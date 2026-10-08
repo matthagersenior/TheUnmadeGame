@@ -1,0 +1,28 @@
+# Unreal Engine generated state
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vs/
+.vscode/
+.idea/
+*.VC.db
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.pdb
+*.tmp
+*.log
+# Packaging output, reports, credentials
+Releases/
+Packaged/
+TestReports/
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+# Keep the actual Unreal Content/ source in Git LFS
+!Content/

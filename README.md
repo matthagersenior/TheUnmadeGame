@@ -1,0 +1,43 @@
+# THE UNMADE
+
+Dark, surreal, third-person 3D RPG. You play a customizable outcast whose origin lies in an impossible version of reality. Living civilizations respond differently to fractures, and NPCs remember what they have personally witnessed or credibly heard.
+
+**Status:** foundational Unreal Engine **source scaffold**, not a playable release. No Unreal Editor compilation, map boot, packaged Windows build, or Android streaming session has been verified yet.
+
+## Approved direction
+- Third-person 3D; Windows PC first; controller + keyboard/mouse planned.
+- Adaptive reality combat: Glimpse, Fold and warned persistent Rewrite.
+- Every identifiable NPC has individuality and salient persistent memory; major NPCs have richer beliefs, relationships and motives.
+- Names mix culturally consistent invented words with unsettling everyday language. Working names are **not canon**.
+- Languages are an optional discovery mechanic.
+- Creator has an Android phone and no PC; interactive remote tests require an approved GPU-equipped host. **Do not provision paid infrastructure without approval.**
+
+See [approved design](docs/specs/2026-10-08-the-unmade-foundations-design-v0.3.md) and [implementation plan](docs/plans/2026-10-08-the-unmade-first-playable-slice.md).
+
+## Development requirements
+Unreal Engine 5.8 (provisional target), Windows C++ toolchain compatible with that engine, Python 3.11+ for engine-independent checks, and Git LFS for binary assets. Follow Epic's Unreal Engine license. Use original or properly licensed game content.
+
+## Check the source scaffold (no Unreal installation needed)
+```bash
+python Scripts/validate_repo.py
+python -m unittest discover -s Scripts/tests -v
+```
+
+GitHub's **Static checks** workflow runs only these commands. A green check does **not** mean this game compiles, launches, or plays.
+
+## Test with Unreal installed
+```powershell
+.\Scripts\run_ue_tests.ps1 -UnrealRoot 'C:\Program Files\Epic Games\UE_5.8' -TestFilter 'Unmade.Bootstrap'
+```
+This script requires UnrealEditor-Cmd.exe; refuses missing installations and rejects empty or failing automation reports. Actual execution awaits an Unreal-equipped host.
+
+## Initial C++ foundation
+The repository contains the primary module, an `AUnmadeCharacter` camera/movement skeleton, and `AUnmadeGameMode` with that pawn as default. DefaultEngine references Unreal's built-in **Entry** map purely to avoid pointing to a nonexistent custom map. It has **no authored environment, meshes, quests, NPCs, or gameplay abilities yet**. The plan's actual region maps and Enhanced Input mapping assets must be created and tested using Unreal Editor. Legacy Action/Axis mappings in `Config/DefaultInput.ini` are only a temporary bootstrap, not the long-term input architecture.
+
+## Honest review gates
+1. **Repository ready:** Python checks pass and files are visible on `main`.
+2. **Engine bootstrap verified:** Unreal Editor compiles, automation tests run, character actually spawns and responds to keyboard/controller on an authored map.
+3. **Gameplay slice verified:** combat, fracture, NPC memories, world changes, save/load all pass Unreal engine tests.
+4. **Creator playtest:** on-demand authenticated GPU Pixel Streaming works from Android, separately checked against native Windows performance.
+
+See [status and verification](docs/development-status.md). Paid cloud hosting is **not** active.

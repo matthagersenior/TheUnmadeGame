@@ -1,0 +1,24 @@
+name: Static checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate repository structure
+        run: python Scripts/validate_repo.py
+      - name: Run validator unit tests
+        run: python -m unittest discover -s Scripts/tests -v
