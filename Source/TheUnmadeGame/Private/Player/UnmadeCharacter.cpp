@@ -10,6 +10,8 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "NPC/UnmadeNpcCharacter.h"
+#include "Dialogue/UnmadeLocalDialogueSubsystem.h"
+#include "Engine/GameInstance.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Kismet/GameplayStatics.h"
@@ -105,8 +107,24 @@ AUnmadeNpcCharacter* FindNearbyCitizen(UWorld* World, FVector Origin, float MaxD
 void AUnmadeCharacter::Interact()
 {
     AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
-    const FString Line = Target ? Target->GetReactionText() : TEXT("Nobody close enough to speak to.");
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan, Line);
+    if (!Target)
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan,
+            TEXT("Nobody close enough to speak to."));
+        return;
+    }
+    UUnmadeLocalDialogueSubsystem* Dialogue = GetGameInstance()
+        ? GetGameInstance()->GetSubsystem<UUnmadeLocalDialogueSubsystem>()
+        : nullptr;
+    if (Dialogue)
+    {
+        // Placeholder greeting until the in-game dialogue UI captures player speech.
+        Dialogue->RequestDialogue(Target, TEXT("Hello."));
+    }
+    else if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan, Target->GetReactionText());
+    }
 }
 
 void AUnmadeCharacter::OfferAid()

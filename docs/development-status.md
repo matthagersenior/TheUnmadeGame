@@ -12,6 +12,13 @@
 - C++ automation source testing event provenance, rumor upgrade, snapshot idempotence and distinct fear/trust.
 - Python static checks and source-contract tests under GitHub Actions.
 
+## Optional local LLM source (new, unverified)
+- One shared Unreal GameInstance subsystem targeting only local Ollama /api/chat.
+- NPC-scoped, bounded memory context; attributed rumors; strict dialogue-output decoding and deterministic fallback.
+- NPC E interaction calls the subsystem; local AI disabled by default in config. No paid API use or externally hosted inference.
+- Added Unreal automation tests for response parsing and memory provenance; these tests are **not** executed in GitHub static CI.
+- Unreal C++ build, actual Ollama response, CPU/GPU performance, and bundled llama.cpp packaging **remain unverified and incomplete**. See `docs/architecture/local-npc-llm.md`.
+
 ## Still absent or unverified
 - Unreal Engine compile, map spawn, player collision, actual NPC perception or snapshot save/load at runtime: **not tested without UE/GPU host**.
 - Authored world visuals, character customization, realistic NPC routines, coherent combat abilities, actual Glimpse/Fold/Rewrite, rich social dialogue, lexicon, full save semantics and quests.

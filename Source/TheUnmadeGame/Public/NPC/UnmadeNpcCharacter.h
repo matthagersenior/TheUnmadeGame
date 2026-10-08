@@ -17,6 +17,7 @@ public:
     void ConfigureIdentity(FName StableId, const FString& DisplayLabel);
     FString GetReactionText() const;
     FName GetStableId() const { return NpcId; }
+    const FString& GetDisplayLabel() const { return NpcDisplayLabel; }
     UUnmadeMemoryComponent* GetMemory() const { return Memory; }
 
 private:
