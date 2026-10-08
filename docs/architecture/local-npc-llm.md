@@ -15,10 +15,10 @@
 1. Install and run Ollama on the **same machine that runs the Unreal game**. Confirm your selected model's license. For example, use the Apache-2.0-licensed Qwen3 4B instruct variant:
    `ollama pull qwen3:4b-instruct`
 2. Start Ollama normally; verify `http://127.0.0.1:11434/api/tags` responds locally. Do not expose Ollama to the internet.
-3. In `Config/DefaultGame.ini` under `[/Script/TheUnmadeGame.UnmadeLocalDialogueSubsystem]`, set `bEnableLocalModel=true`. Default remains `false`.
-4. Compile and run Unreal. Approach a resident, press **E** and read the generated line. If Ollama is missing, the model times out, the game is busy or output is invalid, the resident uses the existing deterministic response.
-5. Run Unreal tests: `Scripts/run_ue_tests.ps1 -UnrealRoot <UnrealRoot> -TestFilter Unmade.LocalDialogue`.
-6. Verify with an offline host (Ollama stopped) and a normal host. Log latency, GPU/RAM use and gameplay frame rate before enabling by default.
+3. Run `python Scripts/probe_local_llm.py --model qwen3:4b-instruct` to confirm Ollama is listening on loopback and the model has been downloaded. This doesn't run inference or require a cloud connection.\n4. In `Config/DefaultGame.ini` under `[/Script/TheUnmadeGame.UnmadeLocalDialogueSubsystem]`, set `bEnableLocalModel=true`. Default remains `false`.
+5. Compile and run Unreal. Approach a resident, press **E** and read the generated line. If Ollama is missing, the model times out, the game is busy or output is invalid, the resident uses the existing deterministic response.
+6. Run Unreal tests: `Scripts/run_ue_tests.ps1 -UnrealRoot <UnrealRoot> -TestFilter Unmade.LocalDialogue`.
+7. Verify with an offline host (Ollama stopped) and a normal host. Log latency, GPU/RAM use and gameplay frame rate before enabling by default.
 
 ### Remote phone testing
 When Pixel Streaming is eventually approved, the model must run on the **same remote Windows GPU host** as the Unreal game. The phone only receives streamed pixels, not model weights or a public Ollama endpoint.

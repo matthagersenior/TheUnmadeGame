@@ -16,7 +16,7 @@
 - One shared Unreal GameInstance subsystem targeting only local Ollama /api/chat.
 - NPC-scoped, bounded memory context; attributed rumors; strict dialogue-output decoding and deterministic fallback.
 - NPC E interaction calls the subsystem; local AI disabled by default in config. No paid API use or externally hosted inference.
-- Added Unreal automation tests for response parsing and memory provenance; these tests are **not** executed in GitHub static CI.
+- Added Unreal automation tests for response parsing and memory provenance; these tests are **not** executed in GitHub static CI.\n- Added a local-only Ollama model readiness probe with four offline mock tests (GitHub static CI exercises the probe tests, but does not prove Ollama exists on the creator's machine).
 - Unreal C++ build, actual Ollama response, CPU/GPU performance, and bundled llama.cpp packaging **remain unverified and incomplete**. See `docs/architecture/local-npc-llm.md`.
 
 ## Still absent or unverified
