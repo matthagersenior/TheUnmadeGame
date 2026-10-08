@@ -54,7 +54,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnBlock(FVector(-650, -440, 160), FVector(3, 3, 3.2), FName("Hub.Watch"));
     SpawnBlock(FVector(650, 570, 140), FVector(4, 3, 2.8), FName("Hub.Store"));
     SpawnBlock(FVector(-590, 660, 190), FVector(4, 4, 3.8), FName("Hub.Shelter"));
-    SpawnBlock(FVector(0, 1030, 90), FVector(1.5, 1.3, 1.8), FName("Hub.AnomalyMarker"));
+    SpawnBlock(FVector(0, 530, 90), FVector(0.75, 0.75, 1.8), FName("Hub.AnomalyMarker"));
 
     SpawnCitizen(FName("npc.merchant.001"), TEXT("The stallkeeper"), FVector(200, -230, 95));
     SpawnCitizen(FName("npc.guard.001"), TEXT("A gate watchkeeper"), FVector(-300, -230, 95));

@@ -41,3 +41,11 @@ The repository contains the primary module, an `AUnmadeCharacter` camera/movemen
 4. **Creator playtest:** on-demand authenticated GPU Pixel Streaming works from Android, separately checked against native Windows performance.
 
 See [status and verification](docs/development-status.md). Paid cloud hosting is **not** active.
+
+## Prototype hub source added (not engine-tested)
+
+The game mode now requests a runtime-generated primitive hub instead of claiming to include a serialized map. It uses built-in cube meshes for the walkable ground, buildings and an anomaly marker, and temporary cylinder visuals for the player and five NPCs. **Engine startup and geometry collision still need to be verified on a Windows Unreal host.** These are testing placeholders, not approved world art or place names.
+
+Once the Unreal host is running: move with WASD/stick, look with mouse/right stick, jump with Space/A, **E/X** to talk to a nearby citizen, **H** to offer aid nearby (at most once to each recipient), and **F** near the anomaly marker to emit a prototype-only event. Revisit the citizens to read their different trust/fear reactions. Memory snapshots are written to the Unreal save slot `UnmadePrototypeNPC` and read when the hub is constructed; full quest/character save/load has not been built. The F key is **not** a functional Glimpse/Fold/Rewrite power.
+
+NPC perception uses distance and line-of-sight; rumor evidence is represented separately but rumor-sharing gameplay is not yet connected. Meaningful NPC jobs, dialogue trees and schedules are subsequent implementation tasks. For actual tests run `Unmade.Npc` and `Unmade.Bootstrap` via the Windows test runner, then manually verify NPC witness, refusal, reload and camera behavior.

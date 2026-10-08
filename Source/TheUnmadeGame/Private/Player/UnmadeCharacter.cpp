@@ -1,6 +1,10 @@
 #include "Player/UnmadeCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Engine/StaticMeshActor.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
@@ -31,6 +35,14 @@ AUnmadeCharacter::AUnmadeCharacter()
     FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
     FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
     FollowCamera->bUsePawnControlRotation = false;
+
+    PlaceholderBody = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PrototypePlayerBody"));
+    PlaceholderBody->SetupAttachment(GetCapsuleComponent());
+    PlaceholderBody->SetRelativeLocation(FVector(0.f, 0.f, -3.f));
+    PlaceholderBody->SetRelativeScale3D(FVector(.54f, .54f, 1.58f));
+    PlaceholderBody->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> BodyMesh(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
+    if (BodyMesh.Succeeded()) PlaceholderBody->SetStaticMesh(BodyMesh.Object);
 }
 
 void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -99,12 +111,44 @@ void AUnmadeCharacter::Interact()
 
 void AUnmadeCharacter::OfferAid()
 {
+    AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
+    if (!Target)
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+            TEXT("Approach a resident before offering aid."));
+        return;
+    }
+    for (const FUnmadeNpcObservation& Observation : Target->GetMemory()->GetObservations())
+    {
+        if (Observation.EventKind == FName("Player.Helped"))
+        {
+            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+                TEXT("You have already helped this resident."));
+            return;
+        }
+    }
     ReportLocalEvent(FName("Player.Helped"));
 }
 
 void AUnmadeCharacter::DemonstrateAnomaly()
 {
-    // This is an NPC perception *test signal*, NOT a finished Glimpse/Fold mechanic.
+    // Prototype-only reaction signal. This is not a completed reality-fracture ability.
+    bool bNearMarker = false;
+    for (TActorIterator<AStaticMeshActor> It(GetWorld()); It; ++It)
+    {
+        if (It->ActorHasTag(FName("Hub.AnomalyMarker"))
+            && FVector::DistSquared(It->GetActorLocation(), GetActorLocation()) < FMath::Square(360.f))
+        {
+            bNearMarker = true;
+            break;
+        }
+    }
+    if (!bNearMarker)
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+            TEXT("Move toward the strange marker to investigate the anomaly."));
+        return;
+    }
     ReportLocalEvent(FName("Reality.Anomaly"));
 }
 

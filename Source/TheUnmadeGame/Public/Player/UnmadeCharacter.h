@@ -6,6 +6,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class UStaticMeshComponent;
 
 /** Foundational third-person pawn. Visual mesh and Enhanced Input data assets are editor work. */
 UCLASS()
@@ -23,6 +24,9 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Camera")
     TObjectPtr<UCameraComponent> FollowCamera;
+
+    UPROPERTY(VisibleAnywhere, Category="Prototype")
+    TObjectPtr<UStaticMeshComponent> PlaceholderBody;
 
     void MoveForward(float Value);
     void MoveRight(float Value);
