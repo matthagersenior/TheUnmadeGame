@@ -7,14 +7,14 @@
 - Unreal C++ descriptor, game/editor targets, module, game mode, third-person camera, movement, temporary input mappings and temporary visible character mesh.
 - Runtime-generated hub blockout with ground, buildings, anomalous marker and five placeholder NPCs (no authored `.umap` exists).
 - Individual NPC memory component with witness vs attributed rumor, deduplication, reactions, bounded observations, and identity-bound snapshots.
-- Line-of-sight/distance-limited witnessed actions (aid, anomaly test); proximity-gated aid cannot repeatedly reward the same NPC.
+- Line-of-sight/distance-limited witnessed actions (aid, anomaly test), and nearby one-hop rumor propagation on an eight-second timer; proximity-gated aid cannot repeatedly reward the same NPC.
 - Narrow `USaveGame` container persisting NPC snapshots to one prototype slot on actions; restoration when hub constructs.
 - C++ automation source testing event provenance, rumor upgrade, snapshot idempotence and distinct fear/trust.
 - Python static checks and source-contract tests under GitHub Actions.
 
 ## Still absent or unverified
 - Unreal Engine compile, map spawn, player collision, actual NPC perception or snapshot save/load at runtime: **not tested without UE/GPU host**.
-- Authored world visuals, character customization, realistic NPC routines, coherent combat abilities, actual Glimpse/Fold/Rewrite, dynamic rumor transmission, lexicon, full save semantics and quests.
+- Authored world visuals, character customization, realistic NPC routines, coherent combat abilities, actual Glimpse/Fold/Rewrite, rich social dialogue, lexicon, full save semantics and quests.
 - Windows packages, real device/controller acceptance testing, cloud server, secure Pixel Streaming Android session.
 
 **Static CI can confirm repository/source contracts only; it cannot confirm Unreal C++ compiles or that gameplay works.**

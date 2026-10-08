@@ -33,6 +33,14 @@ class PrototypeSourceContractTests(unittest.TestCase):
         self.assertIn('TEXT("You have already helped this resident.")', p)
         self.assertIn("UGameplayStatics::SaveGameToSlot", p)
 
+    def test_local_rumors_have_a_real_sharing_path(self):
+        p = source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
+        self.assertIn("SpreadLocalRumors()", p)
+        self.assertIn("LineTraceTestByChannel", p)
+        self.assertIn("Event.Evidence == EUnmadeEvidenceKind::Witnessed", p)
+        self.assertIn("Listener->GetMemory()->HearRumor(", p)
+        self.assertIn("if (bNewMemory) SaveCitizens();", p)
+
     def test_test_suite_has_provenance_and_repeated_restore(self):
         tests = source("Source/TheUnmadeGame/Private/Tests/NpcAutomationTest.cpp")
         self.assertIn("Unmade.Npc.WitnessVsRumor", tests)

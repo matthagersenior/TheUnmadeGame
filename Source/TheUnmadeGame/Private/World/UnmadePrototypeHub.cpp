@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
+#include "TimerManager.h"
 
 AUnmadePrototypeHub::AUnmadePrototypeHub()
 {
@@ -17,6 +18,7 @@ void AUnmadePrototypeHub::BeginPlay()
 {
     Super::BeginPlay();
     BuildForPrototype();
+    GetWorldTimerManager().SetTimer(GossipTimer, this, &AUnmadePrototypeHub::SpreadLocalRumors, 8.f, true);
 }
 
 void AUnmadePrototypeHub::SpawnBlock(FVector Center, FVector Scale, FName Label)
@@ -81,4 +83,58 @@ void AUnmadePrototypeHub::RestoreCitizens()
             }
         }
     }
+}
+
+void AUnmadePrototypeHub::SpreadLocalRumors()
+{
+    UWorld* World = GetWorld();
+    if (!World) return;
+    TArray<AUnmadeNpcCharacter*> Citizens;
+    for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
+        Citizens.Add(*It);
+
+    bool bNewMemory = false;
+    // Nearby named individuals talk about events they directly observed.
+    // Hearsay is not silently upgraded to evidence and gossip cannot teleport.
+    for (AUnmadeNpcCharacter* Speaker : Citizens)
+    {
+        for (AUnmadeNpcCharacter* Listener : Citizens)
+        {
+            if (Speaker == Listener || Speaker->GetStableId().IsNone() || Listener->GetStableId().IsNone())
+                continue;
+            if (FVector::DistSquared(Speaker->GetActorLocation(), Listener->GetActorLocation()) > FMath::Square(400.f))
+                continue;
+            FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeNpcGossip), false);
+            Params.AddIgnoredActor(Speaker);
+            Params.AddIgnoredActor(Listener);
+            if (World->LineTraceTestByChannel(
+                Speaker->GetActorLocation() + FVector(0, 0, 65),
+                Listener->GetActorLocation() + FVector(0, 0, 65),
+                ECC_Visibility, Params))
+                continue;
+
+            for (const FUnmadeNpcObservation& Event : Speaker->GetMemory()->GetObservations())
+            {
+                // First version only permits one hop from a direct witness.
+                if (Event.Evidence == EUnmadeEvidenceKind::Witnessed &&
+                    Listener->GetMemory()->HearRumor(Event.EventId, Event.EventKind, Speaker->GetStableId()))
+                    bNewMemory = true;
+            }
+        }
+    }
+    if (bNewMemory) SaveCitizens();
+}
+
+void AUnmadePrototypeHub::SaveCitizens()
+{
+    UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
+        UGameplayStatics::CreateSaveGameObject(UUnmadePrototypeSave::StaticClass()));
+    if (!Save) return;
+    for (TActorIterator<AUnmadeNpcCharacter> It(GetWorld()); It; ++It)
+    {
+        if (!It->GetStableId().IsNone())
+            Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
+    }
+    if (!UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0))
+        UE_LOG(LogTemp, Error, TEXT("Unmade NPC social update save failed"));
 }

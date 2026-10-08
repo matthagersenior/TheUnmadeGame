@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
 UCLASS()
@@ -18,6 +19,9 @@ public:
 
 private:
     bool bBuilt = false;
+    FTimerHandle GossipTimer;
+    void SpreadLocalRumors();
+    void SaveCitizens();
     void SpawnBlock(FVector Center, FVector Scale, FName Label);
     void SpawnCitizen(FName Id, const TCHAR* DisplayName, FVector Position);
     void RestoreCitizens();
