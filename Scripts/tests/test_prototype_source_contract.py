@@ -41,6 +41,12 @@ class PrototypeSourceContractTests(unittest.TestCase):
         self.assertIn("Listener->GetMemory()->HearRumor(", p)
         self.assertIn("if (bNewMemory) SaveCitizens();", p)
 
+    def test_host_preflight_fails_closed_if_missing_requirements(self):
+        p = source("Scripts/check_unreal_host.ps1")
+        for text in ("UnrealEditor-Cmd.exe", "NOT_READY:", "exit 3",
+                     "VC.Tools.x86.x64", "NOT proof"):
+            self.assertIn(text, p)
+
     def test_test_suite_has_provenance_and_repeated_restore(self):
         tests = source("Source/TheUnmadeGame/Private/Tests/NpcAutomationTest.cpp")
         self.assertIn("Unmade.Npc.WitnessVsRumor", tests)
