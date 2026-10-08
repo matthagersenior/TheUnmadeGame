@@ -5,6 +5,13 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "NPC/UnmadeNpcCharacter.h"
+#include "NPC/UnmadeMemoryComponent.h"
+#include "Save/UnmadePrototypeSave.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/Engine.h"
+#include "Engine/World.h"
+#include "EngineUtils.h"
 
 AUnmadeCharacter::AUnmadeCharacter()
 {
@@ -33,6 +40,9 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     // Early bootstrap mappings. Replace with data-driven Enhanced Input contexts in an engine editor.
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
     PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+    PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AUnmadeCharacter::Interact);
+    PlayerInputComponent->BindAction("OfferAid", IE_Pressed, this, &AUnmadeCharacter::OfferAid);
+    PlayerInputComponent->BindAction("AnomalyPulse", IE_Pressed, this, &AUnmadeCharacter::DemonstrateAnomaly);
     PlayerInputComponent->BindAxis("MoveForward", this, &AUnmadeCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AUnmadeCharacter::MoveRight);
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -59,4 +69,88 @@ void AUnmadeCharacter::MoveRight(float Value)
 
     const FRotator YawOnly(0.f, Controller->GetControlRotation().Yaw, 0.f);
     AddMovementInput(FRotationMatrix(YawOnly).GetUnitAxis(EAxis::Y), Value);
+}
+
+namespace
+{
+AUnmadeNpcCharacter* FindNearbyCitizen(UWorld* World, FVector Origin, float MaxDistance)
+{
+    AUnmadeNpcCharacter* Nearest = nullptr;
+    float BestDistSq = FMath::Square(MaxDistance);
+    for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
+    {
+        const float DistSq = FVector::DistSquared(Origin, It->GetActorLocation());
+        if (DistSq < BestDistSq)
+        {
+            Nearest = *It;
+            BestDistSq = DistSq;
+        }
+    }
+    return Nearest;
+}
+}
+
+void AUnmadeCharacter::Interact()
+{
+    AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
+    const FString Line = Target ? Target->GetReactionText() : TEXT("Nobody close enough to speak to.");
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan, Line);
+}
+
+void AUnmadeCharacter::OfferAid()
+{
+    ReportLocalEvent(FName("Player.Helped"));
+}
+
+void AUnmadeCharacter::DemonstrateAnomaly()
+{
+    // This is an NPC perception *test signal*, NOT a finished Glimpse/Fold mechanic.
+    ReportLocalEvent(FName("Reality.Anomaly"));
+}
+
+void AUnmadeCharacter::ReportLocalEvent(FName EventKind)
+{
+    UWorld* World = GetWorld();
+    if (!World) return;
+    const FGuid EventId = FGuid::NewGuid();
+    int32 Witnesses = 0;
+    for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
+    {
+        if (FVector::DistSquared(GetActorLocation(), It->GetActorLocation()) > FMath::Square(720.f))
+            continue;
+
+        // Simple sight approximation: solid level geometry blocks direct observation.
+        FCollisionQueryParams VisibilityParams(SCENE_QUERY_STAT(UnmadeNPCWitness), false);
+        VisibilityParams.AddIgnoredActor(this);
+        VisibilityParams.AddIgnoredActor(*It);
+        const FVector Observer = It->GetActorLocation() + FVector(0, 0, 70);
+        const FVector Performer = GetActorLocation() + FVector(0, 0, 70);
+        if (World->LineTraceTestByChannel(Observer, Performer, ECC_Visibility, VisibilityParams))
+            continue;
+        if (It->GetMemory()->Witness(EventId, EventKind)) ++Witnesses;
+    }
+    SaveNearbyNpcMemories();
+    const FString Line = FString::Printf(TEXT("%s witnessed by %d nearby resident(s)."),
+        *EventKind.ToString(), Witnesses);
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow, Line);
+}
+
+void AUnmadeCharacter::SaveNearbyNpcMemories()
+{
+    UWorld* World = GetWorld();
+    if (!World) return;
+    UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
+        UGameplayStatics::CreateSaveGameObject(UUnmadePrototypeSave::StaticClass()));
+    if (!Save) return;
+    for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
+    {
+        if (!It->GetStableId().IsNone())
+            Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
+    }
+    if (!UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0))
+    {
+        UE_LOG(LogTemp, Error, TEXT("Unmade prototype NPC memory save failed"));
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+            TEXT("Could not save NPC memories."));
+    }
 }

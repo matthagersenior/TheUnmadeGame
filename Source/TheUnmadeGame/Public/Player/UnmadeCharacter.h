@@ -26,4 +26,9 @@ private:
 
     void MoveForward(float Value);
     void MoveRight(float Value);
+    void Interact();
+    void OfferAid();
+    void DemonstrateAnomaly();
+    void ReportLocalEvent(FName EventKind);
+    void SaveNearbyNpcMemories();
 };
