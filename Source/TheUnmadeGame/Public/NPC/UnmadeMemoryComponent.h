@@ -23,6 +23,10 @@ struct FUnmadeNpcObservation
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     FName EventKind = NAME_None;
 
+    /** Stable ID of the person/place the event concerns. */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+    FName SubjectId = NAME_None;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
     EUnmadeEvidenceKind Evidence = EUnmadeEvidenceKind::Witnessed;
 
@@ -58,10 +62,10 @@ public:
     UUnmadeMemoryComponent();
 
     UFUNCTION(BlueprintCallable, Category="Unmade|Memory")
-    bool Witness(const FGuid& EventId, FName EventKind);
+    bool Witness(const FGuid& EventId, FName EventKind, FName SubjectId = NAME_None);
 
     UFUNCTION(BlueprintCallable, Category="Unmade|Memory")
-    bool HearRumor(const FGuid& EventId, FName EventKind, FName SpeakerId);
+    bool HearRumor(const FGuid& EventId, FName EventKind, FName SpeakerId, FName SubjectId = NAME_None);
 
     UFUNCTION(BlueprintPure, Category="Unmade|Memory")
     int32 GetTrust() const { return Trust; }

@@ -117,7 +117,7 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
             {
                 // First version only permits one hop from a direct witness.
                 if (Event.Evidence == EUnmadeEvidenceKind::Witnessed &&
-                    Listener->GetMemory()->HearRumor(Event.EventId, Event.EventKind, Speaker->GetStableId()))
+                    Listener->GetMemory()->HearRumor(Event.EventId, Event.EventKind, Speaker->GetStableId(), Event.SubjectId))
                     bNewMemory = true;
             }
         }

@@ -17,6 +17,7 @@ class PrototypeSourceContractTests(unittest.TestCase):
         self.assertIn("Existing.Evidence == EUnmadeEvidenceKind::Rumor", impl)
         self.assertIn("if (Observations.Num() >= 64)", impl)
         self.assertIn("ReadSnapshot", impl)
+        self.assertIn("FName SubjectId", header)
 
     def test_runtime_hub_has_5_distinct_citizen_ids_and_ground(self):
         hub = source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
@@ -39,6 +40,7 @@ class PrototypeSourceContractTests(unittest.TestCase):
         self.assertIn("LineTraceTestByChannel", p)
         self.assertIn("Event.Evidence == EUnmadeEvidenceKind::Witnessed", p)
         self.assertIn("Listener->GetMemory()->HearRumor(", p)
+        self.assertIn("Event.SubjectId", p)
         self.assertIn("if (bNewMemory) SaveCitizens();", p)
 
     def test_host_preflight_fails_closed_if_missing_requirements(self):

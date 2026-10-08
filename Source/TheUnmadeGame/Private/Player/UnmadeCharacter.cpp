@@ -120,14 +120,14 @@ void AUnmadeCharacter::OfferAid()
     }
     for (const FUnmadeNpcObservation& Observation : Target->GetMemory()->GetObservations())
     {
-        if (Observation.EventKind == FName("Player.Helped"))
+        if (Observation.EventKind == FName("Player.Helped") && Observation.SubjectId == Target->GetStableId())
         {
             if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
                 TEXT("You have already helped this resident."));
             return;
         }
     }
-    ReportLocalEvent(FName("Player.Helped"));
+    ReportLocalEvent(FName("Player.Helped"), Target->GetStableId());
 }
 
 void AUnmadeCharacter::DemonstrateAnomaly()
@@ -152,7 +152,7 @@ void AUnmadeCharacter::DemonstrateAnomaly()
     ReportLocalEvent(FName("Reality.Anomaly"));
 }
 
-void AUnmadeCharacter::ReportLocalEvent(FName EventKind)
+void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
 {
     UWorld* World = GetWorld();
     if (!World) return;
@@ -171,7 +171,7 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind)
         const FVector Performer = GetActorLocation() + FVector(0, 0, 70);
         if (World->LineTraceTestByChannel(Observer, Performer, ECC_Visibility, VisibilityParams))
             continue;
-        if (It->GetMemory()->Witness(EventId, EventKind)) ++Witnesses;
+        if (It->GetMemory()->Witness(EventId, EventKind, SubjectId)) ++Witnesses;
     }
     SaveNearbyNpcMemories();
     const FString Line = FString::Printf(TEXT("%s witnessed by %d nearby resident(s)."),

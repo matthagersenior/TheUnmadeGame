@@ -33,6 +33,6 @@ private:
     void Interact();
     void OfferAid();
     void DemonstrateAnomaly();
-    void ReportLocalEvent(FName EventKind);
+    void ReportLocalEvent(FName EventKind, FName SubjectId = NAME_None);
     void SaveNearbyNpcMemories();
 };

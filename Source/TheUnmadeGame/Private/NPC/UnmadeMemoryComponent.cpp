@@ -40,21 +40,23 @@ bool UUnmadeMemoryComponent::AddObservation(const FUnmadeNpcObservation& Observa
     return true;
 }
 
-bool UUnmadeMemoryComponent::Witness(const FGuid& EventId, FName EventKind)
+bool UUnmadeMemoryComponent::Witness(const FGuid& EventId, FName EventKind, FName SubjectId)
 {
     FUnmadeNpcObservation Entry;
     Entry.EventId = EventId;
     Entry.EventKind = EventKind;
+    Entry.SubjectId = SubjectId;
     Entry.Evidence = EUnmadeEvidenceKind::Witnessed;
     return AddObservation(Entry);
 }
 
-bool UUnmadeMemoryComponent::HearRumor(const FGuid& EventId, FName EventKind, FName SpeakerId)
+bool UUnmadeMemoryComponent::HearRumor(const FGuid& EventId, FName EventKind, FName SpeakerId, FName SubjectId)
 {
     if (SpeakerId.IsNone()) return false; // No anonymous omniscient rumors.
     FUnmadeNpcObservation Entry;
     Entry.EventId = EventId;
     Entry.EventKind = EventKind;
+    Entry.SubjectId = SubjectId;
     Entry.Evidence = EUnmadeEvidenceKind::Rumor;
     Entry.SpeakerId = SpeakerId;
     return AddObservation(Entry);

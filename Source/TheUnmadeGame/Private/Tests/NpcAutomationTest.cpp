@@ -34,8 +34,8 @@ bool FUnmadeNpcSnapshotTest::RunTest(const FString& Parameters)
     UUnmadeMemoryComponent* Original = NewObject<UUnmadeMemoryComponent>();
     const FGuid Aid = FGuid::NewGuid();
     const FGuid Anomaly = FGuid::NewGuid();
-    Original->Witness(Aid, FName("Player.Helped"));
-    Original->HearRumor(Anomaly, FName("Reality.Anomaly"), FName("npc.guard.001"));
+    Original->Witness(Aid, FName("Player.Helped"), FName("npc.merchant.001"));
+    Original->HearRumor(Anomaly, FName("Reality.Anomaly"), FName("npc.guard.001"), FName("Hub.AnomalyMarker"));
     const FUnmadeNpcSnapshot Snapshot = Original->WriteSnapshot(FName("npc.merchant.001"));
 
     UUnmadeMemoryComponent* Restored = NewObject<UUnmadeMemoryComponent>();
@@ -44,6 +44,8 @@ bool FUnmadeNpcSnapshotTest::RunTest(const FString& Parameters)
     TestTrue(TEXT("Identity matched restores"), Restored->ReadSnapshot(Snapshot, FName("npc.merchant.001")));
     TestEqual(TEXT("Round trip memory count"), Restored->GetObservationCount(), 2);
     TestEqual(TEXT("Trust restored"), Restored->GetTrust(), Original->GetTrust());
+    TestEqual(TEXT("Aid target retained"), Restored->GetObservations()[0].SubjectId, FName("npc.merchant.001"));
+    TestEqual(TEXT("Rumor subject retained"), Restored->GetObservations()[1].SubjectId, FName("Hub.AnomalyMarker"));
     TestEqual(TEXT("Fear restored"), Restored->GetFear(), Original->GetFear());
     TestEqual(TEXT("Rumor provenance retained"), Restored->GetObservations()[1].SpeakerId, FName("npc.guard.001"));
     TestTrue(TEXT("Repeat load is idempotent"), Restored->ReadSnapshot(Snapshot, FName("npc.merchant.001")));
