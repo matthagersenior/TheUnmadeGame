@@ -66,3 +66,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/items/item_rules_test.cpp -o /tmp/unmade-items-test
           /tmp/unmade-items-test
+      - name: Compile and test nine-realm universe atlas
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/world_atlas_test.cpp -o /tmp/unmade-atlas-test
+          /tmp/unmade-atlas-test
