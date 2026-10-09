@@ -187,3 +187,22 @@ No paid hosting authorized or provisioned. The creator currently has Android but
   input/menu polish, unique character animations, quest cinematics, actual
   rich geometry, complete environmental puzzles/alternate professions,
   production-quality balancing and length measurement.
+
+## 2026-10-09 player-first consequence milestone
+
+- Added engine-independent `UnmadeCommunityConsequences.h` with five
+  non-farmable, authored settlement transitions calculated from the *existing*
+  saved conflict, regional tasks, faction and frontier conclusions. Both
+  shared institutions and revealed public evidence matter; neither is
+  presented as an automatically evil moral choice.
+- The Unreal prototype spawns 15 alternative graybox community-state markers
+  (three per town), reveals only the state earned, and refreshes these after
+  successfully persisted narrative decisions and on restored saves.
+- Residents describe their own community's visible changes, not a magically
+  known worldwide reputation. Existing merchant affordability reacts to
+  the corresponding community trust; journals report local aftermath.
+- Source unit/contract tests check the five towns, persistent fact
+  derivation, invalid inputs, independence between towns and Unreal call
+  sites. **This is source-level verification, not an Unreal playtest.**
+- Established the player-first quality bar in
+  `docs/design/2026-10-09-player-first-rpg-quality-contract.md`.
