@@ -52,6 +52,18 @@ public:
     int32 PaperhavenTaskStage = 0;
 
     UPROPERTY(SaveGame)
+    bool bHasInventorySnapshot = false;
+
+    UPROPERTY(SaveGame)
+    TArray<int32> ItemQuantities;
+
+    UPROPERTY(SaveGame)
+    TArray<int32> EquippedItems;
+
+    UPROPERTY(SaveGame)
+    int64 AwardedMilestoneBits = 0;
+
+    UPROPERTY(SaveGame)
     bool bHasFractureSnapshot = false;
 
     UPROPERTY(SaveGame)
