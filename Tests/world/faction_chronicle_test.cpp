@@ -11,6 +11,10 @@ int main(){
     assert(story.Converse("npc.bellwold.guard.001",false)==FactionResult::NeedsEvidence);
     assert(story.Stage(Faction::Refuge)==2);
     assert(story.Converse("npc.bellwold.guard.001",true)==FactionResult::ChoiceRequired);
+    FactionChronicle pendingSave;
+    assert(pendingSave.Restore(story.Snapshot()));
+    assert(pendingSave.Stage(Faction::Refuge)==3 &&
+           pendingSave.Ending(Faction::Refuge)==FactionEnding::Unresolved);
     assert(story.Decide(Faction::Refuge,FactionEnding::Solidarity)==FactionResult::Resolved);
     assert(story.Decide(Faction::Refuge,FactionEnding::Truth)==FactionResult::NoChange);
     assert(story.Reputation(Faction::Refuge)==40);

@@ -37,7 +37,7 @@ public:
         for(int i=0;i<3;++i) {
             if(other.stages[i]<0 || other.stages[i]>3 ||
                other.endings[i]<0 || other.endings[i]>2 ||
-               ((other.stages[i]!=3) != (other.endings[i]==0))) return false;
+               (other.endings[i]!=0 && other.stages[i]!=3)) return false;
         }
         state_=other;return true;
     }
