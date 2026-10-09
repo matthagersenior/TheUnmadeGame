@@ -290,7 +290,10 @@ bool UUnmadeEquipmentComponent::CraftAt(UnmadeCore::SettlementId Village)
         if(Recipe.workshop!=Village)continue;
         const auto BeforeItems=Inventory.Snapshot();
         const auto BeforeMoney=Economy.Snapshot();
-        if(Economy.Craft(Inventory,Recipe.id,Village)!=UnmadeCore::EconomyResult::Completed)
+        const AUnmadeCharacter* OwnerPlayer=Cast<AUnmadeCharacter>(GetOwner());
+        const int32 Borrowed=IsValid(OwnerPlayer) && OwnerPlayer->IsBorrowedLifeActive()?2:0;
+        if(Economy.Craft(Inventory,Recipe.id,Village,Borrowed)
+           !=UnmadeCore::EconomyResult::Completed)
             continue;
         if(!Persist())
         {

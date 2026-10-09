@@ -27,7 +27,7 @@ public:
     int32 FoldBonusSeconds() const { return Inventory.FoldDurationBonus(); }
     double StrainRecoveryMultiplier() const { return Inventory.RecoveryMultiplier(); }
     void SetTemporaryBonuses(int32 Attack,int32 Armor) {
-        TemporaryAttack=FMath::Clamp(Attack,0,80);
+        TemporaryAttack=FMath::Clamp(Attack,-20,80);
         TemporaryArmor=FMath::Clamp(Armor,0,80);
         RefreshCombatBonuses();
     }

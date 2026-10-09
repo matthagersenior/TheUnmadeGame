@@ -102,11 +102,13 @@ public:
         state_.marks+=revenue;
         return EconomyResult::Completed;
     }
-    EconomyResult Craft(InventoryModel& inventory,RecipeId id,SettlementId at) noexcept {
+    EconomyResult Craft(InventoryModel& inventory,RecipeId id,SettlementId at,int borrowedSkill=0) noexcept {
+        if(borrowedSkill<0 || borrowedSkill>2)return EconomyResult::Invalid;
         const auto* recipe=FindRecipe(id);
         if(!recipe)return EconomyResult::Invalid;
         if(at!=recipe->workshop)return EconomyResult::NotAvailable;
-        if(Skill(recipe->profession)<recipe->skill)return EconomyResult::InsufficientSkill;
+        if(Skill(recipe->profession)+borrowedSkill<recipe->skill)
+            return EconomyResult::InsufficientSkill;
         InventoryModel next=inventory;
         if(!next.Take(recipe->inputA,recipe->unitsA) ||
            !next.Take(recipe->inputB,recipe->unitsB))
