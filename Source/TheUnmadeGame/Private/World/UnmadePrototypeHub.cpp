@@ -3,6 +3,7 @@
 #include "NPC/UnmadeMemoryComponent.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Fracture/UnmadeFractureAnchor.h"
+#include "Combat/UnmadeEnemyCharacter.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -71,6 +72,13 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnCitizen(FName("npc.archivist.001"), TEXT("The records keeper"), FVector(-360, 320, 95), UnmadeCore::NpcRole::Scholar, UnmadeCore::NpcTemperament::Curious);
     SpawnCitizen(FName("npc.courier.001"), TEXT("A courier"), FVector(300, 90, 95), UnmadeCore::NpcRole::Courier, UnmadeCore::NpcTemperament::Steady);
 
+    // Two visually distinct graybox enemies. No quest reward or respawn system yet.
+    if (AUnmadeEnemyCharacter* Stalker = GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(
+        FVector(920, 920, 100), FRotator::ZeroRotator))
+        Stalker->ConfigureStyle(UnmadeCore::EnemyStyle::Stalker);
+    if (AUnmadeEnemyCharacter* Watcher = GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(
+        FVector(-910, 920, 100), FRotator::ZeroRotator))
+        Watcher->ConfigureStyle(UnmadeCore::EnemyStyle::Watcher);
     RestoreCitizens();
 }
 

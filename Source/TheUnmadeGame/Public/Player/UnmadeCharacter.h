@@ -9,6 +9,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class AUnmadeFractureAnchor;
 class UStaticMeshComponent;
+class UUnmadeCombatComponent;
 
 /** Foundational third-person pawn. Visual mesh and Enhanced Input data assets are editor work. */
 UCLASS()
@@ -21,6 +22,7 @@ public:
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;
+    UUnmadeCombatComponent* GetCombat() const { return Combat; }
 
 private:
     UPROPERTY(VisibleAnywhere, Category="Camera")
@@ -31,6 +33,14 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Prototype")
     TObjectPtr<UStaticMeshComponent> PlaceholderBody;
+
+    UPROPERTY(VisibleAnywhere, Category="Unmade|Combat")
+    TObjectPtr<UUnmadeCombatComponent> Combat;
+
+    void AttemptMeleeAttack();
+    void StartGuard();
+    void StopGuard();
+    bool bPlayerDefeatHandled = false;
 
     void MoveForward(float Value);
     void MoveRight(float Value);

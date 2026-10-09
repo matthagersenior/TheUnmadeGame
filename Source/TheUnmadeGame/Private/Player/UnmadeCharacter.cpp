@@ -1,5 +1,8 @@
 #include "Player/UnmadeCharacter.h"
 #include "Fracture/UnmadeFractureAnchor.h"
+#include "Combat/UnmadeCombatComponent.h"
+#include "Combat/UnmadeEnemyCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -23,6 +26,7 @@
 AUnmadeCharacter::AUnmadeCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
+    Combat = CreateDefaultSubobject<UUnmadeCombatComponent>(TEXT("Combat"));
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = false;
     bUseControllerRotationRoll = false;
@@ -53,6 +57,9 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     // Early bootstrap mappings. Replace with data-driven Enhanced Input contexts in an engine editor.
+    PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
+    PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
+    PlayerInputComponent->BindAction("Guard", IE_Released, this, &AUnmadeCharacter::StopGuard);
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
     PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
     PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AUnmadeCharacter::Interact);
@@ -65,6 +72,58 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveRight", this, &AUnmadeCharacter::MoveRight);
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+}
+
+void AUnmadeCharacter::AttemptMeleeAttack()
+{
+    UWorld* World = GetWorld();
+    if (!World || Combat->IsDefeated()) return;
+    AUnmadeEnemyCharacter* Target = nullptr;
+    double BestDistanceSq = FMath::Square(240.0);
+    const FVector Facing = GetActorForwardVector().GetSafeNormal2D();
+    for (TActorIterator<AUnmadeEnemyCharacter> It(World); It; ++It)
+    {
+        if (It->GetCombat()->IsDefeated()) continue;
+        FVector Toward = It->GetActorLocation() - GetActorLocation();
+        Toward.Z = 0;
+        const double DistSq = Toward.SizeSquared();
+        if (DistSq >= BestDistanceSq || FVector::DotProduct(Facing, Toward.GetSafeNormal()) < 0.2)
+            continue;
+        FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeMeleeSight), false);
+        Params.AddIgnoredActor(this);
+        Params.AddIgnoredActor(*It);
+        if (World->LineTraceTestByChannel(GetActorLocation() + FVector(0, 0, 60),
+            It->GetActorLocation() + FVector(0, 0, 60), ECC_Visibility, Params))
+            continue;
+        Target = *It;
+        BestDistanceSq = DistSq;
+    }
+    if (!IsValid(Target))
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Silver,
+            TEXT("No enemy within melee reach and facing."));
+        return;
+    }
+    const float Before = Target->GetCombat()->GetHealth();
+    const double Now = World->GetTimeSeconds();
+    if (Combat->TryStrikeTarget(Target->GetCombat(), Now, true,
+        Target->IsFractureExposed(Now)))
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow,
+            FString::Printf(TEXT("HIT: %.0f damage, enemy %.0f health."),
+                Before - Target->GetCombat()->GetHealth(), Target->GetCombat()->GetHealth()));
+        ReportLocalEvent(FName("Player.Fought"), FName("combat.prototype.enemy"));
+    }
+}
+
+void AUnmadeCharacter::StartGuard()
+{
+    if (IsValid(Combat)) Combat->SetGuarding(true);
+}
+
+void AUnmadeCharacter::StopGuard()
+{
+    if (IsValid(Combat)) Combat->SetGuarding(false);
 }
 
 void AUnmadeCharacter::MoveForward(float Value)
@@ -182,6 +241,12 @@ void AUnmadeCharacter::FoldReality()
         return;
     }
     ApplyFractureVisuals();
+    for (TActorIterator<AUnmadeEnemyCharacter> It(GetWorld()); It; ++It)
+    {
+        if (!It->GetCombat()->IsDefeated() &&
+            FVector::DistSquared(It->GetActorLocation(), Anchor->GetActorLocation()) < FMath::Square(800.f))
+            It->ExposeToFold(GetWorld()->GetTimeSeconds(), 4.0);
+    }
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
         TEXT("FOLD: the barrier vanishes for six seconds (+24 Strain)."));
     ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
@@ -307,6 +372,13 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     FractureModel.Recover(static_cast<double>(DeltaSeconds));
+    if (Combat->IsDefeated() && !bPlayerDefeatHandled)
+    {
+        bPlayerDefeatHandled = true;
+        GetCharacterMovement()->DisableMovement();
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::Red,
+            TEXT("You fell in the prototype encounter. Checkpoint/respawn is not implemented yet."));
+    }
     ApplyFractureVisuals();
 }
 

@@ -75,3 +75,17 @@ compile and run the scene and `Unmade.Fracture.CoreRules` automation test.
 **No AI download, subscription, internet access or local inference process is required for gameplay.** NPC roles, temperament, perception, memory, trust/fear, available actions and authored dialogue belong to Unreal's native game rules. `AUnmadeNpcCharacter::CanTradeWithPlayer()` and `GetCurrentActionId()` expose independent gameplay decisions. The optional local LLM is disabled by default and must never control quests or NPC actions.
 
 See [AI-independent NPC design](docs/architecture/offline-npc-gameplay.md). GitHub CI compiles and runs the pure C++ NPC decision-policy tests. NPC movement, authored shops, Unreal compilation, and actual runtime behavior remain unverified/incomplete.
+
+## Physical combat — source prototype (not yet Unreal-compiled)
+
+The hub spawns two temporary enemies away from the civilian center: a **Stalker**
+that closes in for melee and a **Watcher** that retreats when cornered and uses
+a visible debug-message *placeholder* ranged impact when clear sight permits.
+Neither invokes any LLM. The player's left mouse button/right trigger attacks
+one facing, close, line-of-sight target; right mouse button/left trigger holds
+guard (75% reduced damage, no attacking while held). Attacks have cooldowns,
+enemy health cannot be reduced twice by the same swing, and defeat disables
+that enemy's collision/appearance. **Q/Fold** temporarily exposes nearby enemies
+to 50% extra incoming attack damage. Player defeat stops movement; checkpoints,
+loot, animations, hit VFX, projectiles and proper navmesh pursuit remain future
+work. See [combat test scope](docs/qa/combat-prototype.md).
