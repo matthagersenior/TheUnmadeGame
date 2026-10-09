@@ -222,7 +222,8 @@ void AUnmadeCharacter::BuyMarketSupplies()
         const FTCHARToUTF8 Utf8(*Identity);
         const auto* Resident=UnmadeCore::FindResident(Utf8.Get());
         if(Resident && Resident->home==Village &&
-           Resident->role==UnmadeCore::NpcRole::Merchant)
+           Resident->role==UnmadeCore::NpcRole::Merchant &&
+           It->CanTradeWithPlayer())
         {
             bMerchantNearby=true;
             break;
@@ -270,7 +271,8 @@ void AUnmadeCharacter::SellMarketSupplies()
         const FTCHARToUTF8 Utf8(*Identity);
         const auto* Resident=UnmadeCore::FindResident(Utf8.Get());
         if(Resident && Resident->home==Village &&
-           Resident->role==UnmadeCore::NpcRole::Merchant)
+           Resident->role==UnmadeCore::NpcRole::Merchant &&
+           It->CanTradeWithPlayer())
         {
             bMerchantNearby=true;
             break;

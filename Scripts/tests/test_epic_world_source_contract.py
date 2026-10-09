@@ -25,6 +25,7 @@ class EpicWorldContract(unittest.TestCase):
         save=read("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
         for action in ("MarketBuy","MarketSell","ProfessionCraft"):
             self.assertIn('BindAction("'+action+'"',player)
+        self.assertEqual(player.count("It->CanTradeWithPlayer()"),2)
         for name in ("Economy.Buy(", "Economy.Sell(", "Economy.Craft(",
                      "Economy.Restore(BeforeMoney)", "ReconcileCivicContracts"):
             self.assertIn(name,equip)
