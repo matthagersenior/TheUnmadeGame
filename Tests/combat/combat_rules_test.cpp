@@ -43,5 +43,15 @@ int main() {
     assert(ChooseEnemyIntent(EnemyStyle::Watcher,9,true)==EnemyIntent::Approach);
     assert(ChooseEnemyIntent(EnemyStyle::Watcher,5.5,false)==EnemyIntent::Approach);
     assert(ChooseEnemyIntent(EnemyStyle::Watcher,-1,true)==EnemyIntent::Hold);
+    Combatant armored(100, 12, 1.0);
+    assert(armored.ReceiveHit(2,1,20,false,8)==HitOutcome::Applied);
+    assert(armored.Health()==88);
+    assert(armored.ReceiveHit(2,1,20,false,8)==HitOutcome::Duplicate);
+    assert(armored.Heal(7) && armored.Health()==95);
+    assert(armored.Heal(100) && armored.Health()==100);
+    assert(!armored.Heal(10));
+    assert(!armored.Heal(-1));
+    assert(armored.ReceiveHit(2,2,10,false,100)==HitOutcome::Applied);
+    assert(armored.Health()==99);
     std::cout<<"PASS: AI-free combat/guard/cooldown/death/fracture counterplay/two tactics\n";
 }

@@ -16,6 +16,11 @@ public:
     void Configure(double MaxHealth, double Damage, double Cooldown);
     bool TryStrikeTarget(UUnmadeCombatComponent* Target, double Now, bool bValidHit, bool bFractureExposed);
     void SetGuarding(bool bEnabled);
+    void SetGearBonuses(int32 Attack, int32 Armor);
+    bool Heal(float Amount);
+    float GetMissingHealth() const { return GetMaxHealth() - GetHealth(); }
+    int32 GetGearAttackBonus() const { return GearAttack; }
+    int32 GetGearArmorBonus() const { return GearArmor; }
 
     UFUNCTION(BlueprintPure, Category="Unmade|Combat")
     bool IsDefeated() const { return !State.IsAlive(); }
@@ -31,4 +36,6 @@ public:
 
 private:
     UnmadeCore::Combatant State;
+    int32 GearAttack = 0;
+    int32 GearArmor = 0;
 };

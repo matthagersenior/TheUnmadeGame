@@ -27,6 +27,12 @@ public:
     double Health() const noexcept { return health_; }
     double MaximumHealth() const noexcept { return maximumHealth_; }
     bool IsAlive() const noexcept { return health_ > 0; }
+    bool Heal(double amount) noexcept {
+        if (!IsAlive() || !std::isfinite(amount) || amount <= 0.0 || health_ >= maximumHealth_)
+            return false;
+        health_ = std::min(maximumHealth_, health_ + amount);
+        return true;
+    }
     bool IsGuarding() const noexcept { return guarding_; }
 
     bool SetGuarding(bool enabled) noexcept {
@@ -43,10 +49,10 @@ public:
         return {AttackOutcome::Started, ++swingCounter_, damage_};
     }
     HitOutcome ReceiveHit(std::uint64_t attackerId, std::uint64_t swingId,
-                          double baseDamage, bool fractureExposed) {
+                          double baseDamage, bool fractureExposed, double defense = 0.0) {
         if (!IsAlive()) return HitOutcome::AlreadyDefeated;
         if (!attackerId || !swingId) return HitOutcome::InvalidSource;
-        if (!Positive(baseDamage)) return HitOutcome::InvalidDamage;
+        if (!Positive(baseDamage) || !std::isfinite(defense) || defense < 0) return HitOutcome::InvalidDamage;
         for (const auto& recent : seen_) {
             if (recent.first == attackerId && swingId <= recent.second)
                 return HitOutcome::Duplicate;
@@ -59,7 +65,7 @@ public:
             seen_.emplace_back(attackerId, swingId);
         }
         const double multiplier = (guarding_ ? 0.25 : 1.0) * (fractureExposed ? 1.5 : 1.0);
-        health_ = std::max(0.0, health_ - baseDamage * multiplier);
+        health_ = std::max(0.0, health_ - std::max(1.0,baseDamage-defense) * multiplier);
         if (!IsAlive()) guarding_ = false;
         return HitOutcome::Applied;
     }

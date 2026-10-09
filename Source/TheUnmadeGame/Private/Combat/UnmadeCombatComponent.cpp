@@ -11,6 +11,17 @@ void UUnmadeCombatComponent::Configure(double MaxHealth, double Damage, double C
     State = UnmadeCore::Combatant(MaxHealth, Damage, Cooldown);
 }
 
+void UUnmadeCombatComponent::SetGearBonuses(int32 Attack, int32 Armor)
+{
+    GearAttack = FMath::Clamp(Attack, 0, 200);
+    GearArmor = FMath::Clamp(Armor, 0, 200);
+}
+
+bool UUnmadeCombatComponent::Heal(float Amount)
+{
+    return State.Heal(static_cast<double>(Amount));
+}
+
 void UUnmadeCombatComponent::SetGuarding(bool bEnabled)
 {
     State.SetGuarding(bEnabled);
@@ -35,6 +46,6 @@ bool UUnmadeCombatComponent::TryStrikeTarget(UUnmadeCombatComponent* Target, dou
     }
     const auto Hit = Target->State.ReceiveHit(
         static_cast<std::uint64_t>(OwnerActor->GetUniqueID()),
-        Swing.swingId, Swing.baseDamage, bFractureExposed);
+        Swing.swingId, Swing.baseDamage + GearAttack, bFractureExposed, Target->GearArmor);
     return Hit == UnmadeCore::HitOutcome::Applied;
 }
