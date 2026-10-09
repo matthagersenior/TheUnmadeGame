@@ -58,3 +58,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/settlement_registry_test.cpp -o /tmp/unmade-settlement-test
           /tmp/unmade-settlement-test
+      - name: Test optional local village stories
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/regional_tasks_test.cpp -o /tmp/unmade-regional-quest-test
+          /tmp/unmade-regional-quest-test
