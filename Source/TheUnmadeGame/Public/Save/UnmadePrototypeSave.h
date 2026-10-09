@@ -71,6 +71,15 @@ public:
     int64 AwardedMilestoneBits = 0;
 
     UPROPERTY(SaveGame)
+    bool bHasEconomySnapshot = false;
+    UPROPERTY(SaveGame)
+    int32 TradeMarks = 45;
+    UPROPERTY(SaveGame)
+    TArray<int32> ProfessionSkills;
+    UPROPERTY(SaveGame)
+    int32 PaidContractMask = 0;
+
+    UPROPERTY(SaveGame)
     bool bHasFractureSnapshot = false;
 
     UPROPERTY(SaveGame)

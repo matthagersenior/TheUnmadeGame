@@ -38,6 +38,24 @@ void UUnmadeEquipmentComponent::BeginPlay()
         }
     }
 
+    if(Save && Save->SchemaVersion==1 && Save->bHasEconomySnapshot)
+    {
+        UnmadeCore::EconomySnapshot PreviousEconomy;
+        bool bValid=Save->ProfessionSkills.Num()==3 && Save->PaidContractMask>=0;
+        if(bValid)
+        {
+            PreviousEconomy.marks=Save->TradeMarks;
+            for(int32 i=0;i<3;++i) PreviousEconomy.craftsmanship[i]=Save->ProfessionSkills[i];
+            PreviousEconomy.completedContracts=static_cast<uint32>(Save->PaidContractMask);
+            bValid=Economy.Restore(PreviousEconomy);
+        }
+        if(!bValid)
+        {
+            bSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Corrupt economy state rejected; no overwrite"));
+            return;
+        }
+    }
     const auto Previous=Inventory.Snapshot();
     if (Inventory.Claim(UnmadeCore::Achievement::Starter)==UnmadeCore::RewardResult::Awarded)
     {
@@ -60,6 +78,12 @@ bool UUnmadeEquipmentComponent::Persist(double UpdatedStrain)
     for (int Id : Snapshot.equipped) Save->EquippedItems.Add(Id);
     Save->AwardedMilestoneBits=static_cast<int64>(Snapshot.milestones);
     Save->bHasInventorySnapshot=true;
+    const auto EconomyState=Economy.Snapshot();
+    Save->bHasEconomySnapshot=true;
+    Save->TradeMarks=EconomyState.marks;
+    Save->ProfessionSkills.Reset();
+    for(int Rank:EconomyState.craftsmanship)Save->ProfessionSkills.Add(Rank);
+    Save->PaidContractMask=static_cast<int32>(EconomyState.completedContracts);
     if (UpdatedStrain >= 0.0)
     {
         Save->PlayerStrain = UpdatedStrain;
@@ -112,6 +136,7 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
     };
     for(const Entry& Reward: Earned)
         if(Reward.Earned) Claim(Reward.Id); // idempotent; never trusts model text
+    ReconcileCivicContracts(Save);
 }
 
 bool UUnmadeEquipmentComponent::EquipNext(UnmadeCore::GearSlot Slot)
@@ -167,6 +192,82 @@ bool UUnmadeEquipmentComponent::ForgeWaybreaker()
     return true;
 }
 
+void UUnmadeEquipmentComponent::ReconcileCivicContracts(const UUnmadePrototypeSave* Save)
+{
+    if(bSaveRejected || !Save || Save->SchemaVersion!=1)return;
+    const struct Contract { UnmadeCore::SettlementId Town;int Stage; } Contracts[]={
+        {UnmadeCore::SettlementId::Crossings,
+            Save->bHasConflictSnapshot&&Save->LocalConflictChoice!=0?2:0},
+        {UnmadeCore::SettlementId::Bellwold,Save->BellwoldTaskStage},
+        {UnmadeCore::SettlementId::Paperhaven,Save->PaperhavenTaskStage}
+    };
+    for(const Contract& Contract:Contracts)
+    {
+        const auto Before=Economy.Snapshot();
+        if(Economy.PayContract(Contract.Town,Contract.Stage)!=UnmadeCore::EconomyResult::Completed)
+            continue;
+        if(!Persist())Economy.Restore(Before);
+    }
+}
+
+bool UUnmadeEquipmentComponent::Buy(UnmadeCore::ItemId Id,
+    UnmadeCore::SettlementId Village,int Trust)
+{
+    if(bSaveRejected)return false;
+    const auto BeforeItems=Inventory.Snapshot();
+    const auto BeforeMoney=Economy.Snapshot();
+    if(Economy.Buy(Inventory,Id,Village,1,Trust)!=UnmadeCore::EconomyResult::Completed)
+        return false;
+    if(!Persist())
+    {
+        Inventory.Restore(BeforeItems);
+        Economy.Restore(BeforeMoney);
+        return false;
+    }
+    return true;
+}
+
+bool UUnmadeEquipmentComponent::Sell(UnmadeCore::ItemId Id,
+    UnmadeCore::SettlementId Village)
+{
+    if(bSaveRejected)return false;
+    const auto BeforeItems=Inventory.Snapshot();
+    const auto BeforeMoney=Economy.Snapshot();
+    if(Economy.Sell(Inventory,Id,Village,1)!=UnmadeCore::EconomyResult::Completed)
+        return false;
+    if(!Persist())
+    {
+        Inventory.Restore(BeforeItems);
+        Economy.Restore(BeforeMoney);
+        return false;
+    }
+    return true;
+}
+
+bool UUnmadeEquipmentComponent::CraftAt(UnmadeCore::SettlementId Village)
+{
+    if(bSaveRejected)return false;
+    for(const auto& Recipe:UnmadeCore::Recipes)
+    {
+        if(Recipe.workshop!=Village)continue;
+        const auto BeforeItems=Inventory.Snapshot();
+        const auto BeforeMoney=Economy.Snapshot();
+        if(Economy.Craft(Inventory,Recipe.id,Village)!=UnmadeCore::EconomyResult::Completed)
+            continue;
+        if(!Persist())
+        {
+            Inventory.Restore(BeforeItems);
+            Economy.Restore(BeforeMoney);
+            return false;
+        }
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Yellow,
+            FString::Printf(TEXT("CRAFTED: %s. Profession progress saved."),
+                UTF8_TO_TCHAR(Recipe.title)));
+        return true;
+    }
+    return false;
+}
+
 FString UUnmadeEquipmentComponent::DescribeInventory() const
 {
     FString Summary=FString::Printf(TEXT("GEAR: +%d attack, +%d armor | "),
@@ -179,7 +280,10 @@ FString UUnmadeEquipmentComponent::DescribeInventory() const
             i==0?TEXT("Weapon"):i==1?TEXT("Armor"):TEXT("Charm"),
             Def?UTF8_TO_TCHAR(Def->name):TEXT("Empty"));
     }
-    Summary+=TEXT("BAG: ");
+    Summary+=FString::Printf(TEXT("Marks %d | Smith %d, Apothecary %d, Scribe %d | BAG: "),
+        Economy.Marks(),Economy.Skill(UnmadeCore::Profession::Smith),
+        Economy.Skill(UnmadeCore::Profession::Apothecary),
+        Economy.Skill(UnmadeCore::Profession::Scribe));
     for(const auto& Def:UnmadeCore::ItemCatalog)
         if(Inventory.Quantity(Def.id)>0)
             Summary+=FString::Printf(TEXT("%s x%d; "),

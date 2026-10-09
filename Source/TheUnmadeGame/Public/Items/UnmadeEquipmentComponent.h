@@ -2,6 +2,8 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Items/UnmadeItemRules.h"
+#include "Items/UnmadeCraftEconomyRules.h"
+class UUnmadePrototypeSave;
 #include "UnmadeEquipmentComponent.generated.h"
 
 UCLASS(ClassGroup=(Unmade), meta=(BlueprintSpawnableComponent))
@@ -16,6 +18,10 @@ public:
     bool EquipNext(UnmadeCore::GearSlot Slot);
     bool UseConsumable(UnmadeCore::ItemId Item, double CurrentStrain, int32& OutStrain);
     bool ForgeWaybreaker();
+    bool Buy(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village,int Trust=0);
+    bool Sell(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village);
+    bool CraftAt(UnmadeCore::SettlementId Village);
+    int32 GetMarks() const { return Economy.Marks(); }
     FString DescribeInventory() const;
     int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount(); }
     int32 FoldBonusSeconds() const { return Inventory.FoldDurationBonus(); }
@@ -25,4 +31,6 @@ private:
     bool bSaveRejected = false;
     void RefreshCombatBonuses();
     UnmadeCore::InventoryModel Inventory;
+    UnmadeCore::RegionalEconomy Economy;
+    void ReconcileCivicContracts(const UUnmadePrototypeSave* Save);
 };
