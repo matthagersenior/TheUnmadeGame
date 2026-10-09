@@ -37,7 +37,7 @@ private:
     bool Persist(bool bWriteStrain=false);
     void DecideRite(int32 Choice);
     void ExplainResult(UnmadeCore::RiteResult Result) const;
-    void RefreshTemporaryPowers(double CurrentTime);
+    void RefreshTemporaryPowers(double CurrentTime,int32 Day);
     UnmadeCore::TenfoldChronicle Chronicle;
     int32 SelectedRite=0;
     int32 SelectedLaw=0;
@@ -46,6 +46,8 @@ private:
     double BonusExpiresAt=0;
     int32 ActiveAttackBonus=0;
     int32 ActiveArmorBonus=0;
+    int32 LastAppliedAttack=0;
+    int32 LastAppliedArmor=0;
     UnmadeCore::RiteId ActiveRite=UnmadeCore::RiteId::Count;
     double LastTickDayCheck=0;
 };

@@ -225,6 +225,16 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
     if (Phase == UnmadeCore::DayPhase::Night)
         CharacterLine += TEXT(" It feels like the dark has started listening.");
+    // A borrowed life affects what people notice, without pretending they know
+    // a generated backstory or overwriting this individual's memories.
+    if(GetWorld())
+    {
+        const AUnmadeCharacter* Visitor=Cast<AUnmadeCharacter>(
+            UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+        if(IsValid(Visitor) && Visitor->IsBorrowedLifeActive() &&
+           FVector::DistSquared(Visitor->GetActorLocation(),GetActorLocation())<FMath::Square(500.f))
+            CharacterLine+=TEXT(" You look familiar, but your hands carry someone else's craft.");
+    }
 
     // The resident's own community records what the player has accomplished.
     if (CachedHub.IsValid())

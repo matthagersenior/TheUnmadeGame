@@ -396,15 +396,25 @@ void UUnmadeTenfoldComponent::VerifyExploredFrontier(int32 RealmIndex)
             Hub->ApplyRiteEnvironment(UnmadeCore::RiteId::Cartography,40.0,true);
     }
 }
-void UUnmadeTenfoldComponent::RefreshTemporaryPowers(double CurrentTime)
+void UUnmadeTenfoldComponent::RefreshTemporaryPowers(double CurrentTime,int32 Day)
 {
-    if(BonusExpiresAt<=0 || CurrentTime<BonusExpiresAt)return;
-    BonusExpiresAt=0;
-    ActiveAttackBonus=ActiveArmorBonus=0;
-    ActiveRite=UnmadeCore::RiteId::Count;
-    if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
-        if(IsValid(Player->GetEquipment()))
-            Player->GetEquipment()->SetTemporaryBonuses(0,0);
+    if(BonusExpiresAt>0 && CurrentTime>=BonusExpiresAt)
+    {
+        BonusExpiresAt=0;
+        ActiveAttackBonus=ActiveArmorBonus=0;
+        ActiveRite=UnmadeCore::RiteId::Count;
+    }
+    const bool bInDebtRecovery=Chronicle.Snapshot().exhaustedUntilDay>0 &&
+        Day<Chronicle.Snapshot().exhaustedUntilDay;
+    const int32 NewAttack=ActiveAttackBonus-(bInDebtRecovery?8:0);
+    if(NewAttack!=LastAppliedAttack || ActiveArmorBonus!=LastAppliedArmor)
+    {
+        LastAppliedAttack=NewAttack;
+        LastAppliedArmor=ActiveArmorBonus;
+        if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
+            if(IsValid(Player->GetEquipment()))
+                Player->GetEquipment()->SetTemporaryBonuses(NewAttack,ActiveArmorBonus);
+    }
 }
 void UUnmadeTenfoldComponent::TickComponent(float DeltaSeconds,ELevelTick TickType,
     FActorComponentTickFunction* ThisTickFunction)
@@ -419,7 +429,7 @@ void UUnmadeTenfoldComponent::TickComponent(float DeltaSeconds,ELevelTick TickTy
         Day=Hub->GetGameDay();
         break;
     }
-    RefreshTemporaryPowers(Now);
+    RefreshTemporaryPowers(Now,Day);
     if(Now>LastTickDayCheck+3)
     {
         LastTickDayCheck=Now;

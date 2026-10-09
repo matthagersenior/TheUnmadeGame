@@ -207,6 +207,11 @@ void AUnmadeCharacter::ForgeMythicGear()
             TEXT("The forge requires both village stories, all three villages, two Echo Glass, Bellmetal and Archive Ink."));
 }
 
+bool AUnmadeCharacter::IsBorrowedLifeActive() const
+{
+    return IsValid(Tenfold) && Tenfold->IsBorrowedIdentityActive();
+}
+
 bool AUnmadeCharacter::HasNearbyHollowKeeper() const
 {
     UWorld* World=GetWorld();
@@ -306,7 +311,16 @@ void AUnmadeCharacter::CrossFrontierGateway()
             if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
                 TEXT("No reachable realm crossing. Look for the marked stone gateways."));
         }
-        else ReconcileEarnedRewards();
+        else
+        {
+            if(IsValid(Tenfold))
+            {
+                const FVector Destination=GetActorLocation();
+                if(Destination.Y < -46000) Tenfold->VerifyExploredFrontier(0);
+                else if(Destination.Y > 46000) Tenfold->VerifyExploredFrontier(1);
+            }
+            ReconcileEarnedRewards();
+        }
         break;
     }
 }
@@ -782,6 +796,8 @@ void AUnmadeCharacter::Interact()
             {
                 if (Hub->InspectSite(NearestSite))
             {
+                if(IsValid(Tenfold))
+                    Tenfold->RecordLegacyDeed(UnmadeCore::Deed::Discovered);
                 ReconcileEarnedRewards();
                 return;
             }
@@ -1075,6 +1091,15 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
         if (It->GetMemory()->Witness(EventId, EventKind, SubjectId)) ++Witnesses;
     }
     SaveNearbyNpcMemories();
+    if(IsValid(Tenfold))
+    {
+        if(EventKind==FName("Player.Helped") || EventKind==FName("Player.HelpedVillage"))
+            Tenfold->RecordLegacyDeed(UnmadeCore::Deed::Protected);
+        else if(EventKind==FName("World.FactionResolved"))
+            Tenfold->RecordLegacyDeed(UnmadeCore::Deed::Reconciled);
+        else if(EventKind==FName("Player.Threatened"))
+            Tenfold->BreakChosenOath();
+    }
     const FString Line = FString::Printf(TEXT("%s witnessed by %d nearby resident(s)."),
         *EventKind.ToString(), Witnesses);
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow, Line);
