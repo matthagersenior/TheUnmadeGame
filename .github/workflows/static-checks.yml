@@ -98,3 +98,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/community_consequences_test.cpp -o /tmp/unmade-community-test
           /tmp/unmade-community-test
+      - name: Test Bellwold aftermath investigation, two routes and durable outcomes
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/bellwold_afterlight_test.cpp -o /tmp/unmade-afterlight-test
+          /tmp/unmade-afterlight-test
