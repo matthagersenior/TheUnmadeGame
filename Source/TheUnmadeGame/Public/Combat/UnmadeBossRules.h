@@ -6,7 +6,7 @@
 namespace UnmadeCore {
 enum class BossId { None=-1, HollowBell=0, RedactedCurator=1, UnfinishedPilgrim=2, Count=3 };
 enum class BossPhase { Resolute, Fractured, Desperate };
-enum class BossAction { Idle, Approach, Telegraph, Strike, Stagger, Defeated };
+enum class BossAction { Idle, Approach, Retreat, Charge, Telegraph, Strike, Shockwave, Stagger, Defeated };
 struct BossProfile {
     BossId id;
     const char* name;
@@ -61,9 +61,14 @@ public:
             if(distanceCm>spec->rangeCm) return {BossAction::Approach,phase,0};
             const double multiplier=phase==BossPhase::Desperate?1.45:
                                     phase==BossPhase::Fractured?1.2:1.0;
-            return {BossAction::Strike,phase,spec->damage*multiplier};
+            return {kind_==BossId::HollowBell ? BossAction::Shockwave : BossAction::Strike,
+                    phase,spec->damage*multiplier};
         }
-        if(distanceCm>spec->rangeCm) return {BossAction::Approach,phase,0};
+        if(kind_==BossId::RedactedCurator && distanceCm<230.0)
+            return {BossAction::Retreat,phase,0};
+        if(distanceCm>spec->rangeCm)
+            return {kind_==BossId::UnfinishedPilgrim && distanceCm<1600.0
+                ? BossAction::Charge : BossAction::Approach,phase,0};
         if(now<nextReady_) return {BossAction::Idle,phase,0};
         // Every strike requires an earlier, observable warning.
         const double windup=spec->windupSeconds*(phase==BossPhase::Desperate?0.7:1.0);

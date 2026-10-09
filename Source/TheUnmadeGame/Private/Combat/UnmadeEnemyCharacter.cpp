@@ -37,6 +37,12 @@ void AUnmadeEnemyCharacter::ConfigureStyle(UnmadeCore::EnemyStyle NewStyle)
     }
 }
 
+void AUnmadeEnemyCharacter::SetVisualScale(FVector Scale)
+{
+    if(IsValid(TemporaryEnemyVisual))
+        TemporaryEnemyVisual->SetRelativeScale3D(Scale);
+}
+
 void AUnmadeEnemyCharacter::ExposeToFold(double Now, double Seconds)
 {
     if (FMath::IsFinite(Now) && Now >= 0.0 && Seconds > 0.0)

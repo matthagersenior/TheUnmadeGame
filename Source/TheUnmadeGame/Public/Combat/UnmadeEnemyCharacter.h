@@ -18,6 +18,7 @@ public:
     AUnmadeEnemyCharacter();
     virtual void Tick(float DeltaSeconds) override;
     void ConfigureStyle(UnmadeCore::EnemyStyle NewStyle);
+    void SetVisualScale(FVector Scale);
     void ExposeToFold(double Now, double Seconds = 4.0);
     bool IsFractureExposed(double Now) const;
 

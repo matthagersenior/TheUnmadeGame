@@ -15,7 +15,8 @@ int main(){
         assert(beat.action==BossAction::Telegraph && beat.damage==0);
         assert(boss.Advance(1.2,1.0,p->rangeCm-1,false).action==BossAction::Telegraph);
         beat=boss.Advance(5,1.0,p->rangeCm-1,false);
-        assert(beat.action==BossAction::Strike && beat.damage==p->damage);
+        assert(beat.action==(id==BossId::HollowBell?BossAction::Shockwave:BossAction::Strike) &&
+               beat.damage==p->damage);
         assert(boss.Advance(5.1,.5,p->rangeCm-1,false).action==BossAction::Idle);
         beat=boss.Advance(10,.2,p->rangeCm-1,false);
         assert(beat.action==BossAction::Telegraph && beat.phase==BossPhase::Desperate);
@@ -24,6 +25,10 @@ int main(){
         assert(boss.Advance(16,0,p->rangeCm-1,false).action==BossAction::Defeated);
         assert(boss.Advance(-1,.5,10,false).action==BossAction::Idle);
     }
+    BossEncounter curator(BossId::RedactedCurator);
+    assert(curator.Advance(1,1,125,false).action==BossAction::Retreat);
+    BossEncounter pilgrim(BossId::UnfinishedPilgrim);
+    assert(pilgrim.Advance(1,1,550,false).action==BossAction::Charge);
     BossEncounter bell(BossId::HollowBell);
     auto beat=bell.Advance(0,1,2000,false);
     assert(beat.action==BossAction::Approach);

@@ -171,7 +171,7 @@ int main() {
     assert(opening.action==BossAction::Telegraph && opening.damage==0);
     assert(bellBoss.Advance(1.2,1.0,300,true).action==BossAction::Stagger);
     assert(bellBoss.Advance(3.0,.5,300,false).action==BossAction::Telegraph);
-    assert(bellBoss.Advance(6.0,.5,300,false).action==BossAction::Strike);
+    assert(bellBoss.Advance(6.0,.5,300,false).action==BossAction::Shockwave);
     assert(gear.Claim(Achievement::HollowBell)==RewardResult::Awarded);
     assert(gear.Quantity(ItemId::BellheartAegis)==1);
     assert(gear.Claim(Achievement::HollowBell)==RewardResult::AlreadyAwarded);
