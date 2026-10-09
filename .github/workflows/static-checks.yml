@@ -30,3 +30,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/adaptive_npc_test.cpp -o /tmp/unmade-npc-test
           /tmp/unmade-npc-test
+      - name: Compile and test offline combat domain
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/combat_rules_test.cpp -o /tmp/unmade-combat-test
+          /tmp/unmade-combat-test
