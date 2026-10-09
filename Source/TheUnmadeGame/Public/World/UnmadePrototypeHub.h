@@ -8,6 +8,7 @@
 #include "UnmadePrototypeHub.generated.h"
 
 class AUnmadeLoreSite;
+class ADirectionalLight;
 
 UCLASS()
 class THEUNMADEGAME_API AUnmadePrototypeHub : public AActor
@@ -32,6 +33,8 @@ private:
     bool bBuilt = false;
     FTimerHandle GossipTimer;
     FTimerHandle WorldSaveTimer;
+    UPROPERTY(Transient)
+    TObjectPtr<ADirectionalLight> Sunlight;
     UnmadeCore::LivingWorldClock Clock;
     UnmadeCore::DiscoveryLedger Discoveries;
     FName LastAmbientSite = NAME_None;

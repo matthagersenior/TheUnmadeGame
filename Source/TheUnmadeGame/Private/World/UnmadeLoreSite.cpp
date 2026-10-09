@@ -39,7 +39,7 @@ void AUnmadeLoreSite::SetPhase(UnmadeCore::DayPhase Phase)
                        Phase == UnmadeCore::DayPhase::Night;
     Glow->SetIntensity(bDark ? 2600.f : 350.f);
     Glow->SetLightColor(bDark ? FLinearColor(0.3f, 0.12f, 0.95f)
-                              : FLinearColor(0.95f, 0.65f, 0.34f));
+                              : FLinearColor(0.95f, 0.65f, 0.34f), false);
 }
 
 FString AUnmadeLoreSite::GetAmbientText(UnmadeCore::DayPhase Phase, int StoryChoice) const

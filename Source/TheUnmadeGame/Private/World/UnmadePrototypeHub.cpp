@@ -9,6 +9,8 @@
 #include "World/UnmadeLoreSite.h"
 #include "Player/UnmadeCharacter.h"
 #include "Engine/Engine.h"
+#include "Engine/DirectionalLight.h"
+#include "Components/DirectionalLightComponent.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -79,8 +81,22 @@ void AUnmadePrototypeHub::SaveLivingWorld()
 void AUnmadePrototypeHub::RefreshDistrictMood()
 {
     if (!GetWorld()) return;
+    const auto Phase = Clock.Phase();
     for (TActorIterator<AUnmadeLoreSite> It(GetWorld()); It; ++It)
-        It->SetPhase(Clock.Phase());
+        It->SetPhase(Phase);
+
+    if (IsValid(Sunlight) && IsValid(Sunlight->GetComponent()))
+    {
+        const bool bNight = Phase == UnmadeCore::DayPhase::Night;
+        const bool bTransition = Phase == UnmadeCore::DayPhase::Dawn ||
+                                 Phase == UnmadeCore::DayPhase::Dusk;
+        Sunlight->GetComponent()->SetIntensity(bNight ? 0.12f : bTransition ? 2.f : 9.f);
+        Sunlight->GetComponent()->SetLightColor(bNight
+            ? FLinearColor(0.36f, 0.45f, 0.8f)
+            : bTransition ? FLinearColor(1.0f, 0.53f, 0.31f)
+                          : FLinearColor(1.0f, 0.95f, 0.82f), false);
+        Sunlight->SetActorRotation(FRotator(bNight ? 25.f : bTransition ? -12.f : -50.f, 0.f, 0.f));
+    }
 }
 
 bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
@@ -116,7 +132,8 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
     const auto Phase = Clock.Phase();
-    if (Phase != LastAmbientPhase)
+    const bool bPhaseChanged = Phase != LastAmbientPhase;
+    if (bPhaseChanged)
     {
         LastAmbientPhase = Phase;
         RefreshDistrictMood();
@@ -144,7 +161,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     {
         LastAmbientSite = NAME_None; // Re-entry can trigger a new local sensory cue.
     }
-    else if (LastAmbientSite != Near->GetSiteId())
+    else if (LastAmbientSite != Near->GetSiteId() || bPhaseChanged)
     {
         LastAmbientSite = Near->GetSiteId();
         if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Cyan,
@@ -188,6 +205,10 @@ void AUnmadePrototypeHub::BuildForPrototype()
 {
     if (bBuilt || !GetWorld()) return;
     bBuilt = true;
+
+    // Engine-native directional light: temporary global time-of-day illumination.
+    Sunlight = GetWorld()->SpawnActor<ADirectionalLight>(
+        FVector(0, 0, 1200), FRotator(-50.f, 0.f, 0.f));
 
     // All geometry uses Unreal's primitive cube assets: temporary untextured blockout.
     // Walking ground: top at Z=0; center at -50 with 1*100 cm tall mesh.
