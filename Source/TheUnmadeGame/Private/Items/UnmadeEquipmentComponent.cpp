@@ -195,7 +195,8 @@ bool UUnmadeEquipmentComponent::ForgeWaybreaker()
 void UUnmadeEquipmentComponent::ReconcileCivicContracts(const UUnmadePrototypeSave* Save)
 {
     if(bSaveRejected || !Save || Save->SchemaVersion!=1)return;
-    const struct Contract { UnmadeCore::SettlementId Town;int Stage; } Contracts[]={
+    struct Contract { UnmadeCore::SettlementId Town; int Stage; };
+    const Contract Contracts[]={
         {UnmadeCore::SettlementId::Crossings,
             Save->bHasConflictSnapshot&&Save->LocalConflictChoice!=0?2:0},
         {UnmadeCore::SettlementId::Bellwold,Save->BellwoldTaskStage},
