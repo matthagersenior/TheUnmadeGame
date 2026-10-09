@@ -15,6 +15,8 @@ static RiteContext context(RiteId id) {
     c.factionEndings=7;
     c.verifiedWitnesses=3;
     c.hasVeyl=true;
+    c.bellQuestComplete=true;
+    c.paperQuestComplete=true;
     c.day=12;
     c.now=1000;
     c.strain=10;
@@ -52,6 +54,13 @@ int main() {
         c.verifiedWitnesses=3;
         assert(q.Advance(id,RiteAction::Decide,c,1)==RiteResult::Advanced);
         assert(q.Stage(id)==4 && q.Choice(id)==1);
+        if(id==RiteId::LegacyForging){
+            q.RecordDeed(Deed::Protected);
+            q.RecordDeed(Deed::Discovered);
+            q.RecordDeed(Deed::Reconciled);
+        }
+        if(id==RiteId::Cartography)q.VerifyRoute(0,3,true);
+        if(id==RiteId::TomorrowDebt)q.PassDay(13);
         assert(q.Advance(id,RiteAction::Master,c)==RiteResult::Completed);
         assert(q.Stage(id)==5 && q.IsMastered(id));
         assert(q.Advance(id,RiteAction::Master,c)==RiteResult::AlreadyCompleted);
