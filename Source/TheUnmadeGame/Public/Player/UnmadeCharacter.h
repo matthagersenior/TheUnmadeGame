@@ -41,6 +41,7 @@ public:
                           int32 SelectedLaw);
     void ReportRiteWitnessEvent();
     void ReportBrokenOathEvent();
+    void ReportRedeemedOathEvent();
     void ReconcileEarnedRewards();
 
 private:

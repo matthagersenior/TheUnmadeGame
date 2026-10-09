@@ -263,6 +263,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         else if (Event.EventKind == FName("Reality.Anomaly"))
             BeliefLine = bDirect ? TEXT("I saw the street move beneath your hand.")
                                  : TEXT("Someone mentioned a moving street. I did not see it.");
+        else if (Event.EventKind == FName("World.BrokenOath"))
+            BeliefLine = bDirect ? TEXT("I watched you abandon a sworn shelter promise.")
+                                 : TEXT("People say an oath was broken. I need to know what happened.");
+        else if (Event.EventKind == FName("World.RedeemedOath"))
+            BeliefLine = bDirect ? TEXT("I saw the hard work of making an oath right again.")
+                                 : TEXT("They say the refuge accepted restitution, though the scar remains.");
         if (!BeliefLine.IsEmpty()) break;
     }
     return FString::Printf(TEXT("%s %s %s %s"),

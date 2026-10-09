@@ -259,7 +259,7 @@ void UUnmadeTenfoldComponent::ExplainResult(UnmadeCore::RiteResult Result) const
     case UnmadeCore::RiteResult::Exhausted:
         Message=TEXT("The debt has been repaid, but the exhaustion remains until the following day.");break;
     case UnmadeCore::RiteResult::BrokenOath:
-        Message=TEXT("Your former oath remembers the betrayal. It cannot be reclaimed.");break;
+        Message=TEXT("A broken oath requires hard restitution: three deeds, a completed Bellwold faction and three eyewitnesses. F10 retries redemption.");break;
     case UnmadeCore::RiteResult::AlreadyCompleted:
         Message=TEXT("This five-chapter quest is mastered. Repeat actions give no new rewards.");break;
     default: break;

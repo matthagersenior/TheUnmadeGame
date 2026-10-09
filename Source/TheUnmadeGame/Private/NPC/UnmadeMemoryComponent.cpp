@@ -90,6 +90,15 @@ void UUnmadeMemoryComponent::RecalculateReactions()
         {
             Fear += bDirect ? 30 : 12;
         }
+        else if (Entry.EventKind == FName("World.BrokenOath"))
+        {
+            Trust -= bDirect ? 35 : 10;
+            Fear += bDirect ? 16 : 4;
+        }
+        else if (Entry.EventKind == FName("World.RedeemedOath"))
+        {
+            Trust += bDirect ? 16 : 5; // restitution cannot erase betrayal
+        }
         else if (Entry.EventKind == FName("Player.Threatened"))
         {
             Trust -= bDirect ? 35 : 15;

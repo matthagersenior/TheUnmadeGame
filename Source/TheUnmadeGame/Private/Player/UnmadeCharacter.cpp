@@ -304,6 +304,10 @@ void AUnmadeCharacter::ReportBrokenOathEvent()
 {
     ReportLocalEvent(FName("World.BrokenOath"),FName("Bellwold.Refuge"));
 }
+void AUnmadeCharacter::ReportRedeemedOathEvent()
+{
+    ReportLocalEvent(FName("World.RedeemedOath"),FName("Bellwold.Refuge"));
+}
 
 void AUnmadeCharacter::CrossFrontierGateway()
 {
