@@ -21,7 +21,7 @@ The prototype uses engine primitive meshes. It is not visual-quality footage or 
 6. Reload save after committing R: barrier stays open. With a fresh save repeat for T: barrier stays sealed. Neither outcome erases NPC observations.
 7. Force a full Strain meter and ensure Fold/Rewrite refuse without mutation. Corrupt a copied save and ensure it does not silently reset prior data.
 8. Verify a witness reacts differently from someone who cannot see the player; local rumors remain labeled as hearsay.
-9. Check gamepad support separately. The initial R/T/F/Q fracture mappings are keyboard-only placeholders.
+9. Check gamepad separately: Left Shoulder=Glimpse, Right Shoulder=Fold, D-pad Left=Rewrite open, D-pad Right=Rewrite sealed. These mappings require engine/controller verification.
 10. Profile frame rate and memory on both a native GPU Windows host and (later) an Android Pixel Streaming client.
 
 ## Current automation evidence

@@ -30,6 +30,12 @@ class FractureSourceContractTests(unittest.TestCase):
             self.assertIn("ActionName=\"" + name + "\"", keys)
             self.assertIn('BindAction("' + name + '"', player)
 
+    def test_gamepad_fracture_mappings_are_present(self):
+        config = read("Config/DefaultInput.ini")
+        for key in ("Gamepad_LeftShoulder", "Gamepad_RightShoulder",
+                    "Gamepad_DPad_Left", "Gamepad_DPad_Right"):
+            self.assertIn("Key=" + key, config)
+
     def test_prototype_saves_do_not_overwrite_other_components(self):
         save = read("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
         hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
