@@ -78,3 +78,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/items/craft_economy_test.cpp -o /tmp/unmade-economy-test
           /tmp/unmade-economy-test
+      - name: Test multi-stage faction stories and irreversible endings
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/faction_chronicle_test.cpp -o /tmp/unmade-faction-test
+          /tmp/unmade-faction-test
