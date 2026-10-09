@@ -205,8 +205,14 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
         {
             const int32 PreviouslyVisited = VillagesVisited.Snapshot();
             const bool bNewVillage = VillagesVisited.Visit(Village);
-            if (bNewVillage && !WriteWorldSnapshot())
-                VillagesVisited.Restore(PreviouslyVisited);
+            if (bNewVillage)
+            {
+                if (!WriteWorldSnapshot())
+                    VillagesVisited.Restore(PreviouslyVisited);
+                else if (AUnmadeCharacter* UnmadePlayer = Cast<AUnmadeCharacter>(
+                    UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
+                    UnmadePlayer->ReconcileEarnedRewards();
+            }
             if (GEngine)
             {
                 const TCHAR* Line = (Phase == UnmadeCore::DayPhase::Night ||

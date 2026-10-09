@@ -31,6 +31,7 @@ void UUnmadeEquipmentComponent::BeginPlay()
         }
         if (!bValid)
         {
+            bSaveRejected = true;
             UE_LOG(LogTemp,Error,TEXT("Invalid inventory save: refused to overwrite existing data"));
             return;
         }
@@ -46,8 +47,9 @@ void UUnmadeEquipmentComponent::BeginPlay()
     RefreshCombatBonuses();
 }
 
-bool UUnmadeEquipmentComponent::Persist()
+bool UUnmadeEquipmentComponent::Persist(double UpdatedStrain)
 {
+    if (bSaveRejected) return false;
     UUnmadePrototypeSave* Save=UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     const auto& Snapshot=Inventory.Snapshot();
@@ -57,6 +59,11 @@ bool UUnmadeEquipmentComponent::Persist()
     for (int Id : Snapshot.equipped) Save->EquippedItems.Add(Id);
     Save->AwardedMilestoneBits=static_cast<int64>(Snapshot.milestones);
     Save->bHasInventorySnapshot=true;
+    if (UpdatedStrain >= 0.0)
+    {
+        Save->PlayerStrain = UpdatedStrain;
+        Save->bHasFractureSnapshot = true;
+    }
     return UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadePrototypeNPC"),0);
 }
 
@@ -69,6 +76,7 @@ void UUnmadeEquipmentComponent::RefreshCombatBonuses()
 
 bool UUnmadeEquipmentComponent::Claim(UnmadeCore::Achievement Reward)
 {
+    if (bSaveRejected) return false;
     const auto Before=Inventory.Snapshot();
     if (Inventory.Claim(Reward)!=UnmadeCore::RewardResult::Awarded) return false;
     if (!Persist()) { Inventory.Restore(Before); return false; }
@@ -81,7 +89,7 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
 {
     const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
         UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
-    if (!Save || Save->SchemaVersion!=1) return;
+    if (bSaveRejected || !Save || Save->SchemaVersion!=1) return;
     const int32 Sites=Save->DiscoveredLoreMask;
     struct Entry { UnmadeCore::Achievement Id; bool Earned; };
     const Entry Earned[]={
@@ -107,12 +115,14 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
 
 bool UUnmadeEquipmentComponent::EquipNext(UnmadeCore::GearSlot Slot)
 {
+    if (bSaveRejected) return false;
     const auto Before=Inventory.Snapshot();
     const int32 count=static_cast<int32>(UnmadeCore::ItemId::Count);
     const auto Current=Inventory.Equipped(Slot);
+    const int32 currentIndex = Current == UnmadeCore::ItemId::Count ? -1 : static_cast<int32>(Current);
     for(int32 step=1;step<=count;++step)
     {
-        const int32 index=(static_cast<int32>(Current)+step)%count;
+        const int32 index=(currentIndex+step)%count;
         const auto* Def=UnmadeCore::FindItem(static_cast<UnmadeCore::ItemId>(index));
         if(!Def || Def->slot!=Slot || Inventory.Quantity(Def->id)<1) continue;
         if(!Inventory.Equip(Def->id)) return false;
@@ -127,6 +137,7 @@ bool UUnmadeEquipmentComponent::UseConsumable(UnmadeCore::ItemId Id,
     double CurrentStrain,int32& OutStrain)
 {
     OutStrain=0;
+    if (bSaveRejected) return false;
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
     if(!IsValid(Player) || !IsValid(Player->GetCombat()) || Player->GetCombat()->IsDefeated())
         return false;
@@ -134,7 +145,11 @@ bool UUnmadeEquipmentComponent::UseConsumable(UnmadeCore::ItemId Id,
     int heal=0,restore=0;
     if(Inventory.Consume(Id,Player->GetCombat()->GetMissingHealth(),
         CurrentStrain,heal,restore)!=UnmadeCore::ConsumeResult::Used) return false;
-    if(!Persist()) { Inventory.Restore(Before); return false; }
+    if(!Persist(FMath::Max(0.0,CurrentStrain-static_cast<double>(restore))))
+    {
+        Inventory.Restore(Before);
+        return false;
+    }
     if(heal>0) Player->GetCombat()->Heal(heal);
     OutStrain=restore;
     return true;
@@ -142,6 +157,7 @@ bool UUnmadeEquipmentComponent::UseConsumable(UnmadeCore::ItemId Id,
 
 bool UUnmadeEquipmentComponent::ForgeWaybreaker()
 {
+    if (bSaveRejected) return false;
     const auto Before=Inventory.Snapshot();
     if(!Inventory.ForgeWaybreaker()) return false;
     if(!Persist()) { Inventory.Restore(Before); return false; }

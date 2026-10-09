@@ -18,7 +18,8 @@ public:
     bool ForgeWaybreaker();
     FString DescribeInventory() const;
 private:
-    bool Persist();
+    bool Persist(double UpdatedStrain = -1.0);
+    bool bSaveRejected = false;
     void RefreshCombatBonuses();
     UnmadeCore::InventoryModel Inventory;
 };
