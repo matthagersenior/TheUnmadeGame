@@ -38,3 +38,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/lexicon/lexicon_rules_test.cpp -o /tmp/unmade-lexicon-test
           /tmp/unmade-lexicon-test
+      - name: Compile and test offline branching story rules
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/conflict_rules_test.cpp -o /tmp/unmade-conflict-test
+          /tmp/unmade-conflict-test
