@@ -2,6 +2,7 @@
 // THE UNMADE authored equipment, consumables and earned rewards.
 // Pure C++17: fully deterministic, offline and without Unreal/LLM dependencies.
 #include <array>
+#include <cmath>
 #include <algorithm>
 #include <cstdint>
 #include <cstring>
