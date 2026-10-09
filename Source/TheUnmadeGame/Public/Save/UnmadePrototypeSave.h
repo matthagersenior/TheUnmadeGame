@@ -42,6 +42,9 @@ public:
 
     UPROPERTY(SaveGame)
     int32 DiscoveredLoreMask = 0;
+    /** Three separate settlement discoveries; schema-1 predecessors default to 0. */
+    UPROPERTY(SaveGame)
+    int32 VisitedSettlementsMask = 0;
 
     UPROPERTY(SaveGame)
     bool bHasFractureSnapshot = false;

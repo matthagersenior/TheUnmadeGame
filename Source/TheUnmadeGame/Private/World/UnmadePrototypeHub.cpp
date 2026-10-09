@@ -7,6 +7,7 @@
 #include "Story/UnmadeConflictGate.h"
 #include "Story/UnmadeConflictRules.h"
 #include "World/UnmadeLoreSite.h"
+#include "World/UnmadeSettlementRegistry.h"
 #include "Player/UnmadeCharacter.h"
 #include "Engine/Engine.h"
 #include "Engine/DirectionalLight.h"
@@ -52,14 +53,17 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 
     UnmadeCore::LivingWorldClock RestoredClock;
     UnmadeCore::DiscoveryLedger RestoredDiscoveries;
+    UnmadeCore::SettlementVisits RestoredVillages;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
-        !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask))
+        !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
+        !RestoredVillages.Restore(Save->VisitedSettlementsMask))
     {
         UE_LOG(LogTemp, Warning, TEXT("Invalid living world state ignored"));
         return;
     }
     Clock = RestoredClock;
     Discoveries = RestoredDiscoveries;
+    VillagesVisited = RestoredVillages;
 }
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot()
@@ -69,6 +73,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->bHasLivingWorldSnapshot = true;
     Save->LivingWorldSeconds = Clock.ElapsedSeconds();
     Save->DiscoveredLoreMask = Discoveries.Snapshot();
+    Save->VisitedSettlementsMask = VillagesVisited.Snapshot();
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
@@ -150,6 +155,35 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     const ACharacter* Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
     if (!IsValid(Player)) return;
 
+    const FVector Position = Player->GetActorLocation();
+    const UnmadeCore::SettlementId Village = UnmadeCore::SettlementAt(Position.X, Position.Y);
+    if (Village != LastVisitedVillage)
+    {
+        LastVisitedVillage = Village;
+        if (const auto* VillageInfo = UnmadeCore::FindSettlement(Village))
+        {
+            const int32 PreviouslyVisited = VillagesVisited.Snapshot();
+            const bool bNewVillage = VillagesVisited.Visit(Village);
+            if (bNewVillage && !WriteWorldSnapshot())
+                VillagesVisited.Restore(PreviouslyVisited);
+            if (GEngine)
+            {
+                const TCHAR* Line = (Phase == UnmadeCore::DayPhase::Night ||
+                                     Phase == UnmadeCore::DayPhase::Dusk)
+                    ? UTF8_TO_TCHAR(VillageInfo->night)
+                    : UTF8_TO_TCHAR(VillageInfo->welcome);
+                GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Yellow,
+                    FString::Printf(TEXT("ARRIVED: %s | %s"),
+                        UTF8_TO_TCHAR(VillageInfo->name), Line));
+            }
+        }
+        else if (GEngine)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Silver,
+                TEXT("ON THE ROAD: Two settlements wait beyond the horizon."));
+        }
+    }
+
     AUnmadeLoreSite* Near = nullptr;
     double BestSq = FMath::Square(625.0);
     for (TActorIterator<AUnmadeLoreSite> It(GetWorld()); It; ++It)
@@ -192,12 +226,62 @@ void AUnmadePrototypeHub::SpawnBlock(FVector Center, FVector Scale, FName Label)
     Block->SetActorScale3D(Scale);
 }
 
-void AUnmadePrototypeHub::SpawnCitizen(FName Id, const TCHAR* DisplayName, FVector Position,
-    UnmadeCore::NpcRole Role, UnmadeCore::NpcTemperament Temperament)
+void AUnmadePrototypeHub::SpawnCitizen(const UnmadeCore::ResidentSpec& Resident)
 {
-    if (AUnmadeNpcCharacter* Citizen = GetWorld()->SpawnActor<AUnmadeNpcCharacter>(Position, FRotator::ZeroRotator))
+    if (!GetWorld()) return;
+    const UnmadeCore::Vec2 Position = UnmadeCore::ResidentWorldPosition(Resident);
+    if (AUnmadeNpcCharacter* Citizen = GetWorld()->SpawnActor<AUnmadeNpcCharacter>(
+        FVector(Position.x, Position.y, 95.0), FRotator::ZeroRotator))
     {
-        Citizen->ConfigureIdentity(Id, FString(DisplayName), Role, Temperament);
+        Citizen->ConfigureIdentity(
+            FName(UTF8_TO_TCHAR(Resident.id)), FString(UTF8_TO_TCHAR(Resident.name)),
+            Resident.role, Resident.temperament, Resident.home,
+            FString(UTF8_TO_TCHAR(Resident.authoredLine)));
+    }
+}
+
+FString AUnmadePrototypeHub::GetCurrentVillageName() const
+{
+    const ACharacter* Player = GetWorld() ? UGameplayStatics::GetPlayerCharacter(GetWorld(), 0) : nullptr;
+    if (!IsValid(Player)) return TEXT("unknown");
+    const FVector Position = Player->GetActorLocation();
+    const auto* Village = UnmadeCore::FindSettlement(
+        UnmadeCore::SettlementAt(Position.X, Position.Y));
+    return Village ? FString(UTF8_TO_TCHAR(Village->name)) : FString(TEXT("the open road"));
+}
+
+void AUnmadePrototypeHub::BuildVillages()
+{
+    // Individual traversable village floors + broad uninterrupted roads.
+    // 18,000 cm (180 m) separates each village. Built-in cubes only.
+    SpawnBlock(FVector(-9000, 0, -50), FVector(180, 7, 1), FName("Route.WestCauseway"));
+    SpawnBlock(FVector(9000, 0, -50), FVector(180, 7, 1), FName("Route.EastCauseway"));
+    for (const auto& Village : UnmadeCore::Settlements)
+    {
+        if (Village.id == UnmadeCore::SettlementId::Crossings) continue;
+        const FVector Base(Village.x, Village.y, 0);
+        const FName Prefix = Village.id == UnmadeCore::SettlementId::Bellwold
+            ? FName("Village.Bellwold") : FName("Village.Paperhaven");
+        SpawnBlock(Base + FVector(0, 0, -50), FVector(52, 52, 1), Prefix);
+        // Buildings deliberately avoid the central lane and resident arrival markers.
+        SpawnBlock(Base + FVector(-1100, -1030, 155), FVector(3.4, 2.5, 3.1), FName("Village.Commons"));
+        SpawnBlock(Base + FVector(1100, -1060, 130), FVector(2.7, 2.7, 2.6), FName("Village.Trades"));
+        SpawnBlock(Base + FVector(-1110, 1150, 160), FVector(2.8, 3.0, 3.2), FName("Village.Housing"));
+        SpawnBlock(Base + FVector(1160, 1210, 135), FVector(2.5, 2.6, 2.7), FName("Village.Watchpost"));
+        if (Village.id == UnmadeCore::SettlementId::Bellwold)
+        {
+            // Bells and a common shelter establish its refuge character.
+            SpawnBlock(Base + FVector(-1640, 0, 430), FVector(1.2, 1.2, 8.6), FName("Bellwold.Belltower"));
+            SpawnBlock(Base + FVector(180, 1550, 190), FVector(4.5, 3.1, 3.8), FName("Bellwold.Refuge"));
+            SpawnBlock(Base + FVector(1750, -550, 115), FVector(2.0, 3.0, 2.3), FName("Bellwold.Workshop"));
+        }
+        else
+        {
+            // Taller registry tower, archive galleries and paper storehouses.
+            SpawnBlock(Base + FVector(1570, -150, 580), FVector(1.5, 1.5, 11.6), FName("Paperhaven.ArchiveTower"));
+            SpawnBlock(Base + FVector(-150, 1620, 210), FVector(5.0, 2.9, 4.2), FName("Paperhaven.Registry"));
+            SpawnBlock(Base + FVector(-1730, -640, 120), FVector(2.0, 3.0, 2.4), FName("Paperhaven.Scriptorium"));
+        }
     }
 }
 
@@ -213,6 +297,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     // All geometry uses Unreal's primitive cube assets: temporary untextured blockout.
     // Walking ground: top at Z=0; center at -50 with 1*100 cm tall mesh.
     SpawnBlock(FVector(0, 0, -50), FVector(52, 52, 1), FName("Hub.Ground"));
+    BuildVillages();
     SpawnBlock(FVector(520, -470, 210), FVector(5, 5, 4.2), FName("Hub.Market"));
     SpawnBlock(FVector(-650, -440, 160), FVector(3, 3, 3.2), FName("Hub.Watch"));
     SpawnBlock(FVector(650, 570, 140), FVector(4, 3, 2.8), FName("Hub.Store"));
@@ -289,26 +374,9 @@ void AUnmadePrototypeHub::BuildForPrototype()
         }
     }
 
-    SpawnCitizen(FName("npc.merchant.001"), TEXT("The stallkeeper"), FVector(200, -230, 95), UnmadeCore::NpcRole::Merchant, UnmadeCore::NpcTemperament::Cautious);
-    SpawnCitizen(FName("npc.guard.001"), TEXT("A gate watchkeeper"), FVector(-300, -230, 95), UnmadeCore::NpcRole::Guard, UnmadeCore::NpcTemperament::Steady);
-    SpawnCitizen(FName("npc.wanderer.001"), TEXT("A passing stranger"), FVector(170, 340, 95), UnmadeCore::NpcRole::Wanderer, UnmadeCore::NpcTemperament::Steady);
-    SpawnCitizen(FName("npc.archivist.001"), TEXT("The records keeper"), FVector(-360, 320, 95), UnmadeCore::NpcRole::Scholar, UnmadeCore::NpcTemperament::Curious);
-    SpawnCitizen(FName("npc.courier.001"), TEXT("A courier"), FVector(300, 90, 95), UnmadeCore::NpcRole::Courier, UnmadeCore::NpcTemperament::Steady);
-
-    // Additional named residents make the outer sites inhabited, not just scenic.
-    // Stable IDs permit distinct persistent memories even when roles are shared.
-    SpawnCitizen(FName("npc.welllistener.001"), TEXT("The well listener"),
-        FVector(-1540, 680, 95), UnmadeCore::NpcRole::Scholar, UnmadeCore::NpcTemperament::Curious);
-    SpawnCitizen(FName("npc.orchardexile.001"), TEXT("The displaced orchard keeper"),
-        FVector(1120, 1260, 95), UnmadeCore::NpcRole::Wanderer, UnmadeCore::NpcTemperament::Cautious);
-    SpawnCitizen(FName("npc.tollbroker.001"), TEXT("The keeper of future debts"),
-        FVector(1000, -1170, 95), UnmadeCore::NpcRole::Merchant, UnmadeCore::NpcTemperament::Cautious);
-    SpawnCitizen(FName("npc.roadwarden.001"), TEXT("The road warden"),
-        FVector(1690, 390, 95), UnmadeCore::NpcRole::Guard, UnmadeCore::NpcTemperament::Steady);
-    SpawnCitizen(FName("npc.bellmaker.001"), TEXT("The bell maker"),
-        FVector(-1580, -1020, 95), UnmadeCore::NpcRole::Merchant, UnmadeCore::NpcTemperament::Steady);
-    SpawnCitizen(FName("npc.nightcourier.001"), TEXT("The night courier"),
-        FVector(1010, 1040, 95), UnmadeCore::NpcRole::Courier, UnmadeCore::NpcTemperament::Cautious);
+    // Data-driven identities: 16 per village, 48 independently remembered residents.
+    for (const UnmadeCore::ResidentSpec& Resident : UnmadeCore::Residents)
+        SpawnCitizen(Resident);
 
     // Two visually distinct graybox enemies. No quest reward or respawn system yet.
     if (AUnmadeEnemyCharacter* Stalker = GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(

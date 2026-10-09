@@ -13,6 +13,7 @@
 AUnmadeNpcCharacter::AUnmadeNpcCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.TickInterval = 0.25f; // fixed-budget graybox NPC steering
     Memory = CreateDefaultSubobject<UUnmadeMemoryComponent>(TEXT("PersonalMemory"));
     PlaceholderVisual = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TemporaryNPCVisual"));
     PlaceholderVisual->SetupAttachment(GetCapsuleComponent());
@@ -55,12 +56,12 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     case UnmadeCore::NpcAction::InvestigateAnomaly:
     case UnmadeCore::NpcAction::ResearchAnomaly:
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = {0.0, 440.0};
+        Target = UnmadeCore::LocalInvestigationTarget(HomeSettlement);
         Speed = 80.0;
         break;
     case UnmadeCore::NpcAction::VerifyRumor:
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = {-360.0, 280.0}; // prototype records keeper meeting point
+        Target = UnmadeCore::LocalRumorTarget(HomeSettlement);
         break;
     case UnmadeCore::NpcAction::Intervene:
     case UnmadeCore::NpcAction::ShareKnowledge:
@@ -92,7 +93,8 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     {
         // Routine goals never replace urgent individual reactions to observed events.
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = UnmadeCore::RoutineTargetForHome(Role, Phase, {HomeLocation.X, HomeLocation.Y});
+        Target = UnmadeCore::LocalRoutineTarget(
+            HomeSettlement, Role, Phase, {HomeLocation.X, HomeLocation.Y});
         Speed = Role == UnmadeCore::NpcRole::Courier ? 95.0 : 65.0;
         StopRadius = 80.0;
     }
@@ -108,11 +110,14 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
 }
 
 void AUnmadeNpcCharacter::ConfigureIdentity(FName StableId, const FString& DisplayLabel,
-    UnmadeCore::NpcRole InRole, UnmadeCore::NpcTemperament InTemperament)
+    UnmadeCore::NpcRole InRole, UnmadeCore::NpcTemperament InTemperament,
+    UnmadeCore::SettlementId InVillage, const FString& InAuthoredLine)
 {
     NpcId = StableId;
     NpcDisplayLabel = DisplayLabel;
     HomeLocation = GetActorLocation();
+    HomeSettlement = InVillage;
+    AuthoredLine = InAuthoredLine;
     Role = InRole;
     Temperament = InTemperament;
     Tags.AddUnique(StableId);
@@ -129,6 +134,14 @@ UnmadeCore::NpcAction AUnmadeNpcCharacter::DecideForPlayer(bool bPlayerNearby) c
     for (const FUnmadeNpcObservation& Observation : Memory->GetObservations())
     {
         const bool bWitnessed = Observation.Evidence == EUnmadeEvidenceKind::Witnessed;
+        if (Observation.EventKind == FName("World.ConflictShelter") ||
+            Observation.EventKind == FName("World.ConflictResearch"))
+        {
+            const bool bShelter = Observation.EventKind == FName("World.ConflictShelter");
+            const int Delta = UnmadeCore::SettlementTrustDelta(HomeSettlement, bShelter, bWitnessed);
+            Input.trust += Delta;
+            if (Delta < 0) Input.fear -= Delta;
+        }
         if (Observation.EventKind == FName("Player.Threatened") && bWitnessed)
             Input.witnessedThreat = true;
         if (Observation.EventKind == FName("Reality.Anomaly"))
@@ -189,29 +202,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     case NpcAction::OfferAid: Line = TEXT("offers to help you on the road."); break;
     default: break;
     }
-    // Author-written personality, separate from any optional generated dialogue.
-    FString CharacterLine;
-    if (NpcId == FName("npc.welllistener.001"))
-        CharacterLine = TEXT("The well knows tomorrow's answers, not which questions survive.");
-    else if (NpcId == FName("npc.orchardexile.001"))
-        CharacterLine = TEXT("Every leaf bears a name I was meant to remember.");
-    else if (NpcId == FName("npc.tollbroker.001"))
-        CharacterLine = TEXT("Your debt was recorded before you arrived.");
-    else if (NpcId == FName("npc.roadwarden.001"))
-        CharacterLine = TEXT("I guard a road that changes its destination while I sleep.");
-    else if (NpcId == FName("npc.bellmaker.001"))
-        CharacterLine = TEXT("I can mend a bell, but not the hour it rings.");
-    else if (NpcId == FName("npc.nightcourier.001"))
-        CharacterLine = TEXT("I deliver letters people swear they never wrote.");
-    else
-    {
-        const auto Phase = CachedHub.IsValid()
-            ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
-        if (Phase == UnmadeCore::DayPhase::Night)
-            CharacterLine = TEXT("We leave one lantern for people still here.");
-        else if (Phase == UnmadeCore::DayPhase::Dawn)
-            CharacterLine = TEXT("Some things return each morning; others remain unmade.");
-    }
+    // Every one of the 48 residents has an authored personal line from their identity.
+    FString CharacterLine = AuthoredLine;
+    const auto Phase = CachedHub.IsValid()
+        ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
+    if (Phase == UnmadeCore::DayPhase::Night)
+        CharacterLine += TEXT(" It feels like the dark has started listening.");
 
     FString BeliefLine;
     const TArray<FUnmadeNpcObservation>& Observations = Memory->GetObservations();

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "NPC/UnmadeNpcDecisionRules.h"
+#include "World/UnmadeSettlementRegistry.h"
 #include "UnmadeNpcCharacter.generated.h"
 
 class UStaticMeshComponent;
@@ -18,7 +19,8 @@ public:
     AUnmadeNpcCharacter();
     virtual void Tick(float DeltaSeconds) override;
     void ConfigureIdentity(FName StableId, const FString& DisplayLabel,
-        UnmadeCore::NpcRole InRole, UnmadeCore::NpcTemperament InTemperament);
+        UnmadeCore::NpcRole InRole, UnmadeCore::NpcTemperament InTemperament,
+        UnmadeCore::SettlementId InVillage, const FString& InAuthoredLine);
     UnmadeCore::NpcAction DecideForPlayer(bool bPlayerNearby) const;
     UFUNCTION(BlueprintPure, Category="Unmade|NPC")
     FName GetCurrentActionId(bool bPlayerNearby = true) const;
@@ -29,6 +31,7 @@ public:
     FName GetStableId() const { return NpcId; }
     const FString& GetDisplayLabel() const { return NpcDisplayLabel; }
     UUnmadeMemoryComponent* GetMemory() const { return Memory; }
+    UnmadeCore::SettlementId GetHomeSettlement() const { return HomeSettlement; }
 
 private:
     UPROPERTY(VisibleAnywhere, Category="Unmade|Memory")
@@ -45,6 +48,8 @@ private:
 
     TWeakObjectPtr<AUnmadePrototypeHub> CachedHub;
     FVector HomeLocation = FVector::ZeroVector;
+    UnmadeCore::SettlementId HomeSettlement = UnmadeCore::SettlementId::Crossings;
+    FString AuthoredLine;
 
     UnmadeCore::NpcRole Role = UnmadeCore::NpcRole::Wanderer;
     UnmadeCore::NpcTemperament Temperament = UnmadeCore::NpcTemperament::Steady;

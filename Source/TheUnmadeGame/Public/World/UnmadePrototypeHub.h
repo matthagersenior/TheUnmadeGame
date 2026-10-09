@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "NPC/UnmadeNpcDecisionRules.h"
 #include "World/UnmadeLivingWorldRules.h"
+#include "World/UnmadeSettlementRegistry.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -23,6 +24,8 @@ public:
     int32 GetGameDay() const { return Clock.DayIndex() + 1; }
     int32 GetMinuteOfDay() const { return Clock.MinuteOfDay(); }
     int32 GetDiscoveredCount() const { return Discoveries.Count(); }
+    int32 GetVisitedVillageCount() const { return VillagesVisited.Count(); }
+    FString GetCurrentVillageName() const;
     bool InspectSite(AUnmadeLoreSite* Site);
     void RefreshDistrictMood();
 
@@ -37,6 +40,8 @@ private:
     TObjectPtr<ADirectionalLight> Sunlight;
     UnmadeCore::LivingWorldClock Clock;
     UnmadeCore::DiscoveryLedger Discoveries;
+    UnmadeCore::SettlementVisits VillagesVisited;
+    UnmadeCore::SettlementId LastVisitedVillage = UnmadeCore::SettlementId::None;
     FName LastAmbientSite = NAME_None;
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;
     void RestoreLivingWorld();
@@ -48,7 +53,7 @@ private:
     void SpreadLocalRumors();
     void SaveCitizens();
     void SpawnBlock(FVector Center, FVector Scale, FName Label);
-    void SpawnCitizen(FName Id, const TCHAR* DisplayName, FVector Position,
-        UnmadeCore::NpcRole Role, UnmadeCore::NpcTemperament Temperament);
+    void SpawnCitizen(const UnmadeCore::ResidentSpec& Resident);
+    void BuildVillages();
     void RestoreCitizens();
 };
