@@ -30,7 +30,7 @@ public:
     bool IsMastered(UnmadeCore::RiteId Rite) const {return Chronicle.IsMastered(Rite);}
     int32 CurrentSelectedRite() const {return SelectedRite;}
     bool IsBorrowedIdentityActive() const {
-        return BonusExpiresAt>0 && SelectedRite==static_cast<int32>(UnmadeCore::RiteId::BorrowedLives);
+        return BonusExpiresAt>0 && ActiveRite==UnmadeCore::RiteId::BorrowedLives;
     }
 private:
     UnmadeCore::RiteContext GatherContext();
@@ -46,5 +46,6 @@ private:
     double BonusExpiresAt=0;
     int32 ActiveAttackBonus=0;
     int32 ActiveArmorBonus=0;
+    UnmadeCore::RiteId ActiveRite=UnmadeCore::RiteId::Count;
     double LastTickDayCheck=0;
 };

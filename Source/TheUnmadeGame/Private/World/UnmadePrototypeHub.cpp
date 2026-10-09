@@ -503,6 +503,14 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
+    // Unmastered bridges and overlapping histories are temporary physical
+    // states. World mastering only stabilizes explicitly allowed structures.
+    for(auto It=TemporaryRiteWorldEffects.CreateIterator();It;++It)
+    {
+        if(Clock.ElapsedSeconds()<It.Value())continue;
+        SetRiteWorldActorState(It.Key(),false);
+        It.RemoveCurrent();
+    }
     const auto Phase = Clock.Phase();
     const bool bPhaseChanged = Phase != LastAmbientPhase;
     if (bPhaseChanged)

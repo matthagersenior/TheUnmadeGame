@@ -277,6 +277,9 @@ void UUnmadeTenfoldComponent::StudyRite()
     {
         if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
             Player->ReconcileEarnedRewards();
+        if(AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
+            UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass())))
+            Hub->ApplyRiteEnvironment(Id,1.0,true);
     }
     ShowRite();
 }
@@ -346,6 +349,7 @@ void UUnmadeTenfoldComponent::InvokeRite()
             Id==UnmadeCore::RiteId::TomorrowDebt ? Power.impact : 0;
         ActiveArmorBonus=Id==UnmadeCore::RiteId::Oathbinding?Power.impact:0;
         BonusExpiresAt=Context.now+Power.duration;
+        ActiveRite=Id;
         if(IsValid(Player->GetEquipment()))
             Player->GetEquipment()->SetTemporaryBonuses(ActiveAttackBonus,ActiveArmorBonus);
     }
@@ -384,13 +388,20 @@ void UUnmadeTenfoldComponent::VerifyExploredFrontier(int32 RealmIndex)
 {
     if(bSaveRejected || Chronicle.Stage(UnmadeCore::RiteId::Cartography)<2)return;
     const auto Before=Chronicle.Snapshot();
-    if(Chronicle.VerifyRoute(RealmIndex,2,true) && !Persist())Chronicle.Restore(Before);
+    if(Chronicle.VerifyRoute(RealmIndex,2,true))
+    {
+        if(!Persist())Chronicle.Restore(Before);
+        else if(AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
+            UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass())))
+            Hub->ApplyRiteEnvironment(UnmadeCore::RiteId::Cartography,40.0,true);
+    }
 }
 void UUnmadeTenfoldComponent::RefreshTemporaryPowers(double CurrentTime)
 {
     if(BonusExpiresAt<=0 || CurrentTime<BonusExpiresAt)return;
     BonusExpiresAt=0;
     ActiveAttackBonus=ActiveArmorBonus=0;
+    ActiveRite=UnmadeCore::RiteId::Count;
     if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
         if(IsValid(Player->GetEquipment()))
             Player->GetEquipment()->SetTemporaryBonuses(0,0);
