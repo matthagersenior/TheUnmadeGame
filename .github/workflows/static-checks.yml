@@ -86,3 +86,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/frontier_realms_test.cpp -o /tmp/unmade-frontier-test
           /tmp/unmade-frontier-test
+      - name: Compile and test ten signature RPG mechanics and questlines
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/tenfold_chronicle_test.cpp -o /tmp/unmade-tenfold-test
+          /tmp/unmade-tenfold-test
