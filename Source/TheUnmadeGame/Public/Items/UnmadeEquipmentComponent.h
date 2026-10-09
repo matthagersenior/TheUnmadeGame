@@ -26,10 +26,17 @@ public:
     int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount(); }
     int32 FoldBonusSeconds() const { return Inventory.FoldDurationBonus(); }
     double StrainRecoveryMultiplier() const { return Inventory.RecoveryMultiplier(); }
+    void SetTemporaryBonuses(int32 Attack,int32 Armor) {
+        TemporaryAttack=FMath::Clamp(Attack,0,80);
+        TemporaryArmor=FMath::Clamp(Armor,0,80);
+        RefreshCombatBonuses();
+    }
 private:
     bool Persist(double UpdatedStrain = -1.0);
     bool bSaveRejected = false;
     void RefreshCombatBonuses();
+    int32 TemporaryAttack=0;
+    int32 TemporaryArmor=0;
     UnmadeCore::InventoryModel Inventory;
     UnmadeCore::RegionalEconomy Economy;
     void ReconcileCivicContracts(const UUnmadePrototypeSave* Save);

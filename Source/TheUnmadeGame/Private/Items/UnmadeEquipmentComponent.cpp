@@ -1,4 +1,5 @@
 #include "Items/UnmadeEquipmentComponent.h"
+#include "World/UnmadeTenfoldChronicle.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
@@ -96,7 +97,8 @@ void UUnmadeEquipmentComponent::RefreshCombatBonuses()
 {
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
     if (IsValid(Player) && IsValid(Player->GetCombat()))
-        Player->GetCombat()->SetGearBonuses(Inventory.AttackBonus(),Inventory.ArmorBonus());
+        Player->GetCombat()->SetGearBonuses(
+            Inventory.AttackBonus()+TemporaryAttack,Inventory.ArmorBonus()+TemporaryArmor);
 }
 
 bool UUnmadeEquipmentComponent::Claim(UnmadeCore::Achievement Reward)
@@ -147,7 +149,27 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
             Save->FactionEndings[1]!=0},
         {UnmadeCore::Achievement::RoadboundCovenant,
             Save->bHasFactionChronicle && Save->FactionEndings.Num()==3 &&
-            Save->FactionEndings[2]!=0}
+            Save->FactionEndings[2]!=0},
+        {UnmadeCore::Achievement::RiteUnwriteLaw,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[0]==5},
+        {UnmadeCore::Achievement::RiteWitnesscraft,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[1]==5},
+        {UnmadeCore::Achievement::RiteBorrowedLives,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[2]==5},
+        {UnmadeCore::Achievement::RiteLegacyForging,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[3]==5},
+        {UnmadeCore::Achievement::RiteLivingRoads,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[4]==5},
+        {UnmadeCore::Achievement::RiteTomorrowDebt,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[5]==5},
+        {UnmadeCore::Achievement::RiteUnderstandingBosses,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[6]==5},
+        {UnmadeCore::Achievement::RiteParadoxConvergence,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[7]==5},
+        {UnmadeCore::Achievement::RiteOathbinding,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[8]==5},
+        {UnmadeCore::Achievement::RiteCartography,
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[9]==5}
     };
     for(const Entry& Reward: Earned)
         if(Reward.Earned) Claim(Reward.Id); // idempotent; never trusts model text

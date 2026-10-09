@@ -91,6 +91,24 @@ int main(){
     assert(factionRewards.Claim(Achievement::RoadboundCovenant)==RewardResult::Awarded);
     assert(factionRewards.Quantity(ItemId::RoadboundCompass)==1);
     assert(factionRewards.Claim(Achievement::RefugeCovenant)==RewardResult::AlreadyAwarded);
+    InventoryModel newDisciplines;
+    const Achievement rites[]={
+        Achievement::RiteUnwriteLaw,Achievement::RiteWitnesscraft,
+        Achievement::RiteBorrowedLives,Achievement::RiteLegacyForging,
+        Achievement::RiteLivingRoads,Achievement::RiteTomorrowDebt,
+        Achievement::RiteUnderstandingBosses,Achievement::RiteParadoxConvergence,
+        Achievement::RiteOathbinding,Achievement::RiteCartography
+    };
+    assert(ItemCatalog.size()==52);
+    for (auto ability : rites) {
+        assert(newDisciplines.Claim(ability)==RewardResult::Awarded);
+        assert(newDisciplines.Claim(ability)==RewardResult::AlreadyAwarded);
+    }
+    assert(newDisciplines.Quantity(ItemId::ThreeDeedSteel)==1);
+    assert(newDisciplines.Quantity(ItemId::CoastTrueAtlas)==1);
+    InventoryModel afterRestart;
+    assert(afterRestart.Restore(newDisciplines.Snapshot()));
+    for (auto ability : rites) assert(afterRestart.HasClaimed(ability));
     InventoryModel noRewards;
     assert(!noRewards.ForgeWaybreaker());
     assert(noRewards.Claim(static_cast<Achievement>(999))==RewardResult::Invalid);

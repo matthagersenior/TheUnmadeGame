@@ -26,6 +26,9 @@ enum class ItemId : int {
     TemperedEdge, LanternMail, InkboundCharm,
     StormglassCompass, EmberheartBlade,
     RefugeOathguard, ArchivistQuill, RoadboundCompass,
+    BellmakersVerse, RememberedBridge, SecondName, ThreeDeedSteel,
+    CommonCauseway, FutureReceipt, HollowMercy, BetweenHistories,
+    UnbrokenLantern, CoastTrueAtlas,
     Count
 };
 enum class Achievement : int {
@@ -35,7 +38,10 @@ enum class Achievement : int {
     AllLandmarks, FirstStalker, FirstWatcher,
     HollowBell, RedactedCurator, UnfinishedPilgrim,
     SaltwakeStory, CinderholdStory,
-    RefugeCovenant, ArchiveCovenant, RoadboundCovenant, Count
+    RefugeCovenant, ArchiveCovenant, RoadboundCovenant,
+    RiteUnwriteLaw, RiteWitnesscraft, RiteBorrowedLives, RiteLegacyForging,
+    RiteLivingRoads, RiteTomorrowDebt, RiteUnderstandingBosses,
+    RiteParadoxConvergence, RiteOathbinding, RiteCartography, Count
 };
 struct ItemDef {
     ItemId id;
@@ -89,7 +95,17 @@ inline constexpr std::array<ItemDef, static_cast<int>(ItemId::Count)> ItemCatalo
     {ItemId::EmberheartBlade,"blade.emberheart","Emberheart of Cinderhold","A blade that can be passed on without diminishing its flame.",ItemKind::Weapon,Rarity::Mythic,GearSlot::Weapon,1,27,0,0,0},
     {ItemId::RefugeOathguard,"armor.refuge_oathguard","Oathguard of the Open Hearth","There is no sanctuary without people willing to defend it.",ItemKind::Armor,Rarity::Epic,GearSlot::Armor,1,0,15,0,0},
     {ItemId::ArchivistQuill,"blade.archivist_quill","The Quill That Will Not Erase","Every false record must face someone who remembers.",ItemKind::Weapon,Rarity::Epic,GearSlot::Weapon,1,22,0,0,0},
-    {ItemId::RoadboundCompass,"charm.roadbound","Compass of the Common Road","No single village can own a road that people share.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,7,8,0,0}
+    {ItemId::RoadboundCompass,"charm.roadbound","Compass of the Common Road","No single village can own a road that people share.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,7,8,0,0},
+    {ItemId::BellmakersVerse,"charm.bellmakers_verse","The Bellmaker's Unwritten Verse","An interval of silence carved out of a condemned bell.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,6,7,0,0},
+    {ItemId::RememberedBridge,"charm.remembered_bridge","The Bridge That Remembers","Each stone holds the name of one witness who dared to speak.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,7,11,0,0},
+    {ItemId::SecondName,"charm.second_name","The Second Name","An unlived childhood folded beneath the wearer's signature.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,11,3,0,0},
+    {ItemId::ThreeDeedSteel,"blade.three_deed","The Three-Deed Temper","Its maker can name the lives protected instead of foes slain.",ItemKind::Weapon,Rarity::Mythic,GearSlot::Weapon,1,28,0,0,0},
+    {ItemId::CommonCauseway,"charm.common_causeway","The Common Causeway","A road sworn open to everyone and owned by no one.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,5,9,0,0},
+    {ItemId::FutureReceipt,"weapon.future_receipt","Tomorrow's Paid Receipt","The sunrise collects its debt; this receipt admits the cost.",ItemKind::Weapon,Rarity::Epic,GearSlot::Weapon,1,21,0,0,0},
+    {ItemId::HollowMercy,"armor.hollow_mercy","Mercy of the Hollow Keeper","The keeper was seen at last, and chose to stand down.",ItemKind::Armor,Rarity::Mythic,GearSlot::Armor,1,0,19,0,0},
+    {ItemId::BetweenHistories,"charm.between_histories","The Room Between Histories","Two incompatible homes shelter the same forgotten name.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,10,12,0,0},
+    {ItemId::UnbrokenLantern,"armor.unbroken_lantern","The Unbroken Shelter Oath","Every witness expects the light to survive your footsteps.",ItemKind::Armor,Rarity::Epic,GearSlot::Armor,1,0,16,0,0},
+    {ItemId::CoastTrueAtlas,"charm.coast_true","Atlas of the Missing Coast","The navigator kept both the rumor and the shoreline she saw.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,9,10,0,0}
 }};
 inline const ItemDef* FindItem(ItemId id) noexcept {
     const int i = static_cast<int>(id);
@@ -228,6 +244,16 @@ public:
         case Achievement::RefugeCovenant: okay=add(ItemId::RefugeOathguard,1);break;
         case Achievement::ArchiveCovenant: okay=add(ItemId::ArchivistQuill,1);break;
         case Achievement::RoadboundCovenant: okay=add(ItemId::RoadboundCompass,1);break;
+        case Achievement::RiteUnwriteLaw: okay=add(ItemId::BellmakersVerse,1);break;
+        case Achievement::RiteWitnesscraft: okay=add(ItemId::RememberedBridge,1);break;
+        case Achievement::RiteBorrowedLives: okay=add(ItemId::SecondName,1);break;
+        case Achievement::RiteLegacyForging: okay=add(ItemId::ThreeDeedSteel,1);break;
+        case Achievement::RiteLivingRoads: okay=add(ItemId::CommonCauseway,1);break;
+        case Achievement::RiteTomorrowDebt: okay=add(ItemId::FutureReceipt,1);break;
+        case Achievement::RiteUnderstandingBosses: okay=add(ItemId::HollowMercy,1);break;
+        case Achievement::RiteParadoxConvergence: okay=add(ItemId::BetweenHistories,1);break;
+        case Achievement::RiteOathbinding: okay=add(ItemId::UnbrokenLantern,1);break;
+        case Achievement::RiteCartography: okay=add(ItemId::CoastTrueAtlas,1);break;
         default: return RewardResult::Invalid;
         }
         if(!okay)return RewardResult::NoRoom;
