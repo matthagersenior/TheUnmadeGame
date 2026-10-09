@@ -60,7 +60,11 @@ int main() {
             q.RecordDeed(Deed::Reconciled);
         }
         if(id==RiteId::Cartography)q.VerifyRoute(0,3,true);
-        if(id==RiteId::TomorrowDebt)q.PassDay(13);
+        if(id==RiteId::TomorrowDebt){
+            q.PassDay(13);
+            c.day=15; // debt exhaustion must expire by natural time before future use
+            c.now+=400;
+        }
         assert(q.Advance(id,RiteAction::Master,c)==RiteResult::Completed);
         assert(q.Stage(id)==5 && q.IsMastered(id));
         assert(q.Advance(id,RiteAction::Master,c)==RiteResult::AlreadyCompleted);
