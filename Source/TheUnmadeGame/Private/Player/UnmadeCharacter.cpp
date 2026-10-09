@@ -308,6 +308,11 @@ void AUnmadeCharacter::ReportRiteWitnessEvent()
 {
     ReportLocalEvent(FName("Reality.Rite"),FName("TheUnmade.Tenfold"));
 }
+void AUnmadeCharacter::ReportRiteChoiceEvent(int32 Choice)
+{
+    if(Choice==1)ReportLocalEvent(FName("World.RiteProtect"),FName("TheUnmade.Tenfold"));
+    else if(Choice==2)ReportLocalEvent(FName("World.RiteReveal"),FName("TheUnmade.Tenfold"));
+}
 void AUnmadeCharacter::ReportBrokenOathEvent()
 {
     ReportLocalEvent(FName("World.BrokenOath"),FName("Bellwold.Refuge"));

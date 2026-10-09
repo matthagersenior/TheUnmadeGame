@@ -42,6 +42,7 @@ public:
     void ApplyRiteAbility(UnmadeCore::RiteId Rite, const UnmadeCore::RiteEffect& Effect,
                           int32 SelectedLaw);
     void ReportRiteWitnessEvent();
+    void ReportRiteChoiceEvent(int32 Choice);
     void ReportBrokenOathEvent();
     void ReportRedeemedOathEvent();
     void ReconcileEarnedRewards();

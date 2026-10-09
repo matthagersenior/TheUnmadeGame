@@ -90,6 +90,15 @@ void UUnmadeMemoryComponent::RecalculateReactions()
         {
             Fear += bDirect ? 30 : 12;
         }
+        else if (Entry.EventKind == FName("World.RiteProtect"))
+        {
+            Trust += bDirect ? 18 : 6;
+        }
+        else if (Entry.EventKind == FName("World.RiteReveal"))
+        {
+            Trust += bDirect ? 11 : 4;
+            Fear += bDirect ? 7 : 2;
+        }
         else if (Entry.EventKind == FName("World.BrokenOath"))
         {
             Trust -= bDirect ? 35 : 10;

@@ -267,6 +267,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         else if (Event.EventKind == FName("Reality.Anomaly"))
             BeliefLine = bDirect ? TEXT("I saw the street move beneath your hand.")
                                  : TEXT("Someone mentioned a moving street. I did not see it.");
+        else if (Event.EventKind == FName("World.RiteProtect"))
+            BeliefLine = bDirect ? TEXT("I saw you choose to protect the people from a power that could have harmed them.")
+                                 : TEXT("Some say you put the villagers first. I hope they are right.");
+        else if (Event.EventKind == FName("World.RiteReveal"))
+            BeliefLine = bDirect ? TEXT("I watched you reveal what the authorities wanted hidden.")
+                                 : TEXT("They say you released a difficult truth. Did you?");
         else if (Event.EventKind == FName("World.BrokenOath"))
             BeliefLine = bDirect ? TEXT("I watched you abandon a sworn shelter promise.")
                                  : TEXT("People say an oath was broken. I need to know what happened.");

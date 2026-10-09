@@ -686,6 +686,9 @@ void AUnmadePrototypeHub::RefreshRiteWorldFromSave()
         SetRiteWorldActorState(FName("Rite.WitnessBridge"),true);
     if(Save->RiteStages[4]==5)
         SetRiteWorldActorState(FName("Rite.CommonCauseway"),true);
+    if(Save->RiteStages[7]==5 && Save->RiteChoices.Num()==10 &&
+       Save->RiteChoices[7]==2)
+        SetRiteWorldActorState(FName("Rite.ParadoxIntact"),true);
     if(Save->VerifiedRoadBits>0)
         SetRiteWorldActorState(FName("Rite.MapRoute"),true);
 }
@@ -704,10 +707,16 @@ void AUnmadePrototypeHub::ApplyRiteEnvironment(UnmadeCore::RiteId Id,
     default:return;
     }
     SetRiteWorldActorState(Tag,true);
-    if(Mastered && Id!=UnmadeCore::RiteId::ParadoxConvergence)
-        TemporaryRiteWorldEffects.Remove(Tag);
-    else
-        TemporaryRiteWorldEffects.Add(Tag,Clock.ElapsedSeconds()+Duration);
+    bool bPermanent=Mastered && Id!=UnmadeCore::RiteId::ParadoxConvergence;
+    if(Mastered && Id==UnmadeCore::RiteId::ParadoxConvergence)
+    {
+        const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
+            UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+        bPermanent=Save && Save->bHasTenfoldChronicle &&
+            Save->RiteChoices.Num()==10 && Save->RiteChoices[7]==2;
+    }
+    if(bPermanent)TemporaryRiteWorldEffects.Remove(Tag);
+    else TemporaryRiteWorldEffects.Add(Tag,Clock.ElapsedSeconds()+Duration);
 }
 
 void AUnmadePrototypeHub::BuildForPrototype()
