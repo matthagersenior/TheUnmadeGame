@@ -7,6 +7,7 @@
 
 class UStaticMeshComponent;
 class UUnmadeMemoryComponent;
+class AUnmadePrototypeHub;
 
 UCLASS()
 class THEUNMADEGAME_API AUnmadeNpcCharacter : public ACharacter
@@ -41,6 +42,8 @@ private:
 
     UPROPERTY()
     FString NpcDisplayLabel;
+
+    TWeakObjectPtr<AUnmadePrototypeHub> CachedHub;
 
     UnmadeCore::NpcRole Role = UnmadeCore::NpcRole::Wanderer;
     UnmadeCore::NpcTemperament Temperament = UnmadeCore::NpcTemperament::Steady;

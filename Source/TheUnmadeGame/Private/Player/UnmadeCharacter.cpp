@@ -1,6 +1,8 @@
 #include "Player/UnmadeCharacter.h"
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Story/UnmadeConflictGate.h"
+#include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeLoreSite.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Lexicon/UnmadeLexiconComponent.h"
@@ -160,6 +162,8 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
     }
 
     ApplyConflictGates();
+    for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
+        Hub->RefreshDistrictMood();
     const bool bShelter = Choice == UnmadeCore::ConflictChoice::Shelter;
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Yellow,
         bShelter ? TEXT("COMMUNITY ROUTE OPEN; archive closed. This decision persists.")
@@ -223,9 +227,22 @@ void AUnmadeCharacter::ShowStoryJournal()
         Supply = TEXT("delivered");
 
     const int32 Clues = Lexicon ? Lexicon->GetClueCount() : 0;
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 9.f, FColor::Cyan,
-        FString::Printf(TEXT("JOURNAL | Local dispute: %s | Supply errand: %s | Language clues: %d/2 | Strain: %.0f/100"),
-            *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
+    FString WorldTime = TEXT("unknown");
+    int32 SitesSeen = 0;
+    if (GetWorld())
+    {
+        for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
+        {
+            const int32 Minute = Hub->GetMinuteOfDay();
+            WorldTime = FString::Printf(TEXT("day %d at %02d:%02d"),
+                Hub->GetGameDay(), Minute / 60, Minute % 60);
+            SitesSeen = Hub->GetDiscoveredCount();
+            break;
+        }
+    }
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan,
+        FString::Printf(TEXT("JOURNAL | %s | Explored %d/6 | Dispute: %s | Supplies: %s | VEYL clues: %d/2 | Strain: %.0f/100"),
+            *WorldTime, SitesSeen, *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
@@ -326,6 +343,33 @@ void AUnmadeCharacter::Interact()
     AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
     if (!Target)
     {
+        // Discovery is a real authored interaction, not model-generated narration.
+        AUnmadeLoreSite* NearestSite = nullptr;
+        double BestDistSq = FMath::Square(280.f);
+        if (GetWorld())
+        {
+            for (TActorIterator<AUnmadeLoreSite> It(GetWorld()); It; ++It)
+            {
+                const double DistSq = FVector::DistSquared(GetActorLocation(), It->GetActorLocation());
+                if (DistSq >= BestDistSq) continue;
+                FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeLoreSight), false);
+                Params.AddIgnoredActor(this);
+                Params.AddIgnoredActor(*It);
+                if (GetWorld()->LineTraceTestByChannel(
+                    GetActorLocation() + FVector(0, 0, 50),
+                    It->GetActorLocation() + FVector(0, 0, 50), ECC_Visibility, Params))
+                    continue;
+                NearestSite = *It;
+                BestDistSq = DistSq;
+            }
+            if (IsValid(NearestSite))
+            {
+                for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
+                {
+                    if (Hub->InspectSite(NearestSite)) return;
+                }
+            }
+        }
         if (IsValid(FindNearbyFractureAnchor()) && GEngine)
         {
             const FString Inscription = Lexicon && Lexicon->UnderstandsVeyl()

@@ -1,6 +1,8 @@
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "NPC/UnmadeNpcMotionRules.h"
+#include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeLivingWorldRules.h"
 #include "Player/UnmadeCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
@@ -42,6 +44,12 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     double Speed = 70.0;
     double StopRadius = 120.0;
 
+    if (!CachedHub.IsValid())
+        CachedHub = Cast<AUnmadePrototypeHub>(
+            UGameplayStatics::GetActorOfClass(World, AUnmadePrototypeHub::StaticClass()));
+    const auto Phase = CachedHub.IsValid()
+        ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
+
     switch (Action)
     {
     case UnmadeCore::NpcAction::InvestigateAnomaly:
@@ -74,16 +82,19 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         }
         break;
     case UnmadeCore::NpcAction::DeliverMessage:
-        // Simple deterministic round trip for the courier; later replaced by navmesh tasks.
-        Motion = UnmadeCore::NpcMotion::Approach;
-        Target = FMath::FloorToInt(World->GetTimeSeconds() / 18.0) % 2 == 0
-            ? UnmadeCore::Vec2{210.0, -160.0}
-            : UnmadeCore::Vec2{320.0, 90.0};
-        Speed = 95.0;
-        StopRadius = 60.0;
+        // The courier now follows day-part waypoints, not a disconnected timer.
         break;
     default:
         break; // working at stall, patrolling in place, etc.
+    }
+
+    if (Motion == UnmadeCore::NpcMotion::Stay)
+    {
+        // Routine goals never replace urgent individual reactions to observed events.
+        Motion = UnmadeCore::NpcMotion::Approach;
+        Target = UnmadeCore::RoutineTarget(Role, Phase);
+        Speed = Role == UnmadeCore::NpcRole::Courier ? 95.0 : 65.0;
+        StopRadius = 80.0;
     }
 
     const auto NewPosition = UnmadeCore::SteerNpc(
