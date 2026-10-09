@@ -113,3 +113,12 @@ All outcomes merge into the existing local save; adaptive residents can
 witness and remember resulting actions without AI. See
 [branching conflict QA](docs/qa/branching-conflict.md).
 This source has not been compiled or playtested in Unreal Editor.
+
+## Physical NPC responses — source prototype
+
+The five named residents now use the offline decision policy for simple in-world
+movement: investigating the fracture, approaching a trusted player, withdrawing
+when frightened, or running a tiny courier route. This is **swept graybox actor
+motion**, not animation, crowd avoidance or NavMesh AI. The deterministic
+motion policy has native CI tests. Unreal compilation and interactive gameplay
+still require the Windows Unreal host.

@@ -42,3 +42,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/conflict_rules_test.cpp -o /tmp/unmade-conflict-test
           /tmp/unmade-conflict-test
+      - name: Compile and test offline NPC motion
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/npc_motion_test.cpp -o /tmp/unmade-motion-test
+          /tmp/unmade-motion-test

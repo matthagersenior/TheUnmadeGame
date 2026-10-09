@@ -1,12 +1,16 @@
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
+#include "NPC/UnmadeNpcMotionRules.h"
+#include "Player/UnmadeCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
 AUnmadeNpcCharacter::AUnmadeNpcCharacter()
 {
-    PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bCanEverTick = true;
     Memory = CreateDefaultSubobject<UUnmadeMemoryComponent>(TEXT("PersonalMemory"));
     PlaceholderVisual = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TemporaryNPCVisual"));
     PlaceholderVisual->SetupAttachment(GetCapsuleComponent());
@@ -16,6 +20,80 @@ AUnmadeNpcCharacter::AUnmadeNpcCharacter()
 
     static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
     if (Mesh.Succeeded()) PlaceholderVisual->SetStaticMesh(Mesh.Object);
+}
+
+void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+    UWorld* World = GetWorld();
+    if (!World || NpcId.IsNone()) return;
+
+    const AUnmadeCharacter* Player = Cast<AUnmadeCharacter>(
+        UGameplayStatics::GetPlayerCharacter(World, 0));
+    if (!IsValid(Player)) return;
+
+    const FVector Current = GetActorLocation();
+    const FVector PlayerPosition = Player->GetActorLocation();
+    const bool bPlayerNearby = FVector::DistSquared2D(Current, PlayerPosition) < FMath::Square(550.f);
+    const auto Action = DecideForPlayer(bPlayerNearby);
+
+    UnmadeCore::NpcMotion Motion = UnmadeCore::NpcMotion::Stay;
+    UnmadeCore::Vec2 Target{Current.X, Current.Y};
+    double Speed = 70.0;
+    double StopRadius = 120.0;
+
+    switch (Action)
+    {
+    case UnmadeCore::NpcAction::InvestigateAnomaly:
+    case UnmadeCore::NpcAction::ResearchAnomaly:
+        Motion = UnmadeCore::NpcMotion::Approach;
+        Target = {0.0, 440.0};
+        Speed = 80.0;
+        break;
+    case UnmadeCore::NpcAction::VerifyRumor:
+        Motion = UnmadeCore::NpcMotion::Approach;
+        Target = {-360.0, 280.0}; // prototype records keeper meeting point
+        break;
+    case UnmadeCore::NpcAction::Intervene:
+    case UnmadeCore::NpcAction::ShareKnowledge:
+    case UnmadeCore::NpcAction::OfferAid:
+        if (bPlayerNearby)
+        {
+            Motion = UnmadeCore::NpcMotion::Approach;
+            Target = {PlayerPosition.X, PlayerPosition.Y};
+            StopRadius = 175.0;
+        }
+        break;
+    case UnmadeCore::NpcAction::AvoidPlayer:
+    case UnmadeCore::NpcAction::RefuseTrade:
+        if (bPlayerNearby)
+        {
+            Motion = UnmadeCore::NpcMotion::Retreat;
+            Target = {PlayerPosition.X, PlayerPosition.Y};
+            StopRadius = 360.0;
+        }
+        break;
+    case UnmadeCore::NpcAction::DeliverMessage:
+        // Simple deterministic round trip for the courier; later replaced by navmesh tasks.
+        Motion = UnmadeCore::NpcMotion::Approach;
+        Target = FMath::FloorToInt(World->GetTimeSeconds() / 18.0) % 2 == 0
+            ? UnmadeCore::Vec2{210.0, -160.0}
+            : UnmadeCore::Vec2{320.0, 90.0};
+        Speed = 95.0;
+        StopRadius = 60.0;
+        break;
+    default:
+        break; // working at stall, patrolling in place, etc.
+    }
+
+    const auto NewPosition = UnmadeCore::SteerNpc(
+        {Current.X, Current.Y}, Target, Motion, Speed, DeltaSeconds, StopRadius);
+    const FVector Offset(NewPosition.x - Current.X, NewPosition.y - Current.Y, 0.0);
+    if (Offset.SizeSquared2D() > 0.01)
+    {
+        AddActorWorldOffset(Offset, true); // swept graybox collision, no teleporting
+        SetActorRotation(Offset.Rotation());
+    }
 }
 
 void AUnmadeNpcCharacter::ConfigureIdentity(FName StableId, const FString& DisplayLabel,

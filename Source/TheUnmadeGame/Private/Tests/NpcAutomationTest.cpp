@@ -2,6 +2,7 @@
 
 #include "Misc/AutomationTest.h"
 #include "NPC/UnmadeMemoryComponent.h"
+#include "NPC/UnmadeNpcMotionRules.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(
     FUnmadeNpcEvidenceTest, "Unmade.Npc.WitnessVsRumor",
@@ -50,6 +51,23 @@ bool FUnmadeNpcSnapshotTest::RunTest(const FString& Parameters)
     TestEqual(TEXT("Rumor provenance retained"), Restored->GetObservations()[1].SpeakerId, FName("npc.guard.001"));
     TestTrue(TEXT("Repeat load is idempotent"), Restored->ReadSnapshot(Snapshot, FName("npc.merchant.001")));
     TestEqual(TEXT("Still only two observations"), Restored->GetObservationCount(), 2);
+    return true;
+}
+#endif
+
+#if WITH_DEV_AUTOMATION_TESTS
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(
+    FUnmadeNpcMotionTest, "Unmade.Npc.OfflineMotion",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+
+bool FUnmadeNpcMotionTest::RunTest(const FString& Parameters)
+{
+    using namespace UnmadeCore;
+    const auto Step = SteerNpc({0,0}, {1000,0}, NpcMotion::Approach, 200, 1.0, 100);
+    TestEqual(TEXT("Long frame cannot teleport"), Step.x, 50.0);
+    TestEqual(TEXT("No sideways drift"), Step.y, 0.0);
+    const auto Away = SteerNpc({0,0}, {100,0}, NpcMotion::Retreat, 200, 1.0, 300);
+    TestEqual(TEXT("Avoidance increases separation"), Away.x, -50.0);
     return true;
 }
 #endif

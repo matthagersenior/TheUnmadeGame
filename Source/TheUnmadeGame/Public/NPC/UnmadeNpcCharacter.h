@@ -15,6 +15,7 @@ class THEUNMADEGAME_API AUnmadeNpcCharacter : public ACharacter
 
 public:
     AUnmadeNpcCharacter();
+    virtual void Tick(float DeltaSeconds) override;
     void ConfigureIdentity(FName StableId, const FString& DisplayLabel,
         UnmadeCore::NpcRole InRole, UnmadeCore::NpcTemperament InTemperament);
     UnmadeCore::NpcAction DecideForPlayer(bool bPlayerNearby) const;
