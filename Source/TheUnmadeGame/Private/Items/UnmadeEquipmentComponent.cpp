@@ -1,5 +1,6 @@
 #include "Items/UnmadeEquipmentComponent.h"
 #include "World/UnmadeTenfoldChronicle.h"
+#include "World/UnmadeConfluenceRules.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
@@ -169,7 +170,19 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
         {UnmadeCore::Achievement::RiteOathbinding,
             Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[8]==5},
         {UnmadeCore::Achievement::RiteCartography,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[9]==5}
+            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[9]==5},
+        {UnmadeCore::Achievement::ConfluenceSilentAlarm,
+            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[0]==2},
+        {UnmadeCore::Achievement::ConfluenceTwoNames,
+            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[1]==2},
+        {UnmadeCore::Achievement::ConfluenceUnmappedWay,
+            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[2]==2},
+        {UnmadeCore::Achievement::ConfluenceTomorrowPromise,
+            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[3]==2},
+        {UnmadeCore::Achievement::ConfluenceTwoKeepers,
+            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[4]==2},
+        {UnmadeCore::Achievement::ConfluenceFirstAbsence,
+            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[5]==2}
     };
     for(const Entry& Reward: Earned)
         if(Reward.Earned) Claim(Reward.Id); // idempotent; never trusts model text

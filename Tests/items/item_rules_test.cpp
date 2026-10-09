@@ -99,7 +99,7 @@ int main(){
         Achievement::RiteUnderstandingBosses,Achievement::RiteParadoxConvergence,
         Achievement::RiteOathbinding,Achievement::RiteCartography
     };
-    assert(ItemCatalog.size()==52);
+    assert(ItemCatalog.size()==58);
     for (auto ability : rites) {
         assert(newDisciplines.Claim(ability)==RewardResult::Awarded);
         assert(newDisciplines.Claim(ability)==RewardResult::AlreadyAwarded);
@@ -109,6 +109,19 @@ int main(){
     InventoryModel afterRestart;
     assert(afterRestart.Restore(newDisciplines.Snapshot()));
     for (auto ability : rites) assert(afterRestart.HasClaimed(ability));
+    InventoryModel masteredChambers;
+    const Achievement confluenceRewards[]={
+        Achievement::ConfluenceSilentAlarm,Achievement::ConfluenceTwoNames,
+        Achievement::ConfluenceUnmappedWay,Achievement::ConfluenceTomorrowPromise,
+        Achievement::ConfluenceTwoKeepers,Achievement::ConfluenceFirstAbsence
+    };
+    for(auto achievement:confluenceRewards) {
+        assert(masteredChambers.Claim(achievement)==RewardResult::Awarded);
+        assert(masteredChambers.Claim(achievement)==RewardResult::AlreadyAwarded);
+    }
+    assert(masteredChambers.Quantity(ItemId::FirstAbsenceWitness)==1);
+    InventoryModel afterConfluenceLoad;
+    assert(afterConfluenceLoad.Restore(masteredChambers.Snapshot()));
     InventoryModel noRewards;
     assert(!noRewards.ForgeWaybreaker());
     assert(noRewards.Claim(static_cast<Achievement>(999))==RewardResult::Invalid);

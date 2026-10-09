@@ -29,6 +29,8 @@ enum class ItemId : int {
     BellmakersVerse, RememberedBridge, SecondName, ThreeDeedSteel,
     CommonCauseway, FutureReceipt, HollowMercy, BetweenHistories,
     UnbrokenLantern, CoastTrueAtlas,
+    LastWarningAegis, ElsebornSmithEdge, CommonPathChart,
+    BorrowedDawnHeart, TwoKeepersMirror, FirstAbsenceWitness,
     Count
 };
 enum class Achievement : int {
@@ -41,7 +43,9 @@ enum class Achievement : int {
     RefugeCovenant, ArchiveCovenant, RoadboundCovenant,
     RiteUnwriteLaw, RiteWitnesscraft, RiteBorrowedLives, RiteLegacyForging,
     RiteLivingRoads, RiteTomorrowDebt, RiteUnderstandingBosses,
-    RiteParadoxConvergence, RiteOathbinding, RiteCartography, Count
+    RiteParadoxConvergence, RiteOathbinding, RiteCartography,
+    ConfluenceSilentAlarm, ConfluenceTwoNames, ConfluenceUnmappedWay,
+    ConfluenceTomorrowPromise, ConfluenceTwoKeepers, ConfluenceFirstAbsence, Count
 };
 struct ItemDef {
     ItemId id;
@@ -105,7 +109,13 @@ inline constexpr std::array<ItemDef, static_cast<int>(ItemId::Count)> ItemCatalo
     {ItemId::HollowMercy,"armor.hollow_mercy","Mercy of the Hollow Keeper","The keeper was seen at last, and chose to stand down.",ItemKind::Armor,Rarity::Mythic,GearSlot::Armor,1,0,19,0,0},
     {ItemId::BetweenHistories,"charm.between_histories","The Room Between Histories","Two incompatible homes shelter the same forgotten name.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,10,12,0,0},
     {ItemId::UnbrokenLantern,"armor.unbroken_lantern","The Unbroken Shelter Oath","Every witness expects the light to survive your footsteps.",ItemKind::Armor,Rarity::Epic,GearSlot::Armor,1,0,16,0,0},
-    {ItemId::CoastTrueAtlas,"charm.coast_true","Atlas of the Missing Coast","The navigator kept both the rumor and the shoreline she saw.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,9,10,0,0}
+    {ItemId::CoastTrueAtlas,"charm.coast_true","Atlas of the Missing Coast","The navigator kept both the rumor and the shoreline she saw.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,9,10,0,0},
+    {ItemId::LastWarningAegis,"armor.last_warning","Aegis of the Last Warning","A bell's silence that still allows the village to hear.",ItemKind::Armor,Rarity::Mythic,GearSlot::Armor,1,0,23,0,0},
+    {ItemId::ElsebornSmithEdge,"blade.elseborn_smith","Edge of the Elseborn Smith","Forged by the hands you had in another life.",ItemKind::Weapon,Rarity::Mythic,GearSlot::Weapon,1,34,0,0,0},
+    {ItemId::CommonPathChart,"charm.common_chart","Chart of the Common Path","No border owns the choices of its travelers.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,12,11,0,0},
+    {ItemId::BorrowedDawnHeart,"charm.borrowed_dawn","Heart of the Borrowed Dawn","Promises repaid without transferring the debt to others.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,14,8,0,0},
+    {ItemId::TwoKeepersMirror,"armor.two_keepers","Mirror of the Two Keepers","The innocent and the monster both remain in its reflection.",ItemKind::Armor,Rarity::Mythic,GearSlot::Armor,1,0,26,0,0},
+    {ItemId::FirstAbsenceWitness,"charm.first_absence","Witness of the First Absence","Every world begins with someone brave enough to remember.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,20,17,0,0}
 }};
 inline const ItemDef* FindItem(ItemId id) noexcept {
     const int i = static_cast<int>(id);
@@ -254,6 +264,12 @@ public:
         case Achievement::RiteParadoxConvergence: okay=add(ItemId::BetweenHistories,1);break;
         case Achievement::RiteOathbinding: okay=add(ItemId::UnbrokenLantern,1);break;
         case Achievement::RiteCartography: okay=add(ItemId::CoastTrueAtlas,1);break;
+        case Achievement::ConfluenceSilentAlarm: okay=add(ItemId::LastWarningAegis,1);break;
+        case Achievement::ConfluenceTwoNames: okay=add(ItemId::ElsebornSmithEdge,1);break;
+        case Achievement::ConfluenceUnmappedWay: okay=add(ItemId::CommonPathChart,1);break;
+        case Achievement::ConfluenceTomorrowPromise: okay=add(ItemId::BorrowedDawnHeart,1);break;
+        case Achievement::ConfluenceTwoKeepers: okay=add(ItemId::TwoKeepersMirror,1);break;
+        case Achievement::ConfluenceFirstAbsence: okay=add(ItemId::FirstAbsenceWitness,1);break;
         default: return RewardResult::Invalid;
         }
         if(!okay)return RewardResult::NoRoom;
