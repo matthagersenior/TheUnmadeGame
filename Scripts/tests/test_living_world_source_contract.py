@@ -59,6 +59,22 @@ class LivingWorldSourceTests(unittest.TestCase):
         self.assertIn("NpcAction::InvestigateAnomaly", npc)
         self.assertIn("NpcAction::AvoidPlayer", npc)
 
+    def test_character_dialogue_and_local_overheard_rumors(self):
+        npc = read("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")
+        hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
+        for token in ("npc.welllistener.001", "npc.bellmaker.001", "bDirect",
+                      "World.ConflictShelter"):
+            self.assertIn(token, npc)
+        for token in ("bOverheardOne", "OVERHEARD |", "LineTraceTestByChannel",
+                      "Event.Evidence == EUnmadeEvidenceKind::Witnessed"):
+            self.assertIn(token, hub)
+
+    def test_time_of_day_affects_directional_light_and_cues(self):
+        hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
+        self.assertIn("SpawnActor<ADirectionalLight>", hub)
+        self.assertIn("Sunlight->GetComponent()->SetIntensity", hub)
+        self.assertIn("|| bPhaseChanged", hub)
+
     def test_offline_test_and_combined_scenario(self):
         workflow = read(".github/workflows/static-checks.yml")
         suite = read("Tests/integration/offline_slice_scenario.cpp")
