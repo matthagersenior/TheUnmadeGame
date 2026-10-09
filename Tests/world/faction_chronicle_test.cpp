@@ -34,7 +34,10 @@ int main(){
     assert(restored.AllResolved());
     auto invalid=before;invalid.stages[1]=10;
     assert(!restored.Restore(invalid) && restored.AllResolved());
+    // An unresolved final choice is a valid saved stage-3 state.
     invalid=before;invalid.endings[0]=0;
+    assert(restored.Restore(invalid));
+    invalid=before;invalid.stages[0]=2;
     assert(!restored.Restore(invalid));
     invalid=before;invalid.endings[1]=5;
     assert(!restored.Restore(invalid));
