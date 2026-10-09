@@ -4,6 +4,7 @@
 #include "NPC/UnmadeNpcMotionRules.h"
 #include "Lexicon/UnmadeLexiconRules.h"
 #include "Story/UnmadeConflictRules.h"
+#include "World/UnmadeLivingWorldRules.h"
 
 #include <cassert>
 #include <iostream>
@@ -76,6 +77,24 @@ int main() {
     // A native NPC movement update is bounded during frame spikes.
     const Vec2 movement = SteerNpc({0,0}, {500,0}, NpcMotion::Approach, 80, 4.0, 100);
     assert(movement.x == 20.0 && movement.y == 0.0);
+
+    // Act IV: A living region keeps its clock, side stories, and unique discoveries.
+    LivingWorldClock world;
+    assert(world.MinuteOfDay() == 420);
+    assert(world.Restore(780.0) && world.Phase() == DayPhase::Night);
+    assert(SelectAmbientCue(District::ShelterThreshold, world.Phase(), 1)
+        == AmbientCue::ShelterWelcoming);
+    assert(SelectAmbientCue(District::ShelterThreshold, world.Phase(), 2)
+        == AmbientCue::ShelterBarred);
+    DiscoveryLedger places;
+    assert(places.Discover(District::PaperOrchard) && places.Discover(District::EchoWell));
+    assert(!places.Discover(District::PaperOrchard));
+    LivingWorldClock restoredWorld;
+    DiscoveryLedger restoredPlaces;
+    assert(restoredWorld.Restore(world.ElapsedSeconds()));
+    assert(restoredPlaces.Restore(places.Snapshot()) && restoredPlaces.Count() == 2);
+    assert(RoutineTarget(NpcRole::Merchant, DayPhase::Night).y !=
+           RoutineTarget(NpcRole::Merchant, DayPhase::Day).y);
 
     // Returning to the region retains both authored outcomes and clues.
     FractureModel loadedFracture("region.prototype.hub", {"variant.open","variant.sealed"});

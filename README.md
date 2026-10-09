@@ -122,3 +122,18 @@ when frightened, or running a tiny courier route. This is **swept graybox actor
 motion**, not animation, crowd avoidance or NavMesh AI. The deterministic
 motion policy has native CI tests. Unreal compilation and interactive gameplay
 still require the Windows Unreal host.
+
+## Expanding into a living region (source prototype, October 9)
+
+The original small hub now has a larger interconnected primitive floor, outer
+ruins, and **six inspectable authored landmarks** with distinct stories. A 20-minute
+day/night simulation changes location glows, ambient prose and five residents'
+routine destinations; witnessed events still override their schedules. Press
+**E** near a landmark for its description and one-time discovery record; **J**
+shows the in-world day/time and sites found out of six. The Threshold of Two
+Claims reacts to the permanent shelter-vs-research choice. Exploration state
+persists alongside existing NPC, conflict, Strain and lexicon saves.
+
+No model download or external API is required. This is source code with native
+CI checks, **not** a verified rendered environment, asset pass or Unreal build.
+See [living-region QA](docs/qa/living-world-region.md).
