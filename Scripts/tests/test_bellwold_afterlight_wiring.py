@@ -35,6 +35,8 @@ class BellwoldAfterlightWiring(unittest.TestCase):
             self.assertIn(k,save)
             self.assertIn(k,world)
         self.assertIn("bAfterlightSaveRejected=true;",world)
+        self.assertIn("UPROPERTY(SaveGame)\n    bool bHasInventorySnapshot = false;",save)
+        self.assertNotIn("UPROPERTY(SaveGame)\n    /** Bellwold return-visit story",save)
         self.assertIn("if(bAfterlightSaveRejected)return false;",world)
         self.assertIn("Achievement::AfterlightShelter",equipment)
         self.assertIn("Achievement::AfterlightNames",equipment)

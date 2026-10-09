@@ -69,7 +69,6 @@ public:
     UPROPERTY(SaveGame)
     TArray<int32> FrontierEndings;
 
-    UPROPERTY(SaveGame)
     /** Bellwold return-visit story: absent on older schema-1 save slots. */
     UPROPERTY(SaveGame)
     bool bHasAfterlightSnapshot=false;
@@ -80,6 +79,7 @@ public:
     UPROPERTY(SaveGame)
     int32 BellwoldAfterlightOutcome=0;
 
+    UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;
 
     UPROPERTY(SaveGame)
