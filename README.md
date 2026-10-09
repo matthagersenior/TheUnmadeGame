@@ -148,3 +148,23 @@ responds to time, witnessed events and uncertain rumors without an LLM.
 Physical proximity and a clear line of sight limit overheard social exchanges.
 The temporary directional-light cycle augments the six landmark lights. This
 remains uncompiled Unreal source, not a released world.
+
+## Three connected villages and 48 residents
+
+The graybox source now contains The Crossings (center), Bellwold Refuge
+(west) and Paperhaven Archive (east), each with 16 named characters.
+Ground-height causeways connect the three spaces 180 meters apart.
+People have separate persistent memories, authored voices, local daypart
+routines, settlement-specific attitudes toward learned events, and an
+independent conversation/aid interface without any language model.
+
+Bellwold has an optional lantern-relief task: talk to Rook the lamplighter
+and then Hessa the refuge matron. Paperhaven has missing testimony: talk
+to Toma the copyist and then Sevrin the registrar. Quest progress survives
+save/reload and cannot be rewarded repeatedly. Press E to interact, H to
+help an individual, J to see community visits and stories. Existing
+Crossings missions remain.
+
+Tests cover the engine-independent policies and Unreal source wiring.
+No Unreal compilation, native render or full gameplay pass has occurred.
+See docs/qa/three-settlements.md.

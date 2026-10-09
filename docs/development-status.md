@@ -92,3 +92,19 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - Added a movable engine directional light reacting to dawn/day/dusk/night; site lights and ambient cues transition with it.
 - E interaction now selects the nearest NPC or landmark, not always NPCs over closer objects.
 - Native C++ gameplay tests and GitHub source checks exist. No Unreal engine compile, soundscape, real animations, navigation meshes, weather system or in-engine demonstration yet.
+
+## 2026-10-09 regional expansion
+
+- Three separate villages, connected by two graybox causeways, with
+  16 named residents each: 48 total, retaining the original eleven IDs.
+- Each resident has independent memories, authored personal speech,
+  role/temperament, village allegiance and local daily routes.
+- Bellwold lantern and Paperhaven testimony errands are optional
+  two-character interactions with durable quest state.
+- Local completion can be witnessed, remembered and discussed;
+  faction leaning influences personally known events, not omniscience.
+- Source domain tests verify village identity, bounds, task ordering,
+  persistence and cross-system simulation; GitHub source CI also runs
+  Python contract tests.
+- Unreal Engine compilation, physical road traversal, actual frame
+  performance and visible gameplay remain **unverified**.

@@ -5,8 +5,8 @@
 | Milestone | Source | Evidence / missing verification |
 |---|---|---|
 | Unreal C++ project, game mode, player camera | Present | No Unreal Editor compile or launch yet |
-| Extended graybox region, six lore sites, two story gates | Present | No verified Unreal screenshot, lighting, collision, or traversal |
-| Eleven stable NPCs, memory, rumor, deterministic behavior | Present | Native rules CI; Unreal actor movement and save/load unverified |
+| Three road-linked villages, six lore sites, two story gates | Present | No verified Unreal screenshot, lighting, collision, or traversal |
+| 48 named NPCs in three villages, personal memory and regional routines | Present | Native rules CI; Unreal actor movement and save/load unverified |
 | Optional locally hosted language model | Adapter present, off by default | Game fully functions without model by design; model inference untested |
 | Three-tier fracture with Strain and persistent Rewrite | Source present | Native rules CI; Unreal timers/visuals/collision unverified |
 | Melee, guard, Stalker and Watcher | Source present | Native rules CI; animations, projectiles and navigation absent |
