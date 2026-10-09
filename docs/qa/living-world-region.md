@@ -19,8 +19,8 @@ Descriptions have different day/night passages, and the shelter landmark has dif
 ## Cycle and game simulation
 - World begins at 07:00; one in-game 24-hour day takes 20 real minutes.
 - Clock handles dawn, day, dusk, night; leap frames are capped. Time and unique discoveries persist in the existing prototype save.
-- NPC routine destinations vary by phase. Higher-priority reactive actions (investigate, intervene, avoid the player) take precedence over the daily routine.
-- Location marker point-lights change temperature and intensity at dusk/night; a short authored cue is presented upon approaching a landmark.
+- Eleven named residents (five original and six peripheral) follow individual daytime home positions. NPC routine destinations vary by phase. Higher-priority reactive actions (investigate, intervene, avoid the player) take precedence over the daily routine.
+- An engine-native directional light and landmark point-lights change with dusk/night; a short authored cue is presented upon approaching a landmark.
 - Press **E** while near a site to inspect its story and record progress. Revisit for alternate phase/choice-dependent text. **J** shows discovered landmarks, world time, and previous journal data.
 - Sight and proximity rules apply; no LLM or online service is needed.
 

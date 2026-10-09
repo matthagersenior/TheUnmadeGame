@@ -137,3 +137,14 @@ persists alongside existing NPC, conflict, Strain and lexicon saves.
 No model download or external API is required. This is source code with native
 CI checks, **not** a verified rendered environment, asset pass or Unreal build.
 See [living-region QA](docs/qa/living-world-region.md).
+
+## Peripheral residents and authored reactions
+
+Six additional named residents bring the source roster to **eleven**.
+They include a well listener, displaced orchard keeper, future-debt keeper,
+road warden, bell maker, and night courier. NPCs have individually located
+daytime stations and role-based dusk/night routines. Their authored dialogue
+responds to time, witnessed events and uncertain rumors without an LLM.
+Physical proximity and a clear line of sight limit overheard social exchanges.
+The temporary directional-light cycle augments the six landmark lights. This
+remains uncompiled Unreal source, not a released world.

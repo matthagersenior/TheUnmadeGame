@@ -85,3 +85,10 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - Added validated living-world save fields and a conservative periodic save interval. Old schema-v1 saves without these fields default safely.
 - Native C++ world-cycle tests and Python source-contract tests; the cross-system offline scenario now includes world clock and exploration restoration.
 - **Not verified in Unreal:** compilation, night lighting, walking routes, player controls, save behavior, animation, art quality, frame rate or sound. No remote Unreal machine exists.
+
+## 2026-10-09 expanded district population and lighting
+- Eleven stable resident IDs (six added in the outer districts), with individual home locations and retained identity-bound NPC memories.
+- Authored NPC lines vary by personal identity, phase, and firsthand-versus-rumor evidence. Overheard gossip is proximity and line-of-sight gated.
+- Added a movable engine directional light reacting to dawn/day/dusk/night; site lights and ambient cues transition with it.
+- E interaction now selects the nearest NPC or landmark, not always NPCs over closer objects.
+- Native C++ gameplay tests and GitHub source checks exist. No Unreal engine compile, soundscape, real animations, navigation meshes, weather system or in-engine demonstration yet.
