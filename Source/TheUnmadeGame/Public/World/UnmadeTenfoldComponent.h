@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "World/UnmadeTenfoldChronicle.h"
+#include "World/UnmadeConfluenceRules.h"
 #include <string>
 #include "UnmadeTenfoldComponent.generated.h"
 
@@ -24,6 +25,10 @@ public:
     void DecideTruth();
     void BreakChosenOath();
     void CycleWorldLaw();
+    void CycleConfluence();
+    void StudyConfluence();
+    void ConfluenceChoice1();
+    void ConfluenceChoice2();
     void RecordLegacyDeed(UnmadeCore::Deed Deed);
     void VerifyExploredFrontier(int32 RealmIndex);
     int32 RiteStage(UnmadeCore::RiteId Rite) const {return Chronicle.Stage(Rite);}
@@ -37,8 +42,12 @@ private:
     bool Persist(bool bWriteStrain=false);
     void DecideRite(int32 Choice);
     void ExplainResult(UnmadeCore::RiteResult Result) const;
+    int32 FindNearbyConfluence() const;
+    void ChooseConfluence(int32 Outcome);
     void RefreshTemporaryPowers(double CurrentTime,int32 Day);
     UnmadeCore::TenfoldChronicle Chronicle;
+    UnmadeCore::ConfluenceJourney Confluence;
+    int32 SelectedConfluence=0;
     int32 SelectedRite=0;
     int32 SelectedLaw=0;
     bool bSaveRejected=false;

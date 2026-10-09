@@ -136,6 +136,18 @@ public:
     UPROPERTY(SaveGame)
     bool bOathActive=false;
 
+    /** Multi-discipline challenge continuity, absent on earlier save slots. */
+    UPROPERTY(SaveGame)
+    bool bHasConfluenceSnapshot=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> ConfluenceStages;
+    UPROPERTY(SaveGame)
+    TArray<int32> ConfluenceDecisions;
+    UPROPERTY(SaveGame)
+    TArray<int32> ConfluenceCastMasks;
+    UPROPERTY(SaveGame)
+    TArray<double> ConfluenceWindowEnds;
+
     /** Merges prototype sub-system writes instead of erasing unrelated state. */
     static UUnmadePrototypeSave* LoadOrCreate()
     {
