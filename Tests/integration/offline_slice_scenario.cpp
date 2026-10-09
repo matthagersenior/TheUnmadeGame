@@ -9,6 +9,10 @@
 #include "World/UnmadeRegionalTaskRules.h"
 #include "Items/UnmadeItemRules.h"
 #include "World/UnmadeWorldAtlas.h"
+#include "Combat/UnmadeBossRules.h"
+#include "Items/UnmadeCraftEconomyRules.h"
+#include "World/UnmadeFactionChronicleRules.h"
+#include "World/UnmadeFrontierRealmRules.h"
 
 #include <cassert>
 #include <iostream>
@@ -160,6 +164,66 @@ int main() {
     assert(loadedGear.AttackBonus()==gear.AttackBonus());
     assert(loadedGear.HasClaimed(Achievement::ThreeVillages));
     assert(loadedGear.Claim(Achievement::BellwoldLanterns)==RewardResult::AlreadyAwarded);
+
+    // Act VII: named boss warnings, no unavoidable instant strikes, rare victory.
+    BossEncounter bellBoss(BossId::HollowBell);
+    const auto opening=bellBoss.Advance(1.0,1.0,300,false);
+    assert(opening.action==BossAction::Telegraph && opening.damage==0);
+    assert(bellBoss.Advance(1.2,1.0,300,true).action==BossAction::Stagger);
+    assert(bellBoss.Advance(3.0,.5,300,false).action==BossAction::Telegraph);
+    assert(bellBoss.Advance(6.0,.5,300,false).action==BossAction::Strike);
+    assert(gear.Claim(Achievement::HollowBell)==RewardResult::Awarded);
+    assert(gear.Quantity(ItemId::BellheartAegis)==1);
+    assert(gear.Claim(Achievement::HollowBell)==RewardResult::AlreadyAwarded);
+
+    // Act VIII: recipes spend actual items, skilled professions and barter remain finite.
+    RegionalEconomy trade;
+    InventoryModel craftBag;
+    assert(trade.PayContract(SettlementId::Bellwold,2)==EconomyResult::Completed);
+    assert(trade.PayContract(SettlementId::Bellwold,2)==EconomyResult::AlreadyPaid);
+    assert(trade.Buy(craftBag,ItemId::WildHerbs,SettlementId::Bellwold,2)==EconomyResult::Completed);
+    assert(trade.Buy(craftBag,ItemId::IronScrap,SettlementId::Bellwold,1)==EconomyResult::Completed);
+    const int marks=trade.Marks();
+    assert(trade.Craft(craftBag,RecipeId::HerbSalve,SettlementId::Paperhaven)==EconomyResult::NotAvailable);
+    assert(trade.Marks()==marks);
+    assert(trade.Craft(craftBag,RecipeId::HerbSalve,SettlementId::Bellwold)==EconomyResult::Completed);
+    assert(craftBag.Quantity(ItemId::HearthSalve)==2);
+    RegionalEconomy reloadedTrade;
+    assert(reloadedTrade.Restore(trade.Snapshot()) && reloadedTrade.Marks()==marks);
+    assert(reloadedTrade.Skill(Profession::Apothecary)==1);
+
+    // Act IX: village storylines cross multiple real witnesses, with explicit end choices.
+    FactionChronicle factions;
+    assert(factions.Converse("npc.bellwold.lamplighter.001",false)==FactionResult::Advanced);
+    assert(factions.Converse("npc.bellwold.matron.001",false)==FactionResult::Advanced);
+    assert(factions.Converse("npc.bellwold.guard.001",true)==FactionResult::ChoiceRequired);
+    assert(factions.Decide(Faction::Refuge,FactionEnding::Solidarity)==FactionResult::Resolved);
+    FactionChronicle reloadedFactions;
+    assert(reloadedFactions.Restore(factions.Snapshot()));
+    assert(reloadedFactions.Reputation(Faction::Refuge)==40);
+    assert(reloadedFactions.Decide(Faction::Refuge,FactionEnding::Truth)==FactionResult::NoChange);
+
+    // Act X: inter-realm source travels lead to distinct inhabited footholds.
+    assert(FrontierResidents.size()==16);
+    FrontierJourney frontier;
+    assert(frontier.Visit(Realm::WidowedRain)==FrontierEvent::Advanced);
+    assert(frontier.FindClue(Realm::WidowedRain)==FrontierEvent::Advanced);
+    assert(frontier.Converse("npc.saltwake.navigator.001")==FrontierEvent::Advanced);
+    assert(frontier.Converse("npc.saltwake.rainkeeper.001")==FrontierEvent::Advanced);
+    assert(frontier.Converse("npc.saltwake.harborwarden.001")==FrontierEvent::FinalChoice);
+    assert(frontier.Resolve(Realm::WidowedRain,1)==FrontierEvent::Resolved);
+    assert(frontier.Visit(Realm::HearthBeneath)==FrontierEvent::Advanced);
+    assert(frontier.FindClue(Realm::HearthBeneath)==FrontierEvent::Advanced);
+    assert(frontier.Converse("npc.cinderhold.hearthreader.001")==FrontierEvent::Advanced);
+    assert(frontier.Converse("npc.cinderhold.healer.001")==FrontierEvent::Advanced);
+    assert(frontier.Converse("npc.cinderhold.emberwarden.001")==FrontierEvent::FinalChoice);
+    assert(frontier.Resolve(Realm::HearthBeneath,2)==FrontierEvent::Resolved);
+    assert(gear.Claim(Achievement::SaltwakeStory)==RewardResult::Awarded);
+    assert(gear.Claim(Achievement::CinderholdStory)==RewardResult::Awarded);
+    FrontierJourney reloadedFrontier;
+    assert(reloadedFrontier.Restore(frontier.Snapshot()));
+    assert(reloadedFrontier.IsResolved(Realm::HearthBeneath) &&
+           reloadedFrontier.IsResolved(Realm::WidowedRain));
 
     // Returning to the region retains both authored outcomes and clues.
     FractureModel loadedFracture("region.prototype.hub", {"variant.open","variant.sealed"});
