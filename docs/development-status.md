@@ -108,3 +108,20 @@ No paid hosting authorized or provisioned. The creator currently has Android but
   Python contract tests.
 - Unreal Engine compilation, physical road traversal, actual frame
   performance and visible gameplay remain **unverified**.
+
+## 2026-10-09 earned gear and universe source milestone
+- 28 uniquely named item definitions spanning equipment, potions and materials;
+  each rarity, effect, cap and lore is authored without external inference.
+- Finite claim markers link achievements to unique milestone rewards, once,
+  in the existing schema-1 save. Corrupt snapshots or failed writes fail closed
+  and potion Strain recovery shares the saved inventory transaction.
+- Weapons/armor change combat damage, charms can reduce Glimpse cost,
+  Waybreaker extends Fold, and the Unwritten Crown speeds normal Strain recovery.
+- Starter kit, two village rewards, first enemy victories, six landmark finds,
+  all-village progress, settlement choice and Veyl clues are wired to the
+  Unreal prototype source. Bellwold's workshop permits gated mythic crafting.
+- Nine authored future realms and their offline travel graph/attunement rules
+  exist as data/tests. **They do not constitute playable continents.**
+- Gear models, varied attack animations, gamepad equipment UI, inventory
+  rendering, visible potion VFX, merchant economy, health checkpoint persistence,
+  and full Unreal compilation are still absent or unverified.

@@ -132,3 +132,16 @@ it does not invoke AI, random content generation or microtransactions.
    model assets, FX, animations and accessible gear controls.
 8. Build each realm as a separately playable, verified vertical slice before
    describing it as complete. Do not confuse source-domain CI with UE builds.
+
+## Mechanically unique relic passives added
+
+Beyond basic numeric stats, real pure C++ fracture rules now accept carefully
+bounded modifiers from earned equipment. **The Voice Returned** reduces
+Glimpse's eight Strain cost by three; **Lens of the Unentered** reduces it
+by two, and only one charm may occupy that slot. **Waybreaker** extends
+Fold by three seconds. **The Unwritten Crown** increases normal Strain
+recovery by 50 percent. Invalid or out-of-range modifiers fail without
+changing the world or spending Strain. Native regression tests validate
+costs, timings, stacking, preview consistency and snapshot restoration.
+These are source-level game behaviors; particles, item models, ability
+visuals and Unreal live interactions still await an Editor-equipped host.

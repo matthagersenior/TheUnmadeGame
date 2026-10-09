@@ -48,6 +48,20 @@ class GearSourceContract(unittest.TestCase):
         self.assertNotIn("RequestDialogue(",cpp)
         self.assertNotIn("Ollama",cpp)
 
+    def test_unique_gear_changes_reality_mechanics_without_ai(self):
+        rules=read("Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h")
+        effects=read("Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h")
+        equipment=read("Source/TheUnmadeGame/Public/Items/UnmadeEquipmentComponent.h")
+        player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
+        for name in ("GlimpseStrainDiscount", "FoldDurationBonus", "RecoveryMultiplier"):
+            self.assertIn(name, rules)
+        self.assertIn("Result::InvalidModifier", effects)
+        self.assertIn("FoldBonusSeconds()", equipment)
+        self.assertIn("GlimpseDiscount()", equipment)
+        self.assertIn("StrainRecoveryMultiplier()", equipment)
+        self.assertIn("FractureModel.Glimpse(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Discount)", player)
+        self.assertIn("FractureModel.Fold(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Extension)", player)
+
     def test_atlas_is_explicitly_future_data_not_silent_unreal_claims(self):
         atlas=read("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")
         self.assertIn("std::array<RealmSpec,",atlas)

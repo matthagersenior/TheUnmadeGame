@@ -168,3 +168,31 @@ Crossings missions remain.
 Tests cover the engine-independent policies and Unreal source wiring.
 No Unreal compilation, native render or full gameplay pass has occurred.
 See docs/qa/three-settlements.md.
+
+## First earned loot and equipment pass
+
+The deterministic C++ source now defines **28 authored items** across gear,
+consumables and materials with Common, Uncommon, Rare, Epic and Mythic rarity.
+Quest rewards, first enemy victories, unique landmarks, all three villages,
+the settlement decision and complete language evidence feed an item system
+that remembers each milestone and prevents repeating the same claim.
+Two village stories plus a cross-village journey and rare crafting materials
+allow **Waybreaker, the Impossible Road** to be forged once at Bellwold's
+workshop. It is not a random loot-box drop.
+
+Gear affects real native combat attack/armor. Unique relics also change
+reality abilities: a Returned Voice or Paperhaven charm makes Glimpse cost
+less Strain, Waybreaker extends Fold by three seconds, and the Unwritten
+Crown accelerates passive Strain recovery. All modifiers are bounded and
+tested without AI. Potions heal health or recover Strain only when useful.
+
+Prototype keyboard controls: **I** inventory text, **B/M/N** cycle owned
+weapon/armor/charm, **1** heal, **2** restore Strain, **K** forge when near
+Bellwold's workshop. True equipment meshes, inventory UI, controller menu,
+shop transactions and Unreal Editor/runtime tests are still unfinished.
+
+A separate future-world atlas in source defines nine distinct realms and a
+tested route graph with stages based on earned exploration, village progress
+and mythic crafting. **Only three villages in the starting realm have graybox
+Unreal actor source today; the other eight regions are designed, not rendered
+or playable.** See [epic rewards and universe design](docs/design/2026-10-09-epic-rewards-and-nine-realms.md).
