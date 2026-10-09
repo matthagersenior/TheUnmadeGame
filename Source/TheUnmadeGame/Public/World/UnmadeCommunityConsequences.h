@@ -2,6 +2,7 @@
 // Authored, replay-safe consequences derived from EXISTING saved player choices.
 // No new hidden counters, random events, AI, timed grinds, or divergent save slots.
 #include "World/UnmadeFactionChronicleRules.h"
+#include "World/UnmadeRegionalTaskRules.h"
 #include "World/UnmadeFrontierRealmRules.h"
 #include <array>
 namespace UnmadeCore {
