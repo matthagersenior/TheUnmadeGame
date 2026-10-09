@@ -31,6 +31,7 @@ enum class ItemId : int {
     UnbrokenLantern, CoastTrueAtlas,
     LastWarningAegis, ElsebornSmithEdge, CommonPathChart,
     BorrowedDawnHeart, TwoKeepersMirror, FirstAbsenceWitness,
+    AfterlightWard, UnredactedLantern,
     Count
 };
 enum class Achievement : int {
@@ -45,7 +46,8 @@ enum class Achievement : int {
     RiteLivingRoads, RiteTomorrowDebt, RiteUnderstandingBosses,
     RiteParadoxConvergence, RiteOathbinding, RiteCartography,
     ConfluenceSilentAlarm, ConfluenceTwoNames, ConfluenceUnmappedWay,
-    ConfluenceTomorrowPromise, ConfluenceTwoKeepers, ConfluenceFirstAbsence, Count
+    ConfluenceTomorrowPromise, ConfluenceTwoKeepers, ConfluenceFirstAbsence,
+    AfterlightShelter, AfterlightNames, Count
 };
 struct ItemDef {
     ItemId id;
@@ -115,7 +117,9 @@ inline constexpr std::array<ItemDef, static_cast<int>(ItemId::Count)> ItemCatalo
     {ItemId::CommonPathChart,"charm.common_chart","Chart of the Common Path","No border owns the choices of its travelers.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,12,11,0,0},
     {ItemId::BorrowedDawnHeart,"charm.borrowed_dawn","Heart of the Borrowed Dawn","Promises repaid without transferring the debt to others.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,14,8,0,0},
     {ItemId::TwoKeepersMirror,"armor.two_keepers","Mirror of the Two Keepers","The innocent and the monster both remain in its reflection.",ItemKind::Armor,Rarity::Mythic,GearSlot::Armor,1,0,26,0,0},
-    {ItemId::FirstAbsenceWitness,"charm.first_absence","Witness of the First Absence","Every world begins with someone brave enough to remember.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,20,17,0,0}
+    {ItemId::FirstAbsenceWitness,"charm.first_absence","Witness of the First Absence","Every world begins with someone brave enough to remember.",ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,20,17,0,0},
+    {ItemId::AfterlightWard,"armor.afterlight_ward","Ward of the Second Night","Hessa hangs a light for each unregistered child. This protection cannot be bought.",ItemKind::Armor,Rarity::Epic,GearSlot::Armor,1,0,18,0,0},
+    {ItemId::UnredactedLantern,"charm.unredacted_lantern","Lantern of Unredacted Names","Ivera remembers the families officials denied. Its glow never removes a name.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,11,9,0,0}
 }};
 inline const ItemDef* FindItem(ItemId id) noexcept {
     const int i = static_cast<int>(id);
@@ -270,6 +274,8 @@ public:
         case Achievement::ConfluenceTomorrowPromise: okay=add(ItemId::BorrowedDawnHeart,1);break;
         case Achievement::ConfluenceTwoKeepers: okay=add(ItemId::TwoKeepersMirror,1);break;
         case Achievement::ConfluenceFirstAbsence: okay=add(ItemId::FirstAbsenceWitness,1);break;
+        case Achievement::AfterlightShelter: okay=add(ItemId::AfterlightWard,1);break;
+        case Achievement::AfterlightNames: okay=add(ItemId::UnredactedLantern,1);break;
         default: return RewardResult::Invalid;
         }
         if(!okay)return RewardResult::NoRoom;

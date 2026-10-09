@@ -99,7 +99,7 @@ int main(){
         Achievement::RiteUnderstandingBosses,Achievement::RiteParadoxConvergence,
         Achievement::RiteOathbinding,Achievement::RiteCartography
     };
-    assert(ItemCatalog.size()==58);
+    assert(ItemCatalog.size()==60);
     for (auto ability : rites) {
         assert(newDisciplines.Claim(ability)==RewardResult::Awarded);
         assert(newDisciplines.Claim(ability)==RewardResult::AlreadyAwarded);
@@ -122,6 +122,18 @@ int main(){
     assert(masteredChambers.Quantity(ItemId::FirstAbsenceWitness)==1);
     InventoryModel afterConfluenceLoad;
     assert(afterConfluenceLoad.Restore(masteredChambers.Snapshot()));
+    InventoryModel refugeLoot;
+    assert(refugeLoot.Claim(Achievement::AfterlightShelter)==RewardResult::Awarded);
+    assert(refugeLoot.Claim(Achievement::AfterlightShelter)==RewardResult::AlreadyAwarded);
+    assert(refugeLoot.Quantity(ItemId::AfterlightWard)==1);
+    assert(refugeLoot.Quantity(ItemId::UnredactedLantern)==0);
+    InventoryModel censusLoot;
+    assert(censusLoot.Claim(Achievement::AfterlightNames)==RewardResult::Awarded);
+    assert(censusLoot.Claim(Achievement::AfterlightNames)==RewardResult::AlreadyAwarded);
+    assert(censusLoot.Quantity(ItemId::UnredactedLantern)==1);
+    InventoryModel restoredAfterlight;
+    assert(restoredAfterlight.Restore(censusLoot.Snapshot()));
+    assert(restoredAfterlight.HasClaimed(Achievement::AfterlightNames));
     InventoryModel noRewards;
     assert(!noRewards.ForgeWaybreaker());
     assert(noRewards.Claim(static_cast<Achievement>(999))==RewardResult::Invalid);

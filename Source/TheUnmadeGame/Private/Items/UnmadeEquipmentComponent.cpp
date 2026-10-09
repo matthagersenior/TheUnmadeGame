@@ -182,7 +182,13 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
         {UnmadeCore::Achievement::ConfluenceTwoKeepers,
             Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[4]==2},
         {UnmadeCore::Achievement::ConfluenceFirstAbsence,
-            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[5]==2}
+            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[5]==2},
+        {UnmadeCore::Achievement::AfterlightShelter,
+            Save->bHasAfterlightSnapshot && Save->BellwoldAfterlightStage==4 &&
+            Save->BellwoldAfterlightOutcome==1},
+        {UnmadeCore::Achievement::AfterlightNames,
+            Save->bHasAfterlightSnapshot && Save->BellwoldAfterlightStage==4 &&
+            Save->BellwoldAfterlightOutcome==2}
     };
     for(const Entry& Reward: Earned)
         if(Reward.Earned) Claim(Reward.Id); // idempotent; never trusts model text
