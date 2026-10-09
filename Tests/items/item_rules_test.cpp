@@ -45,7 +45,8 @@ int main(){
     assert(i.ForgeWaybreaker() && i.Quantity(ItemId::Waybreaker)==1);
     assert(!i.ForgeWaybreaker());
     assert(i.Quantity(ItemId::EchoGlass)==0 && i.Quantity(ItemId::BellMetal)==0);
-    assert(i.Equip(ItemId::Waybreaker) && i.AttackBonus()==32);
+    // Paperhaven Lens remains equipped (+4), so Waybreaker (+32) stacks to 36.
+    assert(i.Equip(ItemId::Waybreaker) && i.AttackBonus()==36);
     assert(i.FoldDurationBonus()==3);
     assert(i.Claim(Achievement::AllLandmarks)==RewardResult::Awarded);
     assert(i.Equip(ItemId::UnwrittenCrown));
