@@ -52,6 +52,13 @@ public:
     int32 PaperhavenTaskStage = 0;
 
     UPROPERTY(SaveGame)
+    bool bHasFactionChronicle = false;
+    UPROPERTY(SaveGame)
+    TArray<int32> FactionStages;
+    UPROPERTY(SaveGame)
+    TArray<int32> FactionEndings;
+
+    UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;
 
     UPROPERTY(SaveGame)

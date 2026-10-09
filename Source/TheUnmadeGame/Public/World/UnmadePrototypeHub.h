@@ -6,6 +6,7 @@
 #include "World/UnmadeLivingWorldRules.h"
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeRegionalTaskRules.h"
+#include "World/UnmadeFactionChronicleRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -31,6 +32,12 @@ public:
     void RefreshDistrictMood();
     /** True only when a real interaction advanced a quest; completion flag is output. */
     bool TryResidentVillageTask(FName ResidentId, bool& bCompleted);
+    void TryFactionConversation(FName ResidentId);
+    bool ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome);
+    int32 FactionStage(UnmadeCore::Faction Id) const { return Chronicle.Stage(Id); }
+    UnmadeCore::FactionEnding FactionOutcome(UnmadeCore::Faction Id) const {
+        return Chronicle.Ending(Id);
+    }
     UnmadeCore::TaskProgress GetRegionalTask(UnmadeCore::SettlementId Village) const {
         return RegionalTasks.Progress(Village);
     }
@@ -48,6 +55,7 @@ private:
     UnmadeCore::DiscoveryLedger Discoveries;
     UnmadeCore::SettlementVisits VillagesVisited;
     UnmadeCore::RegionalTaskModel RegionalTasks;
+    UnmadeCore::FactionChronicle Chronicle;
     UnmadeCore::SettlementId LastVisitedVillage = UnmadeCore::SettlementId::None;
     FName LastAmbientSite = NAME_None;
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;

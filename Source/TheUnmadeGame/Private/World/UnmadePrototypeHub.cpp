@@ -56,6 +56,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::DiscoveryLedger RestoredDiscoveries;
     UnmadeCore::SettlementVisits RestoredVillages;
     UnmadeCore::RegionalTaskModel RestoredTasks;
+    UnmadeCore::FactionChronicle RestoredChronicle;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -64,6 +65,26 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         UE_LOG(LogTemp, Warning, TEXT("Invalid living world state ignored"));
         return;
     }
+    if (Save->bHasFactionChronicle)
+    {
+        UnmadeCore::FactionSnapshot State;
+        if (Save->FactionStages.Num()!=3 || Save->FactionEndings.Num()!=3)
+        {
+            UE_LOG(LogTemp,Error,TEXT("Invalid faction array size, save not applied"));
+            return;
+        }
+        for(int32 i=0;i<3;++i)
+        {
+            State.stages[i]=Save->FactionStages[i];
+            State.endings[i]=Save->FactionEndings[i];
+        }
+        if (!RestoredChronicle.Restore(State))
+        {
+            UE_LOG(LogTemp,Error,TEXT("Invalid faction state rejected"));
+            return;
+        }
+    }
+    Chronicle=RestoredChronicle;
     Clock = RestoredClock;
     Discoveries = RestoredDiscoveries;
     VillagesVisited = RestoredVillages;
@@ -81,6 +102,15 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     const auto Story = RegionalTasks.Snapshot();
     Save->BellwoldTaskStage = Story.bellwold;
     Save->PaperhavenTaskStage = Story.paperhaven;
+    const auto FactionState=Chronicle.Snapshot();
+    Save->FactionStages.Reset();
+    Save->FactionEndings.Reset();
+    for(int i=0;i<3;++i)
+    {
+        Save->FactionStages.Add(FactionState.stages[i]);
+        Save->FactionEndings.Add(FactionState.endings[i]);
+    }
+    Save->bHasFactionChronicle=true;
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
@@ -117,6 +147,80 @@ bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bComple
         GEngine->AddOnScreenDebugMessage(-1, 9.f, FColor::Cyan, Line);
     }
     return true;
+}
+
+void AUnmadePrototypeHub::TryFactionConversation(FName ResidentId)
+{
+    if(ResidentId.IsNone())return;
+    const FString Id=ResidentId.ToString();
+    const FTCHARToUTF8 Utf8(*Id);
+    bool bHasEvidence=false;
+    for(const auto& Arc:UnmadeCore::FactionArcs)
+        if(Arc.first && Arc.second && Arc.third)
+        {
+            if(FCStringAnsi::Strcmp(Utf8.Get(),Arc.third)!=0)continue;
+            bHasEvidence=Arc.faction==UnmadeCore::Faction::Refuge
+                ? RegionalTasks.Progress(UnmadeCore::SettlementId::Bellwold)==UnmadeCore::TaskProgress::Completed
+                : Arc.faction==UnmadeCore::Faction::Archive
+                  ? RegionalTasks.Progress(UnmadeCore::SettlementId::Paperhaven)==UnmadeCore::TaskProgress::Completed
+                  : VillagesVisited.Count()==3;
+        }
+    const auto Before=Chronicle.Snapshot();
+    const auto Result=Chronicle.Converse(Utf8.Get(),bHasEvidence);
+    if(Result==UnmadeCore::FactionResult::Advanced ||
+       Result==UnmadeCore::FactionResult::ChoiceRequired)
+    {
+        if(Result==UnmadeCore::FactionResult::Advanced ||
+           Chronicle.Snapshot().stages!=Before.stages)
+        {
+            if(!WriteWorldSnapshot())
+            {
+                Chronicle.Restore(Before);
+                return;
+            }
+        }
+    }
+    if(GEngine && Result!=UnmadeCore::FactionResult::NoChange)
+    {
+        const TCHAR* Notice=Result==UnmadeCore::FactionResult::NeedsEvidence
+            ? TEXT("FACTION: complete this settlement's local task (or visit all three villages) first.")
+            : Result==UnmadeCore::FactionResult::ChoiceRequired
+            ? TEXT("FACTION DECISION: near this representative, F7 commits to solidarity, F8 to open truth. This cannot be undone.")
+            : TEXT("FACTION: another witness adds their part to the chronicle. Speak to the next representative.");
+        GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Cyan,Notice);
+    }
+}
+
+bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome)
+{
+    if(!GetWorld() || Outcome==UnmadeCore::FactionEnding::Unresolved)return false;
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return false;
+    for(const auto& Arc:UnmadeCore::FactionArcs)
+    {
+        if(Chronicle.Stage(Arc.faction)!=3 ||
+           Chronicle.Ending(Arc.faction)!=UnmadeCore::FactionEnding::Unresolved)
+            continue;
+        for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+        {
+            if(It->GetStableId()!=FName(UTF8_TO_TCHAR(Arc.third)))continue;
+            if(FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())>FMath::Square(390.f))
+                continue;
+            const auto Before=Chronicle.Snapshot();
+            if(Chronicle.Decide(Arc.faction,Outcome)!=UnmadeCore::FactionResult::Resolved)
+                return false;
+            if(!WriteWorldSnapshot())
+            {
+                Chronicle.Restore(Before);
+                return false;
+            }
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+                FString::Printf(TEXT("FACTION ARC RESOLVED: %s. The town remembers your choice."),
+                    UTF8_TO_TCHAR(Arc.name)));
+            return true;
+        }
+    }
+    return false;
 }
 
 void AUnmadePrototypeHub::SaveLivingWorld()
