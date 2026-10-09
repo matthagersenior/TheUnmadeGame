@@ -22,9 +22,12 @@ class OfflineNpcContract(unittest.TestCase):
         self.assertNotIn("UUnmadeLocalDialogueSubsystem", cpp)
 
     def test_all_five_npc_roles_are_configured(self):
+        registry = read("Source/TheUnmadeGame/Public/World/UnmadeSettlementRegistry.h")
         hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         for role in ("Merchant", "Guard", "Scholar", "Courier", "Wanderer"):
-            self.assertIn("UnmadeCore::NpcRole::" + role, hub)
+            self.assertIn("NpcRole::" + role, registry)
+        self.assertIn("UnmadeCore::Residents", hub)
+        self.assertIn("SpawnCitizen(Resident)", hub)
 
     def test_repeated_saves_replace_snapshots_not_duplicate(self):
         hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")

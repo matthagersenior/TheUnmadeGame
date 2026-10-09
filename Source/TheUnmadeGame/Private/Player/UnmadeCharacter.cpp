@@ -229,6 +229,8 @@ void AUnmadeCharacter::ShowStoryJournal()
     const int32 Clues = Lexicon ? Lexicon->GetClueCount() : 0;
     FString WorldTime = TEXT("unknown");
     int32 SitesSeen = 0;
+    int32 VillagesSeen = 0;
+    FString VillageName = TEXT("unknown");
     if (GetWorld())
     {
         for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
@@ -237,12 +239,14 @@ void AUnmadeCharacter::ShowStoryJournal()
             WorldTime = FString::Printf(TEXT("day %d at %02d:%02d"),
                 Hub->GetGameDay(), Minute / 60, Minute % 60);
             SitesSeen = Hub->GetDiscoveredCount();
+            VillageName = Hub->GetCurrentVillageName();
+            VillagesSeen = Hub->GetVisitedVillageCount();
             break;
         }
     }
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan,
-        FString::Printf(TEXT("JOURNAL | %s | Explored %d/6 | Dispute: %s | Supplies: %s | VEYL clues: %d/2 | Strain: %.0f/100"),
-            *WorldTime, SitesSeen, *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
+        FString::Printf(TEXT("JOURNAL | %s | %s | Villages %d/3, landmarks %d/6 | Dispute: %s | Supplies: %s | VEYL clues: %d/2 | Strain: %.0f/100"),
+            *WorldTime, *VillageName, VillagesSeen, SitesSeen, *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()

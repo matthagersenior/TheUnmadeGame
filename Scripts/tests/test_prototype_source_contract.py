@@ -19,12 +19,17 @@ class PrototypeSourceContractTests(unittest.TestCase):
         self.assertIn("ReadSnapshot", impl)
         self.assertIn("FName SubjectId", header)
 
-    def test_runtime_hub_has_11_distinct_citizen_ids_and_ground(self):
+    def test_runtime_hub_uses_48_persistent_residents_from_three_villages(self):
         hub = source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
-        self.assertEqual(hub.count("SpawnCitizen(FName("), 11)
+        registry = source("Source/TheUnmadeGame/Public/World/UnmadeSettlementRegistry.h")
+        self.assertIn("std::array<ResidentSpec, 48>", registry)
         for token in ("npc.merchant.001", "npc.guard.001", "npc.courier.001",
-                      "npc.wanderer.001", "npc.archivist.001", "Hub.Ground"):
-            self.assertIn(token, hub)
+                      "npc.wanderer.001", "npc.archivist.001"):
+            self.assertIn(token, registry)
+        self.assertIn('FName("Hub.Ground")', hub)
+        self.assertIn("BuildVillages();", hub)
+        self.assertIn("UnmadeCore::Residents", hub)
+        self.assertIn("SpawnCitizen(Resident)", hub)
         self.assertIn("RestoreCitizens();", hub)
 
     def test_player_interactions_are_proximity_and_witness_gated(self):
