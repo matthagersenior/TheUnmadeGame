@@ -57,6 +57,8 @@ class SignatureRiteIntegration(unittest.TestCase):
                     "ConfluenceOption1","ConfluenceOption2"):
             self.assertIn('BindAction("'+key+'"',player)
             self.assertIn('ActionName="'+key+'"',ini)
+        self.assertEqual(player.count("IE_Pressed,Tenfold.Get(),"),13)
+        self.assertNotIn("IE_Pressed,Tenfold,&UUnmadeTenfoldComponent",player)
 
     def test_save_migration_and_grants_are_durable(self):
         save=read("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")

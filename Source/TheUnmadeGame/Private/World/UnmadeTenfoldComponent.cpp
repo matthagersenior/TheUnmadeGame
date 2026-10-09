@@ -351,8 +351,10 @@ void UUnmadeTenfoldComponent::StudyConfluence()
         Confluence.Restore(Before);
         return;
     }
-    CycleConfluence();
-    SelectedConfluence=(SelectedConfluence+5)%6;
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+        FString::Printf(TEXT("CHAMBER UNSEALED: %s | %s"),
+            UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence].name),
+            UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence].chapters[1])));
 }
 
 void UUnmadeTenfoldComponent::ChooseConfluence(int32 Outcome)

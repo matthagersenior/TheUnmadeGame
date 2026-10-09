@@ -87,19 +87,19 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("FrontierTravel", IE_Pressed, this, &AUnmadeCharacter::CrossFrontierGateway);
     if (IsValid(Tenfold))
     {
-        PlayerInputComponent->BindAction("RiteNext",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::NextRite);
-        PlayerInputComponent->BindAction("RitePrevious",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::PreviousRite);
-        PlayerInputComponent->BindAction("RiteJournal",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::ShowRite);
-        PlayerInputComponent->BindAction("RiteStudy",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::StudyRite);
-        PlayerInputComponent->BindAction("RiteUse",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::InvokeRite);
-        PlayerInputComponent->BindAction("RiteChoice1",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::DecideSolidarity);
-        PlayerInputComponent->BindAction("RiteChoice2",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::DecideTruth);
-        PlayerInputComponent->BindAction("RiteBreak",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::BreakChosenOath);
-        PlayerInputComponent->BindAction("RiteLaw",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::CycleWorldLaw);
-        PlayerInputComponent->BindAction("ConfluenceCycle",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::CycleConfluence);
-        PlayerInputComponent->BindAction("ConfluenceStudy",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::StudyConfluence);
-        PlayerInputComponent->BindAction("ConfluenceOption1",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::ConfluenceChoice1);
-        PlayerInputComponent->BindAction("ConfluenceOption2",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::ConfluenceChoice2);
+        PlayerInputComponent->BindAction("RiteNext",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::NextRite);
+        PlayerInputComponent->BindAction("RitePrevious",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::PreviousRite);
+        PlayerInputComponent->BindAction("RiteJournal",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::ShowRite);
+        PlayerInputComponent->BindAction("RiteStudy",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::StudyRite);
+        PlayerInputComponent->BindAction("RiteUse",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::InvokeRite);
+        PlayerInputComponent->BindAction("RiteChoice1",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::DecideSolidarity);
+        PlayerInputComponent->BindAction("RiteChoice2",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::DecideTruth);
+        PlayerInputComponent->BindAction("RiteBreak",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::BreakChosenOath);
+        PlayerInputComponent->BindAction("RiteLaw",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::CycleWorldLaw);
+        PlayerInputComponent->BindAction("ConfluenceCycle",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::CycleConfluence);
+        PlayerInputComponent->BindAction("ConfluenceStudy",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::StudyConfluence);
+        PlayerInputComponent->BindAction("ConfluenceOption1",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::ConfluenceChoice1);
+        PlayerInputComponent->BindAction("ConfluenceOption2",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::ConfluenceChoice2);
     }
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
     PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
