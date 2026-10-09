@@ -30,6 +30,7 @@ void AUnmadePrototypeHub::BeginPlay()
     Super::BeginPlay();
     BuildForPrototype();
     RestoreLivingWorld();
+    RefreshRiteWorldFromSave();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
     GetWorldTimerManager().SetTimer(GossipTimer, this, &AUnmadePrototypeHub::SpreadLocalRumors, 8.f, true);
@@ -657,6 +658,50 @@ void AUnmadePrototypeHub::BuildVillages()
     }
 }
 
+void AUnmadePrototypeHub::SetRiteWorldActorState(FName Tag,bool bEnabled)
+{
+    if(!GetWorld())return;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        if(!It->ActorHasTag(Tag))continue;
+        It->SetActorHiddenInGame(!bEnabled);
+        It->SetActorEnableCollision(bEnabled);
+    }
+}
+
+void AUnmadePrototypeHub::RefreshRiteWorldFromSave()
+{
+    const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
+        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+    if(!Save || !Save->bHasTenfoldChronicle || Save->RiteStages.Num()!=10)return;
+    if(Save->RiteStages[1]==5)
+        SetRiteWorldActorState(FName("Rite.WitnessBridge"),true);
+    if(Save->RiteStages[4]==5)
+        SetRiteWorldActorState(FName("Rite.CommonCauseway"),true);
+    if(Save->VerifiedRoadBits>0)
+        SetRiteWorldActorState(FName("Rite.MapRoute"),true);
+}
+
+void AUnmadePrototypeHub::ApplyRiteEnvironment(UnmadeCore::RiteId Id,
+    double Duration,bool Mastered)
+{
+    if(!GetWorld() || !FMath::IsFinite(Duration) || Duration<=0)return;
+    FName Tag;
+    switch(Id)
+    {
+    case UnmadeCore::RiteId::Witnesscraft:Tag=FName("Rite.WitnessBridge");break;
+    case UnmadeCore::RiteId::LivingRoads:Tag=FName("Rite.CommonCauseway");break;
+    case UnmadeCore::RiteId::ParadoxConvergence:Tag=FName("Rite.ParadoxIntact");break;
+    case UnmadeCore::RiteId::Cartography:Tag=FName("Rite.MapRoute");break;
+    default:return;
+    }
+    SetRiteWorldActorState(Tag,true);
+    if(Mastered && Id!=UnmadeCore::RiteId::ParadoxConvergence)
+        TemporaryRiteWorldEffects.Remove(Tag);
+    else
+        TemporaryRiteWorldEffects.Add(Tag,Clock.ElapsedSeconds()+Duration);
+}
+
 void AUnmadePrototypeHub::BuildForPrototype()
 {
     if (bBuilt || !GetWorld()) return;
@@ -671,6 +716,34 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnBlock(FVector(0, 0, -50), FVector(52, 52, 1), FName("Hub.Ground"));
     BuildVillages();
     BuildFrontiers();
+    // Ten inscriptions across five communities. Each marker is world-space,
+    // independently discoverable, and checked for distance and visibility.
+    const FVector RitualSites[10]={
+        FVector(-1800,-1020,90), // Bellgrave: the Law of the Bell
+        FVector(-1710,680,90),  // Echo Well: Witnesscraft
+        FVector(1300,1260,90),  // Paper Orchard: Borrowed Lives
+        FVector(-17440,-710,90),// Bellwold Forge: Legacy
+        FVector(1850,390,90),   // Silent Mile: Common Roads
+        FVector(1170,-1170,90), // Debt Market: Borrowed Dawn
+        FVector(-18000,-1720,90),// Bellwold Ossuary: boss mercy
+        FVector(17880,-1250,90),// Paperhaven Scribe: dual histories
+        FVector(-17330,540,90),// Bellwold Refuge: Oath
+        FVector(-350,-49600,90)// Saltwake Harbor: Unreliable Map
+    };
+    for(int32 Index=0;Index<10;++Index)
+        SpawnBlock(RitualSites[Index],FVector(.48,.48,1.8),
+            FName(*FString::Printf(TEXT("Rite.Site.%d"),Index)));
+    // Alternating reality props: nondefault state is invisible/noncolliding
+    // until a player performs the actual rite, not until NPC dialogue says so.
+    SpawnBlock(FVector(-1250,270,-50),FVector(3.5,1.4,1),FName("Rite.WitnessBridge"));
+    SpawnBlock(FVector(1720,870,-50),FVector(2.2,1.4,1),FName("Rite.CommonCauseway"));
+    SpawnBlock(FVector(17520,-1440,330),FVector(2.1,2.1,6.6),FName("Rite.ParadoxIntact"));
+    SpawnBlock(FVector(-400,-49400,-50),FVector(2.2,1.4,1),FName("Rite.MapRoute"));
+    SetRiteWorldActorState(FName("Rite.WitnessBridge"),false);
+    SetRiteWorldActorState(FName("Rite.CommonCauseway"),false);
+    SetRiteWorldActorState(FName("Rite.ParadoxIntact"),false);
+    SetRiteWorldActorState(FName("Rite.MapRoute"),false);
+
     SpawnBlock(FVector(520, -470, 210), FVector(5, 5, 4.2), FName("Hub.Market"));
     SpawnBlock(FVector(-650, -440, 160), FVector(3, 3, 3.2), FName("Hub.Watch"));
     SpawnBlock(FVector(650, 570, 140), FVector(4, 3, 2.8), FName("Hub.Store"));

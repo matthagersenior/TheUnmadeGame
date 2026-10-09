@@ -8,6 +8,7 @@
 #include "World/UnmadeRegionalTaskRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeFrontierRealmRules.h"
+#include "World/UnmadeTenfoldChronicle.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -26,6 +27,8 @@ public:
     virtual void Tick(float DeltaSeconds) override;
     UnmadeCore::DayPhase GetCurrentPhase() const { return Clock.Phase(); }
     int32 GetGameDay() const { return Clock.DayIndex() + 1; }
+    double GetWorldClockSeconds() const { return Clock.ElapsedSeconds(); }
+    void ApplyRiteEnvironment(UnmadeCore::RiteId Id,double Duration,bool Mastered);
     int32 GetMinuteOfDay() const { return Clock.MinuteOfDay(); }
     int32 GetDiscoveredCount() const { return Discoveries.Count(); }
     int32 GetVisitedVillageCount() const { return VillagesVisited.Count(); }
@@ -66,6 +69,9 @@ private:
     UnmadeCore::FactionChronicle Chronicle;
     UnmadeCore::FrontierJourney Frontier;
     UnmadeCore::SettlementId LastVisitedVillage = UnmadeCore::SettlementId::None;
+    TMap<FName,double> TemporaryRiteWorldEffects;
+    void SetRiteWorldActorState(FName Tag,bool bEnabled);
+    void RefreshRiteWorldFromSave();
     FName LastAmbientSite = NAME_None;
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;
     void RestoreLivingWorld();
