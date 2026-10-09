@@ -6,7 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "UnmadePrototypeSave.generated.h"
 
-/** Narrow early playtest save: NPC memories only, not yet a full RPG save system. */
+/** Prototype save: NPC observations and one authored world choice; not yet a full RPG save system. */
 UCLASS()
 class THEUNMADEGAME_API UUnmadePrototypeSave : public USaveGame
 {
@@ -34,6 +34,9 @@ public:
         UUnmadePrototypeSave* Existing = Cast<UUnmadePrototypeSave>(
             UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
         if (Existing) return Existing->SchemaVersion == 1 ? Existing : nullptr;
+        // Never replace an existing but unreadable save with an empty one.
+        if (UGameplayStatics::DoesSaveGameExist(TEXT("UnmadePrototypeNPC"), 0))
+            return nullptr;
         return Cast<UUnmadePrototypeSave>(UGameplayStatics::CreateSaveGameObject(StaticClass()));
     }
 };
