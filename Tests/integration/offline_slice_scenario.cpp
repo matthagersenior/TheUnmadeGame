@@ -15,6 +15,7 @@
 #include "World/UnmadeFrontierRealmRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeConfluenceRules.h"
+#include "World/UnmadeAfterlightRules.h"
 
 #include <cassert>
 #include <iostream>
@@ -296,6 +297,33 @@ int main() {
     InventoryModel recalledRelics;
     assert(recalledRelics.Restore(gear.Snapshot()));
     assert(recalledRelics.Quantity(ItemId::FirstAbsenceWitness)==1);
+
+    // Act XIII: Bellwold has a consequential return visit only after its real
+    // refugee task and faction arc. Research and shelter require separate clues.
+    BellwoldAfterlight secondNight;
+    assert(secondNight.Begin(
+        static_cast<int>(tasks.Progress(SettlementId::Bellwold)),
+        static_cast<int>(factions.Ending(Faction::Refuge)),
+        "npc.bellwold.matron.001")==AfterlightResult::Started);
+    assert(secondNight.Inspect(AfterlightChoice::Relief,
+        "Bellwold.Afterlight.Relief")==AfterlightResult::EvidenceFound);
+    assert(secondNight.Converse("npc.bellwold.healer.001")==AfterlightResult::Witnessed);
+    assert(secondNight.Resolve(AfterlightChoice::Revelation)==AfterlightResult::WrongEvidence);
+    assert(secondNight.Resolve(AfterlightChoice::Relief)==AfterlightResult::Resolved);
+    assert(gear.Claim(Achievement::AfterlightShelter)==RewardResult::Awarded);
+    assert(gear.Claim(Achievement::AfterlightShelter)==RewardResult::AlreadyAwarded);
+    assert(gear.Quantity(ItemId::AfterlightWard)==1);
+    assert(gear.Quantity(ItemId::UnredactedLantern)==0);
+    BellwoldAfterlight reloadedSecondNight;
+    assert(reloadedSecondNight.Restore(secondNight.Snapshot()));
+    assert(reloadedSecondNight.Outcome()==AfterlightChoice::Relief);
+    BellwoldAfterlight alternateSecondNight;
+    assert(alternateSecondNight.Begin(2,2,"npc.bellwold.matron.001")==AfterlightResult::Started);
+    assert(alternateSecondNight.Inspect(AfterlightChoice::Revelation,
+        "Bellwold.Afterlight.Census")==AfterlightResult::EvidenceFound);
+    assert(alternateSecondNight.Converse("npc.bellwold.childtutor.001")==AfterlightResult::Witnessed);
+    assert(alternateSecondNight.Resolve(AfterlightChoice::Revelation)==AfterlightResult::Resolved);
+    assert(alternateSecondNight.Effect().publishedWitnesses==2);
 
     // Returning to the region retains both authored outcomes and clues.
     FractureModel loadedFracture("region.prototype.hub", {"variant.open","variant.sealed"});
