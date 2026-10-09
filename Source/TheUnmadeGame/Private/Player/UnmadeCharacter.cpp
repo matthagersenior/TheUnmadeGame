@@ -471,13 +471,19 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
         const bool bResolvedFaction=Hub->ResolveNearbyFaction(Ending);
         const bool bResolvedFrontier=!bResolvedFaction &&
             Hub->ResolveNearbyFrontier(static_cast<int32>(Ending));
-        if(bResolvedFaction || bResolvedFrontier)
+        const bool bResolvedAfterlight=!bResolvedFaction && !bResolvedFrontier &&
+            Hub->ResolveNearbyAfterlight(static_cast<int32>(Ending));
+        if(bResolvedFaction || bResolvedFrontier || bResolvedAfterlight)
         {
             ReconcileEarnedRewards();
-            ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
+            if(bResolvedAfterlight)
+                ReportLocalEvent(Ending==UnmadeCore::FactionEnding::Solidarity?
+                    FName("World.AfterlightShelter"):FName("World.AfterlightNames"),
+                    FName("region.bellwold.refuge"));
+            else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
         else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
-            TEXT("Find your final faction or frontier representative before choosing."));
+            TEXT("Find your final faction, frontier, or Afterlight representative and matching evidence."));
         break;
     }
 }
@@ -659,6 +665,9 @@ void AUnmadeCharacter::ShowStoryJournal()
                 Hub->FactionStage(UnmadeCore::Faction::Archive),
                 Hub->FactionStage(UnmadeCore::Faction::Roadbound));
             RealmSummary=Hub->GetCurrentRealmName(GetActorLocation());
+            if(Hub->GetAfterlightStage()>0)
+                RealmSummary+=FString::Printf(
+                    TEXT(" | Bellwold Afterlight: %d/4"),Hub->GetAfterlightStage());
             RealmSummary+=TEXT(" | ");
             RealmSummary+=Hub->DescribeCommunityAt(GetActorLocation());
             RealmSummary+=FString::Printf(TEXT(" | Beyond the Reach: %d/2 discovered"),
@@ -830,6 +839,11 @@ void AUnmadeCharacter::Interact()
     }
     if (!Target)
     {
+        if(GetWorld())
+        {
+            for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+                if(Hub->InspectAfterlightClue(this))return;
+        }
         if(IsValid(Tenfold) && Tenfold->TryInspectRiteStone())return;
         if(GetWorld())
         {
@@ -865,6 +879,7 @@ void AUnmadeCharacter::Interact()
             }
             Hub->TryFactionConversation(Target->GetStableId());
             Hub->TryFrontierConversation(Target->GetStableId());
+            Hub->TryAfterlightConversation(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
         }
