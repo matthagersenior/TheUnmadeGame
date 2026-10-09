@@ -145,3 +145,20 @@ changing the world or spending Strain. Native regression tests validate
 costs, timings, stacking, preview consistency and snapshot restoration.
 These are source-level game behaviors; particles, item models, ability
 visuals and Unreal live interactions still await an Editor-equipped host.
+
+## Follow-on source expansion update — October 9
+
+The original atlas paragraph above described the initial milestone. Since
+then, Unreal C++ source now spawns one primitive foothold in each of the
+two adjacent realms: **Saltwake** in The Rain That Forgot the Sea and
+**Cinderhold** in The Hearth Beneath. Both have returnable gates, eight
+uniquely named NPCs, realm evidence and local three-witness chronicles.
+These are small graybox environments, not complete open-world regions.
+
+The item catalog has expanded from 28 to **42** named items including three
+boss trophies, three faction rewards, two realm-story relics, and materials
+and crafted gear. Native boss, profession/economy, faction and frontier
+tests now extend the earlier fracture and inventory suite.
+
+The other six atlas regions do not yet have source-spawned settlements,
+combat encounters, weather, custom sound or environmental art.

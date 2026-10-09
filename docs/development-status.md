@@ -125,3 +125,32 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - Gear models, varied attack animations, gamepad equipment UI, inventory
   rendering, visible potion VFX, merchant economy, health checkpoint persistence,
   and full Unreal compilation are still absent or unverified.
+
+## 2026-10-09 named bosses, regional economies, chronicles and realm footholds
+
+- Three authored bosses with distinct native telegraphs, phase transitions,
+  Hollow Bell shockwaves, Redacted Curator range control, Unfinished Pilgrim
+  charging, interruption through Fold, finite unique trophies and victory
+  persistence. Original enemy combat remains separate.
+- Expanded catalog to 42 authored items. Appended stable IDs rather than
+  renumbering previous equipment; source save logic accepts legacy 28+ slots.
+- Six resource-consuming recipes and three finite professions; settlement
+  discounts, safeguarded marks, one-time contract payments and transactional
+  inventory/economy snapshots. Trade requires a merchant's proximity; crafting
+  requires a specific workshop or scriptorium. UI is temporary keyboard text.
+- Three named faction chronicles extend Bellwold, Paperhaven and the Crossings,
+  with three witnesses each, evidence requirements, permanent outcomes, local
+  price effects and one-time epic gear.
+- Added Saltwake (Rain That Forgot the Sea) and Cinderhold (Hearth Beneath)
+  graybox grounds, distinctive primitive architecture, returnable gate source,
+  evidence objects and eight additional memory-bearing NPCs per outpost.
+  Total named stable IDs in source: 64. Both have their own three-witness stories
+  and uniquely earned relics.
+- The initial nine-realm atlas remains; other six areas have no actor level
+  source. Frontier simulation is still a small proof-of-concept and cannot
+  be equated to finished continents or large open-world streaming.
+- Combined native C++17 regression covers boss mechanics, crafting, faction
+  stages and frontier journeys with restored snapshots. Python source
+  contracts check Unreal hookup. **No UnrealEditor compile, in-engine
+  checkpoint, actor traversal, full HUD, animation or verified live combat
+  test was performed.**

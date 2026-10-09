@@ -4,6 +4,44 @@ Dark, surreal, third-person 3D RPG. You play a customizable outcast whose origin
 
 **Status:** foundational Unreal Engine **source scaffold**, not a playable release. No Unreal Editor compilation, map boot, packaged Windows build, or Android streaming session has been verified yet.
 
+## Current source milestone — October 9, 2026
+
+- **Three original villages and two frontier outposts** in graybox actor source:
+  The Crossings, Bellwold, Paperhaven, Saltwake and Cinderhold. Two returnable
+  gateway paths lead from the first realm into the other two.
+- **64 uniquely named NPCs**, each with an independent stable identity,
+  personal memory and authored fallback dialogue (48 original + 16 frontier).
+- **42 authored items**: weapons, armor, charms, consumables and materials;
+  finite one-time rewards, unique relic effects, inventory/equipment and save
+  merging. The catalog includes three boss trophies and unique faction/realm gear.
+- **Three named boss encounters**: the Hollow Bell creates a telegraphed
+  shockwave; the Curator backs away to cast a long-range attack; the
+  Pilgrim closes distance with a charge. Fold can interrupt their attack
+  windups. Source AI uses no language model.
+- **Six recipes and three professions**: smithing, apothecary, and scribing.
+  Village prices differ, local merchants have transaction rules, civic
+  payments only occur once, and failed inventory/economy saves roll back.
+- **Three multi-stage faction arcs** and **two separate frontier narratives**
+  with named witnesses, evidence checks, immutable conclusions and
+  story-specific equipment rewards.
+- **Nine-realm atlas**. Three realms now contain graybox footholds; the other
+  six retain only future content descriptions and tested route-planning rules.
+
+**These numbers refer to implemented data and Unreal C++ source**, not
+rendered, editor-compiled, gameplay-tested or professionally produced
+content. A working 3D game still needs an Unreal-equipped machine, authored
+levels/art/animations, navigation, audio, UI, checkpoints and engine-level
+verification. See [epic gameplay and expansion QA](docs/qa/epic-world-systems.md).
+
+### Additional temporary keyboard controls
+
+**Y** buy the current village's commodity near its merchant; **U** sell
+surplus; **P** craft at the Bellwold workshop or Paperhaven scriptorium.
+**F7/F8** choose an irreversible end to a nearby faction/frontier narrative
+when ready. **G** crosses a nearby realm gateway; **E** speaks or inspects a
+local evidence tablet. **I** shows the current bag, money and profession skill.
+These are prototype actions, not finished menus or tested bindings.
+
 ## Approved direction
 - Third-person 3D; Windows PC first; controller + keyboard/mouse planned.
 - Adaptive reality combat: Glimpse, Fold and warned persistent Rewrite.
@@ -23,7 +61,7 @@ python Scripts/validate_repo.py
 python -m unittest discover -s Scripts/tests -v
 ```
 
-GitHub's **Static checks** workflow runs only these commands. A green check does **not** mean this game compiles, launches, or plays.
+GitHub's **Static checks** workflow runs these checks plus native C++17 gameplay tests for NPCs, combat, bosses, crafting, economy, factions and frontier travel. A green check does **not** mean Unreal C++ compiles, launches, or plays.
 
 ## Test with Unreal installed
 ```powershell
@@ -169,7 +207,7 @@ Tests cover the engine-independent policies and Unreal source wiring.
 No Unreal compilation, native render or full gameplay pass has occurred.
 See docs/qa/three-settlements.md.
 
-## First earned loot and equipment pass
+## First earned loot and equipment pass (initial historical baseline)
 
 The deterministic C++ source now defines **28 authored items** across gear,
 consumables and materials with Common, Uncommon, Rare, Epic and Mythic rarity.
@@ -193,6 +231,4 @@ shop transactions and Unreal Editor/runtime tests are still unfinished.
 
 A separate future-world atlas in source defines nine distinct realms and a
 tested route graph with stages based on earned exploration, village progress
-and mythic crafting. **Only three villages in the starting realm have graybox
-Unreal actor source today; the other eight regions are designed, not rendered
-or playable.** See [epic rewards and universe design](docs/design/2026-10-09-epic-rewards-and-nine-realms.md).
+and mythic crafting. **As of the initial item milestone only the three starting villages had graybox actor source. The subsequent current milestone above adds two frontier outposts, not two finished continents; six atlas regions remain designs.** See [epic rewards and universe design](docs/design/2026-10-09-epic-rewards-and-nine-realms.md).
