@@ -751,6 +751,20 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SetRiteWorldActorState(FName("Rite.CommonCauseway"),false);
     SetRiteWorldActorState(FName("Rite.ParadoxIntact"),false);
     SetRiteWorldActorState(FName("Rite.MapRoute"),false);
+    // Six late-campaign confluence puzzles combine pairs of earned disciplines.
+    // These are separate from the ten learning stones and must be visited.
+    const FVector ConfluenceSites[6]={
+        FVector(-18200,-1700,90),   // Bellwold: silent alarm
+        FVector(-17480,-800,90),    // Bellwold: two names
+        FVector(1600,520,90),       // Silent Mile: unmapped way
+        FVector(970,-1070,90),      // Debt Market: tomorrow's promise
+        FVector(17760,-1350,90),   // Paperhaven: the two keepers
+        FVector(120,-49850,90)      // Saltwake: first absence
+    };
+    for(int32 Index=0;Index<6;++Index)
+        SpawnBlock(ConfluenceSites[Index],FVector(.85,.85,2.5),
+            FName(*FString::Printf(TEXT("Confluence.Site.%d"),Index)));
+
 
     SpawnBlock(FVector(520, -470, 210), FVector(5, 5, 4.2), FName("Hub.Market"));
     SpawnBlock(FVector(-650, -440, 160), FVector(3, 3, 3.2), FName("Hub.Watch"));

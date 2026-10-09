@@ -96,6 +96,10 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
         PlayerInputComponent->BindAction("RiteChoice2",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::DecideTruth);
         PlayerInputComponent->BindAction("RiteBreak",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::BreakChosenOath);
         PlayerInputComponent->BindAction("RiteLaw",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::CycleWorldLaw);
+        PlayerInputComponent->BindAction("ConfluenceCycle",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::CycleConfluence);
+        PlayerInputComponent->BindAction("ConfluenceStudy",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::StudyConfluence);
+        PlayerInputComponent->BindAction("ConfluenceOption1",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::ConfluenceChoice1);
+        PlayerInputComponent->BindAction("ConfluenceOption2",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::ConfluenceChoice2);
     }
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
     PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
