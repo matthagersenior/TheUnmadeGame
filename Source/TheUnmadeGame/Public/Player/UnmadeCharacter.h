@@ -10,6 +10,7 @@ class USpringArmComponent;
 class AUnmadeFractureAnchor;
 class UStaticMeshComponent;
 class UUnmadeCombatComponent;
+class UUnmadeLexiconComponent;
 
 /** Foundational third-person pawn. Visual mesh and Enhanced Input data assets are editor work. */
 UCLASS()
@@ -36,6 +37,9 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Unmade|Combat")
     TObjectPtr<UUnmadeCombatComponent> Combat;
+
+    UPROPERTY(VisibleAnywhere, Category="Unmade|Lexicon")
+    TObjectPtr<UUnmadeLexiconComponent> Lexicon;
 
     void AttemptMeleeAttack();
     void StartGuard();

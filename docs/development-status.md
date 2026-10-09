@@ -54,3 +54,9 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - New Unreal actor components and two graybox enemy actors use these rules; initial keyboard/gamepad attack and guard mappings plus Fold counterplay added.
 - The Watcher currently applies a sight-gated ranged *placeholder* impact with no projectile animation. Navigation is straight-line swept movement, not pathfinding.
 - These are source-level changes only; Unreal Editor compile, visuals, collision, controls, AI progression and actual gameplay have NOT been verified.
+
+## 2026-10-09 first lexicon source
+- Added an optional two-evidence language discovery rule tested without Unreal or LLM.
+- Unreal Player Glimpse and archivist interaction supply distinct evidence and reveal a provisional inscription once both are present.
+- New save evidence field merges with NPC and fracture snapshots; bad saved evidence is refused.
+- Actual Unreal compilation, UI, gamepad interactions and persistence behavior still await an engine host.

@@ -89,3 +89,13 @@ that enemy's collision/appearance. **Q/Fold** temporarily exposes nearby enemies
 to 50% extra incoming attack damage. Player defeat stops movement; checkpoints,
 loot, animations, hit VFX, projectiles and proper navmesh pursuit remain future
 work. See [combat test scope](docs/qa/combat-prototype.md).
+
+## Optional language discovery (Unreal source prototype)
+
+Glimpse near the fracture and speaking with the records keeper yield two distinct
+clues to interpret a provisional word, VEYL. Press E near the anomaly to read the
+inscription once both clues are found. Clues persist in the existing prototype
+save and never depend on Ollama or any AI model. This is authored, optional
+discovery, not a grind or quest prerequisite. See
+[language discovery QA](docs/qa/lexicon-prototype.md). Native lexicon tests pass
+through GitHub CI; Unreal engine behavior and save/reload remain unverified.

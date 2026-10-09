@@ -2,6 +2,7 @@
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Combat/UnmadeEnemyCharacter.h"
+#include "Lexicon/UnmadeLexiconComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Camera/CameraComponent.h"
@@ -27,6 +28,7 @@ AUnmadeCharacter::AUnmadeCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
     Combat = CreateDefaultSubobject<UUnmadeCombatComponent>(TEXT("Combat"));
+    Lexicon = CreateDefaultSubobject<UUnmadeLexiconComponent>(TEXT("Lexicon"));
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = false;
     bUseControllerRotationRoll = false;
@@ -172,10 +174,22 @@ void AUnmadeCharacter::Interact()
     AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
     if (!Target)
     {
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan,
-            TEXT("Nobody close enough to speak to."));
+        if (IsValid(FindNearbyFractureAnchor()) && GEngine)
+        {
+            const FString Inscription = Lexicon && Lexicon->UnderstandsVeyl()
+                ? TEXT("The inscription: VEYL - the way that remains. It marks a surviving passage.")
+                : TEXT("The inscription is unfamiliar. Investigate it with Glimpse and ask the archivist.");
+            GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Cyan, Inscription);
+        }
+        else if (GEngine)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan,
+                TEXT("Nobody close enough to speak to."));
+        }
         return;
     }
+    if (Lexicon && Target->GetStableId() == FName("npc.archivist.001"))
+        Lexicon->RecordEvidence(FName("evidence.archivist"));
     UUnmadeLocalDialogueSubsystem* Dialogue = GetGameInstance()
         ? GetGameInstance()->GetSubsystem<UUnmadeLocalDialogueSubsystem>()
         : nullptr;
@@ -223,6 +237,7 @@ void AUnmadeCharacter::DemonstrateAnomaly()
         return;
     }
     ApplyFractureVisuals();
+    if (Lexicon) Lexicon->RecordEvidence(FName("evidence.glimpse"));
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
         TEXT("GLIMPSE: another possible version flickers into view (+8 Strain)."));
     ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));

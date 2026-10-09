@@ -19,6 +19,10 @@ public:
     UPROPERTY(SaveGame)
     TArray<FUnmadeNpcSnapshot> NpcSnapshots;
 
+    /** Optional language evidence; schema v1 files treat absence as no clues. */
+    UPROPERTY(SaveGame)
+    TArray<FName> LexiconEvidence;
+
     UPROPERTY(SaveGame)
     bool bHasFractureSnapshot = false;
 
