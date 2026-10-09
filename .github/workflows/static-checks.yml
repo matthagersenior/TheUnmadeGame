@@ -22,3 +22,7 @@ jobs:
         run: python Scripts/validate_repo.py
       - name: Run validator unit tests
         run: python -m unittest discover -s Scripts/tests -v
+      - name: Compile and test deterministic C++ fracture rules
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/fracture/fracture_core_test.cpp -o /tmp/unmade-fracture-test
+          /tmp/unmade-fracture-test
