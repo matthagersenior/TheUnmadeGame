@@ -13,6 +13,8 @@
 #include "Items/UnmadeCraftEconomyRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeFrontierRealmRules.h"
+#include "World/UnmadeTenfoldChronicle.h"
+#include "World/UnmadeConfluenceRules.h"
 
 #include <cassert>
 #include <iostream>
@@ -224,6 +226,76 @@ int main() {
     assert(reloadedFrontier.Restore(frontier.Snapshot()));
     assert(reloadedFrontier.IsResolved(Realm::HearthBeneath) &&
            reloadedFrontier.IsResolved(Realm::WidowedRain));
+
+    // Act XI: ten distinct five-stage signature arcs, authored witnesses,
+    // permanent choices, real material rewards and no repeated grants.
+    TenfoldChronicle signature;
+    RiteContext riteContext;
+    riteContext.villageVisits=7;
+    riteContext.landmarkVisits=63;
+    riteContext.frontierVisits=3;
+    riteContext.bellQuestComplete=true;
+    riteContext.paperQuestComplete=true;
+    riteContext.hasVeyl=true;
+    riteContext.bossVictories=7;
+    riteContext.factionEndings=7;
+    riteContext.verifiedWitnesses=3;
+    riteContext.lineOfSight=true;
+    riteContext.day=20;
+    riteContext.now=1000;
+    riteContext.strain=0;
+    for(int idx=0;idx<10;++idx)
+    {
+        const auto id=static_cast<RiteId>(idx);
+        riteContext.site=idx;
+        riteContext.witness=RiteSpecs[idx].witness;
+        assert(signature.Advance(id,RiteAction::Discover,riteContext)==RiteResult::Advanced);
+        assert(signature.Advance(id,RiteAction::Testify,riteContext)==RiteResult::Advanced);
+        assert(signature.Invoke(id,riteContext).result==RiteResult::Applied);
+        assert(signature.Advance(id,RiteAction::Trial,riteContext)==RiteResult::Advanced);
+        assert(signature.Advance(id,RiteAction::Decide,riteContext,idx%2+1)==RiteResult::Advanced);
+        if(id==RiteId::LegacyForging)
+        {
+            assert(signature.RecordDeed(Deed::Protected));
+            assert(signature.RecordDeed(Deed::Discovered));
+            assert(signature.RecordDeed(Deed::Reconciled));
+        }
+        if(id==RiteId::TomorrowDebt)assert(signature.PassDay(21));
+        if(id==RiteId::Cartography)assert(signature.VerifyRoute(0,3,true));
+        assert(signature.Advance(id,RiteAction::Master,riteContext)==RiteResult::Completed);
+        assert(signature.IsMastered(id));
+        assert(gear.Claim(static_cast<Achievement>(
+            static_cast<int>(Achievement::RiteUnwriteLaw)+idx))==RewardResult::Awarded);
+        assert(gear.Claim(static_cast<Achievement>(
+            static_cast<int>(Achievement::RiteUnwriteLaw)+idx))==RewardResult::AlreadyAwarded);
+    }
+    assert(signature.Mastery(Discipline::Unmaker)==2);
+    TenfoldChronicle recalledSignature;
+    assert(recalledSignature.Restore(signature.Snapshot()));
+    for(int idx=0;idx<10;++idx)
+        assert(recalledSignature.IsMastered(static_cast<RiteId>(idx)));
+
+    // Act XII: five paired-world challenges and a late first-realm capstone.
+    ConfluenceJourney confluence;
+    for(int idx=0;idx<6;++idx)
+    {
+        const auto id=static_cast<ConfluenceId>(idx);
+        const auto& spec=Confluences[idx];
+        assert(confluence.Discover(id,idx,1023,3)==ConfluenceResult::Advanced);
+        const double now=1500.0+idx*200;
+        assert(confluence.RecordCast(id,spec.first,now,idx)==ConfluenceResult::CastRecorded);
+        assert(confluence.RecordCast(id,spec.second,now+12,idx)==ConfluenceResult::ReadyToDecide);
+        assert(confluence.Resolve(id,idx,3,idx%2+1,now+13)==ConfluenceResult::Completed);
+        assert(gear.Claim(static_cast<Achievement>(
+            static_cast<int>(Achievement::ConfluenceSilentAlarm)+idx))==RewardResult::Awarded);
+    }
+    ConfluenceJourney recalledConfluence;
+    assert(recalledConfluence.Restore(confluence.Snapshot()));
+    for(int idx=0;idx<6;++idx)
+        assert(recalledConfluence.Stage(static_cast<ConfluenceId>(idx))==2);
+    InventoryModel recalledRelics;
+    assert(recalledRelics.Restore(gear.Snapshot()));
+    assert(recalledRelics.Quantity(ItemId::FirstAbsenceWitness)==1);
 
     // Returning to the region retains both authored outcomes and clues.
     FractureModel loadedFracture("region.prototype.hub", {"variant.open","variant.sealed"});
