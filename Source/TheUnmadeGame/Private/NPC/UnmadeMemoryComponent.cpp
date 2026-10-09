@@ -73,6 +73,10 @@ void UUnmadeMemoryComponent::RecalculateReactions()
         {
             Trust += bDirect ? 25 : 10;
         }
+        else if (Entry.EventKind == FName("Player.HelpedVillage"))
+        {
+            Trust += bDirect ? 20 : 6;
+        }
         else if (Entry.EventKind == FName("Player.DeliveredSupplies") ||
                  Entry.EventKind == FName("World.ConflictShelter"))
         {

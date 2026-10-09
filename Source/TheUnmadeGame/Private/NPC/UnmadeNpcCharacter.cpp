@@ -209,6 +209,18 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     if (Phase == UnmadeCore::DayPhase::Night)
         CharacterLine += TEXT(" It feels like the dark has started listening.");
 
+    // The resident's own community records what the player has accomplished.
+    if (CachedHub.IsValid())
+    {
+        const auto Progress = CachedHub->GetRegionalTask(HomeSettlement);
+        if (HomeSettlement == UnmadeCore::SettlementId::Bellwold &&
+            Progress == UnmadeCore::TaskProgress::Completed)
+            CharacterLine += TEXT(" Our lanterns now belong to every household.");
+        else if (HomeSettlement == UnmadeCore::SettlementId::Paperhaven &&
+                 Progress == UnmadeCore::TaskProgress::Completed)
+            CharacterLine += TEXT(" The rescued testimony is part of our record now.");
+    }
+
     FString BeliefLine;
     const TArray<FUnmadeNpcObservation>& Observations = Memory->GetObservations();
     for (int32 Index = Observations.Num() - 1; Index >= 0; --Index)

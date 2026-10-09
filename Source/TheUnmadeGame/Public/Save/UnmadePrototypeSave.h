@@ -45,6 +45,11 @@ public:
     /** Three separate settlement discoveries; schema-1 predecessors default to 0. */
     UPROPERTY(SaveGame)
     int32 VisitedSettlementsMask = 0;
+    /** Independent Bellwold / Paperhaven optional conversation chains. */
+    UPROPERTY(SaveGame)
+    int32 BellwoldTaskStage = 0;
+    UPROPERTY(SaveGame)
+    int32 PaperhavenTaskStage = 0;
 
     UPROPERTY(SaveGame)
     bool bHasFractureSnapshot = false;

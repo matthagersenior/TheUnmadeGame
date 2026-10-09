@@ -54,9 +54,11 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::LivingWorldClock RestoredClock;
     UnmadeCore::DiscoveryLedger RestoredDiscoveries;
     UnmadeCore::SettlementVisits RestoredVillages;
+    UnmadeCore::RegionalTaskModel RestoredTasks;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
-        !RestoredVillages.Restore(Save->VisitedSettlementsMask))
+        !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
+        !RestoredTasks.Restore({Save->BellwoldTaskStage, Save->PaperhavenTaskStage}))
     {
         UE_LOG(LogTemp, Warning, TEXT("Invalid living world state ignored"));
         return;
@@ -64,6 +66,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     Clock = RestoredClock;
     Discoveries = RestoredDiscoveries;
     VillagesVisited = RestoredVillages;
+    RegionalTasks = RestoredTasks;
 }
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot()
@@ -74,7 +77,45 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->LivingWorldSeconds = Clock.ElapsedSeconds();
     Save->DiscoveredLoreMask = Discoveries.Snapshot();
     Save->VisitedSettlementsMask = VillagesVisited.Snapshot();
+    const auto Story = RegionalTasks.Snapshot();
+    Save->BellwoldTaskStage = Story.bellwold;
+    Save->PaperhavenTaskStage = Story.paperhaven;
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
+}
+
+bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bCompleted)
+{
+    bCompleted = false;
+    const FString ResidentName = ResidentId.ToString();
+    const FTCHARToUTF8 ResidentUtf8(*ResidentName);
+    const UnmadeCore::ResidentSpec* Resident = UnmadeCore::FindResident(ResidentUtf8.Get());
+    if (!Resident) return false;
+    const auto Previous = RegionalTasks.Snapshot();
+    const auto Outcome = RegionalTasks.Converse(Resident->home, ResidentUtf8.Get());
+    if (Outcome == UnmadeCore::TaskResult::NoChange) return false;
+
+    if (!WriteWorldSnapshot())
+    {
+        RegionalTasks.Restore(Previous);
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+            TEXT("Village story could not be saved. No progress applied."));
+        return false;
+    }
+    bCompleted = Outcome == UnmadeCore::TaskResult::Completed;
+    if (GEngine)
+    {
+        FString Line;
+        if (Resident->home == UnmadeCore::SettlementId::Bellwold)
+            Line = bCompleted
+                ? TEXT("BELLWOLD: the shelter matron accepts the restored lanterns. Refuge light survives the night.")
+                : TEXT("BELLWOLD: the lamplighter asks you to carry the shared lanterns to the refuge matron.");
+        else
+            Line = bCompleted
+                ? TEXT("PAPERHAVEN: the registrar preserves the rescued testimony, even though it contradicts the official record.")
+                : TEXT("PAPERHAVEN: the copyist entrusts you with a missing testimony. Bring it to the registrar.");
+        GEngine->AddOnScreenDebugMessage(-1, 9.f, FColor::Cyan, Line);
+    }
+    return true;
 }
 
 void AUnmadePrototypeHub::SaveLivingWorld()

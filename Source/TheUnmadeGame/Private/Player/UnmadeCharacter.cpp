@@ -231,6 +231,8 @@ void AUnmadeCharacter::ShowStoryJournal()
     int32 SitesSeen = 0;
     int32 VillagesSeen = 0;
     FString VillageName = TEXT("unknown");
+    int32 BellwoldQuest = 0;
+    int32 PaperhavenQuest = 0;
     if (GetWorld())
     {
         for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
@@ -241,12 +243,15 @@ void AUnmadeCharacter::ShowStoryJournal()
             SitesSeen = Hub->GetDiscoveredCount();
             VillageName = Hub->GetCurrentVillageName();
             VillagesSeen = Hub->GetVisitedVillageCount();
+            BellwoldQuest = static_cast<int32>(Hub->GetRegionalTask(UnmadeCore::SettlementId::Bellwold));
+            PaperhavenQuest = static_cast<int32>(Hub->GetRegionalTask(UnmadeCore::SettlementId::Paperhaven));
             break;
         }
     }
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan,
-        FString::Printf(TEXT("JOURNAL | %s | %s | Villages %d/3, landmarks %d/6 | Dispute: %s | Supplies: %s | VEYL clues: %d/2 | Strain: %.0f/100"),
-            *WorldTime, *VillageName, VillagesSeen, SitesSeen, *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
+        FString::Printf(TEXT("JOURNAL | %s | %s | Villages %d/3, landmarks %d/6 | Bellwold lanterns %d/2 | Paperhaven testimony %d/2 | Dispute: %s | Supplies: %s | VEYL clues: %d/2 | Strain: %.0f/100"),
+            *WorldTime, *VillageName, VillagesSeen, SitesSeen,
+            BellwoldQuest, PaperhavenQuest, *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
@@ -392,6 +397,19 @@ void AUnmadeCharacter::Interact()
                 TEXT("Nothing nearby to inspect or speak to."));
         }
         return;
+    }
+
+    // Hand-authored village missions are triggered by conversations, never LLM text.
+    if (GetWorld())
+    {
+        for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
+        {
+            bool bCompletedVillageTask = false;
+            if (Hub->TryResidentVillageTask(Target->GetStableId(), bCompletedVillageTask) &&
+                bCompletedVillageTask)
+                ReportLocalEvent(FName("Player.HelpedVillage"), Target->GetStableId());
+            break;
+        }
     }
 
     if (Lexicon && Target->GetStableId() == FName("npc.archivist.001"))

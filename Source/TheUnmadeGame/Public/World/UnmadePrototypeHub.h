@@ -5,6 +5,7 @@
 #include "NPC/UnmadeNpcDecisionRules.h"
 #include "World/UnmadeLivingWorldRules.h"
 #include "World/UnmadeSettlementRegistry.h"
+#include "World/UnmadeRegionalTaskRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -28,6 +29,11 @@ public:
     FString GetCurrentVillageName() const;
     bool InspectSite(AUnmadeLoreSite* Site);
     void RefreshDistrictMood();
+    /** True only when a real interaction advanced a quest; completion flag is output. */
+    bool TryResidentVillageTask(FName ResidentId, bool& bCompleted);
+    UnmadeCore::TaskProgress GetRegionalTask(UnmadeCore::SettlementId Village) const {
+        return RegionalTasks.Progress(Village);
+    }
 
     /** Created at runtime so the initial experiment needs no hand-authored .umap. */
     void BuildForPrototype();
@@ -41,6 +47,7 @@ private:
     UnmadeCore::LivingWorldClock Clock;
     UnmadeCore::DiscoveryLedger Discoveries;
     UnmadeCore::SettlementVisits VillagesVisited;
+    UnmadeCore::RegionalTaskModel RegionalTasks;
     UnmadeCore::SettlementId LastVisitedVillage = UnmadeCore::SettlementId::None;
     FName LastAmbientSite = NAME_None;
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;
