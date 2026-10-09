@@ -573,7 +573,8 @@ void AUnmadeCharacter::DemonstrateAnomaly()
 {
     AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
     if (!GetWorld()) return;
-    const auto Result = FractureModel.Glimpse(IsValid(Anchor), GetWorld()->GetTimeSeconds());
+    const int32 Discount = IsValid(Equipment) ? Equipment->GlimpseDiscount() : 0;
+    const auto Result = FractureModel.Glimpse(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Discount);
     if (Result != UnmadeCore::Result::Applied)
     {
         if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
@@ -584,7 +585,8 @@ void AUnmadeCharacter::DemonstrateAnomaly()
     if (Lexicon) Lexicon->RecordEvidence(FName("evidence.glimpse"));
     ReconcileEarnedRewards();
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
-        TEXT("GLIMPSE: another possible version flickers into view (+8 Strain)."));
+        FString::Printf(TEXT("GLIMPSE: another possible version flickers into view (+%d Strain)."),
+            8 - Discount));
     ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
     SaveFractureState();
 }
@@ -593,7 +595,8 @@ void AUnmadeCharacter::FoldReality()
 {
     AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
     if (!GetWorld()) return;
-    const auto Result = FractureModel.Fold(IsValid(Anchor), GetWorld()->GetTimeSeconds());
+    const int32 Extension = IsValid(Equipment) ? Equipment->FoldBonusSeconds() : 0;
+    const auto Result = FractureModel.Fold(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Extension);
     if (Result != UnmadeCore::Result::Applied)
     {
         if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
@@ -608,7 +611,8 @@ void AUnmadeCharacter::FoldReality()
             It->ExposeToFold(GetWorld()->GetTimeSeconds(), 4.0);
     }
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
-        TEXT("FOLD: the barrier vanishes for six seconds (+24 Strain)."));
+        FString::Printf(TEXT("FOLD: barrier vanishes for %d seconds (+24 Strain)."),
+            6 + Extension));
     ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
     SaveFractureState();
 }
@@ -739,7 +743,8 @@ void AUnmadeCharacter::BeginPlay()
 void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
-    FractureModel.Recover(static_cast<double>(DeltaSeconds));
+    FractureModel.Recover(static_cast<double>(DeltaSeconds) *
+        (IsValid(Equipment) ? Equipment->StrainRecoveryMultiplier() : 1.0));
     if (Combat->IsDefeated() && !bPlayerDefeatHandled)
     {
         bPlayerDefeatHandled = true;

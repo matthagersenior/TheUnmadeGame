@@ -6,7 +6,7 @@
 #include <utility>
 #include <vector>
 namespace UnmadeCore {
-enum class Result { Applied, UnsupportedTarget, UnsupportedChoice, NeedsConfirmation, AlreadyActive, AlreadyCommitted, NotEnoughStability };
+enum class Result { Applied, UnsupportedTarget, UnsupportedChoice, InvalidModifier, NeedsConfirmation, AlreadyActive, AlreadyCommitted, NotEnoughStability };
 struct FractureSnapshot { std::string variant; double strain = 0.0; };
 class FractureModel final {
 public:
@@ -16,16 +16,20 @@ public:
         RewriteCost = 60.0, RecoveryPerSecond = 3.0, GlimpseSeconds = 3.0, FoldSeconds = 6.0;
     double CurrentStrain() const { return strain_; }
     const std::string& WorldVariant() const { return committedVariant_; }
-    Result Glimpse(bool validTarget, double now) {
+    Result Glimpse(bool validTarget, double now, double discount=0.0) {
         if (!validTarget || !ValidTime(now)) return Result::UnsupportedTarget;
-        if (strain_ + GlimpseCost > MaxStrain) return Result::NotEnoughStability;
-        strain_ += GlimpseCost; glimpseUntil_ = now + GlimpseSeconds; return Result::Applied;
+        if (!std::isfinite(discount) || discount<0.0 || discount>6.0) return Result::InvalidModifier;
+        const double cost=std::max(1.0,GlimpseCost-discount);
+        if (strain_ + cost > MaxStrain) return Result::NotEnoughStability;
+        strain_ += cost; glimpseUntil_ = now + GlimpseSeconds; return Result::Applied;
     }
-    Result Fold(bool validTarget, double now) {
+    Result Fold(bool validTarget, double now, double extraSeconds=0.0) {
         if (!validTarget || !ValidTime(now)) return Result::UnsupportedTarget;
+        if (!std::isfinite(extraSeconds) || extraSeconds<0.0 || extraSeconds>5.0)
+            return Result::InvalidModifier;
         if (now < foldUntil_) return Result::AlreadyActive;
         if (strain_ + FoldCost > MaxStrain) return Result::NotEnoughStability;
-        strain_ += FoldCost; foldUntil_ = now + FoldSeconds; return Result::Applied;
+        strain_ += FoldCost; foldUntil_ = now + FoldSeconds + extraSeconds; return Result::Applied;
     }
     Result Rewrite(const std::string& region, const std::string& choice, bool confirmed) {
         if (region != region_ || region_.empty()) return Result::UnsupportedTarget;

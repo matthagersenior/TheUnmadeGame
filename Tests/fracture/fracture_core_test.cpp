@@ -26,6 +26,15 @@ int main() {
     assert(!m.Recover(std::numeric_limits<double>::quiet_NaN()));
     assert(m.Recover(10) && std::abs(m.CurrentStrain()-62.0)<0.001);
     assert(m.Recover(999) && m.CurrentStrain()==0);
+    FractureModel gearEnabled("region.prototype.hub", {"variant.open","variant.sealed"});
+    assert(gearEnabled.Glimpse(true,1.0,3.0)==Result::Applied);
+    assert(gearEnabled.CurrentStrain()==5.0);
+    assert(gearEnabled.Glimpse(true,2.0,-1.0)==Result::InvalidModifier);
+    assert(gearEnabled.CurrentStrain()==5.0);
+    assert(gearEnabled.Fold(true,3.0,3.0)==Result::Applied);
+    assert(gearEnabled.IsFolded(11.99) && !gearEnabled.IsFolded(12.0));
+    assert(gearEnabled.Fold(true,13.0,999.0)==Result::InvalidModifier);
+    assert(gearEnabled.CurrentStrain()==29.0);
     FractureModel fresh("region.prototype.hub", {"variant.open","variant.sealed"});
     assert(fresh.Restore(m.TakeSnapshot()) && fresh.WorldVariant()=="variant.open");
     assert(!fresh.IsFolded(0) && !fresh.IsGlimpsing(0));

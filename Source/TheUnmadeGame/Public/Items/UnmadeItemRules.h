@@ -128,6 +128,18 @@ public:
     int ArmorBonus() const noexcept {
         int amount=0;for(int id:data_.equipped){const auto* item=FindItem(static_cast<ItemId>(id));if(item)amount+=item->armor;}return amount;
     }
+    // Relics must alter playstyles, not merely increase inventory stats.
+    int GlimpseStrainDiscount() const noexcept {
+        const auto charm=Equipped(GearSlot::Charm);
+        return charm==ItemId::ReturnedVoice ? 3
+            : charm==ItemId::PaperhavenLens ? 2 : 0;
+    }
+    int FoldDurationBonus() const noexcept {
+        return Equipped(GearSlot::Weapon)==ItemId::Waybreaker ? 3 : 0;
+    }
+    double RecoveryMultiplier() const noexcept {
+        return Equipped(GearSlot::Charm)==ItemId::UnwrittenCrown ? 1.5 : 1.0;
+    }
     ConsumeResult Consume(ItemId id, double missingHealth, double existingStrain, int& health, int& strain) noexcept {
         health=0;strain=0;
         const auto* item=FindItem(id);

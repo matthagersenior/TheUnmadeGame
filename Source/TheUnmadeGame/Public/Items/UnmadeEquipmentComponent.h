@@ -17,6 +17,9 @@ public:
     bool UseConsumable(UnmadeCore::ItemId Item, double CurrentStrain, int32& OutStrain);
     bool ForgeWaybreaker();
     FString DescribeInventory() const;
+    int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount(); }
+    int32 FoldBonusSeconds() const { return Inventory.FoldDurationBonus(); }
+    double StrainRecoveryMultiplier() const { return Inventory.RecoveryMultiplier(); }
 private:
     bool Persist(double UpdatedStrain = -1.0);
     bool bSaveRejected = false;
