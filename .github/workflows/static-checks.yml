@@ -50,3 +50,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/integration/offline_slice_scenario.cpp -o /tmp/unmade-slice-test
           /tmp/unmade-slice-test
+      - name: Compile and test offline living-world simulation
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/living_world_test.cpp -o /tmp/unmade-living-world-test
+          /tmp/unmade-living-world-test
