@@ -65,6 +65,18 @@ int main(){
     bad=snapshot;
     bad.milestones=~std::uint64_t{0};
     assert(!restored.Restore(bad));
+    InventoryModel firstBoss;
+    assert(firstBoss.Claim(Achievement::HollowBell)==RewardResult::Awarded);
+    assert(firstBoss.Claim(Achievement::HollowBell)==RewardResult::AlreadyAwarded);
+    assert(firstBoss.Quantity(ItemId::BellheartAegis)==1);
+    assert(firstBoss.Claim(Achievement::RedactedCurator)==RewardResult::Awarded);
+    assert(firstBoss.Quantity(ItemId::RedactedScepter)==1);
+    assert(firstBoss.Claim(Achievement::UnfinishedPilgrim)==RewardResult::Awarded);
+    assert(firstBoss.Quantity(ItemId::PilgrimsSignet)==1);
+    const auto savedBoss=firstBoss.Snapshot();
+    InventoryModel reloadedBoss;
+    assert(reloadedBoss.Restore(savedBoss));
+    assert(reloadedBoss.HasClaimed(Achievement::HollowBell));
     InventoryModel noRewards;
     assert(!noRewards.ForgeWaybreaker());
     assert(noRewards.Claim(static_cast<Achievement>(999))==RewardResult::Invalid);

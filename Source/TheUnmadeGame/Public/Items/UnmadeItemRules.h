@@ -21,13 +21,15 @@ enum class ItemId : int {
     NightwatchTonic, RootboundPoultice, MapmakersNeedle,
     DoorlessKey, PathOfThree, Waybreaker,
     UnwrittenCrown, AshOfPossibleLives, AtlasOfAbsence,
+    BellheartAegis, RedactedScepter, PilgrimsSignet,
     Count
 };
 enum class Achievement : int {
     Starter, BellwoldLanterns, PaperhavenTestimony, ThreeVillages,
     EchoWell, PaperOrchard, SilentMile, BellGrave, DebtMarket,
     ShelterSupplies, ShelterChoice, ResearchChoice, LanguageVeyl,
-    AllLandmarks, FirstStalker, FirstWatcher, Count
+    AllLandmarks, FirstStalker, FirstWatcher,
+    HollowBell, RedactedCurator, UnfinishedPilgrim, Count
 };
 struct ItemDef {
     ItemId id;
@@ -67,7 +69,10 @@ inline constexpr std::array<ItemDef, static_cast<int>(ItemId::Count)> ItemCatalo
     {ItemId::Waybreaker, "blade.waybreaker", "Waybreaker, the Impossible Road", "Forged from shelter, testimony and the missing hour.", ItemKind::Weapon,Rarity::Mythic,GearSlot::Weapon,1,32,0,0,0},
     {ItemId::UnwrittenCrown, "charm.unwritten_crown", "The Unwritten Crown", "Sovereignty over what history refused to name.", ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,12,10,0,0},
     {ItemId::AshOfPossibleLives, "elixir.possible_lives", "Ash of Possible Lives", "Once, you had the strength to be all of them.", ItemKind::Consumable,Rarity::Epic,GearSlot::None,3,0,0,100,60},
-    {ItemId::AtlasOfAbsence, "charm.atlas", "Atlas of Absence", "Every missing country has a place upon the page.", ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,8,12,0,0}
+    {ItemId::AtlasOfAbsence, "charm.atlas", "Atlas of Absence", "Every missing country has a place upon the page.", ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,8,12,0,0},
+    {ItemId::BellheartAegis, "armor.bellheart", "Aegis of the Hollow Bell", "No living keeper remains to sound it.", ItemKind::Armor,Rarity::Mythic,GearSlot::Armor,1,0,18,0,0},
+    {ItemId::RedactedScepter, "weapon.redacted", "Scepter of Missing Names", "The name of each wound vanishes from the record.", ItemKind::Weapon,Rarity::Epic,GearSlot::Weapon,1,23,0,0,0},
+    {ItemId::PilgrimsSignet, "charm.pilgrim", "Signet of the Unfinished Pilgrim", "Every ending is only a path that turned.", ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,6,9,0,0}
 }};
 inline const ItemDef* FindItem(ItemId id) noexcept {
     const int i = static_cast<int>(id);
@@ -182,6 +187,9 @@ public:
         case Achievement::AllLandmarks: okay=add(ItemId::UnwrittenCrown,1)&&add(ItemId::RiftSeed,1);break;
         case Achievement::FirstStalker: okay=add(ItemId::EchoGlass,1)&&add(ItemId::HearthSalve,1);break;
         case Achievement::FirstWatcher: okay=add(ItemId::MapmakersNeedle,1)&&add(ItemId::StrainVial,1);break;
+        case Achievement::HollowBell: okay=add(ItemId::BellheartAegis,1)&&add(ItemId::BellMetal,1);break;
+        case Achievement::RedactedCurator: okay=add(ItemId::RedactedScepter,1)&&add(ItemId::ArchiveInk,1);break;
+        case Achievement::UnfinishedPilgrim: okay=add(ItemId::PilgrimsSignet,1)&&add(ItemId::EchoGlass,1);break;
         default: return RewardResult::Invalid;
         }
         if(!okay)return RewardResult::NoRoom;

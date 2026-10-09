@@ -441,11 +441,27 @@ void AUnmadePrototypeHub::BuildForPrototype()
         {UnmadeCore::BossId::RedactedCurator,FVector(18000,2030,100)},
         {UnmadeCore::BossId::UnfinishedPilgrim,FVector(0,-2120,100)}
     };
+    const UUnmadePrototypeSave* EncounterSave=Cast<UUnmadePrototypeSave>(
+        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
     for(const BossPlacement& Location:Encounters)
     {
-        if(AUnmadeBossCharacter* Boss=GetWorld()->SpawnActor<AUnmadeBossCharacter>(
-            Location.Position,FRotator::ZeroRotator))
-            Boss->ConfigureBoss(Location.Id);
+        UnmadeCore::Achievement BossReward=UnmadeCore::Achievement::Count;
+        if(Location.Id==UnmadeCore::BossId::HollowBell)
+            BossReward=UnmadeCore::Achievement::HollowBell;
+        else if(Location.Id==UnmadeCore::BossId::RedactedCurator)
+            BossReward=UnmadeCore::Achievement::RedactedCurator;
+        else if(Location.Id==UnmadeCore::BossId::UnfinishedPilgrim)
+            BossReward=UnmadeCore::Achievement::UnfinishedPilgrim;
+        const bool bPreviouslyDefeated=EncounterSave && EncounterSave->SchemaVersion==1 &&
+            EncounterSave->bHasInventorySnapshot && BossReward!=UnmadeCore::Achievement::Count &&
+            (static_cast<uint64>(EncounterSave->AwardedMilestoneBits) &
+                (uint64(1)<<static_cast<int32>(BossReward)))!=0;
+        if(!bPreviouslyDefeated)
+        {
+            if(AUnmadeBossCharacter* Boss=GetWorld()->SpawnActor<AUnmadeBossCharacter>(
+                Location.Position,FRotator::ZeroRotator))
+                Boss->ConfigureBoss(Location.Id);
+        }
         if(AUnmadeFractureAnchor* Anchor=GetWorld()->SpawnActor<AUnmadeFractureAnchor>(
             Location.Position+FVector(500,0,15),FRotator::ZeroRotator))
             Anchor->Tags.AddUnique(FName("Boss.FractureCounter"));

@@ -78,6 +78,7 @@ void AUnmadeBossCharacter::Tick(float DeltaSeconds)
             Player->GetActorLocation()+FVector(0,0,50),ECC_Visibility,Sight);
         if(bClear)
         {
+            GetCombat()->SetGearBonuses(FMath::RoundToInt(Beat.damage-Profile->damage),0);
             GetCombat()->TryStrikeTarget(Player->GetCombat(),Now,true,false);
             if(GEngine)GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Red,
                 FString::Printf(TEXT("BOSS ATTACK: %s"),UTF8_TO_TCHAR(Profile->name)));

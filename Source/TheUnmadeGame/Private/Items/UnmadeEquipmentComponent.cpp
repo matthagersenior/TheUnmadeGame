@@ -18,7 +18,8 @@ void UUnmadeEquipmentComponent::BeginPlay()
     if (Save && Save->SchemaVersion == 1 && Save->bHasInventorySnapshot)
     {
         UnmadeCore::InventorySnapshot Snapshot;
-        bool bValid = Save->ItemQuantities.Num() == static_cast<int32>(UnmadeCore::ItemId::Count)
+        bool bValid = Save->ItemQuantities.Num() >= 28 &&
+            Save->ItemQuantities.Num() <= static_cast<int32>(UnmadeCore::ItemId::Count)
             && Save->EquippedItems.Num() == 3 && Save->AwardedMilestoneBits >= 0;
         if (bValid)
         {
