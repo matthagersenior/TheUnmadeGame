@@ -175,6 +175,7 @@ UnmadeCore::RiteContext UUnmadeTenfoldComponent::GatherContext()
         break;
     }
     Ctx.selectedLaw=SelectedLaw;
+    Ctx.selectedLife=SelectedLife;
     // Only physically close, unobstructed authored ritual stones count.
     double ClosestStone=FMath::Square(380.f);
     for(TActorIterator<AStaticMeshActor> It(World);It;++It)
@@ -388,6 +389,15 @@ void UUnmadeTenfoldComponent::ConfluenceChoice2(){ChooseConfluence(2);}
 
 void UUnmadeTenfoldComponent::CycleWorldLaw()
 {
+    if(SelectedRite==static_cast<int32>(UnmadeCore::RiteId::BorrowedLives))
+    {
+        SelectedLife=(SelectedLife+1)%3;
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Cyan,
+            FString::Printf(TEXT("Borrowed Life: %s"),
+                SelectedLife==0?TEXT("Forgotten Warrior")
+                :SelectedLife==1?TEXT("Unborn Artisan"):TEXT("Unwritten Archivist")));
+        return;
+    }
     SelectedLaw=(SelectedLaw+1)%3;
     if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
         FString::Printf(TEXT("Unwrite Law: %s"),
@@ -495,10 +505,13 @@ void UUnmadeTenfoldComponent::InvokeRite()
        Id==UnmadeCore::RiteId::TomorrowDebt ||
        Id==UnmadeCore::RiteId::Oathbinding)
     {
-        ActiveAttackBonus=Id==UnmadeCore::RiteId::BorrowedLives ||
-            Id==UnmadeCore::RiteId::LegacyForging ||
-            Id==UnmadeCore::RiteId::TomorrowDebt ? Power.impact : 0;
-        ActiveArmorBonus=Id==UnmadeCore::RiteId::Oathbinding?Power.impact:0;
+        ActiveAttackBonus=Id==UnmadeCore::RiteId::BorrowedLives
+            ? (SelectedLife==0?Power.impact:0)
+            : Id==UnmadeCore::RiteId::LegacyForging ||
+              Id==UnmadeCore::RiteId::TomorrowDebt ? Power.impact : 0;
+        ActiveArmorBonus=Id==UnmadeCore::RiteId::Oathbinding?Power.impact:
+            Id==UnmadeCore::RiteId::BorrowedLives && SelectedLife==2
+                ? Power.impact:0;
         BonusExpiresAt=Context.now+Power.duration;
         ActiveRite=Id;
         if(IsValid(Player->GetEquipment()))

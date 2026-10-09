@@ -233,7 +233,11 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
         if(IsValid(Visitor) && Visitor->IsBorrowedLifeActive() &&
            FVector::DistSquared(Visitor->GetActorLocation(),GetActorLocation())<FMath::Square(500.f))
-            CharacterLine+=TEXT(" You look familiar, but your hands carry someone else's craft.");
+            CharacterLine+=Visitor->GetBorrowedLifeRole()==0
+                ? TEXT(" You stand like the soldier who guarded this street in a history I never lived.")
+                : Visitor->GetBorrowedLifeRole()==1
+                ? TEXT(" Your hands carry the marks of a craft you never apprenticed in.")
+                : TEXT(" You speak as though you have catalogued a century that never happened.");
     }
 
     // The resident's own community records what the player has accomplished.

@@ -215,6 +215,14 @@ bool AUnmadeCharacter::IsBorrowedLifeActive() const
 {
     return IsValid(Tenfold) && Tenfold->IsBorrowedIdentityActive();
 }
+int32 AUnmadeCharacter::GetBorrowedLifeRole() const
+{
+    return IsValid(Tenfold)?Tenfold->BorrowedLifeRole():-1;
+}
+int32 AUnmadeCharacter::GetBorrowedCraftLevel() const
+{
+    return GetBorrowedLifeRole()==1?2:0;
+}
 
 bool AUnmadeCharacter::HasNearbyHollowKeeper() const
 {

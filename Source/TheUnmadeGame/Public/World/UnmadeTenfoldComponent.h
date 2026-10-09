@@ -34,6 +34,9 @@ public:
     int32 RiteStage(UnmadeCore::RiteId Rite) const {return Chronicle.Stage(Rite);}
     bool IsMastered(UnmadeCore::RiteId Rite) const {return Chronicle.IsMastered(Rite);}
     int32 CurrentSelectedRite() const {return SelectedRite;}
+    int32 BorrowedLifeRole() const {
+        return IsBorrowedIdentityActive()?SelectedLife:-1;
+    }
     bool IsBorrowedIdentityActive() const {
         return BonusExpiresAt>0 && ActiveRite==UnmadeCore::RiteId::BorrowedLives;
     }
@@ -50,6 +53,7 @@ private:
     int32 SelectedConfluence=0;
     int32 SelectedRite=0;
     int32 SelectedLaw=0;
+    int32 SelectedLife=0;
     bool bSaveRejected=false;
     std::string WitnessBuffer;
     double BonusExpiresAt=0;
