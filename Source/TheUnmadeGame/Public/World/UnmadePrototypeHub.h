@@ -9,6 +9,7 @@
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeFrontierRealmRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
+#include "World/UnmadeCommunityConsequences.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -35,6 +36,10 @@ public:
     FString GetCurrentVillageName() const;
     bool InspectSite(AUnmadeLoreSite* Site);
     void RefreshDistrictMood();
+    /** Rebuild public village state from already-saved choices; no extra save flags. */
+    void RefreshCommunityConsequences();
+    UnmadeCore::CommunityConsequence GetCommunityOutcome(UnmadeCore::Community Id) const;
+    FString DescribeCommunityAt(FVector Position) const;
     /** True only when a real interaction advanced a quest; completion flag is output. */
     bool TryResidentVillageTask(FName ResidentId, bool& bCompleted);
     void TryFactionConversation(FName ResidentId);
@@ -68,6 +73,8 @@ private:
     UnmadeCore::RegionalTaskModel RegionalTasks;
     UnmadeCore::FactionChronicle Chronicle;
     UnmadeCore::FrontierJourney Frontier;
+    std::array<UnmadeCore::CommunityConsequence,5> CommunityEffects{};
+    void BuildCommunityConsequences();
     UnmadeCore::SettlementId LastVisitedVillage = UnmadeCore::SettlementId::None;
     TMap<FName,double> TemporaryRiteWorldEffects;
     void SetRiteWorldActorState(FName Tag,bool bEnabled);

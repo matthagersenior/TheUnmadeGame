@@ -378,13 +378,11 @@ void AUnmadeCharacter::BuyMarketSupplies()
         : Village==UnmadeCore::SettlementId::Paperhaven
           ? UnmadeCore::ItemId::BlankParchment : UnmadeCore::ItemId::IronScrap;
     int Trust=0;
-    const auto* Save=Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
-    if(Save && Save->bHasFactionChronicle && Save->FactionEndings.Num()==3)
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
-        const int Index=Village==UnmadeCore::SettlementId::Bellwold?0
-            : Village==UnmadeCore::SettlementId::Paperhaven?1:2;
-        Trust=Save->FactionEndings[Index]==1?40:Save->FactionEndings[Index]==2?25:0;
+        const auto Home=static_cast<UnmadeCore::Community>(static_cast<int32>(Village));
+        Trust=Hub->GetCommunityOutcome(Home).tradeTrust;
+        break;
     }
     if(Equipment->Buy(Id,Village,Trust))
     {
@@ -565,7 +563,10 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
     ApplyConflictGates();
     ReconcileEarnedRewards();
     for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
+    {
         Hub->RefreshDistrictMood();
+        Hub->RefreshCommunityConsequences();
+    }
     const bool bShelter = Choice == UnmadeCore::ConflictChoice::Shelter;
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Yellow,
         bShelter ? TEXT("COMMUNITY ROUTE OPEN; archive closed. This decision persists.")
@@ -658,6 +659,8 @@ void AUnmadeCharacter::ShowStoryJournal()
                 Hub->FactionStage(UnmadeCore::Faction::Archive),
                 Hub->FactionStage(UnmadeCore::Faction::Roadbound));
             RealmSummary=Hub->GetCurrentRealmName(GetActorLocation());
+            RealmSummary+=TEXT(" | ");
+            RealmSummary+=Hub->DescribeCommunityAt(GetActorLocation());
             RealmSummary+=FString::Printf(TEXT(" | Beyond the Reach: %d/2 discovered"),
                 ((Hub->GetFrontierVisitMask()&1)?1:0)+((Hub->GetFrontierVisitMask()&2)?1:0));
             break;

@@ -30,6 +30,7 @@ void AUnmadePrototypeHub::BeginPlay()
     Super::BeginPlay();
     BuildForPrototype();
     RestoreLivingWorld();
+    RefreshCommunityConsequences();
     RefreshRiteWorldFromSave();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
@@ -167,6 +168,7 @@ bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bComple
             TEXT("Village story could not be saved. No progress applied."));
         return false;
     }
+    RefreshCommunityConsequences();
     bCompleted = Outcome == UnmadeCore::TaskResult::Completed;
     if (GEngine)
     {
@@ -249,6 +251,7 @@ bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome
                 Chronicle.Restore(Before);
                 return false;
             }
+            RefreshCommunityConsequences();
             if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
                 FString::Printf(TEXT("FACTION ARC RESOLVED: %s. The town remembers your choice."),
                     UTF8_TO_TCHAR(Arc.name)));
@@ -395,6 +398,7 @@ bool AUnmadePrototypeHub::ResolveNearbyFrontier(int32 Ending)
                 Frontier.Restore(Before);
                 return false;
             }
+            RefreshCommunityConsequences();
             if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
                 FString::Printf(TEXT("REALM STORY RESOLVED: %s."),
                     UTF8_TO_TCHAR(Outpost.settlementName)));
@@ -666,6 +670,82 @@ void AUnmadePrototypeHub::BuildVillages()
     }
 }
 
+void AUnmadePrototypeHub::BuildCommunityConsequences()
+{
+    // Source graybox: each community has three exclusive physical landmarks:
+    // restoration works, a freely shared institution, or a public testimony.
+    const FVector Centers[5]={
+        FVector(0,0,0),FVector(-18000,0,0),FVector(18000,0,0),
+        FVector(0,-50000,0),FVector(0,50000,0)
+    };
+    for(int32 i=0;i<5;++i)
+    {
+        for(int32 state=1;state<4;++state)
+        {
+            const FVector Position=Centers[i]+FVector(
+                -1050.f+state*510.f,1650.f,190.f);
+            const FVector Scale=state==1?FVector(2.4,1,3.8):
+                state==2?FVector(3.4,1.2,3.8):FVector(.75,3.5,3.8);
+            const FName Tag(*FString::Printf(TEXT("Community.%d.%d"),i,state));
+            SpawnBlock(Position,Scale,Tag);
+            SetRiteWorldActorState(Tag,false);
+        }
+    }
+}
+
+void AUnmadePrototypeHub::RefreshCommunityConsequences()
+{
+    UnmadeCore::ConsequenceFacts Facts;
+    Facts.crossingDecision=ReadStoryChoice();
+    Facts.local=RegionalTasks.Snapshot();
+    Facts.factionEndings=Chronicle.Snapshot().endings;
+    Facts.frontierEndings=Frontier.Snapshot().endings;
+    if(!UnmadeCore::ValidFacts(Facts))
+    {
+        UE_LOG(LogTemp,Warning,TEXT("Invalid community source facts; retaining previous environment"));
+        return;
+    }
+    const auto Next=UnmadeCore::EvaluateAllCommunities(Facts);
+    for(int32 i=0;i<5;++i)
+    {
+        if(Next[i].state==CommunityEffects[i].state)continue;
+        for(int32 State=1;State<=3;++State)
+        {
+            const FName Tag(*FString::Printf(TEXT("Community.%d.%d"),i,State));
+            SetRiteWorldActorState(Tag,static_cast<int32>(Next[i].state)==State);
+        }
+        if(GEngine && Next[i].state!=UnmadeCore::CommunityState::Uncertain)
+            GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Cyan,
+                FString::Printf(TEXT("WORLD CHANGED: %s — %s"),
+                    UTF8_TO_TCHAR(UnmadeCore::CommunityNames[i]),
+                    UTF8_TO_TCHAR(Next[i].visibleChange)));
+    }
+    CommunityEffects=Next;
+}
+
+UnmadeCore::CommunityConsequence AUnmadePrototypeHub::GetCommunityOutcome(
+    UnmadeCore::Community Id) const
+{
+    const int32 Index=static_cast<int32>(Id);
+    return Index>=0 && Index<5?CommunityEffects[Index]:
+        UnmadeCore::CommunityConsequence{};
+}
+
+FString AUnmadePrototypeHub::DescribeCommunityAt(FVector Position) const
+{
+    int32 Index=-1;
+    const auto Village=UnmadeCore::SettlementAt(Position.X,Position.Y);
+    if(Village!=UnmadeCore::SettlementId::None)
+        Index=static_cast<int32>(Village);
+    else if(FVector::DistSquared2D(Position,FVector(0,-50000,Position.Z))
+        <FMath::Square(2850.f))Index=3;
+    else if(FVector::DistSquared2D(Position,FVector(0,50000,Position.Z))
+        <FMath::Square(2850.f))Index=4;
+    return Index>=0
+        ? FString(UTF8_TO_TCHAR(CommunityEffects[Index].visibleChange))
+        : TEXT("The unclaimed road carries no settlement law.");
+}
+
 void AUnmadePrototypeHub::SetRiteWorldActorState(FName Tag,bool bEnabled)
 {
     if(!GetWorld())return;
@@ -733,6 +813,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnBlock(FVector(0, 0, -50), FVector(52, 52, 1), FName("Hub.Ground"));
     BuildVillages();
     BuildFrontiers();
+    BuildCommunityConsequences();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={

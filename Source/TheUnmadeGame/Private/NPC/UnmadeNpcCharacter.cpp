@@ -252,6 +252,31 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             CharacterLine += TEXT(" The rescued testimony is part of our record now.");
     }
 
+    if(CachedHub.IsValid())
+    {
+        // Only publicly observable changes in the NPC's own home town.
+        // Rumors and firsthand player acts remain separate personal memories.
+        UnmadeCore::Community Home=UnmadeCore::Community::Count;
+        if(bFrontierResident)
+        {
+            const FString OwnId=GetStableId().ToString();
+            Home=OwnId.StartsWith(TEXT("npc.saltwake."))
+                ? UnmadeCore::Community::Saltwake
+                : UnmadeCore::Community::Cinderhold;
+        }
+        else if(HomeSettlement!=UnmadeCore::SettlementId::None)
+            Home=static_cast<UnmadeCore::Community>(static_cast<int32>(HomeSettlement));
+        if(Home!=UnmadeCore::Community::Count)
+        {
+            const auto Outcome=CachedHub->GetCommunityOutcome(Home);
+            if(Outcome.state!=UnmadeCore::CommunityState::Uncertain)
+            {
+                CharacterLine+=TEXT(" ");
+                CharacterLine+=FString(UTF8_TO_TCHAR(Outcome.visibleChange));
+            }
+        }
+    }
+
     FString BeliefLine;
     const TArray<FUnmadeNpcObservation>& Observations = Memory->GetObservations();
     for (int32 Index = Observations.Num() - 1; Index >= 0; --Index)
