@@ -54,3 +54,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/living_world_test.cpp -o /tmp/unmade-living-world-test
           /tmp/unmade-living-world-test
+      - name: Verify three offline settlements and all resident identities
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/settlement_registry_test.cpp -o /tmp/unmade-settlement-test
+          /tmp/unmade-settlement-test
