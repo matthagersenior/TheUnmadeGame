@@ -341,35 +341,40 @@ AUnmadeNpcCharacter* FindNearbyCitizen(UWorld* World, FVector Origin, float MaxD
 void AUnmadeCharacter::Interact()
 {
     AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
-    if (!Target)
+    AUnmadeLoreSite* NearestSite = nullptr;
+    double BestSiteDistSq = FMath::Square(280.f);
+    if (GetWorld())
     {
-        // Discovery is a real authored interaction, not model-generated narration.
-        AUnmadeLoreSite* NearestSite = nullptr;
-        double BestDistSq = FMath::Square(280.f);
-        if (GetWorld())
+        for (TActorIterator<AUnmadeLoreSite> It(GetWorld()); It; ++It)
         {
-            for (TActorIterator<AUnmadeLoreSite> It(GetWorld()); It; ++It)
+            const double DistSq = FVector::DistSquared(GetActorLocation(), It->GetActorLocation());
+            if (DistSq >= BestSiteDistSq) continue;
+            FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeLoreSight), false);
+            Params.AddIgnoredActor(this);
+            Params.AddIgnoredActor(*It);
+            if (GetWorld()->LineTraceTestByChannel(
+                GetActorLocation() + FVector(0, 0, 50),
+                It->GetActorLocation() + FVector(0, 0, 50), ECC_Visibility, Params))
+                continue;
+            NearestSite = *It;
+            BestSiteDistSq = DistSq;
+        }
+
+        // Prioritize whichever interactable is actually closer, avoiding NPCs
+        // unintentionally hiding a landmark's inspection action.
+        const bool bLoreIsCloser = IsValid(NearestSite) &&
+            (!IsValid(Target) || BestSiteDistSq <
+                FVector::DistSquared(GetActorLocation(), Target->GetActorLocation()));
+        if (bLoreIsCloser)
+        {
+            for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
             {
-                const double DistSq = FVector::DistSquared(GetActorLocation(), It->GetActorLocation());
-                if (DistSq >= BestDistSq) continue;
-                FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeLoreSight), false);
-                Params.AddIgnoredActor(this);
-                Params.AddIgnoredActor(*It);
-                if (GetWorld()->LineTraceTestByChannel(
-                    GetActorLocation() + FVector(0, 0, 50),
-                    It->GetActorLocation() + FVector(0, 0, 50), ECC_Visibility, Params))
-                    continue;
-                NearestSite = *It;
-                BestDistSq = DistSq;
-            }
-            if (IsValid(NearestSite))
-            {
-                for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
-                {
-                    if (Hub->InspectSite(NearestSite)) return;
-                }
+                if (Hub->InspectSite(NearestSite)) return;
             }
         }
+    }
+    if (!Target)
+    {
         if (IsValid(FindNearbyFractureAnchor()) && GEngine)
         {
             const FString Inscription = Lexicon && Lexicon->UnderstandsVeyl()
@@ -380,10 +385,11 @@ void AUnmadeCharacter::Interact()
         else if (GEngine)
         {
             GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan,
-                TEXT("Nobody close enough to speak to."));
+                TEXT("Nothing nearby to inspect or speak to."));
         }
         return;
     }
+
     if (Lexicon && Target->GetStableId() == FName("npc.archivist.001"))
         Lexicon->RecordEvidence(FName("evidence.archivist"));
     UUnmadeLocalDialogueSubsystem* Dialogue = GetGameInstance()
@@ -391,7 +397,6 @@ void AUnmadeCharacter::Interact()
         : nullptr;
     if (Dialogue)
     {
-        // Placeholder greeting until the in-game dialogue UI captures player speech.
         Dialogue->RequestDialogue(Target, TEXT("Hello."));
     }
     else if (GEngine)

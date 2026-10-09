@@ -44,6 +44,9 @@ class LivingWorldSourceTests(unittest.TestCase):
         self.assertIn("Glow->SetLightColor(", lore)
         self.assertIn("Site->GetInspectionText(", hub)
         self.assertIn("Hub->InspectSite(NearestSite)", player)
+        self.assertIn("const bool bLoreIsCloser", player)
+        self.assertIn("BestSiteDistSq <", player)
+        self.assertIn("FVector::DistSquared(GetActorLocation(), Target->GetActorLocation())", player)
         self.assertIn("Hub->GetDiscoveredCount()", player)
         self.assertNotIn("UUnmadeLocalDialogueSubsystem", lore)
 
