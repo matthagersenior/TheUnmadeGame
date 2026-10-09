@@ -41,6 +41,10 @@ public:
     }
     bool IsGlimpsing(double now) const { return ValidTime(now) && now < glimpseUntil_; }
     bool IsFolded(double now) const { return ValidTime(now) && now < foldUntil_; }
+    bool SpendStrain(double amount) {
+        if(!std::isfinite(amount) || amount<=0 || strain_+amount>MaxStrain)return false;
+        strain_+=amount;return true;
+    }
     bool Recover(double deltaSeconds) {
         if (!std::isfinite(deltaSeconds) || deltaSeconds <= 0.0 || strain_ <= 0.0) return false;
         strain_ = std::max(0.0, strain_ - deltaSeconds * RecoveryPerSecond); return true;

@@ -99,6 +99,43 @@ public:
     UPROPERTY(SaveGame)
     double PlayerStrain = 0.0;
 
+    /** Ten offline signature abilities: append-only save fields, absent on old slots. */
+    UPROPERTY(SaveGame)
+    bool bHasTenfoldChronicle=false;
+
+    UPROPERTY(SaveGame)
+    TArray<int32> RiteStages;
+
+    UPROPERTY(SaveGame)
+    TArray<int32> RiteChoices;
+
+    UPROPERTY(SaveGame)
+    TArray<double> RiteReadyAt;
+
+    UPROPERTY(SaveGame)
+    TArray<int32> DisciplineMastery;
+
+    UPROPERTY(SaveGame)
+    int32 RiteTrialBits=0;
+
+    UPROPERTY(SaveGame)
+    int32 LegacyDeedBits=0;
+
+    UPROPERTY(SaveGame)
+    int32 VerifiedRoadBits=0;
+
+    UPROPERTY(SaveGame)
+    int32 TomorrowDebtDueDay=0;
+
+    UPROPERTY(SaveGame)
+    int32 TomorrowDebtExhaustedUntil=0;
+
+    UPROPERTY(SaveGame)
+    int32 BrokenOathCount=0;
+
+    UPROPERTY(SaveGame)
+    bool bOathActive=false;
+
     /** Merges prototype sub-system writes instead of erasing unrelated state. */
     static UUnmadePrototypeSave* LoadOrCreate()
     {
