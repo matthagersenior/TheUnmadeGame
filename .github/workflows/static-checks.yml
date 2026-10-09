@@ -74,3 +74,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/boss_rules_test.cpp -o /tmp/unmade-boss-test
           /tmp/unmade-boss-test
+      - name: Test village economies, professions, and finite crafting
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/items/craft_economy_test.cpp -o /tmp/unmade-economy-test
+          /tmp/unmade-economy-test

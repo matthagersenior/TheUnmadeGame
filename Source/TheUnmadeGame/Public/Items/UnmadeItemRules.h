@@ -22,6 +22,8 @@ enum class ItemId : int {
     DoorlessKey, PathOfThree, Waybreaker,
     UnwrittenCrown, AshOfPossibleLives, AtlasOfAbsence,
     BellheartAegis, RedactedScepter, PilgrimsSignet,
+    IronScrap, WildHerbs, BlankParchment,
+    TemperedEdge, LanternMail, InkboundCharm,
     Count
 };
 enum class Achievement : int {
@@ -72,7 +74,13 @@ inline constexpr std::array<ItemDef, static_cast<int>(ItemId::Count)> ItemCatalo
     {ItemId::AtlasOfAbsence, "charm.atlas", "Atlas of Absence", "Every missing country has a place upon the page.", ItemKind::Charm,Rarity::Mythic,GearSlot::Charm,1,8,12,0,0},
     {ItemId::BellheartAegis, "armor.bellheart", "Aegis of the Hollow Bell", "No living keeper remains to sound it.", ItemKind::Armor,Rarity::Mythic,GearSlot::Armor,1,0,18,0,0},
     {ItemId::RedactedScepter, "weapon.redacted", "Scepter of Missing Names", "The name of each wound vanishes from the record.", ItemKind::Weapon,Rarity::Epic,GearSlot::Weapon,1,23,0,0,0},
-    {ItemId::PilgrimsSignet, "charm.pilgrim", "Signet of the Unfinished Pilgrim", "Every ending is only a path that turned.", ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,6,9,0,0}
+    {ItemId::PilgrimsSignet, "charm.pilgrim", "Signet of the Unfinished Pilgrim", "Every ending is only a path that turned.", ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,6,9,0,0},
+    {ItemId::IronScrap,"mat.iron_scrap","Weathered Iron","The ore forgot which mountain it belonged to.",ItemKind::Material,Rarity::Common,GearSlot::None,20,0,0,0,0},
+    {ItemId::WildHerbs,"mat.wild_herbs","Night-Mint","Harvested where the rain refuses to fall.",ItemKind::Material,Rarity::Common,GearSlot::None,20,0,0,0,0},
+    {ItemId::BlankParchment,"mat.blank_parchment","Blank Witness Parchment","It accepts testimony that no one will sign.",ItemKind::Material,Rarity::Common,GearSlot::None,20,0,0,0,0},
+    {ItemId::TemperedEdge,"blade.tempered","Oath-Tempered Edge","A blade that remembers whose hands made it.",ItemKind::Weapon,Rarity::Rare,GearSlot::Weapon,1,14,0,0,0},
+    {ItemId::LanternMail,"armor.lanternmail","Lanternwoven Mail","Bellwold's embers stitched between iron rings.",ItemKind::Armor,Rarity::Epic,GearSlot::Armor,1,0,14,0,0},
+    {ItemId::InkboundCharm,"charm.inkbound","Seal of Kept Testimony","Even the silenced leave marks behind.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,7,6,0,0}
 }};
 inline const ItemDef* FindItem(ItemId id) noexcept {
     const int i = static_cast<int>(id);
@@ -116,6 +124,22 @@ public:
         const int index=static_cast<int>(achievement);
         return index>=0 && index<static_cast<int>(Achievement::Count) &&
             (data_.milestones & (std::uint64_t{1}<<index))!=0;
+    }
+    // Explicit finite transfers for trusted shops/forges. Equipped gear cannot
+    // be sold or consumed. All transaction coordinators stage on a copy.
+    bool Add(ItemId id,int amount) noexcept {
+        const auto* def=FindItem(id);
+        if(!def || amount<=0 || amount>def->maxStack-Quantity(id)) return false;
+        data_.quantities[static_cast<int>(id)]+=amount;
+        return true;
+    }
+    bool Take(ItemId id,int amount) noexcept {
+        const auto* def=FindItem(id);
+        if(!def || amount<=0 || Quantity(id)<amount) return false;
+        for(int worn : data_.equipped)
+            if(worn==static_cast<int>(id)) return false;
+        data_.quantities[static_cast<int>(id)]-=amount;
+        return true;
     }
     bool Equip(ItemId id) noexcept {
         const auto* item=FindItem(id);
