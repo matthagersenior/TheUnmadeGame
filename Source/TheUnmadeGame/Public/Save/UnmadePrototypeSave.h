@@ -23,6 +23,16 @@ public:
     UPROPERTY(SaveGame)
     TArray<FName> LexiconEvidence;
 
+    /** Separate authored local dispute; older v1 slots default to no choice. */
+    UPROPERTY(SaveGame)
+    bool bHasConflictSnapshot = false;
+
+    UPROPERTY(SaveGame)
+    int32 LocalConflictChoice = 0;
+
+    UPROPERTY(SaveGame)
+    int32 SupplyActivityStage = 0;
+
     UPROPERTY(SaveGame)
     bool bHasFractureSnapshot = false;
 
