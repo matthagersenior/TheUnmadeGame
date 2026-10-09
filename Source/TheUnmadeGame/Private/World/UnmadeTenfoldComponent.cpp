@@ -403,6 +403,36 @@ void UUnmadeTenfoldComponent::CycleWorldLaw()
         FString::Printf(TEXT("Unwrite Law: %s"),
             SelectedLaw==0?TEXT("Gravity"):SelectedLaw==1?TEXT("Sound"):TEXT("Momentum")));
 }
+bool UUnmadeTenfoldComponent::TryInspectRiteStone()
+{
+    if(bSaveRejected)return false;
+    const auto Id=static_cast<UnmadeCore::RiteId>(SelectedRite);
+    const int32 Stage=Chronicle.Stage(Id);
+    if(Stage!=0 && Stage!=4)return false;
+    if(GatherContext().site!=SelectedRite)return false;
+    StudyRite();
+    return true;
+}
+
+bool UUnmadeTenfoldComponent::TryWitnessConversation(FName ResidentId)
+{
+    if(bSaveRejected || ResidentId.IsNone())return false;
+    const auto Id=static_cast<UnmadeCore::RiteId>(SelectedRite);
+    const auto& Spec=UnmadeCore::RiteSpecs[SelectedRite];
+    const int32 Stage=Chronicle.Stage(Id);
+    if(Stage!=1 && Stage!=3)return false;
+    if(ResidentId!=FName(UTF8_TO_TCHAR(Spec.witness)))return false;
+    // Quest testimony is always an authored factual passage. AI conversation
+    // is optional and never changes whether this interaction succeeds.
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,
+        FString::Printf(TEXT("%s | TESTIMONY: %s"),
+            UTF8_TO_TCHAR(Spec.name),UTF8_TO_TCHAR(Spec.lore)));
+    if(Stage==1)StudyRite();
+    else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+        TEXT("You have enough history to face a permanent choice. Gather two direct witnesses, then use F5 or F6."));
+    return true;
+}
+
 void UUnmadeTenfoldComponent::StudyRite()
 {
     if(bSaveRejected){ExplainResult(UnmadeCore::RiteResult::Invalid);return;}

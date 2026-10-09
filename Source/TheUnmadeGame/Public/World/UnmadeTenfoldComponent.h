@@ -20,6 +20,8 @@ public:
     void PreviousRite();
     void ShowRite();
     void StudyRite();
+    bool TryWitnessConversation(FName ResidentId);
+    bool TryInspectRiteStone();
     void InvokeRite();
     void DecideSolidarity();
     void DecideTruth();

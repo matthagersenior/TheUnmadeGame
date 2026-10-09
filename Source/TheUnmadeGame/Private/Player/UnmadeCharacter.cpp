@@ -822,6 +822,7 @@ void AUnmadeCharacter::Interact()
     }
     if (!Target)
     {
+        if(IsValid(Tenfold) && Tenfold->TryInspectRiteStone())return;
         if(GetWorld())
         {
             for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
@@ -856,6 +857,7 @@ void AUnmadeCharacter::Interact()
             }
             Hub->TryFactionConversation(Target->GetStableId());
             Hub->TryFrontierConversation(Target->GetStableId());
+            if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
         }
     }
