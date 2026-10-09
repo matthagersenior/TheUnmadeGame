@@ -94,3 +94,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/confluence_rules_test.cpp -o /tmp/unmade-confluence-test
           /tmp/unmade-confluence-test
+      - name: Verify community consequences are earned, distinct and replay-safe
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/community_consequences_test.cpp -o /tmp/unmade-community-test
+          /tmp/unmade-community-test
