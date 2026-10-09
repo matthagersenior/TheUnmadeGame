@@ -238,6 +238,11 @@ public:
         if(data_.stage[i]<5 && context.site!=i) {
             out.result=RiteResult::WrongLocation;return out;
         }
+        if((id==RiteId::Witnesscraft || id==RiteId::UnderstandingBosses) &&
+           context.verifiedWitnesses<2) {
+            out.result=RiteResult::NeedsEvidence;
+            return out;
+        }
         if(context.strain>100.0-spec.strainCost){
             out.result=RiteResult::InsufficientStability;return out;
         }

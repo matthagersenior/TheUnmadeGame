@@ -78,6 +78,17 @@ int main() {
         bad=q.Snapshot(); bad.choice[i]=9;
         assert(!restored.Restore(bad));
     }
+    // Witnesscraft and boss mercy must not be usable without *real* witnesses.
+    for(const auto ritual : {RiteId::Witnesscraft,RiteId::UnderstandingBosses}) {
+        TenfoldChronicle model;
+        auto evidence=context(ritual);
+        assert(model.Advance(ritual,RiteAction::Discover,evidence)==RiteResult::Advanced);
+        assert(model.Advance(ritual,RiteAction::Testify,evidence)==RiteResult::Advanced);
+        evidence.verifiedWitnesses=0;
+        assert(model.Invoke(ritual,evidence).result==RiteResult::NeedsEvidence);
+        evidence.verifiedWitnesses=2;
+        assert(model.Invoke(ritual,evidence).result==RiteResult::Applied);
+    }
     // Learning is gated by *actual* world evidence, not model text.
     TenfoldChronicle advanced;
     auto c=context(RiteId::Cartography);
