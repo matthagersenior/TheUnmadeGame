@@ -70,3 +70,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/world_atlas_test.cpp -o /tmp/unmade-atlas-test
           /tmp/unmade-atlas-test
+      - name: Test named boss telegraphs and fracture counterplay
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/boss_rules_test.cpp -o /tmp/unmade-boss-test
+          /tmp/unmade-boss-test
