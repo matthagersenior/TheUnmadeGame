@@ -244,6 +244,14 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     if (CachedHub.IsValid())
     {
         const auto Progress = CachedHub->GetRegionalTask(HomeSettlement);
+            const auto Afterlight=CachedHub->GetAfterlightBenefit();
+            if(HomeSettlement==UnmadeCore::SettlementId::Bellwold &&
+               Afterlight.worldTag && Afterlight.worldTag[0]!='\0')
+            {
+                CharacterLine+=TEXT(" ");
+                CharacterLine+=FString(UTF8_TO_TCHAR(Afterlight.description));
+            }
+
         if (HomeSettlement == UnmadeCore::SettlementId::Bellwold &&
             Progress == UnmadeCore::TaskProgress::Completed)
             CharacterLine += TEXT(" Our lanterns now belong to every household.");
@@ -292,6 +300,14 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         else if (Event.EventKind == FName("Reality.Anomaly"))
             BeliefLine = bDirect ? TEXT("I saw the street move beneath your hand.")
                                  : TEXT("Someone mentioned a moving street. I did not see it.");
+        else if (Event.EventKind == FName("World.AfterlightShelter"))
+            BeliefLine = bDirect
+                ? TEXT("I watched the second-night lamps open a ward for families who had no place in the census.")
+                : TEXT("I heard Hessa found room for the families whose names went missing.");
+        else if (Event.EventKind == FName("World.AfterlightNames"))
+            BeliefLine = bDirect
+                ? TEXT("I saw the erased names carved where the registrars could not hide them.")
+                : TEXT("They say the names are public now. I will go and look for my own.");
         else if (Event.EventKind == FName("World.RiteProtect"))
             BeliefLine = bDirect ? TEXT("I saw you choose to protect the people from a power that could have harmed them.")
                                  : TEXT("Some say you put the villagers first. I hope they are right.");

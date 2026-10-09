@@ -90,6 +90,15 @@ void UUnmadeMemoryComponent::RecalculateReactions()
         {
             Fear += bDirect ? 30 : 12;
         }
+        else if (Entry.EventKind == FName("World.AfterlightShelter"))
+        {
+            Trust += bDirect ? 16 : 5;
+        }
+        else if (Entry.EventKind == FName("World.AfterlightNames"))
+        {
+            Trust += bDirect ? 11 : 3;
+            Fear += bDirect ? 4 : 1;
+        }
         else if (Entry.EventKind == FName("World.RiteProtect"))
         {
             Trust += bDirect ? 18 : 6;
