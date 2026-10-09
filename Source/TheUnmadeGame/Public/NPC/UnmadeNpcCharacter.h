@@ -44,6 +44,7 @@ private:
     FString NpcDisplayLabel;
 
     TWeakObjectPtr<AUnmadePrototypeHub> CachedHub;
+    FVector HomeLocation = FVector::ZeroVector;
 
     UnmadeCore::NpcRole Role = UnmadeCore::NpcRole::Wanderer;
     UnmadeCore::NpcTemperament Temperament = UnmadeCore::NpcTemperament::Steady;

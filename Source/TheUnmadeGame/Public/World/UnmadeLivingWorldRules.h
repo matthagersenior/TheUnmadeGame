@@ -83,6 +83,12 @@ inline Vec2 RoutineTarget(NpcRole role, DayPhase phase) noexcept {
     }
     return {};
 }
+/** NPCs work near their own home during the day; at other hours they regroup by role. */
+inline Vec2 RoutineTargetForHome(NpcRole role, DayPhase phase, Vec2 home) noexcept {
+    if (phase == DayPhase::Day && std::isfinite(home.x) && std::isfinite(home.y))
+        return home;
+    return RoutineTarget(role, phase);
+}
 inline AmbientCue SelectAmbientCue(District district, DayPhase phase, int choice) noexcept {
     const bool night = phase == DayPhase::Night || phase == DayPhase::Dusk;
     switch (district) {

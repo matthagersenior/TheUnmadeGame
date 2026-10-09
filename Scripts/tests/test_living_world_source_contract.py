@@ -16,6 +16,11 @@ class LivingWorldSourceTests(unittest.TestCase):
             self.assertIn("UnmadeCore::District::" + district, hub)
         self.assertIn("FVector(-1720, 850, 90)", hub)
         self.assertIn("FVector(1260, 1490, 90)", hub)
+        self.assertEqual(hub.count("SpawnCitizen(FName("), 11)
+        for resident in ("npc.welllistener.001", "npc.orchardexile.001",
+                         "npc.tollbroker.001", "npc.roadwarden.001",
+                         "npc.bellmaker.001", "npc.nightcourier.001"):
+            self.assertIn(resident, hub)
 
     def test_world_clock_and_visits_persist_without_erasing_other_saves(self):
         hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
@@ -46,7 +51,8 @@ class LivingWorldSourceTests(unittest.TestCase):
         npc = read("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")
         self.assertIn("CachedHub->GetCurrentPhase()", npc)
         self.assertIn("if (Motion == UnmadeCore::NpcMotion::Stay)", npc)
-        self.assertIn("UnmadeCore::RoutineTarget(Role, Phase)", npc)
+        self.assertIn("UnmadeCore::RoutineTargetForHome(Role, Phase", npc)
+        self.assertIn("HomeLocation = GetActorLocation()", npc)
         self.assertIn("NpcAction::InvestigateAnomaly", npc)
         self.assertIn("NpcAction::AvoidPlayer", npc)
 

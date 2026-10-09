@@ -295,6 +295,21 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnCitizen(FName("npc.archivist.001"), TEXT("The records keeper"), FVector(-360, 320, 95), UnmadeCore::NpcRole::Scholar, UnmadeCore::NpcTemperament::Curious);
     SpawnCitizen(FName("npc.courier.001"), TEXT("A courier"), FVector(300, 90, 95), UnmadeCore::NpcRole::Courier, UnmadeCore::NpcTemperament::Steady);
 
+    // Additional named residents make the outer sites inhabited, not just scenic.
+    // Stable IDs permit distinct persistent memories even when roles are shared.
+    SpawnCitizen(FName("npc.welllistener.001"), TEXT("The well listener"),
+        FVector(-1540, 680, 95), UnmadeCore::NpcRole::Scholar, UnmadeCore::NpcTemperament::Curious);
+    SpawnCitizen(FName("npc.orchardexile.001"), TEXT("The displaced orchard keeper"),
+        FVector(1120, 1260, 95), UnmadeCore::NpcRole::Wanderer, UnmadeCore::NpcTemperament::Cautious);
+    SpawnCitizen(FName("npc.tollbroker.001"), TEXT("The keeper of future debts"),
+        FVector(1000, -1170, 95), UnmadeCore::NpcRole::Merchant, UnmadeCore::NpcTemperament::Cautious);
+    SpawnCitizen(FName("npc.roadwarden.001"), TEXT("The road warden"),
+        FVector(1690, 390, 95), UnmadeCore::NpcRole::Guard, UnmadeCore::NpcTemperament::Steady);
+    SpawnCitizen(FName("npc.bellmaker.001"), TEXT("The bell maker"),
+        FVector(-1580, -1020, 95), UnmadeCore::NpcRole::Merchant, UnmadeCore::NpcTemperament::Steady);
+    SpawnCitizen(FName("npc.nightcourier.001"), TEXT("The night courier"),
+        FVector(1010, 1040, 95), UnmadeCore::NpcRole::Courier, UnmadeCore::NpcTemperament::Cautious);
+
     // Two visually distinct graybox enemies. No quest reward or respawn system yet.
     if (AUnmadeEnemyCharacter* Stalker = GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(
         FVector(920, 920, 100), FRotator::ZeroRotator))

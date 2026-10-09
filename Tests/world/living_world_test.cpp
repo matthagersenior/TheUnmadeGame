@@ -20,6 +20,11 @@ int main() {
     assert(daytime.x!=night.x || daytime.y!=night.y);
     assert(RoutineTarget(NpcRole::Guard,DayPhase::Night).y>RoutineTarget(NpcRole::Guard,DayPhase::Day).y);
     assert(RoutineTarget(NpcRole::Courier,DayPhase::Dusk).x!=RoutineTarget(NpcRole::Courier,DayPhase::Day).x);
+    const Vec2 farHome{1700,800};
+    const Vec2 dayTarget=RoutineTargetForHome(NpcRole::Scholar,DayPhase::Day,farHome);
+    const Vec2 nightTarget=RoutineTargetForHome(NpcRole::Scholar,DayPhase::Night,farHome);
+    assert(dayTarget.x==farHome.x && dayTarget.y==farHome.y);
+    assert(nightTarget.x!=farHome.x || nightTarget.y!=farHome.y);
     DiscoveryLedger explored;
     assert(explored.Count()==0 && explored.Discover(District::EchoWell));
     assert(explored.Count()==1 && !explored.Discover(District::EchoWell));

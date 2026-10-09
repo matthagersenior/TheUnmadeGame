@@ -21,7 +21,7 @@ class PrototypeSourceContractTests(unittest.TestCase):
 
     def test_runtime_hub_has_5_distinct_citizen_ids_and_ground(self):
         hub = source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
-        self.assertEqual(hub.count("SpawnCitizen(FName("), 5)
+        self.assertEqual(hub.count("SpawnCitizen(FName("), 11)
         for token in ("npc.merchant.001", "npc.guard.001", "npc.courier.001",
                       "npc.wanderer.001", "npc.archivist.001", "Hub.Ground"):
             self.assertIn(token, hub)

@@ -92,7 +92,7 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     {
         // Routine goals never replace urgent individual reactions to observed events.
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = UnmadeCore::RoutineTarget(Role, Phase);
+        Target = UnmadeCore::RoutineTargetForHome(Role, Phase, {HomeLocation.X, HomeLocation.Y});
         Speed = Role == UnmadeCore::NpcRole::Courier ? 95.0 : 65.0;
         StopRadius = 80.0;
     }
@@ -112,6 +112,7 @@ void AUnmadeNpcCharacter::ConfigureIdentity(FName StableId, const FString& Displ
 {
     NpcId = StableId;
     NpcDisplayLabel = DisplayLabel;
+    HomeLocation = GetActorLocation();
     Role = InRole;
     Temperament = InTemperament;
     Tags.AddUnique(StableId);
