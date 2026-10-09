@@ -189,5 +189,47 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     case NpcAction::OfferAid: Line = TEXT("offers to help you on the road."); break;
     default: break;
     }
-    return FString::Printf(TEXT("%s %s"), *NpcDisplayLabel, Line);
+    // Author-written personality, separate from any optional generated dialogue.
+    FString CharacterLine;
+    if (NpcId == FName("npc.welllistener.001"))
+        CharacterLine = TEXT("The well knows tomorrow's answers, not which questions survive.");
+    else if (NpcId == FName("npc.orchardexile.001"))
+        CharacterLine = TEXT("Every leaf bears a name I was meant to remember.");
+    else if (NpcId == FName("npc.tollbroker.001"))
+        CharacterLine = TEXT("Your debt was recorded before you arrived.");
+    else if (NpcId == FName("npc.roadwarden.001"))
+        CharacterLine = TEXT("I guard a road that changes its destination while I sleep.");
+    else if (NpcId == FName("npc.bellmaker.001"))
+        CharacterLine = TEXT("I can mend a bell, but not the hour it rings.");
+    else if (NpcId == FName("npc.nightcourier.001"))
+        CharacterLine = TEXT("I deliver letters people swear they never wrote.");
+    else
+    {
+        const auto Phase = CachedHub.IsValid()
+            ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
+        if (Phase == UnmadeCore::DayPhase::Night)
+            CharacterLine = TEXT("We leave one lantern for people still here.");
+        else if (Phase == UnmadeCore::DayPhase::Dawn)
+            CharacterLine = TEXT("Some things return each morning; others remain unmade.");
+    }
+
+    FString BeliefLine;
+    const TArray<FUnmadeNpcObservation>& Observations = Memory->GetObservations();
+    for (int32 Index = Observations.Num() - 1; Index >= 0; --Index)
+    {
+        const FUnmadeNpcObservation& Event = Observations[Index];
+        const bool bDirect = Event.Evidence == EUnmadeEvidenceKind::Witnessed;
+        if (Event.EventKind == FName("World.ConflictShelter"))
+            BeliefLine = bDirect ? TEXT("I saw you keep the shelter route open.")
+                                 : TEXT("I heard you protected the shelter. Is it true?");
+        else if (Event.EventKind == FName("World.ConflictResearch"))
+            BeliefLine = bDirect ? TEXT("I witnessed the archive claim the passage.")
+                                 : TEXT("Someone says the archive controls the passage.");
+        else if (Event.EventKind == FName("Reality.Anomaly"))
+            BeliefLine = bDirect ? TEXT("I saw the street move beneath your hand.")
+                                 : TEXT("Someone mentioned a moving street. I did not see it.");
+        if (!BeliefLine.IsEmpty()) break;
+    }
+    return FString::Printf(TEXT("%s %s %s %s"),
+        *NpcDisplayLabel, Line, *CharacterLine, *BeliefLine);
 }

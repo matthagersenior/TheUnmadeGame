@@ -347,6 +347,8 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
         Citizens.Add(*It);
 
     bool bNewMemory = false;
+    bool bOverheardOne = false;
+    const ACharacter* Player = UGameplayStatics::GetPlayerCharacter(World, 0);
     // Nearby named individuals talk about events they directly observed.
     // Hearsay is not silently upgraded to evidence and gossip cannot teleport.
     for (AUnmadeNpcCharacter* Speaker : Citizens)
@@ -371,7 +373,38 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
                 // First version only permits one hop from a direct witness.
                 if (Event.Evidence == EUnmadeEvidenceKind::Witnessed &&
                     Listener->GetMemory()->HearRumor(Event.EventId, Event.EventKind, Speaker->GetStableId(), Event.SubjectId))
+                {
                     bNewMemory = true;
+                    // A single local line, only if the player can physically overhear.
+                    if (!bOverheardOne && IsValid(Player) && GEngine &&
+                        FVector::DistSquared2D(Player->GetActorLocation(), Speaker->GetActorLocation()) < FMath::Square(520.f))
+                    {
+                        FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeOverheardGossip), false);
+                        Params.AddIgnoredActor(Player);
+                        Params.AddIgnoredActor(Speaker);
+                        if (!World->LineTraceTestByChannel(
+                            Player->GetActorLocation() + FVector(0, 0, 55),
+                            Speaker->GetActorLocation() + FVector(0, 0, 55),
+                            ECC_Visibility, Params))
+                        {
+                            const TCHAR* Topic = TEXT("something odd in the district");
+                            if (Event.EventKind == FName("Reality.Anomaly"))
+                                Topic = TEXT("the street shifting beneath the stranger");
+                            else if (Event.EventKind == FName("Player.Helped"))
+                                Topic = TEXT("the stranger helping a neighbor");
+                            else if (Event.EventKind == FName("Player.DeliveredSupplies"))
+                                Topic = TEXT("provisions reaching the shelter");
+                            else if (Event.EventKind == FName("World.ConflictShelter"))
+                                Topic = TEXT("the shelter passage being protected");
+                            else if (Event.EventKind == FName("World.ConflictResearch"))
+                                Topic = TEXT("the archive taking control of the route");
+                            GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Silver,
+                                FString::Printf(TEXT("OVERHEARD | %s to %s: I saw %s."),
+                                    *Speaker->GetDisplayLabel(), *Listener->GetDisplayLabel(), Topic));
+                            bOverheardOne = true;
+                        }
+                    }
+                }
             }
         }
     }
