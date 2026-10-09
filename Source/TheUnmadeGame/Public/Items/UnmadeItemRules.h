@@ -25,6 +25,7 @@ enum class ItemId : int {
     IronScrap, WildHerbs, BlankParchment,
     TemperedEdge, LanternMail, InkboundCharm,
     StormglassCompass, EmberheartBlade,
+    RefugeOathguard, ArchivistQuill, RoadboundCompass,
     Count
 };
 enum class Achievement : int {
@@ -33,7 +34,8 @@ enum class Achievement : int {
     ShelterSupplies, ShelterChoice, ResearchChoice, LanguageVeyl,
     AllLandmarks, FirstStalker, FirstWatcher,
     HollowBell, RedactedCurator, UnfinishedPilgrim,
-    SaltwakeStory, CinderholdStory, Count
+    SaltwakeStory, CinderholdStory,
+    RefugeCovenant, ArchiveCovenant, RoadboundCovenant, Count
 };
 struct ItemDef {
     ItemId id;
@@ -84,7 +86,10 @@ inline constexpr std::array<ItemDef, static_cast<int>(ItemId::Count)> ItemCatalo
     {ItemId::LanternMail,"armor.lanternmail","Lanternwoven Mail","Bellwold's embers stitched between iron rings.",ItemKind::Armor,Rarity::Epic,GearSlot::Armor,1,0,14,0,0},
     {ItemId::InkboundCharm,"charm.inkbound","Seal of Kept Testimony","Even the silenced leave marks behind.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,7,6,0,0},
     {ItemId::StormglassCompass,"charm.stormglass","Compass of Forgotten Tides","It points toward where the vanished sea still longs to return.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,9,4,0,0},
-    {ItemId::EmberheartBlade,"blade.emberheart","Emberheart of Cinderhold","A blade that can be passed on without diminishing its flame.",ItemKind::Weapon,Rarity::Mythic,GearSlot::Weapon,1,27,0,0,0}
+    {ItemId::EmberheartBlade,"blade.emberheart","Emberheart of Cinderhold","A blade that can be passed on without diminishing its flame.",ItemKind::Weapon,Rarity::Mythic,GearSlot::Weapon,1,27,0,0,0},
+    {ItemId::RefugeOathguard,"armor.refuge_oathguard","Oathguard of the Open Hearth","There is no sanctuary without people willing to defend it.",ItemKind::Armor,Rarity::Epic,GearSlot::Armor,1,0,15,0,0},
+    {ItemId::ArchivistQuill,"blade.archivist_quill","The Quill That Will Not Erase","Every false record must face someone who remembers.",ItemKind::Weapon,Rarity::Epic,GearSlot::Weapon,1,22,0,0,0},
+    {ItemId::RoadboundCompass,"charm.roadbound","Compass of the Common Road","No single village can own a road that people share.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,7,8,0,0}
 }};
 inline const ItemDef* FindItem(ItemId id) noexcept {
     const int i = static_cast<int>(id);
@@ -220,6 +225,9 @@ public:
         case Achievement::UnfinishedPilgrim: okay=add(ItemId::PilgrimsSignet,1)&&add(ItemId::EchoGlass,1);break;
         case Achievement::SaltwakeStory: okay=add(ItemId::StormglassCompass,1)&&add(ItemId::WildHerbs,2);break;
         case Achievement::CinderholdStory: okay=add(ItemId::EmberheartBlade,1)&&add(ItemId::IronScrap,2);break;
+        case Achievement::RefugeCovenant: okay=add(ItemId::RefugeOathguard,1);break;
+        case Achievement::ArchiveCovenant: okay=add(ItemId::ArchivistQuill,1);break;
+        case Achievement::RoadboundCovenant: okay=add(ItemId::RoadboundCompass,1);break;
         default: return RewardResult::Invalid;
         }
         if(!okay)return RewardResult::NoRoom;

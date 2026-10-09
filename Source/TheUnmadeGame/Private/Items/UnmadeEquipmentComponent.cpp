@@ -138,7 +138,16 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
             Save->FrontierEndings[0]!=0},
         {UnmadeCore::Achievement::CinderholdStory,
             Save->bHasFrontierSnapshot && Save->FrontierEndings.Num()==2 &&
-            Save->FrontierEndings[1]!=0}
+            Save->FrontierEndings[1]!=0},
+        {UnmadeCore::Achievement::RefugeCovenant,
+            Save->bHasFactionChronicle && Save->FactionEndings.Num()==3 &&
+            Save->FactionEndings[0]!=0},
+        {UnmadeCore::Achievement::ArchiveCovenant,
+            Save->bHasFactionChronicle && Save->FactionEndings.Num()==3 &&
+            Save->FactionEndings[1]!=0},
+        {UnmadeCore::Achievement::RoadboundCovenant,
+            Save->bHasFactionChronicle && Save->FactionEndings.Num()==3 &&
+            Save->FactionEndings[2]!=0}
     };
     for(const Entry& Reward: Earned)
         if(Reward.Earned) Claim(Reward.Id); // idempotent; never trusts model text

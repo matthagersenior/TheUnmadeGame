@@ -83,6 +83,14 @@ int main(){
     assert(frontierAchievements.Claim(Achievement::CinderholdStory)==RewardResult::Awarded);
     assert(frontierAchievements.Quantity(ItemId::EmberheartBlade)==1);
     assert(frontierAchievements.Claim(Achievement::CinderholdStory)==RewardResult::AlreadyAwarded);
+    InventoryModel factionRewards;
+    assert(factionRewards.Claim(Achievement::RefugeCovenant)==RewardResult::Awarded);
+    assert(factionRewards.Quantity(ItemId::RefugeOathguard)==1);
+    assert(factionRewards.Claim(Achievement::ArchiveCovenant)==RewardResult::Awarded);
+    assert(factionRewards.Quantity(ItemId::ArchivistQuill)==1);
+    assert(factionRewards.Claim(Achievement::RoadboundCovenant)==RewardResult::Awarded);
+    assert(factionRewards.Quantity(ItemId::RoadboundCompass)==1);
+    assert(factionRewards.Claim(Achievement::RefugeCovenant)==RewardResult::AlreadyAwarded);
     InventoryModel noRewards;
     assert(!noRewards.ForgeWaybreaker());
     assert(noRewards.Claim(static_cast<Achievement>(999))==RewardResult::Invalid);
