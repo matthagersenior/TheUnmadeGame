@@ -4,6 +4,18 @@ Dark, surreal, third-person 3D RPG. You play a customizable outcast whose origin
 
 **Status:** foundational Unreal Engine **source scaffold**, not a playable release. No Unreal Editor compilation, map boot, packaged Windows build, or Android streaming session has been verified yet.
 
+## The Second Night — Bellwold Afterlight
+
+An authored return-visit chapter begins only after Bellwold's relief mission
+and the Refuge Compact faction ending. Investigate either a shelter cache or
+an erased census, seek Sorin or Ivera as appropriate, then return to Hessa
+for a lasting ward or public monument. Nearby residents remember actual
+witnessed choices; both routes grant mutually exclusive epic rewards.
+
+See [Afterlight story](docs/design/2026-10-09-bellwold-afterlight.md)
+and [Afterlight engine QA](docs/qa/bellwold-afterlight.md). **60 named items**
+exist in source. Unreal compilation and in-engine playtesting are outstanding.
+
 ## Latest source milestone — Tenfold Chronicles and Confluence saga
 
 **Ten authored signature mechanics, fifty five-stage quest beats, six paired-discipline challenges, and fifty-eight named equipment/material items are now represented in tested offline C++ source.** Skills make real choices about gravity, sound, witnessed bridges, alternate lives, evolving gear, roads, future debt, boss mercy, overlapping histories, oaths and truthful mapping. Outcomes persist with NPC-specific evidence and reward deduplication.
@@ -19,7 +31,7 @@ See the [Tenfold quest/lore bible](docs/design/2026-10-09-tenfold-rites-quest-bi
   gateway paths lead from the first realm into the other two.
 - **64 uniquely named NPCs**, each with an independent stable identity,
   personal memory and authored fallback dialogue (48 original + 16 frontier).
-- **58 authored items (including the newer rites and Confluences)**: weapons, armor, charms, consumables and materials;
+- **60 authored items (including the newer rites and Confluences)**: weapons, armor, charms, consumables and materials;
   finite one-time rewards, unique relic effects, inventory/equipment and save
   merging. The catalog includes three boss trophies and unique faction/realm gear.
 - **Three named boss encounters**: the Hollow Bell creates a telegraphed

@@ -206,3 +206,17 @@ No paid hosting authorized or provisioned. The creator currently has Android but
   sites. **This is source-level verification, not an Unreal playtest.**
 - Established the player-first quality bar in
   `docs/design/2026-10-09-player-first-rpg-quality-contract.md`.
+
+## 2026-10-09 Bellwold's Second Night
+
+- Added a return-visit story, after Bellwold's earlier refugee task and
+  completed Refuge Compact. Four stages: Hessa, physical evidence, Sorin
+  (relief) or Ivera (census), then irreversible commitment at Hessa.
+- Two mutually exclusive visible graybox structures and one-time epic
+  items (the Ward of the Second Night or Lantern of Unredacted Names).
+- Source NPCs react as firsthand witnesses or as rumor recipients. Saved
+  chapter stages and choices restore atomically and guard corrupt snapshots.
+- Appended items to existing indices: **60** named items. Added native
+  model tests, item tests, integrated offline journey and source contracts.
+- Unreal/UE editor build, actual cold/night hardship, animation, navigation,
+  dialogue UI, accessible controls, campaign length and balancing unverified.
