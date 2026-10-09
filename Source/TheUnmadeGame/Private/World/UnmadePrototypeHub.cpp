@@ -4,6 +4,7 @@
 #include "Save/UnmadePrototypeSave.h"
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Combat/UnmadeEnemyCharacter.h"
+#include "Combat/UnmadeBossCharacter.h"
 #include "Story/UnmadeConflictGate.h"
 #include "Story/UnmadeConflictRules.h"
 #include "World/UnmadeLoreSite.h"
@@ -432,6 +433,24 @@ void AUnmadePrototypeHub::BuildForPrototype()
     if (AUnmadeEnemyCharacter* Watcher = GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(
         FVector(-910, 920, 100), FRotator::ZeroRotator))
         Watcher->ConfigureStyle(UnmadeCore::EnemyStyle::Watcher);
+    // Three authored arenas on the village outskirts. Fracture anchors allow
+    // the existing Fold power to interrupt the boss' telegraphed attacks.
+    struct BossPlacement { UnmadeCore::BossId Id; FVector Position; };
+    const BossPlacement Encounters[]={
+        {UnmadeCore::BossId::HollowBell,FVector(-18000,-2050,100)},
+        {UnmadeCore::BossId::RedactedCurator,FVector(18000,2030,100)},
+        {UnmadeCore::BossId::UnfinishedPilgrim,FVector(0,-2120,100)}
+    };
+    for(const BossPlacement& Location:Encounters)
+    {
+        if(AUnmadeBossCharacter* Boss=GetWorld()->SpawnActor<AUnmadeBossCharacter>(
+            Location.Position,FRotator::ZeroRotator))
+            Boss->ConfigureBoss(Location.Id);
+        if(AUnmadeFractureAnchor* Anchor=GetWorld()->SpawnActor<AUnmadeFractureAnchor>(
+            Location.Position+FVector(500,0,15),FRotator::ZeroRotator))
+            Anchor->Tags.AddUnique(FName("Boss.FractureCounter"));
+    }
+
     RestoreCitizens();
 }
 

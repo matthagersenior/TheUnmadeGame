@@ -5,6 +5,7 @@
 #include "World/UnmadeLoreSite.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Combat/UnmadeEnemyCharacter.h"
+#include "Combat/UnmadeBossCharacter.h"
 #include "Lexicon/UnmadeLexiconComponent.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "Items/UnmadeItemRules.h"
@@ -401,8 +402,23 @@ void AUnmadeCharacter::AttemptMeleeAttack()
             FString::Printf(TEXT("HIT: %.0f damage, enemy %.0f health."),
                 Before - Target->GetCombat()->GetHealth(), Target->GetCombat()->GetHealth()));
         if (Target->GetCombat()->IsDefeated() && IsValid(Equipment))
-            Equipment->Claim(Target->GetEnemyStyle() == UnmadeCore::EnemyStyle::Stalker
-                ? UnmadeCore::Achievement::FirstStalker : UnmadeCore::Achievement::FirstWatcher);
+        {
+            const AUnmadeBossCharacter* Boss=Cast<AUnmadeBossCharacter>(Target);
+            if(Boss)
+            {
+                UnmadeCore::Achievement Reward=UnmadeCore::Achievement::Count;
+                switch(Boss->GetBossId())
+                {
+                case UnmadeCore::BossId::HollowBell: Reward=UnmadeCore::Achievement::HollowBell; break;
+                case UnmadeCore::BossId::RedactedCurator: Reward=UnmadeCore::Achievement::RedactedCurator; break;
+                case UnmadeCore::BossId::UnfinishedPilgrim: Reward=UnmadeCore::Achievement::UnfinishedPilgrim; break;
+                default: break;
+                }
+                if(Reward!=UnmadeCore::Achievement::Count) Equipment->Claim(Reward);
+            }
+            else Equipment->Claim(Target->GetEnemyStyle()==UnmadeCore::EnemyStyle::Stalker
+                ? UnmadeCore::Achievement::FirstStalker:UnmadeCore::Achievement::FirstWatcher);
+        }
         ReportLocalEvent(FName("Player.Fought"), FName("combat.prototype.enemy"));
     }
 }

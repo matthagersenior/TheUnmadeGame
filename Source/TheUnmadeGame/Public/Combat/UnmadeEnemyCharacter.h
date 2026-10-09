@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Combat/UnmadeCombatRules.h"
+#include "Combat/UnmadeBossRules.h"
 #include "UnmadeEnemyCharacter.generated.h"
 
 class UUnmadeCombatComponent;
