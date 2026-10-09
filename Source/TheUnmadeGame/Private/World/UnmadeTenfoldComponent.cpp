@@ -55,6 +55,32 @@ void UUnmadeTenfoldComponent::BeginPlay()
     {
         bSaveRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Invalid tenfold quest state; refusing overwrite"));
+        return;
+    }
+    if(Save->bHasConfluenceSnapshot)
+    {
+        if(Save->ConfluenceStages.Num()!=6 ||
+           Save->ConfluenceDecisions.Num()!=6 ||
+           Save->ConfluenceCastMasks.Num()!=6 ||
+           Save->ConfluenceWindowEnds.Num()!=6)
+        {
+            bSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid confluence save arrays; refusing overwrite"));
+            return;
+        }
+        UnmadeCore::ConfluenceSnapshot Trials;
+        for(int32 i=0;i<6;++i)
+        {
+            Trials.stage[i]=Save->ConfluenceStages[i];
+            Trials.decisions[i]=Save->ConfluenceDecisions[i];
+            Trials.casts[i]=Save->ConfluenceCastMasks[i];
+            Trials.windowEnds[i]=Save->ConfluenceWindowEnds[i];
+        }
+        if(!Confluence.Restore(Trials))
+        {
+            bSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid confluence state rejected"));
+        }
     }
 }
 
@@ -83,6 +109,19 @@ bool UUnmadeTenfoldComponent::Persist(bool bWriteStrain)
     Save->BrokenOathCount=State.brokenOaths;
     Save->bOathActive=State.oathActive;
     Save->bHasTenfoldChronicle=true;
+    const auto& Trials=Confluence.Snapshot();
+    Save->ConfluenceStages.Reset();
+    Save->ConfluenceDecisions.Reset();
+    Save->ConfluenceCastMasks.Reset();
+    Save->ConfluenceWindowEnds.Reset();
+    for(int32 i=0;i<6;++i)
+    {
+        Save->ConfluenceStages.Add(Trials.stage[i]);
+        Save->ConfluenceDecisions.Add(Trials.decisions[i]);
+        Save->ConfluenceCastMasks.Add(Trials.casts[i]);
+        Save->ConfluenceWindowEnds.Add(Trials.windowEnds[i]);
+    }
+    Save->bHasConfluenceSnapshot=true;
     if(bWriteStrain)
     {
         const AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
@@ -245,6 +284,106 @@ void UUnmadeTenfoldComponent::PreviousRite()
 {
     SelectedRite=(SelectedRite+9)%10;ShowRite();
 }
+int32 UUnmadeTenfoldComponent::FindNearbyConfluence() const
+{
+    const AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
+    if(!IsValid(Player) || !GetWorld())return -1;
+    int32 Found=-1;
+    double Distance=FMath::Square(420.f);
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        const double D=FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation());
+        if(D>=Distance)continue;
+        for(int32 i=0;i<6;++i)
+            if(It->ActorHasTag(FName(*FString::Printf(TEXT("Confluence.Site.%d"),i))))
+            {
+                FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeConfluenceSight),false);
+                Params.AddIgnoredActor(Player);
+                Params.AddIgnoredActor(*It);
+                if(GetWorld()->LineTraceTestByChannel(Player->GetActorLocation()+FVector(0,0,60),
+                    It->GetActorLocation()+FVector(0,0,60),ECC_Visibility,Params))continue;
+                Found=i;Distance=D;
+            }
+    }
+    return Found;
+}
+
+void UUnmadeTenfoldComponent::CycleConfluence()
+{
+    SelectedConfluence=(SelectedConfluence+1)%6;
+    if(!GEngine)return;
+    const auto& Trial=UnmadeCore::Confluences[SelectedConfluence];
+    GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Yellow,
+        FString::Printf(TEXT("CONFLUENCE %d/6: %s | %s"),
+            SelectedConfluence+1,UTF8_TO_TCHAR(Trial.name),
+            UTF8_TO_TCHAR(Trial.chapters[FMath::Min(Confluence.Stage(Trial.id),2)])));
+}
+
+void UUnmadeTenfoldComponent::StudyConfluence()
+{
+    if(bSaveRejected || !GetWorld())return;
+    const auto Id=static_cast<UnmadeCore::ConfluenceId>(SelectedConfluence);
+    const int Site=FindNearbyConfluence();
+    if(Confluence.Stage(Id)!=0)
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
+            FString(UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence]
+                .chapters[FMath::Min(Confluence.Stage(Id),2)])));
+        return;
+    }
+    std::uint16_t Mastered=0;
+    for(int i=0;i<10;++i)
+        if(Chronicle.IsMastered(static_cast<UnmadeCore::RiteId>(i)))Mastered|=1u<<i;
+    const auto Before=Confluence.Snapshot();
+    const auto Context=GatherContext();
+    const auto Result=Confluence.Discover(Id,Site,Mastered,Context.frontierVisits);
+    if(Result!=UnmadeCore::ConfluenceResult::Advanced)
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+            TEXT("Chamber sealed: master both listed disciplines, find its physical altar, and finish earlier trials."));
+        return;
+    }
+    if(!Persist())
+    {
+        Confluence.Restore(Before);
+        return;
+    }
+    CycleConfluence();
+    SelectedConfluence=(SelectedConfluence+5)%6;
+}
+
+void UUnmadeTenfoldComponent::ChooseConfluence(int32 Outcome)
+{
+    if(bSaveRejected || !GetWorld())return;
+    const auto Id=static_cast<UnmadeCore::ConfluenceId>(SelectedConfluence);
+    const auto Context=GatherContext();
+    const auto Before=Confluence.Snapshot();
+    const auto Result=Confluence.Resolve(Id,FindNearbyConfluence(),
+        Context.verifiedWitnesses,Outcome,Context.now);
+    if(Result!=UnmadeCore::ConfluenceResult::Completed)
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+            TEXT("Combine both mastered abilities at this chamber within two minutes, with two real witnesses."));
+        return;
+    }
+    if(!Persist())
+    {
+        Confluence.Restore(Before);
+        return;
+    }
+    if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
+    {
+        Player->ReconcileEarnedRewards();
+        Player->ReportRiteWitnessEvent();
+    }
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Cyan,
+        FString::Printf(TEXT("CONFLUENCE COMPLETE: %s. The outcome is saved."),
+            UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence].name)));
+}
+
+void UUnmadeTenfoldComponent::ConfluenceChoice1(){ChooseConfluence(1);}
+void UUnmadeTenfoldComponent::ConfluenceChoice2(){ChooseConfluence(2);}
+
 void UUnmadeTenfoldComponent::CycleWorldLaw()
 {
     SelectedLaw=(SelectedLaw+1)%3;
@@ -311,6 +450,7 @@ void UUnmadeTenfoldComponent::InvokeRite()
         return;
     }
     const auto Previous=Chronicle.Snapshot();
+    const auto PriorConfluence=Confluence.Snapshot();
     const auto Power=Chronicle.Invoke(Id,Context);
     if(Power.result!=UnmadeCore::RiteResult::Applied)
     {
@@ -332,8 +472,16 @@ void UUnmadeTenfoldComponent::InvokeRite()
             ExplainResult(Advanced);return;
         }
     }
+    const int32 ChamberSite=FindNearbyConfluence();
+    if(ChamberSite>=0)
+    {
+        const auto TrialId=static_cast<UnmadeCore::ConfluenceId>(ChamberSite);
+        if(Confluence.Stage(TrialId)==1)
+            Confluence.RecordCast(TrialId,Id,Context.now,ChamberSite);
+    }
     if(!Persist(true))
     {
+        Confluence.Restore(PriorConfluence);
         Chronicle.Restore(Previous);
         Player->RefundRealityStrain(Power.cost);
         ExplainResult(UnmadeCore::RiteResult::Invalid);return;
