@@ -31,6 +31,7 @@ void AUnmadePrototypeHub::BeginPlay()
     BuildForPrototype();
     RestoreLivingWorld();
     RefreshCommunityConsequences();
+    RefreshAfterlightWorld();
     RefreshRiteWorldFromSave();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
@@ -60,6 +61,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::RegionalTaskModel RestoredTasks;
     UnmadeCore::FactionChronicle RestoredChronicle;
     UnmadeCore::FrontierJourney RestoredFrontier;
+    UnmadeCore::BellwoldAfterlight RestoredAfterlight;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -108,6 +110,15 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    if(Save->bHasAfterlightSnapshot &&
+       !RestoredAfterlight.Restore({Save->BellwoldAfterlightStage,
+           Save->BellwoldAfterlightApproach,Save->BellwoldAfterlightOutcome}))
+    {
+        bAfterlightSaveRejected=true; // No other writer may replace corrupt progress.
+        UE_LOG(LogTemp,Error,TEXT("Bellwold Afterlight save rejected; old state preserved"));
+        return;
+    }
+    Afterlight=RestoredAfterlight;
     Frontier=RestoredFrontier;
     Chronicle=RestoredChronicle;
     Clock = RestoredClock;
@@ -118,6 +129,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot()
 {
+    if(bAfterlightSaveRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -147,6 +159,11 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
         Save->FrontierStages.Add(FrontierState.stages[i]);
         Save->FrontierEndings.Add(FrontierState.endings[i]);
     }
+    const auto AfterlightState=Afterlight.Snapshot();
+    Save->bHasAfterlightSnapshot=true;
+    Save->BellwoldAfterlightStage=AfterlightState.stage;
+    Save->BellwoldAfterlightApproach=AfterlightState.approach;
+    Save->BellwoldAfterlightOutcome=AfterlightState.outcome;
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
@@ -404,6 +421,128 @@ bool AUnmadePrototypeHub::ResolveNearbyFrontier(int32 Ending)
                     UTF8_TO_TCHAR(Outpost.settlementName)));
             return true;
         }
+    }
+    return false;
+}
+
+void AUnmadePrototypeHub::BuildBellwoldAfterlight()
+{
+    // Separate physical evidence and mutually exclusive final landmarks.
+    SpawnBlock(FVector(-19350,1100,90),FVector(.55,.42,1.6),
+        FName("Bellwold.Afterlight.Relief"));
+    SpawnBlock(FVector(-18500,-1450,90),FVector(.55,.42,1.6),
+        FName("Bellwold.Afterlight.Census"));
+    SpawnBlock(FVector(-19100,1490,155),FVector(3.6,1.15,3.1),
+        FName("Bellwold.Afterlight.SafeWard"));
+    SpawnBlock(FVector(-18350,-1360,195),FVector(1.5,1.4,3.9),
+        FName("Bellwold.Afterlight.OpenCensus"));
+    SetRiteWorldActorState(FName("Bellwold.Afterlight.SafeWard"),false);
+    SetRiteWorldActorState(FName("Bellwold.Afterlight.OpenCensus"),false);
+}
+void AUnmadePrototypeHub::RefreshAfterlightWorld()
+{
+    const auto Outcome=Afterlight.Outcome();
+    SetRiteWorldActorState(FName("Bellwold.Afterlight.SafeWard"),
+        Outcome==UnmadeCore::AfterlightChoice::Relief);
+    SetRiteWorldActorState(FName("Bellwold.Afterlight.OpenCensus"),
+        Outcome==UnmadeCore::AfterlightChoice::Revelation);
+}
+bool AUnmadePrototypeHub::TryAfterlightConversation(FName ResidentId)
+{
+    if(ResidentId.IsNone() || bAfterlightSaveRejected)return false;
+    const FString Identity=ResidentId.ToString();
+    const FTCHARToUTF8 Utf8(*Identity);
+    const auto Before=Afterlight.Snapshot();
+    auto Result=UnmadeCore::AfterlightResult::NoChange;
+    if(Afterlight.Stage()==0)
+        Result=Afterlight.Begin(
+            static_cast<int>(RegionalTasks.Progress(UnmadeCore::SettlementId::Bellwold)),
+            static_cast<int>(Chronicle.Ending(UnmadeCore::Faction::Refuge)),Utf8.Get());
+    else Result=Afterlight.Converse(Utf8.Get());
+    if(Result!=UnmadeCore::AfterlightResult::Started &&
+       Result!=UnmadeCore::AfterlightResult::Witnessed)return false;
+    if(!WriteWorldSnapshot())
+    {
+        Afterlight.Restore(Before);
+        return false;
+    }
+    if(GEngine)
+    {
+        const TCHAR* Line=Result==UnmadeCore::AfterlightResult::Started
+            ? TEXT("AFTERLIGHT: Hessa needs you back after the Refuge Compact. The second night draws near: examine the shelter's relief cache or the lost-name census.")
+            : TEXT("AFTERLIGHT: testimony verified. Return to Hessa. F7 protects those without shelter; F8 publishes the lost names. Your evidence determines what can be chosen.");
+        GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,Line);
+    }
+    return true;
+}
+bool AUnmadePrototypeHub::InspectAfterlightClue(AUnmadeCharacter* Player)
+{
+    if(!IsValid(Player) || !GetWorld() || bAfterlightSaveRejected ||
+       (Afterlight.Stage()!=1 && Afterlight.Stage()!=2))return false;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        if(FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())>
+            FMath::Square(310.f))continue;
+        UnmadeCore::AfterlightChoice Approach=UnmadeCore::AfterlightChoice::None;
+        if(It->ActorHasTag(FName("Bellwold.Afterlight.Relief")))
+            Approach=UnmadeCore::AfterlightChoice::Relief;
+        else if(It->ActorHasTag(FName("Bellwold.Afterlight.Census")))
+            Approach=UnmadeCore::AfterlightChoice::Revelation;
+        if(Approach==UnmadeCore::AfterlightChoice::None)continue;
+        FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeAfterlightSight),false);
+        Sight.AddIgnoredActor(Player);
+        Sight.AddIgnoredActor(*It);
+        if(GetWorld()->LineTraceTestByChannel(Player->GetActorLocation()+FVector(0,0,50),
+            It->GetActorLocation()+FVector(0,0,50),ECC_Visibility,Sight))continue;
+        const auto Before=Afterlight.Snapshot();
+        const FString Tag=Approach==UnmadeCore::AfterlightChoice::Relief
+            ? TEXT("Bellwold.Afterlight.Relief"):TEXT("Bellwold.Afterlight.Census");
+        const FTCHARToUTF8 Utf8(*Tag);
+        if(Afterlight.Inspect(Approach,Utf8.Get())!=
+           UnmadeCore::AfterlightResult::EvidenceFound)return false;
+        if(!WriteWorldSnapshot())
+        {
+            Afterlight.Restore(Before);
+            return false;
+        }
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Cyan,
+            Approach==UnmadeCore::AfterlightChoice::Relief
+            ? TEXT("CACHE: the lamps could save the unregistered families. Ask Sorin the healer what this cold will cost.")
+            : TEXT("CENSUS: these erased names prove the shelter's history was altered. Ask Ivera the tutor what the children remember."));
+        return true;
+    }
+    return false;
+}
+bool AUnmadePrototypeHub::ResolveNearbyAfterlight(int32 Choice)
+{
+    if(!GetWorld() || bAfterlightSaveRejected || Afterlight.Stage()!=3 ||
+       (Choice!=1 && Choice!=2))return false;
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return false;
+    for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+    {
+        if(It->GetStableId()!=FName("npc.bellwold.matron.001") ||
+           FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())>
+           FMath::Square(390.f))continue;
+        const auto Before=Afterlight.Snapshot();
+        const auto Result=Afterlight.Resolve(static_cast<UnmadeCore::AfterlightChoice>(Choice));
+        if(Result==UnmadeCore::AfterlightResult::WrongEvidence)
+        {
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+                TEXT("The choice needs the other evidence and witness. Inspect that path before you commit."));
+            return false;
+        }
+        if(Result!=UnmadeCore::AfterlightResult::Resolved)return false;
+        if(!WriteWorldSnapshot())
+        {
+            Afterlight.Restore(Before);
+            return false;
+        }
+        RefreshAfterlightWorld();
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,
+            FString::Printf(TEXT("THE SECOND NIGHT: %s"),
+                UTF8_TO_TCHAR(Afterlight.Effect().description)));
+        return true;
     }
     return false;
 }
@@ -814,6 +953,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     BuildVillages();
     BuildFrontiers();
     BuildCommunityConsequences();
+    BuildBellwoldAfterlight();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={

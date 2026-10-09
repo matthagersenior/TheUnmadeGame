@@ -10,6 +10,7 @@
 #include "World/UnmadeFrontierRealmRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeCommunityConsequences.h"
+#include "World/UnmadeAfterlightRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -48,6 +49,11 @@ public:
     bool InspectFrontierClue(AUnmadeCharacter* Player);
     void TryFrontierConversation(FName ResidentId);
     bool ResolveNearbyFrontier(int32 Ending);
+    bool TryAfterlightConversation(FName ResidentId);
+    bool InspectAfterlightClue(AUnmadeCharacter* Player);
+    bool ResolveNearbyAfterlight(int32 Choice);
+    int32 GetAfterlightStage() const { return Afterlight.Stage(); }
+    UnmadeCore::AfterlightBenefit GetAfterlightBenefit() const { return Afterlight.Effect(); }
     FString GetCurrentRealmName(FVector Position) const;
     int32 GetFrontierVisitMask() const { return Frontier.Snapshot().visits; }
     int32 FactionStage(UnmadeCore::Faction Id) const { return Chronicle.Stage(Id); }
@@ -73,6 +79,10 @@ private:
     UnmadeCore::RegionalTaskModel RegionalTasks;
     UnmadeCore::FactionChronicle Chronicle;
     UnmadeCore::FrontierJourney Frontier;
+    UnmadeCore::BellwoldAfterlight Afterlight;
+    bool bAfterlightSaveRejected=false;
+    void BuildBellwoldAfterlight();
+    void RefreshAfterlightWorld();
     std::array<UnmadeCore::CommunityConsequence,5> CommunityEffects{};
     void BuildCommunityConsequences();
     UnmadeCore::SettlementId LastVisitedVillage = UnmadeCore::SettlementId::None;
