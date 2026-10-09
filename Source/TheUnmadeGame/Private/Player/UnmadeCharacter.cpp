@@ -1,5 +1,6 @@
 #include "Player/UnmadeCharacter.h"
 #include "Fracture/UnmadeFractureAnchor.h"
+#include "Story/UnmadeConflictGate.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Lexicon/UnmadeLexiconComponent.h"
@@ -59,6 +60,10 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     Super::SetupPlayerInputComponent(PlayerInputComponent);
 
     // Early bootstrap mappings. Replace with data-driven Enhanced Input contexts in an engine editor.
+    PlayerInputComponent->BindAction("StoryShelter", IE_Pressed, this, &AUnmadeCharacter::ChooseShelter);
+    PlayerInputComponent->BindAction("StoryResearch", IE_Pressed, this, &AUnmadeCharacter::ChooseResearch);
+    PlayerInputComponent->BindAction("SupplyActivity", IE_Pressed, this, &AUnmadeCharacter::ProgressSupplyActivity);
+    PlayerInputComponent->BindAction("StoryJournal", IE_Pressed, this, &AUnmadeCharacter::ShowStoryJournal);
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
     PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
     PlayerInputComponent->BindAction("Guard", IE_Released, this, &AUnmadeCharacter::StopGuard);
@@ -74,6 +79,153 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveRight", this, &AUnmadeCharacter::MoveRight);
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+}
+
+void AUnmadeCharacter::ChooseShelter()
+{
+    ChooseLocalConflict(UnmadeCore::ConflictChoice::Shelter);
+}
+
+void AUnmadeCharacter::ChooseResearch()
+{
+    ChooseLocalConflict(UnmadeCore::ConflictChoice::Research);
+}
+
+bool AUnmadeCharacter::SaveLocalConflict()
+{
+    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
+    if (!Save) return false;
+
+    const UnmadeCore::ConflictSnapshot Snapshot = LocalConflict.Snapshot();
+    Save->bHasConflictSnapshot = true;
+    Save->LocalConflictChoice = Snapshot.choice;
+    Save->SupplyActivityStage = Snapshot.supplies;
+    return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
+}
+
+void AUnmadeCharacter::ApplyConflictGates()
+{
+    if (!GetWorld()) return;
+    for (TActorIterator<AUnmadeConflictGate> It(GetWorld()); It; ++It)
+    {
+        if (It->GetGateId() == FName("gate.prototype.shelter"))
+            It->SetAccess(LocalConflict.ShelterOpen());
+        else if (It->GetGateId() == FName("gate.prototype.archive"))
+            It->SetAccess(LocalConflict.ArchiveOpen());
+    }
+}
+
+void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
+{
+    if (!GetWorld() || !IsValid(FindNearbyFractureAnchor()))
+    {
+        PendingStoryChoice = UnmadeCore::ConflictChoice::None;
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow,
+            TEXT("Approach the central fracture before deciding the settlement dispute."));
+        return;
+    }
+    const double Now = GetWorld()->GetTimeSeconds();
+    const bool bConfirmed = PendingStoryChoice == Choice && Now <= PendingStoryExpiresAt;
+    if (!bConfirmed)
+    {
+        PendingStoryChoice = UnmadeCore::ConflictChoice::None;
+        if (LocalConflict.Preview(Choice) != UnmadeCore::ConflictResult::NeedsConfirmation)
+        {
+            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
+                TEXT("This dispute is already resolved. Your decision cannot be overridden."));
+            return;
+        }
+        PendingStoryChoice = Choice;
+        PendingStoryExpiresAt = Now + 6.0;
+        if (GEngine)
+        {
+            const FString Warning = Choice == UnmadeCore::ConflictChoice::Shelter
+                ? TEXT("SUPPORT SHELTER: open the community passage, close the research route. Press Z / D-pad Up again within six seconds.")
+                : TEXT("SUPPORT RESEARCH: open the archive passage, close the shelter route. Press X / D-pad Down again within six seconds.");
+            GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Orange, Warning);
+        }
+        return;
+    }
+
+    PendingStoryChoice = UnmadeCore::ConflictChoice::None;
+    const UnmadeCore::ConflictSnapshot Previous = LocalConflict.Snapshot();
+    if (LocalConflict.Commit(Choice, true) != UnmadeCore::ConflictResult::Committed)
+        return;
+    if (!SaveLocalConflict())
+    {
+        LocalConflict.Restore(Previous);
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+            TEXT("Dispute decision could not be saved; no world change was applied."));
+        return;
+    }
+
+    ApplyConflictGates();
+    const bool bShelter = Choice == UnmadeCore::ConflictChoice::Shelter;
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Yellow,
+        bShelter ? TEXT("COMMUNITY ROUTE OPEN; archive closed. This decision persists.")
+                 : TEXT("ARCHIVE ROUTE OPEN; community shelter closed. This decision persists."));
+    ReportLocalEvent(bShelter ? FName("World.ConflictShelter") : FName("World.ConflictResearch"),
+        FName("region.prototype.hub"));
+}
+
+void AUnmadeCharacter::ProgressSupplyActivity()
+{
+    UWorld* World = GetWorld();
+    if (!World || Combat->IsDefeated()) return;
+    bool bNearMarket = false;
+    bool bNearShelter = false;
+    for (TActorIterator<AStaticMeshActor> It(World); It; ++It)
+    {
+        if (FVector::DistSquared(GetActorLocation(), It->GetActorLocation()) > FMath::Square(530.f))
+            continue;
+        bNearMarket = bNearMarket || It->ActorHasTag(FName("Hub.Market"));
+        bNearShelter = bNearShelter || It->ActorHasTag(FName("Hub.Shelter"));
+    }
+
+    const auto Previous = LocalConflict.Snapshot();
+    const bool bCompletedDelivery = LocalConflict.Supplies() == UnmadeCore::SupplyStage::Carrying;
+    const bool bProgressed = bCompletedDelivery
+        ? LocalConflict.DeliverSupplies(bNearShelter)
+        : LocalConflict.CollectSupplies(bNearMarket);
+    if (!bProgressed)
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow,
+            TEXT("Supply errand: collect once at the market, then deliver at the shelter. Completed deliveries cannot be repeated."));
+        return;
+    }
+
+    if (!SaveLocalConflict())
+    {
+        LocalConflict.Restore(Previous);
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Red,
+            TEXT("Supply activity could not be saved; progress restored."));
+        return;
+    }
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Cyan,
+        bCompletedDelivery ? TEXT("SUPPLIES DELIVERED: the shelter remembers your help.")
+                           : TEXT("SUPPLIES COLLECTED: bring these provisions to the shelter."));
+    if (bCompletedDelivery)
+        ReportLocalEvent(FName("Player.DeliveredSupplies"), FName("Hub.Shelter"));
+}
+
+void AUnmadeCharacter::ShowStoryJournal()
+{
+    FString Decision = TEXT("unresolved");
+    if (LocalConflict.Choice() == UnmadeCore::ConflictChoice::Shelter)
+        Decision = TEXT("community shelter supported");
+    else if (LocalConflict.Choice() == UnmadeCore::ConflictChoice::Research)
+        Decision = TEXT("research archive supported");
+
+    FString Supply = TEXT("available: visit market");
+    if (LocalConflict.Supplies() == UnmadeCore::SupplyStage::Carrying)
+        Supply = TEXT("carrying: deliver at shelter");
+    else if (LocalConflict.Supplies() == UnmadeCore::SupplyStage::Delivered)
+        Supply = TEXT("delivered");
+
+    const int32 Clues = Lexicon ? Lexicon->GetClueCount() : 0;
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 9.f, FColor::Cyan,
+        FString::Printf(TEXT("JOURNAL | Local dispute: %s | Supply errand: %s | Language clues: %d/2 | Strain: %.0f/100"),
+            *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
@@ -380,7 +532,14 @@ void AUnmadeCharacter::BeginPlay()
             UE_LOG(LogTemp, Warning, TEXT("Invalid fracture save ignored"));
         }
     }
+    // Older prototype saves have no conflict fields and safely remain unresolved.
+    if (Save && Save->SchemaVersion == 1 && Save->bHasConflictSnapshot &&
+        !LocalConflict.Restore({Save->LocalConflictChoice, Save->SupplyActivityStage}))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Invalid local conflict snapshot ignored"));
+    }
     ApplyFractureVisuals();
+    ApplyConflictGates();
 }
 
 void AUnmadeCharacter::Tick(float DeltaSeconds)

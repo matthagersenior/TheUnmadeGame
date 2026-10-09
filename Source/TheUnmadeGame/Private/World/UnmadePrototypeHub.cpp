@@ -4,6 +4,8 @@
 #include "Save/UnmadePrototypeSave.h"
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Combat/UnmadeEnemyCharacter.h"
+#include "Story/UnmadeConflictGate.h"
+#include "Story/UnmadeConflictRules.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -64,6 +66,32 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FVector(0, 530, 110), FRotator::ZeroRotator))
     {
         Anchor->Tags.AddUnique(FName("Hub.AnomalyMarker"));
+    }
+
+    // Two distinct blocked routes; the player's persistent local choice opens exactly one.
+    if (AUnmadeConflictGate* ShelterGate = GetWorld()->SpawnActor<AUnmadeConflictGate>(
+        FVector(-420, 930, 110), FRotator::ZeroRotator))
+        ShelterGate->Configure(FName("gate.prototype.shelter"));
+    if (AUnmadeConflictGate* ArchiveGate = GetWorld()->SpawnActor<AUnmadeConflictGate>(
+        FVector(420, 930, 110), FRotator::ZeroRotator))
+        ArchiveGate->Configure(FName("gate.prototype.archive"));
+
+    // Restore physical access independently of player BeginPlay order.
+    const UUnmadePrototypeSave* SavedConflict = Cast<UUnmadePrototypeSave>(
+        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+    if (SavedConflict && SavedConflict->SchemaVersion == 1 && SavedConflict->bHasConflictSnapshot)
+    {
+        UnmadeCore::ConflictModel Restored;
+        if (Restored.Restore({SavedConflict->LocalConflictChoice, SavedConflict->SupplyActivityStage}))
+        {
+            for (TActorIterator<AUnmadeConflictGate> It(GetWorld()); It; ++It)
+            {
+                if (It->GetGateId() == FName("gate.prototype.shelter"))
+                    It->SetAccess(Restored.ShelterOpen());
+                else if (It->GetGateId() == FName("gate.prototype.archive"))
+                    It->SetAccess(Restored.ArchiveOpen());
+            }
+        }
     }
 
     SpawnCitizen(FName("npc.merchant.001"), TEXT("The stallkeeper"), FVector(200, -230, 95), UnmadeCore::NpcRole::Merchant, UnmadeCore::NpcTemperament::Cautious);

@@ -99,3 +99,17 @@ save and never depend on Ollama or any AI model. This is authored, optional
 discovery, not a grind or quest prerequisite. See
 [language discovery QA](docs/qa/lexicon-prototype.md). Native lexicon tests pass
 through GitHub CI; Unreal engine behavior and save/reload remain unverified.
+
+## Local settlement conflict (AI-independent source prototype)
+
+Near the central fracture, press **Z / D-pad Up** to favor community shelter or
+**X / D-pad Down** to favor anomaly research. A second press within six seconds
+confirms the choice and opens exactly one graybox route permanently for the
+save slot. This is independent of the earlier reality Rewrite mechanic.
+An optional supply run uses **V / controller top face button** to collect near
+the market and deliver once at the shelter. **J** shows a temporary text
+journal with current choices, supply stage, language clues and Strain.
+All outcomes merge into the existing local save; adaptive residents can
+witness and remember resulting actions without AI. See
+[branching conflict QA](docs/qa/branching-conflict.md).
+This source has not been compiled or playtested in Unreal Editor.

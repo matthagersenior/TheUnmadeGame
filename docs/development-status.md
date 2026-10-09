@@ -60,3 +60,11 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - Unreal Player Glimpse and archivist interaction supply distinct evidence and reveal a provisional inscription once both are present.
 - New save evidence field merges with NPC and fracture snapshots; bad saved evidence is refused.
 - Actual Unreal compilation, UI, gamepad interactions and persistence behavior still await an engine host.
+
+## 2026-10-09 branching dispute and optional errand
+- Added two mutually exclusive local settlement choices with explicit two-press warning and persistent separate choice state, without language or AI prerequisite.
+- Runtime graybox opens shelter or archive passage according to saved choice; other route remains blocked.
+- Optional pickup/delivery uses two saved stages; repeat delivery cannot award credit. Authored plain-text journal summarizes live story, clue, Strain state.
+- New NPC-memory events grant trust or fear only to credible witnesses/rumor recipients through the existing non-omniscient event pipeline.
+- Native C++17 tests cover choices, idempotence, optional activity, atomic restoration. Python CI checks basic Unreal source wiring.
+- **Engine compilation, world collision, control input, and save/load gameplay remain unverified on a Windows Unreal host**.

@@ -73,6 +73,15 @@ void UUnmadeMemoryComponent::RecalculateReactions()
         {
             Trust += bDirect ? 25 : 10;
         }
+        else if (Entry.EventKind == FName("Player.DeliveredSupplies") ||
+                 Entry.EventKind == FName("World.ConflictShelter"))
+        {
+            Trust += bDirect ? 25 : 8;
+        }
+        else if (Entry.EventKind == FName("World.ConflictResearch"))
+        {
+            Fear += bDirect ? 30 : 10;
+        }
         else if (Entry.EventKind == FName("Reality.Anomaly"))
         {
             Fear += bDirect ? 30 : 12;

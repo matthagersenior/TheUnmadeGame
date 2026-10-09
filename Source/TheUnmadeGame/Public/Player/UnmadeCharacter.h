@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Fracture/UnmadeFractureRules.h"
+#include "Story/UnmadeConflictRules.h"
 #include "UnmadeCharacter.generated.h"
 
 class UCameraComponent;
@@ -40,6 +41,17 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Unmade|Lexicon")
     TObjectPtr<UUnmadeLexiconComponent> Lexicon;
+
+    void ChooseShelter();
+    void ChooseResearch();
+    void ChooseLocalConflict(UnmadeCore::ConflictChoice Choice);
+    void ProgressSupplyActivity();
+    void ShowStoryJournal();
+    bool SaveLocalConflict();
+    void ApplyConflictGates();
+    UnmadeCore::ConflictModel LocalConflict;
+    UnmadeCore::ConflictChoice PendingStoryChoice = UnmadeCore::ConflictChoice::None;
+    double PendingStoryExpiresAt = -1.0;
 
     void AttemptMeleeAttack();
     void StartGuard();
