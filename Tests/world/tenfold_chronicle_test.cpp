@@ -98,6 +98,17 @@ int main() {
     c.frontierVisits=3;
     assert(advanced.Advance(RiteId::Cartography,RiteAction::Discover,c)
            ==RiteResult::Advanced);
+    // Borrowed Lives includes three deliberately different roles, not one buff.
+    for(int role=0;role<3;++role) {
+        TenfoldChronicle alternate;
+        auto life=context(RiteId::BorrowedLives);
+        life.selectedLife=role;
+        assert(alternate.Advance(RiteId::BorrowedLives,RiteAction::Discover,life)==RiteResult::Advanced);
+        assert(alternate.Advance(RiteId::BorrowedLives,RiteAction::Testify,life)==RiteResult::Advanced);
+        auto power=alternate.Invoke(RiteId::BorrowedLives,life);
+        assert(power.result==RiteResult::Applied);
+        assert(power.impact==(role==0?9:role==1?2:7));
+    }
     // A vow can be broken, but demands costly, witnessed restitution.
     auto oath=context(RiteId::Oathbinding);
     TenfoldChronicle vows;

@@ -142,6 +142,7 @@ struct RiteContext {
     int day=0;
     double now=0, strain=0;
     int selectedLaw=0;             // gravity, sound, or momentum
+    int selectedLife=0;            // fighter, artisan, archivist
 };
 struct RiteEffect {
     RiteResult result=RiteResult::Invalid;
@@ -257,13 +258,15 @@ public:
         }
         if(context.now<data_.readyAt[i]){out.result=RiteResult::Cooldown;return out;}
         if(id==RiteId::UnwriteLaw && (context.selectedLaw<0 || context.selectedLaw>2))return out;
+        if(id==RiteId::BorrowedLives && (context.selectedLife<0 || context.selectedLife>2))return out;
         // Different effects and strengths; no generic "press once, win" action.
         out.result=RiteResult::Applied;
         out.cost=spec.strainCost;out.duration=spec.duration;
         switch(id) {
         case RiteId::UnwriteLaw: out.impact=context.selectedLaw+1;break;
         case RiteId::Witnesscraft:out.impact=context.verifiedWitnesses;break;
-        case RiteId::BorrowedLives:out.impact=9;break;
+        case RiteId::BorrowedLives:out.impact=context.selectedLife==0 ? 9 :
+            context.selectedLife==1 ? 2 : 7;break;
         case RiteId::LegacyForging:out.impact=3+CountDeeds()*3;break;
         case RiteId::LivingRoads:out.impact=3;break;
         case RiteId::TomorrowDebt:out.impact=18;data_.debtDueDay=context.day+1;break;
