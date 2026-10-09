@@ -33,6 +33,16 @@ public:
     UPROPERTY(SaveGame)
     int32 SupplyActivityStage = 0;
 
+    /** Twenty-minute in-world clock and six-place exploration; absent in older v1 saves. */
+    UPROPERTY(SaveGame)
+    bool bHasLivingWorldSnapshot = false;
+
+    UPROPERTY(SaveGame)
+    double LivingWorldSeconds = 0.0;
+
+    UPROPERTY(SaveGame)
+    int32 DiscoveredLoreMask = 0;
+
     UPROPERTY(SaveGame)
     bool bHasFractureSnapshot = false;
 
