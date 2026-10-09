@@ -132,7 +132,13 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
         {UnmadeCore::Achievement::ResearchChoice,Save->bHasConflictSnapshot&&Save->LocalConflictChoice==2},
         {UnmadeCore::Achievement::LanguageVeyl,
             Save->LexiconEvidence.Contains(FName("evidence.glimpse")) &&
-            Save->LexiconEvidence.Contains(FName("evidence.archivist"))}
+            Save->LexiconEvidence.Contains(FName("evidence.archivist"))},
+        {UnmadeCore::Achievement::SaltwakeStory,
+            Save->bHasFrontierSnapshot && Save->FrontierEndings.Num()==2 &&
+            Save->FrontierEndings[0]!=0},
+        {UnmadeCore::Achievement::CinderholdStory,
+            Save->bHasFrontierSnapshot && Save->FrontierEndings.Num()==2 &&
+            Save->FrontierEndings[1]!=0}
     };
     for(const Entry& Reward: Earned)
         if(Reward.Earned) Claim(Reward.Id); // idempotent; never trusts model text

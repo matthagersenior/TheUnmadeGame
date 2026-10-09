@@ -77,6 +77,12 @@ int main(){
     InventoryModel reloadedBoss;
     assert(reloadedBoss.Restore(savedBoss));
     assert(reloadedBoss.HasClaimed(Achievement::HollowBell));
+    InventoryModel frontierAchievements;
+    assert(frontierAchievements.Claim(Achievement::SaltwakeStory)==RewardResult::Awarded);
+    assert(frontierAchievements.Quantity(ItemId::StormglassCompass)==1);
+    assert(frontierAchievements.Claim(Achievement::CinderholdStory)==RewardResult::Awarded);
+    assert(frontierAchievements.Quantity(ItemId::EmberheartBlade)==1);
+    assert(frontierAchievements.Claim(Achievement::CinderholdStory)==RewardResult::AlreadyAwarded);
     InventoryModel noRewards;
     assert(!noRewards.ForgeWaybreaker());
     assert(noRewards.Claim(static_cast<Achievement>(999))==RewardResult::Invalid);

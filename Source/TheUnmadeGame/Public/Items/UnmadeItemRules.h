@@ -24,6 +24,7 @@ enum class ItemId : int {
     BellheartAegis, RedactedScepter, PilgrimsSignet,
     IronScrap, WildHerbs, BlankParchment,
     TemperedEdge, LanternMail, InkboundCharm,
+    StormglassCompass, EmberheartBlade,
     Count
 };
 enum class Achievement : int {
@@ -31,7 +32,8 @@ enum class Achievement : int {
     EchoWell, PaperOrchard, SilentMile, BellGrave, DebtMarket,
     ShelterSupplies, ShelterChoice, ResearchChoice, LanguageVeyl,
     AllLandmarks, FirstStalker, FirstWatcher,
-    HollowBell, RedactedCurator, UnfinishedPilgrim, Count
+    HollowBell, RedactedCurator, UnfinishedPilgrim,
+    SaltwakeStory, CinderholdStory, Count
 };
 struct ItemDef {
     ItemId id;
@@ -80,7 +82,9 @@ inline constexpr std::array<ItemDef, static_cast<int>(ItemId::Count)> ItemCatalo
     {ItemId::BlankParchment,"mat.blank_parchment","Blank Witness Parchment","It accepts testimony that no one will sign.",ItemKind::Material,Rarity::Common,GearSlot::None,20,0,0,0,0},
     {ItemId::TemperedEdge,"blade.tempered","Oath-Tempered Edge","A blade that remembers whose hands made it.",ItemKind::Weapon,Rarity::Rare,GearSlot::Weapon,1,14,0,0,0},
     {ItemId::LanternMail,"armor.lanternmail","Lanternwoven Mail","Bellwold's embers stitched between iron rings.",ItemKind::Armor,Rarity::Epic,GearSlot::Armor,1,0,14,0,0},
-    {ItemId::InkboundCharm,"charm.inkbound","Seal of Kept Testimony","Even the silenced leave marks behind.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,7,6,0,0}
+    {ItemId::InkboundCharm,"charm.inkbound","Seal of Kept Testimony","Even the silenced leave marks behind.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,7,6,0,0},
+    {ItemId::StormglassCompass,"charm.stormglass","Compass of Forgotten Tides","It points toward where the vanished sea still longs to return.",ItemKind::Charm,Rarity::Epic,GearSlot::Charm,1,9,4,0,0},
+    {ItemId::EmberheartBlade,"blade.emberheart","Emberheart of Cinderhold","A blade that can be passed on without diminishing its flame.",ItemKind::Weapon,Rarity::Mythic,GearSlot::Weapon,1,27,0,0,0}
 }};
 inline const ItemDef* FindItem(ItemId id) noexcept {
     const int i = static_cast<int>(id);
@@ -214,6 +218,8 @@ public:
         case Achievement::HollowBell: okay=add(ItemId::BellheartAegis,1)&&add(ItemId::BellMetal,1);break;
         case Achievement::RedactedCurator: okay=add(ItemId::RedactedScepter,1)&&add(ItemId::ArchiveInk,1);break;
         case Achievement::UnfinishedPilgrim: okay=add(ItemId::PilgrimsSignet,1)&&add(ItemId::EchoGlass,1);break;
+        case Achievement::SaltwakeStory: okay=add(ItemId::StormglassCompass,1)&&add(ItemId::WildHerbs,2);break;
+        case Achievement::CinderholdStory: okay=add(ItemId::EmberheartBlade,1)&&add(ItemId::IronScrap,2);break;
         default: return RewardResult::Invalid;
         }
         if(!okay)return RewardResult::NoRoom;
