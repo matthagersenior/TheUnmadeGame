@@ -77,8 +77,11 @@ inline EnemyIntent ChooseEnemyIntent(EnemyStyle style, double distanceMeters,
     if (style == EnemyStyle::Stalker) {
         return distanceMeters <= 2.2 && clearSight ? EnemyIntent::Attack : EnemyIntent::Approach;
     }
-    if (distanceMeters < 3.5) return EnemyIntent::Retreat;
-    if (distanceMeters <= 7.0 && clearSight) return EnemyIntent::Attack;
-    return EnemyIntent::Approach;
+    if (style == EnemyStyle::Watcher) {
+        if (distanceMeters < 3.5) return EnemyIntent::Retreat;
+        if (distanceMeters <= 7.0 && clearSight) return EnemyIntent::Attack;
+        return EnemyIntent::Approach;
+    }
+    return EnemyIntent::Hold; // Unknown styles must not inherit an enemy attack policy.
 }
 }
