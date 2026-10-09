@@ -61,6 +61,7 @@ private:
     void CommitSolidarity();
     void CommitTruth();
     void CommitFaction(UnmadeCore::FactionEnding Ending);
+    void CrossFrontierGateway();
 
     void ChooseShelter();
     void ChooseResearch();

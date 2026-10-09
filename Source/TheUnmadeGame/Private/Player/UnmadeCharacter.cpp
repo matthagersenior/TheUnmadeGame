@@ -82,6 +82,7 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("ProfessionCraft", IE_Pressed, this, &AUnmadeCharacter::CraftLocalRecipe);
     PlayerInputComponent->BindAction("FactionSolidarity", IE_Pressed, this, &AUnmadeCharacter::CommitSolidarity);
     PlayerInputComponent->BindAction("FactionTruth", IE_Pressed, this, &AUnmadeCharacter::CommitTruth);
+    PlayerInputComponent->BindAction("FrontierTravel", IE_Pressed, this, &AUnmadeCharacter::CrossFrontierGateway);
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
     PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
     PlayerInputComponent->BindAction("Guard", IE_Released, this, &AUnmadeCharacter::StopGuard);
@@ -190,6 +191,21 @@ void AUnmadeCharacter::ForgeMythicGear()
     if (!Equipment->ForgeWaybreaker() && GEngine)
         GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
             TEXT("The forge requires both village stories, all three villages, two Echo Glass, Bellmetal and Archive Ink."));
+}
+
+void AUnmadeCharacter::CrossFrontierGateway()
+{
+    if(!GetWorld() || Combat->IsDefeated())return;
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+    {
+        if(!Hub->TryTravelFrontier(this))
+        {
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+                TEXT("No reachable realm crossing. Look for the marked stone gateways."));
+        }
+        else ReconcileEarnedRewards();
+        break;
+    }
 }
 
 void AUnmadeCharacter::BuyMarketSupplies()
@@ -314,16 +330,16 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
     if(!GetWorld())return;
     for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
-        if(!Hub->ResolveNearbyFaction(Ending))
-        {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
-                TEXT("Talk to the final faction representative, then choose this ending nearby."));
-        }
-        else
+        const bool bResolvedFaction=Hub->ResolveNearbyFaction(Ending);
+        const bool bResolvedFrontier=!bResolvedFaction &&
+            Hub->ResolveNearbyFrontier(static_cast<int32>(Ending));
+        if(bResolvedFaction || bResolvedFrontier)
         {
             ReconcileEarnedRewards();
             ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
+        else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
+            TEXT("Find your final faction or frontier representative before choosing."));
         break;
     }
 }
@@ -484,6 +500,7 @@ void AUnmadeCharacter::ShowStoryJournal()
     int32 BellwoldQuest = 0;
     int32 PaperhavenQuest = 0;
     FString FactionSummary;
+    FString RealmSummary;
     if (GetWorld())
     {
         for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
@@ -500,6 +517,9 @@ void AUnmadeCharacter::ShowStoryJournal()
                 Hub->FactionStage(UnmadeCore::Faction::Refuge),
                 Hub->FactionStage(UnmadeCore::Faction::Archive),
                 Hub->FactionStage(UnmadeCore::Faction::Roadbound));
+            RealmSummary=Hub->GetCurrentRealmName(GetActorLocation());
+            RealmSummary+=FString::Printf(TEXT(" | Beyond the Reach: %d/2 discovered"),
+                ((Hub->GetFrontierVisitMask()&1)?1:0)+((Hub->GetFrontierVisitMask()&2)?1:0));
             break;
         }
     }
@@ -509,6 +529,8 @@ void AUnmadeCharacter::ShowStoryJournal()
             BellwoldQuest, PaperhavenQuest, *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
     if(GEngine && !FactionSummary.IsEmpty())
         GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,FactionSummary);
+    if(GEngine && !RealmSummary.IsEmpty())
+        GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,RealmSummary);
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
@@ -663,6 +685,11 @@ void AUnmadeCharacter::Interact()
     }
     if (!Target)
     {
+        if(GetWorld())
+        {
+            for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+                if(Hub->InspectFrontierClue(this))return;
+        }
         if (IsValid(FindNearbyFractureAnchor()) && GEngine)
         {
             const FString Inscription = Lexicon && Lexicon->UnderstandsVeyl()
@@ -691,6 +718,7 @@ void AUnmadeCharacter::Interact()
                 ReportLocalEvent(FName("Player.HelpedVillage"), Target->GetStableId());
             }
             Hub->TryFactionConversation(Target->GetStableId());
+            Hub->TryFrontierConversation(Target->GetStableId());
             break;
         }
     }
