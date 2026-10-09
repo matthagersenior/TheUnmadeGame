@@ -46,3 +46,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/npc_motion_test.cpp -o /tmp/unmade-motion-test
           /tmp/unmade-motion-test
+      - name: Verify integrated offline gameplay scenario
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/integration/offline_slice_scenario.cpp -o /tmp/unmade-slice-test
+          /tmp/unmade-slice-test
