@@ -2,6 +2,7 @@
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "Save/UnmadePrototypeSave.h"
+#include "Fracture/UnmadeFractureAnchor.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -56,7 +57,12 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnBlock(FVector(-650, -440, 160), FVector(3, 3, 3.2), FName("Hub.Watch"));
     SpawnBlock(FVector(650, 570, 140), FVector(4, 3, 2.8), FName("Hub.Store"));
     SpawnBlock(FVector(-590, 660, 190), FVector(4, 4, 3.8), FName("Hub.Shelter"));
-    SpawnBlock(FVector(0, 530, 90), FVector(0.75, 0.75, 1.8), FName("Hub.AnomalyMarker"));
+    // A single authored prototype target for temporary and permanent fractures.
+    if (AUnmadeFractureAnchor* Anchor = GetWorld()->SpawnActor<AUnmadeFractureAnchor>(
+        FVector(0, 530, 110), FRotator::ZeroRotator))
+    {
+        Anchor->Tags.AddUnique(FName("Hub.AnomalyMarker"));
+    }
 
     SpawnCitizen(FName("npc.merchant.001"), TEXT("The stallkeeper"), FVector(200, -230, 95));
     SpawnCitizen(FName("npc.guard.001"), TEXT("A gate watchkeeper"), FVector(-300, -230, 95));
@@ -127,8 +133,7 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
 
 void AUnmadePrototypeHub::SaveCitizens()
 {
-    UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::CreateSaveGameObject(UUnmadePrototypeSave::StaticClass()));
+    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return;
     for (TActorIterator<AUnmadeNpcCharacter> It(GetWorld()); It; ++It)
     {

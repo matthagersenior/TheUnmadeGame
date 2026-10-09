@@ -201,8 +201,7 @@ void AUnmadeCharacter::SaveNearbyNpcMemories()
 {
     UWorld* World = GetWorld();
     if (!World) return;
-    UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::CreateSaveGameObject(UUnmadePrototypeSave::StaticClass()));
+    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return;
     for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
     {
