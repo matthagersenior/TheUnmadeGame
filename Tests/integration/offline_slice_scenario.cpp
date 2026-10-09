@@ -7,6 +7,8 @@
 #include "World/UnmadeLivingWorldRules.h"
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeRegionalTaskRules.h"
+#include "Items/UnmadeItemRules.h"
+#include "World/UnmadeWorldAtlas.h"
 
 #include <cassert>
 #include <iostream>
@@ -129,6 +131,35 @@ int main() {
     assert(loadedTasks.Progress(SettlementId::Paperhaven)==TaskProgress::Completed);
     SettlementVisits loadedVillages;
     assert(loadedVillages.Restore(villageVisits.Snapshot()) && loadedVillages.Count()==3);
+
+    // Act VI: an earned inventory changes combat and makes inter-realm routes credible.
+    InventoryModel gear;
+    assert(gear.Claim(Achievement::Starter)==RewardResult::Awarded);
+    assert(gear.Equip(ItemId::SalvagerBlade));
+    assert(gear.Equip(ItemId::TravelerMantle));
+    assert(gear.AttackBonus()==3 && gear.ArmorBonus()==2);
+    assert(gear.Claim(Achievement::BellwoldLanterns)==RewardResult::Awarded);
+    assert(gear.Claim(Achievement::PaperhavenTestimony)==RewardResult::Awarded);
+    assert(gear.Claim(Achievement::ThreeVillages)==RewardResult::Awarded);
+    assert(gear.Claim(Achievement::EchoWell)==RewardResult::Awarded);
+    assert(gear.Claim(Achievement::FirstStalker)==RewardResult::Awarded);
+    assert(AttunementFromRewards(gear)==1);
+    assert(gear.ForgeWaybreaker());
+    assert(gear.Equip(ItemId::Waybreaker));
+    assert(gear.AttackBonus()>=32);
+    assert(AttunementFromRewards(gear)==3);
+    assert(gear.Claim(Achievement::AllLandmarks)==RewardResult::Awarded);
+    assert(gear.Equip(ItemId::UnwrittenCrown));
+    assert(AttunementFromRewards(gear)==4);
+    const auto finalRoute=PlanRealmRoute(Realm::ThreefoldReach,Realm::FirstAbsence,
+        AttunementFromRewards(gear));
+    assert(finalRoute.size()>3);
+    const auto itemSave=gear.Snapshot();
+    InventoryModel loadedGear;
+    assert(loadedGear.Restore(itemSave));
+    assert(loadedGear.AttackBonus()==gear.AttackBonus());
+    assert(loadedGear.HasClaimed(Achievement::ThreeVillages));
+    assert(loadedGear.Claim(Achievement::BellwoldLanterns)==RewardResult::AlreadyAwarded);
 
     // Returning to the region retains both authored outcomes and clues.
     FractureModel loadedFracture("region.prototype.hub", {"variant.open","variant.sealed"});
