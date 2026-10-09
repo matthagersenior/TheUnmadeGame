@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "NPC/UnmadeNpcDecisionRules.h"
 #include "UnmadeNpcCharacter.generated.h"
 
 class UStaticMeshComponent;
@@ -14,7 +15,14 @@ class THEUNMADEGAME_API AUnmadeNpcCharacter : public ACharacter
 
 public:
     AUnmadeNpcCharacter();
-    void ConfigureIdentity(FName StableId, const FString& DisplayLabel);
+    void ConfigureIdentity(FName StableId, const FString& DisplayLabel,
+        UnmadeCore::NpcRole InRole, UnmadeCore::NpcTemperament InTemperament);
+    UnmadeCore::NpcAction DecideForPlayer(bool bPlayerNearby) const;
+    UFUNCTION(BlueprintPure, Category="Unmade|NPC")
+    FName GetCurrentActionId(bool bPlayerNearby = true) const;
+    /** Entry-point for future trade UI: independent of dialogue model text. */
+    UFUNCTION(BlueprintPure, Category="Unmade|NPC")
+    bool CanTradeWithPlayer() const;
     FString GetReactionText() const;
     FName GetStableId() const { return NpcId; }
     const FString& GetDisplayLabel() const { return NpcDisplayLabel; }
@@ -32,4 +40,7 @@ private:
 
     UPROPERTY()
     FString NpcDisplayLabel;
+
+    UnmadeCore::NpcRole Role = UnmadeCore::NpcRole::Wanderer;
+    UnmadeCore::NpcTemperament Temperament = UnmadeCore::NpcTemperament::Steady;
 };

@@ -27,3 +27,7 @@ When Pixel Streaming is eventually approved, the model must run on the **same re
 This is an **optional dev/runtime Ollama adapter**, *not* a bundled offline model distribution. Later, replace the transport through a shared local-model interface with a tested in-process llama.cpp backend for install-and-play PC shipping. That work requires license notice handling, model downloads or installer packaging, platform-specific library builds and RAM/VRAM profiling.
 
 No paid AI service is necessary. Model weights are not checked into Git; current source does not download/install/run Ollama itself. No cloud GPU host is provisioned.
+
+## Product policy update: AI is never required
+
+The game must remain fully playable without the model. All NPC **gameplay decisions** now route through the separate native deterministic NPC policy, not through this subsystem. Local inference is strictly optional presentation of conversational text; no game world consequences, dialogue-choice availability, NPC disposition, inventory, quest progression, save format or trade permission may rely on a model response. The fallback line is authored in Unreal, and the optional LLM is disabled by default. See `docs/architecture/offline-npc-gameplay.md`.

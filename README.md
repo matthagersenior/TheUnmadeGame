@@ -69,3 +69,9 @@ compiled or gameplay-verified yet.
 The shared deterministic fracture engine is tested on GitHub by compiling
 `Tests/fracture/fracture_core_test.cpp` with g++. The Unreal editor must still
 compile and run the scene and `Unmade.Fracture.CoreRules` automation test.
+
+## AI-free gameplay is the default (approved design)
+
+**No AI download, subscription, internet access or local inference process is required for gameplay.** NPC roles, temperament, perception, memory, trust/fear, available actions and authored dialogue belong to Unreal's native game rules. `AUnmadeNpcCharacter::CanTradeWithPlayer()` and `GetCurrentActionId()` expose independent gameplay decisions. The optional local LLM is disabled by default and must never control quests or NPC actions.
+
+See [AI-independent NPC design](docs/architecture/offline-npc-gameplay.md). GitHub CI compiles and runs the pure C++ NPC decision-policy tests. NPC movement, authored shops, Unreal compilation, and actual runtime behavior remain unverified/incomplete.

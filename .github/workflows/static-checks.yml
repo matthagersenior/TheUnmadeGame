@@ -26,3 +26,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/fracture/fracture_core_test.cpp -o /tmp/unmade-fracture-test
           /tmp/unmade-fracture-test
+      - name: Compile and test completely offline NPC decision rules
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/adaptive_npc_test.cpp -o /tmp/unmade-npc-test
+          /tmp/unmade-npc-test

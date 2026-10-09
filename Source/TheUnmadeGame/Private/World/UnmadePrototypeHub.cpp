@@ -37,11 +37,12 @@ void AUnmadePrototypeHub::SpawnBlock(FVector Center, FVector Scale, FName Label)
     Block->SetActorScale3D(Scale);
 }
 
-void AUnmadePrototypeHub::SpawnCitizen(FName Id, const TCHAR* DisplayName, FVector Position)
+void AUnmadePrototypeHub::SpawnCitizen(FName Id, const TCHAR* DisplayName, FVector Position,
+    UnmadeCore::NpcRole Role, UnmadeCore::NpcTemperament Temperament)
 {
     if (AUnmadeNpcCharacter* Citizen = GetWorld()->SpawnActor<AUnmadeNpcCharacter>(Position, FRotator::ZeroRotator))
     {
-        Citizen->ConfigureIdentity(Id, FString(DisplayName));
+        Citizen->ConfigureIdentity(Id, FString(DisplayName), Role, Temperament);
     }
 }
 
@@ -64,11 +65,11 @@ void AUnmadePrototypeHub::BuildForPrototype()
         Anchor->Tags.AddUnique(FName("Hub.AnomalyMarker"));
     }
 
-    SpawnCitizen(FName("npc.merchant.001"), TEXT("The stallkeeper"), FVector(200, -230, 95));
-    SpawnCitizen(FName("npc.guard.001"), TEXT("A gate watchkeeper"), FVector(-300, -230, 95));
-    SpawnCitizen(FName("npc.wanderer.001"), TEXT("A passing stranger"), FVector(170, 340, 95));
-    SpawnCitizen(FName("npc.archivist.001"), TEXT("The records keeper"), FVector(-360, 320, 95));
-    SpawnCitizen(FName("npc.courier.001"), TEXT("A courier"), FVector(300, 90, 95));
+    SpawnCitizen(FName("npc.merchant.001"), TEXT("The stallkeeper"), FVector(200, -230, 95), UnmadeCore::NpcRole::Merchant, UnmadeCore::NpcTemperament::Cautious);
+    SpawnCitizen(FName("npc.guard.001"), TEXT("A gate watchkeeper"), FVector(-300, -230, 95), UnmadeCore::NpcRole::Guard, UnmadeCore::NpcTemperament::Steady);
+    SpawnCitizen(FName("npc.wanderer.001"), TEXT("A passing stranger"), FVector(170, 340, 95), UnmadeCore::NpcRole::Wanderer, UnmadeCore::NpcTemperament::Steady);
+    SpawnCitizen(FName("npc.archivist.001"), TEXT("The records keeper"), FVector(-360, 320, 95), UnmadeCore::NpcRole::Scholar, UnmadeCore::NpcTemperament::Curious);
+    SpawnCitizen(FName("npc.courier.001"), TEXT("A courier"), FVector(300, 90, 95), UnmadeCore::NpcRole::Courier, UnmadeCore::NpcTemperament::Steady);
 
     RestoreCitizens();
 }
@@ -135,6 +136,7 @@ void AUnmadePrototypeHub::SaveCitizens()
 {
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return;
+    Save->NpcSnapshots.Reset(); // Avoid duplicates on repeated gossip saves.
     for (TActorIterator<AUnmadeNpcCharacter> It(GetWorld()); It; ++It)
     {
         if (!It->GetStableId().IsNone())

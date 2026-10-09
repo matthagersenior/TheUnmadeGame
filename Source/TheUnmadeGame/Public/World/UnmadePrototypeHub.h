@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NPC/UnmadeNpcDecisionRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -23,6 +24,7 @@ private:
     void SpreadLocalRumors();
     void SaveCitizens();
     void SpawnBlock(FVector Center, FVector Scale, FName Label);
-    void SpawnCitizen(FName Id, const TCHAR* DisplayName, FVector Position);
+    void SpawnCitizen(FName Id, const TCHAR* DisplayName, FVector Position,
+        UnmadeCore::NpcRole Role, UnmadeCore::NpcTemperament Temperament);
     void RestoreCitizens();
 };

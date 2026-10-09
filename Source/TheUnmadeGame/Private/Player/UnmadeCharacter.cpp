@@ -343,6 +343,7 @@ void AUnmadeCharacter::SaveNearbyNpcMemories()
     if (!World) return;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return;
+    Save->NpcSnapshots.Reset(); // Keep one snapshot per stable NPC ID.
     for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
     {
         if (!It->GetStableId().IsNone())
