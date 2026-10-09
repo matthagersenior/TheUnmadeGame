@@ -57,6 +57,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::SettlementVisits RestoredVillages;
     UnmadeCore::RegionalTaskModel RestoredTasks;
     UnmadeCore::FactionChronicle RestoredChronicle;
+    UnmadeCore::FrontierJourney RestoredFrontier;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -84,6 +85,28 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    if(Save->bHasFrontierSnapshot)
+    {
+        UnmadeCore::FrontierSnapshot State;
+        if(Save->FrontierStages.Num()!=2 || Save->FrontierEndings.Num()!=2)
+        {
+            UE_LOG(LogTemp,Error,TEXT("Invalid frontier save arrays"));
+            return;
+        }
+        State.visits=Save->VisitedFrontierRealms;
+        State.discoveries=Save->DiscoveredFrontierClues;
+        for(int32 i=0;i<2;++i)
+        {
+            State.stages[i]=Save->FrontierStages[i];
+            State.endings[i]=Save->FrontierEndings[i];
+        }
+        if(!RestoredFrontier.Restore(State))
+        {
+            UE_LOG(LogTemp,Error,TEXT("Corrupt frontier progress rejected"));
+            return;
+        }
+    }
+    Frontier=RestoredFrontier;
     Chronicle=RestoredChronicle;
     Clock = RestoredClock;
     Discoveries = RestoredDiscoveries;
@@ -111,6 +134,17 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
         Save->FactionEndings.Add(FactionState.endings[i]);
     }
     Save->bHasFactionChronicle=true;
+    const auto FrontierState=Frontier.Snapshot();
+    Save->bHasFrontierSnapshot=true;
+    Save->VisitedFrontierRealms=FrontierState.visits;
+    Save->DiscoveredFrontierClues=FrontierState.discoveries;
+    Save->FrontierStages.Reset();
+    Save->FrontierEndings.Reset();
+    for(int32 i=0;i<2;++i)
+    {
+        Save->FrontierStages.Add(FrontierState.stages[i]);
+        Save->FrontierEndings.Add(FrontierState.endings[i]);
+    }
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
@@ -221,6 +255,192 @@ bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome
         }
     }
     return false;
+}
+
+FString AUnmadePrototypeHub::GetCurrentRealmName(FVector Position) const
+{
+    for(const auto& Outpost:UnmadeCore::FrontierOutposts)
+        if(FVector::DistSquared2D(Position,FVector(Outpost.centerX,Outpost.centerY,Position.Z))
+           <=FMath::Square(2900.f))
+            return FString(UTF8_TO_TCHAR(Outpost.settlementName));
+    return TEXT("The Threefold Reach");
+}
+
+bool AUnmadePrototypeHub::TryTravelFrontier(AUnmadeCharacter* Player)
+{
+    if(!IsValid(Player) || !GetWorld())return false;
+    const FVector P=Player->GetActorLocation();
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        if(FVector::DistSquared(P,It->GetActorLocation())>FMath::Square(390.f))continue;
+        FVector Destination;
+        UnmadeCore::Realm Next=UnmadeCore::Realm::ThreefoldReach;
+        if(It->ActorHasTag(FName("Gateway.ToRain")))
+        {
+            Next=UnmadeCore::Realm::WidowedRain;
+            Destination=FVector(0,-50000,125);
+        }
+        else if(It->ActorHasTag(FName("Gateway.ToHearth")))
+        {
+            Next=UnmadeCore::Realm::HearthBeneath;
+            Destination=FVector(0,50000,125);
+        }
+        else if(It->ActorHasTag(FName("Gateway.ReturnRain")))
+            Destination=FVector(0,-1250,125);
+        else if(It->ActorHasTag(FName("Gateway.ReturnHearth")))
+            Destination=FVector(0,1250,125);
+        else continue;
+
+        const auto Before=Frontier.Snapshot();
+        const bool bNew=Frontier.Visit(Next)==UnmadeCore::FrontierEvent::Advanced;
+        if(bNew && !WriteWorldSnapshot())
+        {
+            Frontier.Restore(Before);
+            return false;
+        }
+        if(!Player->SetActorLocation(Destination,false,nullptr,ETeleportType::TeleportPhysics))
+        {
+            Frontier.Restore(Before);
+            if(bNew)WriteWorldSnapshot();
+            return false;
+        }
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,
+            FString::Printf(TEXT("CROSSING OPEN: %s. Speak to local witnesses and examine the clue."),
+                *GetCurrentRealmName(Destination)));
+        return true;
+    }
+    return false;
+}
+
+bool AUnmadePrototypeHub::InspectFrontierClue(AUnmadeCharacter* Player)
+{
+    if(!IsValid(Player) || !GetWorld())return false;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        if(FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())>FMath::Square(310.f))
+            continue;
+        UnmadeCore::Realm At=UnmadeCore::Realm::Count;
+        if(It->ActorHasTag(FName("Frontier.Clue.Rain")))
+            At=UnmadeCore::Realm::WidowedRain;
+        else if(It->ActorHasTag(FName("Frontier.Clue.Hearth")))
+            At=UnmadeCore::Realm::HearthBeneath;
+        if(At==UnmadeCore::Realm::Count)continue;
+        const auto Before=Frontier.Snapshot();
+        const bool bNew=Frontier.FindClue(At)==UnmadeCore::FrontierEvent::Advanced;
+        if(bNew && !WriteWorldSnapshot())
+        {
+            Frontier.Restore(Before);
+            return false;
+        }
+        const auto* Spec=UnmadeCore::FindFrontier(At);
+        if(GEngine && Spec)GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,
+            FString::Printf(TEXT("REALM EVIDENCE: %s"),UTF8_TO_TCHAR(Spec->mystery)));
+        return true;
+    }
+    return false;
+}
+
+void AUnmadePrototypeHub::TryFrontierConversation(FName ResidentId)
+{
+    if(ResidentId.IsNone())return;
+    const FString Id=ResidentId.ToString();
+    const FTCHARToUTF8 Utf8(*Id);
+    if(!UnmadeCore::FindFrontierResident(Utf8.Get()))return;
+    const auto Before=Frontier.Snapshot();
+    const auto Event=Frontier.Converse(Utf8.Get());
+    if(Event==UnmadeCore::FrontierEvent::Advanced ||
+       Event==UnmadeCore::FrontierEvent::FinalChoice)
+    {
+        if(Frontier.Snapshot().stages!=Before.stages && !WriteWorldSnapshot())
+        {
+            Frontier.Restore(Before);
+            return;
+        }
+    }
+    if(GEngine && Event!=UnmadeCore::FrontierEvent::NoChange)
+    {
+        const TCHAR* Notice=Event==UnmadeCore::FrontierEvent::NeedClue
+            ? TEXT("REALM STORY: inspect the local evidence before returning to the third witness.")
+            : Event==UnmadeCore::FrontierEvent::FinalChoice
+            ? TEXT("REALM CHOICE: F7 stands with the people; F8 releases the disputed truth.")
+            : TEXT("REALM STORY: the next witness waits elsewhere in this settlement.");
+        GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,Notice);
+    }
+}
+
+bool AUnmadePrototypeHub::ResolveNearbyFrontier(int32 Ending)
+{
+    if(!GetWorld() || (Ending!=1 && Ending!=2))return false;
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return false;
+    for(const auto& Outpost:UnmadeCore::FrontierOutposts)
+    {
+        const int idx=UnmadeCore::FrontierIndex(Outpost.realm);
+        if(idx<0 || Frontier.Snapshot().stages[idx]!=3 ||
+           Frontier.Snapshot().endings[idx]!=0)continue;
+        const FName FinalId(Outpost.realm==UnmadeCore::Realm::WidowedRain
+            ? TEXT("npc.saltwake.harborwarden.001")
+            : TEXT("npc.cinderhold.emberwarden.001"));
+        for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+        {
+            if(It->GetStableId()!=FinalId ||
+               FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())>FMath::Square(390.f))
+                continue;
+            const auto Before=Frontier.Snapshot();
+            if(Frontier.Resolve(Outpost.realm,Ending)!=UnmadeCore::FrontierEvent::Resolved)
+                return false;
+            if(!WriteWorldSnapshot())
+            {
+                Frontier.Restore(Before);
+                return false;
+            }
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+                FString::Printf(TEXT("REALM STORY RESOLVED: %s."),
+                    UTF8_TO_TCHAR(Outpost.settlementName)));
+            return true;
+        }
+    }
+    return false;
+}
+
+void AUnmadePrototypeHub::BuildFrontiers()
+{
+    SpawnBlock(FVector(0,-1950,130),FVector(.45,.45,2.4),FName("Gateway.ToRain"));
+    SpawnBlock(FVector(0,1950,130),FVector(.45,.45,2.4),FName("Gateway.ToHearth"));
+    for(const auto& Outpost:UnmadeCore::FrontierOutposts)
+    {
+        const FVector Origin(Outpost.centerX,Outpost.centerY,0);
+        const bool bRain=Outpost.realm==UnmadeCore::Realm::WidowedRain;
+        SpawnBlock(Origin+FVector(0,0,-50),FVector(52,52,1),
+            FName(bRain?TEXT("Realm.Rain.Ground"):TEXT("Realm.Hearth.Ground")));
+        if(bRain)
+        {
+            SpawnBlock(Origin+FVector(-1500,-900,130),FVector(7,.65,2.6),FName("Rain.BeachHull"));
+            SpawnBlock(Origin+FVector(1300,850,225),FVector(.65,2.5,4.5),FName("Rain.Lighthouse"));
+            SpawnBlock(Origin+FVector(-100,1550,125),FVector(4,1.2,2.5),FName("Rain.Rainhouse"));
+            SpawnBlock(Origin+FVector(1480,-1500,160),FVector(2.8,.8,3.2),FName("Rain.SaltVault"));
+        }
+        else
+        {
+            SpawnBlock(Origin+FVector(-1420,-1300,380),FVector(1.4,4,7.6),FName("Hearth.DeepWall"));
+            SpawnBlock(Origin+FVector(1550,1000,290),FVector(1.2,3,5.8),FName("Hearth.StoneArch"));
+            SpawnBlock(Origin+FVector(-100,1480,150),FVector(3.3,2.2,3),FName("Hearth.WarmCommons"));
+            SpawnBlock(Origin+FVector(1150,-1550,150),FVector(2.2,2,3),FName("Hearth.ForgeChamber"));
+        }
+        SpawnBlock(Origin+FVector(1550,0,130),FVector(.45,.45,2.4),
+            FName(bRain?TEXT("Gateway.ReturnRain"):TEXT("Gateway.ReturnHearth")));
+        SpawnBlock(Origin+FVector(-400,0,110),FVector(.65,.45,2.1),
+            FName(bRain?TEXT("Frontier.Clue.Rain"):TEXT("Frontier.Clue.Hearth")));
+    }
+    for(const auto& Resident:UnmadeCore::FrontierResidents)
+    {
+        const auto* Outpost=UnmadeCore::FindFrontier(Resident.home);
+        if(!Outpost)continue;
+        if(AUnmadeNpcCharacter* Npc=GetWorld()->SpawnActor<AUnmadeNpcCharacter>(
+            FVector(Outpost->centerX+Resident.localX,
+                    Outpost->centerY+Resident.localY,95),FRotator::ZeroRotator))
+            Npc->ConfigureFrontier(Resident);
+    }
 }
 
 void AUnmadePrototypeHub::SaveLivingWorld()
@@ -450,6 +670,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     // Walking ground: top at Z=0; center at -50 with 1*100 cm tall mesh.
     SpawnBlock(FVector(0, 0, -50), FVector(52, 52, 1), FName("Hub.Ground"));
     BuildVillages();
+    BuildFrontiers();
     SpawnBlock(FVector(520, -470, 210), FVector(5, 5, 4.2), FName("Hub.Market"));
     SpawnBlock(FVector(-650, -440, 160), FVector(3, 3, 3.2), FName("Hub.Watch"));
     SpawnBlock(FVector(650, 570, 140), FVector(4, 3, 2.8), FName("Hub.Store"));
