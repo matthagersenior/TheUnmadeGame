@@ -2,10 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Fracture/UnmadeFractureRules.h"
 #include "UnmadeCharacter.generated.h"
 
 class UCameraComponent;
 class USpringArmComponent;
+class AUnmadeFractureAnchor;
 class UStaticMeshComponent;
 
 /** Foundational third-person pawn. Visual mesh and Enhanced Input data assets are editor work. */
@@ -17,6 +19,8 @@ class THEUNMADEGAME_API AUnmadeCharacter : public ACharacter
 public:
     AUnmadeCharacter();
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+    virtual void BeginPlay() override;
+    virtual void Tick(float DeltaSeconds) override;
 
 private:
     UPROPERTY(VisibleAnywhere, Category="Camera")
@@ -35,4 +39,15 @@ private:
     void DemonstrateAnomaly();
     void ReportLocalEvent(FName EventKind, FName SubjectId = NAME_None);
     void SaveNearbyNpcMemories();
+    void FoldReality();
+    void RewriteOpen();
+    void RewriteSealed();
+    bool SaveFractureState();
+    AUnmadeFractureAnchor* FindNearbyFractureAnchor() const;
+    void ApplyFractureVisuals();
+    void RewriteChoice(FName ChoiceId);
+
+    UnmadeCore::FractureModel FractureModel{"region.prototype.hub", {"variant.open", "variant.sealed"}};
+    FName PendingRewriteChoice = NAME_None;
+    double PendingRewriteExpiresAt = -1.0;
 };

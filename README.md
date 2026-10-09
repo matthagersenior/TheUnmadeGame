@@ -53,3 +53,19 @@ NPC perception uses distance and line-of-sight; rumor evidence is represented se
 ## Optional offline NPC dialogue (source added)
 
 The local NPC dialogue adapter can send brief, provenance-aware prompts to **Ollama on the same Windows game machine**. It is **disabled by default** and always has a deterministic offline fallback. No commercial AI API is used. See [local dialogue architecture](docs/architecture/local-npc-llm.md) for install/configuration, trust boundaries and the Unreal test gate. This feature is not a bundled AI model, has not been compiled in Unreal, and must not be described as a released playable capability.
+
+## Fracture prototype (authored-blockout demonstration)
+
+The hub has one temporary static-mesh fracture target. Near it press **F** for Glimpse
+(brief alternate-history clue, 8 Strain), **Q** for Fold (temporarily remove collision,
+24 Strain), or **R/T** for two mutually exclusive permanent Rewrite variants
+(open or seal, 60 Strain). A Rewrite needs a repeat press of the same key within
+six seconds and can only happen once; it persists in the existing prototype save
+without erasing NPC memories. Strain recovers at 3 units/second. Failure to
+save a Rewrite rolls back the model and visuals. **These are placeholders**:
+there is no authored level, animation, VFX or HUD. This source is NOT Unreal
+compiled or gameplay-verified yet.
+
+The shared deterministic fracture engine is tested on GitHub by compiling
+`Tests/fracture/fracture_core_test.cpp` with g++. The Unreal editor must still
+compile and run the scene and `Unmade.Fracture.CoreRules` automation test.

@@ -19,6 +19,13 @@
 - Added Unreal automation tests for response parsing and memory provenance; these tests are **not** executed in GitHub static CI.\n- Added a local-only Ollama model readiness probe with four offline mock tests (GitHub static CI exercises the probe tests, but does not prove Ollama exists on the creator's machine).
 - Unreal C++ build, actual Ollama response, CPU/GPU performance, and bundled llama.cpp packaging **remain unverified and incomplete**. See `docs/architecture/local-npc-llm.md`.
 
+## Fracture prototype source
+- Added a target with visible collision states and a clue mesh using built-in Unreal cubes.
+- F=Glimpse, Q=Fold, R/T=two-confirmation permanent Rewrite (valid target required).
+- Shared native C++ fracture logic has an executable C++17 GitHub CI test.
+- World variant and Strain now coexist in the existing prototype save data alongside NPC memories.
+- **Not verified** in Unreal Editor/Windows GPU host: compilation, geometry, collision, visual state timing, long-running save behavior.
+
 ## Still absent or unverified
 - Unreal Engine compile, map spawn, player collision, actual NPC perception or snapshot save/load at runtime: **not tested without UE/GPU host**.
 - Authored world visuals, character customization, realistic NPC routines, coherent combat abilities, actual Glimpse/Fold/Rewrite, rich social dialogue, lexicon, full save semantics and quests.

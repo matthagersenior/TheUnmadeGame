@@ -1,4 +1,5 @@
 #include "Player/UnmadeCharacter.h"
+#include "Fracture/UnmadeFractureAnchor.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -21,7 +22,7 @@
 
 AUnmadeCharacter::AUnmadeCharacter()
 {
-    PrimaryActorTick.bCanEverTick = false;
+    PrimaryActorTick.bCanEverTick = true;
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = false;
     bUseControllerRotationRoll = false;
@@ -57,6 +58,9 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AUnmadeCharacter::Interact);
     PlayerInputComponent->BindAction("OfferAid", IE_Pressed, this, &AUnmadeCharacter::OfferAid);
     PlayerInputComponent->BindAction("AnomalyPulse", IE_Pressed, this, &AUnmadeCharacter::DemonstrateAnomaly);
+    PlayerInputComponent->BindAction("FoldReality", IE_Pressed, this, &AUnmadeCharacter::FoldReality);
+    PlayerInputComponent->BindAction("RewriteOpen", IE_Pressed, this, &AUnmadeCharacter::RewriteOpen);
+    PlayerInputComponent->BindAction("RewriteSealed", IE_Pressed, this, &AUnmadeCharacter::RewriteSealed);
     PlayerInputComponent->BindAxis("MoveForward", this, &AUnmadeCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AUnmadeCharacter::MoveRight);
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -150,24 +154,160 @@ void AUnmadeCharacter::OfferAid()
 
 void AUnmadeCharacter::DemonstrateAnomaly()
 {
-    // Prototype-only reaction signal. This is not a completed reality-fracture ability.
-    bool bNearMarker = false;
-    for (TActorIterator<AStaticMeshActor> It(GetWorld()); It; ++It)
-    {
-        if (It->ActorHasTag(FName("Hub.AnomalyMarker"))
-            && FVector::DistSquared(It->GetActorLocation(), GetActorLocation()) < FMath::Square(360.f))
-        {
-            bNearMarker = true;
-            break;
-        }
-    }
-    if (!bNearMarker)
+    AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
+    if (!GetWorld()) return;
+    const auto Result = FractureModel.Glimpse(IsValid(Anchor), GetWorld()->GetTimeSeconds());
+    if (Result != UnmadeCore::Result::Applied)
     {
         if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
-            TEXT("Move toward the strange marker to investigate the anomaly."));
+            TEXT("Glimpse unavailable. Get closer to the fracture or recover Strain."));
         return;
     }
-    ReportLocalEvent(FName("Reality.Anomaly"));
+    ApplyFractureVisuals();
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
+        TEXT("GLIMPSE: another possible version flickers into view (+8 Strain)."));
+    ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
+    SaveFractureState();
+}
+
+void AUnmadeCharacter::FoldReality()
+{
+    AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
+    if (!GetWorld()) return;
+    const auto Result = FractureModel.Fold(IsValid(Anchor), GetWorld()->GetTimeSeconds());
+    if (Result != UnmadeCore::Result::Applied)
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+            TEXT("Fold unavailable: already active, out of range, or Strain too high."));
+        return;
+    }
+    ApplyFractureVisuals();
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
+        TEXT("FOLD: the barrier vanishes for six seconds (+24 Strain)."));
+    ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
+    SaveFractureState();
+}
+
+void AUnmadeCharacter::RewriteOpen()
+{
+    RewriteChoice(FName("variant.open"));
+}
+
+void AUnmadeCharacter::RewriteSealed()
+{
+    RewriteChoice(FName("variant.sealed"));
+}
+
+void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
+{
+    if (!GetWorld() || !IsValid(FindNearbyFractureAnchor()))
+    {
+        PendingRewriteChoice = NAME_None;
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+            TEXT("Approach the anomaly before attempting Rewrite."));
+        return;
+    }
+    const double Now = GetWorld()->GetTimeSeconds();
+    const FString ChoiceString = ChoiceId.ToString();
+    const std::string Choice(TCHAR_TO_UTF8(*ChoiceString));
+    const bool bConfirmed = PendingRewriteChoice == ChoiceId && Now <= PendingRewriteExpiresAt;
+    if (!bConfirmed)
+    {
+        const auto Preview = FractureModel.Rewrite("region.prototype.hub", Choice, false);
+        PendingRewriteChoice = NAME_None;
+        if (Preview != UnmadeCore::Result::NeedsConfirmation)
+        {
+            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+                TEXT("This world has already been committed or the choice is unavailable."));
+            return;
+        }
+        PendingRewriteChoice = ChoiceId;
+        PendingRewriteExpiresAt = Now + 6.0;
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Orange,
+            FString::Printf(TEXT("PERMANENT REWRITE %s (+60 Strain). Press the same key again within 6 seconds to confirm."), *ChoiceString));
+        return;
+    }
+    PendingRewriteChoice = NAME_None;
+    const UnmadeCore::FractureSnapshot Previous = FractureModel.TakeSnapshot();
+    const auto Result = FractureModel.Rewrite("region.prototype.hub", Choice, true);
+    if (Result != UnmadeCore::Result::Applied)
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+            TEXT("Rewrite refused. Strain may be too high."));
+        return;
+    }
+    ApplyFractureVisuals();
+    if (!SaveFractureState())
+    {
+        FractureModel.Restore(Previous);
+        ApplyFractureVisuals();
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+            TEXT("Rewrite failed to save: world and Strain restored."));
+        return;
+    }
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
+        FString::Printf(TEXT("REWRITE COMMITTED: %s. This outcome persists across sessions."), *ChoiceString));
+    ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
+}
+
+AUnmadeFractureAnchor* AUnmadeCharacter::FindNearbyFractureAnchor() const
+{
+    UWorld* World = GetWorld();
+    if (!World) return nullptr;
+    for (TActorIterator<AUnmadeFractureAnchor> It(World); It; ++It)
+    {
+        if (FVector::DistSquared(GetActorLocation(), It->GetActorLocation()) <= FMath::Square(490.f))
+            return *It;
+    }
+    return nullptr;
+}
+
+void AUnmadeCharacter::ApplyFractureVisuals()
+{
+    if (!GetWorld()) return;
+    const double Now = GetWorld()->GetTimeSeconds();
+    const FString VariantString(UTF8_TO_TCHAR(FractureModel.WorldVariant().c_str()));
+    for (TActorIterator<AUnmadeFractureAnchor> It(GetWorld()); It; ++It)
+    {
+        It->ApplyFractureState(FractureModel.IsGlimpsing(Now),
+            FractureModel.IsFolded(Now), FName(*VariantString));
+    }
+}
+
+bool AUnmadeCharacter::SaveFractureState()
+{
+    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
+    if (!Save) return false;
+    const auto Snapshot = FractureModel.TakeSnapshot();
+    Save->WorldVariantId = Snapshot.variant.empty()
+        ? NAME_None : FName(UTF8_TO_TCHAR(Snapshot.variant.c_str()));
+    Save->PlayerStrain = Snapshot.strain;
+    Save->bHasFractureSnapshot = true;
+    return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
+}
+
+void AUnmadeCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+    const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
+        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+    if (Save && Save->SchemaVersion == 1 && Save->bHasFractureSnapshot)
+    {
+        const FString Variant = Save->WorldVariantId.IsNone()
+            ? TEXT("") : Save->WorldVariantId.ToString();
+        if (!FractureModel.Restore({std::string(TCHAR_TO_UTF8(*Variant)), Save->PlayerStrain}))
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Invalid fracture save ignored"));
+        }
+    }
+    ApplyFractureVisuals();
+}
+
+void AUnmadeCharacter::Tick(float DeltaSeconds)
+{
+    Super::Tick(DeltaSeconds);
+    FractureModel.Recover(static_cast<double>(DeltaSeconds));
+    ApplyFractureVisuals();
 }
 
 void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
