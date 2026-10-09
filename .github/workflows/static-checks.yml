@@ -82,3 +82,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/faction_chronicle_test.cpp -o /tmp/unmade-faction-test
           /tmp/unmade-faction-test
+      - name: Test two expanded frontier realms, characters, and stories
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/frontier_realms_test.cpp -o /tmp/unmade-frontier-test
+          /tmp/unmade-frontier-test
