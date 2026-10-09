@@ -62,3 +62,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/regional_tasks_test.cpp -o /tmp/unmade-regional-quest-test
           /tmp/unmade-regional-quest-test
+      - name: Compile and test earned gear and consumables
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/items/item_rules_test.cpp -o /tmp/unmade-items-test
+          /tmp/unmade-items-test
