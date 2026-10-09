@@ -5,6 +5,7 @@
 #include "Fracture/UnmadeFractureRules.h"
 #include "Story/UnmadeConflictRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
+#include "World/UnmadeTenfoldChronicle.h"
 #include "UnmadeCharacter.generated.h"
 
 class UCameraComponent;
@@ -14,6 +15,7 @@ class UStaticMeshComponent;
 class UUnmadeCombatComponent;
 class UUnmadeLexiconComponent;
 class UUnmadeEquipmentComponent;
+class UUnmadeTenfoldComponent;
 
 /** Foundational third-person pawn. Visual mesh and Enhanced Input data assets are editor work. */
 UCLASS()
@@ -27,6 +29,17 @@ public:
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;
     UUnmadeCombatComponent* GetCombat() const { return Combat; }
+    UUnmadeEquipmentComponent* GetEquipment() const { return Equipment; }
+    double GetRealityStrain() const { return FractureModel.CurrentStrain(); }
+    bool SpendRealityStrain(int32 Cost) { return FractureModel.SpendStrain(Cost); }
+    void RefundRealityStrain(int32 Cost) {
+        FractureModel.Recover(static_cast<double>(Cost) / UnmadeCore::FractureModel::RecoveryPerSecond);
+    }
+    bool HasNearbyHollowKeeper() const;
+    void ApplyRiteAbility(UnmadeCore::RiteId Rite, const UnmadeCore::RiteEffect& Effect,
+                          int32 SelectedLaw);
+    void ReportRiteWitnessEvent();
+    void ReportBrokenOathEvent();
     void ReconcileEarnedRewards();
 
 private:
@@ -47,6 +60,9 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Unmade|Equipment")
     TObjectPtr<UUnmadeEquipmentComponent> Equipment;
+
+    UPROPERTY(VisibleAnywhere, Category="Unmade|SignatureRites")
+    TObjectPtr<UUnmadeTenfoldComponent> Tenfold;
 
     void ShowInventory();
     void EquipNextWeapon();

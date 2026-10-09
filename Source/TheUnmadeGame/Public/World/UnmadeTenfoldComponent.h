@@ -29,6 +29,9 @@ public:
     int32 RiteStage(UnmadeCore::RiteId Rite) const {return Chronicle.Stage(Rite);}
     bool IsMastered(UnmadeCore::RiteId Rite) const {return Chronicle.IsMastered(Rite);}
     int32 CurrentSelectedRite() const {return SelectedRite;}
+    bool IsBorrowedIdentityActive() const {
+        return BonusExpiresAt>0 && SelectedRite==static_cast<int32>(UnmadeCore::RiteId::BorrowedLives);
+    }
 private:
     UnmadeCore::RiteContext GatherContext();
     bool Persist(bool bWriteStrain=false);

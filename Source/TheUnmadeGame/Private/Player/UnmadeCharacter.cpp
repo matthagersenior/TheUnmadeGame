@@ -9,6 +9,7 @@
 #include "Lexicon/UnmadeLexiconComponent.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "Items/UnmadeItemRules.h"
+#include "World/UnmadeTenfoldComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Camera/CameraComponent.h"
@@ -36,6 +37,7 @@ AUnmadeCharacter::AUnmadeCharacter()
     Combat = CreateDefaultSubobject<UUnmadeCombatComponent>(TEXT("Combat"));
     Lexicon = CreateDefaultSubobject<UUnmadeLexiconComponent>(TEXT("Lexicon"));
     Equipment = CreateDefaultSubobject<UUnmadeEquipmentComponent>(TEXT("Equipment"));
+    Tenfold = CreateDefaultSubobject<UUnmadeTenfoldComponent>(TEXT("TenfoldRites"));
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = false;
     bUseControllerRotationRoll = false;
@@ -83,6 +85,18 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("FactionSolidarity", IE_Pressed, this, &AUnmadeCharacter::CommitSolidarity);
     PlayerInputComponent->BindAction("FactionTruth", IE_Pressed, this, &AUnmadeCharacter::CommitTruth);
     PlayerInputComponent->BindAction("FrontierTravel", IE_Pressed, this, &AUnmadeCharacter::CrossFrontierGateway);
+    if (IsValid(Tenfold))
+    {
+        PlayerInputComponent->BindAction("RiteNext",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::NextRite);
+        PlayerInputComponent->BindAction("RitePrevious",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::PreviousRite);
+        PlayerInputComponent->BindAction("RiteJournal",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::ShowRite);
+        PlayerInputComponent->BindAction("RiteStudy",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::StudyRite);
+        PlayerInputComponent->BindAction("RiteUse",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::InvokeRite);
+        PlayerInputComponent->BindAction("RiteChoice1",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::DecideSolidarity);
+        PlayerInputComponent->BindAction("RiteChoice2",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::DecideTruth);
+        PlayerInputComponent->BindAction("RiteBreak",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::BreakChosenOath);
+        PlayerInputComponent->BindAction("RiteLaw",IE_Pressed,Tenfold,&UUnmadeTenfoldComponent::CycleWorldLaw);
+    }
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
     PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
     PlayerInputComponent->BindAction("Guard", IE_Released, this, &AUnmadeCharacter::StopGuard);
@@ -191,6 +205,95 @@ void AUnmadeCharacter::ForgeMythicGear()
     if (!Equipment->ForgeWaybreaker() && GEngine)
         GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
             TEXT("The forge requires both village stories, all three villages, two Echo Glass, Bellmetal and Archive Ink."));
+}
+
+bool AUnmadeCharacter::HasNearbyHollowKeeper() const
+{
+    UWorld* World=GetWorld();
+    if(!World)return false;
+    for(TActorIterator<AUnmadeBossCharacter> It(World);It;++It)
+    {
+        if(It->GetBossId()!=UnmadeCore::BossId::HollowBell ||
+           It->GetCombat()->IsDefeated() ||
+           FVector::DistSquared(GetActorLocation(),It->GetActorLocation())>FMath::Square(1400.f))
+            continue;
+        FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeRiteKeeperSight),false);
+        Sight.AddIgnoredActor(this);
+        Sight.AddIgnoredActor(*It);
+        if(!World->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,70),
+            It->GetActorLocation()+FVector(0,0,70),ECC_Visibility,Sight))
+            return true;
+    }
+    return false;
+}
+
+void AUnmadeCharacter::ApplyRiteAbility(UnmadeCore::RiteId Rite,
+    const UnmadeCore::RiteEffect& Effect,int32 SelectedLaw)
+{
+    UWorld* World=GetWorld();
+    if(!World || Effect.result!=UnmadeCore::RiteResult::Applied)return;
+    const double Now=World->GetTimeSeconds();
+    switch(Rite)
+    {
+    case UnmadeCore::RiteId::UnwriteLaw:
+        if(SelectedLaw==0)LaunchCharacter(FVector(0,0,520),false,true);
+        else
+        {
+            for(TActorIterator<AUnmadeEnemyCharacter> It(World);It;++It)
+            {
+                if(It->GetCombat()->IsDefeated() ||
+                   FVector::DistSquared(GetActorLocation(),It->GetActorLocation())>FMath::Square(850.f))
+                    continue;
+                if(SelectedLaw==1)It->ExposeToFold(Now,Effect.duration);
+                else
+                {
+                    const FVector Away=(It->GetActorLocation()-GetActorLocation()).GetSafeNormal2D();
+                    It->AddActorWorldOffset(Away*310.f,true);
+                }
+            }
+        }
+        break;
+    case UnmadeCore::RiteId::UnderstandingBosses:
+        for(TActorIterator<AUnmadeBossCharacter> It(World);It;++It)
+        {
+            if(It->GetBossId()!=UnmadeCore::BossId::HollowBell ||
+               FVector::DistSquared(GetActorLocation(),It->GetActorLocation())>FMath::Square(1400.f))
+                continue;
+            It->SetActorEnableCollision(false);
+            It->SetActorHiddenInGame(true);
+            It->SetActorTickEnabled(false);
+            if(IsValid(Equipment))Equipment->Claim(UnmadeCore::Achievement::HollowBell);
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Green,
+                TEXT("HOLLOW KEEPER SPARED: testimony ended the battle without a killing blow."));
+            break;
+        }
+        break;
+    case UnmadeCore::RiteId::BorrowedLives:
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Cyan,
+            TEXT("ANOTHER LIFE: an unlived fighter's instincts change your attack temporarily."));
+        break;
+    case UnmadeCore::RiteId::LegacyForging:
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Cyan,
+            TEXT("LEGACY STEEL: distinct deeds remembered by your blade increase attack."));
+        break;
+    case UnmadeCore::RiteId::TomorrowDebt:
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Orange,
+            TEXT("FUTURE BORROWED: powerful for now; the debt must be repaid tomorrow."));
+        break;
+    case UnmadeCore::RiteId::Oathbinding:
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
+            TEXT("OATH ARMOR: a promise carries weight. Breaking it has permanent consequences."));
+        break;
+    default: break;
+    }
+}
+void AUnmadeCharacter::ReportRiteWitnessEvent()
+{
+    ReportLocalEvent(FName("Reality.Rite"),FName("TheUnmade.Tenfold"));
+}
+void AUnmadeCharacter::ReportBrokenOathEvent()
+{
+    ReportLocalEvent(FName("World.BrokenOath"),FName("Bellwold.Refuge"));
 }
 
 void AUnmadeCharacter::CrossFrontierGateway()

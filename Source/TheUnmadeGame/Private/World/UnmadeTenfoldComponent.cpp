@@ -5,6 +5,7 @@
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "Combat/UnmadeBossCharacter.h"
+#include "Combat/UnmadeCombatComponent.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "Items/UnmadeItemRules.h"
 #include "Engine/World.h"
