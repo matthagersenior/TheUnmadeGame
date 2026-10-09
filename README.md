@@ -4,6 +4,14 @@ Dark, surreal, third-person 3D RPG. You play a customizable outcast whose origin
 
 **Status:** foundational Unreal Engine **source scaffold**, not a playable release. No Unreal Editor compilation, map boot, packaged Windows build, or Android streaming session has been verified yet.
 
+## Latest source milestone — Tenfold Chronicles and Confluence saga
+
+**Ten authored signature mechanics, fifty five-stage quest beats, six paired-discipline challenges, and fifty-eight named equipment/material items are now represented in tested offline C++ source.** Skills make real choices about gravity, sound, witnessed bridges, alternate lives, evolving gear, roads, future debt, boss mercy, overlapping histories, oaths and truthful mapping. Outcomes persist with NPC-specific evidence and reward deduplication.
+
+Six Confluence chambers require mastered ability combinations, a timed dual-cast and firsthand witnesses; the final chamber requires the full earlier saga. The last chamber is **not** a finished game ending. Original three villages and two frontier outposts remain graybox source, not completed levels.
+
+See the [Tenfold quest/lore bible](docs/design/2026-10-09-tenfold-rites-quest-bible.md) and [engine QA checklist](docs/qa/tenfold-prototype-qa.md). **No Unreal compilation, animation, visual HUD, full quest production, complete nine-realm world, difficulty benchmark or playtime validation has occurred.** All critical logic works without AI.
+
 ## Current source milestone — October 9, 2026
 
 - **Three original villages and two frontier outposts** in graybox actor source:
@@ -11,7 +19,7 @@ Dark, surreal, third-person 3D RPG. You play a customizable outcast whose origin
   gateway paths lead from the first realm into the other two.
 - **64 uniquely named NPCs**, each with an independent stable identity,
   personal memory and authored fallback dialogue (48 original + 16 frontier).
-- **42 authored items**: weapons, armor, charms, consumables and materials;
+- **58 authored items (including the newer rites and Confluences)**: weapons, armor, charms, consumables and materials;
   finite one-time rewards, unique relic effects, inventory/equipment and save
   merging. The catalog includes three boss trophies and unique faction/realm gear.
 - **Three named boss encounters**: the Hollow Bell creates a telegraphed

@@ -9,7 +9,7 @@
 | Three named bosses with different actions and phase changes | Source present | Native C++17 tests pass; hit timing, visuals and combat are Unreal-unverified |
 | Six crafting recipes, three professions and finite village economies | Source present | Native test coverage; shop proximity, workstation use and UI are engine-unverified |
 | Three faction chronicles and two frontier arcs | Source present | Native tests; NPC conversation and save persistence unverified inside Unreal |
-| Inventory and equipment (42 authored items) | Source present | Native tests; models, combat effects, trading and inventory UI unverified |
+| Inventory and equipment (58 authored items) | Source present | Native tests; models, combat effects, trading and inventory UI unverified |
 | 64 named NPCs across three villages and two frontier outposts, memory and routines | Present | Native rules CI; Unreal actor movement and save/load unverified |
 | Optional locally hosted language model | Adapter present, off by default | Game fully functions without model by design; model inference untested |
 | Three-tier fracture with Strain and persistent Rewrite | Source present | Native rules CI; Unreal timers/visuals/collision unverified |
@@ -52,3 +52,17 @@ On a provisioned Windows Unreal GPU host, run `Scripts/check_unreal_host.ps1`, b
 - [Branching story QA](branching-conflict.md)
 - [Fracture QA](fracture-prototype.md)
 - [Windows host acceptance](windows-unreal-host.md)
+
+## Tenfold source status — October 9, 2026
+
+| Feature | State | Engine verification |
+| --- | --- | --- |
+| Ten deterministic signature powers and distinct effects | Native + Unreal integration source | Unreal runtime uncompiled; no ability/VFX demo |
+| Ten authored five-chapter questlines and named witnesses | Native model + E/F-key hook | Quest logic not tested in-game; no finished journal |
+| Six Confluence chambers and 120s dual-power puzzles | Native model + physical marker source | Chamber collision, casting and witness playtest required |
+| 58 named items and sixteen earned rite/confluence relics | Native item tests + saved achievement integration | Inventory/equipment UI and save migration unverified in Unreal |
+| Oath betrayal/restitution, debt exhaustion, branching law/history consequences | C++ source and tests | Live NPC/world reactions, difficulty and pacing unverified |
+| Full nine-realm RPG, audio, cinematics, authored levels | Not completed | Six other realms remain concepts; three have source footholds |
+
+This is a **meaningfully expanded code foundation**, not a finished game.
+See [Tenfold QA](tenfold-prototype-qa.md).

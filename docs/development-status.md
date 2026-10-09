@@ -154,3 +154,36 @@ No paid hosting authorized or provisioned. The creator currently has Android but
   contracts check Unreal hookup. **No UnrealEditor compile, in-engine
   checkpoint, actor traversal, full HUD, animation or verified live combat
   test was performed.**
+
+## 2026-10-09 Tenfold Chronicles, testimony and Confluence saga
+
+- Authored **ten** offline reality-discipline rules, each with five distinct
+  chapter objectives, correct witness identity, firsthand evidence,
+  proximity-limited ritual stones, finite Strain/cooldown, consequential
+  protect/reveal decision, and nontrivial route/boss/quest mastery gates.
+- Added physically spawned ritual stones in existing settlements and Saltwake,
+  a persistent `UUnmadeTenfoldComponent`, keyboard actions and NPC
+  interaction hooks. Mastery awards a unique named item once.
+- Original gear catalog appended to **58** stable IDs including ten Rite
+  rewards and six additional Confluence trophies. All append-only IDs;
+  older inventory snapshots are accepted where structurally valid.
+- Added six paired-discipline trials and world-space chambers. Both mastered
+  skills must be cast in the same place within a timed window with actual
+  witnesses. The first-realm capstone requires all ten and earlier trials.
+- Actual first-pass physical effects: gravity launch, sound-based enemy
+  interruption, knockback, timed witness bridge, common causeway, overlapping
+  tower, temporary fighting/crafting/defense from alternate lives, temporary
+  attack from tomorrow's strength with a delayed penalty, and researched
+  nonlethal Hollow Keeper resolution. **All engine-unverified.**
+- Saved irreversible oath breaking and a nontrivial reconciliation arc;
+  NPC trust and rumors reflect actual witnessing of betrayal/restitution
+  and a protective/revelatory choice. Unmake and debt choices modify future
+  ability cost/duration, while the paradox historical choice affects the
+  persistent layer.
+- Added `TenfoldChronicle`, `ConfluenceJourney` native C++17 tests,
+  extended the full offline cross-system scenario and Python integration
+  contracts. GitHub CI validates code rules but does not compile Unreal.
+- **Still missing:** Unreal engine build and runtime tests, visual abilities,
+  input/menu polish, unique character animations, quest cinematics, actual
+  rich geometry, complete environmental puzzles/alternate professions,
+  production-quality balancing and length measurement.
