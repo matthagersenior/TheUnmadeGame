@@ -6,6 +6,8 @@
 #include "Combat/UnmadeCombatComponent.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Lexicon/UnmadeLexiconComponent.h"
+#include "Items/UnmadeEquipmentComponent.h"
+#include "Items/UnmadeItemRules.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Camera/CameraComponent.h"
@@ -32,6 +34,7 @@ AUnmadeCharacter::AUnmadeCharacter()
     PrimaryActorTick.bCanEverTick = true;
     Combat = CreateDefaultSubobject<UUnmadeCombatComponent>(TEXT("Combat"));
     Lexicon = CreateDefaultSubobject<UUnmadeLexiconComponent>(TEXT("Lexicon"));
+    Equipment = CreateDefaultSubobject<UUnmadeEquipmentComponent>(TEXT("Equipment"));
     bUseControllerRotationPitch = false;
     bUseControllerRotationYaw = false;
     bUseControllerRotationRoll = false;
@@ -66,6 +69,13 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("StoryResearch", IE_Pressed, this, &AUnmadeCharacter::ChooseResearch);
     PlayerInputComponent->BindAction("SupplyActivity", IE_Pressed, this, &AUnmadeCharacter::ProgressSupplyActivity);
     PlayerInputComponent->BindAction("StoryJournal", IE_Pressed, this, &AUnmadeCharacter::ShowStoryJournal);
+    PlayerInputComponent->BindAction("ItemInventory", IE_Pressed, this, &AUnmadeCharacter::ShowInventory);
+    PlayerInputComponent->BindAction("ItemWeapon", IE_Pressed, this, &AUnmadeCharacter::EquipNextWeapon);
+    PlayerInputComponent->BindAction("ItemArmor", IE_Pressed, this, &AUnmadeCharacter::EquipNextArmor);
+    PlayerInputComponent->BindAction("ItemCharm", IE_Pressed, this, &AUnmadeCharacter::EquipNextCharm);
+    PlayerInputComponent->BindAction("ItemHeal", IE_Pressed, this, &AUnmadeCharacter::UseHealthPotion);
+    PlayerInputComponent->BindAction("ItemStrain", IE_Pressed, this, &AUnmadeCharacter::UseStrainPotion);
+    PlayerInputComponent->BindAction("ItemForge", IE_Pressed, this, &AUnmadeCharacter::ForgeMythicGear);
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
     PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
     PlayerInputComponent->BindAction("Guard", IE_Released, this, &AUnmadeCharacter::StopGuard);
@@ -81,6 +91,99 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAxis("MoveRight", this, &AUnmadeCharacter::MoveRight);
     PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
     PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+}
+
+void AUnmadeCharacter::ReconcileEarnedRewards()
+{
+    if (IsValid(Equipment)) Equipment->ReconcileEarnedMilestones();
+}
+
+void AUnmadeCharacter::ShowInventory()
+{
+    ReconcileEarnedRewards();
+    if (IsValid(Equipment) && GEngine)
+        GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Cyan, Equipment->DescribeInventory());
+}
+
+void AUnmadeCharacter::EquipNextWeapon()
+{
+    if (IsValid(Equipment) && Equipment->EquipNext(UnmadeCore::GearSlot::Weapon))
+        ShowInventory();
+}
+
+void AUnmadeCharacter::EquipNextArmor()
+{
+    if (IsValid(Equipment) && Equipment->EquipNext(UnmadeCore::GearSlot::Armor))
+        ShowInventory();
+}
+
+void AUnmadeCharacter::EquipNextCharm()
+{
+    if (IsValid(Equipment) && Equipment->EquipNext(UnmadeCore::GearSlot::Charm))
+        ShowInventory();
+}
+
+void AUnmadeCharacter::UseHealthPotion()
+{
+    if (!IsValid(Equipment)) return;
+    int32 Restored = 0;
+    const UnmadeCore::ItemId Potions[] = {
+        UnmadeCore::ItemId::HearthSalve, UnmadeCore::ItemId::NightwatchTonic,
+        UnmadeCore::ItemId::RootboundPoultice, UnmadeCore::ItemId::AshOfPossibleLives
+    };
+    for (const auto Id : Potions)
+        if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored))
+        {
+            if (Restored > 0) FractureModel.Recover(Restored / UnmadeCore::FractureModel::RecoveryPerSecond);
+            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
+                TEXT("Healing consumed. Health and any Strain recovery applied."));
+            return;
+        }
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Silver,
+        TEXT("No useful healing consumable in your bag."));
+}
+
+void AUnmadeCharacter::UseStrainPotion()
+{
+    if (!IsValid(Equipment)) return;
+    int32 Restored = 0;
+    const UnmadeCore::ItemId Potions[] = {
+        UnmadeCore::ItemId::StrainVial, UnmadeCore::ItemId::AshOfPossibleLives
+    };
+    for (const auto Id : Potions)
+        if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored))
+        {
+            if (Restored > 0) FractureModel.Recover(Restored / UnmadeCore::FractureModel::RecoveryPerSecond);
+            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
+                TEXT("Stillness restored: Reality Strain diminished."));
+            return;
+        }
+    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Silver,
+        TEXT("No useful Strain elixir remains."));
+}
+
+void AUnmadeCharacter::ForgeMythicGear()
+{
+    if (!GetWorld() || !IsValid(Equipment)) return;
+    bool NearForge = false;
+    for (TActorIterator<AStaticMeshActor> It(GetWorld()); It; ++It)
+    {
+        if (It->ActorHasTag(FName("Bellwold.Workshop")) &&
+            FVector::DistSquared(GetActorLocation(), It->GetActorLocation()) < FMath::Square(550.f))
+        {
+            NearForge = true;
+            break;
+        }
+    }
+    if (!NearForge)
+    {
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow,
+            TEXT("Waybreaker can only be forged at Bellwold's old workshop."));
+        return;
+    }
+    if (!Equipment->ForgeWaybreaker() && GEngine)
+        GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
+            TEXT("The forge requires both village stories, all three villages, two Echo Glass, Bellmetal and Archive Ink."));
 }
 
 void AUnmadeCharacter::ChooseShelter()
@@ -162,6 +265,7 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
     }
 
     ApplyConflictGates();
+    ReconcileEarnedRewards();
     for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
         Hub->RefreshDistrictMood();
     const bool bShelter = Choice == UnmadeCore::ConflictChoice::Shelter;
@@ -209,11 +313,15 @@ void AUnmadeCharacter::ProgressSupplyActivity()
         bCompletedDelivery ? TEXT("SUPPLIES DELIVERED: the shelter remembers your help.")
                            : TEXT("SUPPLIES COLLECTED: bring these provisions to the shelter."));
     if (bCompletedDelivery)
+    {
+        ReconcileEarnedRewards();
         ReportLocalEvent(FName("Player.DeliveredSupplies"), FName("Hub.Shelter"));
+    }
 }
 
 void AUnmadeCharacter::ShowStoryJournal()
 {
+    ReconcileEarnedRewards();
     FString Decision = TEXT("unresolved");
     if (LocalConflict.Choice() == UnmadeCore::ConflictChoice::Shelter)
         Decision = TEXT("community shelter supported");
@@ -292,6 +400,9 @@ void AUnmadeCharacter::AttemptMeleeAttack()
         if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow,
             FString::Printf(TEXT("HIT: %.0f damage, enemy %.0f health."),
                 Before - Target->GetCombat()->GetHealth(), Target->GetCombat()->GetHealth()));
+        if (Target->GetCombat()->IsDefeated() && IsValid(Equipment))
+            Equipment->Claim(Target->GetEnemyStyle() == UnmadeCore::EnemyStyle::Stalker
+                ? UnmadeCore::Achievement::FirstStalker : UnmadeCore::Achievement::FirstWatcher);
         ReportLocalEvent(FName("Player.Fought"), FName("combat.prototype.enemy"));
     }
 }
@@ -378,7 +489,11 @@ void AUnmadeCharacter::Interact()
         {
             for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
             {
-                if (Hub->InspectSite(NearestSite)) return;
+                if (Hub->InspectSite(NearestSite))
+            {
+                ReconcileEarnedRewards();
+                return;
+            }
             }
         }
     }
@@ -407,13 +522,19 @@ void AUnmadeCharacter::Interact()
             bool bCompletedVillageTask = false;
             if (Hub->TryResidentVillageTask(Target->GetStableId(), bCompletedVillageTask) &&
                 bCompletedVillageTask)
+            {
+                ReconcileEarnedRewards();
                 ReportLocalEvent(FName("Player.HelpedVillage"), Target->GetStableId());
+            }
             break;
         }
     }
 
     if (Lexicon && Target->GetStableId() == FName("npc.archivist.001"))
+    {
         Lexicon->RecordEvidence(FName("evidence.archivist"));
+        ReconcileEarnedRewards();
+    }
     UUnmadeLocalDialogueSubsystem* Dialogue = GetGameInstance()
         ? GetGameInstance()->GetSubsystem<UUnmadeLocalDialogueSubsystem>()
         : nullptr;
@@ -461,6 +582,7 @@ void AUnmadeCharacter::DemonstrateAnomaly()
     }
     ApplyFractureVisuals();
     if (Lexicon) Lexicon->RecordEvidence(FName("evidence.glimpse"));
+    ReconcileEarnedRewards();
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
         TEXT("GLIMPSE: another possible version flickers into view (+8 Strain)."));
     ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
@@ -611,6 +733,7 @@ void AUnmadeCharacter::BeginPlay()
     }
     ApplyFractureVisuals();
     ApplyConflictGates();
+    ReconcileEarnedRewards();
 }
 
 void AUnmadeCharacter::Tick(float DeltaSeconds)

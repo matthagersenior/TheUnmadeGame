@@ -12,6 +12,7 @@ class AUnmadeFractureAnchor;
 class UStaticMeshComponent;
 class UUnmadeCombatComponent;
 class UUnmadeLexiconComponent;
+class UUnmadeEquipmentComponent;
 
 /** Foundational third-person pawn. Visual mesh and Enhanced Input data assets are editor work. */
 UCLASS()
@@ -25,6 +26,7 @@ public:
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;
     UUnmadeCombatComponent* GetCombat() const { return Combat; }
+    void ReconcileEarnedRewards();
 
 private:
     UPROPERTY(VisibleAnywhere, Category="Camera")
@@ -41,6 +43,17 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Unmade|Lexicon")
     TObjectPtr<UUnmadeLexiconComponent> Lexicon;
+
+    UPROPERTY(VisibleAnywhere, Category="Unmade|Equipment")
+    TObjectPtr<UUnmadeEquipmentComponent> Equipment;
+
+    void ShowInventory();
+    void EquipNextWeapon();
+    void EquipNextArmor();
+    void EquipNextCharm();
+    void UseHealthPotion();
+    void UseStrainPotion();
+    void ForgeMythicGear();
 
     void ChooseShelter();
     void ChooseResearch();

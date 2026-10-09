@@ -21,6 +21,7 @@ public:
     bool IsFractureExposed(double Now) const;
 
     UUnmadeCombatComponent* GetCombat() const { return Combat; }
+    UnmadeCore::EnemyStyle GetEnemyStyle() const { return Style; }
 
 private:
     UPROPERTY(VisibleAnywhere, Category="Unmade|Combat")
