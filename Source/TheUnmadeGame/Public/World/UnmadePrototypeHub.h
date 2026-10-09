@@ -7,11 +7,13 @@
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeRegionalTaskRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
+#include "World/UnmadeFrontierRealmRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
 class AUnmadeLoreSite;
 class ADirectionalLight;
+class AUnmadeCharacter;
 
 UCLASS()
 class THEUNMADEGAME_API AUnmadePrototypeHub : public AActor
@@ -34,6 +36,12 @@ public:
     bool TryResidentVillageTask(FName ResidentId, bool& bCompleted);
     void TryFactionConversation(FName ResidentId);
     bool ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome);
+    bool TryTravelFrontier(AUnmadeCharacter* Player);
+    bool InspectFrontierClue(AUnmadeCharacter* Player);
+    void TryFrontierConversation(FName ResidentId);
+    bool ResolveNearbyFrontier(int32 Ending);
+    FString GetCurrentRealmName(FVector Position) const;
+    int32 GetFrontierVisitMask() const { return Frontier.Snapshot().visits; }
     int32 FactionStage(UnmadeCore::Faction Id) const { return Chronicle.Stage(Id); }
     UnmadeCore::FactionEnding FactionOutcome(UnmadeCore::Faction Id) const {
         return Chronicle.Ending(Id);
@@ -56,6 +64,7 @@ private:
     UnmadeCore::SettlementVisits VillagesVisited;
     UnmadeCore::RegionalTaskModel RegionalTasks;
     UnmadeCore::FactionChronicle Chronicle;
+    UnmadeCore::FrontierJourney Frontier;
     UnmadeCore::SettlementId LastVisitedVillage = UnmadeCore::SettlementId::None;
     FName LastAmbientSite = NAME_None;
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;
@@ -70,5 +79,6 @@ private:
     void SpawnBlock(FVector Center, FVector Scale, FName Label);
     void SpawnCitizen(const UnmadeCore::ResidentSpec& Resident);
     void BuildVillages();
+    void BuildFrontiers();
     void RestoreCitizens();
 };

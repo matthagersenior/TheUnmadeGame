@@ -57,6 +57,17 @@ public:
     TArray<int32> FactionStages;
     UPROPERTY(SaveGame)
     TArray<int32> FactionEndings;
+    /** New realm footholds: visits, unique clues and two authored local arcs. */
+    UPROPERTY(SaveGame)
+    bool bHasFrontierSnapshot = false;
+    UPROPERTY(SaveGame)
+    int32 VisitedFrontierRealms = 0;
+    UPROPERTY(SaveGame)
+    int32 DiscoveredFrontierClues = 0;
+    UPROPERTY(SaveGame)
+    TArray<int32> FrontierStages;
+    UPROPERTY(SaveGame)
+    TArray<int32> FrontierEndings;
 
     UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;

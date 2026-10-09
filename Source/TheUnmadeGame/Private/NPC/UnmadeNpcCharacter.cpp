@@ -56,12 +56,16 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     case UnmadeCore::NpcAction::InvestigateAnomaly:
     case UnmadeCore::NpcAction::ResearchAnomaly:
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = UnmadeCore::LocalInvestigationTarget(HomeSettlement);
+        Target = bFrontierResident ?
+            UnmadeCore::Vec2{HomeLocation.X+130,HomeLocation.Y+300}
+            : UnmadeCore::LocalInvestigationTarget(HomeSettlement);
         Speed = 80.0;
         break;
     case UnmadeCore::NpcAction::VerifyRumor:
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = UnmadeCore::LocalRumorTarget(HomeSettlement);
+        Target = bFrontierResident ?
+            UnmadeCore::Vec2{HomeLocation.X-130,HomeLocation.Y+150}
+            : UnmadeCore::LocalRumorTarget(HomeSettlement);
         break;
     case UnmadeCore::NpcAction::Intervene:
     case UnmadeCore::NpcAction::ShareKnowledge:
@@ -93,8 +97,12 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     {
         // Routine goals never replace urgent individual reactions to observed events.
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = UnmadeCore::LocalRoutineTarget(
-            HomeSettlement, Role, Phase, {HomeLocation.X, HomeLocation.Y});
+        Target = bFrontierResident ?
+            (Phase == UnmadeCore::DayPhase::Night
+                ? UnmadeCore::Vec2{HomeLocation.X+160,HomeLocation.Y-160}
+                : UnmadeCore::Vec2{HomeLocation.X,HomeLocation.Y})
+            : UnmadeCore::LocalRoutineTarget(
+                HomeSettlement, Role, Phase, {HomeLocation.X, HomeLocation.Y});
         Speed = Role == UnmadeCore::NpcRole::Courier ? 95.0 : 65.0;
         StopRadius = 80.0;
     }
@@ -107,6 +115,14 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         AddActorWorldOffset(Offset, true); // swept graybox collision, no teleporting
         SetActorRotation(Offset.Rotation());
     }
+}
+
+void AUnmadeNpcCharacter::ConfigureFrontier(const UnmadeCore::FrontierResident& Resident)
+{
+    ConfigureIdentity(FName(UTF8_TO_TCHAR(Resident.id)),
+        FString(UTF8_TO_TCHAR(Resident.name)),Resident.role,Resident.temperament,
+        UnmadeCore::SettlementId::Crossings,FString(UTF8_TO_TCHAR(Resident.authoredLine)));
+    bFrontierResident=true; // use independent home-based frontier routines, not Crossings
 }
 
 void AUnmadeNpcCharacter::ConfigureIdentity(FName StableId, const FString& DisplayLabel,
@@ -138,7 +154,8 @@ UnmadeCore::NpcAction AUnmadeNpcCharacter::DecideForPlayer(bool bPlayerNearby) c
             Observation.EventKind == FName("World.ConflictResearch"))
         {
             const bool bShelter = Observation.EventKind == FName("World.ConflictShelter");
-            const int Delta = UnmadeCore::SettlementTrustDelta(HomeSettlement, bShelter, bWitnessed);
+            const int Delta = bFrontierResident ? 0
+                : UnmadeCore::SettlementTrustDelta(HomeSettlement, bShelter, bWitnessed);
             Input.trust += Delta;
             if (Delta < 0) Input.fear -= Delta;
         }
