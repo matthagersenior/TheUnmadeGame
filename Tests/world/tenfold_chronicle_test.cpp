@@ -98,7 +98,7 @@ int main() {
     c.frontierVisits=3;
     assert(advanced.Advance(RiteId::Cartography,RiteAction::Discover,c)
            ==RiteResult::Advanced);
-    // A vow can be broken, but leaves a durable penalty.
+    // A vow can be broken, but demands costly, witnessed restitution.
     auto oath=context(RiteId::Oathbinding);
     TenfoldChronicle vows;
     vows.Advance(RiteId::Oathbinding,RiteAction::Discover,oath);
@@ -107,6 +107,17 @@ int main() {
     assert(vows.BreakOath());
     assert(!vows.BreakOath());
     assert(vows.Snapshot().brokenOaths==1);
+    assert(vows.Invoke(RiteId::Oathbinding,oath).result==RiteResult::BrokenOath);
+    assert(!vows.RedeemOath(oath));
+    assert(vows.RecordDeed(Deed::Protected));
+    assert(vows.RecordDeed(Deed::Discovered));
+    assert(vows.RecordDeed(Deed::Reconciled));
+    assert(vows.RedeemOath(oath));
+    assert(vows.Snapshot().oathRedeemed && vows.Snapshot().brokenOaths==1);
+    auto restoredScar=vows.Snapshot();
+    TenfoldChronicle redeemed;
+    assert(redeemed.Restore(restoredScar));
+    assert(redeemed.Snapshot().oathRedeemed);
     // Borrowing tomorrow cannot be free or perpetual.
     TenfoldChronicle debts;
     auto debt=context(RiteId::TomorrowDebt);

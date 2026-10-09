@@ -159,6 +159,7 @@ struct TenfoldSnapshot {
     std::uint8_t verifiedRoutes=0;
     int debtDueDay=0, exhaustedUntilDay=0, brokenOaths=0;
     bool oathActive=false;
+    bool oathRedeemed=false;
 };
 class TenfoldChronicle final {
 public:
@@ -179,7 +180,8 @@ public:
            (value.verifiedRoutes & ~std::uint8_t{3}) ||
            value.debtDueDay<0 || value.exhaustedUntilDay<0 ||
            value.brokenOaths<0 || value.brokenOaths>1 ||
-           (value.oathActive && value.brokenOaths!=0))return false;
+           (value.oathActive && value.brokenOaths!=0 && !value.oathRedeemed) ||
+           (value.oathRedeemed && value.brokenOaths!=1))return false;
         data_=value;return true;
     }
     int Stage(RiteId id) const noexcept {
@@ -250,7 +252,7 @@ public:
             if(data_.debtDueDay>0){out.result=RiteResult::DebtOutstanding;return out;}
             if(context.day<data_.exhaustedUntilDay){out.result=RiteResult::Exhausted;return out;}
         }
-        if(id==RiteId::Oathbinding && data_.brokenOaths>0) {
+        if(id==RiteId::Oathbinding && data_.brokenOaths>0 && !data_.oathRedeemed) {
             out.result=RiteResult::BrokenOath;return out;
         }
         if(context.now<data_.readyAt[i]){out.result=RiteResult::Cooldown;return out;}
@@ -282,6 +284,16 @@ public:
     bool BreakOath() noexcept {
         if(!data_.oathActive || data_.brokenOaths!=0)return false;
         data_.oathActive=false;++data_.brokenOaths;return true;
+    }
+    // Redemption is difficult but a broken promise can never hard-lock the
+    // entire game. The betrayal remains recorded permanently.
+    bool RedeemOath(const RiteContext& c) noexcept {
+        if(data_.brokenOaths!=1 || data_.oathRedeemed ||
+           (c.factionEndings&1)==0 || !c.bellQuestComplete ||
+           c.verifiedWitnesses<3 || CountDeeds()<3)return false;
+        data_.oathRedeemed=true;
+        data_.oathActive=true;
+        return true;
     }
     bool RecordDeed(Deed deed) noexcept {
         const int i=static_cast<int>(deed);
@@ -323,11 +335,12 @@ private:
         case RiteId::Witnesscraft:return c.verifiedWitnesses>=3;
         case RiteId::BorrowedLives:return c.frontierVisits!=0;
         case RiteId::LegacyForging:return CountDeeds()>=3;
-        case RiteId::LivingRoads:return c.factionEndings!=0 && c.villageVisits==7;
+        case RiteId::LivingRoads:return (c.factionEndings&3)==3 && c.villageVisits==7;
         case RiteId::TomorrowDebt:return data_.debtDueDay==0;
         case RiteId::UnderstandingBosses:return c.bossVictories!=0;
         case RiteId::ParadoxConvergence:return c.hasVeyl && c.factionEndings!=0;
-        case RiteId::Oathbinding:return data_.oathActive && data_.brokenOaths==0;
+        case RiteId::Oathbinding:return data_.oathActive && 
+            (data_.brokenOaths==0 || data_.oathRedeemed);
         case RiteId::Cartography:return data_.verifiedRoutes!=0;
         default:return false;
         }

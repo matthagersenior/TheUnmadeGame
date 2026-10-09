@@ -51,6 +51,7 @@ void UUnmadeTenfoldComponent::BeginPlay()
     State.exhaustedUntilDay=Save->TomorrowDebtExhaustedUntil;
     State.brokenOaths=Save->BrokenOathCount;
     State.oathActive=Save->bOathActive;
+    State.oathRedeemed=Save->bOathRedeemed;
     if(!Chronicle.Restore(State))
     {
         bSaveRejected=true;
@@ -108,6 +109,7 @@ bool UUnmadeTenfoldComponent::Persist(bool bWriteStrain)
     Save->TomorrowDebtExhaustedUntil=State.exhaustedUntilDay;
     Save->BrokenOathCount=State.brokenOaths;
     Save->bOathActive=State.oathActive;
+    Save->bOathRedeemed=State.oathRedeemed;
     Save->bHasTenfoldChronicle=true;
     const auto& Trials=Confluence.Snapshot();
     Save->ConfluenceStages.Reset();
@@ -444,7 +446,8 @@ void UUnmadeTenfoldComponent::InvokeRite()
     if(bSaveRejected || !IsValid(Player) || !GetWorld() || Player->GetCombat()->IsDefeated())return;
     const auto Id=static_cast<UnmadeCore::RiteId>(SelectedRite);
     const auto Context=GatherContext();
-    if(Id==UnmadeCore::RiteId::UnderstandingBosses && !Player->HasNearbyHollowKeeper())
+    if(Id==UnmadeCore::RiteId::UnderstandingBosses &&
+       !Chronicle.IsMastered(Id) && !Player->HasNearbyHollowKeeper())
     {
         ExplainResult(UnmadeCore::RiteResult::WrongLocation);
         return;
@@ -513,6 +516,22 @@ void UUnmadeTenfoldComponent::BreakChosenOath()
 {
     if(bSaveRejected)return;
     const auto Before=Chronicle.Snapshot();
+    if(Chronicle.Snapshot().brokenOaths==1 &&
+       !Chronicle.Snapshot().oathRedeemed)
+    {
+        if(!Chronicle.RedeemOath(GatherContext()))
+        {
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+                TEXT("REDEMPTION: complete Bellwold's relief and faction, earn three distinct deeds and bring three firsthand witnesses."));
+            return;
+        }
+        if(!Persist()){Chronicle.Restore(Before);return;}
+        if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
+            Player->ReportRedeemedOathEvent();
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Green,
+            TEXT("OATH RESTORED: the betrayal is still remembered, but witnesses accept your costly restitution."));
+        return;
+    }
     if(!Chronicle.BreakOath()){ExplainResult(UnmadeCore::RiteResult::BrokenOath);return;}
     if(!Persist()){Chronicle.Restore(Before);return;}
     ActiveArmorBonus=0;

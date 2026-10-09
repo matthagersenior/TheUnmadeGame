@@ -135,6 +135,8 @@ public:
 
     UPROPERTY(SaveGame)
     bool bOathActive=false;
+    UPROPERTY(SaveGame)
+    bool bOathRedeemed=false;
 
     /** Multi-discipline challenge continuity, absent on earlier save slots. */
     UPROPERTY(SaveGame)
