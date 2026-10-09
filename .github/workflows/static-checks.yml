@@ -34,3 +34,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/combat_rules_test.cpp -o /tmp/unmade-combat-test
           /tmp/unmade-combat-test
+      - name: Compile and test offline language discovery
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/lexicon/lexicon_rules_test.cpp -o /tmp/unmade-lexicon-test
+          /tmp/unmade-lexicon-test
