@@ -77,6 +77,11 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("ItemHeal", IE_Pressed, this, &AUnmadeCharacter::UseHealthPotion);
     PlayerInputComponent->BindAction("ItemStrain", IE_Pressed, this, &AUnmadeCharacter::UseStrainPotion);
     PlayerInputComponent->BindAction("ItemForge", IE_Pressed, this, &AUnmadeCharacter::ForgeMythicGear);
+    PlayerInputComponent->BindAction("MarketBuy", IE_Pressed, this, &AUnmadeCharacter::BuyMarketSupplies);
+    PlayerInputComponent->BindAction("MarketSell", IE_Pressed, this, &AUnmadeCharacter::SellMarketSupplies);
+    PlayerInputComponent->BindAction("ProfessionCraft", IE_Pressed, this, &AUnmadeCharacter::CraftLocalRecipe);
+    PlayerInputComponent->BindAction("FactionSolidarity", IE_Pressed, this, &AUnmadeCharacter::CommitSolidarity);
+    PlayerInputComponent->BindAction("FactionTruth", IE_Pressed, this, &AUnmadeCharacter::CommitTruth);
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
     PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
     PlayerInputComponent->BindAction("Guard", IE_Released, this, &AUnmadeCharacter::StopGuard);
@@ -185,6 +190,142 @@ void AUnmadeCharacter::ForgeMythicGear()
     if (!Equipment->ForgeWaybreaker() && GEngine)
         GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
             TEXT("The forge requires both village stories, all three villages, two Echo Glass, Bellmetal and Archive Ink."));
+}
+
+void AUnmadeCharacter::BuyMarketSupplies()
+{
+    if(!IsValid(Equipment) || !GetWorld())return;
+    const FVector P=GetActorLocation();
+    const auto Village=UnmadeCore::SettlementAt(P.X,P.Y);
+    if(Village==UnmadeCore::SettlementId::None)return;
+    bool bMerchantNearby=false;
+    for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+    {
+        if(FVector::DistSquared(P,It->GetActorLocation())>FMath::Square(340.f))continue;
+        const FString Identity=It->GetStableId().ToString();
+        const FTCHARToUTF8 Utf8(*Identity);
+        const auto* Resident=UnmadeCore::FindResident(Utf8.Get());
+        if(Resident && Resident->home==Village &&
+           Resident->role==UnmadeCore::NpcRole::Merchant)
+        {
+            bMerchantNearby=true;
+            break;
+        }
+    }
+    if(!bMerchantNearby)
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+            TEXT("Trade: find a merchant in this village first."));
+        return;
+    }
+    const auto Id=Village==UnmadeCore::SettlementId::Bellwold
+        ? UnmadeCore::ItemId::WildHerbs
+        : Village==UnmadeCore::SettlementId::Paperhaven
+          ? UnmadeCore::ItemId::BlankParchment : UnmadeCore::ItemId::IronScrap;
+    int Trust=0;
+    const auto* Save=Cast<UUnmadePrototypeSave>(
+        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+    if(Save && Save->bHasFactionChronicle && Save->FactionEndings.Num()==3)
+    {
+        const int Index=Village==UnmadeCore::SettlementId::Bellwold?0
+            : Village==UnmadeCore::SettlementId::Paperhaven?1:2;
+        Trust=Save->FactionEndings[Index]==1?40:Save->FactionEndings[Index]==2?25:0;
+    }
+    if(Equipment->Buy(Id,Village,Trust))
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Green,
+            TEXT("Local materials purchased. Press I to view remaining marks."));
+    }
+    else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+        TEXT("Trade failed: insufficient marks, no bag space, or unavailable stock."));
+}
+
+void AUnmadeCharacter::SellMarketSupplies()
+{
+    if(!IsValid(Equipment) || !GetWorld())return;
+    const FVector P=GetActorLocation();
+    const auto Village=UnmadeCore::SettlementAt(P.X,P.Y);
+    if(Village==UnmadeCore::SettlementId::None)return;
+    bool bMerchantNearby=false;
+    for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+    {
+        if(FVector::DistSquared(P,It->GetActorLocation())>FMath::Square(340.f))continue;
+        const FString Identity=It->GetStableId().ToString();
+        const FTCHARToUTF8 Utf8(*Identity);
+        const auto* Resident=UnmadeCore::FindResident(Utf8.Get());
+        if(Resident && Resident->home==Village &&
+           Resident->role==UnmadeCore::NpcRole::Merchant)
+        {
+            bMerchantNearby=true;
+            break;
+        }
+    }
+    if(!bMerchantNearby)return;
+    const auto Id=Village==UnmadeCore::SettlementId::Bellwold
+        ? UnmadeCore::ItemId::WildHerbs
+        : Village==UnmadeCore::SettlementId::Paperhaven
+          ? UnmadeCore::ItemId::BlankParchment : UnmadeCore::ItemId::IronScrap;
+    if(!Equipment->Sell(Id,Village) && GEngine)
+        GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+            TEXT("No tradable surplus of this village's commodity."));
+}
+
+void AUnmadeCharacter::CraftLocalRecipe()
+{
+    if(!IsValid(Equipment) || !GetWorld())return;
+    const FVector P=GetActorLocation();
+    const auto Village=UnmadeCore::SettlementAt(P.X,P.Y);
+    const FName Station=Village==UnmadeCore::SettlementId::Bellwold
+        ? FName("Bellwold.Workshop") :
+        Village==UnmadeCore::SettlementId::Paperhaven
+        ? FName("Paperhaven.Scriptorium") : NAME_None;
+    if(Station.IsNone())return;
+    bool bNearStation=false;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        if(It->ActorHasTag(Station) &&
+           FVector::DistSquared(P,It->GetActorLocation())<FMath::Square(650.f))
+        {
+            bNearStation=true;
+            break;
+        }
+    }
+    if(!bNearStation)
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+            TEXT("Find the village's workshop or scriptorium to practice a profession."));
+        return;
+    }
+    if(!Equipment->CraftAt(Village) && GEngine)
+        GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+            TEXT("No known recipe can be made here with your current skill and materials."));
+}
+
+void AUnmadeCharacter::CommitSolidarity()
+{
+    CommitFaction(UnmadeCore::FactionEnding::Solidarity);
+}
+void AUnmadeCharacter::CommitTruth()
+{
+    CommitFaction(UnmadeCore::FactionEnding::Truth);
+}
+void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
+{
+    if(!GetWorld())return;
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+    {
+        if(!Hub->ResolveNearbyFaction(Ending))
+        {
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
+                TEXT("Talk to the final faction representative, then choose this ending nearby."));
+        }
+        else
+        {
+            ReconcileEarnedRewards();
+            ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
+        }
+        break;
+    }
 }
 
 void AUnmadeCharacter::ChooseShelter()
@@ -342,6 +483,7 @@ void AUnmadeCharacter::ShowStoryJournal()
     FString VillageName = TEXT("unknown");
     int32 BellwoldQuest = 0;
     int32 PaperhavenQuest = 0;
+    FString FactionSummary;
     if (GetWorld())
     {
         for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
@@ -354,6 +496,10 @@ void AUnmadeCharacter::ShowStoryJournal()
             VillagesSeen = Hub->GetVisitedVillageCount();
             BellwoldQuest = static_cast<int32>(Hub->GetRegionalTask(UnmadeCore::SettlementId::Bellwold));
             PaperhavenQuest = static_cast<int32>(Hub->GetRegionalTask(UnmadeCore::SettlementId::Paperhaven));
+            FactionSummary=FString::Printf(TEXT("Faction chapters: Refuge %d/3, Archive %d/3, Roadbound %d/3"),
+                Hub->FactionStage(UnmadeCore::Faction::Refuge),
+                Hub->FactionStage(UnmadeCore::Faction::Archive),
+                Hub->FactionStage(UnmadeCore::Faction::Roadbound));
             break;
         }
     }
@@ -361,6 +507,8 @@ void AUnmadeCharacter::ShowStoryJournal()
         FString::Printf(TEXT("JOURNAL | %s | %s | Villages %d/3, landmarks %d/6 | Bellwold lanterns %d/2 | Paperhaven testimony %d/2 | Dispute: %s | Supplies: %s | VEYL clues: %d/2 | Strain: %.0f/100"),
             *WorldTime, *VillageName, VillagesSeen, SitesSeen,
             BellwoldQuest, PaperhavenQuest, *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
+    if(GEngine && !FactionSummary.IsEmpty())
+        GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,FactionSummary);
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
@@ -542,6 +690,7 @@ void AUnmadeCharacter::Interact()
                 ReconcileEarnedRewards();
                 ReportLocalEvent(FName("Player.HelpedVillage"), Target->GetStableId());
             }
+            Hub->TryFactionConversation(Target->GetStableId());
             break;
         }
     }

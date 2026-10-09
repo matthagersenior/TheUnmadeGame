@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "Fracture/UnmadeFractureRules.h"
 #include "Story/UnmadeConflictRules.h"
+#include "World/UnmadeFactionChronicleRules.h"
 #include "UnmadeCharacter.generated.h"
 
 class UCameraComponent;
@@ -54,6 +55,12 @@ private:
     void UseHealthPotion();
     void UseStrainPotion();
     void ForgeMythicGear();
+    void BuyMarketSupplies();
+    void SellMarketSupplies();
+    void CraftLocalRecipe();
+    void CommitSolidarity();
+    void CommitTruth();
+    void CommitFaction(UnmadeCore::FactionEnding Ending);
 
     void ChooseShelter();
     void ChooseResearch();
