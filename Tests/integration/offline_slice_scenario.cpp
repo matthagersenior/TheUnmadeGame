@@ -5,6 +5,8 @@
 #include "Lexicon/UnmadeLexiconRules.h"
 #include "Story/UnmadeConflictRules.h"
 #include "World/UnmadeLivingWorldRules.h"
+#include "World/UnmadeSettlementRegistry.h"
+#include "World/UnmadeRegionalTaskRules.h"
 
 #include <cassert>
 #include <iostream>
@@ -95,6 +97,38 @@ int main() {
     assert(restoredPlaces.Restore(places.Snapshot()) && restoredPlaces.Count() == 2);
     assert(RoutineTarget(NpcRole::Merchant, DayPhase::Night).y !=
            RoutineTarget(NpcRole::Merchant, DayPhase::Day).y);
+
+    // Multi-settlement regression: real separate villages, local policies, story state.
+    assert(Settlements.size() == 3 && Residents.size() == 48);
+    assert(SettlementAt(18000,0) == SettlementId::Paperhaven);
+    assert(SettlementAt(-18000,0) == SettlementId::Bellwold);
+    assert(SettlementAt(0,0) == SettlementId::Crossings);
+    assert(SettlementAt(9000,0) == SettlementId::None);
+    const ResidentSpec* courier = FindResident("npc.bellwold.courier.001");
+    assert(courier && courier->home == SettlementId::Bellwold);
+    const Vec2 courierHome = ResidentWorldPosition(*courier);
+    const Vec2 courierNight = LocalRoutineTarget(
+        courier->home, courier->role, DayPhase::Night, courierHome);
+    assert(SettlementAt(courierNight.x,courierNight.y)==SettlementId::Bellwold);
+    assert(SettlementTrustDelta(SettlementId::Bellwold,true,true)>0);
+    assert(SettlementTrustDelta(SettlementId::Paperhaven,true,true)<0);
+    SettlementVisits villageVisits;
+    assert(villageVisits.Visit(SettlementId::Crossings));
+    assert(villageVisits.Visit(SettlementId::Bellwold));
+    assert(villageVisits.Visit(SettlementId::Paperhaven));
+    assert(villageVisits.Count()==3);
+    RegionalTaskModel tasks;
+    assert(tasks.Converse(SettlementId::Bellwold,"npc.bellwold.matron.001")==TaskResult::NoChange);
+    assert(tasks.Converse(SettlementId::Bellwold,"npc.bellwold.lamplighter.001")==TaskResult::Advanced);
+    assert(tasks.Converse(SettlementId::Bellwold,"npc.bellwold.matron.001")==TaskResult::Completed);
+    assert(tasks.Converse(SettlementId::Paperhaven,"npc.paperhaven.scribe.001")==TaskResult::Advanced);
+    assert(tasks.Converse(SettlementId::Paperhaven,"npc.paperhaven.registrar.001")==TaskResult::Completed);
+    RegionalTaskModel loadedTasks;
+    assert(loadedTasks.Restore(tasks.Snapshot()));
+    assert(loadedTasks.Progress(SettlementId::Bellwold)==TaskProgress::Completed);
+    assert(loadedTasks.Progress(SettlementId::Paperhaven)==TaskProgress::Completed);
+    SettlementVisits loadedVillages;
+    assert(loadedVillages.Restore(villageVisits.Snapshot()) && loadedVillages.Count()==3);
 
     // Returning to the region retains both authored outcomes and clues.
     FractureModel loadedFracture("region.prototype.hub", {"variant.open","variant.sealed"});
