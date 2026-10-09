@@ -89,6 +89,23 @@ int main() {
         evidence.verifiedWitnesses=2;
         assert(model.Invoke(ritual,evidence).result==RiteResult::Applied);
     }
+    // Finishing a quest changes subsequent power behavior according to its
+    // consequential choice; this is not cosmetic dialogue.
+    for(int choice=1;choice<=2;++choice) {
+        TenfoldChronicle history;
+        auto c=context(RiteId::UnwriteLaw);
+        assert(history.Advance(RiteId::UnwriteLaw,RiteAction::Discover,c)==RiteResult::Advanced);
+        assert(history.Advance(RiteId::UnwriteLaw,RiteAction::Testify,c)==RiteResult::Advanced);
+        assert(history.Invoke(RiteId::UnwriteLaw,c).result==RiteResult::Applied);
+        assert(history.Advance(RiteId::UnwriteLaw,RiteAction::Trial,c)==RiteResult::Advanced);
+        assert(history.Advance(RiteId::UnwriteLaw,RiteAction::Decide,c,choice)==RiteResult::Advanced);
+        assert(history.Advance(RiteId::UnwriteLaw,RiteAction::Master,c)==RiteResult::Completed);
+        c.now+=400;
+        const auto changed=history.Invoke(RiteId::UnwriteLaw,c);
+        assert(changed.result==RiteResult::Applied);
+        assert(changed.cost==(choice==1?16:18));
+        assert(changed.duration==(choice==2?19.0:12.0));
+    }
     // Learning is gated by *actual* world evidence, not model text.
     TenfoldChronicle advanced;
     auto c=context(RiteId::Cartography);

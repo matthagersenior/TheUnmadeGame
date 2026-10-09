@@ -474,7 +474,7 @@ void UUnmadeTenfoldComponent::DecideRite(int32 Choice)
     if(Result!=UnmadeCore::RiteResult::Advanced){ExplainResult(Result);return;}
     if(!Persist()){Chronicle.Restore(Before);return;}
     if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
-        Player->ReportRiteWitnessEvent();
+        Player->ReportRiteChoiceEvent(Choice);
     ShowRite();
 }
 void UUnmadeTenfoldComponent::DecideSolidarity(){DecideRite(1);}
@@ -539,7 +539,11 @@ void UUnmadeTenfoldComponent::InvokeRite()
             ? (SelectedLife==0?Power.impact:0)
             : Id==UnmadeCore::RiteId::LegacyForging ||
               Id==UnmadeCore::RiteId::TomorrowDebt ? Power.impact : 0;
-        ActiveArmorBonus=Id==UnmadeCore::RiteId::Oathbinding?Power.impact:
+        const bool bTruthOath=Id==UnmadeCore::RiteId::Oathbinding &&
+            Chronicle.Choice(Id)==2;
+        if(bTruthOath) ActiveAttackBonus=Power.impact;
+        ActiveArmorBonus=Id==UnmadeCore::RiteId::Oathbinding && !bTruthOath
+            ? Power.impact:
             Id==UnmadeCore::RiteId::BorrowedLives && SelectedLife==2
                 ? Power.impact:0;
         BonusExpiresAt=Context.now+Power.duration;

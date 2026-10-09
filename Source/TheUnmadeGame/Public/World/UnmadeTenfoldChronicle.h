@@ -246,7 +246,11 @@ public:
             out.result=RiteResult::NeedsEvidence;
             return out;
         }
-        if(context.strain>100.0-spec.strainCost){
+        const bool bMastered=data_.stage[i]==5;
+        const int cost=spec.strainCost -
+            (bMastered && data_.choice[i]==1 &&
+             (id==RiteId::UnwriteLaw || id==RiteId::TomorrowDebt) ? 2:0);
+        if(context.strain>100.0-cost){
             out.result=RiteResult::InsufficientStability;return out;
         }
         if(id==RiteId::TomorrowDebt) {
@@ -261,7 +265,11 @@ public:
         if(id==RiteId::BorrowedLives && (context.selectedLife<0 || context.selectedLife>2))return out;
         // Different effects and strengths; no generic "press once, win" action.
         out.result=RiteResult::Applied;
-        out.cost=spec.strainCost;out.duration=spec.duration;
+        out.cost=cost;
+        out.duration=spec.duration+
+            (bMastered && data_.choice[i]==2 &&
+             (id==RiteId::UnwriteLaw || id==RiteId::TomorrowDebt ||
+              id==RiteId::ParadoxConvergence) ? 7.0:0.0);
         switch(id) {
         case RiteId::UnwriteLaw: out.impact=context.selectedLaw+1;break;
         case RiteId::Witnesscraft:out.impact=context.verifiedWitnesses;break;
