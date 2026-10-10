@@ -54,7 +54,7 @@ int main(){
                                      Realm::HundredUnlived,Realm::FirstAbsence});
     assert(EvaluateUnansweredRoad(alternate).bossAccessible);
     assert(EvaluateUnansweredRoad(With(false,{Realm::HearthBeneath})).act==
-           RoadAct::MissingWorld); // normalized real opening still needed
+           RoadAct::Opening); // pure rules reject fabricated opening evidence
     assert(EvaluateUnansweredRoad(With(false,{},1)).act==RoadAct::ConfrontTheAnswer);
     assert(EvaluateUnansweredRoad(With(false,{},2)).bossAccessible);
     assert(EvaluateUnansweredRoad(With(false,{},3)).act==RoadAct::LivingAfterward);
