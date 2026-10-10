@@ -156,9 +156,12 @@ public:
         if(act!=FinalAct::Veil&&act!=FinalAct::Unmasked&&act!=FinalAct::EchoAwake)
             return {};
         if(distanceCm>2200){armed_=false;return {FinalMove::Disengage,FinalAttack::Bell,0,0,""};}
-        const int style=(sequence_+memorySeed+
-            (act==FinalAct::Unmasked?1:act==FinalAct::EchoAwake?2:0)+
-            (variant==Morning::Many?1:0))%4;
+        const int style=act==FinalAct::EchoAwake
+            ? (variant==Morning::Anchor
+                ? ((sequence_+memorySeed)%2)*2 // only Bell / Names: oath echoes
+                : 1+((sequence_+memorySeed)%2)*2) // Horizon / Counterfactual
+            : (sequence_+memorySeed+
+               (act==FinalAct::Unmasked?1:0))%4;
         const auto attack=static_cast<FinalAttack>(style);
         const double range=attack==FinalAttack::Horizon?700:
                            attack==FinalAttack::Counterfactual?625:500;
@@ -181,8 +184,9 @@ public:
         locked_=attack;lockedRange_=range;
         // Each act is visually different, but none hides an instant new input
         // mapping or a zero-warning, unavoidable strike.
-        warnDuration_=act==FinalAct::EchoAwake?2.1:
-                      act==FinalAct::Unmasked?1.85:2.5;
+        warnDuration_=act==FinalAct::EchoAwake
+            ? (variant==Morning::Anchor?2.8:1.95)
+            : (act==FinalAct::Unmasked?1.85:2.5);
         warnUntil_=now+warnDuration_;armed_=true;
         return {FinalMove::Telegraph,locked_,0,warnDuration_,
                 FinalWarnings[static_cast<int>(locked_)]};
