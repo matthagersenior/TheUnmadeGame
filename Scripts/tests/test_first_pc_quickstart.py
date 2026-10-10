@@ -72,6 +72,8 @@ class PcProductionQuickstart(unittest.TestCase):
         self.assertIn('get_editor_property("row_struct")',body)
         self.assertIn("save_loaded_asset(asset)",body)
         self.assertIn("STAGER.apply_in_editor(stage)",body)
+        self.assertIn("LIVED.apply_in_editor(lived)",body)
+        self.assertIn("lived_staging",body)
         self.assertIn("UNMADE_EDITOR_RECEIPT",body)
 
 if __name__=="__main__":
