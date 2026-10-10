@@ -115,3 +115,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/frontier_hazard_test.cpp -o /tmp/unmade-frontier-hazards
           /tmp/unmade-frontier-hazards
+
+      - name: Test offline character identity, profile validation and snapshots
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/player/character_identity_test.cpp -o /tmp/unmade-identity
+          /tmp/unmade-identity
