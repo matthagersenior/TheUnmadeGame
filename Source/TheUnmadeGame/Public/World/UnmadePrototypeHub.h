@@ -5,6 +5,7 @@
 #include "NPC/UnmadeNpcDecisionRules.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
 #include "World/UnmadeLivingWorldRules.h"
+#include "World/UnmadeWitnessEchoRules.h"
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeRegionalTaskRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
@@ -47,6 +48,8 @@ public:
     int32 GetVisitedVillageCount() const { return VillagesVisited.Count(); }
     FString GetCurrentVillageName() const;
     bool InspectSite(AUnmadeLoreSite* Site);
+    /** Source-authored optional physical callback observations, visible to the journal. */
+    FString GetWitnessEchoJournal() const;
     void RefreshDistrictMood();
     /** Rebuild public village state from already-saved choices; no extra save flags. */
     void RefreshCommunityConsequences();
@@ -134,6 +137,8 @@ private:
     UnmadeCore::SettlementVisits VillagesVisited;
     UnmadeCore::RegionalTaskModel RegionalTasks;
     UnmadeCore::ResidentContinuity ResidentRelationships;
+    UnmadeCore::WitnessEchoLedger WitnessEchoes;
+    bool bWitnessEchoRejected=false;
     bool bResidentContinuityRejected=false;
     UnmadeCore::FactionChronicle Chronicle;
     UnmadeCore::FrontierJourney Frontier;
