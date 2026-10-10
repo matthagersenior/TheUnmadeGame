@@ -264,7 +264,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
         // Only the named person who actually received the carried packet gets
         // delivery knowledge; other residents need witnessed local testimony.
-        CharacterLine+=CachedHub->GetWitnessDispatchRecipientLine(NpcId);
+        const FString PhysicalReceipt=CachedHub->GetWitnessDispatchRecipientLine(NpcId);
+        if(!PhysicalReceipt.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=PhysicalReceipt;
+        }
     }
     const auto Phase = CachedHub.IsValid()
         ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
