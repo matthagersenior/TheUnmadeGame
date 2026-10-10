@@ -175,7 +175,7 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Updated primary Volume X Markdown canon, living continuity, native C++ regression and source wiring checks. Original illustrated complete edition is still a dated asset, not falsely marked republished. UE compile/PIE and actual embodied content still pending.
 
 
-## 2026-10-10 — Living Evidence milestone (Volume X Chapter 18)
+## 2026-10-10 — The Living Evidence milestone (Volume X Chapter 18)
 
 - Added firsthand-only, source-attributed evidence notebook API with F9 player activation and a BlueprintPure readout for future UMG. Three established physical clues retain stable IDs; the journal never prints an unvisited secret.
 - Distinct sheltered/public Witness Braid events are witnessed only by physically nearby residents with clear sight. Existing local one-hop social transfer marks later listeners as *rumor*, preserves the named origin and cannot promote gossip into observation. Per-person fear/trust and context-specific authored lines change only when memory has the source.
