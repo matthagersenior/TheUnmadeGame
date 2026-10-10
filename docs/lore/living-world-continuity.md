@@ -115,3 +115,5 @@ Entering a previously settled frontier must not turn into a permanent death trap
 The graybox source now connects the telegraphed 12-second frontier pulse to world actors (a non-colliding visible warning surface), proximity/danger checks, single-damage-per-pulse combat, guard mitigation, and checkpoint recovery after player defeat. Pulses stop after mechanism preparation. Native tests exist, but editor compilation, performance, VFX, safe spawning and controller comfort remain unverified.
 
 The PC handoff is specified as a repeatable preflight → native Unreal Editor build → actual automation sequence that refuses failures, produces attempt logs, and never provisions a paid machine. Passing GitHub C++17 tests does **not** mean this handoff succeeds or that authored levels and gameplay cinematics are complete.
+
+An engine automation test `Unmade.World.FrontierHazardAndCheckpoint` mirrors the new native hazard/guard/revival rules. It is source-prepared for Unreal, **not executed** without an engine host.
