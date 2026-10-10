@@ -73,6 +73,21 @@ int main(){
             assert(battle.Advance(5.2,120,false,phase,sig,Morning::Anchor).move==FinalMove::Still);
         }
     }
+    // Returned boss uses an exclusive mechanic family in each saved reality,
+    // rather than the same fight with a different title screen.
+    for(int memory=0;memory<6;++memory){
+        FinalBattleRhythm held,many;
+        const auto A=held.Advance(20,100,false,FinalAct::EchoAwake,
+                                  memory,Morning::Anchor);
+        const auto B=many.Advance(20,100,false,FinalAct::EchoAwake,
+                                  memory,Morning::Many);
+        assert(A.attack==FinalAttack::Bell||A.attack==FinalAttack::Names);
+        assert(B.attack==FinalAttack::Horizon||
+               B.attack==FinalAttack::Counterfactual);
+        assert(A.attack!=B.attack);
+        assert(A.warningSeconds==2.8);
+        assert(B.warningSeconds==1.95);
+    }
     FinalBattleRhythm away;
     assert(away.Advance(2,3000,false,FinalAct::Veil,0,Morning::Unchosen).move==FinalMove::Disengage);
     assert(away.Advance(std::numeric_limits<double>::quiet_NaN(),100,false,FinalAct::Veil,0,Morning::Unchosen).move==FinalMove::Still);
