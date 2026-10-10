@@ -32,6 +32,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RestoreLivingWorld();
     RefreshCommunityConsequences();
     RefreshAfterlightWorld();
+    RefreshRealmAftermathWorld();
     RefreshRiteWorldFromSave();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
@@ -62,6 +63,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::FactionChronicle RestoredChronicle;
     UnmadeCore::FrontierJourney RestoredFrontier;
     UnmadeCore::BellwoldAfterlight RestoredAfterlight;
+    UnmadeCore::RealmAftermathChronicle RestoredRealmAftermath;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -118,6 +120,31 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         UE_LOG(LogTemp,Error,TEXT("Bellwold Afterlight save rejected; old state preserved"));
         return;
     }
+    if(Save->bHasRealmAftermathSnapshot)
+    {
+        if(Save->RealmAftermathStages.Num()!=9 || Save->RealmAftermathPrepared.Num()!=9 ||
+           Save->RealmAftermathApproaches.Num()!=9 || Save->RealmAftermathEndings.Num()!=9)
+        {
+            bRealmAftermathSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Realm aftermath arrays invalid; all previous progress protected"));
+            return;
+        }
+        UnmadeCore::RealmAftermathSnapshot State;
+        for(int32 i=0;i<9;++i)
+        {
+            State.stage[i]=Save->RealmAftermathStages[i];
+            State.prepared[i]=Save->RealmAftermathPrepared[i];
+            State.approach[i]=Save->RealmAftermathApproaches[i];
+            State.ending[i]=Save->RealmAftermathEndings[i];
+        }
+        if(!RestoredRealmAftermath.Restore(State))
+        {
+            bRealmAftermathSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Realm aftermath invalid progression; save writes disabled"));
+            return;
+        }
+    }
+    RealmAftermath=RestoredRealmAftermath;
     Afterlight=RestoredAfterlight;
     Frontier=RestoredFrontier;
     Chronicle=RestoredChronicle;
@@ -129,7 +156,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot()
 {
-    if(bAfterlightSaveRejected)return false;
+    if(bAfterlightSaveRejected || bRealmAftermathSaveRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -164,6 +191,19 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->BellwoldAfterlightStage=AfterlightState.stage;
     Save->BellwoldAfterlightApproach=AfterlightState.approach;
     Save->BellwoldAfterlightOutcome=AfterlightState.outcome;
+    const auto AftermathState=RealmAftermath.Snapshot();
+    Save->bHasRealmAftermathSnapshot=true;
+    Save->RealmAftermathStages.Reset();
+    Save->RealmAftermathPrepared.Reset();
+    Save->RealmAftermathApproaches.Reset();
+    Save->RealmAftermathEndings.Reset();
+    for(int32 i=0;i<9;++i)
+    {
+        Save->RealmAftermathStages.Add(AftermathState.stage[i]);
+        Save->RealmAftermathPrepared.Add(AftermathState.prepared[i]);
+        Save->RealmAftermathApproaches.Add(AftermathState.approach[i]);
+        Save->RealmAftermathEndings.Add(AftermathState.ending[i]);
+    }
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
@@ -423,6 +463,209 @@ bool AUnmadePrototypeHub::ResolveNearbyFrontier(int32 Ending)
         }
     }
     return false;
+}
+
+bool AUnmadePrototypeHub::InspectRealmAftermathSite(
+    AUnmadeCharacter* Player,double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player) || !GetWorld() || bRealmAftermathSaveRejected)return false;
+    AStaticMeshActor* Nearest=nullptr;
+    UnmadeCore::Realm At=UnmadeCore::Realm::Count;
+    bool bMechanism=false;
+    int32 Approach=0;
+    double BestDistSq=FMath::Min(FMath::Square(310.0),CompetingNpcDistanceSq);
+    // Only two created destinations have physical actors; future realm IDs
+    // are narrative contracts and must not be triggered through worldless UI.
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        const double Dist=FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation());
+        if(Dist>=BestDistSq)continue;
+        for(int32 i=1;i<=2;++i)
+        {
+            const auto& Spec=UnmadeCore::RealmAftermathSpecs[i];
+            const bool Mechanism=It->ActorHasTag(FName(UTF8_TO_TCHAR(Spec.mechanismSite)));
+            const bool Care=It->ActorHasTag(FName(UTF8_TO_TCHAR(Spec.evidenceForCare)));
+            const bool Truth=It->ActorHasTag(FName(UTF8_TO_TCHAR(Spec.evidenceForTruth)));
+            if(!Mechanism && !Care && !Truth)continue;
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeRealmAftermathSight),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,50),
+                It->GetActorLocation()+FVector(0,0,50),ECC_Visibility,Sight))continue;
+            Nearest=*It;
+            At=Spec.realm;
+            bMechanism=Mechanism;
+            Approach=Care?1:Truth?2:0;
+            BestDistSq=Dist;
+            break;
+        }
+    }
+    if(!Nearest || At==UnmadeCore::Realm::Count)return false;
+    const auto& Spec=UnmadeCore::RealmAftermathSpecs[static_cast<int>(At)];
+    const int32 Stage=RealmAftermath.Stage(At);
+    if(Stage==0 || Stage==4)
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
+            Stage==0?TEXT("RETURN STORY LOCKED: resolve the local harbor/hearth accord and talk to its warden.")
+                    :FString(UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(At))));
+        return true;
+    }
+    const auto Before=RealmAftermath.Snapshot();
+    const auto Event=bMechanism
+        ?RealmAftermath.Prepare(At,Spec.mechanismSite)
+        :RealmAftermath.Inspect(At,Approach,Approach==1?Spec.evidenceForCare:Spec.evidenceForTruth);
+    if(Event==UnmadeCore::RealmAftermathResult::NeedMechanism)
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+            TEXT("The flood/heat barrier is still active. Find its physical control first."));
+        return true;
+    }
+    if(Event!=UnmadeCore::RealmAftermathResult::Prepared &&
+       Event!=UnmadeCore::RealmAftermathResult::EvidenceFound)return true;
+    if(!WriteWorldSnapshot())
+    {
+        RealmAftermath.Restore(Before);
+        return true; // do not claim world change when the save transaction fails
+    }
+    RefreshRealmAftermathWorld();
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Cyan,
+        Event==UnmadeCore::RealmAftermathResult::Prepared
+        ?TEXT("CONTROL OPERATED: the physical barrier yields. Follow a route to the evidence.")
+        :Approach==1
+        ?TEXT("CARE EVIDENCE: seek the community's keeper of rain or warmth for testimony.")
+        :TEXT("PUBLIC TRUTH: seek the navigator or hearth reader for testimony."));
+    return true;
+}
+
+bool AUnmadePrototypeHub::TryRealmAftermathConversation(FName ResidentId)
+{
+    if(ResidentId.IsNone() || bRealmAftermathSaveRejected)return false;
+    const FString Id=ResidentId.ToString();
+    const FTCHARToUTF8 Utf8(*Id);
+    const auto* Resident=UnmadeCore::FindFrontierResident(Utf8.Get());
+    if(!Resident)return false;
+    const auto Realm=Resident->home;
+    const int32 Stage=RealmAftermath.Stage(Realm);
+    if(Stage!=0 && Stage!=2)return false;
+    const auto Before=RealmAftermath.Snapshot();
+    const int32 idx=UnmadeCore::FrontierIndex(Realm);
+    const bool bVisited=idx>=0 && (Frontier.Snapshot().visits&(1<<idx))!=0;
+    const auto Event=Stage==0
+        ?RealmAftermath.Begin(Realm,Frontier.IsResolved(Realm),bVisited,Utf8.Get())
+        :RealmAftermath.Testify(Realm,Utf8.Get());
+    if(Event!=UnmadeCore::RealmAftermathResult::Started &&
+       Event!=UnmadeCore::RealmAftermathResult::Witnessed)return false;
+    if(!WriteWorldSnapshot())
+    {
+        RealmAftermath.Restore(Before);
+        return false;
+    }
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+        Event==UnmadeCore::RealmAftermathResult::Started
+        ?TEXT("AFTERSHOCK: find and operate the local sluice or heat vent, then investigate either physical record.")
+        :TEXT("TESTIMONY RECORDED: return to the warden. F7 gives immediate public relief; F8 makes the concealed claim public. Only the evidenced route can be committed."));
+    return true;
+}
+
+bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
+{
+    if(!GetWorld() || bRealmAftermathSaveRejected || (Choice!=1 && Choice!=2))return false;
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return false;
+    for(int32 i=1;i<=2;++i)
+    {
+        const auto& Spec=UnmadeCore::RealmAftermathSpecs[i];
+        if(RealmAftermath.Stage(Spec.realm)!=3)continue;
+        for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+        {
+            if(It->GetStableId()!=FName(UTF8_TO_TCHAR(Spec.initiatingWitness)) ||
+                FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())>
+                    FMath::Square(390.f))continue;
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeRealmDecisionSight),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,50),
+                It->GetActorLocation()+FVector(0,0,50),ECC_Visibility,Sight))continue;
+            const auto Before=RealmAftermath.Snapshot();
+            const auto Result=RealmAftermath.Decide(Spec.realm,Choice);
+            if(Result==UnmadeCore::RealmAftermathResult::WrongChoice)
+            {
+                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+                    TEXT("This commitment needs its own inspected evidence and named witness."));
+                return false;
+            }
+            if(Result!=UnmadeCore::RealmAftermathResult::Resolved)return false;
+            if(!WriteWorldSnapshot())
+            {
+                RealmAftermath.Restore(Before);
+                return false;
+            }
+            RefreshRealmAftermathWorld();
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,
+                FString::Printf(TEXT("THE REALM CHANGED: %s"),
+                    UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(Spec.realm))));
+            return true;
+        }
+    }
+    return false;
+}
+
+void AUnmadePrototypeHub::BuildFrontierAftermath()
+{
+    for(int32 i=1;i<=2;++i)
+    {
+        const auto& Spec=UnmadeCore::RealmAftermathSpecs[i];
+        const auto* Outpost=UnmadeCore::FindFrontier(Spec.realm);
+        if(!Outpost)continue;
+        const bool bRain=Spec.realm==UnmadeCore::Realm::WidowedRain;
+        const FVector Origin(Outpost->centerX,Outpost->centerY,0);
+        SpawnBlock(Origin+FVector(bRain?-100:250,250,100),
+            FVector(.6,.45,1.8),FName(UTF8_TO_TCHAR(Spec.mechanismSite)));
+        SpawnBlock(Origin+FVector(bRain?-500:-450,1290,95),
+            FVector(.7,.6,1.8),FName(UTF8_TO_TCHAR(Spec.evidenceForCare)));
+        SpawnBlock(Origin+FVector(bRain?1200:1000,1290,95),
+            FVector(.7,.6,1.8),FName(UTF8_TO_TCHAR(Spec.evidenceForTruth)));
+        // A broad sealed passage. The player must use the physical control
+        // to remove collision, rather than merely click an invisible quest menu.
+        SpawnBlock(Origin+FVector(0,905,160),FVector(33,.65,3.2),
+            FName(bRain?TEXT("Saltwake.Aftermath.StormBarrier")
+                       :TEXT("Cinderhold.Aftermath.HeatSeal")));
+        const FName CareGate(bRain?TEXT("Saltwake.Aftermath.CareGate")
+                                 :TEXT("Cinderhold.Aftermath.CareGate"));
+        const FName TruthGate(bRain?TEXT("Saltwake.Aftermath.TruthGate")
+                                  :TEXT("Cinderhold.Aftermath.TruthGate"));
+        const FName CareRoute(bRain?TEXT("Saltwake.Aftermath.SafeJetty")
+                                  :TEXT("Cinderhold.Aftermath.PublicKiln"));
+        const FName TruthRoute(bRain?TEXT("Saltwake.Aftermath.OpenTideWalk")
+                                   :TEXT("Cinderhold.Aftermath.UnsealedPassage"));
+        SpawnBlock(Origin+FVector(-500,1740,150),FVector(6,.55,3),CareGate);
+        SpawnBlock(Origin+FVector(1200,1740,150),FVector(6,.55,3),TruthGate);
+        SpawnBlock(Origin+FVector(-500,2180,15),FVector(7,10,.3),CareRoute);
+        SpawnBlock(Origin+FVector(1200,2180,15),FVector(7,10,.3),TruthRoute);
+    }
+}
+
+void AUnmadePrototypeHub::RefreshRealmAftermathWorld()
+{
+    for(int32 i=1;i<=2;++i)
+    {
+        const auto Realm=UnmadeCore::RealmAftermathSpecs[i].realm;
+        const bool bRain=Realm==UnmadeCore::Realm::WidowedRain;
+        const int32 Ending=RealmAftermath.Ending(Realm);
+        SetRiteWorldActorState(FName(bRain?TEXT("Saltwake.Aftermath.StormBarrier")
+                                   :TEXT("Cinderhold.Aftermath.HeatSeal")),
+            !RealmAftermath.IsPrepared(Realm));
+        SetRiteWorldActorState(FName(bRain?TEXT("Saltwake.Aftermath.CareGate")
+                                   :TEXT("Cinderhold.Aftermath.CareGate")),Ending!=1);
+        SetRiteWorldActorState(FName(bRain?TEXT("Saltwake.Aftermath.TruthGate")
+                                   :TEXT("Cinderhold.Aftermath.TruthGate")),Ending!=2);
+        SetRiteWorldActorState(FName(bRain?TEXT("Saltwake.Aftermath.SafeJetty")
+                                   :TEXT("Cinderhold.Aftermath.PublicKiln")),Ending==1);
+        SetRiteWorldActorState(FName(bRain?TEXT("Saltwake.Aftermath.OpenTideWalk")
+                                   :TEXT("Cinderhold.Aftermath.UnsealedPassage")),Ending==2);
+    }
 }
 
 void AUnmadePrototypeHub::BuildBellwoldAfterlight()
@@ -952,6 +1195,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnBlock(FVector(0, 0, -50), FVector(52, 52, 1), FName("Hub.Ground"));
     BuildVillages();
     BuildFrontiers();
+    BuildFrontierAftermath();
     BuildCommunityConsequences();
     BuildBellwoldAfterlight();
     // Ten inscriptions across five communities. Each marker is world-space,
