@@ -108,6 +108,17 @@ void UUnmadeMemoryComponent::RecalculateReactions()
             Trust += bDirect ? 11 : 4;
             Fear += bDirect ? 7 : 2;
         }
+        else if (Entry.EventKind == FName("World.WitnessBraidShelter"))
+        {
+            // Only a personally witnessed or locally delivered account affects
+            // this specific resident; it is NOT remote world reputation.
+            Trust += bDirect ? 8 : 2;
+        }
+        else if (Entry.EventKind == FName("World.WitnessBraidDocket"))
+        {
+            Trust += bDirect ? 3 : 1;
+            Fear += bDirect ? 7 : 2;
+        }
         else if (Entry.EventKind == FName("World.BrokenOath"))
         {
             Trust -= bDirect ? 35 : 10;
