@@ -90,6 +90,14 @@ A game change is **not ready to describe as complete** until it has been reflect
 
 Do not promote future-realm concepts as constructed levels. Do not equate green native C++ source checks with Unreal compilation, balanced bosses, validated hours of campaign play, or a playable build. Every later release should be regenerated from the tracked canon and supplied as a verified artifact; the CI content-contract guard only verifies documentation coverage, not image-generation or visual QA.
 
+## Volume III source expansion — The water gate and the ember vent (October 10, 2026)
+Saltwake's return begins only after Harrow has recorded a final port settlement, then demands opening the physical **Storm Sluice** before either the common cistern or rain ledger can be examined. Thenn witnesses the shared-water route; Sella witnesses the public-price route. The unlocked sluice makes both investigations reachable, while the final resolution controls distinct traversable boardwalks and settlement works. No single evidence click can bypass the mechanism or witness.
+
+Cinderhold's return requires its first hearth accord and the opening of the **Heat Vent**, allowing investigation of the common kiln with Ovenna or the disputed Ember Deed with Tarin. A concluded route changes which communal structures and mountain walks are usable; no NPC acquires magical knowledge of the result. Both realms preserve their player's choices and restored physical geometry. These are Unreal C++ graybox source targets, not engine-tested adventures.
+
+The six later realms each have a named physical mechanism in `UnmadeRealmAftermathRules.h`. Those are contracts for future places, **not** proof their geometry, actors, cities, audio or hazards have been constructed. Later-world production must first create traversable terrain and encounters, then connect mechanism activation, evidence, witnesses, save rollback, local reactions and irreversible consequences. Each realm must pass the same four standards before it can be called playable.
+
 ## Release ledger
 - **Volume I (October 9, 2026):** initial illustrated canon; nine realm atlas, 64 current NPCs, 58 then-authored items, three bosses, ten rites and six confluences.
 - **Volume II (October 10, 2026):** Bellwold's Second Night, two epic items (60 total), living community consequence system, nine distinct proposed aftershock arcs, continuity test and revised illustrated master.
+- **Volume III source pass (October 10, 2026):** physical mechanism gates and two alternative investigation routes for Saltwake and Cinderhold, with persistent geometry, source tests, and authored later-realm mechanism contracts. The illustrated master is pending regeneration and does not yet constitute an updated downloadable edition.
