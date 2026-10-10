@@ -146,6 +146,26 @@ inline constexpr std::array<const char*,4> FinalWarnings={{
     "Your old name is spoken from behind you. The actual strike remains in front; follow the visible mark.",
     "A borrowed history folds inward. Leave its marked line until the counterfactual settles."
 }};
+// Stationary, directional attack footprints. The boss holds its facing once
+// a tell starts, so stepping OUT of the marked area is legitimate counterplay.
+// Forward/right coordinates are boss-local centimeters; no radial auto-hit.
+inline bool FinalStrikeInFootprint(FinalAttack attack,double forwardCm,
+                                  double rightCm)noexcept {
+    if(!std::isfinite(forwardCm)||!std::isfinite(rightCm) ||
+       forwardCm<0)return false;
+    const double side=std::fabs(rightCm);
+    switch(attack){
+    case FinalAttack::Bell:
+        return forwardCm<=520 && side<=370; // wide guarded toll
+    case FinalAttack::Horizon:
+        return forwardCm<=740 && side<=160; // long, thin horizon seam
+    case FinalAttack::Names:
+        return forwardCm<=440 && side<=240; // close single-name thrust
+    case FinalAttack::Counterfactual:
+        return forwardCm<=625 && rightCm>=80 && rightCm<=400; // right strip
+    }
+    return false;
+}
 class FinalBattleRhythm final {
 public:
     void Reset()noexcept {armed_=false;warnUntil_=nextReady_=0;sequence_=0;}
