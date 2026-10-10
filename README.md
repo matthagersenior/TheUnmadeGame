@@ -44,6 +44,10 @@ Six Confluence chambers require mastered ability combinations, a timed dual-cast
 
 See the [Tenfold quest/lore bible](docs/design/2026-10-09-tenfold-rites-quest-bible.md) and [engine QA checklist](docs/qa/tenfold-prototype-qa.md). **No Unreal compilation, animation, visual HUD, full quest production, complete nine-realm world, difficulty benchmark or playtime validation has occurred.** All critical logic works without AI.
 
+## Six later realms: source graybox expansion (October 10)
+
+Drevlach, Orravane, Vathless, Eillun, Tharniv and Auvren now have source-generated destination grounds, six physically different first-visit encounters, a real gap and one of two permanently selected bridges, a second return investigation, three source NPC witnesses apiece, and mutually exclusive civic gates. Travel follows the actual atlas edges and earned attunement; new optional save state restores progression independently. Native tests cover evidence, corruption, travel locks and endings. **This is not a finished level, Unreal-compiled game or full six-realm campaign.** See [six-realm manual acceptance](docs/qa/later-realm-expedition.md).
+
 ## Latest illustrated edition
 Volume IV, **A World Prepared to Respond**, adds the source-aligned hazard/recovery/customization/choice-confirmation chapter to the previous illustrated master. A 52-page Word/PDF and 39-file checksum-verified ZIP were generated as **conversation download artifacts**, not source-controlled game assets, Unreal screenshots or a compiled build. The canonical code/lore remains in this repository.
 

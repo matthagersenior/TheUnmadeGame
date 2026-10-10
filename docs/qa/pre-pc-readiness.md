@@ -18,12 +18,12 @@
 | Bellwold, Paperhaven, Crossings | Three populated graybox settlements and returning Bellwold Afterlight (SOURCE WIRED) | CONTENT MISSING: authored map, quests, menus, ambience |
 | Saltwake and Cinderhold | Distinct frontier story, post-choice paths, timed flood/heat and localized NPC memory (SOURCE WIRED) | ENGINE REQUIRED: collision/traversal and realistic hazard feel |
 | Persistent rewards/economy | 60 named items, finite rewards, professions, receipts and multiple save subsystems (NATIVE TESTED + SOURCE WIRED) | ENGINE REQUIRED: entire cold-save/reload/failed-write acceptance |
-| Nine-realm atlas | Distinct future scripts, witness names, controls, paths and ethical choices (NATIVE TESTED) | CONTENT MISSING: **six realms have no spawned level source at all** |
+| Nine-realm atlas | Distinct future scripts, witness names, controls, paths and ethical choices (NATIVE TESTED) | CONTENT MISSING: six graybox realm chunks are now source-spawned, but they are **not authored or engine-tested levels** |
 | Windows host bootstrap | `Scripts/first_pc_build_and_test.ps1` with preflight, build and automation, per-attempt logs | ENGINE REQUIRED: actually running it on a supported host |
 
 ## Pre-PC backlog (can continue now, not yet complete)
 1. **SOURCE WIRED / NATIVE TESTED:** irreversible F7/F8 previews now require a second same-arc, same-ending press within six seconds. The pending remaining gate is UE controller, UI and save-failure playtesting.
-2. Bring later six realms beyond data-only lore: authored encounter gates, differentiated enemy pressure, material discovery loops and meaningful return-state contracts **before** they can be rendered.
+2. **SOURCE WIRED / ENGINE UNVERIFIED:** six later realm chunks, NPCs, grounded atlas portals, forked trial bridges, and second-chapter civic gates. Next: meaningful differentiated hazard/combat systems, environmental puzzles and substantial authored content.
 3. Improve save transaction integrity across combat health/checkpoints, quests, NPC memory, equipment and worlds; test bad arrays, failed writes and repeated saves.
 4. Author navigation and controller-accessible UI interaction specifications, first-party feedback, item/quest/inventory states, audio cue sheets and localization text independent of a PC.
 5. Create source-verifiable quests and world consequences per realm, not merely names, stat counters or 3D placeholders; validate performance budgets and progression without infinite grinding.
@@ -44,3 +44,8 @@
 5. Author level assets and real creator/HUD/animation/audio in Unreal, run all manual QA, then create the first genuine packaged Windows demo.
 
 **No claim of PC-ready final completion is made while the pre-PC backlog and these engine/art gates remain open.**
+
+## Later realm source milestone (October 10)
+- Six source-spawned world chunks have split walkable floor and actual missing chasms, separate safe entry positions, atlas-connected gates with equipment-derived attunement requirements, three named witnesses per realm and two permanent source-visible route changes per realm.
+- First visit selects and operates a physical trial; revisiting the initiator opens a different aftermath branch requiring another physical mechanism, local evidence, witness testimony and deliberate F7/F8 confirmation.
+- Native C++ tests cover six independent branches, all alternate first routes, corrupt snapshots and atlas progression. No UE compilation or real traversability claim.

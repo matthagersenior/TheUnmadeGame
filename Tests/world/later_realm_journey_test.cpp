@@ -42,6 +42,23 @@ int main() {
     assert(alt.Study(Realm::TidalLedger,1,LaterRealms[0].trialEvidenceA)==LaterResult::EvidenceFound);
     assert(alt.Operate(Realm::TidalLedger,LaterRealms[0].mechanism)==LaterResult::Completed);
     assert(alt.Outcome(Realm::TidalLedger)==1);
+    // Both first-visit route options are separately playable in all six.
+    for(const auto& Spec:LaterRealms) {
+        LaterRealmJourney Alternate;
+        assert(Alternate.Visit(Spec.realm)==LaterResult::Visited);
+        assert(Alternate.Begin(Spec.realm,Spec.initiator)==LaterResult::Started);
+        assert(Alternate.Study(Spec.realm,1,Spec.trialEvidenceA)==LaterResult::EvidenceFound);
+        assert(Alternate.Operate(Spec.realm,Spec.mechanism)==LaterResult::Completed);
+        assert(Alternate.Outcome(Spec.realm)==1);
+        LaterRealmJourney Loaded;
+        assert(Loaded.Restore(Alternate.Snapshot()));
+        assert(Loaded.Outcome(Spec.realm)==1);
+    }
+    assert(PlanRealmRoute(Realm::WidowedRain,Realm::TidalLedger,0).empty());
+    const auto SeaPath=PlanRealmRoute(Realm::WidowedRain,Realm::TidalLedger,1);
+    assert(SeaPath.size()==2 && SeaPath.back()==Realm::TidalLedger);
+    assert(PlanRealmRoute(Realm::ThreefoldReach,Realm::FirstAbsence,0).empty());
+    assert(!PlanRealmRoute(Realm::ThreefoldReach,Realm::FirstAbsence,4).empty());
     // Six later realms must each inherit physical aftershock evidence and witnesses.
     RealmAftermathChronicle aftermath;
     for(int i=3;i<9;++i){

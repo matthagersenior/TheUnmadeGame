@@ -15,6 +15,11 @@ class SixLaterRealmSource(unittest.TestCase):
         self.assertIn("LaterRealms",hub)
         self.assertIn("RealmAftermath.Prepare(",hub)
         self.assertIn("RealmAftermath.Testify(",hub)
+        self.assertIn("GroundSouth",hub)
+        self.assertIn("GroundNorth",hub)
+        self.assertIn("Aftermath.Wall.Middle",hub)
+        self.assertIn("Aftermath.Gate.Care",hub)
+        self.assertIn("Aftermath.Gate.Truth",hub)
     def test_player_and_save(self):
         player=src("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         save=src("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
@@ -25,6 +30,10 @@ class SixLaterRealmSource(unittest.TestCase):
         self.assertIn("InspectLaterRealmSite(",player)
         self.assertIn("TryLaterRealmConversation(",player)
         self.assertIn("ResolveNearbyRealmAftermath(",player)
+        self.assertIn("Realm.centerY-1170",player)
+        self.assertIn("GetAtlasAttunement()",hub)
+        self.assertNotIn("UPROPERTY(SaveGame)\n    UPROPERTY(SaveGame)",
+                         save)
     def test_npc_identity_and_local_reactions(self):
         npc=src("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")
         self.assertIn("ConfigureLaterRealm(",npc)

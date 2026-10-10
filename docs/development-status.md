@@ -268,3 +268,10 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 ## 2026-10-10 illustrated continuity packaging
 - Superseding the Volume III illustrated master, Volume IV was rendered to **52 pages** with prior art retained. The packaged ZIP has 39 files and was verified for corruption plus per-file hashes.
 - These are provided in the ChatGPT conversation as downloadable ZIP/DOCX/PDF. No GitHub release asset or Unreal compiled package is implied.
+
+## 2026-10-10 — six later realms / source-created architecture
+- Added physical graybox island-like chapters for the six late atlas realms with actual terrain gap, forked collidable bridge, civic barrier and exclusive gates. All are source actors, **not .umap/editor-authored levels**.
+- Names, physical control tags and consequences differ per realm. First visits require a local keeper, route-specific evidence and mechanism. The pre-existing nine-realm aftermath chronicle now integrates with the six later regions for a second consequence-driven return visit.
+- Atlas travel uses the authored adjacency graph and earned attunement. Source-backed saved snapshots preserve six realm visits, stages and route choices, while corrupt saves block mutation. Player-safe checkpoint arrival was extended.
+- 18 later-realm NPC actor identities (three per region) are source-configured, but voice performances and authored characters remain not built.
+- Engine runtime still uncompiled; AI-free deterministic C++ source tests and static integration checks are used only as preliminary verification.

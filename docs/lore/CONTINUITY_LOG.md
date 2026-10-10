@@ -41,3 +41,8 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Created six distinct first-visit realm journey rules with protected initial evidence, two physical strategies, control activation, durable route change and old-save compatibility.
 - Added atlas travel scaffolding, per-realm generated landscape blockouts and locally persistent post-arc choices; the game still requires an engine compile/playtest and full art/encounter pass.
 - Repaired duplicate `UPROPERTY(SaveGame)` annotation on the realm aftermath snapshot, an Unreal UHT risk discovered during source review.
+
+## 2026-10-10 — Volume V source milestone: Six Roads Beyond
+- Extended six later realms from future atlas and return-arc data into source-generated physical gap/bridge and civic gate geometry, 18 stable actor identities, earned-atlas travel, first-visit trial decisions and second-visit aftermath evidence/witness/choice paths.
+- A new six-slot optional save snapshot preserves visited, stage and route results without replacing old schema-1 slots. Source checks cover state corruption, rollback and separate realm progress. No Unreal Editor compilation or gameplay performance has been demonstrated.
+- This substantial code milestone requires regenerating the illustrated package as Volume V rather than silently labeling the Volume IV binary current.
