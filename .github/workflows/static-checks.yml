@@ -37,6 +37,12 @@ jobs:
       - name: Enforce ten-volume storyworld, stable cast/cities and unanswered mystery ledger
         run: python Scripts/validate_transmedia_storyworld.py --check
 
+      - name: Validate one-click first PC Unreal production content and guarded Editor plans
+        run: |
+          python Scripts/prepare_unreal_authoring.py --check
+          python Scripts/unreal_editor/first_pc_editor_batch.py
+          python Scripts/unreal_editor/stage_lived_world_manifest.py
+
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits
