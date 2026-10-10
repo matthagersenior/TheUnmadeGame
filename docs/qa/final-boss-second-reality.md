@@ -12,3 +12,6 @@
 10. Run `Unmade.Combat.FinalAnswer` Unreal automation plus full `Unmade` filter. Compile Editor/UHT on supported Windows, test gamepad, colorblind/high-contrast, subtitles, no flicker, stable horizon, skippable cinematics, save migration and full movement.
 
 **Important:** Native C++ source tests verify transitions and warning timing; they do not prove real animation, hitbox geometry, cinematics or performance. The current nine variant monuments are primitive actors and do not constitute nine remade authored levels.
+
+### Extra spatial-action acceptance (same source milestone)
+The four patterns now have different native hit footprints and the actor stops turning during windup: Bell is a wide frontal arc, Horizon a long narrow seam, Names a shorter close frontal thrust, and Counterfactual a one-sided right-hand strip. The optional Held Morning echo uses only Bell/Names; Many Mornings uses only Horizon/Counterfactual. On first PC, inspect line-trace walls and turn rate, test sidesteps against the correct footprint, calibrate any production Niagara/VFX markings to **exact hit geometry**, and ensure no invisible side hit or instant re-aim. The current cube prototype has no final ground decals, animations, directional particles or audio cues; source geometry alone is not an accessible player tell.

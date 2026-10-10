@@ -7,6 +7,20 @@
 #include <string>
 using namespace UnmadeCore;
 int main(){
+    // Real directional dodge geometry: never hit behind the boss or
+    // throughout an infinite radial distance.
+    assert(FinalStrikeInFootprint(FinalAttack::Bell,300,0));
+    assert(!FinalStrikeInFootprint(FinalAttack::Bell,300,390));
+    assert(FinalStrikeInFootprint(FinalAttack::Horizon,720,90));
+    assert(!FinalStrikeInFootprint(FinalAttack::Horizon,720,200));
+    assert(FinalStrikeInFootprint(FinalAttack::Names,430,200));
+    assert(!FinalStrikeInFootprint(FinalAttack::Names,490,0));
+    assert(FinalStrikeInFootprint(FinalAttack::Counterfactual,400,120));
+    assert(!FinalStrikeInFootprint(FinalAttack::Counterfactual,400,-120));
+    assert(!FinalStrikeInFootprint(FinalAttack::Bell,-1,0));
+    assert(!FinalStrikeInFootprint(FinalAttack::Bell,100,
+                    std::numeric_limits<double>::infinity()));
+
     assert(static_cast<int>(Realm::Count)==9);
     for(int i=0;i<9;++i){
         const auto realm=static_cast<Realm>(i);

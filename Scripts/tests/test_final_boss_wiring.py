@@ -25,6 +25,9 @@ class FinalBossContracts(unittest.TestCase):
                       "TryStrikeTarget(", "IsFractureExposed("):
             self.assertIn(token,boss)
         self.assertNotIn("AUnmadeEnemyCharacter::Tick(",boss)
+        self.assertIn("FinalStrikeInFootprint(",boss)
+        self.assertIn("GetActorRightVector()",boss)
+        self.assertIn("Beat.move==UnmadeCore::FinalMove::Still",boss)
     def test_world_after_boss_and_safe_player_restart(self):
         world=src("Source/TheUnmadeGame/Private/World/UnmadeFinalWorld.cpp")
         player=src("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
