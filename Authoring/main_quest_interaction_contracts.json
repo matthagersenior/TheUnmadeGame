@@ -95,8 +95,8 @@
       ],
       "npc_ids": [
         "npc.archivist.001",
-        "npc.bellwold.001",
-        "npc.paperhaven.001"
+        "npc.bellwold.matron.001",
+        "npc.paperhaven.registrar.001"
       ],
       "real_source_tags": {
         "evidence": [
@@ -123,7 +123,7 @@
           "trigger": "local first quest begun by actual relevant NPC",
           "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
           "objective": "Carry supplies through the contested neighborhood and speak to local witnesses",
-          "speaker": "npc.bellwold.001",
+          "speaker": "npc.bellwold.matron.001",
           "line": "I hold a document proving this bell was never made. Your ears aren't evidence, but neither is my paper complete.",
           "evidence_tags": [
             "Reach.Bell.Remembered",
@@ -150,7 +150,7 @@
           "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
           "interaction": "two deliberate matching confirmations; physical branch and collision must change",
           "objective": "Preserve public shelter access and lantern use.",
-          "speaker": "npc.bellwold.001",
+          "speaker": "npc.bellwold.matron.001",
           "line": "If we keep a roof open tonight, someone may live long enough to tell us what happened.",
           "outcome": "care",
           "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
@@ -162,7 +162,7 @@
           "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
           "interaction": "two deliberate matching confirmations; physical branch and collision must change",
           "objective": "Make the missing record inspectable without forcefully identifying every protected resident.",
-          "speaker": "npc.paperhaven.001",
+          "speaker": "npc.paperhaven.registrar.001",
           "line": "The archive can be public without naming people who asked for refuge.",
           "outcome": "truth",
           "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
