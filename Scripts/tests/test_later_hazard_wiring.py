@@ -27,6 +27,10 @@ class LaterHazardWiring(unittest.TestCase):
         self.assertIn("SaveFractureState()",player)
         self.assertIn("LaterHazardEffect::Strain",player)
         self.assertIn("LaterHazardEffect::Injury",player)
+        npc=src("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")
+        self.assertIn("LaterHazardShelterX(",npc)
+        self.assertIn("Danger.counterplay",npc)
+        self.assertIn("NpcMotion::Approach",npc)
     def test_native_test_registered(self):
         wf=src(".github/workflows/static-checks.yml")
         self.assertIn("Tests/world/later_hazard_test.cpp",wf)

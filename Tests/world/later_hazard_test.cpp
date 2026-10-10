@@ -31,6 +31,11 @@ int main(){
         assert(SampleLaterHazard(r,spec.impactAt+.1,x,y,3).pulseId==0);
         assert(SampleLaterHazard(r,spec.impactAt+.1,x,y,4).pulseId==0);
         assert(SampleLaterHazard(r,spec.impactAt+.1,x+spec.halfWidth+30,y,1).pulseId==0);
+        const double safe=LaterHazardShelterX(r,x);
+        assert(std::fabs(safe-loc.centerX-spec.laneX)>spec.halfWidth);
+        assert(SampleLaterHazard(r,spec.impactAt+.1,safe,y,1).pulseId==0);
+        assert(std::fabs(LaterHazardShelterX(r,safe)-safe)<=2*(spec.halfWidth+150));
+        assert(LaterHazardShelterX(Realm::ThreefoldReach,x)==x);
         assert(SampleLaterHazard(r,spec.impactAt+.1,x,loc.centerY-1170,1).pulseId==0);
         assert(SampleLaterHazard(r,spec.impactAt+.1,x,loc.centerY+2000,1).pulseId==0);
         assert(SampleLaterHazard(r,-1,x,y,1).pulseId==0);

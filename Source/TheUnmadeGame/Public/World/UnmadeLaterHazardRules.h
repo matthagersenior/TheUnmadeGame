@@ -59,6 +59,19 @@ struct LaterHazardSample {
     const char* counterplay="";
 };
 
+/** Nearest safe x at least 150 cm beyond the dangerous band.
+    This is a deterministic navigation goal, not a teleport or free immunity. */
+inline double LaterHazardShelterX(Realm realm,double worldX) noexcept
+{
+    const int idx=LaterIndex(realm);
+    if(idx<0 || !std::isfinite(worldX))return worldX;
+    const auto& zone=LaterHazards[idx];
+    const auto& region=LaterRealms[idx];
+    const double x=worldX-region.centerX,limit=zone.halfWidth+150.0;
+    const double left=zone.laneX-limit,right=zone.laneX+limit;
+    return region.centerX+(std::fabs(x-left)<=std::fabs(x-right)?left:right);
+}
+
 inline LaterHazardSample SampleLaterHazard(
     Realm realm,double elapsed,double worldX,double worldY,int firstArcStage) noexcept
 {
