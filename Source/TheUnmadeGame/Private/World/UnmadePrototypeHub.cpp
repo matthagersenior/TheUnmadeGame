@@ -36,6 +36,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshLaterRealmWorld();
     RefreshEchoQuestWorld();
     RefreshRealmResonanceWorld();
+    RefreshRealmGuardians();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
@@ -72,6 +73,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::LaterRealmJourney RestoredLaterRealm;
     UnmadeCore::EchoChronicle RestoredEcho;
     UnmadeCore::RealmResonanceJourney RestoredResonance;
+    UnmadeCore::GuardianChronicle RestoredGuardians;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -222,6 +224,24 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    if(Save->bHasGuardianSnapshot)
+    {
+        if(Save->RealmGuardianOutcomes.Num()!=6)
+        {
+            bGuardianSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid optional guardian state arrays; writes blocked"));
+            return;
+        }
+        UnmadeCore::GuardianSnapshot S;
+        for(int i=0;i<6;++i)S.outcomes[i]=Save->RealmGuardianOutcomes[i];
+        if(!RestoredGuardians.Restore(S))
+        {
+            bGuardianSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Corrupt optional guardian resolution rejected"));
+            return;
+        }
+    }
+    Guardians=RestoredGuardians;
     Resonance=RestoredResonance;
     EchoQuest=RestoredEcho;
     LaterRealm=RestoredLaterRealm;
@@ -239,7 +259,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
 {
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
        bLaterRealmSaveRejected || bEchoSaveRejected ||
-       bResonanceSaveRejected)return false;
+       bResonanceSaveRejected || bGuardianSaveRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -321,6 +341,10 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
         Save->RealmResonanceFirstCasts.Add(ResonanceState.firstCast[i]);
         Save->RealmResonanceDeadlines.Add(ResonanceState.deadline[i]);
     }
+    Save->bHasGuardianSnapshot=true;
+    Save->RealmGuardianOutcomes.Reset();
+    for(int value:Guardians.Snapshot().outcomes)
+        Save->RealmGuardianOutcomes.Add(value);
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
@@ -1436,6 +1460,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     BuildAtlasGateways();
     BuildEchoQuests();
     BuildRealmResonance();
+    BuildRealmGuardians();
     BuildCommunityConsequences();
     BuildBellwoldAfterlight();
     // Ten inscriptions across five communities. Each marker is world-space,

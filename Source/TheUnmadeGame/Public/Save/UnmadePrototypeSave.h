@@ -133,6 +133,12 @@ public:
     UPROPERTY(SaveGame)
     TArray<double> RealmResonanceDeadlines;
 
+    /** Six optional guardians: unresolved/pacified/defeated; never required for travel. */
+    UPROPERTY(SaveGame)
+    bool bHasGuardianSnapshot=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> RealmGuardianOutcomes;
+
     UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;
 
