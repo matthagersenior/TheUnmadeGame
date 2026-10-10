@@ -93,6 +93,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/witness_braid_test.cpp -o /tmp/unmade-witness-braid
           /tmp/unmade-witness-braid
+      - name: Verify personal evidence, changing testimony and non-omniscient NPC reactions
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/evidence_provenance_test.cpp -o /tmp/unmade-evidence-provenance
+          /tmp/unmade-evidence-provenance
 
       - name: Verify three offline settlements and all resident identities
         run: |
