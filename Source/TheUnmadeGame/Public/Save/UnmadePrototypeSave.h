@@ -123,6 +123,16 @@ public:
     UPROPERTY(SaveGame)
     TArray<int32> EchoQuestEndings;
 
+    /** Optional paired mastered rites; saved independently across six outer realms. */
+    UPROPERTY(SaveGame)
+    bool bHasRealmResonanceSnapshot=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> RealmResonanceStages;
+    UPROPERTY(SaveGame)
+    TArray<int32> RealmResonanceFirstCasts;
+    UPROPERTY(SaveGame)
+    TArray<double> RealmResonanceDeadlines;
+
     UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;
 

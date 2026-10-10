@@ -187,6 +187,7 @@ bool AUnmadePrototypeHub::InspectEchoQuestSite(
             return true;
         }
         RefreshEchoQuestWorld();
+        RefreshRealmResonanceWorld();
     }
     if(GEngine)
     {

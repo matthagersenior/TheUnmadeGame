@@ -321,6 +321,15 @@ FString AUnmadeNpcCharacter::GetReactionText() const
                     Home->trialChoiceA:Home->trialChoiceB));
             }
         }
+        if(CachedHub->GetRealmResonanceStage(LaterHome)==2)
+        {
+            const int idx=UnmadeCore::LaterIndex(LaterHome);
+            if(idx>=0)
+            {
+                CharacterLine+=TEXT(" ");
+                CharacterLine+=FString(UTF8_TO_TCHAR(UnmadeCore::RealmResonances[idx].openedArchive));
+            }
+        }
         const int32 EchoEnding=CachedHub->GetEchoQuestEnding(LaterHome);
         if(EchoEnding!=0)
         {

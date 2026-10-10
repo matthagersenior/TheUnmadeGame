@@ -15,6 +15,7 @@
 #include "World/UnmadeRealmAftermathRules.h"
 #include "World/UnmadeLaterRealmRules.h"
 #include "World/UnmadeEchoQuestRules.h"
+#include "World/UnmadeRealmResonanceRules.h"
 #include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeLaterHazardRules.h"
 #include "TimerManager.h"
@@ -71,6 +72,9 @@ public:
     int32 GetEchoQuestStage(UnmadeCore::Realm Realm) const {return EchoQuest.Stage(Realm);}
     int32 GetEchoQuestEnding(UnmadeCore::Realm Realm) const {return EchoQuest.Ending(Realm);}
     int32 GetEchoQuestEvidence(UnmadeCore::Realm Realm) const {return EchoQuest.Evidence(Realm);}
+    int32 GetRealmResonanceStage(UnmadeCore::Realm Realm) const {return Resonance.Stage(Realm);}
+    bool RecordNearbyRealmRite(AUnmadeCharacter* Player,UnmadeCore::RiteId Id);
+    bool InspectResonanceArchive(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     int32 GetLaterRealmStage(UnmadeCore::Realm Id) const {return LaterRealm.Stage(Id);}
     int32 GetLaterRealmOutcome(UnmadeCore::Realm Id) const {return LaterRealm.Outcome(Id);}
     int32 GetLaterRealmVisitMask() const {return LaterRealm.Snapshot().visits;}
@@ -120,6 +124,10 @@ private:
     bool bEchoSaveRejected=false;
     void BuildEchoQuests();
     void RefreshEchoQuestWorld();
+    UnmadeCore::RealmResonanceJourney Resonance;
+    bool bResonanceSaveRejected=false;
+    void BuildRealmResonance();
+    void RefreshRealmResonanceWorld();
     bool bLaterHazardCueVisible[6]={false,false,false,false,false,false};
     void RefreshLaterHazardCues();
     void BuildFrontierAftermath();

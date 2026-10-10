@@ -35,6 +35,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
     RefreshEchoQuestWorld();
+    RefreshRealmResonanceWorld();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
@@ -70,6 +71,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::RealmAftermathChronicle RestoredRealmAftermath;
     UnmadeCore::LaterRealmJourney RestoredLaterRealm;
     UnmadeCore::EchoChronicle RestoredEcho;
+    UnmadeCore::RealmResonanceJourney RestoredResonance;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -196,6 +198,31 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    if(Save->bHasRealmResonanceSnapshot)
+    {
+        if(Save->RealmResonanceStages.Num()!=6 ||
+           Save->RealmResonanceFirstCasts.Num()!=6 ||
+           Save->RealmResonanceDeadlines.Num()!=6)
+        {
+            bResonanceSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid resonance record arrays; writes disabled"));
+            return;
+        }
+        UnmadeCore::ResonanceSnapshot S;
+        for(int i=0;i<6;++i)
+        {
+            S.stage[i]=Save->RealmResonanceStages[i];
+            S.firstCast[i]=Save->RealmResonanceFirstCasts[i];
+            S.deadline[i]=Save->RealmResonanceDeadlines[i];
+        }
+        if(!RestoredResonance.Restore(S))
+        {
+            bResonanceSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid resonance progress blocked; writes disabled"));
+            return;
+        }
+    }
+    Resonance=RestoredResonance;
     EchoQuest=RestoredEcho;
     LaterRealm=RestoredLaterRealm;
     RealmAftermath=RestoredRealmAftermath;
@@ -211,7 +238,8 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 bool AUnmadePrototypeHub::WriteWorldSnapshot()
 {
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
-       bLaterRealmSaveRejected || bEchoSaveRejected)return false;
+       bLaterRealmSaveRejected || bEchoSaveRejected ||
+       bResonanceSaveRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -281,6 +309,17 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
         Save->EchoQuestEvidence.Add(Echo.evidence[i]);
         Save->EchoQuestTestimonies.Add(Echo.testimony[i]);
         Save->EchoQuestEndings.Add(Echo.ending[i]);
+    }
+    const auto ResonanceState=Resonance.Snapshot();
+    Save->bHasRealmResonanceSnapshot=true;
+    Save->RealmResonanceStages.Reset();
+    Save->RealmResonanceFirstCasts.Reset();
+    Save->RealmResonanceDeadlines.Reset();
+    for(int i=0;i<6;++i)
+    {
+        Save->RealmResonanceStages.Add(ResonanceState.stage[i]);
+        Save->RealmResonanceFirstCasts.Add(ResonanceState.firstCast[i]);
+        Save->RealmResonanceDeadlines.Add(ResonanceState.deadline[i]);
     }
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
@@ -1396,6 +1435,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     BuildLaterRealms();
     BuildAtlasGateways();
     BuildEchoQuests();
+    BuildRealmResonance();
     BuildCommunityConsequences();
     BuildBellwoldAfterlight();
     // Ten inscriptions across five communities. Each marker is world-space,

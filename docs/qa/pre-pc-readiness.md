@@ -55,3 +55,6 @@ The six further realms each expose a bounded first-arc danger and a safe lane, w
 
 ## Production content pack (10 October)
 **SOURCE WIRED / NATIVE TESTED:** 9 culture art/audio/customs briefs, 18 named distinct outer people with daily voices and knowledge limitations, and 10 established rite execution briefs are available as editable JSON and automatically generated native actor header/Unreal CSVs/complete artist dossier. One content consistency check runs in PR CI and on the first Windows PC build. **ENGINE REQUIRED:** UE Header Tool, DataTable CSV import/reimport, animated people, VO, local translations, soundscapes and visible ability VFX.
+
+## Optional mastered ability observatories (2026-10-10)
+**SOURCE COMPLETE, NATIVE TESTED, ENGINE UNVERIFIED:** Six post-Echo dual-rite observatories use all ten original abilities through real, persisted casts, with separate physical bridge/island and testimony archive, saved deadline and corruption refusal. The source records no spontaneous teleportation, duplicate spell credit or repeatable loot. **Requires Windows UE:** UHT/compile, actual collision, camera/gamepad and audio/FX tests, spell-cooldown fairness and combat effects after crossing. See `docs/qa/realm-resonance-observatories.md`.

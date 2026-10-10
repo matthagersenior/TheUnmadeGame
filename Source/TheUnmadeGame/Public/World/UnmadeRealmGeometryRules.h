@@ -35,8 +35,18 @@ struct LaterArenaLayout {
     static constexpr Rect2 WallRight() noexcept {return {1250,2600,2102.5,2157.5};}
     static constexpr Rect2 GateCare() noexcept {return {-1250,-450,2102.5,2157.5};}
     static constexpr Rect2 GateTruth() noexcept {return {450,1250,2102.5,2157.5};}
+    static constexpr Rect2 ResonanceSpan() noexcept {
+        return {-400,400,3500,4200};
+    }
+    static constexpr Rect2 ResonanceIsland() noexcept {
+        return {-700,700,4050,4550};
+    }
     static constexpr bool Sound() noexcept {
-        return !Overlaps(South(),North()) &&
+        return Overlaps(North(),ResonanceSpan()) &&
+            Overlaps(ResonanceSpan(),ResonanceIsland()) &&
+            !Overlaps(North(),ResonanceIsland()) &&
+            Contains(ResonanceIsland(),0,4380) &&
+            !Overlaps(South(),North()) &&
             Overlaps(South(),BridgeCare()) && Overlaps(North(),BridgeCare()) &&
             Overlaps(South(),BridgeTruth()) && Overlaps(North(),BridgeTruth()) &&
             !Overlaps(BridgeCare(),BridgeTruth()) &&

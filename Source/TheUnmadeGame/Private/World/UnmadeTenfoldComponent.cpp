@@ -556,7 +556,11 @@ void UUnmadeTenfoldComponent::InvokeRite()
     Player->ApplyRiteAbility(Id,Power,SelectedLaw);
     if(AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
         UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass())))
+    {
         Hub->ApplyRiteEnvironment(Id,Power.duration,Chronicle.IsMastered(Id));
+        if(Chronicle.IsMastered(Id))
+            Hub->RecordNearbyRealmRite(Player,Id);
+    }
     Player->ReportRiteWitnessEvent();
     ShowRite();
 }

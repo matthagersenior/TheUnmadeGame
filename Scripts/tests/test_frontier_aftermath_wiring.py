@@ -46,7 +46,8 @@ class FrontierAftermathWiring(unittest.TestCase):
         self.assertIn("RestoredRealmAftermath.Restore(",hub)
         self.assertIn("RealmAftermath.Restore(Before)",hub)
         self.assertIn("if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||",hub)
-        self.assertIn("bLaterRealmSaveRejected || bEchoSaveRejected)return false;",hub)
+        self.assertIn("bLaterRealmSaveRejected || bEchoSaveRejected ||",hub)
+        self.assertIn("bResonanceSaveRejected)return false;",hub)
 
 if __name__=="__main__":
     unittest.main()
