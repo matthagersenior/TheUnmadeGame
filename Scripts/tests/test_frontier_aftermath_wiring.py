@@ -10,12 +10,13 @@ def source(p): return (ROOT/p).read_text(encoding="utf-8")
 class FrontierAftermathWiring(unittest.TestCase):
     def test_two_physical_mechanisms_and_two_evidence_routes_per_realm(self):
         world=source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
+        rules=source("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h")
         for tag in ("Saltwake.Aftermath.StormSluice",
                     "Saltwake.Aftermath.Cistern","Saltwake.Aftermath.RainLedger",
                     "Cinderhold.Aftermath.HeatVent",
                     "Cinderhold.Aftermath.CommonKiln","Cinderhold.Aftermath.EmberDeed",
                     "Saltwake.Aftermath.StormBarrier","Cinderhold.Aftermath.HeatSeal"):
-            self.assertIn(tag,world)
+            self.assertIn(tag,world+rules)
         self.assertIn("RealmAftermath.Prepare(",world)
         self.assertIn("RealmAftermath.Inspect(",world)
         self.assertIn("RealmAftermath.Testify(",world)
