@@ -16,3 +16,4 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added deterministic, non-farmable physical mechanism requirements to all nine realm aftermath rules; Saltwake's storm sluice and Cinderhold's heat vent are the next actor-connected milestones.
 - Preserved the two ethically distinct evidence/witness paths and permanent outcomes; later six mechanism IDs remain authored contracts without spawned worlds.
 - Updated the living canon in this same source commit. The full illustrated DOCX/PDF/art atlas/manifest/ZIP package is **not yet regenerated** and must not be represented as shipped.
+- Reserved a separate save schema-compatible nine-realm aftermath snapshot and a dedicated Hub/Player API, keeping earlier frontier and Bellwold states intact. Pending Unreal-host runtime acceptance.\n

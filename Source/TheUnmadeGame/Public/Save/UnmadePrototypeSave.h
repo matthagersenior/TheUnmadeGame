@@ -80,6 +80,19 @@ public:
     int32 BellwoldAfterlightOutcome=0;
 
     UPROPERTY(SaveGame)
+    UPROPERTY(SaveGame)
+    bool bHasRealmAftermathSnapshot = false;
+    /** Nine slots follow the append-only Realm enum; six unspawned realms remain 0. */
+    UPROPERTY(SaveGame)
+    TArray<int32> RealmAftermathStages;
+    UPROPERTY(SaveGame)
+    TArray<int32> RealmAftermathPrepared;
+    UPROPERTY(SaveGame)
+    TArray<int32> RealmAftermathApproaches;
+    UPROPERTY(SaveGame)
+    TArray<int32> RealmAftermathEndings;
+
+    UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;
 
     UPROPERTY(SaveGame)
