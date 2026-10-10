@@ -3,6 +3,7 @@
 #include "NPC/UnmadeMemoryComponent.h"
 #include "NPC/UnmadeNpcMotionRules.h"
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeEvidenceProvenanceRules.h"
 #include "World/UnmadeLivingWorldRules.h"
 #include "Player/UnmadeCharacter.h"
 #include "Kismet/GameplayStatics.h"
@@ -289,6 +290,41 @@ FString AUnmadeNpcCharacter::GetReactionText() const
                 : Visitor->GetBorrowedLifeRole()==1
                 ? TEXT(" Your hands carry the marks of a craft you never apprenticed in.")
                 : TEXT(" You speak as though you have catalogued a century that never happened.");
+    }
+
+    // A rumor requires a named, physically nearby originating witness.
+    // Never consult the global Braid outcome and pretend this NPC saw it.
+    const FUnmadeNpcObservation* LocalBraid=nullptr;
+    for(const FUnmadeNpcObservation& Event:Memory->GetObservations())
+    {
+        const FString Kind=Event.EventKind.ToString();
+        const FTCHARToUTF8 EncodedKind(*Kind);
+        if(!UnmadeCore::IsBraidEvent(EncodedKind.Get()))continue;
+        if(!LocalBraid ||
+           (LocalBraid->Evidence==EUnmadeEvidenceKind::Rumor &&
+            Event.Evidence==EUnmadeEvidenceKind::Witnessed))
+            LocalBraid=&Event;
+    }
+    if(LocalBraid)
+    {
+        const FString Kind=LocalBraid->EventKind.ToString();
+        const FTCHARToUTF8 EncodedKind(*Kind);
+        const auto Account=UnmadeCore::BraidAccountFromEvent(EncodedKind.Get());
+        const auto Provenance=LocalBraid->Evidence==EUnmadeEvidenceKind::Witnessed
+            ?UnmadeCore::WitnessProvenance::PersonallyWitnessed
+            :UnmadeCore::WitnessProvenance::HeardFromPerson;
+        const FString Speaker=LocalBraid->SpeakerId.ToString();
+        const FTCHARToUTF8 EncodedSpeaker(*Speaker);
+        const char* LineFromEvidence=UnmadeCore::BraidAccountLine(
+            Account,Provenance,LocalBraid->Evidence==EUnmadeEvidenceKind::Rumor
+                ?EncodedSpeaker.Get():nullptr);
+        if(LineFromEvidence[0])
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=FString(UTF8_TO_TCHAR(LineFromEvidence));
+            if(LocalBraid->Evidence==EUnmadeEvidenceKind::Rumor)
+                CharacterLine+=FString::Printf(TEXT(" My source was %s."),*Speaker);
+        }
     }
 
     // The resident's own community records what the player has accomplished.
