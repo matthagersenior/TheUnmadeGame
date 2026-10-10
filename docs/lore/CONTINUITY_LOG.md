@@ -137,3 +137,10 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added Authoring/lived_universe_atlas.json as a non-authoritative detailed society, climate, ecology, labor, cultural customs and mystery master: 27 physical evidence objects, 18 resident routines, nine optional five-objective/dual-outcome civic quests, nine comparative inter-realm evidence links and 36 specified asset packages.
 - Generated 90 distinct reference-only Unreal work orders; implemented a deterministic standard-library Python validator, unit tests and CI/first-PC drift checks. New GUIDEs have no collision or gameplay authority and are explicitly marked unbuilt.
 - Updated canonical continuity and design guidance. The existing illustrated Volume IX remains the most recent rendered package; no DOCX/PDF/atlas/ZIP regeneration, Unreal Editor compile or new gameplay implementation is claimed here.
+
+
+## 2026-10-10 — Cinema director edition v2 / sound and nine-realm scope
+- Preserved the 16-shot spoiler-light Volume IX public film and its existing Unreal editor DataTable contract. Did **not** replace or modify those canonical shots.
+- Authored a separate 56-scene, seven-chapter, 12:15.03 spoiler-inclusive director cut to explain nine settlements, 82 individual source resident identities, ten disciplines, optional lived-world and Echo content, Nhal-Vey's false first victory, both postboss worlds and voluntary echo.
+- Validated rendered MP4 has 48 kHz two-channel AAC for the entire 735.03-second runtime, with audible temporary synthesized narration and scratch music; the source has a deterministic scope index plus a CLI gate that verifies real delivered media when supplied. Media, subtitles and stem downloads remain conversation production artifacts, **not checked-in Unreal assets or playable engine proof**.
+- Source documentation and audio QA updated. The legacy illustrated Volume IX book/art ZIP has not automatically been regenerated. This new editorial edition remains conceptual until actor, animation, professional voice/music and Unreal Sequencer production.
