@@ -1,5 +1,28 @@
 # Latest illustrated lore publication
 
+**Current edition:** Volume X — *The Unanswered Atlas*, First-PC Development Supplement (2026-10-10)  
+**Included source revision:** `0981b9108b44f191a7f53c366087edc415e21aaf` · GitHub PR #26  
+**Delivery channel:** verified ChatGPT downloadable files (not GitHub Release binaries)  
+**Canon change:** None from prior Volume X. This revision adds a separately labeled tooling/production appendix; all original literary material, story variants and 52 cumulative illustrations are retained.
+
+| Updated publication | Verified result |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_First_PC_Update.pdf` | **106 pages**, complete cumulative Bible |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_First_PC_Update.docx` | Editable cumulative master; 52 embedded illustrations |
+| `THE_UNMADE_Volume_X_Illustrated_Complete_First_PC_Update.pdf` | **32 pages**, standalone Volume X |
+| `THE_UNMADE_Volume_X_Illustrated_Complete_First_PC_Update.docx` | Editable standalone master; 5 embedded illustrations |
+| `THE_UNMADE_Volume_X_First_PC_Complete_Bible_Package.zip` | All updated books, full manuscript, gameplay appendix, prior art references, reproducible append/build scripts, manifest and checksums |
+
+**QA:** Both DOCX editions were rendered to PDF and complete PNG page runs. The final supplement pages were visually inspected; extracted text includes the full canonical Volume X material, 198 authored CSV rows, 52+90 reference markers and preservation/engine-testing boundaries. All pages were inspected programmatically for text boxes outside page bounds (none found), and the ZIP passed CRC integrity checks.
+
+**Source contribution:** `START_THE_UNMADE.cmd` now launches a Windows preflight/build/test/authoring sequence. The seven DataTables have 198 source-authored rows; two isolated maps have 142 noncolliding reference work orders. Real UE 5.8 Editor compilation, Editor Python commandlet imports, PIE collision and complete world production still require Windows verification. The illustrated book records these boundaries without claiming they were executed.
+
+The actual updated file bytes live in conversation downloads, not automatically on GitHub or inside Unreal. **The previous publication receipt is preserved below as historical provenance.** Future canon/gameplay updates must issue new cumulative and current-volume PDFs, Word masters and complete ZIP before reporting publication complete.
+
+---
+
+# Prior illustrated publication — original Volume X edition
+
 **Edition:** Volume X — The Unanswered Atlas  
 **Publication:** 2026-10-10  
 **Source revision:** `144b1eff9904dd97c0b507b24bf2584a2daf68fd`  
