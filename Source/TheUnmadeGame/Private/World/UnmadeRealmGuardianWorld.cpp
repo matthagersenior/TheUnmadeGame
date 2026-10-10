@@ -1,5 +1,6 @@
 #include "World/UnmadePrototypeHub.h"
 #include "Combat/UnmadeRealmGuardian.h"
+#include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
