@@ -173,3 +173,11 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Authored separate human-scale outcomes: **Sheltered Thread** (private refuge cord) or **Public Docket** (redacted public discrepancy record). They create different physically spawned structures and journal text, reuse two-press commitment, and never resolve the nine OPEN mysteries or require a particular protagonist history.
 - Added optional old-save-safe outcome persistence, strict prerequisite validation, fail-closed rejection of corrupted snapshots, rollback when saving fails, non-farmable commitment and no new compulsory boss or quest gate.
 - Updated primary Volume X Markdown canon, living continuity, native C++ regression and source wiring checks. Original illustrated complete edition is still a dated asset, not falsely marked republished. UE compile/PIE and actual embodied content still pending.
+
+
+## 2026-10-10 — Living Evidence milestone (Volume X Chapter 18)
+
+- Added firsthand-only, source-attributed evidence notebook API with F9 player activation and a BlueprintPure readout for future UMG. Three established physical clues retain stable IDs; the journal never prints an unvisited secret.
+- Distinct sheltered/public Witness Braid events are witnessed only by physically nearby residents with clear sight. Existing local one-hop social transfer marks later listeners as *rumor*, preserves the named origin and cannot promote gossip into observation. Per-person fear/trust and context-specific authored lines change only when memory has the source.
+- Added no new hidden ending, no undisclosed protected person's identity, no global auto-knowledge and no mandatory quest gate. Existing optional schema-1 evidence and Braid state remain the source of truth. Added offline C++17 and Python source-wiring tests to CI and the first Windows PC preflight.
+- Editorial primary source Volume X Chapter 18 and cumulative illustrated Bible explain the resident theories, authorial ambiguity and current implementation status. Real Unreal Editor test and physical long-distance courier delivery remain clearly pending.
