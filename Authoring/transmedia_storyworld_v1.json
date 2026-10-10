@@ -2,7 +2,7 @@
   "schema_version": 1,
   "edition": "2026-10-10",
   "title": "THE UNMADE — The Unanswered Atlas: Canon, Cast, Cities & Long-Form Mysteries",
-  "status": "new editorial canon / narrative production contracts; none of the new details is a finished Unreal scene",
+  "status": "new editorial canon and preproduction contracts; NOT implemented, rendered or verified in Unreal",
   "canonical_authorities": [
     "Authoring/world_content_pack.json",
     "Authoring/resident_return_encounters.json",
