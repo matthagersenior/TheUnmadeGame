@@ -137,6 +137,15 @@ void AUnmadePrototypeHub::BuildLaterRealms()
                    FName(UTF8_TO_TCHAR(Spec.trialEvidenceB)));
         SpawnBlock(Origin+FVector(0,-180,115),FVector(.65,.65,2.3),
                    FName(UTF8_TO_TCHAR(Spec.mechanism)));
+        const auto& Danger=UnmadeCore::LaterHazards[Index];
+        const FName CueTag=LaterProp(Index,TEXT("HazardCue"));
+        SpawnBlock(Origin+FVector(Danger.laneX,
+            (Danger.minY+Danger.maxY)*.5,5),
+            FVector(Danger.halfWidth/100.0,
+                (Danger.maxY-Danger.minY)/200.0,.08),
+            CueTag);
+        // Visual feedback only: never silently collide with this warning.
+        SetRiteWorldActorState(CueTag,false);
         SpawnBlock(Origin+FVector(0,610,140),FVector(50,.55,3),
                    LaterProp(Index,TEXT("Trial.Barrier")));
         SpawnBlock(Origin+FVector(-850,970,20),FVector(8,12,.35),
@@ -193,6 +202,41 @@ void AUnmadePrototypeHub::BuildLaterRealms()
                                     UTF8_TO_TCHAR(Spec.name)),
                     Witness.Role,Witness.Temperament,Witness.Line);
         }
+    }
+}
+
+
+UnmadeCore::LaterHazardSample AUnmadePrototypeHub::GetNearbyLaterRealmHazard(
+    FVector Position) const
+{
+    for(const auto& Region:UnmadeCore::LaterRealms)
+    {
+        const auto Sample=UnmadeCore::SampleLaterHazard(
+            Region.realm,Clock.ElapsedSeconds(),Position.X,Position.Y,
+            LaterRealm.Stage(Region.realm));
+        if(Sample.pulseId!=0)return Sample;
+    }
+    return {};
+}
+
+void AUnmadePrototypeHub::RefreshLaterHazardCues()
+{
+    if(!GetWorld())return;
+    for(int32 i=0;i<static_cast<int32>(UnmadeCore::LaterHazards.size());++i)
+    {
+        const auto& Danger=UnmadeCore::LaterHazards[i];
+        const auto& Place=UnmadeCore::LaterRealms[i];
+        const auto Sample=UnmadeCore::SampleLaterHazard(
+            Place.realm,Clock.ElapsedSeconds(),Place.centerX+Danger.laneX,
+            Place.centerY+(Danger.minY+Danger.maxY)*.5,
+            LaterRealm.Stage(Place.realm));
+        const bool bVisible=Sample.phase!=UnmadeCore::FrontierHazardPhase::Calm;
+        if(bVisible==bLaterHazardCueVisible[i])continue;
+        bLaterHazardCueVisible[i]=bVisible;
+        const FName Cue=LaterProp(i,TEXT("HazardCue"));
+        SetRiteWorldActorState(Cue,bVisible);
+        for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+            if(It->ActorHasTag(Cue))It->SetActorEnableCollision(false);
     }
 }
 

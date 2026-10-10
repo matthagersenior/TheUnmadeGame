@@ -123,6 +123,8 @@ private:
     double DefeatRecordedAt=-1.0;
     uint64 LastHazardWarningPulse[2]={0,0};
     uint64 LastHazardImpactPulse[2]={0,0};
+    uint64 LastLaterHazardWarningPulse[6]={0,0,0,0,0,0};
+    uint64 LastLaterHazardPulse[6]={0,0,0,0,0,0};
     void RecoverAtSafeCheckpoint();
 
     void MoveForward(float Value);

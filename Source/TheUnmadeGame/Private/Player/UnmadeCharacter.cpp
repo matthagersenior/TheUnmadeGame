@@ -1338,6 +1338,54 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
             break;
         }
     }
+
+    // Six land-specific warnings share the source world clock, not a random
+    // per-frame roll. One pulse can affect a player at most once.
+    if(GetWorld() && !Combat->IsDefeated())
+    {
+        for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        {
+            const auto Hazard=Hub->GetNearbyLaterRealmHazard(GetActorLocation());
+            if(Hazard.index<0 || Hazard.pulseId==0)break;
+            const int32 Index=Hazard.index;
+            if(Hazard.phase==UnmadeCore::FrontierHazardPhase::Warning &&
+               LastLaterHazardWarningPulse[Index]!=Hazard.pulseId)
+            {
+                LastLaterHazardWarningPulse[Index]=Hazard.pulseId;
+                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Yellow,
+                    FString::Printf(TEXT("%s: %s"),
+                        UTF8_TO_TCHAR(UnmadeCore::LaterHazards[Index].label),
+                        UTF8_TO_TCHAR(Hazard.warning)));
+            }
+            if(Hazard.phase==UnmadeCore::FrontierHazardPhase::Impact &&
+               LastLaterHazardPulse[Index]!=Hazard.pulseId)
+            {
+                LastLaterHazardPulse[Index]=Hazard.pulseId;
+                bool bApplied=false;
+                if(Hazard.effect==UnmadeCore::LaterHazardEffect::Injury)
+                    bApplied=Combat->ReceiveHazardPulse(
+                        Hazard.sourceId,Hazard.pulseId,Hazard.severity);
+                else if(Hazard.effect==UnmadeCore::LaterHazardEffect::Strain)
+                {
+                    const auto Before=FractureModel.TakeSnapshot();
+                    bApplied=FractureModel.ApplyEnvironmentalStrain(Hazard.severity);
+                    if(bApplied && !SaveFractureState())
+                    {
+                        FractureModel.Restore(Before);
+                        bApplied=false;
+                        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,
+                           TEXT("Unmade could not persist reality strain; the exposure was undone."));
+                    }
+                }
+                if(bApplied && GEngine)
+                    GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Orange,
+                        FString::Printf(TEXT("%s: %s"),
+                            UTF8_TO_TCHAR(UnmadeCore::LaterHazards[Index].label),
+                            UTF8_TO_TCHAR(Hazard.counterplay)));
+            }
+            break;
+        }
+    }
     if (Combat->IsDefeated() && !bPlayerDefeatHandled)
     {
         bPlayerDefeatHandled=true;

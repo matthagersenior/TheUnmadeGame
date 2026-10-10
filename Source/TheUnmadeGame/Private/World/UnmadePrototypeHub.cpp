@@ -35,6 +35,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
     RefreshFrontierHazardCues();
+    RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
@@ -1044,6 +1045,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
     RefreshFrontierHazardCues();
+    RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical
     // states. World mastering only stabilizes explicitly allowed structures.
     for(auto It=TemporaryRiteWorldEffects.CreateIterator();It;++It)

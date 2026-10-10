@@ -1,5 +1,6 @@
 #include "World/UnmadeLaterHazardRules.h"
 #include "Combat/UnmadeCombatRules.h"
+#include "Fracture/UnmadeFractureRules.h"
 #include <cassert>
 #include <cmath>
 #include <iostream>

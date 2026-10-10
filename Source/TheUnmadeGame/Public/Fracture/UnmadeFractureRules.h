@@ -41,6 +41,14 @@ public:
     }
     bool IsGlimpsing(double now) const { return ValidTime(now) && now < glimpseUntil_; }
     bool IsFolded(double now) const { return ValidTime(now) && now < foldUntil_; }
+    /** Nonlethal environmental uncertainty; saturates at the maximum.
+        Unlike a player cast, a valid environmental hit cannot bypass pressure
+        just because the character is almost at their strain cap. */
+    bool ApplyEnvironmentalStrain(double amount) {
+        if(!std::isfinite(amount) || amount<=0 || strain_>=MaxStrain)return false;
+        strain_=std::min(MaxStrain,strain_+amount);
+        return true;
+    }
     bool SpendStrain(double amount) {
         if(!std::isfinite(amount) || amount<=0 || strain_+amount>MaxStrain)return false;
         strain_+=amount;return true;
