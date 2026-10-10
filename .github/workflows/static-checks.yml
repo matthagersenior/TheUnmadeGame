@@ -120,3 +120,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/player/character_identity_test.cpp -o /tmp/unmade-identity
           /tmp/unmade-identity
+
+      - name: Verify guarded irreversible story choices before effects
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/commitment_rules_test.cpp -o /tmp/unmade-commitment-test
+          /tmp/unmade-commitment-test
