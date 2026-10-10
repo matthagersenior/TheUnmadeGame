@@ -102,3 +102,7 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/bellwold_afterlight_test.cpp -o /tmp/unmade-afterlight-test
           /tmp/unmade-afterlight-test
+      - name: Verify all nine realm aftermath arcs, two decisions and durable continuity
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/realm_aftermath_test.cpp -o /tmp/unmade-realm-aftermath
+          /tmp/unmade-realm-aftermath
