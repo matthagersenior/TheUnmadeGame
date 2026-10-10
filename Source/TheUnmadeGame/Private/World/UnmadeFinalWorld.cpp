@@ -73,6 +73,7 @@ void AUnmadePrototypeHub::RefreshFinalWorld()
         for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
             if(It->ActorHasTag(Current))It->SetActorEnableCollision(false);
     }
+    RefreshDistrictMood(); // final answer changes the visible sky immediately
 }
 
 bool AUnmadePrototypeHub::BreakFinalMask()
