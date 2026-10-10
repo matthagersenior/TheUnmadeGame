@@ -151,3 +151,11 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added Authoring/transmedia_storyworld_v1.json and strict actor/city/mystery/callback validity gates. All original realm IDs, 82 resident identities, story save gates, customizable protagonist and two valid postboss morning variants are preserved.
 - Distinguishes authored objective/source facts from attributed rumors, disputed recollections, open mysteries and adaptation-only staging. Mystery answers need an explicit later canon update; no convenient retcon is permitted.
 - Updated editorial release policy, CI and Windows preflight. No previous illustrated DOCX/PDF was automatically regenerated, and no literary scene is claimed to be a finished Unreal asset or completed novel/series.
+
+
+## 2026-10-10 — Volume X Witness Echoes: first physical canon callback implementation
+- Added three independent source-spawned physical markers for Hessa's uncounted cup (Bellwold, CALL.01), Sevrin's two-faced press (Paperhaven, CALL.03), and Orrel's inkless nail (The Crossings, CALL.04). All three use existing proximate E interaction and authored writing, not distant omniscient auto-unlock.
+- Implemented a bounded C++17 `WitnessEchoLedger`: firsthand observation and one later meaning after matching local committed consequence, without farming, hidden realm progression gates or asserted cosmic resolution.
+- Appended two optional save masks and a presence bit to the existing schema-1 slot; added restore validation, corruption preservation and failed-save rollback of new and old landmark state; exposed discovered/returned evidence in prototype journal.
+- Added portable C++17 gameplay-state test to CI plus source wiring/first-PC preflight tests; engine-native compile, world navigation, gamepad accessibility, authored levels and spoken character performances await first Unreal PC.
+- Existing 10-volume literary assets and dated illustrated DOCX/PDF/ZIP package have not been automatically rebuilt for this new source implementation.
