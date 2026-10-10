@@ -90,7 +90,6 @@ public:
     int32 BellwoldAfterlightOutcome=0;
 
     UPROPERTY(SaveGame)
-    UPROPERTY(SaveGame)
     bool bHasRealmAftermathSnapshot = false;
     /** Nine slots follow the append-only Realm enum; six unspawned realms remain 0. */
     UPROPERTY(SaveGame)
@@ -101,6 +100,16 @@ public:
     TArray<int32> RealmAftermathApproaches;
     UPROPERTY(SaveGame)
     TArray<int32> RealmAftermathEndings;
+
+    /** Six later-first-visit quests; optional on existing version-1 slots. */
+    UPROPERTY(SaveGame)
+    bool bHasLaterRealmSnapshot = false;
+    UPROPERTY(SaveGame)
+    int32 LaterVisitedMask = 0;
+    UPROPERTY(SaveGame)
+    TArray<int32> LaterRealmStages;
+    UPROPERTY(SaveGame)
+    TArray<int32> LaterRealmChoices;
 
     UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;

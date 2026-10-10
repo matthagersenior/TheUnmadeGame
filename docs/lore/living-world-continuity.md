@@ -132,3 +132,13 @@ An Unreal automation test `Unmade.Story.CommitmentConfirmation` awaits the futur
 
 ## Illustrated Volume IV record
 The October 10 illustrated **Volume IV: A World Prepared to Respond** updates Volume III by adding a 52-page canon/engineering DOCX, a verified rendered PDF, an unchanged art atlas, source appendix, matrix and hash manifest. It is distributed as a downloadable conversation artifact, not stored as a binary in GitHub. The release is consistent with main `5a068c322ee1f0c72f82da3c5f54673f919b2cdb` at creation; later code commits require a future new edition. No actual 3D gameplay or Unreal build has yet been demonstrated.
+
+## Six later realm first-visit graybox implementation (source pass)
+The six outer destinations gain authored local trial evidence, two responses, separate control mechanisms, proof-dependent witnesses and independent saved continuities before their existing return-visit aftermaths can begin. Atlas connections require earned attunement; permanent outcomes alter real collision-enabled prototype routes. No level art, authored cities, sound, Unreal build or hands-on playtest is claimed.
+
+## First real foundations for the remaining six regions — Volume V
+Drevlach's ferry receipt versus collateral tide, Orravane's counterweight versus unheard chorus, Vathless's safe wedge versus lineage stone, Eillun's private shelter versus voluntary consent, Tharniv's public graft versus unclaimed coronation, and Auvren's stable memory versus contradictory origin map are now source-modeled **first-visit choices**. Each has a named physical control and mutually exclusive bridge across a gap. A second chapter can begin only after the first has been resolved; it relies on the already authored nine-realm aftermath witness/choice contract, now exposed as source actors for all six. The final realm remains a place to return to, not a screen that says the game has ended.
+
+The source generates 18 additional actor identities for the six future regions (three per realm). These are prototype personas tied to existing canonical witness IDs, **not** 18 finished character meshes, voice performances or finalized lore portraits. With the existing 64 authored NPC identities there are now up to 82 actors represented in source; their play-tested presence is unconfirmed.
+
+Progress still depends on earned atlas attunement. The later regions are physically different prototype positions with split terrain, gates and choice-dependent access; gameplay on a real Windows Unreal host, animation, unique environmental hazard counterplay, deeper NPC routines and a proper map remain outstanding.

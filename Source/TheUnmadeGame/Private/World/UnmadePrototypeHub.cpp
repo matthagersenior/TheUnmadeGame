@@ -33,6 +33,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshCommunityConsequences();
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
+    RefreshLaterRealmWorld();
     RefreshFrontierHazardCues();
     RefreshRiteWorldFromSave();
     RefreshDistrictMood();
@@ -65,6 +66,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::FrontierJourney RestoredFrontier;
     UnmadeCore::BellwoldAfterlight RestoredAfterlight;
     UnmadeCore::RealmAftermathChronicle RestoredRealmAftermath;
+    UnmadeCore::LaterRealmJourney RestoredLaterRealm;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -145,6 +147,29 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    if(Save->bHasLaterRealmSnapshot)
+    {
+        if(Save->LaterRealmStages.Num()!=6 || Save->LaterRealmChoices.Num()!=6)
+        {
+            bLaterRealmSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid later realm save arrays; writes blocked"));
+            return;
+        }
+        UnmadeCore::LaterRealmSnapshot State;
+        State.visits=Save->LaterVisitedMask;
+        for(int32 i=0;i<6;++i)
+        {
+            State.stage[i]=Save->LaterRealmStages[i];
+            State.choice[i]=Save->LaterRealmChoices[i];
+        }
+        if(!RestoredLaterRealm.Restore(State))
+        {
+            bLaterRealmSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Corrupt later realm progress protected"));
+            return;
+        }
+    }
+    LaterRealm=RestoredLaterRealm;
     RealmAftermath=RestoredRealmAftermath;
     Afterlight=RestoredAfterlight;
     Frontier=RestoredFrontier;
@@ -157,7 +182,8 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot()
 {
-    if(bAfterlightSaveRejected || bRealmAftermathSaveRejected)return false;
+    if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
+       bLaterRealmSaveRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -204,6 +230,16 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
         Save->RealmAftermathPrepared.Add(AftermathState.prepared[i]);
         Save->RealmAftermathApproaches.Add(AftermathState.approach[i]);
         Save->RealmAftermathEndings.Add(AftermathState.ending[i]);
+    }
+    const auto Later=LaterRealm.Snapshot();
+    Save->bHasLaterRealmSnapshot=true;
+    Save->LaterVisitedMask=Later.visits;
+    Save->LaterRealmStages.Reset();
+    Save->LaterRealmChoices.Reset();
+    for(int32 i=0;i<6;++i)
+    {
+        Save->LaterRealmStages.Add(Later.stage[i]);
+        Save->LaterRealmChoices.Add(Later.choice[i]);
     }
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
@@ -334,7 +370,7 @@ bool AUnmadePrototypeHub::GetNearbyCommitPreview(
             :TEXT("Lantern of Unredacted Names: publicly restore erased names.");
         return true;
     }
-    for(int32 idx=1;idx<=2;++idx)
+    for(int32 idx=1;idx<static_cast<int32>(UnmadeCore::RealmAftermathSpecs.size());++idx)
     {
         const auto Realm=UnmadeCore::RealmAftermathSpecs[idx].realm;
         const auto& Spec=UnmadeCore::RealmAftermathSpecs[idx];
@@ -388,6 +424,10 @@ FString AUnmadePrototypeHub::GetCurrentRealmName(FVector Position) const
         if(FVector::DistSquared2D(Position,FVector(Outpost.centerX,Outpost.centerY,Position.Z))
            <=FMath::Square(2900.f))
             return FString(UTF8_TO_TCHAR(Outpost.settlementName));
+    for(const auto& Later:UnmadeCore::LaterRealms)
+        if(FVector::DistSquared2D(Position,FVector(Later.centerX,Later.centerY,Position.Z))
+           <=FMath::Square(3200.f))
+            return FString(UTF8_TO_TCHAR(Later.name));
     return TEXT("The Threefold Reach");
 }
 
@@ -434,7 +474,7 @@ bool AUnmadePrototypeHub::TryTravelFrontier(AUnmadeCharacter* Player)
                 *GetCurrentRealmName(Destination)));
         return true;
     }
-    return false;
+    return TryTravelAtlas(Player);
 }
 
 bool AUnmadePrototypeHub::InspectFrontierClue(AUnmadeCharacter* Player)
@@ -638,7 +678,7 @@ bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
     if(!GetWorld() || bRealmAftermathSaveRejected || (Choice!=1 && Choice!=2))return false;
     const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
     if(!IsValid(Player))return false;
-    for(int32 i=1;i<=2;++i)
+    for(int32 i=1;i<static_cast<int32>(UnmadeCore::RealmAftermathSpecs.size());++i)
     {
         const auto& Spec=UnmadeCore::RealmAftermathSpecs[i];
         if(RealmAftermath.Stage(Spec.realm)!=3)continue;
@@ -668,6 +708,7 @@ bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
                 return false;
             }
             RefreshRealmAftermathWorld();
+            RefreshLaterRealmWorld();
             if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,
                 FString::Printf(TEXT("THE REALM CHANGED: %s"),
                     UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(Spec.realm))));
@@ -1310,6 +1351,8 @@ void AUnmadePrototypeHub::BuildForPrototype()
     BuildVillages();
     BuildFrontiers();
     BuildFrontierAftermath();
+    BuildLaterRealms();
+    BuildAtlasGateways();
     BuildCommunityConsequences();
     BuildBellwoldAfterlight();
     // Ten inscriptions across five communities. Each marker is world-space,
