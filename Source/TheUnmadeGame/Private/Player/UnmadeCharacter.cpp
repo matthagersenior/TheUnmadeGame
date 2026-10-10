@@ -544,7 +544,9 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
                 }
             }
             else if(bResolvedBraid)
-                ReportLocalEvent(FName("World.WitnessBraidResolved"),FName("region.crossings.bridge"));
+                ReportLocalEvent(FName(Ending==UnmadeCore::FactionEnding::Solidarity
+                    ?TEXT("World.WitnessBraidShelter"):TEXT("World.WitnessBraidDocket")),
+                    FName("region.crossings.bridge"));
             else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
         else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
