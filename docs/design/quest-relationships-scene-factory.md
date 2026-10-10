@@ -41,3 +41,7 @@ Run `python -m unittest discover -s Scripts/tests -v` and the native `Tests/npc/
 
 ## Production priority (actual future effort saved)
 The next valuable PC work is **one complete vertical slice** through Bellwold/Paperhaven -> Saltwake or Cinderhold -> one middle realm -> one upper realm -> Auvren, with full physical UI and camera functionality. Once this path is playable, extend modular assets across the alternate main routes and optional stories. Source specification is more complete, but this is still a major 3D RPG production: no claim that map art, every branching dialogue animation, full console input, Level Sequence editing or actual UE Editor compilation has already been completed.
+
+## First-PC automated authoring update
+
+Instead of manually creating the 52-marker staging map and importing each of seven USTRUCT-backed CSV tables in Content Browser, the root `START_THE_UNMADE.cmd` launcher now performs a guarded Unreal Python Editor import **after** a successful build/test run, and also creates a separate map for 90 lived-world work orders. This is idempotent, restricted to `/Game/UnmadeProduction/` and accompanied by a dated receipt. Legacy manual steps above remain valid as a recovery path if an installed UE Python API differs; **never bypass failure gates** to claim imports were performed. [Complete quickstart](../qa/first-pc-one-click-production.md).
