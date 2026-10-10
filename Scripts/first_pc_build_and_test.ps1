@@ -43,6 +43,10 @@ try {
     & python (Join-Path $PSScriptRoot "validate_lived_universe.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "lived-universe-validation.log")
     if($LASTEXITCODE -ne 0){throw "LIVED_UNIVERSE_CONTENT_OUT_OF_SYNC: regenerate work order manifest"}
+    Write-Host "Checking complete-universe director cinema source and audio-export contract."
+    & python (Join-Path $PSScriptRoot "validate_directors_cut.py") 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "directors-cinema-validation.log")
+    if($LASTEXITCODE -ne 0){throw "DIRECTOR_CINEMATIC_INDEX_INVALID"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")
