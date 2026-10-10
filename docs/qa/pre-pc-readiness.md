@@ -67,3 +67,6 @@ The six further realms each expose a bounded first-arc danger and a safe lane, w
 
 ## 2026-10-10 — cohesive five-act main campaign source spine
 **SOURCE WIRED / NATIVE CI TARGET:** a five-act non-linear, main-quest-based trail from Bellwold/Paperhaven to Nhal-Vey, nine physical inspection markers, locally earned revelation text, road-aware journal advice and final-boss eligibility that needs no optional Echo quests or all-nine realm completions. Saves are derived from existing story flags (no migration). **UNREAL PC GATE:** usable HUD/objective tracker, quest marker collision, actual route readability, companion/VO presentation, narrative pacing, old-save end-to-end regression and boss access verification in PIE.
+
+## 2026-10-10 — Volume IX cinematic explainer / source-fed Unreal handoff
+**DONE BEFORE PC:** original 16-shot, 2:29.5 moving illustrated proof-of-style with captions and offline temporary VO, exact art-source/shot times, coherent nine-realm execution specs, editor CSV generator, CI tests for canonical story/realm IDs, source consistency and public ending-spoiler protection. **PC DEPENDENT:** UHT/Editor compile, DataTable import and reimport, actual Level Sequence camera cuts, VO recording, accessibility, 3D landscapes/rigs, physical hazards, gameplay and full story QA. Story movie clips are reference imagery, **not a playable engine trailer**.

@@ -22,6 +22,9 @@ jobs:
           python-version: '3.11'
       - name: Check canonical nine-realm authoring master and Unreal import outputs
         run: python Scripts/build_world_content.py --check
+      - name: Validate cinematic and realm production source against Unreal CSVs
+        run: python Scripts/build_cinematic_handoff.py --check
+
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits

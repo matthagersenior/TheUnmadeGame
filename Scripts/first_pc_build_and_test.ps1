@@ -31,6 +31,10 @@ try {
     & (Join-Path $PSScriptRoot "check_unreal_host.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "preflight.log")
     if($LASTEXITCODE -ne 0){throw "HOST_PREFLIGHT_FAILED: exit $LASTEXITCODE"}
+    Write-Host "Checking cinematic explainer and nine-realm production handoff."
+    & python (Join-Path $PSScriptRoot "build_cinematic_handoff.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "cinematic-production-validation.log")
+    if($LASTEXITCODE -ne 0){throw "CINEMATIC_CONTENT_OUT_OF_SYNC: regenerate and commit data tables"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")
