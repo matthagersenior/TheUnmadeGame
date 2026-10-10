@@ -1,0 +1,404 @@
+{
+  "version": 2,
+  "edition": "2026-10-10",
+  "title": "The Unmade: A World That Remembers — full-universe director animatic",
+  "editorial_status": "56 concept storyboard scenes, synthesized scratch narration and score, NOT Unreal gameplay or fully animated cinematic",
+  "duration_seconds": 735.03,
+  "scene_count": 56,
+  "public_spoiler_policy": "Internal director edition, not a spoiler-light public trailer; existing 16-shot public explainer stays separate",
+  "delivery": "The complete 56-scene narration, score stems, timed SRT and playback-verified MP4 are supplied as a ChatGPT production kit, not committed Git binary media",
+  "chapters": [
+    {
+      "name": "The Impossible Person",
+      "scenes": [
+        {
+          "id": "C01",
+          "title": "THE UNMADE",
+          "start_seconds": 0,
+          "end_seconds": 12.07
+        },
+        {
+          "id": "C02",
+          "title": "WHO YOU BECOME",
+          "start_seconds": 12.07,
+          "end_seconds": 25.86
+        },
+        {
+          "id": "C03",
+          "title": "THE WORLD IS NOT A STAGE",
+          "start_seconds": 25.86,
+          "end_seconds": 39.75
+        },
+        {
+          "id": "C04",
+          "title": "ONE SOUND IS MISSING",
+          "start_seconds": 39.75,
+          "end_seconds": 51.65
+        },
+        {
+          "id": "C05",
+          "title": "A WORLD WITH NO SIMPLE VERDICT",
+          "start_seconds": 51.65,
+          "end_seconds": 63.88
+        }
+      ]
+    },
+    {
+      "name": "Living Civilizations",
+      "scenes": [
+        {
+          "id": "C06",
+          "title": "THE THREEFOLD REACH",
+          "start_seconds": 63.88,
+          "end_seconds": 77.43
+        },
+        {
+          "id": "C07",
+          "title": "A LANTERN WITHOUT AN OWNER",
+          "start_seconds": 77.43,
+          "end_seconds": 89.78
+        },
+        {
+          "id": "C08",
+          "title": "SALTWAKE / THE WIDOWED RAIN",
+          "start_seconds": 89.78,
+          "end_seconds": 101.97
+        },
+        {
+          "id": "C09",
+          "title": "A BERTH WITHOUT WATER",
+          "start_seconds": 101.97,
+          "end_seconds": 113.95
+        },
+        {
+          "id": "C10",
+          "title": "CINDERHOLD / THE HEARTH BENEATH",
+          "start_seconds": 113.95,
+          "end_seconds": 127.69
+        },
+        {
+          "id": "C11",
+          "title": "THE SECOND SHADOW",
+          "start_seconds": 127.69,
+          "end_seconds": 140.22
+        },
+        {
+          "id": "C12",
+          "title": "DREVLACH / THE SEA OF WRITTEN DEBTS",
+          "start_seconds": 140.22,
+          "end_seconds": 152.74
+        },
+        {
+          "id": "C13",
+          "title": "THE UNBORN RECEIPT",
+          "start_seconds": 152.74,
+          "end_seconds": 165.55
+        },
+        {
+          "id": "C14",
+          "title": "ORRAVANE / THE UPSIDE-DOWN CHOIR",
+          "start_seconds": 165.55,
+          "end_seconds": 177.83
+        },
+        {
+          "id": "C15",
+          "title": "THE SEVENTH REST",
+          "start_seconds": 177.83,
+          "end_seconds": 190.51
+        },
+        {
+          "id": "C16",
+          "title": "VATHLESS / THE BONES OF YESTERDAYS",
+          "start_seconds": 190.51,
+          "end_seconds": 202.52
+        },
+        {
+          "id": "C17",
+          "title": "NAMES UNDER LOAD",
+          "start_seconds": 202.52,
+          "end_seconds": 215.08
+        },
+        {
+          "id": "C18",
+          "title": "EILLUN / THE HUNDRED UNLIVED",
+          "start_seconds": 215.08,
+          "end_seconds": 227.2
+        },
+        {
+          "id": "C19",
+          "title": "THE UNNUMBERED DOOR",
+          "start_seconds": 227.2,
+          "end_seconds": 239.63
+        },
+        {
+          "id": "C20",
+          "title": "THARNIV / THE ORCHARD OF KINGS",
+          "start_seconds": 239.63,
+          "end_seconds": 252.36
+        },
+        {
+          "id": "C21",
+          "title": "THE FRUIT LEFT UNTOUCHED",
+          "start_seconds": 252.36,
+          "end_seconds": 264.13
+        },
+        {
+          "id": "C22",
+          "title": "AUVREN / THE PLACE BEFORE PLACE",
+          "start_seconds": 264.13,
+          "end_seconds": 275.69
+        },
+        {
+          "id": "C23",
+          "title": "A MARK FOR LEAVING",
+          "start_seconds": 275.69,
+          "end_seconds": 289.23
+        }
+      ]
+    },
+    {
+      "name": "The People Who Remember",
+      "scenes": [
+        {
+          "id": "C24",
+          "title": "82 INDIVIDUAL RESIDENTS",
+          "start_seconds": 289.23,
+          "end_seconds": 305.64
+        },
+        {
+          "id": "C25",
+          "title": "RETURN TO SOMEONE YOU KNOW",
+          "start_seconds": 305.64,
+          "end_seconds": 318.26
+        },
+        {
+          "id": "C26",
+          "title": "PRIVATE LIVES BEYOND QUESTS",
+          "start_seconds": 318.26,
+          "end_seconds": 330.61
+        },
+        {
+          "id": "C27",
+          "title": "CULTURE IS A MECHANIC",
+          "start_seconds": 330.61,
+          "end_seconds": 346.09
+        }
+      ]
+    },
+    {
+      "name": "Player Freedom and Consequence",
+      "scenes": [
+        {
+          "id": "C28",
+          "title": "EXPLORE WITHOUT A STRAIGHT LINE",
+          "start_seconds": 346.09,
+          "end_seconds": 360.65
+        },
+        {
+          "id": "C29",
+          "title": "A ROAD THAT ANSWERS BACK",
+          "start_seconds": 360.65,
+          "end_seconds": 373.95
+        },
+        {
+          "id": "C30",
+          "title": "GLIMPSE",
+          "start_seconds": 373.95,
+          "end_seconds": 386.63
+        },
+        {
+          "id": "C31",
+          "title": "FOLD",
+          "start_seconds": 386.63,
+          "end_seconds": 399.4
+        },
+        {
+          "id": "C32",
+          "title": "REWRITE",
+          "start_seconds": 399.4,
+          "end_seconds": 412.78
+        },
+        {
+          "id": "C33",
+          "title": "TEN SIGNATURE DISCIPLINES",
+          "start_seconds": 412.78,
+          "end_seconds": 427.1
+        },
+        {
+          "id": "C34",
+          "title": "A SECOND LANGUAGE OF REALITY",
+          "start_seconds": 427.1,
+          "end_seconds": 442.83
+        },
+        {
+          "id": "C35",
+          "title": "UNDERSTAND BEFORE YOU STRIKE",
+          "start_seconds": 442.83,
+          "end_seconds": 456.73
+        },
+        {
+          "id": "C36",
+          "title": "COMBAT THAT MUST BE LEARNED",
+          "start_seconds": 456.73,
+          "end_seconds": 469.95
+        },
+        {
+          "id": "C37",
+          "title": "MERCY IS A REAL ACTION",
+          "start_seconds": 469.95,
+          "end_seconds": 483.65
+        },
+        {
+          "id": "C38",
+          "title": "ITEMS AND PROFESSIONS",
+          "start_seconds": 483.65,
+          "end_seconds": 496.44
+        }
+      ]
+    },
+    {
+      "name": "Quests, Return, and Discovery",
+      "scenes": [
+        {
+          "id": "C39",
+          "title": "THE UNANSWERED ROAD",
+          "start_seconds": 496.44,
+          "end_seconds": 507.48
+        },
+        {
+          "id": "C40",
+          "title": "THIRD CHAPTERS MATTER",
+          "start_seconds": 507.48,
+          "end_seconds": 522.02
+        },
+        {
+          "id": "C41",
+          "title": "OPTIONAL OBSERVATORIES",
+          "start_seconds": 522.02,
+          "end_seconds": 534.01
+        },
+        {
+          "id": "C42",
+          "title": "MYSTERIES BENEATH MYSTERIES",
+          "start_seconds": 534.01,
+          "end_seconds": 547.16
+        },
+        {
+          "id": "C43",
+          "title": "THE WORLD CAN REFUSE YOU",
+          "start_seconds": 547.16,
+          "end_seconds": 559.48
+        },
+        {
+          "id": "C44",
+          "title": "DIFFICULT DOES NOT MEAN OBSCURE",
+          "start_seconds": 559.48,
+          "end_seconds": 573.02
+        }
+      ]
+    },
+    {
+      "name": "The Answer That Ate Its Question",
+      "scenes": [
+        {
+          "id": "C45",
+          "title": "NHAL-VEY",
+          "start_seconds": 573.02,
+          "end_seconds": 586.17
+        },
+        {
+          "id": "C46",
+          "title": "THE FIRST FORM",
+          "start_seconds": 586.17,
+          "end_seconds": 599.85
+        },
+        {
+          "id": "C47",
+          "title": "THE FALSE VICTORY",
+          "start_seconds": 599.85,
+          "end_seconds": 612.38
+        },
+        {
+          "id": "C48",
+          "title": "THE UNMASKED ANSWER",
+          "start_seconds": 612.38,
+          "end_seconds": 626.91
+        },
+        {
+          "id": "C49",
+          "title": "DEFEAT IS NOT AN ENDING",
+          "start_seconds": 626.91,
+          "end_seconds": 638.86
+        }
+      ]
+    },
+    {
+      "name": "The Worlds After Victory",
+      "scenes": [
+        {
+          "id": "C50",
+          "title": "THE HELD MORNING",
+          "start_seconds": 638.86,
+          "end_seconds": 653.34
+        },
+        {
+          "id": "C51",
+          "title": "THE MANY MORNINGS",
+          "start_seconds": 653.34,
+          "end_seconds": 666.38
+        },
+        {
+          "id": "C52",
+          "title": "NINE REALMS, CHANGED",
+          "start_seconds": 666.38,
+          "end_seconds": 679.61
+        },
+        {
+          "id": "C53",
+          "title": "THE OPTIONAL ECHO",
+          "start_seconds": 679.61,
+          "end_seconds": 691.76
+        },
+        {
+          "id": "C54",
+          "title": "THE GAME BEYOND THE BOSS",
+          "start_seconds": 691.76,
+          "end_seconds": 704.75
+        },
+        {
+          "id": "C55",
+          "title": "OUR PRODUCTION TRUTH",
+          "start_seconds": 704.75,
+          "end_seconds": 720.13
+        },
+        {
+          "id": "C56",
+          "title": "THE UNMADE",
+          "start_seconds": 720.13,
+          "end_seconds": 735.03
+        }
+      ]
+    }
+  ],
+  "audio_acceptance": {
+    "audio_codec": "aac",
+    "sample_rate_hz": 48000,
+    "channels": 2,
+    "min_audio_duration_seconds": 734.8,
+    "max_abs_duration_difference_seconds": 0.5,
+    "music_only_not_substitute_for_voice": true,
+    "voice_present": true,
+    "mean_dbfs_min": -24,
+    "peak_dbfs_max": 0,
+    "project_voice_status": "temporary synthetic offline scratch; professional voice performances pending",
+    "caption_ext": ".srt"
+  },
+  "continuity": [
+    "nine realms in canonical order",
+    "82 character identities preserved",
+    "ten signature disciplines represented",
+    "Nhal-Vey's two mandatory forms and false victory",
+    "Held Morning and Many Mornings both represented",
+    "optional postgame echo remains voluntary"
+  ]
+}
