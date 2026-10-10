@@ -11,6 +11,7 @@
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
+#include "World/UnmadeFrontierHazardRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
@@ -59,6 +60,8 @@ public:
     bool ResolveNearbyRealmAftermath(int32 Choice);
     int32 GetRealmAftermathStage(UnmadeCore::Realm Id) const { return RealmAftermath.Stage(Id); }
     int32 GetRealmAftermathEnding(UnmadeCore::Realm Id) const { return RealmAftermath.Ending(Id); }
+    /** Clock-synchronized local hazard, no update or damage outside active route. */
+    UnmadeCore::FrontierHazardSample GetNearbyFrontierHazard(FVector Position) const;
     int32 GetAfterlightStage() const { return Afterlight.Stage(); }
     UnmadeCore::AfterlightBenefit GetAfterlightBenefit() const { return Afterlight.Effect(); }
     FString GetCurrentRealmName(FVector Position) const;
@@ -92,6 +95,8 @@ private:
     bool bRealmAftermathSaveRejected=false;
     void BuildFrontierAftermath();
     void RefreshRealmAftermathWorld();
+    bool bHazardCueVisible[2]={false,false};
+    void RefreshFrontierHazardCues();
     void BuildBellwoldAfterlight();
     void RefreshAfterlightWorld();
     std::array<UnmadeCore::CommunityConsequence,5> CommunityEffects{};

@@ -33,3 +33,12 @@ This check does not install, purchase, or provision any software. If it exits 3,
 **Required evidence:** exact game SHA, Unreal version/build, Windows/toolchain/GPU model, compiler logs, test-run logs/report, functional QA video/screenshots and save/reload evidence.
 
 **Cost gate:** No GPU cloud infrastructure may be provisioned until the creator approves a provider and cost cap.
+
+## Single-command first-PC gate (added October 10)
+On a Windows PC with the correct licensed Unreal Engine and Visual Studio C++ workload already installed, use:
+
+```powershell
+.\Scripts\first_pc_build_and_test.ps1 -UnrealRoot "C:\Program Files\Epic Games\UE_5.8"
+```
+
+This script runs hardware/toolchain preflight, **Build.bat** for the Editor target and the `Unmade` automation group. It stops on nonzero exit and writes timestamped build and test logs under `TestReports/first-pc-*`. Use `-BuildOnly` for compiler debugging without pretending tests ran. It **does not** install UE, generate authored maps, cook a build, provision cloud resources, prove in-game save/load or certify real-time frame rates. Retain logs and follow the manual QA chapters for combat, frontiers, Afterlight, NPCs and all nine-realm progress.

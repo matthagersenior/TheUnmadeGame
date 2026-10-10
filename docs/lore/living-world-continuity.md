@@ -108,3 +108,12 @@ Later realms require the corresponding real-world control before an aftermath ca
 - **Volume I (October 9, 2026):** initial illustrated canon; nine realm atlas, 64 current NPCs, 58 then-authored items, three bosses, ten rites and six confluences.
 - **Volume II (October 10, 2026):** Bellwold's Second Night, two epic items (60 total), living community consequence system, nine distinct proposed aftershock arcs, continuity test and revised illustrated master.
 - **Volume III source pass (October 10, 2026):** physical mechanism gates and two alternative investigation routes for Saltwake and Cinderhold, with persistent geometry, source tests, and authored later-realm mechanism contracts. The illustrated master is pending regeneration and does not yet constitute an updated downloadable edition.
+
+## PC-readiness rules addendum: fair failure, safe returns
+Entering a previously settled frontier must not turn into a permanent death trap. Before the sealed route is released, the Saltwake surge and Cinderhold heat pulse follow a readable calm → warning → impact cadence. The approach is bounded: backtrack beyond the marked route, shelter at the town edge, or guard to reduce damage; operating the mechanism stops later pulses. Defeat should return the protagonist to a safe entry checkpoint after a delay without deleting witnessed events, inventory, or hard story decisions. These are domain/source integration targets pending Unreal Editor verification, not a verified combat/survival experience.
+
+The graybox source now connects the telegraphed 12-second frontier pulse to world actors (a non-colliding visible warning surface), proximity/danger checks, single-damage-per-pulse combat, guard mitigation, and checkpoint recovery after player defeat. Pulses stop after mechanism preparation. Native tests exist, but editor compilation, performance, VFX, safe spawning and controller comfort remain unverified.
+
+The PC handoff is specified as a repeatable preflight → native Unreal Editor build → actual automation sequence that refuses failures, produces attempt logs, and never provisions a paid machine. Passing GitHub C++17 tests does **not** mean this handoff succeeds or that authored levels and gameplay cinematics are complete.
+
+An engine automation test `Unmade.World.FrontierHazardAndCheckpoint` mirrors the new native hazard/guard/revival rules. It is source-prepared for Unreal, **not executed** without an engine host.

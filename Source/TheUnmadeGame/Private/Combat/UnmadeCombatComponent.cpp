@@ -49,3 +49,16 @@ bool UUnmadeCombatComponent::TryStrikeTarget(UUnmadeCombatComponent* Target, dou
         Swing.swingId, Swing.baseDamage + GearAttack, bFractureExposed, Target->GearArmor);
     return Hit == UnmadeCore::HitOutcome::Applied;
 }
+
+bool UUnmadeCombatComponent::ReceiveHazardPulse(
+    uint64 SourceId,uint64 PulseId,double Damage)
+{
+    return State.ReceiveHit(static_cast<std::uint64_t>(SourceId),
+                            static_cast<std::uint64_t>(PulseId),
+                            Damage,false,0.0)==UnmadeCore::HitOutcome::Applied;
+}
+
+bool UUnmadeCombatComponent::ReviveAtCheckpoint()
+{
+    return State.ReviveAtCheckpoint(0.75);
+}

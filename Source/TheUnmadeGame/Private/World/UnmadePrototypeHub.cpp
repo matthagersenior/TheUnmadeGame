@@ -33,6 +33,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshCommunityConsequences();
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
+    RefreshFrontierHazardCues();
     RefreshRiteWorldFromSave();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
@@ -529,6 +530,7 @@ bool AUnmadePrototypeHub::InspectRealmAftermathSite(
         return true; // do not claim world change when the save transaction fails
     }
     RefreshRealmAftermathWorld();
+    RefreshFrontierHazardCues();
     if(GEngine)GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Cyan,
         Event==UnmadeCore::RealmAftermathResult::Prepared
         ?TEXT("CONTROL OPERATED: the physical barrier yields. Follow a route to the evidence.")
@@ -612,6 +614,47 @@ bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
     return false;
 }
 
+UnmadeCore::FrontierHazardSample AUnmadePrototypeHub::GetNearbyFrontierHazard(
+    FVector Position) const
+{
+    for(int32 i=1;i<=2;++i)
+    {
+        const auto Realm=UnmadeCore::RealmAftermathSpecs[i].realm;
+        const auto Sample=UnmadeCore::SampleFrontierHazard(
+            Realm,Clock.ElapsedSeconds(),Position.X,Position.Y,
+            RealmAftermath.Stage(Realm)>0,RealmAftermath.IsPrepared(Realm));
+        if(Sample.pulseId!=0)return Sample;
+    }
+    return {};
+}
+
+void AUnmadePrototypeHub::RefreshFrontierHazardCues()
+{
+    if(!GetWorld())return;
+    for(int32 i=1;i<=2;++i)
+    {
+        const auto Realm=UnmadeCore::RealmAftermathSpecs[i].realm;
+        const auto* Outpost=UnmadeCore::FindFrontier(Realm);
+        if(!Outpost)continue;
+        const auto Sample=UnmadeCore::SampleFrontierHazard(
+            Realm,Clock.ElapsedSeconds(),0,Outpost->centerY+700,
+            RealmAftermath.Stage(Realm)>0,RealmAftermath.IsPrepared(Realm));
+        const bool bShow=Sample.phase!=UnmadeCore::FrontierHazardPhase::Calm;
+        const int32 Idx=i-1;
+        if(bShow==bHazardCueVisible[Idx])continue;
+        bHazardCueVisible[Idx]=bShow;
+        const FName Tag(Realm==UnmadeCore::Realm::WidowedRain
+            ?TEXT("Saltwake.Aftermath.StormCue")
+            :TEXT("Cinderhold.Aftermath.HeatCue"));
+        for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+        {
+            if(!It->ActorHasTag(Tag))continue;
+            It->SetActorHiddenInGame(!bShow);
+            It->SetActorEnableCollision(false); // visual warning, not an invisible floor
+        }
+    }
+}
+
 void AUnmadePrototypeHub::BuildFrontierAftermath()
 {
     for(int32 i=1;i<=2;++i)
@@ -632,6 +675,13 @@ void AUnmadePrototypeHub::BuildFrontierAftermath()
         SpawnBlock(Origin+FVector(0,905,160),FVector(33,.65,3.2),
             FName(bRain?TEXT("Saltwake.Aftermath.StormBarrier")
                        :TEXT("Cinderhold.Aftermath.HeatSeal")));
+        // Pulse warning floor, intentionally noncolliding; collision is owned
+        // by actual route barriers. Warns clearly before hazard damage.
+        SpawnBlock(Origin+FVector(0,630,9),FVector(29,7,.16),
+            FName(bRain?TEXT("Saltwake.Aftermath.StormCue")
+                       :TEXT("Cinderhold.Aftermath.HeatCue")));
+        SetRiteWorldActorState(FName(bRain?TEXT("Saltwake.Aftermath.StormCue")
+                                           :TEXT("Cinderhold.Aftermath.HeatCue")),false);
         const FName CareGate(bRain?TEXT("Saltwake.Aftermath.CareGate")
                                  :TEXT("Cinderhold.Aftermath.CareGate"));
         const FName TruthGate(bRain?TEXT("Saltwake.Aftermath.TruthGate")
@@ -889,6 +939,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
+    RefreshFrontierHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical
     // states. World mastering only stabilizes explicitly allowed structures.
     for(auto It=TemporaryRiteWorldEffects.CreateIterator();It;++It)

@@ -34,6 +34,14 @@ int main() {
     assert(target.ReceiveHit(13,1,20,false)==HitOutcome::AlreadyDefeated);
     assert(target.TryAttack(5).outcome==AttackOutcome::Defeated);
     assert(!target.SetGuarding(true));
+    assert(!target.ReviveAtCheckpoint(0));
+    assert(!target.ReviveAtCheckpoint(1.1));
+    assert(target.ReviveAtCheckpoint(0.75));
+    assert(target.IsAlive() && target.Health()==60);
+    assert(target.TryAttack(0).outcome==AttackOutcome::Started);
+    assert(target.ReceiveHit(11,1,10,false)==HitOutcome::Applied);
+    assert(target.Health()==50);
+    assert(!target.ReviveAtCheckpoint(0.75));
     assert(attacker.TryAttack(std::numeric_limits<double>::quiet_NaN()).outcome==AttackOutcome::InvalidTime);
     assert(ChooseEnemyIntent(EnemyStyle::Stalker,8,true)==EnemyIntent::Approach);
     assert(ChooseEnemyIntent(EnemyStyle::Stalker,1.5,true)==EnemyIntent::Attack);

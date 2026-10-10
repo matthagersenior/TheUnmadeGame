@@ -243,3 +243,10 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - Journal tracks returned chapters; frontier residents reference local visible consequences, while observed player choices remain witness/rumor events.
 - GitHub Python source contracts and C++17 domain tests ran on CI; **the Unreal Editor has still not compiled this source** and no actual controller, navigation, flood/heat gameplay, geometry traversal or in-game save/load has been checked.
 - Full illustrated lore package Volume III is tracked as a separately generated deliverable and should not be claimed from green source CI alone.
+
+## 2026-10-10 pre-PC hazard and recovery source milestone
+- Guard reduces the native combat damage of region-specific telegraphed storm/heat impacts; mechanics only activate in bounded intervention lanes after starting an aftermath and until the local control is operated.
+- A 4-second post-defeat recovery restores 75% player health and movement at the current realm's safe entry without resetting world decisions, personal memories, earned inventory or hard storyline flags. The pulse-model and domain resurrection tests have passed in source CI; engine collision and usability remain pending.
+- Visible noncolliding warning floor stripes toggle based on deterministic realm clock; Unreal animation/audio/controller feedback and balanced survival are not proven.
+- Added a one-command Windows host build/UE-automation script with preflight, per-attempt logs, exit-code refusal and no automatic purchases or deployment.
+- Unreal Editor C++ compilation, game startup, level art, in-world screenshots and full live gameplay tests are **not** completed.
