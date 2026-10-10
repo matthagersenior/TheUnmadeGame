@@ -1342,6 +1342,89 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
     return true;
 }
 
+void AUnmadePrototypeHub::RefreshWitnessDispatchWorld()
+{
+    SetRiteWorldActorState(FName("WitnessDispatch.FoldedRecord"),
+        WitnessBraid.Outcome()!=UnmadeCore::WitnessBraidOutcome::Unresolved &&
+        Dispatch.Stage()==UnmadeCore::WitnessDispatchStage::Waiting);
+}
+
+FString AUnmadePrototypeHub::GetWitnessDispatchRecipientLine(FName NpcId) const
+{
+    if(NpcId!=FName("npc.bellwold.matron.001") ||
+       Dispatch.Stage()!=UnmadeCore::WitnessDispatchStage::HandDelivered)
+        return FString();
+    return FString(UTF8_TO_TCHAR(Dispatch.HessaLine(WitnessBraid.Outcome())));
+}
+
+bool AUnmadePrototypeHub::TryWitnessDispatch(AUnmadeCharacter* Player,
+    double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player) || !GetWorld() ||
+       WitnessBraid.Outcome()==UnmadeCore::WitnessBraidOutcome::Unresolved)
+        return false;
+    const auto At=Dispatch.Stage();
+    if(At==UnmadeCore::WitnessDispatchStage::Waiting)
+    {
+        for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+        {
+            if(!It->ActorHasTag(FName("WitnessDispatch.FoldedRecord")))continue;
+            const double DistSq=FVector::DistSquared(
+                Player->GetActorLocation(),It->GetActorLocation());
+            if(DistSq>FMath::Square(260.f) || DistSq>=CompetingNpcDistanceSq)
+                return false; // closer resident keeps their conversation
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeDispatchPickup),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,65),
+                It->GetActorLocation()+FVector(0,0,35),ECC_Visibility,Sight))
+                return false;
+            const auto Before=Dispatch.Snapshot();
+            if(Dispatch.Collect(WitnessBraid.Outcome(),GetGameDay())!=
+                UnmadeCore::WitnessDispatchEvent::Collected)return false;
+            if(!WriteWorldSnapshot())
+            {
+                Dispatch.Restore(Before,WitnessBraid.Outcome());
+                return false;
+            }
+            RefreshWitnessDispatchWorld();
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Yellow,
+                TEXT("FOLDED RECORD COLLECTED: physically carry it to Hessa in Bellwold. Your custody is saved."));
+            return true;
+        }
+    }
+    else if(At==UnmadeCore::WitnessDispatchStage::PlayerCarrying)
+    {
+        for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+        {
+            if(It->GetStableId()!=FName("npc.bellwold.matron.001") ||
+               FVector::DistSquared(Player->GetActorLocation(),
+                    It->GetActorLocation())>FMath::Square(265.f))
+                continue;
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeDispatchReceipt),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,65),
+                It->GetActorLocation()+FVector(0,0,65),ECC_Visibility,Sight))
+                return false;
+            const auto Before=Dispatch.Snapshot();
+            if(Dispatch.HandToHessa(WitnessBraid.Outcome(),GetGameDay())!=
+                UnmadeCore::WitnessDispatchEvent::Delivered)return false;
+            if(!WriteWorldSnapshot())
+            {
+                Dispatch.Restore(Before,WitnessBraid.Outcome());
+                return false;
+            }
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,14.f,FColor::Green,
+                FString(UTF8_TO_TCHAR(Dispatch.HessaLine(WitnessBraid.Outcome()))));
+            return true;
+        }
+    }
+    return false;
+}
+
 FString AUnmadePrototypeHub::GetEvidenceNotebook() const
 {
     // Read only the existing, persisted firsthand notebook state. Local
@@ -1391,6 +1474,9 @@ FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
         Text+=TEXT(" | BRAID READY: return to Orrel's nail at the Crossings, F7 protect or F8 publish; confirm twice.");
     else
         Text+=TEXT(" | BRAID UNRESOLVED: inspect three relics and revisit one after a local choice.");
+    if(WitnessBraid.Outcome()!=UnmadeCore::WitnessBraidOutcome::Unresolved)
+        Text+=FString::Printf(TEXT(" | CUSTODY: %s"),
+            UTF8_TO_TCHAR(Dispatch.PlayerLine(WitnessBraid.Outcome())));
     return Text;
 }
 
