@@ -309,6 +309,18 @@ FString AUnmadeNpcCharacter::GetReactionText() const
                     Home->trialChoiceA:Home->trialChoiceB));
             }
         }
+        const int32 EchoEnding=CachedHub->GetEchoQuestEnding(LaterHome);
+        if(EchoEnding!=0)
+        {
+            const int32 Idx=UnmadeCore::LaterIndex(LaterHome);
+            if(Idx>=0)
+            {
+                const auto& Q=UnmadeCore::EchoQuests[Idx];
+                CharacterLine+=TEXT(" ");
+                CharacterLine+=FString(UTF8_TO_TCHAR(EchoEnding==1?
+                    Q.resultCare:Q.resultTruth));
+            }
+        }
         const int32 After=CachedHub->GetRealmAftermathEnding(LaterHome);
         if(After!=0)
         {

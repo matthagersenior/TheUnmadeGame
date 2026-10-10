@@ -23,7 +23,7 @@
 
 ## Pre-PC backlog (can continue now, not yet complete)
 1. **SOURCE WIRED / NATIVE TESTED:** irreversible F7/F8 previews now require a second same-arc, same-ending press within six seconds. The pending remaining gate is UE controller, UI and save-failure playtesting.
-2. **SOURCE WIRED / NATIVE TESTED / ENGINE UNVERIFIED:** Six different world-timed dangers now apply health injury or nonlethal reality strain. Each has safe flanks, telegraph and stops when the first intervention is completed. The next work is nuanced enemy encounters, environmental puzzles and substantial art/audio. NPCs currently have a preliminary safe-lane steering rule, not finished navigation.
+2. **SOURCE WIRED / NATIVE TESTED / ENGINE UNVERIFIED:** Six different world-timed dangers apply health injury or nonlethal reality strain. Six optional third-chapter Echo investigations add two proofs and a verified local witness per realm, plus source-world consequences. Now prioritize distinct enemies, advanced ability interaction, professional dialogue/cinematic/audio content and true navigation. No engine playtest yet.
 3. Improve save transaction integrity across combat health/checkpoints, quests, NPC memory, equipment and worlds; test bad arrays, failed writes and repeated saves.
 4. Author navigation and controller-accessible UI interaction specifications, first-party feedback, item/quest/inventory states, audio cue sheets and localization text independent of a PC.
 5. Create source-verifiable quests and world consequences per realm, not merely names, stat counters or 3D placeholders; validate performance budgets and progression without infinite grinding.

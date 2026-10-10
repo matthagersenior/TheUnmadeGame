@@ -291,3 +291,8 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - Created a **38-entry ZIP** with editable DOCX/PDF, art, release status, quality matrix, source appendix and manifest. Verified ZIP integrity and SHA-256 of every file.
 - Gameplay source `fe849e839cf7eb3550df9711d99fc42cf50f960f` completed post-merge main source CI; the documentation does not claim engine build or playtest.
 - Binary artifacts are provided in this conversation only, not checked into GitHub, and art is conceptual not gameplay capture.
+
+## 2026-10-10 — optional Echo Quests and layout contract
+- Added a third, independently saved narrative chapter for all six later realms, totaling **six third-chapter quests, twelve mutually exclusive endings, twelve physical evidence locations, twelve confirmation controls, six consequences at adjacent passages**, plus local civic world geometry. Story text and NPC testimony are authored and deterministic, with no remote inference or repeatable fetch-loop.
+- Each new chapter only unlocks after that realm's first and aftershock arcs. Both unique clues, the correct witness, physical final control and double confirmation are required. Standalone C++17 tests validate save restoration, corruption refusal, both endings and geometry intervals; source Unreal automation included (not executed).
+- Fixed a source-level ground overlap bug that previously invalidated the separated graybox. Gate-wall segments now leave room for the actual care and truth apertures. Gameplay still needs full UE compiler, capsule, navigation and traversal testing.

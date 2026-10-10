@@ -65,3 +65,10 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Generated a 38-entry distribution ZIP with source appendix, release status, a six-realm quality matrix and SHA-256 manifest; checked every ZIP entry for integrity and digest correctness.
 - Record pinned to merged gameplay source `fe849e839cf7eb3550df9711d99fc42cf50f960f`, PR #8. GitHub main CI verified only native C++17/Python source tests; Unreal compilation, a runtime hazard experience and GPU frame acceptance are still pending.
 - The illustrated files are provided as downloadable conversation artifacts and are **not** committed to this repository. New concept visuals are **not** claimed as Unreal render footage.
+
+## 2026-10-10 — Third-return Echo Quests and physical graybox correction
+- Authored six unique tertiary quest narratives (two non-repeatable clues, conflicting evidence, separate care/truth witnesses, a named irreversible council ritual with two-press confirmation, a civic monument and one adjacent-realm physical dispatch).
+- Added data-only C++17 `EchoChronicle` with atomic six-realm saved progress, four optional schema-1 save arrays, invalid-state refusal, independent outcomes and rollback after failed Unreal SaveGameToSlot.
+- Integrated E interaction and source-spawned physical sites and public outcomes with the existing nine-realm first and aftermath quests. Added optional journal status and local NPC aftermath commentary; remote NPCs do not gain magical knowledge.
+- Corrected a serious previous graybox geometry error: original north/south grounds overlapped, and walls overlapped their decision gate apertures. A compile-time geometric invariants header now checks that both bridges reach the two separate grounds and exclusive wall gate apertures do not overlap. Only real UE collision/navigation tests can confirm the blockout physically works.
+- Detailed third-chapter writer guide and Unreal acceptance matrix added; all ten rites have authoring cross-references but their advanced runtime combinations remain future work. Volume VI remains the latest illustrated PDF; the next art edition must include these narratives.
