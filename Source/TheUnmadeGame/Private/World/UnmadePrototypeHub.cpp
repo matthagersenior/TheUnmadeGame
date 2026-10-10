@@ -37,6 +37,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshEchoQuestWorld();
     RefreshRealmResonanceWorld();
     RefreshRealmGuardians();
+    RefreshFinalWorld();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
@@ -74,6 +75,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::EchoChronicle RestoredEcho;
     UnmadeCore::RealmResonanceJourney RestoredResonance;
     UnmadeCore::GuardianChronicle RestoredGuardians;
+    UnmadeCore::FinalJourney RestoredFinal;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -241,6 +243,19 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    if(Save->bHasFinalEncounterSnapshot)
+    {
+        const UnmadeCore::FinalSnapshot State{
+            Save->FinalEncounterStage,Save->FinalMorningChoice,Save->FinalMemorySeed
+        };
+        if(!RestoredFinal.Restore(State))
+        {
+            bFinalSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Corrupt final ending cannot overwrite existing world"));
+            return;
+        }
+    }
+    FinalStory=RestoredFinal;
     Guardians=RestoredGuardians;
     Resonance=RestoredResonance;
     EchoQuest=RestoredEcho;
@@ -259,7 +274,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
 {
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
        bLaterRealmSaveRejected || bEchoSaveRejected ||
-       bResonanceSaveRejected || bGuardianSaveRejected)return false;
+       bResonanceSaveRejected || bGuardianSaveRejected ||
+       bFinalSaveRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -345,6 +361,11 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->RealmGuardianOutcomes.Reset();
     for(int value:Guardians.Snapshot().outcomes)
         Save->RealmGuardianOutcomes.Add(value);
+    const auto FinalState=FinalStory.Snapshot();
+    Save->bHasFinalEncounterSnapshot=true;
+    Save->FinalEncounterStage=FinalState.act;
+    Save->FinalMorningChoice=FinalState.morning;
+    Save->FinalMemorySeed=FinalState.memorySeed;
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
@@ -1461,6 +1482,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     BuildEchoQuests();
     BuildRealmResonance();
     BuildRealmGuardians();
+    BuildFinalWorld();
     BuildCommunityConsequences();
     BuildBellwoldAfterlight();
     // Ten inscriptions across five communities. Each marker is world-space,
