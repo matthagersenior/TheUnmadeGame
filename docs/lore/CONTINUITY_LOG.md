@@ -130,3 +130,10 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added optional version1 SaveGame resident arrays with strict order and length validation, fail-closed mutation guard and rollback after failed writes. Old slots are compatible. Indexed order cannot be reordered without deliberate migration.
 - Added canonical 82-person JSON, deterministic C++ dialogue data header, 54-step/82-person Unreal DataTable CSV outputs and a non-colliding 52-actor Editor-only staging manifest. First-PC dry-run works without Unreal; explicit apply guards the dedicated `Unmade_AuthoringStaging` map and leaves existing stage actors untouched on rerun.
 - Added native and Python tests; CI and PC bootstrap must validate all generated products against source tags and resident registry before accepting any build. Full UHT compile, DataTable import, real 3D scenes, UMG dialogue branching and entire alternate nine-realm cinematics remain PC-dependent.
+
+
+## 2026-10-10 — Preproduction lived-universe atlas, beyond the quest markers
+- Preserved nine canonical realm enum IDs, original main-campaign branches, 82 registered NPC identities, ten disciplines, final boss optional route and the two postboss world variants.
+- Added Authoring/lived_universe_atlas.json as a non-authoritative detailed society, climate, ecology, labor, cultural customs and mystery master: 27 physical evidence objects, 18 resident routines, nine optional five-objective/dual-outcome civic quests, nine comparative inter-realm evidence links and 36 specified asset packages.
+- Generated 90 distinct reference-only Unreal work orders; implemented a deterministic standard-library Python validator, unit tests and CI/first-PC drift checks. New GUIDEs have no collision or gameplay authority and are explicitly marked unbuilt.
+- Updated canonical continuity and design guidance. The existing illustrated Volume IX remains the most recent rendered package; no DOCX/PDF/atlas/ZIP regeneration, Unreal Editor compile or new gameplay implementation is claimed here.
