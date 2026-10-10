@@ -1,0 +1,16 @@
+# The Unanswered Road — Win64 Unreal campaign acceptance
+
+Native C++17 tests prove story derivation/branch handling. They are not engine or walkability tests.
+
+1. On a new save enter Crossings. The journal says **A Bell That Had No Last Note** and offers a concrete reachable opening objective (two actual landmark visits, an accepted Crossings choice or two communities). A main-story marker near the first Reach road is inspectable with E and never grants rewards.
+2. Fulfill any one opening alternative. Journal moves to **What the World Withheld**, offering Saltwake **or** Cinderhold. Use the actual Reach gateways: both must be usable with attunement 0.
+3. Complete the first Saltwake route and reload. The diary offers Drevlach or Orravane, along with physically feasible routes and an explicit "not yet attuned" indicator if earning a crossing relic is still required. Complete Cinderhold on another save and verify Orravane or Vathless is offered instead. Do not require both frontier stories.
+4. Finish just Drevlach, Orravane or Vathless. Main act changes to **What the Absences Cost** -> **Who Deserves To Be Real** with Eillun/Tharniv alternatives based on the actual route. Optional unrelated realm stories remain available and independent.
+5. Complete Eillun *or* Tharniv first story, then Auvren's first trial via the unlocked atlas passage. Confirm the initial Nhal-Vey actor was not allowed to attack during unready acts, and now is reachable. Full Echo completion, six guardian kills, ten mastered spells, and collecting all nine markers must not be secretly required.
+6. Complete the two-stage finale and verify the story journal uses the existing final save to announce the living-world chapter. On returning to earlier realms, inspect an Unanswered Road marker and local NPC dialogue; their written clue must only reflect their own publicly resolved first story, not far-away private witness memory.
+7. Walk all nine markers near safe southern ground. Test interaction radius/line of sight, NPC interaction priority, camera, subtitles, text sizing, controller E/confirm equivalents and selection of a closer actor. Reading repeatedly should never grant inventory, XP or an achievement.
+8. Test intentionally non-linear saves (already completed a middle realm or the Auvren trial). The journal must show missing earlier evidence without erasing unrelated progress or claiming the finale is finished. **Existing saves already past the final first form must remain allowed to finish.**
+9. Test when each atlas route is inaccessible at the current attunement: the game must display a grounded requirement and must **never** invent a direct path or teleport. Future fully voiced companion navigation and story map UI remain work for the Windows PC.
+10. Compile UHT and the Windows Editor target. Run `Unmade.Story.UnansweredRoad` plus full `Unmade` automation, and manually play both branch routes with real collision/streaming. Only then declare the chain playable.
+
+**Important limitation:** The nine main-plot physical props are source-spawned graybox cubes with debug-text feedback; this milestone does not provide the final HUD, cinematics, fully navigable high-fidelity continents, animated recurring characters or full UE integration tests.
