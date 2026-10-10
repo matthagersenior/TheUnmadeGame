@@ -1,3 +1,7 @@
+## Six realm-specific hazard and counterplay loops (October 10, 2026)
+
+The six later-realm first-visit approaches now have independent rhythmic warnings, safe sidelines and distinct stakes: injury from the debt tide, quarry fractures and law roots; nonlethal reality strain from the inverted choir, involuntary census and contradictory horizon. Physical damage respects guarding; nonlethal pressure saturates and recovers. Source-timed cue geometry and locally alert resident routines are wired. Completing the realm's first intervention ends that realm's hazard, with no perpetual penalty. **The hazards are native-test-verified only, not compiled or played in Unreal.** See [six-realm hazard QA](docs/qa/later-realm-hazards.md).
+
 ## Volume V illustrated package — Six Roads Beyond the Known
 A 55-page Volume V DOCX/PDF was rendered from the Volume IV illustrated master; 30 prior concept/schematic art assets are preserved. The verified 38-file ZIP includes the editable DOCX, PDF, art atlas, quality matrix, source appendix and SHA-256 manifest. The package is a conversation download artifact, not a tracked GitHub binary or Unreal gameplay video.
 
