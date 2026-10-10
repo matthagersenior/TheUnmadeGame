@@ -24,4 +24,6 @@ class CharacterProfileSource(unittest.TestCase):
             self.assertIn(action,cpp)
         self.assertIn("SetRelativeScale3D(",cpp)
         self.assertIn("CharacterProfile",read("Config/DefaultInput.ini"))
+        self.assertIn("Unmade.Player.CharacterIdentity",
+            read("Source/TheUnmadeGame/Private/Tests/CharacterIdentityAutomationTest.cpp"))
 if __name__=="__main__":unittest.main()
