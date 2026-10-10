@@ -124,3 +124,8 @@ The creator may customize eight independent profile dimensions: body frame, face
 The Unreal player source stores all eight selections and the validated chosen name as optional schema-1 profile fields. Bad fields are rejected without replacing the saved profile; failed writes restore the last in-memory selection. A primitive frame/hair silhouette helps verify some shape choices once UE runs, while the other options remain art/animation hooks. `C` displays a debug profile; Blueprint-callable setters allow eventual UMG creator controls. This is not a finished visual customization interface.
 
 A separate Unreal automation source test `Unmade.Player.CharacterIdentity` awaits a Windows host. The character creation UI must be an authored accessible system, not debug text, and must allow all selections without affecting shared narrative origin or NPC memory identities.
+
+## Intentional irreversible decisions
+All current F7/F8 final faction, first-frontier, Bellwold Afterlight and actor-backed later-frontier decisions now have source-wired, six-second two-press confirmation bound to the specific arc and choice. A new story target, changed ending, expired time or invalid context cannot reuse an earlier preview. The first press states the specific permanent consequence. Source tests cover this policy; Unreal controller/visual acceptance remains unverified.
+
+An Unreal automation test `Unmade.Story.CommitmentConfirmation` awaits the future host. The final player experience must show the outcome in accessible language with a confirmation countdown and clear cancel option rather than relying only on debug text.

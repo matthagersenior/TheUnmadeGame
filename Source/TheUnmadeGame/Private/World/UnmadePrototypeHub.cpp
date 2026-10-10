@@ -286,6 +286,69 @@ void AUnmadePrototypeHub::TryFactionConversation(FName ResidentId)
     }
 }
 
+bool AUnmadePrototypeHub::GetNearbyCommitPreview(
+    int32 Choice,FName& Scope,FString& Warning) const
+{
+    Scope=NAME_None;Warning.Empty();
+    if(!GetWorld() || (Choice!=1 && Choice!=2))return false;
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return false;
+    const auto Nearby=[&](FName Id)->bool {
+        for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+            if(It->GetStableId()==Id &&
+               FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())
+                   <=FMath::Square(390.f))return true;
+        return false;
+    };
+    // Same priority order as CommitFaction's resolver.
+    for(const auto& Arc:UnmadeCore::FactionArcs)
+    {
+        if(Chronicle.Stage(Arc.faction)!=3 ||
+           Chronicle.Ending(Arc.faction)!=UnmadeCore::FactionEnding::Unresolved ||
+           !Nearby(FName(UTF8_TO_TCHAR(Arc.third))))continue;
+        Scope=FName(*FString::Printf(TEXT("Faction.%d"),static_cast<int32>(Arc.faction)));
+        Warning=FString::Printf(TEXT("%s — %s; this changes the town permanently."),
+            UTF8_TO_TCHAR(Arc.name),Choice==1?TEXT("Shared protection"):TEXT("Public testimony"));
+        return true;
+    }
+    for(const auto& Outpost:UnmadeCore::FrontierOutposts)
+    {
+        const int32 idx=UnmadeCore::FrontierIndex(Outpost.realm);
+        if(idx<0 || Frontier.Snapshot().stages[idx]!=3 || Frontier.Snapshot().endings[idx]!=0)continue;
+        const FName FinalId(Outpost.realm==UnmadeCore::Realm::WidowedRain
+            ?TEXT("npc.saltwake.harborwarden.001"):TEXT("npc.cinderhold.emberwarden.001"));
+        if(!Nearby(FinalId))continue;
+        Scope=FName(*FString::Printf(TEXT("Frontier.%d"),idx));
+        Warning=FString::Printf(TEXT("%s — %s; this first accord cannot be undone."),
+            UTF8_TO_TCHAR(Outpost.settlementName),
+            Choice==1?TEXT("Shelter the neighbors"):TEXT("Release the concealed truth"));
+        return true;
+    }
+    if(Afterlight.Stage()==3 &&
+       Nearby(FName("npc.bellwold.matron.001")) &&
+       static_cast<int32>(Afterlight.Approach())==Choice)
+    {
+        Scope=FName("Bellwold.Afterlight");
+        Warning=Choice==1
+            ?TEXT("Ward of the Second Night: permanently shelter unregistered families.")
+            :TEXT("Lantern of Unredacted Names: publicly restore erased names.");
+        return true;
+    }
+    for(int32 idx=1;idx<=2;++idx)
+    {
+        const auto Realm=UnmadeCore::RealmAftermathSpecs[idx].realm;
+        const auto& Spec=UnmadeCore::RealmAftermathSpecs[idx];
+        if(RealmAftermath.Stage(Realm)!=3 ||
+           RealmAftermath.Snapshot().approach[idx]!=Choice ||
+           !Nearby(FName(UTF8_TO_TCHAR(Spec.initiatingWitness))))continue;
+        Scope=FName(*FString::Printf(TEXT("RealmAftermath.%d"),idx));
+        Warning=FString(UTF8_TO_TCHAR(
+            Choice==1?Spec.careConsequence:Spec.truthConsequence));
+        return true;
+    }
+    return false;
+}
+
 bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome)
 {
     if(!GetWorld() || Outcome==UnmadeCore::FactionEnding::Unresolved)return false;

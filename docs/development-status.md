@@ -259,3 +259,8 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 
 ## 2026-10-10 engineering readiness ledger
 The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unreal source-only wiring, PC-required verification and authored-content gaps. It explicitly identifies source work still possible before a PC and disallows claims that a purchased PC alone would finish the game.
+
+## 2026-10-10 irreversible story decision guard
+- Added an offline deterministic six-second preview→confirm domain with target scope, ending, expired/reversed timestamps, invalid-input rejection and explicit cancellation.
+- The actual Unreal player F7/F8 action now checks nearby eligible chapter representatives and existing evidence before invoking any of the prior world-mutation functions.
+- Native C++ CI tests, source-level integration check, and dedicated Unreal automation source exist. No in-engine controller/UX or transactional failure injection has yet been performed.

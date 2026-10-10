@@ -22,7 +22,7 @@
 | Windows host bootstrap | `Scripts/first_pc_build_and_test.ps1` with preflight, build and automation, per-attempt logs | ENGINE REQUIRED: actually running it on a supported host |
 
 ## Pre-PC backlog (can continue now, not yet complete)
-1. Extend informed irreversible-choice confirmations so a single accidental F7/F8 does not choose a permanent future. Bind preview to the same actor/witness/choice and expire it; add pure-core tests.
+1. **SOURCE WIRED / NATIVE TESTED:** irreversible F7/F8 previews now require a second same-arc, same-ending press within six seconds. The pending remaining gate is UE controller, UI and save-failure playtesting.
 2. Bring later six realms beyond data-only lore: authored encounter gates, differentiated enemy pressure, material discovery loops and meaningful return-state contracts **before** they can be rendered.
 3. Improve save transaction integrity across combat health/checkpoints, quests, NPC memory, equipment and worlds; test bad arrays, failed writes and repeated saves.
 4. Author navigation and controller-accessible UI interaction specifications, first-party feedback, item/quest/inventory states, audio cue sheets and localization text independent of a PC.

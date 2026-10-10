@@ -27,3 +27,7 @@ Every substantial gameplay addition needs a companion canon update and a regener
 ## 2026-10-10 — PC readiness: protagonist identity source
 - Introduced an offline canonical 8-dimension customization model, distinct Unicode-capable name validation, atomic snapshot restoration and immutable shared impossible origin. Unreal character creator art and menus are still unbuilt.
 - Added backward-compatible Unreal SaveGame profile fields, Blueprint-callable name/feature changes, rollback on failed writes, basic body/hair preview geometry and a keyboard profile readout. Full asset-driven creator screen remains outstanding.\n- Added an editor-side automation source test for profile selection and atomic restoration, and recorded a full creator QA gate. This is not a verified UMG creator or shipping character assets.\n
+## 2026-10-10 — Informed irreversible decisions
+- Added offline deterministic six-second confirmation with scope/choice matching, invalid-input rejection, cancellation and expiry.
+- Integrated scoped source previews before F7/F8 mutations for the faction, frontier and aftermath chapters. No single accidental keypress can commit these paths through the player input entrypoint. Real UI/controller acceptance still pending.
+- Added a dedicated Unreal automation source test and engine/manual QA gate for choice preview, path-change cancellation, save failure and controller accessibility. Actual Unreal acceptance remains outstanding.\n
