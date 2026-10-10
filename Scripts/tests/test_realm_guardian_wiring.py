@@ -9,7 +9,7 @@ class RealmGuardiansWiring(unittest.TestCase):
         world=source("Source/TheUnmadeGame/Private/World/UnmadeRealmGuardianWorld.cpp")
         for term in ("ACharacter::Tick(DeltaSeconds)","GuardianAction::Telegraph",
                      "GuardianAction::Strike","TryStrikeTarget(",
-                     "UnmadeGuardianSight","ExposeToFold"):
+                     "UnmadeGuardianSight","IsFractureExposed"):
             self.assertIn(term,guardian)
         self.assertNotIn("AUnmadeEnemyCharacter::Tick(",guardian)
         self.assertIn("BuildRealmGuardians()",world)
