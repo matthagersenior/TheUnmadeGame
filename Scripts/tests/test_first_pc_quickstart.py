@@ -27,6 +27,7 @@ class PcProductionQuickstart(unittest.TestCase):
         self.assertTrue(all(len(x["sha256"])==64 for x in plan["tables"]))
         self.assertTrue(all(x["asset"].startswith("/Game/UnmadeProduction/Data/") for x in plan["tables"]))
         self.assertEqual(len(E.validate()[1]["actors"]),52)
+        self.assertEqual(len(E.validate()[2]["work_orders"]),90)
 
     def test_no_unreal_needed_for_inspection(self):
         for script in ["Scripts/prepare_unreal_authoring.py","Scripts/unreal_editor/first_pc_editor_batch.py"]:
