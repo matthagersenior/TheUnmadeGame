@@ -52,3 +52,8 @@ Use IDs instead of ad hoc labels: `NPC_<stable-id-with-underscores>`, `DT_Unmade
 Source-level JSON-to-C++/CSV export, native tests and committed data all exist. **Editor CSV import, UHT success, actual mesh production, staged dialogues, voice performance, map art and real PC gameplay remain unverified.** The JSON pack is not a full substitute for Unreal content authoring; its purpose is to eliminate duplicate writing, ID churn and manual reentry.
 
 The latest illustrated volume stays Volume VI until a newly rendered volume is produced and its art/source provenance validated.
+
+
+## Primary literary continuity for new volumes and screen adaptations
+
+Authoring/transmedia_storyworld_v1.json anchors eleven existing settlements, thirteen established character actor IDs, nine OPEN mysteries and thirteen callback threads to current story/game source; docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md is the new long-form source. Run python Scripts/validate_transmedia_storyworld.py --check for historical identity, place and reveal gates. Literary characterization and visual/voice descriptions are editorial authoring directions, not live level actors, audio performances or save-state additions.
