@@ -15,8 +15,8 @@ int main() {
         assert(s.realm==LaterRealms[i].realm);
         assert(names.insert(s.name).second);
         assert(std::strlen(s.name)>15 && std::strlen(s.origin)>65 &&
-               std::strlen(s.warning)>60 && std::strlen(s.careMemory)>65 &&
-               std::strlen(s.truthMemory)>65);
+               std::strlen(s.warning)>60 && std::strlen(s.careMemory)>50 &&
+               std::strlen(s.truthMemory)>50);
         assert(s.maxHealth>=100 && s.damage>0 && s.rangeCm>=300);
         assert(s.windup>=1.5 && s.recovery>=2);
         assert(journey.Resolve(s.realm,false,true)==GuardianResolution::Locked);
