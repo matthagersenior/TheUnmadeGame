@@ -956,6 +956,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryWitnessDispatch(this,ResidentDistSq))return;
             if(Hub->TryFinalInteraction(this,ResidentDistSq))return;
             if(Hub->InspectUnansweredRoad(this,ResidentDistSq))return;
             if(Hub->TryCalmNearbyGuardian(this,ResidentDistSq))return;
