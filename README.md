@@ -12,6 +12,12 @@ Each of the two outcomes changes **different collision-enabled passages, walkway
 
 See [frontier return QA](docs/qa/frontier-aftermaths.md) and [physical adventure standard for all nine realms](docs/design/2026-10-10-physical-realm-adventure-contract.md). **Unreal Editor compilation, traversal, performance and real player verification remain outstanding.**
 
+## Deliberate irreversible story choices — source pass
+
+All existing F7/F8 permanent outcomes (three faction chronicles, both first frontier accords, Bellwold's Second Night and the two actor-backed frontier return stories) now require two matching presses within six seconds **near the same qualified story representative**. The first press previews a concrete lasting consequence; changing target or ending restarts the warning. The native decision policy is tested without AI or network. **Unreal gameplay and accessible confirmation UI remain unverified.**
+
+See [irreversible-choice QA](docs/qa/choice-commitment.md).
+
 ## Custom protagonist identity source pass — October 10
 
 The new offline character profile supports eight bounded customizable dimensions (body, face, hair, voice, palette, reality mark, gait, calling), a UTF-8 name and an unchanged common impossible origin. Native C++ checks cover invalid selection, malformed names, atomic restore and independent character state. Unreal-facing Blueprint-callable setters save optional schema-1 fields without erasing prior missions, and primitive body/hair geometry offers only an initial silhouette check. Press **C** to view the temporary text profile. **A real 3D creator screen, skinned mesh, facial art, voice performances and full controller UX remain to be built and tested on Unreal.**
