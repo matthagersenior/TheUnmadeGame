@@ -1128,10 +1128,21 @@ void AUnmadePrototypeHub::RefreshDistrictMood()
         const bool bTransition = Phase == UnmadeCore::DayPhase::Dawn ||
                                  Phase == UnmadeCore::DayPhase::Dusk;
         Sunlight->GetComponent()->SetIntensity(bNight ? 0.12f : bTransition ? 2.f : 9.f);
-        Sunlight->GetComponent()->SetLightColor(bNight
-            ? FLinearColor(0.36f, 0.45f, 0.8f)
-            : bTransition ? FLinearColor(1.0f, 0.53f, 0.31f)
-                          : FLinearColor(1.0f, 0.95f, 0.82f), false);
+        // Persistent epilogue lighting spans the SAME existing nine lands.
+        // Stable tint rather than unpredictable flashing or camera reversal.
+        const auto Morning=FinalStory.World();
+        const FLinearColor LightColor=Morning==UnmadeCore::Morning::Anchor
+            ? (bNight?FLinearColor(.28f,.42f,.72f):
+               bTransition?FLinearColor(.7f,.68f,.82f):
+                           FLinearColor(.78f,.84f,.93f))
+            : Morning==UnmadeCore::Morning::Many
+            ? (bNight?FLinearColor(.42f,.30f,.72f):
+               bTransition?FLinearColor(.75f,.58f,.90f):
+                           FLinearColor(.87f,.78f,1.0f))
+            : (bNight?FLinearColor(.36f,.45f,.8f):
+               bTransition?FLinearColor(1.0f,.53f,.31f):
+                           FLinearColor(1.0f,.95f,.82f));
+        Sunlight->GetComponent()->SetLightColor(LightColor,false);
         Sunlight->SetActorRotation(FRotator(bNight ? 25.f : bTransition ? -12.f : -50.f, 0.f, 0.f));
     }
 }
