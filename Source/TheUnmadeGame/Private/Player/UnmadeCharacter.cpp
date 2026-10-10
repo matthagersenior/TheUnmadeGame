@@ -920,6 +920,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->InspectResonanceArchive(this,ResidentDistSq))return;
             if(Hub->InspectEchoQuestSite(this,ResidentDistSq))return;
             if(Hub->InspectLaterRealmSite(this,ResidentDistSq))return;
             if(Hub->InspectRealmAftermathSite(this,ResidentDistSq))return;
