@@ -41,6 +41,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
+    RefreshWitnessBraidWorld();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
     GetWorldTimerManager().SetTimer(GossipTimer, this, &AUnmadePrototypeHub::SpreadLocalRumors, 8.f, true);
@@ -78,6 +79,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::FinalJourney RestoredFinal;
     UnmadeCore::ResidentContinuity RestoredResidentContinuity;
     UnmadeCore::WitnessEchoLedger RestoredWitnessEcho;
+    UnmadeCore::WitnessBraidChronicle RestoredWitnessBraid;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -293,6 +295,15 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             UE_LOG(LogTemp,Error,TEXT("Corrupt witness echo evidence: preservation mode, writes blocked"));
         }
     }
+    // If a later public verdict is corrupt, protect it without discarding
+    // unaffected old quest and evidence progress in memory.
+    if(Save->bHasWitnessBraidSnapshot &&
+       !RestoredWitnessBraid.Restore({Save->WitnessBraidOutcome},RestoredWitnessEcho))
+    {
+        bWitnessBraidRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Corrupt Witness Braid verdict: save writes blocked"));
+    }
+    WitnessBraid=RestoredWitnessBraid;
     WitnessEchoes=RestoredWitnessEcho;
     ResidentRelationships=RestoredResidentContinuity;
     FinalStory=RestoredFinal;
@@ -316,7 +327,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bLaterRealmSaveRejected || bEchoSaveRejected ||
        bResonanceSaveRejected || bGuardianSaveRejected ||
        bFinalSaveRejected || bResidentContinuityRejected ||
-       bWitnessEchoRejected)return false;
+       bWitnessEchoRejected || bWitnessBraidRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -411,6 +422,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->bHasWitnessEchoSnapshot=true;
     Save->WitnessEchoFirstMask=static_cast<int32>(EchoSnapshot.first);
     Save->WitnessEchoReturnMask=static_cast<int32>(EchoSnapshot.returnRead);
+    Save->bHasWitnessBraidSnapshot=true;
+    Save->WitnessBraidOutcome=WitnessBraid.Snapshot().outcome;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -561,6 +574,16 @@ bool AUnmadePrototypeHub::GetNearbyCommitPreview(
         Scope=FName(*FString::Printf(TEXT("RealmAftermath.%d"),idx));
         Warning=FString(UTF8_TO_TCHAR(
             Choice==1?Spec.careConsequence:Spec.truthConsequence));
+        return true;
+    }
+    // Physical decision at the nail only after three independent firsthand
+    // inspections and one later reading changed by an actual civic choice.
+    if(WitnessBraid.Outcome()==UnmadeCore::WitnessBraidOutcome::Unresolved &&
+       UnmadeCore::WitnessBraidChronicle::Ready(WitnessEchoes) &&
+       FVector::DistSquared(Player->GetActorLocation(),FVector(-1100,-540,90))<=FMath::Square(295.f))
+    {
+        Scope=FName("WitnessBraid.Crossings");
+        Warning=FString(UTF8_TO_TCHAR(UnmadeCore::WitnessBraidChronicle::Warning(Choice)));
         return true;
     }
     return false;
@@ -1246,12 +1269,56 @@ bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
                 FString::Printf(TEXT("%s | %s"),
                     UTF8_TO_TCHAR(EchoSpec->id),
                     UTF8_TO_TCHAR(UnmadeCore::WitnessEchoText(*EchoSpec,EchoEvent,LocalOutcome))));
+            if(Site->GetSiteId()==FName("site.callback.inkless_nail") &&
+               UnmadeCore::WitnessBraidChronicle::Ready(WitnessEchoes))
+            {
+                GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+                    FString(UTF8_TO_TCHAR(UnmadeCore::WitnessBraidChronicle::Investigation())));
+                GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Yellow,
+                    FString(UTF8_TO_TCHAR(WitnessBraid.OutcomeText())));
+                if(WitnessBraid.Outcome()==UnmadeCore::WitnessBraidOutcome::Unresolved)
+                    GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Green,
+                        TEXT("F7: private refuge marker | F8: public redacted record | press twice to commit."));
+            }
             if(bEchoChanged)
                 GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
                     FString::Printf(TEXT("WITNESS ECHO RECORDED | %s | The question remains open: %s"),
                         UTF8_TO_TCHAR(EchoSpec->title),UTF8_TO_TCHAR(EchoSpec->openQuestion)));
         }
     }
+    return true;
+}
+
+void AUnmadePrototypeHub::RefreshWitnessBraidWorld()
+{
+    SetRiteWorldActorState(FName("WitnessBraid.RefugeCord"),
+        WitnessBraid.Outcome()==UnmadeCore::WitnessBraidOutcome::ShelteredThread);
+    SetRiteWorldActorState(FName("WitnessBraid.PublicDocket"),
+        WitnessBraid.Outcome()==UnmadeCore::WitnessBraidOutcome::PublicDocket);
+}
+
+bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
+{
+    if(!GetWorld() || !UnmadeCore::WitnessBraidChronicle::Ready(WitnessEchoes) ||
+       WitnessBraid.Outcome()!=UnmadeCore::WitnessBraidOutcome::Unresolved)
+        return false;
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player) ||
+       FVector::DistSquared(Player->GetActorLocation(),FVector(-1100,-540,90))>FMath::Square(295.f))
+        return false;
+    const auto Before=WitnessBraid.Snapshot();
+    if(WitnessBraid.Commit(Choice,WitnessEchoes)!=UnmadeCore::WitnessBraidEvent::Committed)
+        return false;
+    if(!WriteWorldSnapshot())
+    {
+        WitnessBraid.Restore(Before,WitnessEchoes);
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Red,
+            TEXT("Your braid decision was not saved; no world state was applied."));
+        return false;
+    }
+    RefreshWitnessBraidWorld();
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Yellow,
+        FString(UTF8_TO_TCHAR(WitnessBraid.OutcomeText())));
     return true;
 }
 
@@ -1267,6 +1334,13 @@ FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
             WitnessEchoes.HasReturn(Spec.id)?TEXT("returned; truth not resolved"):
                                            TEXT("observed; return later"));
     }
+    if(WitnessBraid.Outcome()!=UnmadeCore::WitnessBraidOutcome::Unresolved)
+        Text+=FString::Printf(TEXT(" | CROSSINGS RECORD: %s"),
+            UTF8_TO_TCHAR(WitnessBraid.OutcomeText()));
+    else if(UnmadeCore::WitnessBraidChronicle::Ready(WitnessEchoes))
+        Text+=TEXT(" | BRAID READY: return to Orrel's nail at the Crossings, F7 protect or F8 publish; confirm twice.");
+    else
+        Text+=TEXT(" | BRAID UNRESOLVED: inspect three relics and revisit one after a local choice.");
     return Text;
 }
 
@@ -1612,6 +1686,12 @@ void AUnmadePrototypeHub::BuildForPrototype()
         TEXT("A bent nail is tied with blue cord at a disputed crossing."),
         TEXT("The empty road rattles the nail without a passing wagon."),
         FVector(-1100, -540, 90));
+    // One of these two visibly different real-world structures survives
+    // the optional player-chosen three-city Witness Braid. Neither obstructs
+    // the physical nail or exists before a legitimate saved commitment.
+    SpawnBlock(FVector(-730,-510,95),FVector(0.4,2.2,0.25),FName("WitnessBraid.RefugeCord"));
+    SpawnBlock(FVector(-730,-510,95),FVector(0.65,0.3,1.8),FName("WitnessBraid.PublicDocket"));
+    RefreshWitnessBraidWorld();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={
