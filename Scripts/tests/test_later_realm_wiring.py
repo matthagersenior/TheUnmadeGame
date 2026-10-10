@@ -31,7 +31,7 @@ class SixLaterRealmSource(unittest.TestCase):
         self.assertIn("TryLaterRealmConversation(",player)
         self.assertIn("ResolveNearbyRealmAftermath(",player)
         self.assertIn("Realm.centerY-1170",player)
-        self.assertIn("GetAtlasAttunement()",hub)
+        self.assertIn("GetAtlasAttunement()",world)
         self.assertNotIn("UPROPERTY(SaveGame)\n    UPROPERTY(SaveGame)",
                          save)
     def test_npc_identity_and_local_reactions(self):
