@@ -11,6 +11,7 @@
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
+#include "World/UnmadeRealmAftermathRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -52,6 +53,12 @@ public:
     bool TryAfterlightConversation(FName ResidentId);
     bool InspectAfterlightClue(AUnmadeCharacter* Player);
     bool ResolveNearbyAfterlight(int32 Choice);
+    /** Returns true when a closer physical aftershock control/clue handled E. */
+    bool InspectRealmAftermathSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryRealmAftermathConversation(FName ResidentId);
+    bool ResolveNearbyRealmAftermath(int32 Choice);
+    int32 GetRealmAftermathStage(UnmadeCore::Realm Id) const { return RealmAftermath.Stage(Id); }
+    int32 GetRealmAftermathEnding(UnmadeCore::Realm Id) const { return RealmAftermath.Ending(Id); }
     int32 GetAfterlightStage() const { return Afterlight.Stage(); }
     UnmadeCore::AfterlightBenefit GetAfterlightBenefit() const { return Afterlight.Effect(); }
     FString GetCurrentRealmName(FVector Position) const;
@@ -81,6 +88,10 @@ private:
     UnmadeCore::FrontierJourney Frontier;
     UnmadeCore::BellwoldAfterlight Afterlight;
     bool bAfterlightSaveRejected=false;
+    UnmadeCore::RealmAftermathChronicle RealmAftermath;
+    bool bRealmAftermathSaveRejected=false;
+    void BuildFrontierAftermath();
+    void RefreshRealmAftermathWorld();
     void BuildBellwoldAfterlight();
     void RefreshAfterlightWorld();
     std::array<UnmadeCore::CommunityConsequence,5> CommunityEffects{};

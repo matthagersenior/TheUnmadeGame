@@ -473,17 +473,29 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
             Hub->ResolveNearbyFrontier(static_cast<int32>(Ending));
         const bool bResolvedAfterlight=!bResolvedFaction && !bResolvedFrontier &&
             Hub->ResolveNearbyAfterlight(static_cast<int32>(Ending));
-        if(bResolvedFaction || bResolvedFrontier || bResolvedAfterlight)
+        const bool bResolvedRealmAftermath=!bResolvedFaction && !bResolvedFrontier &&
+            !bResolvedAfterlight && Hub->ResolveNearbyRealmAftermath(static_cast<int32>(Ending));
+        if(bResolvedFaction || bResolvedFrontier || bResolvedAfterlight || bResolvedRealmAftermath)
         {
             ReconcileEarnedRewards();
             if(bResolvedAfterlight)
                 ReportLocalEvent(Ending==UnmadeCore::FactionEnding::Solidarity?
                     FName("World.AfterlightShelter"):FName("World.AfterlightNames"),
                     FName("region.bellwold.refuge"));
+            else if(bResolvedRealmAftermath)
+            {
+                const bool bRain=GetActorLocation().Y < -46000.f;
+                ReportLocalEvent(FName(bRain
+                    ?(Ending==UnmadeCore::FactionEnding::Solidarity
+                      ?TEXT("World.SaltwakeCistern"):TEXT("World.SaltwakeLedger"))
+                    :(Ending==UnmadeCore::FactionEnding::Solidarity
+                      ?TEXT("World.CinderholdKiln"):TEXT("World.CinderholdDeed"))),
+                    FName(bRain?TEXT("region.saltwake.port"):TEXT("region.cinderhold.hearth")));
+            }
             else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
         else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
-            TEXT("Find your final faction, frontier, or Afterlight representative and matching evidence."));
+            TEXT("Find your final representative and matching local evidence: faction, frontier, Afterlight or realm aftershock."));
         break;
     }
 }
@@ -668,6 +680,14 @@ void AUnmadeCharacter::ShowStoryJournal()
             if(Hub->GetAfterlightStage()>0)
                 RealmSummary+=FString::Printf(
                     TEXT(" | Bellwold Afterlight: %d/4"),Hub->GetAfterlightStage());
+            for(const auto At:{UnmadeCore::Realm::WidowedRain,UnmadeCore::Realm::HearthBeneath})
+            {
+                const int32 Stage=Hub->GetRealmAftermathStage(At);
+                if(Stage>0)
+                    RealmSummary+=FString::Printf(TEXT(" | %s return: %d/4, outcome %d"),
+                        At==UnmadeCore::Realm::WidowedRain?TEXT("Saltwake"):TEXT("Cinderhold"),
+                        Stage,Hub->GetRealmAftermathEnding(At));
+            }
             RealmSummary+=TEXT(" | ");
             RealmSummary+=Hub->DescribeCommunityAt(GetActorLocation());
             RealmSummary+=FString::Printf(TEXT(" | Beyond the Reach: %d/2 discovered"),
@@ -837,6 +857,16 @@ void AUnmadeCharacter::Interact()
             }
         }
     }
+    // A world mechanism or clue can outrank a farther NPC; otherwise a closer
+    // resident keeps the conversation action, as in Bellwold's lore inspection.
+    if(GetWorld())
+    {
+        const double ResidentDistSq=IsValid(Target)
+            ?FVector::DistSquared(GetActorLocation(),Target->GetActorLocation())
+            :FMath::Square(310.f)+1.f;
+        for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+            if(Hub->InspectRealmAftermathSite(this,ResidentDistSq))return;
+    }
     if (!Target)
     {
         if(GetWorld())
@@ -880,6 +910,7 @@ void AUnmadeCharacter::Interact()
             Hub->TryFactionConversation(Target->GetStableId());
             Hub->TryFrontierConversation(Target->GetStableId());
             Hub->TryAfterlightConversation(Target->GetStableId());
+            Hub->TryRealmAftermathConversation(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
         }

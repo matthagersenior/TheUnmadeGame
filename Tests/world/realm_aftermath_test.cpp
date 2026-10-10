@@ -18,6 +18,10 @@ int main(){
         assert(campaign.Begin(realm,true,true,"npc.unknown")==RealmAftermathResult::WrongWitness);
         assert(campaign.Begin(realm,true,true,spec.initiatingWitness)==RealmAftermathResult::Started);
         assert(campaign.Begin(realm,true,true,spec.initiatingWitness)==RealmAftermathResult::NoChange);
+        assert(campaign.Inspect(realm,1,spec.evidenceForCare)==RealmAftermathResult::NeedMechanism);
+        assert(campaign.Prepare(realm,"Wrong.Control")==RealmAftermathResult::WrongMechanism);
+        assert(campaign.Prepare(realm,spec.mechanismSite)==RealmAftermathResult::Prepared);
+        assert(campaign.Prepare(realm,spec.mechanismSite)==RealmAftermathResult::NoChange);
         assert(campaign.Inspect(realm,1,spec.evidenceForTruth)==RealmAftermathResult::WrongSite);
         assert(campaign.Inspect(realm,1,spec.evidenceForCare)==RealmAftermathResult::EvidenceFound);
         assert(campaign.Testify(realm,spec.truthWitness)==RealmAftermathResult::WrongWitness);
@@ -32,6 +36,7 @@ int main(){
     RealmAftermathChronicle second;
     const auto& rain=RealmAftermathSpecs[1];
     assert(second.Begin(Realm::WidowedRain,true,true,rain.initiatingWitness)==RealmAftermathResult::Started);
+    assert(second.Prepare(Realm::WidowedRain,rain.mechanismSite)==RealmAftermathResult::Prepared);
     assert(second.Inspect(Realm::WidowedRain,2,rain.evidenceForTruth)==RealmAftermathResult::EvidenceFound);
     assert(second.Testify(Realm::WidowedRain,rain.truthWitness)==RealmAftermathResult::Witnessed);
     assert(second.Decide(Realm::WidowedRain,2)==RealmAftermathResult::Resolved);
@@ -40,11 +45,16 @@ int main(){
     RealmAftermathChronicle loaded;
     assert(loaded.Restore(campaign.Snapshot()));
     assert(loaded.Ending(Realm::FirstAbsence)==1);
+    assert(loaded.IsPrepared(Realm::WidowedRain));
     const auto before=loaded.Snapshot();
     auto bad=before;
     bad.approach[4]=2;
     assert(!loaded.Restore(bad));
     assert(loaded.Ending(Realm::FirstAbsence)==1);
+    bad=before;bad.prepared[8]=2;
+    assert(!loaded.Restore(bad));
+    bad=before;bad.prepared[8]=0;
+    assert(!loaded.Restore(bad));
     bad=before;bad.stage[8]=7;
     assert(!loaded.Restore(bad));
     RealmAftermathChronicle oldSave;
