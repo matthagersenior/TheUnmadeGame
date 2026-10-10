@@ -1,3 +1,9 @@
+## Volume VII illustrated canon — The World Withheld Its Answer
+
+The current illustrated development edition is **66-page Volume VII** (DOCX and visually inspected PDF), retaining **43 embedded illustrations** and the original **30-piece concept art atlas**. Its integrity-verified **38-entry ZIP** includes a quality matrix, source appendix, release status and SHA-256 manifest. The new sections cover six optional third-return Echo Quests, nine distinct cultures, eighteen NPC identity/motivation briefs, all ten canonical ability production verbs, and a minimal-effort authoring/Unreal DataTable import workflow.
+
+Source baseline: [merged gameplay PR #10](https://github.com/matthagersenior/TheUnmadeGame/pull/10) (`bb5a929bb5d4a4e794dfb6c55fd5899decd75c66`) and [merged authoring PR #11](https://github.com/matthagersenior/TheUnmadeGame/pull/11) (`e8c3948cdfc697c666621eab16670f7a55b7634a`). Both completed post-merge green native/static GitHub CI. The illustrated binary package is a conversation download, not a GitHub binary or an Unreal-game build. Illustrations are speculative references.
+
 ## Single-source production world pack (October 10)
 
 The project now has a deterministic JSON → **three Unreal DataTable CSVs + 18 native NPC identities + full art/dialogue dossier** authoring pipeline, with CI drift protection and automatic verification in the first-PC preflight. It currently covers all nine realm cultures, eighteen individual later-realm characters with day/night lines and personal knowledge limits, and all ten existing abilities with production-friendly uses, limits and cues. The NPC actors read these actual source names/dialogue. [Authoring and Editor-import guide](Authoring/README.md). **Editor import has not yet been tested**.

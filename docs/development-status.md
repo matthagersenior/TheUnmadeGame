@@ -302,3 +302,10 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - An offline Python 3.11 generator validates runtime enum names and registered witness IDs, emits a portable NPC header, three Unreal CSV tables and a comprehensive writer/art dossier. CI and Windows host preflight reject mismatches.
 - 18 existing source-spawned NPCs now display individual stable names and authored day/night speech instead of generic placeholder titles; additional adaptive individual reactions and formal VO are still required.
 - Added UHT-ready DataTable row declarations and precise first PC CSV import/reimport instructions. UHT compilation and actual Content Browser import remain unavailable without Windows UE.
+
+## 2026-10-10 — illustrated Volume VII source publication
+- Completed and visually inspected a **66-page** Volume VII Word master and matching PDF. The existing **43 embedded illustrations** and **30 atlas art assets** remain intact.
+- Six deeper optional Echo Quest investigations, their witnesses and two irreversible outcomes each, plus nine cultures, eighteen fully named NPC personas and ten ability-production briefs are included in the new chapters.
+- Generated a checksum-verified **38-entry ZIP** with editable DOCX, rendered PDF, concept art, source appendix and release/QA matrix. Archive integrity and SHA-256 of every included file verified.
+- Source anchors: merged gameplay PR #10 `bb5a929bb5d4a4e794dfb6c55fd5899decd75c66`; merged authoring PR #11 `e8c3948cdfc697c666621eab16670f7a55b7634a`. Both native/static main CI checks succeeded.
+- The binary files are delivered in the chat, **not committed to GitHub**. Editor compilation, game art, voice performances and real movement/quest playtests remain unverified.
