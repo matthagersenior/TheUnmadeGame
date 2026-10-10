@@ -262,6 +262,14 @@ FString AUnmadeNpcCharacter::GetReactionText() const
                 :UnmadeCore::Realm::HearthBeneath;
         CharacterLine+=TEXT(" ");
         CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
+        // Only the named person who actually received the carried packet gets
+        // delivery knowledge; other residents need witnessed local testimony.
+        const FString PhysicalReceipt=CachedHub->GetWitnessDispatchRecipientLine(NpcId);
+        if(!PhysicalReceipt.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=PhysicalReceipt;
+        }
     }
     const auto Phase = CachedHub.IsValid()
         ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;

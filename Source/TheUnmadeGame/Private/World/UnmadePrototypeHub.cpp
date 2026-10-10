@@ -43,6 +43,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
     RefreshWitnessBraidWorld();
+    RefreshWitnessDispatchWorld();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
     GetWorldTimerManager().SetTimer(GossipTimer, this, &AUnmadePrototypeHub::SpreadLocalRumors, 8.f, true);
@@ -81,6 +82,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::ResidentContinuity RestoredResidentContinuity;
     UnmadeCore::WitnessEchoLedger RestoredWitnessEcho;
     UnmadeCore::WitnessBraidChronicle RestoredWitnessBraid;
+    UnmadeCore::WitnessDispatch RestoredDispatch;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -304,6 +306,16 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bWitnessBraidRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Corrupt Witness Braid verdict: save writes blocked"));
     }
+    // Restore a physically justified courier receipt, not a global knowledge flag.
+    if(Save->bHasWitnessDispatchSnapshot &&
+       !RestoredDispatch.Restore({Save->WitnessDispatchStage,
+            Save->WitnessDispatchCollectedDay,Save->WitnessDispatchDeliveredDay},
+            RestoredWitnessBraid.Outcome()))
+    {
+        bWitnessDispatchRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Corrupt witness dispatch custody: writes blocked"));
+    }
+    Dispatch=RestoredDispatch;
     WitnessBraid=RestoredWitnessBraid;
     WitnessEchoes=RestoredWitnessEcho;
     ResidentRelationships=RestoredResidentContinuity;
@@ -328,7 +340,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bLaterRealmSaveRejected || bEchoSaveRejected ||
        bResonanceSaveRejected || bGuardianSaveRejected ||
        bFinalSaveRejected || bResidentContinuityRejected ||
-       bWitnessEchoRejected || bWitnessBraidRejected)return false;
+       bWitnessEchoRejected || bWitnessBraidRejected ||
+       bWitnessDispatchRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -425,6 +438,11 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->WitnessEchoReturnMask=static_cast<int32>(EchoSnapshot.returnRead);
     Save->bHasWitnessBraidSnapshot=true;
     Save->WitnessBraidOutcome=WitnessBraid.Snapshot().outcome;
+    const auto Post=Dispatch.Snapshot();
+    Save->bHasWitnessDispatchSnapshot=true;
+    Save->WitnessDispatchStage=Post.stage;
+    Save->WitnessDispatchCollectedDay=Post.collectedDay;
+    Save->WitnessDispatchDeliveredDay=Post.deliveredDay;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -1318,9 +1336,93 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
         return false;
     }
     RefreshWitnessBraidWorld();
+    RefreshWitnessDispatchWorld();
     if(GEngine)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Yellow,
         FString(UTF8_TO_TCHAR(WitnessBraid.OutcomeText())));
     return true;
+}
+
+void AUnmadePrototypeHub::RefreshWitnessDispatchWorld()
+{
+    SetRiteWorldActorState(FName("WitnessDispatch.FoldedRecord"),
+        WitnessBraid.Outcome()!=UnmadeCore::WitnessBraidOutcome::Unresolved &&
+        Dispatch.Stage()==UnmadeCore::WitnessDispatchStage::Waiting);
+}
+
+FString AUnmadePrototypeHub::GetWitnessDispatchRecipientLine(FName NpcId) const
+{
+    if(NpcId!=FName("npc.bellwold.matron.001") ||
+       Dispatch.Stage()!=UnmadeCore::WitnessDispatchStage::HandDelivered)
+        return FString();
+    return FString(UTF8_TO_TCHAR(Dispatch.HessaLine(WitnessBraid.Outcome())));
+}
+
+bool AUnmadePrototypeHub::TryWitnessDispatch(AUnmadeCharacter* Player,
+    double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player) || !GetWorld() ||
+       WitnessBraid.Outcome()==UnmadeCore::WitnessBraidOutcome::Unresolved)
+        return false;
+    const auto At=Dispatch.Stage();
+    if(At==UnmadeCore::WitnessDispatchStage::Waiting)
+    {
+        for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+        {
+            if(!It->ActorHasTag(FName("WitnessDispatch.FoldedRecord")))continue;
+            const double DistSq=FVector::DistSquared(
+                Player->GetActorLocation(),It->GetActorLocation());
+            if(DistSq>FMath::Square(260.f) || DistSq>=CompetingNpcDistanceSq)
+                return false; // closer resident keeps their conversation
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeDispatchPickup),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,65),
+                It->GetActorLocation()+FVector(0,0,35),ECC_Visibility,Sight))
+                return false;
+            const auto Before=Dispatch.Snapshot();
+            if(Dispatch.Collect(WitnessBraid.Outcome(),GetGameDay())!=
+                UnmadeCore::WitnessDispatchEvent::Collected)return false;
+            if(!WriteWorldSnapshot())
+            {
+                Dispatch.Restore(Before,WitnessBraid.Outcome());
+                return false;
+            }
+            RefreshWitnessDispatchWorld();
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Yellow,
+                TEXT("FOLDED RECORD COLLECTED: physically carry it to Hessa in Bellwold. Your custody is saved."));
+            return true;
+        }
+    }
+    else if(At==UnmadeCore::WitnessDispatchStage::PlayerCarrying)
+    {
+        for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+        {
+            if(It->GetStableId()!=FName("npc.bellwold.matron.001") ||
+               FVector::DistSquared(Player->GetActorLocation(),
+                    It->GetActorLocation())>FMath::Square(265.f))
+                continue;
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeDispatchReceipt),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,65),
+                It->GetActorLocation()+FVector(0,0,65),ECC_Visibility,Sight))
+                return false;
+            const auto Before=Dispatch.Snapshot();
+            if(Dispatch.HandToHessa(WitnessBraid.Outcome(),GetGameDay())!=
+                UnmadeCore::WitnessDispatchEvent::Delivered)return false;
+            if(!WriteWorldSnapshot())
+            {
+                Dispatch.Restore(Before,WitnessBraid.Outcome());
+                return false;
+            }
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,14.f,FColor::Green,
+                FString(UTF8_TO_TCHAR(Dispatch.HessaLine(WitnessBraid.Outcome()))));
+            return true;
+        }
+    }
+    return false;
 }
 
 FString AUnmadePrototypeHub::GetEvidenceNotebook() const
@@ -1372,6 +1474,9 @@ FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
         Text+=TEXT(" | BRAID READY: return to Orrel's nail at the Crossings, F7 protect or F8 publish; confirm twice.");
     else
         Text+=TEXT(" | BRAID UNRESOLVED: inspect three relics and revisit one after a local choice.");
+    if(WitnessBraid.Outcome()!=UnmadeCore::WitnessBraidOutcome::Unresolved)
+        Text+=FString::Printf(TEXT(" | CUSTODY: %s"),
+            UTF8_TO_TCHAR(Dispatch.PlayerLine(WitnessBraid.Outcome())));
     return Text;
 }
 
@@ -1722,7 +1827,12 @@ void AUnmadePrototypeHub::BuildForPrototype()
     // the physical nail or exists before a legitimate saved commitment.
     SpawnBlock(FVector(-730,-510,95),FVector(0.4,2.2,0.25),FName("WitnessBraid.RefugeCord"));
     SpawnBlock(FVector(-730,-510,95),FVector(0.65,0.3,1.8),FName("WitnessBraid.PublicDocket"));
+    // The Crossings' folded, redacted witness dispatch: real E-collectible, never
+    // exists before the Crossings decision; future art replaces this cube.
+    SpawnBlock(FVector(-845,-680,90),FVector(0.32,0.34,0.12),
+        FName("WitnessDispatch.FoldedRecord"));
     RefreshWitnessBraidWorld();
+    RefreshWitnessDispatchWorld();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={

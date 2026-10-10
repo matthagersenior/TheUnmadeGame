@@ -166,6 +166,15 @@ public:
 
     UPROPERTY(SaveGame)
     int32 WitnessBraidOutcome=0;
+    /** Optional physical hand-carry to Hessa; never inferred from global story flags. */
+    UPROPERTY(SaveGame)
+    bool bHasWitnessDispatchSnapshot=false;
+    UPROPERTY(SaveGame)
+    int32 WitnessDispatchStage=0;
+    UPROPERTY(SaveGame)
+    int32 WitnessDispatchCollectedDay=0;
+    UPROPERTY(SaveGame)
+    int32 WitnessDispatchDeliveredDay=0;
 
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)

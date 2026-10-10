@@ -67,6 +67,10 @@ try {
     & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_evidence_provenance_wiring.py" 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "evidence-provenance-source-validation.log")
     if($LASTEXITCODE -ne 0){throw "EVIDENCE_PROVENANCE_INVALID"}
+    Write-Host "Checking the real player-carried witness dispatch to Bellwold."
+    & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_witness_dispatch_wiring.py" 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "witness-dispatch-validation.log")
+    if($LASTEXITCODE -ne 0){throw "WITNESS_DISPATCH_INVALID"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")

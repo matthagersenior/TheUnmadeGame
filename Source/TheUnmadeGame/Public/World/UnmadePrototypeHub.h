@@ -7,6 +7,7 @@
 #include "World/UnmadeLivingWorldRules.h"
 #include "World/UnmadeWitnessEchoRules.h"
 #include "World/UnmadeWitnessBraidRules.h"
+#include "World/UnmadeWitnessDispatchRules.h"
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeRegionalTaskRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
@@ -54,6 +55,9 @@ public:
     /** Return only firsthand evidence actually inspected, with attributed theories. */
     UFUNCTION(BlueprintPure,Category="Unmade|Investigation")
     FString GetEvidenceNotebook() const;
+    bool TryWitnessDispatch(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    /** Only Hessa can read the physically delivered document from the world state. */
+    FString GetWitnessDispatchRecipientLine(FName NpcId) const;
     /** Optional three-city public response near Orrel's physical bridge nail. */
     bool ResolveNearbyWitnessBraid(int32 Choice);
     void RefreshDistrictMood();
@@ -145,6 +149,9 @@ private:
     UnmadeCore::ResidentContinuity ResidentRelationships;
     UnmadeCore::WitnessEchoLedger WitnessEchoes;
     UnmadeCore::WitnessBraidChronicle WitnessBraid;
+    UnmadeCore::WitnessDispatch Dispatch;
+    bool bWitnessDispatchRejected=false;
+    void RefreshWitnessDispatchWorld();
     bool bWitnessEchoRejected=false;
     bool bWitnessBraidRejected=false;
     void RefreshWitnessBraidWorld();
