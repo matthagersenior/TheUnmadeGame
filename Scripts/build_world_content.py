@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MASTER = ROOT / "Authoring/world_content_pack.json"
 OUT = ROOT / "Authoring/generated"
-HEADER = ROOT / "Source/TheUnmadeGame/Public/Authoring/UnmadeOuterPeople.generated.h"
+HEADER = ROOT / "Source/TheUnmadeGame/Public/Authoring/UnmadeOuterPeopleData.h"
 LATER = {"TidalLedger", "SkyBelow", "CinderSpine",
          "HundredUnlived", "OrchardOfKings", "FirstAbsence"}
 NPC_FIELDS = ("id", "display_name", "realm", "day_line", "night_line",
