@@ -511,6 +511,19 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
                     FName("region.bellwold.refuge"));
             else if(bResolvedRealmAftermath)
             {
+                bool bLater=false;
+                for(const auto& Region:UnmadeCore::LaterRealms)
+                {
+                    if(FVector::DistSquared2D(GetActorLocation(),
+                        FVector(Region.centerX,Region.centerY,GetActorLocation().Z))>
+                        FMath::Square(3200.f))continue;
+                    bLater=true;
+                    ReportLocalEvent(FName("World.LaterRealmResolved"),
+                        FName(UTF8_TO_TCHAR(Region.name)));
+                    break;
+                }
+                if(!bLater)
+                {
                 const bool bRain=GetActorLocation().Y < -46000.f;
                 ReportLocalEvent(FName(bRain
                     ?(Ending==UnmadeCore::FactionEnding::Solidarity
@@ -518,6 +531,7 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
                     :(Ending==UnmadeCore::FactionEnding::Solidarity
                       ?TEXT("World.CinderholdKiln"):TEXT("World.CinderholdDeed"))),
                     FName(bRain?TEXT("region.saltwake.port"):TEXT("region.cinderhold.hearth")));
+                }
             }
             else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
@@ -715,6 +729,14 @@ void AUnmadeCharacter::ShowStoryJournal()
                         At==UnmadeCore::Realm::WidowedRain?TEXT("Saltwake"):TEXT("Cinderhold"),
                         Stage,Hub->GetRealmAftermathEnding(At));
             }
+            for(const auto& Region:UnmadeCore::LaterRealms)
+            {
+                if(Hub->GetLaterRealmStage(Region.realm)>0)
+                    RealmSummary+=FString::Printf(TEXT(" | %s first %d/3, return %d/4"),
+                        UTF8_TO_TCHAR(Region.name),
+                        Hub->GetLaterRealmStage(Region.realm),
+                        Hub->GetRealmAftermathStage(Region.realm));
+            }
             RealmSummary+=TEXT(" | ");
             RealmSummary+=Hub->DescribeCommunityAt(GetActorLocation());
             RealmSummary+=FString::Printf(TEXT(" | Beyond the Reach: %d/2 discovered"),
@@ -892,7 +914,10 @@ void AUnmadeCharacter::Interact()
             ?FVector::DistSquared(GetActorLocation(),Target->GetActorLocation())
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        {
+            if(Hub->InspectLaterRealmSite(this,ResidentDistSq))return;
             if(Hub->InspectRealmAftermathSite(this,ResidentDistSq))return;
+        }
     }
     if (!Target)
     {
@@ -938,6 +963,7 @@ void AUnmadeCharacter::Interact()
             Hub->TryFrontierConversation(Target->GetStableId());
             Hub->TryAfterlightConversation(Target->GetStableId());
             Hub->TryRealmAftermathConversation(Target->GetStableId());
+            Hub->TryLaterRealmConversation(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
         }

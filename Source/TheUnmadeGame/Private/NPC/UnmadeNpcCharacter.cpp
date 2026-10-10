@@ -56,14 +56,14 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     case UnmadeCore::NpcAction::InvestigateAnomaly:
     case UnmadeCore::NpcAction::ResearchAnomaly:
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = bFrontierResident ?
+        Target = (bFrontierResident || bLaterRealmResident) ?
             UnmadeCore::Vec2{HomeLocation.X+130,HomeLocation.Y+300}
             : UnmadeCore::LocalInvestigationTarget(HomeSettlement);
         Speed = 80.0;
         break;
     case UnmadeCore::NpcAction::VerifyRumor:
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = bFrontierResident ?
+        Target = (bFrontierResident || bLaterRealmResident) ?
             UnmadeCore::Vec2{HomeLocation.X-130,HomeLocation.Y+150}
             : UnmadeCore::LocalRumorTarget(HomeSettlement);
         break;
@@ -97,7 +97,7 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     {
         // Routine goals never replace urgent individual reactions to observed events.
         Motion = UnmadeCore::NpcMotion::Approach;
-        Target = bFrontierResident ?
+        Target = (bFrontierResident || bLaterRealmResident) ?
             (Phase == UnmadeCore::DayPhase::Night
                 ? UnmadeCore::Vec2{HomeLocation.X+160,HomeLocation.Y-160}
                 : UnmadeCore::Vec2{HomeLocation.X,HomeLocation.Y})
@@ -123,6 +123,19 @@ void AUnmadeNpcCharacter::ConfigureFrontier(const UnmadeCore::FrontierResident& 
         FString(UTF8_TO_TCHAR(Resident.name)),Resident.role,Resident.temperament,
         UnmadeCore::SettlementId::Crossings,FString(UTF8_TO_TCHAR(Resident.authoredLine)));
     bFrontierResident=true; // use independent home-based frontier routines, not Crossings
+}
+
+void AUnmadeNpcCharacter::ConfigureLaterRealm(
+    const UnmadeCore::LaterRealmSpec& Realm,const char* Identity,
+    const FString& Display,UnmadeCore::NpcRole Role,
+    UnmadeCore::NpcTemperament Temperament,const char* Line)
+{
+    if(!Identity || !Line)return;
+    ConfigureIdentity(FName(UTF8_TO_TCHAR(Identity)),Display,Role,Temperament,
+                      UnmadeCore::SettlementId::None,
+                      FString(UTF8_TO_TCHAR(Line)));
+    bLaterRealmResident=true;
+    LaterHome=Realm.realm;
 }
 
 void AUnmadeNpcCharacter::ConfigureIdentity(FName StableId, const FString& DisplayLabel,
@@ -260,6 +273,28 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             CharacterLine += TEXT(" The rescued testimony is part of our record now.");
     }
 
+    if(bLaterRealmResident && CachedHub.IsValid())
+    {
+        const int32 Initial=CachedHub->GetLaterRealmOutcome(LaterHome);
+        if(Initial!=0)
+        {
+            const auto* Home=UnmadeCore::FindLaterRealm(LaterHome);
+            if(Home)
+            {
+                CharacterLine+=TEXT(" ");
+                CharacterLine+=FString(UTF8_TO_TCHAR(Initial==1?
+                    Home->trialChoiceA:Home->trialChoiceB));
+            }
+        }
+        const int32 After=CachedHub->GetRealmAftermathEnding(LaterHome);
+        if(After!=0)
+        {
+            const auto& S=UnmadeCore::RealmAftermathSpecs[static_cast<int>(LaterHome)];
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=FString(UTF8_TO_TCHAR(After==1?S.careConsequence:S.truthConsequence));
+        }
+    }
+
     if(CachedHub.IsValid())
     {
         // Only publicly observable changes in the NPC's own home town.
@@ -333,6 +368,10 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         else if (Event.EventKind == FName("World.CinderholdDeed"))
             BeliefLine = bDirect ? TEXT("I watched the ember deed exposed in the reopened passage.")
                                  : TEXT("Someone says the old ownership claim was forged.");
+        else if (Event.EventKind == FName("World.LaterRealmResolved"))
+            BeliefLine = bDirect
+                ? TEXT("I saw you commit to the new road here. We will have to live with what follows.")
+                : TEXT("I heard the traveler changed another realm. I will ask who witnessed it.");
         else if (Event.EventKind == FName("World.RiteProtect"))
             BeliefLine = bDirect ? TEXT("I saw you choose to protect the people from a power that could have harmed them.")
                                  : TEXT("Some say you put the villagers first. I hope they are right.");

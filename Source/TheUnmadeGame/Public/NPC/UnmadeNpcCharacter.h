@@ -5,6 +5,7 @@
 #include "NPC/UnmadeNpcDecisionRules.h"
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeFrontierRealmRules.h"
+#include "World/UnmadeLaterRealmRules.h"
 #include "UnmadeNpcCharacter.generated.h"
 
 class UStaticMeshComponent;
@@ -23,6 +24,10 @@ public:
         UnmadeCore::NpcRole InRole, UnmadeCore::NpcTemperament InTemperament,
         UnmadeCore::SettlementId InVillage, const FString& InAuthoredLine);
     void ConfigureFrontier(const UnmadeCore::FrontierResident& Resident);
+    void ConfigureLaterRealm(const UnmadeCore::LaterRealmSpec& Realm,
+        const char* Identity,const FString& Display,
+        UnmadeCore::NpcRole Role,UnmadeCore::NpcTemperament Temperament,
+        const char* AuthoredLine);
     UnmadeCore::NpcAction DecideForPlayer(bool bPlayerNearby) const;
     UFUNCTION(BlueprintPure, Category="Unmade|NPC")
     FName GetCurrentActionId(bool bPlayerNearby = true) const;
@@ -53,6 +58,8 @@ private:
     UnmadeCore::SettlementId HomeSettlement = UnmadeCore::SettlementId::Crossings;
     FString AuthoredLine;
     bool bFrontierResident = false;
+    bool bLaterRealmResident = false;
+    UnmadeCore::Realm LaterHome = UnmadeCore::Realm::Count;
 
     UnmadeCore::NpcRole Role = UnmadeCore::NpcRole::Wanderer;
     UnmadeCore::NpcTemperament Temperament = UnmadeCore::NpcTemperament::Steady;

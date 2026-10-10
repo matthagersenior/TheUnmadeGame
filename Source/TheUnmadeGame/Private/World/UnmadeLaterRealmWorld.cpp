@@ -269,8 +269,8 @@ bool AUnmadePrototypeHub::InspectLaterRealmSite(
                              UTF8_TO_TCHAR(Spec.trialChoiceB));
         else if(L==UnmadeCore::LaterResult::Completed)
             Message=FString::Printf(TEXT("NEW ROAD: %s | Speak to the local keeper again."),
-                   Choice==1?UTF8_TO_TCHAR(Spec.trialChoiceA):
-                             UTF8_TO_TCHAR(Spec.trialChoiceB));
+                   LaterRealm.Outcome(Spec.realm)==1?
+                   UTF8_TO_TCHAR(Spec.trialChoiceA):UTF8_TO_TCHAR(Spec.trialChoiceB));
         else if(L==UnmadeCore::LaterResult::NeedEvidence)
             Message=TEXT("FIRST INVESTIGATE one of the two evidence stones before operating the control.");
         else if(A==UnmadeCore::RealmAftermathResult::Prepared)
