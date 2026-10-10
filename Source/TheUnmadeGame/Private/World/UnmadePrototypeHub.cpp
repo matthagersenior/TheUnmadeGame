@@ -76,6 +76,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::RealmResonanceJourney RestoredResonance;
     UnmadeCore::GuardianChronicle RestoredGuardians;
     UnmadeCore::FinalJourney RestoredFinal;
+    UnmadeCore::ResidentContinuity RestoredResidentContinuity;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -255,6 +256,31 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    if(Save->bHasResidentContinuitySnapshot)
+    {
+        if(Save->ResidentEncounterVisits.Num()!=UnmadeCore::ResidentContinuityCount ||
+           Save->ResidentEncounterLastDays.Num()!=UnmadeCore::ResidentContinuityCount ||
+           Save->ResidentEncounterAidFlags.Num()!=UnmadeCore::ResidentContinuityCount)
+        {
+            bResidentContinuityRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Malformed resident continuity save arrays; writes blocked"));
+            return;
+        }
+        UnmadeCore::ResidentContinuitySnapshot RS;
+        for(int i=0;i<UnmadeCore::ResidentContinuityCount;++i)
+        {
+            RS.visits[i]=Save->ResidentEncounterVisits[i];
+            RS.lastDay[i]=Save->ResidentEncounterLastDays[i];
+            RS.aids[i]=Save->ResidentEncounterAidFlags[i];
+        }
+        if(!RestoredResidentContinuity.Restore(RS))
+        {
+            bResidentContinuityRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Corrupt resident continuity rejected"));
+            return;
+        }
+    }
+    ResidentRelationships=RestoredResidentContinuity;
     FinalStory=RestoredFinal;
     Guardians=RestoredGuardians;
     Resonance=RestoredResonance;
@@ -275,7 +301,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
        bLaterRealmSaveRejected || bEchoSaveRejected ||
        bResonanceSaveRejected || bGuardianSaveRejected ||
-       bFinalSaveRejected)return false;
+       bFinalSaveRejected || bResidentContinuityRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -366,6 +392,17 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->FinalEncounterStage=FinalState.act;
     Save->FinalMorningChoice=FinalState.morning;
     Save->FinalMemorySeed=FinalState.memorySeed;
+    Save->bHasResidentContinuitySnapshot=true;
+    Save->ResidentEncounterVisits.Reset();
+    Save->ResidentEncounterLastDays.Reset();
+    Save->ResidentEncounterAidFlags.Reset();
+    for(int i=0;i<UnmadeCore::ResidentContinuityCount;++i)
+    {
+        const auto RS=ResidentRelationships.Snapshot();
+        Save->ResidentEncounterVisits.Add(RS.visits[i]);
+        Save->ResidentEncounterLastDays.Add(RS.lastDay[i]);
+        Save->ResidentEncounterAidFlags.Add(RS.aids[i]);
+    }
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
