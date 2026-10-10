@@ -77,6 +77,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::GuardianChronicle RestoredGuardians;
     UnmadeCore::FinalJourney RestoredFinal;
     UnmadeCore::ResidentContinuity RestoredResidentContinuity;
+    UnmadeCore::WitnessEchoLedger RestoredWitnessEcho;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -280,6 +281,19 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    // Do not sacrifice otherwise valid old quest progress if this *optional*
+    // snapshot is corrupt. Protect every further save from overwriting it.
+    if(Save->bHasWitnessEchoSnapshot)
+    {
+        if(!RestoredWitnessEcho.Restore({
+            static_cast<uint32_t>(Save->WitnessEchoFirstMask),
+            static_cast<uint32_t>(Save->WitnessEchoReturnMask)}))
+        {
+            bWitnessEchoRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Corrupt witness echo evidence: preservation mode, writes blocked"));
+        }
+    }
+    WitnessEchoes=RestoredWitnessEcho;
     ResidentRelationships=RestoredResidentContinuity;
     FinalStory=RestoredFinal;
     Guardians=RestoredGuardians;
@@ -301,7 +315,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
        bLaterRealmSaveRejected || bEchoSaveRejected ||
        bResonanceSaveRejected || bGuardianSaveRejected ||
-       bFinalSaveRejected || bResidentContinuityRejected)return false;
+       bFinalSaveRejected || bResidentContinuityRejected ||
+       bWitnessEchoRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -392,6 +407,10 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->FinalEncounterStage=FinalState.act;
     Save->FinalMorningChoice=FinalState.morning;
     Save->FinalMemorySeed=FinalState.memorySeed;
+    const auto EchoSnapshot=WitnessEchoes.Snapshot();
+    Save->bHasWitnessEchoSnapshot=true;
+    Save->WitnessEchoFirstMask=static_cast<int32>(EchoSnapshot.first);
+    Save->WitnessEchoReturnMask=static_cast<int32>(EchoSnapshot.returnRead);
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -1193,10 +1212,22 @@ bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
         return false;
 
     const int32 OldMask = Discoveries.Snapshot();
+    const auto OldEcho=WitnessEchoes.Snapshot();
+    const FString PhysicalId=Site->GetSiteId().ToString();
+    const FTCHARToUTF8 PhysicalUtf8(*PhysicalId);
+    const auto* EchoSpec=UnmadeCore::WitnessEchoFromSite(PhysicalUtf8.Get());
+    // Bellwold uses its own saved aftermath decision; Crossings/Paperhaven
+    // use the original local civic choice. Neither guesses a remote person's mind.
+    const int32 LocalOutcome=EchoSpec && Site->GetSiteId()==FName("site.callback.uncounted_cup")
+        ? static_cast<int32>(Afterlight.Outcome()) : ReadStoryChoice();
+    const auto EchoEvent=WitnessEchoes.Read(PhysicalUtf8.Get(),LocalOutcome);
+    const bool bEchoChanged=EchoEvent==UnmadeCore::WitnessEchoEvent::FirstReading ||
+        EchoEvent==UnmadeCore::WitnessEchoEvent::LaterMeaning;
     const bool bNew = Discoveries.Discover(Site->GetDistrict());
-    if (bNew && !WriteWorldSnapshot())
+    if ((bNew || bEchoChanged) && !WriteWorldSnapshot())
     {
         Discoveries.Restore(OldMask);
+        WitnessEchoes.Restore(OldEcho);
         if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Red,
             TEXT("Exploration progress could not be saved."));
         return false;
@@ -1208,8 +1239,35 @@ bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
         if (bNew)
             GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
                 FString::Printf(TEXT("LANDMARK DISCOVERED: %d of 6."), Discoveries.Count()));
+        if(EchoSpec)
+        {
+            // A physical object is evidence, not proof of an OPEN mystery.
+            GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Yellow,
+                FString::Printf(TEXT("%s | %s"),
+                    UTF8_TO_TCHAR(EchoSpec->id),
+                    UTF8_TO_TCHAR(UnmadeCore::WitnessEchoText(*EchoSpec,EchoEvent,LocalOutcome))));
+            if(bEchoChanged)
+                GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
+                    FString::Printf(TEXT("WITNESS ECHO RECORDED | %s | The question remains open: %s"),
+                        UTF8_TO_TCHAR(EchoSpec->title),UTF8_TO_TCHAR(EchoSpec->openQuestion)));
+        }
     }
     return true;
+}
+
+FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
+{
+    FString Text=FString::Printf(TEXT("WITNESS ECHOES | discovered %d/3 | changed meanings %d/3"),
+        WitnessEchoes.FirstCount(),WitnessEchoes.ReturnCount());
+    for(const auto& Spec:UnmadeCore::WitnessEchoSites)
+    {
+        if(!WitnessEchoes.HasFirst(Spec.id))continue;
+        Text+=FString::Printf(TEXT(" | %s: %s"),
+            UTF8_TO_TCHAR(Spec.id),
+            WitnessEchoes.HasReturn(Spec.id)?TEXT("returned; truth not resolved"):
+                                           TEXT("observed; return later"));
+    }
+    return Text;
 }
 
 void AUnmadePrototypeHub::Tick(float DeltaSeconds)
@@ -1534,6 +1592,26 @@ void AUnmadePrototypeHub::BuildForPrototype()
     BuildUnansweredRoad();
     BuildCommunityConsequences();
     BuildBellwoldAfterlight();
+    // Three distinct tangible links from Volume X lore to the existing
+    // playable graybox. They intentionally do not trigger main-quest gates.
+    SpawnLoreSite(UnmadeCore::District::BellGrave,
+        FName("site.callback.uncounted_cup"),
+        TEXT("The Cup Hessa Never Counted"),
+        TEXT("A chipped white cup waits beside a refuge bed. No name is written."),
+        TEXT("Someone has cleaned the cup, but the crack is the same."),
+        FVector(-17290, 750, 90));
+    SpawnLoreSite(UnmadeCore::District::PaperOrchard,
+        FName("site.callback.two_faced_press"),
+        TEXT("Sevrin's Two-Faced Press"),
+        TEXT("One seal face is inscribed; the other is deliberately bare."),
+        TEXT("The reverse holds the warmth of a hand that has not yet pressed it."),
+        FVector(17760, 1090, 90));
+    SpawnLoreSite(UnmadeCore::District::SilentMile,
+        FName("site.callback.inkless_nail"),
+        TEXT("Orrel's Inkless Bridge Nail"),
+        TEXT("A bent nail is tied with blue cord at a disputed crossing."),
+        TEXT("The empty road rattles the nail without a passing wagon."),
+        FVector(-1100, -540, 90));
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={

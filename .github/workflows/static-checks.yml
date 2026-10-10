@@ -75,6 +75,11 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/living_world_test.cpp -o /tmp/unmade-living-world-test
           /tmp/unmade-living-world-test
+      - name: Verify Volume X in-world witness echoes and safe story return states
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/witness_echo_test.cpp -o /tmp/unmade-witness-echo
+          /tmp/unmade-witness-echo
+
       - name: Verify three offline settlements and all resident identities
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/settlement_registry_test.cpp -o /tmp/unmade-settlement-test

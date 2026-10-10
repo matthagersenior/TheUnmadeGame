@@ -9,7 +9,11 @@ def read(path):
 class LivingWorldSourceTests(unittest.TestCase):
     def test_six_authored_sites_and_expanded_accessible_ground(self):
         hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
-        self.assertEqual(hub.count("SpawnLoreSite(UnmadeCore::District::"), 6)
+        # Preserve six original landmarks and add three distinct optional Volume X relics.
+        self.assertEqual(hub.count("SpawnLoreSite(UnmadeCore::District::"), 9)
+        for original_id in ("site.echo_well","site.paper_orchard","site.silent_mile",
+                            "site.bell_grave","site.market_ledger","site.shelter_threshold"):
+            self.assertIn('FName("'+original_id+'")', hub)
         self.assertIn("FVector(52, 52, 1)", hub)
         for district in ("EchoWell","PaperOrchard","SilentMile","BellGrave",
                          "MarketLedger","ShelterThreshold"):

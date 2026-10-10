@@ -149,6 +149,17 @@ public:
     UPROPERTY(SaveGame)
     int32 FinalMemorySeed=0;
 
+    /** Three physical Volume X witness echoes; 13 stable bits reserved for later worlds.
+        Absent on old schema-1 slots. These are observations, never main-quest gates. */
+    UPROPERTY(SaveGame)
+    bool bHasWitnessEchoSnapshot=false;
+
+    UPROPERTY(SaveGame)
+    int32 WitnessEchoFirstMask=0;
+
+    UPROPERTY(SaveGame)
+    int32 WitnessEchoReturnMask=0;
+
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)
     bool bHasResidentContinuitySnapshot=false;
