@@ -116,10 +116,10 @@ private:
 inline const char* WitnessEchoText(const WitnessEchoSpec& spec,
                                    WitnessEchoEvent event,int localOutcome) noexcept {
     if(event==WitnessEchoEvent::FirstReading ||
-       event==WitnessEchoEvent::AlreadyRecorded && localOutcome==0)
+       (event==WitnessEchoEvent::AlreadyRecorded && localOutcome==0))
         return spec.firstObservation;
     if(event==WitnessEchoEvent::LaterMeaning ||
-       event==WitnessEchoEvent::AlreadyRecorded && (localOutcome==1||localOutcome==2))
+       (event==WitnessEchoEvent::AlreadyRecorded && (localOutcome==1||localOutcome==2)))
         return localOutcome==1?spec.careInterpretation:spec.truthInterpretation;
     return spec.firstObservation;
 }
