@@ -250,3 +250,12 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - Visible noncolliding warning floor stripes toggle based on deterministic realm clock; Unreal animation/audio/controller feedback and balanced survival are not proven.
 - Added a one-command Windows host build/UE-automation script with preflight, per-attempt logs, exit-code refusal and no automatic purchases or deployment.
 - Unreal Editor C++ compilation, game startup, level art, in-world screenshots and full live gameplay tests are **not** completed.
+
+## 2026-10-10 customizable protagonist data milestone
+- Player identity has eight separately bounded appearance/role dimensions plus a validated 48-byte UTF-8 chosen name, while the impossible shared origin is immutable in the domain.
+- Optional backwards-compatible schema-1 SaveGame fields store an atomic snapshot and preserve previous choice states/gear/NPC memories. Corrupt identity data are never silently overwritten by the player profile editor.
+- Blueprint-callable feature/name setters and a temporary character silhouette/prototype C-key profile viewer are source-wired.
+- Native C++ tests and GitHub source contracts cover validity and failure cases; Unreal Editor compilation, a complete character-creation UI, full meshes/hair, animations and audio remain **unverified and incomplete**.
+
+## 2026-10-10 engineering readiness ledger
+The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unreal source-only wiring, PC-required verification and authored-content gaps. It explicitly identifies source work still possible before a PC and disallows claims that a purchased PC alone would finish the game.

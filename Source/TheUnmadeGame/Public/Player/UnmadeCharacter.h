@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Fracture/UnmadeFractureRules.h"
+#include "Player/UnmadeCharacterIdentityRules.h"
 #include "Story/UnmadeConflictRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
@@ -47,6 +48,16 @@ public:
     void ReportRedeemedOathEvent();
     void ReconcileEarnedRewards();
 
+    /** Data-only choices are Blueprint-ready for future on-screen creator widgets. */
+    UFUNCTION(BlueprintCallable, Category="Unmade|Identity")
+    bool SetCharacterFeature(int32 Aspect,int32 Choice);
+
+    UFUNCTION(BlueprintCallable, Category="Unmade|Identity")
+    bool SetCharacterChosenName(const FString& Name);
+
+    UFUNCTION(BlueprintPure, Category="Unmade|Identity")
+    FString GetCharacterChosenName() const;
+
 private:
     UPROPERTY(VisibleAnywhere, Category="Camera")
     TObjectPtr<USpringArmComponent> CameraBoom;
@@ -56,6 +67,9 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Prototype")
     TObjectPtr<UStaticMeshComponent> PlaceholderBody;
+
+    UPROPERTY(VisibleAnywhere, Category="Prototype")
+    TObjectPtr<UStaticMeshComponent> PlaceholderCrest;
 
     UPROPERTY(VisibleAnywhere, Category="Unmade|Combat")
     TObjectPtr<UUnmadeCombatComponent> Combat;
@@ -70,6 +84,11 @@ private:
     TObjectPtr<UUnmadeTenfoldComponent> Tenfold;
 
     void ShowInventory();
+    void ShowCharacterProfile();
+    void ApplyIdentitySilhouette();
+    bool SaveCharacterIdentity();
+    UnmadeCore::CharacterIdentity Identity;
+    bool bCharacterIdentitySaveRejected=false;
     void EquipNextWeapon();
     void EquipNextArmor();
     void EquipNextCharm();

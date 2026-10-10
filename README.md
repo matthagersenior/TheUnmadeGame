@@ -12,6 +12,12 @@ Each of the two outcomes changes **different collision-enabled passages, walkway
 
 See [frontier return QA](docs/qa/frontier-aftermaths.md) and [physical adventure standard for all nine realms](docs/design/2026-10-10-physical-realm-adventure-contract.md). **Unreal Editor compilation, traversal, performance and real player verification remain outstanding.**
 
+## Custom protagonist identity source pass — October 10
+
+The new offline character profile supports eight bounded customizable dimensions (body, face, hair, voice, palette, reality mark, gait, calling), a UTF-8 name and an unchanged common impossible origin. Native C++ checks cover invalid selection, malformed names, atomic restore and independent character state. Unreal-facing Blueprint-callable setters save optional schema-1 fields without erasing prior missions, and primitive body/hair geometry offers only an initial silhouette check. Press **C** to view the temporary text profile. **A real 3D creator screen, skinned mesh, facial art, voice performances and full controller UX remain to be built and tested on Unreal.**
+
+See [character identity QA](docs/qa/character-identity.md).
+
 ## The Second Night — Bellwold Afterlight
 
 An authored return-visit chapter begins only after Bellwold's relief mission
@@ -31,6 +37,10 @@ exist in source. Unreal compilation and in-engine playtesting are outstanding.
 Six Confluence chambers require mastered ability combinations, a timed dual-cast and firsthand witnesses; the final chamber requires the full earlier saga. The last chamber is **not** a finished game ending. Original three villages and two frontier outposts remain graybox source, not completed levels.
 
 See the [Tenfold quest/lore bible](docs/design/2026-10-09-tenfold-rites-quest-bible.md) and [engine QA checklist](docs/qa/tenfold-prototype-qa.md). **No Unreal compilation, animation, visual HUD, full quest production, complete nine-realm world, difficulty benchmark or playtime validation has occurred.** All critical logic works without AI.
+
+## Pre-PC readiness and remaining production gaps
+
+The [maintained readiness ledger](docs/qa/pre-pc-readiness.md) distinguishes what is verified in offline source checks from Unreal-only compilation, art and real gameplay acceptance. It also tracks source work that can be done before acquiring a PC; **an actual finished RPG is not simply waiting for hardware**.
 
 ## First-PC handoff and pre-PC source preparation (October 10, 2026)
 

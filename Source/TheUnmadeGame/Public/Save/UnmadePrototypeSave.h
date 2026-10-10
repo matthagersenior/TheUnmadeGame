@@ -16,6 +16,16 @@ public:
     UPROPERTY(SaveGame)
     int32 SchemaVersion = 1;
 
+    /** Optional immutable-origin profile. Older schema-1 files default to none. */
+    UPROPERTY(SaveGame)
+    bool bHasCharacterIdentity = false;
+
+    UPROPERTY(SaveGame)
+    TArray<int32> CharacterIdentityChoices;
+
+    UPROPERTY(SaveGame)
+    FString CharacterChosenName;
+
     UPROPERTY(SaveGame)
     TArray<FUnmadeNpcSnapshot> NpcSnapshots;
 
