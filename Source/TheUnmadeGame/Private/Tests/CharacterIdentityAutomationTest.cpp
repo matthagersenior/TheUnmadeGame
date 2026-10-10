@@ -22,7 +22,8 @@ bool FUnmadeCharacterIdentityTest::RunTest(const FString& Parameters)
     auto Bad=Save;
     Bad.options[4]=33;
     TestFalse(TEXT("invalid save rejected"),Reloaded.Restore(Bad));
-    TestEqual(TEXT("invalid save does not wipe profile"),Reloaded.Snapshot().chosenName,Save.chosenName);
+    TestTrue(TEXT("invalid save does not wipe profile"),
+        Reloaded.Snapshot().chosenName==Save.chosenName);
     return true;
 }
 #endif
