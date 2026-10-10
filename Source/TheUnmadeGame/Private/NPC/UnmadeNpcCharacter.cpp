@@ -167,7 +167,7 @@ UnmadeCore::NpcAction AUnmadeNpcCharacter::DecideForPlayer(bool bPlayerNearby) c
             Observation.EventKind == FName("World.ConflictResearch"))
         {
             const bool bShelter = Observation.EventKind == FName("World.ConflictShelter");
-            const int Delta = bFrontierResident ? 0
+            const int Delta = (bFrontierResident || bLaterRealmResident) ? 0
                 : UnmadeCore::SettlementTrustDelta(HomeSettlement, bShelter, bWitnessed);
             Input.trust += Delta;
             if (Delta < 0) Input.fear -= Delta;

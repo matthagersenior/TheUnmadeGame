@@ -1282,9 +1282,18 @@ void AUnmadeCharacter::RecoverAtSafeCheckpoint()
        GetWorld()->GetTimeSeconds()<DefeatRecordedAt+4.0)return;
     // Safe start platforms exist in the Threefold Reach and each real frontier.
     // No Story/Inventory/Memory snapshot is reset or rewritten on death.
-    const double Y=GetActorLocation().Y;
-    const FVector Safe=(Y<-45000.0)?FVector(0,-50000,135)
+    const FVector Current=GetActorLocation();
+    const double Y=Current.Y;
+    FVector Safe=(Y<-45000.0)?FVector(0,-50000,135)
         :(Y>45000.0)?FVector(0,50000,135):FVector(0,0,135);
+    for(const auto& Realm:UnmadeCore::LaterRealms)
+    {
+        if(FVector::DistSquared2D(Current,
+             FVector(Realm.centerX,Realm.centerY,Current.Z))>FMath::Square(3600.f))
+            continue;
+        Safe=FVector(Realm.centerX,Realm.centerY-1170,135);
+        break;
+    }
     if(!SetActorLocation(Safe,false,nullptr,ETeleportType::TeleportPhysics))
         return;
     if(!Combat->ReviveAtCheckpoint())return;
