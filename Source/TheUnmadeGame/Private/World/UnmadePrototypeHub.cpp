@@ -43,6 +43,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
     RefreshWitnessBraidWorld();
+    RefreshWitnessDispatchWorld();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
     GetWorldTimerManager().SetTimer(GossipTimer, this, &AUnmadePrototypeHub::SpreadLocalRumors, 8.f, true);
@@ -81,6 +82,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::ResidentContinuity RestoredResidentContinuity;
     UnmadeCore::WitnessEchoLedger RestoredWitnessEcho;
     UnmadeCore::WitnessBraidChronicle RestoredWitnessBraid;
+    UnmadeCore::WitnessDispatch RestoredDispatch;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -304,6 +306,16 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bWitnessBraidRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Corrupt Witness Braid verdict: save writes blocked"));
     }
+    // Restore a physically justified courier receipt, not a global knowledge flag.
+    if(Save->bHasWitnessDispatchSnapshot &&
+       !RestoredDispatch.Restore({Save->WitnessDispatchStage,
+            Save->WitnessDispatchCollectedDay,Save->WitnessDispatchDeliveredDay},
+            RestoredWitnessBraid.Outcome()))
+    {
+        bWitnessDispatchRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Corrupt witness dispatch custody: writes blocked"));
+    }
+    Dispatch=RestoredDispatch;
     WitnessBraid=RestoredWitnessBraid;
     WitnessEchoes=RestoredWitnessEcho;
     ResidentRelationships=RestoredResidentContinuity;
@@ -328,7 +340,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bLaterRealmSaveRejected || bEchoSaveRejected ||
        bResonanceSaveRejected || bGuardianSaveRejected ||
        bFinalSaveRejected || bResidentContinuityRejected ||
-       bWitnessEchoRejected || bWitnessBraidRejected)return false;
+       bWitnessEchoRejected || bWitnessBraidRejected ||
+       bWitnessDispatchRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -425,6 +438,11 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->WitnessEchoReturnMask=static_cast<int32>(EchoSnapshot.returnRead);
     Save->bHasWitnessBraidSnapshot=true;
     Save->WitnessBraidOutcome=WitnessBraid.Snapshot().outcome;
+    const auto Post=Dispatch.Snapshot();
+    Save->bHasWitnessDispatchSnapshot=true;
+    Save->WitnessDispatchStage=Post.stage;
+    Save->WitnessDispatchCollectedDay=Post.collectedDay;
+    Save->WitnessDispatchDeliveredDay=Post.deliveredDay;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -1318,6 +1336,7 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
         return false;
     }
     RefreshWitnessBraidWorld();
+    RefreshWitnessDispatchWorld();
     if(GEngine)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Yellow,
         FString(UTF8_TO_TCHAR(WitnessBraid.OutcomeText())));
     return true;
@@ -1722,7 +1741,12 @@ void AUnmadePrototypeHub::BuildForPrototype()
     // the physical nail or exists before a legitimate saved commitment.
     SpawnBlock(FVector(-730,-510,95),FVector(0.4,2.2,0.25),FName("WitnessBraid.RefugeCord"));
     SpawnBlock(FVector(-730,-510,95),FVector(0.65,0.3,1.8),FName("WitnessBraid.PublicDocket"));
+    // Kesta's folded, redacted witness dispatch: real E-collectible, never
+    // exists before the Crossings decision; future art replaces this cube.
+    SpawnBlock(FVector(-845,-680,90),FVector(0.32,0.34,0.12),
+        FName("WitnessDispatch.FoldedRecord"));
     RefreshWitnessBraidWorld();
+    RefreshWitnessDispatchWorld();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={
