@@ -1827,7 +1827,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     // the physical nail or exists before a legitimate saved commitment.
     SpawnBlock(FVector(-730,-510,95),FVector(0.4,2.2,0.25),FName("WitnessBraid.RefugeCord"));
     SpawnBlock(FVector(-730,-510,95),FVector(0.65,0.3,1.8),FName("WitnessBraid.PublicDocket"));
-    // Kesta's folded, redacted witness dispatch: real E-collectible, never
+    // The Crossings' folded, redacted witness dispatch: real E-collectible, never
     // exists before the Crossings decision; future art replaces this cube.
     SpawnBlock(FVector(-845,-680,90),FVector(0.32,0.34,0.12),
         FName("WitnessDispatch.FoldedRecord"));
