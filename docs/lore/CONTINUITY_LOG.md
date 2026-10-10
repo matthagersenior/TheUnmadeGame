@@ -52,3 +52,10 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Assembled 38-file ZIP with quality matrix, source appendix, release status and SHA-256 manifest; verified all entries for integrity and checksums.
 - Source game baseline `61a90178985b34dbffde5eb54a509562d7ae8c38` is merged into main and the GitHub native source CI is green. Volume V package is provided as a conversation download, not a tracked GitHub binary.
 - Honest limit: six later realm levels remain primitive cube source blockouts, not authored UE terrain or verified 3D gameplay.
+
+## 2026-10-10 — Six differentiated environmental counterplay loops
+- Wrote independent C++17 harm/strain terrain danger samplers for all six future regions. Safe entrance and evidence flanks, warning windows, clock identities and persistent disabled-on-quest-completion semantics are tested before Unreal runtime.
+- Integrated source-visible noncolliding warning strips, player per-realm pulse deduplication, combat guarding for injurious hazards, and capped recoverable reality strain for intrusive/memory hazards. Failed strain writes are rolled back in memory.
+- No Unreal Engine compilation or visual/audio playtest. The last rendered Volume V Bible predates this change; a future illustrated update must incorporate it.
+- Local later-realm NPCs seek a deterministic safe lane during an observed local warning/impact and provide hazard-specific guidance. The source model tests the shelter destination for every realm; eventual Unreal NavMesh and locomotion still require engine acceptance.
+- Added a dedicated Unreal automation test `Unmade.World.SixLaterRealmHazards`, a realm-by-realm manual acceptance sheet, and technical pre-PC status. These are source documents and have not been run in UE. Next illustrated Bible volume must capture the implementation; Volume V remains the latest verified rendered art edition.

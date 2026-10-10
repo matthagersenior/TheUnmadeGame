@@ -107,6 +107,21 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         StopRadius = 80.0;
     }
 
+    // The resident reacts only to the warning at their *own current place*.
+    // Others are not granted omniscient knowledge of remote realm pressure.
+    if(bLaterRealmResident && CachedHub.IsValid())
+    {
+        const auto Danger=CachedHub->GetNearbyLaterRealmHazard(Current);
+        if(Danger.pulseId!=0 &&
+           Danger.phase!=UnmadeCore::FrontierHazardPhase::Calm)
+        {
+            Motion=UnmadeCore::NpcMotion::Approach;
+            Target={UnmadeCore::LaterHazardShelterX(LaterHome,Current.X),Current.Y};
+            StopRadius=55.0;
+            Speed=250.0;
+        }
+    }
+
     const auto NewPosition = UnmadeCore::SteerNpc(
         {Current.X, Current.Y}, Target, Motion, Speed, DeltaSeconds, StopRadius);
     const FVector Offset(NewPosition.x - Current.X, NewPosition.y - Current.Y, 0.0);
@@ -275,6 +290,14 @@ FString AUnmadeNpcCharacter::GetReactionText() const
 
     if(bLaterRealmResident && CachedHub.IsValid())
     {
+        const auto Danger=CachedHub->GetNearbyLaterRealmHazard(GetActorLocation());
+        if(Danger.phase==UnmadeCore::FrontierHazardPhase::Warning)
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=FString(UTF8_TO_TCHAR(Danger.warning));
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=FString(UTF8_TO_TCHAR(Danger.counterplay));
+        }
         const int32 Initial=CachedHub->GetLaterRealmOutcome(LaterHome);
         if(Initial!=0)
         {

@@ -280,3 +280,8 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - Completed a 55-page DOCX and rendered PDF preserving Volume IV's illustrated concept atlas, plus an integrity-verified 38-file ZIP containing support documentation, quality matrix, 30 art files and manifest.
 - Gameplay source baseline: `61a90178985b34dbffde5eb54a509562d7ae8c38`; post-merge native/static CI completed successfully on main.
 - The binaries are conversation artifacts and are **not** committed to the repository; illustrations are not Unreal footage. No Unreal build or packaged PC game has been produced.
+
+## 2026-10-10 — distinct six-realm environmental hazard source pass
+- Six source-specific timing/counterplay patterns distinguish injurious environmental pressure from nonlethal reality strain, each with bounded hazard lanes and deliberately safe clue/arrival zones.
+- Added noncolliding visibility cues, a per-realm one-hit-per-pulse player mechanism and dynamically shelter-seeking residents. Operating the corresponding first-arc mechanism permanently disables its local danger.
+- Separate source policy tests and an Unreal automation source test (awaiting first Windows UE build) now accompany a step-by-step realm-specific engine QA checklist. No real-time visuals, VFX, physics, navigation, audio or balance acceptance has yet occurred.

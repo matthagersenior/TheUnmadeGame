@@ -145,3 +145,10 @@ Progress still depends on earned atlas attunement. The later regions are physica
 
 ## Volume V distribution and visual provenance
 **Volume V — Six Roads Beyond the Known** has an editable 55-page DOCX, matching rendered PDF, a preserved thirty-piece concept/schematic art atlas, CSV quality matrix, source appendix, release status and SHA-256 manifest. Its verified 38-file ZIP was generated for the conversation, not uploaded as GitHub binary assets. Gameplay source corresponds to merged PR #6 (`61a90178985b34dbffde5eb54a509562d7ae8c38`). Neither this package nor green native CI proves Unreal compilation, physically tested gap traversal or completed world art.
+
+## Six learnable dangers beyond the first frontiers (source implementation)
+Each later region has an **independent, fixed world-clock hazard with a visible nonblocking warning floor**, a safe approach, and a learnable interval. Three affect physical health (Drevlach debt tide, Vathless quarry split, Tharniv law roots); three cause nonlethal reality strain (Orravane falling note, Eillun intrusive census sweep, Auvren horizon unmooring). Each has its own cadence, lane, warning and named counterplay. The physical hit respects combat guarding, while reality strain saturates rather than spilling into lethal damage. Completing that realm's first operated control stops its danger permanently; no repeated grind or online inference is required. These are source-wired cues and model tests, **not** proven UE visual effects or gameplay balance.
+
+Later-realm residents caught in an actual locally sampled warning lane now move toward the nearest sheltered outer band and can explain that specific danger's counterplay while it is visibly pending. Other communities and uninvolved people are not given global hazard awareness; this is a graybox offline routine awaiting pathfinding/animation validation.
+
+**Provenance:** a later-realm hazard test exists as Unreal Editor automation source, but no Unreal-host execution. The latest verified visual package remains Volume V and predates this feature; the next illustrated edition must include these stakes before calling visual documentation current.

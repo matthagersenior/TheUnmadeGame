@@ -14,6 +14,7 @@
 #include "World/UnmadeFrontierHazardRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
 #include "World/UnmadeLaterRealmRules.h"
+#include "World/UnmadeLaterHazardRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -70,6 +71,7 @@ public:
     int32 GetRealmAftermathEnding(UnmadeCore::Realm Id) const { return RealmAftermath.Ending(Id); }
     /** Clock-synchronized local hazard, no update or damage outside active route. */
     UnmadeCore::FrontierHazardSample GetNearbyFrontierHazard(FVector Position) const;
+    UnmadeCore::LaterHazardSample GetNearbyLaterRealmHazard(FVector Position) const;
     int32 GetAfterlightStage() const { return Afterlight.Stage(); }
     UnmadeCore::AfterlightBenefit GetAfterlightBenefit() const { return Afterlight.Effect(); }
     FString GetCurrentRealmName(FVector Position) const;
@@ -106,6 +108,8 @@ private:
     void BuildLaterRealms();
     void BuildAtlasGateways();
     void RefreshLaterRealmWorld();
+    bool bLaterHazardCueVisible[6]={false,false,false,false,false,false};
+    void RefreshLaterHazardCues();
     void BuildFrontierAftermath();
     void RefreshRealmAftermathWorld();
     bool bHazardCueVisible[2]={false,false};

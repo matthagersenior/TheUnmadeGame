@@ -130,3 +130,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/later_realm_journey_test.cpp -o /tmp/unmade-later-realms
           /tmp/unmade-later-realms
+
+      - name: Test six fair environmental hazards, safe lanes and strain saturation
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/later_hazard_test.cpp -o /tmp/unmade-later-hazards
+          /tmp/unmade-later-hazards

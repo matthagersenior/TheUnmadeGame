@@ -23,7 +23,7 @@
 
 ## Pre-PC backlog (can continue now, not yet complete)
 1. **SOURCE WIRED / NATIVE TESTED:** irreversible F7/F8 previews now require a second same-arc, same-ending press within six seconds. The pending remaining gate is UE controller, UI and save-failure playtesting.
-2. **SOURCE WIRED / ENGINE UNVERIFIED:** six later realm chunks, NPCs, grounded atlas portals, forked trial bridges, and second-chapter civic gates. Next: meaningful differentiated hazard/combat systems, environmental puzzles and substantial authored content.
+2. **SOURCE WIRED / NATIVE TESTED / ENGINE UNVERIFIED:** Six different world-timed dangers now apply health injury or nonlethal reality strain. Each has safe flanks, telegraph and stops when the first intervention is completed. The next work is nuanced enemy encounters, environmental puzzles and substantial art/audio. NPCs currently have a preliminary safe-lane steering rule, not finished navigation.
 3. Improve save transaction integrity across combat health/checkpoints, quests, NPC memory, equipment and worlds; test bad arrays, failed writes and repeated saves.
 4. Author navigation and controller-accessible UI interaction specifications, first-party feedback, item/quest/inventory states, audio cue sheets and localization text independent of a PC.
 5. Create source-verifiable quests and world consequences per realm, not merely names, stat counters or 3D placeholders; validate performance budgets and progression without infinite grinding.
@@ -49,3 +49,6 @@
 - Six source-spawned world chunks have split walkable floor and actual missing chasms, separate safe entry positions, atlas-connected gates with equipment-derived attunement requirements, three named witnesses per realm and two permanent source-visible route changes per realm.
 - First visit selects and operates a physical trial; revisiting the initiator opens a different aftermath branch requiring another physical mechanism, local evidence, witness testimony and deliberate F7/F8 confirmation.
 - Native C++ tests cover six independent branches, all alternate first routes, corrupt snapshots and atlas progression. No UE compilation or real traversability claim.
+
+### Realm danger source milestone (October 10)
+The six further realms each expose a bounded first-arc danger and a safe lane, with per-pulse identity to avoid duplicate injuries, guarding counterplay for physical strikes and saturated nonlethal strain for intrusive anomalies. Local residents can respond to their own observed warning. Native/model tests and static source integration passed in the PR after implementation; actual UE compilation and real traversal remain outstanding. See `docs/qa/later-realm-hazards.md`.
