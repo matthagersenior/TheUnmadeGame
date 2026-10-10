@@ -25,6 +25,7 @@ def import_source(name: str, source: Path):
 PLAN=import_source("unmade_authoring_contract",ROOT/"Scripts/prepare_unreal_authoring.py")
 STAGER=import_source("unmade_scene_stager",ROOT/"Scripts/unreal_editor/stage_world_manifest.py")
 LIVED=import_source("unmade_lived_workorders",ROOT/"Scripts/unreal_editor/stage_lived_world_manifest.py")
+CITY=import_source("unmade_city_staging",ROOT/"Scripts/unreal_editor/stage_city_assembly.py")
 
 def validate():
     plan=PLAN.authoring_plan()
@@ -36,7 +37,10 @@ def validate():
     lived=LIVED.read_plan()
     if len(lived["work_orders"])!=90:
         raise ValueError("Nine-realm world work orders changed")
-    return plan,stage,lived
+    city=CITY.read_plan()
+    if city["actor_count"]!=402 or city["cities"]!=11:
+        raise ValueError("City assembly actor plan incomplete")
+    return plan,stage,lived,city
 
 def put_tables(unreal, plan):
     tools=unreal.AssetToolsHelpers.get_asset_tools()
@@ -104,16 +108,32 @@ def put_lived_stage(unreal,lived):
         raise RuntimeError("Not all lived-universe reference markers placed")
     return {"map":map_path,"created":created,"skipped":skipped}
 
-def apply(plan,stage,lived):
+def put_city_assembly(unreal,city):
+    library=unreal.EditorAssetLibrary
+    map_path=CITY.MAP
+    if library.does_asset_exist(map_path):
+        if not unreal.EditorLevelLibrary.load_level(map_path):
+            raise RuntimeError("Cannot open isolated city assembly map")
+    elif not unreal.EditorLevelLibrary.new_level(map_path):
+        raise RuntimeError("Cannot create isolated city assembly map")
+    created,skipped=CITY.apply_in_editor(city)
+    if created+skipped!=402:
+        raise RuntimeError("City assembly scene incomplete")
+    return {"map":map_path,"created":created,"skipped":skipped,
+            "source_actor_total":402,"city_count":11}
+
+def apply(plan,stage,lived,city):
     if os.environ.get("UNMADE_EDITOR_APPROVED")!="1":
         raise RuntimeError("Editor application requires explicit PowerShell approval")
     import unreal
     tables=put_tables(unreal,plan)
     staged=put_stage(unreal,stage)
     lived_stage=put_lived_stage(unreal,lived)
+    city_stage=put_city_assembly(unreal,city)
     receipt={"status":"EDITOR_IMPORT_ATTEMPT_COMPLETE",
              "note":"Not a completed art or game playtest; only generated editor references",
              "tables":tables,"staging":staged,"lived_staging":lived_stage,
+             "city_assembly":city_stage,
              "commit":os.environ.get("UNMADE_COMMIT","unknown")}
     report=os.environ.get("UNMADE_EDITOR_RECEIPT","")
     if not report:
@@ -122,17 +142,17 @@ def apply(plan,stage,lived):
     if not path.parent.is_dir():
         raise RuntimeError("Receipt directory does not exist")
     path.write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
-    unreal.log("UNMADE EDITOR BATCH PASSED: 7 tables / 198 rows / 52+90 reference cubes")
+    unreal.log("UNMADE EDITOR BATCH PASSED: 7 tables / 198 rows / 52+90+402 source markers")
     return receipt
 
 def main():
-    plan,stage,lived=validate()
+    plan,stage,lived,city=validate()
     if os.environ.get("UNMADE_EDITOR_APPROVED")!="1":
-        print("DRY RUN ONLY | tables %d | rows %d | stage refs %d+%d | map %s"
+        print("DRY RUN ONLY | tables %d | rows %d | staged refs %d+%d+%d | map %s"
               %(len(plan["tables"]),plan["total_rows"],len(stage["actors"]),
-                len(lived["work_orders"]),MAP_PATH))
+                len(lived["work_orders"]),city["actor_count"],MAP_PATH))
         return 0
-    apply(plan,stage,lived)
+    apply(plan,stage,lived,city)
     print("EDITOR REFERENCE IMPORT COMPLETED; no runtime content or SaveGame changed")
     return 0
 

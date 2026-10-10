@@ -47,3 +47,7 @@ Next open PIE in the normal starter map: walk with a third-person placeholder, i
 ## Before calling it 'ready to ship'
 
 Still outstanding: first UE 5.8 engine compilation and validation, authentic terrain/buildings and occupied-world art, real UMG conversations/codex, distinct performances/animation/VO, integrated cues/lighting, safe cross-realm traversal, combat feel, boss polish, accessibility, and full load/save fault injection. The scripts reduce reentry, not creative or testing requirements.
+
+## 11-city assembly extension — third safe map
+
+The first-PC importer now also produces `/Game/UnmadeProduction/Maps/Unmade_CityAssemblyStaging`, a separate 402-reference-actor **city massing** level. This is not a successor to the real gameplay graybox; it is a city-by-city visual plan that connects all existing quest/cast/rite/evidence identities to recognizable city silhouettes. Use `python Scripts/build_city_assembly.py --check` without Unreal to inspect coverage, or `--output city-preview.json` to export the whole actor plan. The quickstart's receipt requires 402 third-map markers as well as 52 and 90 from the prior two maps. None has collision, navmesh or completed interactivity. Reference: [all-realm assembly contract](../design/nine-realm-city-assembly-factory.md).

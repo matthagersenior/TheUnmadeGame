@@ -81,7 +81,8 @@ try{
             if($result.status -ne "EDITOR_IMPORT_ATTEMPT_COMPLETE" -or
                @($result.tables).Count -ne 7 -or
                $result.staging.created+$result.staging.skipped -ne 52 -or
-               $result.lived_staging.created+$result.lived_staging.skipped -ne 90){
+               $result.lived_staging.created+$result.lived_staging.skipped -ne 90 -or
+               $result.city_assembly.created+$result.city_assembly.skipped -ne 402){
                 throw "EDITOR_REFERENCE_IMPORT_INCOMPLETE"
             }
         }finally{

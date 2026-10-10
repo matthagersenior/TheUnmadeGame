@@ -35,6 +35,10 @@ try {
     & python (Join-Path $PSScriptRoot "build_story_scene_handoff.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "story-scene-handoff-validation.log")
     if($LASTEXITCODE -ne 0){throw "QUEST_SCENE_CONTENT_OUT_OF_SYNC: run generator and commit outputs"}
+    Write-Host "Validating 11 canonical city assembly kits, 82 residents, 54 quest beats and 10 rites."
+    & python (Join-Path $PSScriptRoot "build_city_assembly.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "city-assembly-source-check.log")
+    if($LASTEXITCODE -ne 0){throw "CITY_ASSEMBLY_SOURCE_DRIFT"}
     Write-Host "Checking cinematic explainer and nine-realm production handoff."
     & python (Join-Path $PSScriptRoot "build_cinematic_handoff.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "cinematic-production-validation.log")

@@ -159,3 +159,9 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Appended two optional save masks and a presence bit to the existing schema-1 slot; added restore validation, corruption preservation and failed-save rollback of new and old landmark state; exposed discovered/returned evidence in prototype journal.
 - Added portable C++17 gameplay-state test to CI plus source wiring/first-PC preflight tests; engine-native compile, world navigation, gamepad accessibility, authored levels and spoken character performances await first Unreal PC.
 - Existing 10-volume literary assets and dated illustrated DOCX/PDF/ZIP package have not been automatically rebuilt for this new source implementation.
+
+## 2026-10-10 — 11-city authoring layout factory across all nine realms
+- Authored eight distinct cinematic/civic silhouette guides for each of the eleven existing cities, with 44 reference road strips and 88 housing proxy shapes.
+- Added noncolliding source-linked actor guides for all 82 saved resident IDs, ten original mastered rite IDs, 54 source-authored main quest steps, 27 physical evidence contracts and nine still-unimplemented side-story concepts; complete isolated planning map has 402 reference actors.
+- Connected the third safe editor map and source validator to the first-PC command and CI. The prototype's actual quest/saves, stage gates, NPC identity continuity, ending alternatives and nine OPEN mysteries remain unchanged.
+- Technical publication update required: these are authored build instructions and markers, **not** fully built or tested Unreal cities, animated characters, voice performances, playable story interactions, finished user interface or shipped content.
