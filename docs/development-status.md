@@ -220,3 +220,17 @@ No paid hosting authorized or provisioned. The creator currently has Android but
   model tests, item tests, integrated offline journey and source contracts.
 - Unreal/UE editor build, actual cold/night hardship, animation, navigation,
   dialogue UI, accessible controls, campaign length and balancing unverified.
+
+## 2026-10-10 Volume II story and canonical package expansion
+
+- Codified the four user standards and ten signature mechanics in
+  `docs/lore/living-world-continuity.md` with a dated release ledger.
+- Added 9 uniquely authored Realm Aftermath arcs with care/truth evidence,
+  different named witnesses, irreversible choices, atomic snapshots and
+  persistent narrative effects in native C++17 source.
+- Current runtime limit is **3 realms with footholds and only 5 populated
+  communities**; the remaining six aftermath arcs are design data, not
+  completed 3D destinations or actor conversations.
+- The prior Bellwold Afterlight source episode remains the working template.
+  The revised complete illustrated package is a separate downloadable
+  dated artifact; GitHub docs are the canon source, not proof of in-engine art.
