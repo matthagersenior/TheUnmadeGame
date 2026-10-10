@@ -30,7 +30,8 @@ class WitnessBraidWiring(unittest.TestCase):
         self.assertIn("CommitmentGate.Attempt(",player)
         self.assertIn("bHasWitnessBraidSnapshot=false",save)
         self.assertIn("WitnessBraidOutcome=0",save)
-        self.assertIn("ReportLocalEvent(FName(\"World.WitnessBraidResolved\")",player)
+        self.assertIn("World.WitnessBraidShelter",player)
+        self.assertIn("World.WitnessBraidDocket",player)
 
     def test_canon_and_tests_follow_source(self):
         for path in ("docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md",
