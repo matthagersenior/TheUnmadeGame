@@ -364,6 +364,32 @@ FString AUnmadeNpcCharacter::GetReactionText() const
 
     if(CachedHub.IsValid())
     {
+        // A resident only interprets the main mystery through public events
+        // from THEIR own realm; finishing an unrelated realm does not grant
+        // magical knowledge of other witnesses' private testimony.
+        const auto Story=CachedHub->GetUnansweredRoadEvidence();
+        UnmadeCore::Realm HomeOfBeat=UnmadeCore::Realm::ThreefoldReach;
+        if(bLaterRealmResident)HomeOfBeat=LaterHome;
+        else if(bFrontierResident)
+        {
+            const FString Own=NpcId.ToString();
+            HomeOfBeat=Own.StartsWith(TEXT("npc.saltwake."))
+                ?UnmadeCore::Realm::WidowedRain:
+                 UnmadeCore::Realm::HearthBeneath;
+        }
+        const bool Known=HomeOfBeat==UnmadeCore::Realm::ThreefoldReach
+            ?Story.openingWitnessed
+            :UnmadeCore::RoadHas(Story,HomeOfBeat);
+        if(Known)
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=FString(UTF8_TO_TCHAR(
+                UnmadeCore::UnansweredRoadBeats[static_cast<int>(HomeOfBeat)]
+                    .witnessedDiscovery));
+        }
+    }
+    if(CachedHub.IsValid())
+    {
         // Local observation of changed sky/monuments; do not globally
         // broadcast a private final-boss memory to every resident.
         const auto NewMorning=CachedHub->GetNewMorning();
