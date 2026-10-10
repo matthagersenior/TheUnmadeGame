@@ -984,6 +984,7 @@ void AUnmadeCharacter::Interact()
             Hub->TryRealmAftermathConversation(Target->GetStableId());
             Hub->TryLaterRealmConversation(Target->GetStableId());
             Hub->TryEchoQuestConversation(Target->GetStableId());
+            Hub->RecordResidentConversation(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
         }
@@ -1026,6 +1027,8 @@ void AUnmadeCharacter::OfferAid()
         }
     }
     ReportLocalEvent(FName("Player.Helped"), Target->GetStableId());
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        Hub->RecordResidentAid(Target->GetStableId());
 }
 
 void AUnmadeCharacter::DemonstrateAnomaly()

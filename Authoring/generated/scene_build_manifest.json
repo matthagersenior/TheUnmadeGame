@@ -1,0 +1,788 @@
+{
+  "schema_version": 1,
+  "editor_level_name": "Unmade_AuthoringStaging",
+  "save_policy": "authoring-only, never overwrite runtime actors",
+  "actors": [
+    {
+      "id": "STG_ThreefoldReach_01",
+      "kind": "RealmProductionReference",
+      "realm": "ThreefoldReach",
+      "label": "UM_STG_ThreefoldReach_01",
+      "position_cm": [
+        -1400,
+        -1100,
+        160
+      ],
+      "asset_hint": "SM_Reach_BellWithoutClapper",
+      "source_ref": "QUEST_MAIN_ThreefoldReach",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_ThreefoldReach_02",
+      "kind": "RealmProductionReference",
+      "realm": "ThreefoldReach",
+      "label": "UM_STG_ThreefoldReach_02",
+      "position_cm": [
+        -750,
+        -1000,
+        160
+      ],
+      "asset_hint": "SM_Reach_RefugeLantern",
+      "source_ref": "QUEST_MAIN_ThreefoldReach",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_ThreefoldReach_03",
+      "kind": "RealmProductionReference",
+      "realm": "ThreefoldReach",
+      "label": "UM_STG_ThreefoldReach_03",
+      "position_cm": [
+        750,
+        -1000,
+        160
+      ],
+      "asset_hint": "NI_Reach_AbsentBellRing",
+      "source_ref": "QUEST_MAIN_ThreefoldReach",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_ThreefoldReach_04",
+      "kind": "RealmProductionReference",
+      "realm": "ThreefoldReach",
+      "label": "UM_STG_ThreefoldReach_04",
+      "position_cm": [
+        1400,
+        -1100,
+        160
+      ],
+      "asset_hint": "SEQ_Reach_BellSilence",
+      "source_ref": "QUEST_MAIN_ThreefoldReach",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_WidowedRain_01",
+      "kind": "RealmProductionReference",
+      "realm": "WidowedRain",
+      "label": "UM_STG_WidowedRain_01",
+      "position_cm": [
+        -1400,
+        -51100,
+        160
+      ],
+      "asset_hint": "SM_Rain_DryPier",
+      "source_ref": "QUEST_MAIN_WidowedRain",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_WidowedRain_02",
+      "kind": "RealmProductionReference",
+      "realm": "WidowedRain",
+      "label": "UM_STG_WidowedRain_02",
+      "position_cm": [
+        -750,
+        -51000,
+        160
+      ],
+      "asset_hint": "SM_Rain_TideCounter",
+      "source_ref": "QUEST_MAIN_WidowedRain",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_WidowedRain_03",
+      "kind": "RealmProductionReference",
+      "realm": "WidowedRain",
+      "label": "UM_STG_WidowedRain_03",
+      "position_cm": [
+        750,
+        -51000,
+        160
+      ],
+      "asset_hint": "NS_Rain_WarningPulse",
+      "source_ref": "QUEST_MAIN_WidowedRain",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_WidowedRain_04",
+      "kind": "RealmProductionReference",
+      "realm": "WidowedRain",
+      "label": "UM_STG_WidowedRain_04",
+      "position_cm": [
+        1400,
+        -51100,
+        160
+      ],
+      "asset_hint": "SFX_Rain_BellNoBuoy",
+      "source_ref": "QUEST_MAIN_WidowedRain",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_HearthBeneath_01",
+      "kind": "RealmProductionReference",
+      "realm": "HearthBeneath",
+      "label": "UM_STG_HearthBeneath_01",
+      "position_cm": [
+        -1400,
+        48900,
+        160
+      ],
+      "asset_hint": "SM_Hearth_FurnaceValve",
+      "source_ref": "QUEST_MAIN_HearthBeneath",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_HearthBeneath_02",
+      "kind": "RealmProductionReference",
+      "realm": "HearthBeneath",
+      "label": "UM_STG_HearthBeneath_02",
+      "position_cm": [
+        -750,
+        49000,
+        160
+      ],
+      "asset_hint": "SM_Hearth_HeatPipe",
+      "source_ref": "QUEST_MAIN_HearthBeneath",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_HearthBeneath_03",
+      "kind": "RealmProductionReference",
+      "realm": "HearthBeneath",
+      "label": "UM_STG_HearthBeneath_03",
+      "position_cm": [
+        750,
+        49000,
+        160
+      ],
+      "asset_hint": "NS_Hearth_HeatTelegraph",
+      "source_ref": "QUEST_MAIN_HearthBeneath",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_HearthBeneath_04",
+      "kind": "RealmProductionReference",
+      "realm": "HearthBeneath",
+      "label": "UM_STG_HearthBeneath_04",
+      "position_cm": [
+        1400,
+        48900,
+        160
+      ],
+      "asset_hint": "SFX_Hearth_BreathingKiln",
+      "source_ref": "QUEST_MAIN_HearthBeneath",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_TidalLedger_01",
+      "kind": "RealmProductionReference",
+      "realm": "TidalLedger",
+      "label": "UM_STG_TidalLedger_01",
+      "position_cm": [
+        98600,
+        -51100,
+        160
+      ],
+      "asset_hint": "SM_Drevlach_DebtLatch",
+      "source_ref": "QUEST_MAIN_TidalLedger",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_TidalLedger_02",
+      "kind": "RealmProductionReference",
+      "realm": "TidalLedger",
+      "label": "UM_STG_TidalLedger_02",
+      "position_cm": [
+        99250,
+        -51000,
+        160
+      ],
+      "asset_hint": "SM_Drevlach_FerryGate",
+      "source_ref": "QUEST_MAIN_TidalLedger",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_TidalLedger_03",
+      "kind": "RealmProductionReference",
+      "realm": "TidalLedger",
+      "label": "UM_STG_TidalLedger_03",
+      "position_cm": [
+        100750,
+        -51000,
+        160
+      ],
+      "asset_hint": "BP_Drevlach_ReceiptEvidence",
+      "source_ref": "QUEST_MAIN_TidalLedger",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_TidalLedger_04",
+      "kind": "RealmProductionReference",
+      "realm": "TidalLedger",
+      "label": "UM_STG_TidalLedger_04",
+      "position_cm": [
+        101400,
+        -51100,
+        160
+      ],
+      "asset_hint": "SEQ_Drevlach_ChildsafeCrossing",
+      "source_ref": "QUEST_MAIN_TidalLedger",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_SkyBelow_01",
+      "kind": "RealmProductionReference",
+      "realm": "SkyBelow",
+      "label": "UM_STG_SkyBelow_01",
+      "position_cm": [
+        -101400,
+        -51100,
+        160
+      ],
+      "asset_hint": "SM_Orravane_HangingStreet",
+      "source_ref": "QUEST_MAIN_SkyBelow",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_SkyBelow_02",
+      "kind": "RealmProductionReference",
+      "realm": "SkyBelow",
+      "label": "UM_STG_SkyBelow_02",
+      "position_cm": [
+        -100750,
+        -51000,
+        160
+      ],
+      "asset_hint": "BP_Orravane_TuningFork",
+      "source_ref": "QUEST_MAIN_SkyBelow",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_SkyBelow_03",
+      "kind": "RealmProductionReference",
+      "realm": "SkyBelow",
+      "label": "UM_STG_SkyBelow_03",
+      "position_cm": [
+        -99250,
+        -51000,
+        160
+      ],
+      "asset_hint": "NS_Orravane_GravityCue",
+      "source_ref": "QUEST_MAIN_SkyBelow",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_SkyBelow_04",
+      "kind": "RealmProductionReference",
+      "realm": "SkyBelow",
+      "label": "UM_STG_SkyBelow_04",
+      "position_cm": [
+        -98600,
+        -51100,
+        160
+      ],
+      "asset_hint": "SFX_Orravane_ChoirSupport",
+      "source_ref": "QUEST_MAIN_SkyBelow",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_CinderSpine_01",
+      "kind": "RealmProductionReference",
+      "realm": "CinderSpine",
+      "label": "UM_STG_CinderSpine_01",
+      "position_cm": [
+        98600,
+        48900,
+        160
+      ],
+      "asset_hint": "SM_Vathless_SeamClamp",
+      "source_ref": "QUEST_MAIN_CinderSpine",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_CinderSpine_02",
+      "kind": "RealmProductionReference",
+      "realm": "CinderSpine",
+      "label": "UM_STG_CinderSpine_02",
+      "position_cm": [
+        99250,
+        49000,
+        160
+      ],
+      "asset_hint": "SM_Vathless_AncestorWall",
+      "source_ref": "QUEST_MAIN_CinderSpine",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_CinderSpine_03",
+      "kind": "RealmProductionReference",
+      "realm": "CinderSpine",
+      "label": "UM_STG_CinderSpine_03",
+      "position_cm": [
+        100750,
+        49000,
+        160
+      ],
+      "asset_hint": "NS_Vathless_CrackCue",
+      "source_ref": "QUEST_MAIN_CinderSpine",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_CinderSpine_04",
+      "kind": "RealmProductionReference",
+      "realm": "CinderSpine",
+      "label": "UM_STG_CinderSpine_04",
+      "position_cm": [
+        101400,
+        48900,
+        160
+      ],
+      "asset_hint": "SFX_Vathless_StoneGroan",
+      "source_ref": "QUEST_MAIN_CinderSpine",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_HundredUnlived_01",
+      "kind": "RealmProductionReference",
+      "realm": "HundredUnlived",
+      "label": "UM_STG_HundredUnlived_01",
+      "position_cm": [
+        -101400,
+        48900,
+        160
+      ],
+      "asset_hint": "SM_Eillun_NameLatch",
+      "source_ref": "QUEST_MAIN_HundredUnlived",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_HundredUnlived_02",
+      "kind": "RealmProductionReference",
+      "realm": "HundredUnlived",
+      "label": "UM_STG_HundredUnlived_02",
+      "position_cm": [
+        -100750,
+        49000,
+        160
+      ],
+      "asset_hint": "BP_Eillun_ConsentPrompt",
+      "source_ref": "QUEST_MAIN_HundredUnlived",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_HundredUnlived_03",
+      "kind": "RealmProductionReference",
+      "realm": "HundredUnlived",
+      "label": "UM_STG_HundredUnlived_03",
+      "position_cm": [
+        -99250,
+        49000,
+        160
+      ],
+      "asset_hint": "SM_Eillun_ShelterDoor",
+      "source_ref": "QUEST_MAIN_HundredUnlived",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_HundredUnlived_04",
+      "kind": "RealmProductionReference",
+      "realm": "HundredUnlived",
+      "label": "UM_STG_HundredUnlived_04",
+      "position_cm": [
+        -98600,
+        48900,
+        160
+      ],
+      "asset_hint": "SFX_Eillun_UnsentLetter",
+      "source_ref": "QUEST_MAIN_HundredUnlived",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_OrchardOfKings_01",
+      "kind": "RealmProductionReference",
+      "realm": "OrchardOfKings",
+      "label": "UM_STG_OrchardOfKings_01",
+      "position_cm": [
+        198600,
+        -1100,
+        160
+      ],
+      "asset_hint": "SM_Tharniv_RootChannel",
+      "source_ref": "QUEST_MAIN_OrchardOfKings",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_OrchardOfKings_02",
+      "kind": "RealmProductionReference",
+      "realm": "OrchardOfKings",
+      "label": "UM_STG_OrchardOfKings_02",
+      "position_cm": [
+        199250,
+        -1000,
+        160
+      ],
+      "asset_hint": "SM_Tharniv_EmptyCrown",
+      "source_ref": "QUEST_MAIN_OrchardOfKings",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_OrchardOfKings_03",
+      "kind": "RealmProductionReference",
+      "realm": "OrchardOfKings",
+      "label": "UM_STG_OrchardOfKings_03",
+      "position_cm": [
+        200750,
+        -1000,
+        160
+      ],
+      "asset_hint": "NS_Tharniv_RootTell",
+      "source_ref": "QUEST_MAIN_OrchardOfKings",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_OrchardOfKings_04",
+      "kind": "RealmProductionReference",
+      "realm": "OrchardOfKings",
+      "label": "UM_STG_OrchardOfKings_04",
+      "position_cm": [
+        201400,
+        -1100,
+        160
+      ],
+      "asset_hint": "BP_Tharniv_GraftedRoad",
+      "source_ref": "QUEST_MAIN_OrchardOfKings",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_FirstAbsence_01",
+      "kind": "RealmProductionReference",
+      "realm": "FirstAbsence",
+      "label": "UM_STG_FirstAbsence_01",
+      "position_cm": [
+        -201400,
+        -1100,
+        160
+      ],
+      "asset_hint": "SEQ_Auvren_FalseVictory",
+      "source_ref": "QUEST_MAIN_FirstAbsence",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_FirstAbsence_02",
+      "kind": "RealmProductionReference",
+      "realm": "FirstAbsence",
+      "label": "UM_STG_FirstAbsence_02",
+      "position_cm": [
+        -200750,
+        -1000,
+        160
+      ],
+      "asset_hint": "SEQ_Auvren_WorldAnswer",
+      "source_ref": "QUEST_MAIN_FirstAbsence",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_FirstAbsence_03",
+      "kind": "RealmProductionReference",
+      "realm": "FirstAbsence",
+      "label": "UM_STG_FirstAbsence_03",
+      "position_cm": [
+        -199250,
+        -1000,
+        160
+      ],
+      "asset_hint": "BP_NhalVey_BossPhases",
+      "source_ref": "QUEST_MAIN_FirstAbsence",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_FirstAbsence_04",
+      "kind": "RealmProductionReference",
+      "realm": "FirstAbsence",
+      "label": "UM_STG_FirstAbsence_04",
+      "position_cm": [
+        -198600,
+        -1100,
+        160
+      ],
+      "asset_hint": "SM_Auvren_ReturnThreshold",
+      "source_ref": "QUEST_MAIN_FirstAbsence",
+      "collision": false,
+      "note": "Authoring-only stage. Does NOT replace runtime quest tagged actor."
+    },
+    {
+      "id": "STG_SHOT_S01",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S01",
+      "position_cm": [
+        300000,
+        100000,
+        180
+      ],
+      "asset_hint": "legacy_art_22.jpg",
+      "source_ref": "S01",
+      "collision": false,
+      "note": "establish world; avoid antagonist name"
+    },
+    {
+      "id": "STG_SHOT_S02",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S02",
+      "position_cm": [
+        300900,
+        100000,
+        180
+      ],
+      "asset_hint": "legacy_art_12.jpg",
+      "source_ref": "S02",
+      "collision": false,
+      "note": "source character origin; no false game footage"
+    },
+    {
+      "id": "STG_SHOT_S03",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S03",
+      "position_cm": [
+        301800,
+        100000,
+        180
+      ],
+      "asset_hint": "legacy_art_01.jpg",
+      "source_ref": "S03",
+      "collision": false,
+      "note": "opening Unanswered Interval"
+    },
+    {
+      "id": "STG_SHOT_S04",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S04",
+      "position_cm": [
+        302700,
+        100000,
+        180
+      ],
+      "asset_hint": "legacy_art_23.jpg",
+      "source_ref": "S04",
+      "collision": false,
+      "note": "frontier first choice"
+    },
+    {
+      "id": "STG_SHOT_S05",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S05",
+      "position_cm": [
+        303600,
+        100000,
+        180
+      ],
+      "asset_hint": "legacy_art_26.jpg",
+      "source_ref": "S05",
+      "collision": false,
+      "note": "alternate frontier first choice"
+    },
+    {
+      "id": "STG_SHOT_S06",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S06",
+      "position_cm": [
+        304500,
+        100000,
+        180
+      ],
+      "asset_hint": "legacy_art_24.png",
+      "source_ref": "S06",
+      "collision": false,
+      "note": "show earned crossings not nine mandatory regions"
+    },
+    {
+      "id": "STG_SHOT_S07",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S07",
+      "position_cm": [
+        305400,
+        100000,
+        180
+      ],
+      "asset_hint": "legacy_art_15.jpg",
+      "source_ref": "S07",
+      "collision": false,
+      "note": "future contract conflict"
+    },
+    {
+      "id": "STG_SHOT_S08",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S08",
+      "position_cm": [
+        306300,
+        100000,
+        180
+      ],
+      "asset_hint": "legacy_art_28.jpg",
+      "source_ref": "S08",
+      "collision": false,
+      "note": "inverted gravity civic conflict"
+    },
+    {
+      "id": "STG_SHOT_S09",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S09",
+      "position_cm": [
+        300000,
+        101500,
+        180
+      ],
+      "asset_hint": "legacy_art_13.jpg",
+      "source_ref": "S09",
+      "collision": false,
+      "note": "quarry physical consequence"
+    },
+    {
+      "id": "STG_SHOT_S10",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S10",
+      "position_cm": [
+        300900,
+        101500,
+        180
+      ],
+      "asset_hint": "legacy_art_10.jpg",
+      "source_ref": "S10",
+      "collision": false,
+      "note": "privacy and consent"
+    },
+    {
+      "id": "STG_SHOT_S11",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S11",
+      "position_cm": [
+        301800,
+        101500,
+        180
+      ],
+      "asset_hint": "legacy_art_04.jpg",
+      "source_ref": "S11",
+      "collision": false,
+      "note": "law without author"
+    },
+    {
+      "id": "STG_SHOT_S12",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S12",
+      "position_cm": [
+        302700,
+        101500,
+        180
+      ],
+      "asset_hint": "legacy_art_27.jpg",
+      "source_ref": "S12",
+      "collision": false,
+      "note": "safe return path"
+    },
+    {
+      "id": "STG_SHOT_S13",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S13",
+      "position_cm": [
+        303600,
+        101500,
+        180
+      ],
+      "asset_hint": "legacy_art_20.jpg",
+      "source_ref": "S13",
+      "collision": false,
+      "note": "Tenfold powers are limited and earned"
+    },
+    {
+      "id": "STG_SHOT_S14",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S14",
+      "position_cm": [
+        304500,
+        101500,
+        180
+      ],
+      "asset_hint": "legacy_art_03.jpg",
+      "source_ref": "S14",
+      "collision": false,
+      "note": "NPC memory, combat, rematch and altered space"
+    },
+    {
+      "id": "STG_SHOT_S15",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S15",
+      "position_cm": [
+        305400,
+        101500,
+        180
+      ],
+      "asset_hint": "legacy_art_07.jpg",
+      "source_ref": "S15",
+      "collision": false,
+      "note": "mask hidden; public version spoiler-light"
+    },
+    {
+      "id": "STG_SHOT_S16",
+      "kind": "CinematicShotReference",
+      "realm": "StagingOnly",
+      "label": "UM_STG_SHOT_S16",
+      "position_cm": [
+        306300,
+        101500,
+        180
+      ],
+      "asset_hint": "legacy_art_22.jpg",
+      "source_ref": "S16",
+      "collision": false,
+      "note": "end slate, concept only"
+    }
+  ],
+  "expected_actor_count": 52
+}

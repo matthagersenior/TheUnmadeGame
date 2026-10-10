@@ -1,0 +1,1143 @@
+{
+  "schema_version": 1,
+  "revision": "2026-10-10",
+  "intent": "Exact dialogue/trigger/failure/recovery authoring contracts; original C++ quest states authoritative. New cinematic/dialogue staging not claimed UE compiled.",
+  "act_gates": [
+    {
+      "act": 0,
+      "eligible": [
+        "ThreefoldReach"
+      ],
+      "requires": "A true opening local choice OR two visited settlements OR two discovered lore sites",
+      "journal": "A bell without a last note",
+      "optional": false
+    },
+    {
+      "act": 1,
+      "eligible": [
+        "WidowedRain",
+        "HearthBeneath"
+      ],
+      "requires": "Opening witnessed; resolve one frontier first story",
+      "journal": "Where did the missing thing go?",
+      "optional": false
+    },
+    {
+      "act": 2,
+      "eligible": [
+        "TidalLedger",
+        "SkyBelow",
+        "CinderSpine"
+      ],
+      "requires": "One frontier first story resolved; resolve one middle first story",
+      "journal": "Who bears the hidden cost?",
+      "optional": false
+    },
+    {
+      "act": 3,
+      "eligible": [
+        "HundredUnlived",
+        "OrchardOfKings"
+      ],
+      "requires": "One middle first story resolved; resolve one upper first story",
+      "journal": "Who may be a true witness?",
+      "optional": false
+    },
+    {
+      "act": 4,
+      "eligible": [
+        "FirstAbsence"
+      ],
+      "requires": "One upper first story resolved; resolve Auvren first trial",
+      "journal": "The witness before place",
+      "optional": false
+    },
+    {
+      "act": 5,
+      "eligible": [
+        "FirstAbsence"
+      ],
+      "requires": "Coherent opening + frontier + middle + upper + Auvren completed, or progressed legacy final state",
+      "journal": "Face Nhal-Vey; survive false victory and choose the next morning",
+      "optional": false
+    },
+    {
+      "act": 6,
+      "eligible": [
+        "ThreefoldReach",
+        "WidowedRain",
+        "HearthBeneath",
+        "TidalLedger",
+        "SkyBelow",
+        "CinderSpine",
+        "HundredUnlived",
+        "OrchardOfKings",
+        "FirstAbsence"
+      ],
+      "requires": "True final choice saved",
+      "journal": "Explore the same nine realms in the chosen morning; rematch optional",
+      "optional": true
+    }
+  ],
+  "quests": [
+    {
+      "id": "ThreefoldReach",
+      "chapter": "QUEST_MAIN_ThreefoldReach",
+      "realm": "ThreefoldReach",
+      "chapter_level": 0,
+      "source_authority": "Original ThreefoldReach/RegionalTaskModel",
+      "director_note": "Bell silence is later heard in rain, fire and choir; never say Nhal-Vey here.",
+      "environment": "Roads stitched through contradictory maps, refugee lanterns and a split-record archive.",
+      "player_verbs": [
+        "Ring the silent bell and mark two observable landmarks",
+        "Carry supplies through the contested neighborhood and speak to local witnesses",
+        "Choose shelter or research testimony with a clear permanent preview"
+      ],
+      "npc_ids": [
+        "npc.archivist.001",
+        "npc.bellwold.matron.001",
+        "npc.paperhaven.registrar.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Reach.Bell.Remembered",
+          "Reach.Paperhaven.AbsenceRecord"
+        ],
+        "mechanism": "Reach.CrossingsWitness",
+        "contract_status": "frontier/Reach art-direction tag placeholders; verify against actual UE actor before binding"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Ring the silent bell and mark two observable landmarks",
+          "speaker": "npc.archivist.001",
+          "line": "I heard a bell from a road that doesn't exist. Who would carve a road into silence?",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Carry supplies through the contested neighborhood and speak to local witnesses",
+          "speaker": "npc.bellwold.matron.001",
+          "line": "I hold a document proving this bell was never made. Your ears aren't evidence, but neither is my paper complete.",
+          "evidence_tags": [
+            "Reach.Bell.Remembered",
+            "Reach.Paperhaven.AbsenceRecord"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "Existing frontier/Reach quest evidence; original authoritative state"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Choose shelter or research testimony with a clear permanent preview",
+          "speaker": "npc.archivist.001",
+          "line": "I heard a bell from a road that doesn't exist. Who would carve a road into silence? The the unanswered interval: bell without a last note gives you one chance to change the place responsibly.",
+          "physical_tag": "Reach.CrossingsWitness",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Preserve public shelter access and lantern use.",
+          "speaker": "npc.bellwold.matron.001",
+          "line": "If we keep a roof open tonight, someone may live long enough to tell us what happened.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Make the missing record inspectable without forcefully identifying every protected resident.",
+          "speaker": "npc.paperhaven.registrar.001",
+          "line": "The archive can be public without naming people who asked for refuge.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "A stranger can trace both shelter and archive routes, meeting residents who remember the chosen side.",
+          "speaker": "npc.archivist.001",
+          "line": "You came back. A stranger can trace both shelter and archive routes, meeting residents who remember the chosen side. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Preserve public shelter access and lantern use.",
+        "truth": "Make the missing record inspectable without forcefully identifying every protected resident.",
+        "held": "The road gains a visible scar through existing public landmarks.",
+        "many": "The same street has two navigable, clearly signposted interpretations.",
+        "manual_test": "Choose both paths on separate saves; reload preserves route and individual witness memories."
+      },
+      "accessibility": {
+        "danger": "Moving routes and civic access; neither path is a combat-only choke.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    },
+    {
+      "id": "WidowedRain",
+      "chapter": "QUEST_MAIN_WidowedRain",
+      "realm": "WidowedRain",
+      "chapter_level": 1,
+      "source_authority": "FrontierJourney",
+      "director_note": "A missing tide is dated like a loan due before birth.",
+      "environment": "Dry docks under persistent rain, wet ledgers, hollow ship-roof shelters.",
+      "player_verbs": [
+        "Collect a shoreline impression from a physical pier and a contradictory wet map",
+        "Avoid a telegraphed tidal storm pulse and use an elevated safe route",
+        "Commit to public rain access or a protected account of loss"
+      ],
+      "npc_ids": [
+        "npc.saltwake.navigator.001",
+        "npc.saltwake.rainkeeper.001",
+        "npc.saltwake.harborwarden.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Saltwake.Clue.WetLedger",
+          "Saltwake.Clue.TideChart"
+        ],
+        "mechanism": "Saltwake.StormValve",
+        "contract_status": "frontier/Reach art-direction tag placeholders; verify against actual UE actor before binding"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Collect a shoreline impression from a physical pier and a contradictory wet map",
+          "speaker": "npc.saltwake.navigator.001",
+          "line": "I charted a sea yesterday. Tell me why its shore is still wet but its water isn't here.",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Avoid a telegraphed tidal storm pulse and use an elevated safe route",
+          "speaker": "npc.saltwake.rainkeeper.001",
+          "line": "I count every drop, because someone is selling us the same storm twice.",
+          "evidence_tags": [
+            "Saltwake.Clue.WetLedger",
+            "Saltwake.Clue.TideChart"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "Existing frontier/Reach quest evidence; original authoritative state"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Commit to public rain access or a protected account of loss",
+          "speaker": "npc.saltwake.navigator.001",
+          "line": "I charted a sea yesterday. Tell me why its shore is still wet but its water isn't here. The missing water as an economic and environmental absence gives you one chance to change the place responsibly.",
+          "physical_tag": "Saltwake.StormValve",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Shelter ferry users without requiring old ownership papers.",
+          "speaker": "npc.saltwake.rainkeeper.001",
+          "line": "Share our rain before another family sleeps in an empty boat.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Preserve the ledger and collateral history without declaring private survivors debtors.",
+          "speaker": "npc.saltwake.harborwarden.001",
+          "line": "Show us the missing water's accounts, and let us choose whom to protect.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "Storm records update to acknowledge actual Rainward public choice; no generic all-knowing NPC reaction.",
+          "speaker": "npc.saltwake.navigator.001",
+          "line": "You came back. Storm records update to acknowledge actual Rainward public choice; no generic all-knowing NPC reaction. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Shelter ferry users without requiring old ownership papers.",
+        "truth": "Preserve the ledger and collateral history without declaring private survivors debtors.",
+        "held": "The missing coast retains the last honest tide mark.",
+        "many": "Two differently timed shoreline marks remain readable together.",
+        "manual_test": "A player can walk the storm safe line, save/reload and still inspect both evidence perspectives."
+      },
+      "accessibility": {
+        "danger": "Rain-lane pulses, with legible blue warning and a reliable dry shelter.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    },
+    {
+      "id": "HearthBeneath",
+      "chapter": "QUEST_MAIN_HearthBeneath",
+      "realm": "HearthBeneath",
+      "chapter_level": 1,
+      "source_authority": "FrontierJourney",
+      "director_note": "Flames lack exactly the same note missing from the Reach's bell.",
+      "environment": "Inward mountain city with public kilns, soot families and thermal canal controls.",
+      "player_verbs": [
+        "Trace a heat canal from the common kiln to a cold household",
+        "Manually divert a heat pulse through an insulated channel",
+        "Balance immediate warmth for children against truth about inherited fuel costs"
+      ],
+      "npc_ids": [
+        "npc.cinderhold.hearthreader.001",
+        "npc.cinderhold.emberwarden.001",
+        "npc.cinderhold.healer.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Cinderhold.Clue.ColdHearth",
+          "Cinderhold.Clue.EmberDeed"
+        ],
+        "mechanism": "Cinderhold.KilnVent",
+        "contract_status": "frontier/Reach art-direction tag placeholders; verify against actual UE actor before binding"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Trace a heat canal from the common kiln to a cold household",
+          "speaker": "npc.cinderhold.hearthreader.001",
+          "line": "The kiln casts heat from a sun that has never risen. A family is cold because of that contradiction.",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Manually divert a heat pulse through an insulated channel",
+          "speaker": "npc.cinderhold.emberwarden.001",
+          "line": "A public flame is only public if the farthest house may share it.",
+          "evidence_tags": [
+            "Cinderhold.Clue.ColdHearth",
+            "Cinderhold.Clue.EmberDeed"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "Existing frontier/Reach quest evidence; original authoritative state"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Balance immediate warmth for children against truth about inherited fuel costs",
+          "speaker": "npc.cinderhold.hearthreader.001",
+          "line": "The kiln casts heat from a sun that has never risen. A family is cold because of that contradiction. The an impossible sun's heat and shared physical obligations gives you one chance to change the place responsibly.",
+          "physical_tag": "Cinderhold.KilnVent",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Keep unregistered homes warm without demanding signatures.",
+          "speaker": "npc.cinderhold.emberwarden.001",
+          "line": "Give the households heat now; my neighbors cannot eat an argument.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Expose the true provenance of fuel and require a public repair plan.",
+          "speaker": "npc.cinderhold.healer.001",
+          "line": "Name the price of the ember. We can repair a lie only after we see it.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "Citizens relight hearths based on the route player actually maintained.",
+          "speaker": "npc.cinderhold.hearthreader.001",
+          "line": "You came back. Citizens relight hearths based on the route player actually maintained. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Keep unregistered homes warm without demanding signatures.",
+        "truth": "Expose the true provenance of fuel and require a public repair plan.",
+        "held": "Two shadows belong to one common flame.",
+        "many": "Twin embers suggest coexisting origins without doubling resources.",
+        "manual_test": "Valve visibly directs heat, hazard has readable counterplay, old community decision survives."
+      },
+      "accessibility": {
+        "danger": "Timed heat pulses with stable visual rim and cooled recovery window.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    },
+    {
+      "id": "TidalLedger",
+      "chapter": "QUEST_MAIN_TidalLedger",
+      "realm": "TidalLedger",
+      "chapter_level": 2,
+      "source_authority": "LaterRealmJourney.Visit/Begin/Study/Operate",
+      "director_note": "The ledger implies the world has been taking loans against nonexistent histories.",
+      "environment": "Tide clocks in stranded boats, ferry passages and flooded civic ledgers.",
+      "player_verbs": [
+        "Examine ferry receipt and collateral tide impressions on opposite routes",
+        "Work a debt latch to open a permanent physical care or truth bridge",
+        "Return for an Echo investigation and optional two-rite observatory"
+      ],
+      "npc_ids": [
+        "npc.tidal.ledgerkeeper.001",
+        "npc.tidal.ferryman.001",
+        "npc.tidal.witness.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Tidal.Trial.FerryReceipt",
+          "Tidal.Trial.CollateralTide"
+        ],
+        "mechanism": "Tidal.Trial.DebtLatch",
+        "contract_status": "authoritative tags checked against LaterRealms source"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Examine ferry receipt and collateral tide impressions on opposite routes",
+          "speaker": "npc.tidal.ledgerkeeper.001",
+          "line": "The ninth debt is dated before its debtor's birth. The ink isn't lying; the law is.",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Work a debt latch to open a permanent physical care or truth bridge",
+          "speaker": "npc.tidal.ferryman.001",
+          "line": "The ferried child never agreed to any creditor; protect the boat from the books.",
+          "evidence_tags": [
+            "Tidal.Trial.FerryReceipt",
+            "Tidal.Trial.CollateralTide"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "LaterRealm.stage=2 and pending care/truth evidence"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Return for an Echo investigation and optional two-rite observatory",
+          "speaker": "npc.tidal.ledgerkeeper.001",
+          "line": "The ninth debt is dated before its debtor's birth. The ink isn't lying; the law is. The contracts dated before their signers' birth gives you one chance to change the place responsibly.",
+          "physical_tag": "Tidal.Trial.DebtLatch",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Make a child-safe ferry that never charges future passengers.",
+          "speaker": "npc.tidal.ferryman.001",
+          "line": "Let tomorrow's children cross without taking on yesterday's payments.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Publish verifiable fraud without forcibly identifying protected borrowers.",
+          "speaker": "npc.tidal.witness.001",
+          "line": "Publish the fraudulent contracts, not the private addresses of the borrowers.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "Local residents remember ferry or archive outcomes, guardian mercy or defeat, and observatory archive.",
+          "speaker": "npc.tidal.ledgerkeeper.001",
+          "line": "You came back. Local residents remember ferry or archive outcomes, guardian mercy or defeat, and observatory archive. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Make a child-safe ferry that never charges future passengers.",
+        "truth": "Publish verifiable fraud without forcibly identifying protected borrowers.",
+        "held": "The estuary's promises are carved into visible stable dates.",
+        "many": "Two future and past receipts are presented side by side, not merged into one.",
+        "manual_test": "First-quest two routes, aftermath, Echo, optional guardian, optional dual-rite door independently survive reload."
+      },
+      "accessibility": {
+        "danger": "Ledger tide lanes with visible warning and cover; don't demand repeated debt farming.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    },
+    {
+      "id": "SkyBelow",
+      "chapter": "QUEST_MAIN_SkyBelow",
+      "realm": "SkyBelow",
+      "chapter_level": 2,
+      "source_authority": "LaterRealmJourney.Visit/Begin/Study/Operate",
+      "director_note": "The exact missing musical rest is identical to the Unanswered Interval.",
+      "environment": "Hanging neighborhoods and two load-bearing musical support scores.",
+      "player_verbs": [
+        "Observe the actual support-counterweight under a precarious building",
+        "Tune the fork to a recorded note while keeping an alternate stable load",
+        "Choose shared meter or public excluded chorus, and see the hanging path respond"
+      ],
+      "npc_ids": [
+        "npc.sky.choirmaster.001",
+        "npc.sky.structuralist.001",
+        "npc.sky.dissenter.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Sky.Trial.Counterweight",
+          "Sky.Trial.ForgottenChorus"
+        ],
+        "mechanism": "Sky.Trial.TuningFork",
+        "contract_status": "authoritative tags checked against LaterRealms source"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Observe the actual support-counterweight under a precarious building",
+          "speaker": "npc.sky.choirmaster.001",
+          "line": "Count the missing singers: the houses will fall if you remove their support blindly.",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Tune the fork to a recorded note while keeping an alternate stable load",
+          "speaker": "npc.sky.structuralist.001",
+          "line": "A counterweight can take the load, but the chorus has to choose its part.",
+          "evidence_tags": [
+            "Sky.Trial.Counterweight",
+            "Sky.Trial.ForgottenChorus"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "LaterRealm.stage=2 and pending care/truth evidence"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Choose shared meter or public excluded chorus, and see the hanging path respond",
+          "speaker": "npc.sky.choirmaster.001",
+          "line": "Count the missing singers: the houses will fall if you remove their support blindly. The songs physically holding inverted architecture aloft gives you one chance to change the place responsibly.",
+          "physical_tag": "Sky.Trial.TuningFork",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Stabilize homes through a voluntary shared support rhythm.",
+          "speaker": "npc.sky.structuralist.001",
+          "line": "Keep the houses aloft and teach a voluntary new refrain.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Recover forbidden singers' names without forcing their return to compulsory work.",
+          "speaker": "npc.sky.dissenter.001",
+          "line": "Print the forbidden verse and all its names. Let those named decide whether to sing.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "A household's safety and a dissenting score remain independently inspectable.",
+          "speaker": "npc.sky.choirmaster.001",
+          "line": "You came back. A household's safety and a dissenting score remain independently inspectable. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Stabilize homes through a voluntary shared support rhythm.",
+        "truth": "Recover forbidden singers' names without forcing their return to compulsory work.",
+        "held": "All public music includes the erased staff line.",
+        "many": "Two supporting harmonies can be seen without doubling the actual load.",
+        "manual_test": "Play both notes without instant collision, examine witnesses and verify chosen physical route remains."
+      },
+      "accessibility": {
+        "danger": "Inverted gravity stress pulse with anchored safe walkway, horizon remains stable in accessibility mode.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    },
+    {
+      "id": "CinderSpine",
+      "chapter": "QUEST_MAIN_CinderSpine",
+      "realm": "CinderSpine",
+      "chapter_level": 2,
+      "source_authority": "LaterRealmJourney.Visit/Begin/Study/Operate",
+      "director_note": "The name sealed in mortar is not simply old: it belongs to an event removed from recorded chronology.",
+      "environment": "Quarry seams, ancestor mortar, rail braces and fossil family portraits.",
+      "player_verbs": [
+        "Read alternate ancestral inscriptions from two sides of a geological cut",
+        "Place a seam clamp or named brace that changes collision-supported access",
+        "Test a dangerous rock lane after its visible fracture warning"
+      ],
+      "npc_ids": [
+        "npc.bones.seamwarden.001",
+        "npc.bones.mason.001",
+        "npc.bones.descendant.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Bones.Trial.SafeWedge",
+          "Bones.Trial.LineageStone"
+        ],
+        "mechanism": "Bones.Trial.SeamClamp",
+        "contract_status": "authoritative tags checked against LaterRealms source"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Read alternate ancestral inscriptions from two sides of a geological cut",
+          "speaker": "npc.bones.seamwarden.001",
+          "line": "Each stone has an older maker's mark. Someone called these people rubble.",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Place a seam clamp or named brace that changes collision-supported access",
+          "speaker": "npc.bones.mason.001",
+          "line": "An unsafe brace will crush the family whose wall you mean to save.",
+          "evidence_tags": [
+            "Bones.Trial.SafeWedge",
+            "Bones.Trial.LineageStone"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "LaterRealm.stage=2 and pending care/truth evidence"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Test a dangerous rock lane after its visible fracture warning",
+          "speaker": "npc.bones.seamwarden.001",
+          "line": "Each stone has an older maker's mark. Someone called these people rubble. The erased families compressed into history-bearing stone gives you one chance to change the place responsibly.",
+          "physical_tag": "Bones.Trial.SeamClamp",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Preserve accessible braced route and shelter without another erased generation.",
+          "speaker": "npc.bones.mason.001",
+          "line": "Build a safe passage without quarrying another remembered ancestor.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Display a public family record of the quarry's origin with informed consent.",
+          "speaker": "npc.bones.descendant.001",
+          "line": "Carve the erased lineages where descendants can contest the record.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "Repair homes using explicitly sourced materials while keeping the earlier choice visible.",
+          "speaker": "npc.bones.seamwarden.001",
+          "line": "You came back. Repair homes using explicitly sourced materials while keeping the earlier choice visible. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Preserve accessible braced route and shelter without another erased generation.",
+        "truth": "Display a public family record of the quarry's origin with informed consent.",
+        "held": "Stone names cut from history remain engraved and legible.",
+        "many": "Old and living genealogies appear on overlapping but separable walls.",
+        "manual_test": "Source and materials must remain causal; do not pretend a character can be restored by clicking a monument."
+      },
+      "accessibility": {
+        "danger": "Pressure seam collapse with widening crack telegraph and a safe sidestep.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    },
+    {
+      "id": "HundredUnlived",
+      "chapter": "QUEST_MAIN_HundredUnlived",
+      "realm": "HundredUnlived",
+      "chapter_level": 3,
+      "source_authority": "LaterRealmJourney.Visit/Begin/Study/Operate",
+      "director_note": "Unregistered residents prove that absence and nonexistence are not the same.",
+      "environment": "Doorways without census numbers, shelters behind name latches and voluntary public thresholds.",
+      "player_verbs": [
+        "Open a private shelter without entering a guest's name",
+        "Examine an official recognition board and a hidden shelter without merging their records",
+        "Work an identity latch in the ethical direction supported by the witnesses"
+      ],
+      "npc_ids": [
+        "npc.unlived.censuskeeper.001",
+        "npc.unlived.caretaker.001",
+        "npc.unlived.challenger.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Unlived.Trial.HiddenShelter",
+          "Unlived.Trial.ConsentBoard"
+        ],
+        "mechanism": "Unlived.Trial.NameLatch",
+        "contract_status": "authoritative tags checked against LaterRealms source"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Open a private shelter without entering a guest's name",
+          "speaker": "npc.unlived.censuskeeper.001",
+          "line": "The census says this shelter contains nobody. I can hear the children behind the door.",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Examine an official recognition board and a hidden shelter without merging their records",
+          "speaker": "npc.unlived.caretaker.001",
+          "line": "A welcome cup does not ask for a birth record. Can you promise the same?",
+          "evidence_tags": [
+            "Unlived.Trial.HiddenShelter",
+            "Unlived.Trial.ConsentBoard"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "LaterRealm.stage=2 and pending care/truth evidence"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Work an identity latch in the ethical direction supported by the witnesses",
+          "speaker": "npc.unlived.censuskeeper.001",
+          "line": "The census says this shelter contains nobody. I can hear the children behind the door. The people without official beginnings whose consent matters gives you one chance to change the place responsibly.",
+          "physical_tag": "Unlived.Trial.NameLatch",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Shelter stays reachable without public identity disclosure.",
+          "speaker": "npc.unlived.caretaker.001",
+          "line": "Open a refuge that does not require anyone's name.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Public recognition is opt-in and revocable, not a forced population dump.",
+          "speaker": "npc.unlived.challenger.001",
+          "line": "Let residents speak publicly by choice, not under a compulsory registry.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "A previously hidden resident chooses whether to speak; never auto-publish a name.",
+          "speaker": "npc.unlived.censuskeeper.001",
+          "line": "You came back. A previously hidden resident chooses whether to speak; never auto-publish a name. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Shelter stays reachable without public identity disclosure.",
+        "truth": "Public recognition is opt-in and revocable, not a forced population dump.",
+        "held": "Quiet houses remain visibly legitimate civic destinations.",
+        "many": "Private refuge and public threshold coexist with voluntary traversal.",
+        "manual_test": "No gameplay branch can reveal an individual's identity without its explicit recorded consent."
+      },
+      "accessibility": {
+        "danger": "Name-scan lane warns before an identity pulse; silence and physical shielding can avoid it.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    },
+    {
+      "id": "OrchardOfKings",
+      "chapter": "QUEST_MAIN_OrchardOfKings",
+      "realm": "OrchardOfKings",
+      "chapter_level": 3,
+      "source_authority": "LaterRealmJourney.Visit/Begin/Study/Operate",
+      "director_note": "The first legal rule was never signed; an answering mechanism continued enforcing it anyway.",
+      "environment": "Root courts, communal fruit stores, roads grafted from consent and a physically empty throne.",
+      "player_verbs": [
+        "Compare a shared graft to evidence of an empty coronation",
+        "Turn a root-channel control to build one permanent walkable civic road",
+        "Question the untitled court about a legal mandate with no author"
+      ],
+      "npc_ids": [
+        "npc.orchard.untitled.001",
+        "npc.orchard.gardener.001",
+        "npc.orchard.historian.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Orchard.Trial.SharedGraft",
+          "Orchard.Trial.EmptyCoronation"
+        ],
+        "mechanism": "Orchard.Trial.RootChannel",
+        "contract_status": "authoritative tags checked against LaterRealms source"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Compare a shared graft to evidence of an empty coronation",
+          "speaker": "npc.orchard.untitled.001",
+          "line": "Every crown in this orchard is empty. Yet the roads obey a law we never passed.",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Turn a root-channel control to build one permanent walkable civic road",
+          "speaker": "npc.orchard.gardener.001",
+          "line": "A graft is an agreement between living branches; you cannot command either one.",
+          "evidence_tags": [
+            "Orchard.Trial.SharedGraft",
+            "Orchard.Trial.EmptyCoronation"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "LaterRealm.stage=2 and pending care/truth evidence"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Question the untitled court about a legal mandate with no author",
+          "speaker": "npc.orchard.untitled.001",
+          "line": "Every crown in this orchard is empty. Yet the roads obey a law we never passed. The unwritten laws growing from living roots gives you one chance to change the place responsibly.",
+          "physical_tag": "Orchard.Trial.RootChannel",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Share the road and harvest without an inherited crown.",
+          "speaker": "npc.orchard.gardener.001",
+          "line": "Open the harvest paths to everyone willing to care for them.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Expose the unratified court law while preserving living people's right to dissent.",
+          "speaker": "npc.orchard.historian.001",
+          "line": "Show the unratified law. A crown without a wearer cannot consent for us.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "Roots remember elected access and old disputes instead of being magically healed.",
+          "speaker": "npc.orchard.untitled.001",
+          "line": "You came back. Roots remember elected access and old disputes instead of being magically healed. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Share the road and harvest without an inherited crown.",
+        "truth": "Expose the unratified court law while preserving living people's right to dissent.",
+        "held": "Public harvest shares its path with a visibly empty crown.",
+        "many": "Two readable competing laws remain open to civil challenge.",
+        "manual_test": "Change root traversal collision after choice, preserve archive and access, never create an invisible monarch."
+      },
+      "accessibility": {
+        "danger": "Roots point at the lane before a timed strike; alternate public path offers counterplay.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    },
+    {
+      "id": "FirstAbsence",
+      "chapter": "QUEST_MAIN_FirstAbsence",
+      "realm": "FirstAbsence",
+      "chapter_level": 4,
+      "source_authority": "LaterRealmJourney.Visit/Begin/Study/Operate",
+      "director_note": "Reveal that Nhal-Vey suppresses questions; don't reveal false-victory twist during ordinary traversal.",
+      "environment": "Doorways without foundations, contradictory source maps, stable return line and northern final arena.",
+      "player_verbs": [
+        "Read both stable-memory and contradictory-map evidence before choosing an origin anchor",
+        "Open one real threshold with stable fallback travel",
+        "Confront Nhal-Vey's mask, unveiled form, and deliberate future-choice controls"
+      ],
+      "npc_ids": [
+        "npc.absence.firstwitness.001",
+        "npc.absence.caretaker.001",
+        "npc.absence.otherwitness.001"
+      ],
+      "real_source_tags": {
+        "evidence": [
+          "Absence.Trial.StableMemory",
+          "Absence.Trial.ContradictoryMap"
+        ],
+        "mechanism": "Absence.Trial.OriginAnchor",
+        "contract_status": "authoritative tags checked against LaterRealms source"
+      },
+      "steps": [
+        {
+          "id": "arrival",
+          "trigger": "player within safe southern arrival zone after earned AtlasPassages crossing",
+          "interaction": "Inspect the real realm public Campaign.Thread marker or speak to a resident",
+          "objective": "Read both stable-memory and contradictory-map evidence before choosing an origin anchor",
+          "speaker": "npc.absence.firstwitness.001",
+          "line": "I remember your arrival before this threshold existed. I don't know which memory came first.",
+          "failure": "No valid sightline or current quest not started",
+          "recovery": "Return to safe arrival path; map marker remains readable without taking rewards",
+          "saved_as": "world visit/initial dialogue; no new required quest flag"
+        },
+        {
+          "id": "investigation",
+          "trigger": "local first quest begun by actual relevant NPC",
+          "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
+          "objective": "Open one real threshold with stable fallback travel",
+          "speaker": "npc.absence.caretaker.001",
+          "line": "A safe door is more useful than deciding whose beginning is true.",
+          "evidence_tags": [
+            "Absence.Trial.StableMemory",
+            "Absence.Trial.ContradictoryMap"
+          ],
+          "failure": "Wrong site, unreadable text or hazard damage before evidence was collected",
+          "recovery": "Evidence remains independently inspectable; stable safe route, no story skip or permanent lockout",
+          "saved_as": "LaterRealm.stage=2 and pending care/truth evidence"
+        },
+        {
+          "id": "mechanism",
+          "trigger": "matching locally saved evidence acquired; mechanism is interactable",
+          "interaction": "Use actual site actor; check line of sight, stage and evidence match",
+          "objective": "Confront Nhal-Vey's mask, unveiled form, and deliberate future-choice controls",
+          "speaker": "npc.absence.firstwitness.001",
+          "line": "I remember your arrival before this threshold existed. I don't know which memory came first. The two truthful beginnings at one usable threshold gives you one chance to change the place responsibly.",
+          "physical_tag": "Absence.Trial.OriginAnchor",
+          "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
+          "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
+          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+        },
+        {
+          "id": "care_commit",
+          "trigger": "mechanism and care evidence valid; chosen care route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Reliable passage exists without erasing other origins.",
+          "speaker": "npc.absence.caretaker.001",
+          "line": "Leave a stable return for every traveler, regardless of origin.",
+          "outcome": "care",
+          "failure": "SaveGameToSlot failure, mismatched scope, missed confirmation window",
+          "recovery": "Keep previous world and pending quest state; repeat deliberate confirmation after save works",
+          "saved_as": "Original first-story outcome 1; physical care passage and local visible public effect"
+        },
+        {
+          "id": "truth_commit",
+          "trigger": "mechanism and truth evidence valid; chosen truth route explicitly previewed and confirmed",
+          "interaction": "two deliberate matching confirmations; physical branch and collision must change",
+          "objective": "Both maps remain inspectable without one mandatory universal history.",
+          "speaker": "npc.absence.otherwitness.001",
+          "line": "Preserve both honest maps. Don't grant one witness the power to erase the other.",
+          "outcome": "truth",
+          "failure": "SaveGameToSlot failure, consent condition unfulfilled, mismatched confirmation",
+          "recovery": "Restore previous route; allow player to change evidence route before irreversible save",
+          "saved_as": "Original first-story outcome 2; public evidence record and local visible physical effect"
+        },
+        {
+          "id": "return",
+          "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
+          "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
+          "objective": "Held Morning uses bell/names echo attacks; Many Mornings uses horizon/counterfactual echoes.",
+          "speaker": "npc.absence.firstwitness.001",
+          "line": "You came back. Held Morning uses bell/names echo attacks; Many Mornings uses horizon/counterfactual echoes. I have not forgotten the path you chose.",
+          "failure": "Area unloaded or a followup system still dormant",
+          "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+        }
+      ],
+      "world_after_save": {
+        "care": "Reliable passage exists without erasing other origins.",
+        "truth": "Both maps remain inspectable without one mandatory universal history.",
+        "held": "Auvren's threshold keeps one visibly reliable exit after victory.",
+        "many": "Two contradictory dawns appear while a stable exit remains.",
+        "manual_test": "Main story reaches boss without sidequest grind; save preserves identity and all choices through both endings and optional rematch."
+      },
+      "accessibility": {
+        "danger": "Origin distortions, safe marked return; boss has four directional attacks with real windups.",
+        "retry_rule": "No auto-save lockout, accessible subtitles, predictable input, nonviolent first-story alternatives"
+      }
+    }
+  ],
+  "final_encounter": {
+    "id": "QUEST_FINAL_NHAL_VEY",
+    "source": "FinalJourney in UnmadeFinalEncounterRules.h",
+    "stages": [
+      {
+        "id": "mask",
+        "trigger": "The Unanswered Road confirms first Auvren trial and coherent opening/frontier/middle/upper chain",
+        "dialogue": "I am the wound that keeps your world alive. You may kill me and keep everything you believe.",
+        "objective": "Defeat first telegraphed combat shell; live Fold/guard counters",
+        "failure": "Player defeated or encounter exited before real core defeat",
+        "recovery": "Respawn at safe Auvren checkpoint; no quest outcome advanced",
+        "save": "FinalAct=Unmasked only after actual health zero and successful save"
+      },
+      {
+        "id": "core",
+        "trigger": "Persisted mask break",
+        "dialogue": "That was only the version of me your world was willing to fight.",
+        "objective": "Read shift to alternate attack family and defeat unveiled core",
+        "failure": "Save fails or player exits",
+        "recovery": "Retry with intact first defeat state",
+        "save": "FinalAct=AnswerPending; two irreversible choices available"
+      },
+      {
+        "id": "choice",
+        "trigger": "Both bars actually defeated",
+        "dialogue": "Each town you saved is real. Each town you condemned is real. You are holding all of them together.",
+        "objective": "Choose Held Morning or Many Mornings with same-control double confirmation",
+        "failure": "Mixed inputs or failed write",
+        "recovery": "Preview again; maintain undecided state",
+        "save": "FinalAct=OtherMorning; morning variant; all inventory, history preserved"
+      },
+      {
+        "id": "return",
+        "trigger": "FinalAct>=OtherMorning",
+        "dialogue": "I wasn't guarding the world's ending. I was guarding the door to its other beginning.",
+        "objective": "Return to Reach and revisit familiar realms, optionally summon distinct-ability echo",
+        "failure": "Relocation fails",
+        "recovery": "Use already-existing atlas gate; do not reset save",
+        "save": "Same original save, branch-specific monuments and optional rematch"
+      }
+    ]
+  }
+}

@@ -251,6 +251,17 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     // Resident dialogue is source-authored; adaptive reactions never change
     // stable identifiers or assert knowledge of unobserved remote events.
     FString CharacterLine = AuthoredLine;
+    if(CachedHub.IsValid())
+    {
+        UnmadeCore::Realm CurrentHome=UnmadeCore::Realm::ThreefoldReach;
+        if(bLaterRealmResident)CurrentHome=LaterHome;
+        else if(bFrontierResident)
+            CurrentHome=NpcId.ToString().StartsWith(TEXT("npc.saltwake."))
+                ?UnmadeCore::Realm::WidowedRain
+                :UnmadeCore::Realm::HearthBeneath;
+        CharacterLine+=TEXT(" ");
+        CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
+    }
     const auto Phase = CachedHub.IsValid()
         ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
     const UnmadeCore::OuterPersonSpec* LocalProfile=nullptr;

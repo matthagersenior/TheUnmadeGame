@@ -149,6 +149,16 @@ public:
     UPROPERTY(SaveGame)
     int32 FinalMemorySeed=0;
 
+    /** Optional stable-ID 82-resident return recognition; version1 compatible. */
+    UPROPERTY(SaveGame)
+    bool bHasResidentContinuitySnapshot=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> ResidentEncounterVisits;
+    UPROPERTY(SaveGame)
+    TArray<int32> ResidentEncounterLastDays;
+    UPROPERTY(SaveGame)
+    TArray<int32> ResidentEncounterAidFlags;
+
     UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;
 

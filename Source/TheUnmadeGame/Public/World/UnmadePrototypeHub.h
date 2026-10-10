@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "NPC/UnmadeNpcDecisionRules.h"
+#include "NPC/UnmadeResidentContinuityRules.h"
 #include "World/UnmadeLivingWorldRules.h"
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeRegionalTaskRules.h"
@@ -94,6 +95,9 @@ public:
     UnmadeCore::RoadGuidance GetUnansweredRoadGuidance() const;
     FString DescribeUnansweredRoad(AUnmadeCharacter* Player) const;
     bool InspectUnansweredRoad(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool RecordResidentConversation(FName ResidentId);
+    bool RecordResidentAid(FName ResidentId);
+    FString GetResidentReturnLine(FName ResidentId,UnmadeCore::Realm Home) const;
     bool CommitFinalMorning(AUnmadeCharacter* Player,UnmadeCore::Morning Choice);
     bool WakeFinalEcho();
     int32 GetLaterRealmStage(UnmadeCore::Realm Id) const {return LaterRealm.Stage(Id);}
@@ -129,6 +133,8 @@ private:
     UnmadeCore::DiscoveryLedger Discoveries;
     UnmadeCore::SettlementVisits VillagesVisited;
     UnmadeCore::RegionalTaskModel RegionalTasks;
+    UnmadeCore::ResidentContinuity ResidentRelationships;
+    bool bResidentContinuityRejected=false;
     UnmadeCore::FactionChronicle Chronicle;
     UnmadeCore::FrontierJourney Frontier;
     UnmadeCore::BellwoldAfterlight Afterlight;
