@@ -1,3 +1,7 @@
+## Six dual-discipline observatories (10 October)
+
+All ten mastered signature rites can now be paired at six **optional, post-Echo-quest physical sites**. Each pair is different, requires two successful real casts at the same upper-terrace plinth within a 120-second saved-world window, and permanently opens a bridge to a local, non-farmable archive that reflects the previously chosen moral outcome. The rules enforce no fake/duplicate casts, old-save compatibility, rollback on write failure and independent state per realm. Source-generated cube locations and local NPC reactions are wired, while **Unreal Editor compilation and physical level playtesting remain pending**. See [full authoring canon](docs/design/realm-resonance-observatories.md) and [Win64 QA checklist](docs/qa/realm-resonance-observatories.md).
+
 ## Volume VII illustrated canon — The World Withheld Its Answer
 
 The current illustrated development edition is **66-page Volume VII** (DOCX and visually inspected PDF), retaining **43 embedded illustrations** and the original **30-piece concept art atlas**. Its integrity-verified **38-entry ZIP** includes a quality matrix, source appendix, release status and SHA-256 manifest. The new sections cover six optional third-return Echo Quests, nine distinct cultures, eighteen NPC identity/motivation briefs, all ten canonical ability production verbs, and a minimal-effort authoring/Unreal DataTable import workflow.

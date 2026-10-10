@@ -84,3 +84,9 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Generated and SHA-256-verified an archive of 38 entries; visually inspected new 21-page sample montage and final chapter page. The editable Word, PDF, art, quality matrix and source appendix are included.
 - Pinned gameplay source to PR #10 / `bb5a929bb5d4a4e794dfb6c55fd5899decd75c66` and authoring source to PR #11 / `e8c3948cdfc697c666621eab16670f7a55b7634a`. Both post-merge source workflows green.
 - The package remains conversation-only binaries, not committed source or actual Unreal screenshots. No UHT/UE Editor compilation, avatar rigs, animations, full voice recordings or finished 3D continent playtest is claimed.
+
+## 2026-10-10 — Six optional post-Echo dual-rite observatories
+- Authored six ability pairings covering all ten canonical rites and representing distinct relationships among voluntary debts, unheard voices, lineage, identity, public access and contradictory origins.
+- Implemented source-spawned post-Echo plinth, bridge, archive island and E-readable consequence record for every later realm. Mastered spells must be *successfully cast and saved*, not merely held, twice at the same physical site with distinct IDs and a persisted-clock 120-second window.
+- Added optional 6-slot stage, first-rite and deadline save arrays, atomic C++17 restore, corruption/time-reversal defenses, world-save rollback and unique permanent branch state without reward farming. Local NPCs acknowledge a real public archive only in their own realm.
+- Added portable layout invariants, C++17/Unreal automation tests and manual engine acceptance checklist. Engine build, physical traversal, VFX/audio and encounter balance are outstanding. Volume VII is still the last fully rendered illustrated edition.

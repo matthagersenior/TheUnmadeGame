@@ -309,3 +309,9 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - Generated a checksum-verified **38-entry ZIP** with editable DOCX, rendered PDF, concept art, source appendix and release/QA matrix. Archive integrity and SHA-256 of every included file verified.
 - Source anchors: merged gameplay PR #10 `bb5a929bb5d4a4e794dfb6c55fd5899decd75c66`; merged authoring PR #11 `e8c3948cdfc697c666621eab16670f7a55b7634a`. Both native/static main CI checks succeeded.
 - The binary files are delivered in the chat, **not committed to GitHub**. Editor compilation, game art, voice performances and real movement/quest playtests remain unverified.
+
+## 2026-10-10 — six cross-discipline physical observatories
+- Added six optional north-terrace plinths, opened only after each specific realm's third-chapter Echo choice. Players must cast two different mastered rites, covering all **ten canonical disciplines** across six sites, within a 120 persisted-world-second window.
+- A successful pair creates a persistent new bridge to a separate island and interactable history archive; the archive text acknowledges each realm's care or truth resolution. Local residents recognize only their own opened archive. No infinite repeat rewards or automatic universal game completion.
+- New append-only six-element save fields support replay-safe restore, malformed state refusal, deadline rollback guard, old saves and write-failure rollback. Six native tests and an Unreal automation source test accompany the source actor integration.
+- Portable geometry asserts the new bridge overlaps both the north terrain and a *distinct* archive island. Unreal collision, sound, camera, AI navigation, boss counterplay and player UI remain unverified without the Windows engine.
