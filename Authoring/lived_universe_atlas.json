@@ -1,0 +1,1112 @@
+{
+  "schema_version": 1,
+  "edition": "2026-10-10",
+  "status": "preproduction only: new LUE/LUR/LUQ scenes, save fields, and authored assets are NOT implemented or verified in Unreal",
+  "design_intent": "living-world nuance, physical exploration, optional humane microquests, local knowledge boundaries, and a repeatable asset/QA handoff layered on canonical quests",
+  "authority": [
+    "Source/TheUnmadeGame original quest and save rules",
+    "Authoring/main_quest_interaction_contracts.json",
+    "Authoring/resident_return_encounters.json",
+    "Authoring/cinematic_realm_playbook.json"
+  ],
+  "canonical_order": [
+    "ThreefoldReach",
+    "WidowedRain",
+    "HearthBeneath",
+    "TidalLedger",
+    "SkyBelow",
+    "CinderSpine",
+    "HundredUnlived",
+    "OrchardOfKings",
+    "FirstAbsence"
+  ],
+  "universal_rules": {
+    "progression": "All LUR/LUE/LUQ content is optional and never a hidden main-story, boss, realm-travel or earned-rite prerequisite. No new source SaveGame fields exist for these specs.",
+    "evidence": "Inspectable clues require a visible physical verb, proximity/line-of-sight and readable alternatives. A spoken line never impersonates a source quest completion.",
+    "personal_knowledge": "A resident has only witnessed, personally told, or legitimately public local facts. Remote-region news requires visible dated courier delivery and never turns rumors into personal observations.",
+    "choices": "Each LUQ ending is mutually exclusive within that side quest, shown as two explicit consequences before the six-second confirm interaction; defer actual save schema to implemented isolated versioned state.",
+    "rollback": "On failed write restore the entire prior state; no physical changes, inventory duplication or reported success until durable commit.",
+    "failure": "No clue permanently consumed by a wrong attempt. Environmental danger provides telegraph, credible escape and restart near evidence, rather than repetition of long dialogue.",
+    "accessibility": "All cues have independent visual and caption/text signals; motion-reduced and static-horizon mode, remappable controls, reading time, subtitle speaker, high contrast and color-blind differentiation.",
+    "ending": "Held Morning and Many Mornings preserve existing quests, personhood, inventory and visit history; shown changes are local public facts, not fabricated universal eyewitness knowledge.",
+    "content_status": "Production guidance only: all scene triggers, optional side-quest save slots, new resident actions, art IDs and dialogue require implementation and Editor acceptance."
+  },
+  "worlds": [
+    {
+      "id": "ThreefoldReach",
+      "title": "The Threefold Reach",
+      "settlements": [
+        "The Crossings",
+        "Bellwold",
+        "Paperhaven"
+      ],
+      "ordinary": "Refuge kettles are counted before wages; Bellwold lantern tenders walk the same lane that Paperhaven record runners insist never existed.",
+      "architecture": "A three-way road knot of mismatched mile markers, split-roof shelters, chalk archive vaults and a bell tower missing its casting seam.",
+      "custom": "A visitor is offered a place to sit before a request for a name; recording a stranger's name without consent is considered a quiet theft.",
+      "taboo": "Never ring a bell during the interval reserved for those no ledger can verify.",
+      "governance": "Shelter stewards negotiate resources with archive registrars; neither holds authority over the other's witnesses.",
+      "labor": "Lantern wick trimming, route repair, water carting, archive copying and informal shelter kitchens.",
+      "trade": "Measured lantern oil, copied route notes and shelter meal tokens; no reward for registering a displaced person's private name.",
+      "ecology": "Pale waymoss grows toward walked paths, not sunlight; little paper-wings nest where contradictory maps overlap.",
+      "weather": "The day's shadow agrees with the road until the missing bell note; during the interval only the mile markers disagree.",
+      "sensory": {
+        "day": "Wet paper and kettle steam; boot soles on mismatched paving; warm pockets of lantern gold.",
+        "night": "Shelter fires persist; a bell's absent final note lowers the ambience without producing sudden full silence.",
+        "hazard_cue": "Route splits acquire high-contrast chalk edging before the safe way changes.",
+        "access": "Persistent map and text clue; bell silence is also indicated by visible wick tremor and caption."
+      },
+      "mystery": {
+        "question": "How can a refuge be remembered and officially never built?",
+        "visible": "A shelter hearth has more soot than the building's documented age.",
+        "evidence": [
+          {
+            "id": "LUE.ThreefoldReach.01",
+            "site": "Bellwold uncast-bell mold",
+            "verb": "Compare the mold rim with the tower's missing casting seam",
+            "discovery": "Metal never poured; indentations show hands holding a bell-shaped void."
+          },
+          {
+            "id": "LUE.ThreefoldReach.02",
+            "site": "Paperhaven cross-index desk",
+            "verb": "Align a refugee meal chit with a registry's blank date",
+            "discovery": "The receipt predates the legal approval yet bears the same worn thumbmark."
+          },
+          {
+            "id": "LUE.ThreefoldReach.03",
+            "site": "Crossings mile marker",
+            "verb": "Follow a child's chalk route against a surveyor's stone mile",
+            "discovery": "Both lead to the same kettle house from opposing directions."
+          }
+        ],
+        "false_lead": "The archivist burned a page; investigation shows an old fire unrelated to the missing date.",
+        "interpretation": "The interval was socially necessary before it was made official; neither ledger nor testimony can erase the people sheltered.",
+        "link": "A rain-soaked meal chit carries an imprint of Saltwake's older harbor tariff.",
+        "hint": "The child's chalk crosses the road only when the bell stops.",
+        "do_not_reveal": "Do not mention Nhal-Vey or a final boss by name."
+      },
+      "routine": [
+        {
+          "id": "LUR.ThreefoldReach.01",
+          "window": "dawn",
+          "place": "Bellwold refuge kitchen",
+          "trigger": "player enters kitchen after first arrival",
+          "action": "Carry a warm kettle over a damaged threshold or ask a lantern keeper for a stable route",
+          "reaction": "The keeper first secures a seat for a nameless visitor before discussing the cracked threshold",
+          "line": "There is always one cup left uncounted. It is not an accounting error.",
+          "feedback": "Steam reveals a footworn path and reveals a safe crossing",
+          "failure": "Dropping the kettle extinguishes one local lantern but does not lose the evidence",
+          "recovery": "Refill at the kettle stand; route marker remains visible",
+          "persistence": "Only one personal witnessed-aid event if authentic resident interaction fires; otherwise ambience only"
+        },
+        {
+          "id": "LUR.ThreefoldReach.02",
+          "window": "dusk",
+          "place": "Paperhaven witness steps",
+          "trigger": "the player has inspected at least one bell discrepancy",
+          "action": "Choose to read a public redaction or request a protected spoken account",
+          "reaction": "Registrar redirects curious listeners away from a protected refugee while offering the public index",
+          "line": "Truth without a door can still be a kind of hunting.",
+          "feedback": "One of two nonexclusive clue formats is accessible; no main quest decision changes",
+          "failure": "If consent is declined the private name is not exposed",
+          "recovery": "Read the public version at any future daypart",
+          "persistence": "Optional discovery note only; no XP farm"
+        }
+      ],
+      "side": {
+        "id": "LUQ.ThreefoldReach.WickDebt",
+        "name": "The Uncounted Wick",
+        "unlock": "after opening Reach investigation; optional",
+        "objective": "Restore a lantern line without turning its residents into registered collateral",
+        "steps": [
+          "Inspect a dark shelter marker and match two lengths of used wick",
+          "Speak to the keeper privately; learn that the spare oil belongs to unregistered travelers",
+          "Carry oil to the public crossing without crossing the unsafe invisible footbridge",
+          "Choose an anonymous supply tally or a named but consent-based open ledger",
+          "Return next day to see either a communal wick shelf or a consent station"
+        ],
+        "branches": {
+          "care": "Anonymous lantern shelf stays accessible but cannot be used as proof of residency.",
+          "truth": "Consent-based register helps supplies arrive but has clearly marked refusal rights."
+        },
+        "failure": "Wrong wick makes lantern dim, not cause instant death or fake story completion.",
+        "recovery": "Trim and retry with both samples; no consumable loss beyond a reversible local wick.",
+        "return_dialogue": "You repaired a light. You did not ask who deserved to stand under it.",
+        "save": "New optional side-story authored contract only; requires a future isolated LUQ slot, no runtime flag yet"
+      },
+      "asset": [
+        "SM_Reach_UncastMold",
+        "SM_Reach_MealChit",
+        "SFX_Reach_AbsentBell",
+        "SEQ_Reach_WickDelivery"
+      ],
+      "post": {
+        "held": "Soot and legal date remain simultaneously legible on a single restored shelter wall.",
+        "many": "Two shelter thresholds overlap but both lead to the same kettle, with optional stable-view setting."
+      }
+    },
+    {
+      "id": "WidowedRain",
+      "title": "The Widowed Rain",
+      "settlements": [
+        "Saltwake"
+      ],
+      "ordinary": "Dry-dock families mend nets for a sea absent from maps; public rain catchers are checked before any ferry launches.",
+      "architecture": "Hull-roof shelters, tide gauges anchored in dry stone, sloped breakwaters and an open storm sluice court.",
+      "custom": "People greet strangers by offering a dry knot of rope rather than a handshake; a knot accepted means safe shelter, not ownership.",
+      "taboo": "No one claims to own another family's collected rain by reading a debt aloud in a storm.",
+      "governance": "Harbor wardens hold flood authority; navigators challenge them with physical measurements and common rain counters.",
+      "labor": "Net darning, empty buoy inspection, slate-chart repair, storm-shelter watch and ferry maintenance.",
+      "trade": "Rain allotments and ferry repair credits; storm insurance cannot be collected twice on the same missing tide.",
+      "ecology": "Salt fern clings to dry piers; tidecrabs hide below no-water marks and emerge with loud pressure shifts.",
+      "weather": "Rain has weight and rhythm without a reachable sea; the storm pulse telegraphs on marked lanes with a safe elevated bypass.",
+      "sensory": {
+        "day": "Blue rust, wet rope, slate ticking beneath a missing waterline.",
+        "night": "Empty buoy chime has no splash; rain lamp halos stretch toward impossible offshore distance.",
+        "hazard_cue": "A low rail vibrates, sluice counter flashes blue and the storm lane glows before impact.",
+        "access": "Visual counter, captioned pressure click and high-contrast elevated safe line, never audio-only."
+      },
+      "mystery": {
+        "question": "Who wrote a tariff for a harbor that disappeared before the tariff's issuer was born?",
+        "visible": "A buoy ledger records departures from dry ground.",
+        "evidence": [
+          {
+            "id": "LUE.WidowedRain.01",
+            "site": "Dry Pier 3 mooring post",
+            "verb": "Touch three tide grooves and mark which groove is newer than the post",
+            "discovery": "The newest groove lies beneath a mark carved centuries earlier."
+          },
+          {
+            "id": "LUE.WidowedRain.02",
+            "site": "Saltwake public rain counter",
+            "verb": "Read numbers only after the storm warning has settled",
+            "discovery": "The last tally includes a negative arrival not charged to any fisher."
+          },
+          {
+            "id": "LUE.WidowedRain.03",
+            "site": "Ferry repair bench",
+            "verb": "Fit an older rope knot to a measured missing-buoy hole",
+            "discovery": "A net repair tag from Drevlach lists the same impossible date."
+          }
+        ],
+        "false_lead": "A missing boat was stolen; the inspected sail seams reveal it never touched this shore.",
+        "interpretation": "A vanished channel was made useful as transferable future debt; residents still must decide fair access to real rain.",
+        "link": "The negative arrival is charged to a child's future birth in Drevlach.",
+        "hint": "Read the public counter in the lull, not while running from the warning.",
+        "do_not_reveal": "Do not frame all debtors as villains or reveal final enemy."
+      },
+      "routine": [
+        {
+          "id": "LUR.WidowedRain.01",
+          "window": "work",
+          "place": "Saltwake rope square",
+          "trigger": "player visits before completing rainward first intervention",
+          "action": "Help coil a rope before the surge or use the marked elevated bypass",
+          "reaction": "Navigator acknowledges the chosen safe method; bystanders flee only when they hear their own storm warning",
+          "line": "Knots hold where charts do not. Keep your hand on the dry part.",
+          "feedback": "Rope line leads to accessible clue at the mooring post",
+          "failure": "Storm hit injures only in source-defined danger lane",
+          "recovery": "Retreat to signed shelter; source checkpoint behavior remains authority",
+          "persistence": "Ordinary local help has a single id and cannot resolve a story by itself"
+        },
+        {
+          "id": "LUR.WidowedRain.02",
+          "window": "night",
+          "place": "Empty ferry quay",
+          "trigger": "first local story resolved",
+          "action": "Inspect an empty boarding call and compare the ledger to a returned ferryman's testimony",
+          "reaction": "Ferry worker respects the public outcome but remembers personally observed aid separately",
+          "line": "We keep a berth for those who never made land.",
+          "feedback": "A night-only reflection reveals submerged letters on dry boards",
+          "failure": "Player arrives before the night shift; clue is safely repeatable",
+          "recovery": "Return at night or ask worker for the written schedule",
+          "persistence": "Optional codex addition; never a required boss gate"
+        }
+      ],
+      "side": {
+        "id": "LUQ.WidowedRain.LastBerth",
+        "name": "The Berth Without Water",
+        "unlock": "Saltwake first-story completion; optional",
+        "objective": "Maintain a public ferry stop even if two witnesses disagree about the tide",
+        "steps": [
+          "Inspect dry berth number and a current shelter passenger tally",
+          "Interview a navigator and a rain collector without presenting either as omniscient",
+          "Carry a replacement plank along the storm-safe route",
+          "Repair a handrail using an actual dock mechanism",
+          "Choose a shared public waiting rail or a recorded tide archive, then revisit at night"
+        ],
+        "branches": {
+          "care": "Shared handrail serves stranded travelers without ownership tests.",
+          "truth": "Tide archive preserves contradiction for navigators while keeping a sheltered entry."
+        },
+        "failure": "Missed warning interrupts the plank carry; it remains recoverable at the safe shelter.",
+        "recovery": "Restart the short carry after the current storm pulse; never replay interviews for rewards.",
+        "return_dialogue": "The berth was empty. That did not mean nobody needed somewhere to wait.",
+        "save": "New optional authored side arc; no Unreal stage flag exists"
+      },
+      "asset": [
+        "SM_Rain_TideGrooves",
+        "SM_Rain_RopeKnot",
+        "NS_Rain_SurgeCounter",
+        "SEQ_Rain_LastBerth"
+      ],
+      "post": {
+        "held": "The honest last waterline is engraved around accessible dry piers.",
+        "many": "Two tidal silhouettes can be read together with a stable single-outline option."
+      }
+    },
+    {
+      "id": "HearthBeneath",
+      "title": "The Hearth Beneath",
+      "settlements": [
+        "Cinderhold"
+      ],
+      "ordinary": "Households share a public heat allowance without agreeing who originally lit the flame; the heat vent is inspected before breakfast.",
+      "architecture": "Sunken communal kilns, basalt house ribs, ash sieves and a vent court whose shadows disagree with its fire.",
+      "custom": "Offering a cooled coal signals willingness to listen rather than consent to repay a family obligation.",
+      "taboo": "Never attribute another person's warmth to inherited debt without hearing that household.",
+      "governance": "Kiln guild weighs public safety; hearth readers hold independent records of each fuel claim.",
+      "labor": "Clay tempering, vent grating, stone-lid casting, communal bread baking and ash sorting.",
+      "trade": "Cooled ceramic, workshop hours and public vent shares; heat claims are witnesses, not currency for buying people.",
+      "ecology": "Glass moths fold their wings near unsafe heat; ash root threads retain warmth long after fire goes dark.",
+      "weather": "Borrowed sun glow rises from beneath streets; source heat pulses give a legible orange warning and signed refuge route.",
+      "sensory": {
+        "day": "Basalt dust, fermented dough, slow metal ping from vent housings.",
+        "night": "Coals cast a second wrong-way shadow across floor tiles.",
+        "hazard_cue": "Vent shutters chatter and floor seams brighten before danger.",
+        "access": "Shutter silhouettes and text hazard timer accompany sound; no photo-flash requirement."
+      },
+      "mystery": {
+        "question": "Why does a hearth cast warmth from an hour nobody lived?",
+        "visible": "An ash register shows the kiln burning before any fuel receipt.",
+        "evidence": [
+          {
+            "id": "LUE.HearthBeneath.01",
+            "site": "Old vent winding wheel",
+            "verb": "Compare wear on two teeth without engaging hazardous mechanism",
+            "discovery": "The wheel has been wound one turn before its manufacture stamp."
+          },
+          {
+            "id": "LUE.HearthBeneath.02",
+            "site": "Shared bread oven",
+            "verb": "Lift a cooled ash pan after its safety indicator",
+            "discovery": "Unburned paper inside describes a childhood that has not yet occurred."
+          },
+          {
+            "id": "LUE.HearthBeneath.03",
+            "site": "Tarin's public heat slate",
+            "verb": "Align shadow scratches with a real lantern",
+            "discovery": "A missing beat matches the choir pauses of Orravane."
+          }
+        ],
+        "false_lead": "A guild master deliberately lit all fires; the mark predates the guild and is acknowledged by its critics.",
+        "interpretation": "Survival is being subsidized by an unasked temporal obligation that ordinary citizens did not individually choose.",
+        "link": "The impossible pause in flame is mirrored by a missing sustaining note in Orravane.",
+        "hint": "Wait for the ash pan's cooled edge; the safe clue outlasts the pulse.",
+        "do_not_reveal": "No pre-Auvren speech may confirm Nhal-Vey's creation."
+      },
+      "routine": [
+        {
+          "id": "LUR.HearthBeneath.01",
+          "window": "dawn",
+          "place": "Public hearth pantry",
+          "trigger": "player enters after reaching Cinderhold",
+          "action": "Carry a clay loaf tray between counters rather than through live vent corridor",
+          "reaction": "A baker deliberately feeds a family that cannot prove inherited heat rights",
+          "line": "There is always bread for the one who didn't sign the furnace.",
+          "feedback": "Second shadow marks a clue in soot",
+          "failure": "Tray cools if delayed; no permanent penalty",
+          "recovery": "Return to the oven, collect fresh warm tray, and use obvious sheltered route",
+          "persistence": "Optional ambient scene; never converts into debt"
+        },
+        {
+          "id": "LUR.HearthBeneath.02",
+          "window": "dusk",
+          "place": "Vent court listening bench",
+          "trigger": "Cinderhold first act resolved",
+          "action": "Listen to two opposed household accounts before selecting public record format",
+          "reaction": "Hearth reader keeps disagreement visible but does not announce a single winner",
+          "line": "We can owe the flame care without owing it ourselves.",
+          "feedback": "Public display changes commentary only, does not overwrite earlier choice",
+          "failure": "If a household refuses a name, only anonymized account is readable",
+          "recovery": "Use the anonymized paper anytime",
+          "persistence": "One codex variant per choice; no local story reset"
+        }
+      ],
+      "side": {
+        "id": "LUQ.HearthBeneath.SecondShadow",
+        "name": "The Second Shadow",
+        "unlock": "Cinderhold first story resolved; optional",
+        "objective": "Protect a communal oven without endorsing an invented inherited fuel debt",
+        "steps": [
+          "Inspect a cold ash pan and compare two furnace shadow marks",
+          "Ask a bread maker and hearth reader what they independently know",
+          "Retrieve vent grating from the safe stone yard",
+          "Install grate using the real heat-control interaction after warning ends",
+          "Choose a public fuel audit or a household warmth reserve; observe evening shadow"
+        ],
+        "branches": {
+          "care": "Household reserve guarantees safe bread without requiring genealogy.",
+          "truth": "Public fuel audit preserves contradictory records and anonymous family testimony."
+        },
+        "failure": "Installing during a heat warning is refused, not a forced damaging cutscene.",
+        "recovery": "Wait at the sheltered bench for cooldown and try again.",
+        "return_dialogue": "The second shadow is still there. It no longer decides whose bread gets baked.",
+        "save": "Production-only optional arc; native main story unaffected"
+      },
+      "asset": [
+        "SM_Hearth_CooledCoal",
+        "SM_Hearth_AshPan",
+        "NS_Hearth_VentTeeth",
+        "SEQ_Hearth_SecondShadow"
+      ],
+      "post": {
+        "held": "Two cooling marks remain on one public oven, each labelled with a remembered obligation.",
+        "many": "Paired shadows share the kiln floor; static-light toggle preserves readable traversal."
+      }
+    },
+    {
+      "id": "TidalLedger",
+      "title": "The Sea of Written Debts",
+      "settlements": [
+        "Drevlach"
+      ],
+      "ordinary": "Children learn to count tide-ledger stamps before they learn genealogies; grown debt carriers argue whether future entries are valid.",
+      "architecture": "Ledger canals, inkstone lockhouses, portable counting bridges and thresholds etched with dates not yet reached.",
+      "custom": "A contract offered to a traveler must be read both forwards and backwards; silence is not acceptance.",
+      "taboo": "Do not assign a future child's signature to an adult's current hardship.",
+      "governance": "Counter-clerks control public transit slips; debt dissidents keep receipts in an unlicensed dry archive.",
+      "labor": "Ink harvesting, sluice scribing, canal tow, account witnesses and slip repair.",
+      "trade": "Repair vouchers and witnessed labor credits; speculative birth collateral is an institutional abuse, not a valid player currency.",
+      "ecology": "Date-eels gather by inkstone sluices one moment before rain; ink reeds bloom with letters running the wrong direction.",
+      "weather": "Water follows recorded debits in some canals; nearby tide surge has readable boundaries and a safe bank.",
+      "sensory": {
+        "day": "Ink brine, paper scraping over stone, regular tapping from canal clocks.",
+        "night": "Ledger lamps shine through reversed dates on translucent water.",
+        "hazard_cue": "Debt tide pulls paper flags against their stakes before collision pressure.",
+        "access": "Tactile marker relief and high-contrast arrows identify safe banks; written equivalents to number sounds."
+      },
+      "mystery": {
+        "question": "Who can own a debt dated before its debtor exists?",
+        "visible": "A child's future signature appears in a ledger sealed while the child was unborn.",
+        "evidence": [
+          {
+            "id": "LUE.TidalLedger.01",
+            "site": "Public twin receipt press",
+            "verb": "Make one non-binding rubbing of reversed embossed entries",
+            "discovery": "Debit appears before the credit on both impressions."
+          },
+          {
+            "id": "LUE.TidalLedger.02",
+            "site": "Dry archive towline box",
+            "verb": "Place a Saltwake repair tag beside a birth-date tab",
+            "discovery": "The missing sea's tariff was securitized as someone's unwritten years."
+          },
+          {
+            "id": "LUE.TidalLedger.03",
+            "site": "Clerks' broken canal gate",
+            "verb": "Watch water change direction at an unoccupied account post",
+            "discovery": "The canal still serves a debt whose witness cannot be found."
+          }
+        ],
+        "false_lead": "The child is secretly an immortal debtor; no evidence supports this, and the story must not confirm it.",
+        "interpretation": "Contracts became infrastructure; an accounting system exploited questions no one dared demand answered.",
+        "link": "An erased family reference in the dry archive points toward Vathless stone deeds.",
+        "hint": "The two stamps must be read in opposite directions.",
+        "do_not_reveal": "The final entity is not the bank manager and debt exploitation remains a civic choice."
+      },
+      "routine": [
+        {
+          "id": "LUR.TidalLedger.01",
+          "window": "work",
+          "place": "Two-slip market",
+          "trigger": "player first arrives at Drevlach",
+          "action": "Witness a purchase without signing and compare a forged balance slip to a merchant's spoken price",
+          "reaction": "Merchant thanks the player for insisting on reversible evidence before any accusation",
+          "line": "There is a difference between balancing a book and balancing a life.",
+          "feedback": "Slip shows an impossible offset only if physically held against light",
+          "failure": "Wrong slip is returned without a fine",
+          "recovery": "Ask for duplicate public copy and inspect again",
+          "persistence": "Discovery only; non-farmable"
+        },
+        {
+          "id": "LUR.TidalLedger.02",
+          "window": "night",
+          "place": "Canal debt bridge",
+          "trigger": "first story resolved",
+          "action": "Escort an older counter-clerk by a safe bank as dates glow in the canal",
+          "reaction": "The clerk can admit personal guilt without erasing neighbors' survival needs",
+          "line": "I filed the number. I did not make the child.",
+          "feedback": "Public plaque acknowledges local committed outcome",
+          "failure": "Tide warning blocks exposed route",
+          "recovery": "Use signed upper bank, no escort permadeath",
+          "persistence": "Single optional witnessed meeting; no currency duplication"
+        }
+      ],
+      "side": {
+        "id": "LUQ.TidalLedger.UnbornReceipt",
+        "name": "A Receipt for an Unborn Hour",
+        "unlock": "Drevlach first chapter resolved; optional",
+        "objective": "Stop a duplicate future debt without deleting the records that prove abuse",
+        "steps": [
+          "Rubb two public receipt faces using the fixed press",
+          "Compare a dry archive tag with a witness clerk's original",
+          "Cross the safe upper canal path during the tide interval",
+          "Present discrepancy at a functioning nonviolent public account desk",
+          "Choose a protected redaction plus restitution route or a public audit with consent safeguards"
+        ],
+        "branches": {
+          "care": "Protected household claim is frozen; a reachable restitution desk remains.",
+          "truth": "Audit plaque names the institutional failure, not an unconsenting child."
+        },
+        "failure": "Submitting one stamp is refused with an explicit missing-evidence message.",
+        "recovery": "The press and duplicate copies remain available.",
+        "return_dialogue": "The canal still runs. The child no longer has to be its missing signature.",
+        "save": "New optional LUQ contract; not a source bank-transaction modification"
+      },
+      "asset": [
+        "SM_Ledger_ReceiptPress",
+        "SM_Ledger_DryTowline",
+        "SFX_Ledger_ReverseClock",
+        "SEQ_Ledger_UnbornHour"
+      ],
+      "post": {
+        "held": "Contradictory stamps preserved as public scar in one legal record.",
+        "many": "Two valid receipt directions become publicly visible; consent archive remains protected."
+      }
+    },
+    {
+      "id": "SkyBelow",
+      "title": "The Upside-Down Choir",
+      "settlements": [
+        "Orravane"
+      ],
+      "ordinary": "Suspended houses are serviced by singers who must rest; nobody agrees whether the missing choir note is a worker or a building support.",
+      "architecture": "Inverted terraces, hanging floors, counterweight choirs and bridges pinned by acoustic chambers.",
+      "custom": "Visitors tap a support rail before speaking so residents can tell a body from an echo.",
+      "taboo": "No one is required to sing past exhaustion to earn shelter; dissenting silence is a valid testimony.",
+      "governance": "Bridge wardens and choir stewards dispute who may interrupt load-bearing performances.",
+      "labor": "Resonance tending, rope weighing, breath-rest scheduling, tuning-hammer repair and hanging-garden care.",
+      "trade": "Repair parts, rest shifts and verified safe-path charts; voices are not tradable property.",
+      "ecology": "Ceiling swifts nest beneath streets; air lichen curls when load-bearing intervals weaken.",
+      "weather": "Inverted choir draft disorients briefly but warning rails and a fully safe sideline remain reliable.",
+      "sensory": {
+        "day": "A low resonant seam under wooden rail taps; dangling soil falls upward.",
+        "night": "The unoccupied singer's platform hums while all visible throats rest.",
+        "hazard_cue": "Support-rail beads tremble before pressure interval; stable colored cue persists without audio.",
+        "access": "Subtitles identify note direction; alternative static horizon and rail pulse support vestibular accessibility."
+      },
+      "mystery": {
+        "question": "Who should be allowed to stop singing when the missing note holds up homes?",
+        "visible": "An unused score stand supports a terrace with no musician present.",
+        "evidence": [
+          {
+            "id": "LUE.SkyBelow.01",
+            "site": "Missing-singer lectern",
+            "verb": "Examine a scratched rest tally under the score",
+            "discovery": "A seventh resting interval appears between six singers."
+          },
+          {
+            "id": "LUE.SkyBelow.02",
+            "site": "Counterweight lower bridge",
+            "verb": "Compare load changes during marked safe chorus breaks",
+            "discovery": "The bridge carries an absent weight instead of failing."
+          },
+          {
+            "id": "LUE.SkyBelow.03",
+            "site": "Public choir rest bench",
+            "verb": "Read an account only after asking the resting singer",
+            "discovery": "Consent to perform was treated as permanent once spoken."
+          }
+        ],
+        "false_lead": "The singers freely enjoy endless work; several expressly deny this, others find meaning in singing.",
+        "interpretation": "The absence physically stabilizes a community but cannot justify continuing compelled labor.",
+        "link": "The missing interval is the same impossible beat recorded in Cinderhold's hearth slate.",
+        "hint": "When the rail beads stop, the lectern can be approached on solid ground.",
+        "do_not_reveal": "Do not make musicians metaphysical batteries that disappear after rescue."
+      },
+      "routine": [
+        {
+          "id": "LUR.SkyBelow.01",
+          "window": "dawn",
+          "place": "Rest platform",
+          "trigger": "first arrival",
+          "action": "Carry a support cushion to a resting singer before asking for a performance",
+          "reaction": "Singer refuses a performance while willingly sharing a memory about the empty stand",
+          "line": "A rest is not silence. It is something we are owed.",
+          "feedback": "A rail-glow gap points toward the hidden seventh rest mark",
+          "failure": "Demanding a song produces a refusal and no punishment",
+          "recovery": "Ask about the score with accessible written dialogue",
+          "persistence": "Consent interaction does not grant magic progress"
+        },
+        {
+          "id": "LUR.SkyBelow.02",
+          "window": "dusk",
+          "place": "Hanging-garden bridge",
+          "trigger": "local first story resolved",
+          "action": "Hold a stabilizer while an NPC traverses a signed route to their home",
+          "reaction": "Resident comments only on the local choir decision personally known",
+          "line": "A house is not kept alive if everyone inside must spend their lungs.",
+          "feedback": "The chosen public bridge state stays visible on reload",
+          "failure": "Unsupported bridge yields a safe retreat not a lethal trap",
+          "recovery": "Use lower rail and repeat with no inventory loss",
+          "persistence": "Optional local visit only"
+        }
+      ],
+      "side": {
+        "id": "LUQ.SkyBelow.SeventhRest",
+        "name": "The Seventh Rest",
+        "unlock": "Orravane first story resolved; optional",
+        "objective": "Build one predictable rest interval into the community's load-bearing routine",
+        "steps": [
+          "Inspect the empty music stand and six public rest clocks",
+          "Listen to two singers with different opinions about duty",
+          "Move a mechanical support brace along the safe bridge",
+          "Anchor it to a real rail socket while the choir is in a scheduled break",
+          "Choose a longer rest timetable or independent public load instrumentation"
+        ],
+        "branches": {
+          "care": "Community rest board gains protected intervals.",
+          "truth": "Transparent load measurement shows exactly when pressure is safe to reduce."
+        },
+        "failure": "Brace slips before socket engagement; it returns to safety at lower rail.",
+        "recovery": "Retake brace; no singer forced into an emergency performance.",
+        "return_dialogue": "The bridge held when we rested. We needed proof of that more than applause.",
+        "save": "Optional contract only; main choir mechanics remain authoritative"
+      },
+      "asset": [
+        "SM_Choir_SeventhStand",
+        "SM_Choir_BraceSocket",
+        "NS_Choir_RailBeads",
+        "SEQ_Choir_SeventhRest"
+      ],
+      "post": {
+        "held": "The silent note remains a measured absence beside an enforceable rest charter.",
+        "many": "Overlaid chorus tracks are readable through subtitles and never required simultaneously."
+      }
+    },
+    {
+      "id": "CinderSpine",
+      "title": "The Bones of Yesterdays",
+      "settlements": [
+        "Vathless"
+      ],
+      "ordinary": "Stonecutters repair homes built from inherited names; children trace rejected family trees under the quarry shelter.",
+      "architecture": "Ancestral quarry shelves, family-wall dwellings, layered stone ledgers and roots hardened into civic stairs.",
+      "custom": "Before shaping a family stone, ask whose name is already inside it; refusal to answer is not proof of ownership.",
+      "taboo": "Breaking a bearing stone to make a moral point is forbidden while people live above it.",
+      "governance": "Stone stewards prioritize structural safety; remembrance guild advocates for unrecorded families.",
+      "labor": "Mortar grinding, brace repair, name-rubbing, quarry dust screening and foundation surveying.",
+      "trade": "Measured safe stone, repair labor and open memorial casts; no sale of another family's deleted ancestry.",
+      "ecology": "Name lichens distinguish quarry strata by remembered footsteps; stone swallows circle just before shelf fracture.",
+      "weather": "Dry law-root pressure cracks the quarry with visible fracture lines; marked side shelter stays safe.",
+      "sensory": {
+        "day": "Granite powder, cold damp air, chisel echoes too long for the gallery.",
+        "night": "Faint household names emerge in low angled light along the stairs.",
+        "hazard_cue": "Bright chalk lines widen and gravel rattles before a shelf split.",
+        "access": "High contrast cracks, dust-resistant camera, low-frequency captions; no invisible collapse."
+      },
+      "mystery": {
+        "question": "How many generations can a house erase and still call itself ancestral?",
+        "visible": "A bearing stone has a worked child-sized handprint below a false founding date.",
+        "evidence": [
+          {
+            "id": "LUE.CinderSpine.01",
+            "site": "Quarry mother-stone",
+            "verb": "Brush dust from mismatched chisels without weakening support",
+            "discovery": "An older family name survives beneath a legally new stone seal."
+          },
+          {
+            "id": "LUE.CinderSpine.02",
+            "site": "Household foundation register",
+            "verb": "Compare one inhabited dwelling's weight ledger to its family roll",
+            "discovery": "The building is supported by stone attributed to a person never listed."
+          },
+          {
+            "id": "LUE.CinderSpine.03",
+            "site": "Memorial stair turn",
+            "verb": "Hold a rubbing to angled lantern light",
+            "discovery": "Drevlach's account mark appears where a birth record was removed."
+          }
+        ],
+        "false_lead": "A whole civilization knowingly killed its ancestors; records show disputed incremental decisions over generations.",
+        "interpretation": "Injustice has become load-bearing architecture; repair demands engineering and witness consent, not demolition.",
+        "link": "Missing quarry birth marks correlate with Drevlach's speculative debt stamps.",
+        "hint": "The quieter stair at night reveals the lower inscription.",
+        "do_not_reveal": "A name revealed by Glimpse is evidence, not automatic consent to publish it."
+      },
+      "routine": [
+        {
+          "id": "LUR.CinderSpine.01",
+          "window": "work",
+          "place": "Foundation repair lane",
+          "trigger": "player enters inhabited district",
+          "action": "Carry brace pins around a marked unstable stair without breaking ancestral stone",
+          "reaction": "Stone worker asks whose roof stays standing and whose name was covered",
+          "line": "I can mend the crack. I cannot decide whose grandfather it was.",
+          "feedback": "House stabilizes cosmetically without erasing inscription",
+          "failure": "Hazard warning sends worker to refuge; pins remain at shelter",
+          "recovery": "Recover pins after pulse and use the signed path",
+          "persistence": "Physical task gives no infinite stone drops"
+        },
+        {
+          "id": "LUR.CinderSpine.02",
+          "window": "night",
+          "place": "Remembrance guild wall",
+          "trigger": "first story resolved",
+          "action": "Read a family's anonymous remembrance alongside an official house deed",
+          "reaction": "Relative can decline to identify the erased person",
+          "line": "We have lived here for every year they say we did not.",
+          "feedback": "Choice-respecting memorial changes its public plaque",
+          "failure": "Attempt to publish without consent only produces explicit refusal",
+          "recovery": "Retain a private rubbing or request authorized public summary",
+          "persistence": "Optional codex; no forced story overwrite"
+        }
+      ],
+      "side": {
+        "id": "LUQ.CinderSpine.LoadingNames",
+        "name": "Names Under Load",
+        "unlock": "Vathless first story resolved; optional",
+        "objective": "Secure a lived-in wall and preserve evidence of its erased builders",
+        "steps": [
+          "Inspect stress seam before entering the inhabited lower room",
+          "Listen to household and quarry steward account",
+          "Collect support pins from a safely abandoned ledge",
+          "Fit pins into two designated load sockets",
+          "Choose a consent-protected memorial or a public architectural audit"
+        ],
+        "branches": {
+          "care": "Family-private name archive remains accessible to descendants.",
+          "truth": "A structural audit exposes the erased work without exposing living descendants."
+        },
+        "failure": "Incorrect socket warns and refuses to bear load; house never auto-collapses.",
+        "recovery": "Remove and relocate pins; test weight marker before committing.",
+        "return_dialogue": "The wall is still standing. The name under it finally has space to breathe.",
+        "save": "Optional LUQ contract only; actual collision awaits Unreal"
+      },
+      "asset": [
+        "SM_Quarry_MotherStone",
+        "SM_Quarry_BracePins",
+        "NS_Quarry_FractureLine",
+        "SEQ_Quarry_LoadingNames"
+      ],
+      "post": {
+        "held": "Ancestry names appear as stable seams in the structures families still occupy.",
+        "many": "Two construction histories can be inspected without swapping away inhabited homes."
+      }
+    },
+    {
+      "id": "HundredUnlived",
+      "title": "The Hundred Unlived",
+      "settlements": [
+        "Eillun"
+      ],
+      "ordinary": "People without authorized birth records teach each other how to build legitimate homes; a visitor's first meal is never conditioned on identity papers.",
+      "architecture": "Overlapping doorstep grids, unsigned household lamps, reversible street signs and a civic refuge woven from contradictory addresses.",
+      "custom": "A name is given once as a gift and may be withdrawn; people call each other by agreed gestures when uncertain.",
+      "taboo": "Never count a person aloud without permission; counting can become conscription or forced recognition.",
+      "governance": "Shelter pairs and census refusals negotiate practical care; no single municipal count can define personhood.",
+      "labor": "House-number weaving, lamp repair, garden tending, route witnessing and voluntary address translation.",
+      "trade": "Portable lamp repairs, shared garden portions and voluntary address stamps; names are never accepted as payment.",
+      "ecology": "Unlived moths emerge where two paths intersect, and inkless ivy flowers in the shade of unsigned doors.",
+      "weather": "Census pulses create nonlethal reality strain at marked checkpoints; sheltered routes avoid involuntary counting.",
+      "sensory": {
+        "day": "Two door knocks one heartbeat apart; herb smoke and lamplight beneath sunny thresholds.",
+        "night": "Street numbers glow as gestures, never an exact authoritative sequence.",
+        "hazard_cue": "A census arch displays a visible expanding lattice before pressure.",
+        "access": "Consent dialogue text, signed alternate paths and static-address map; no forced spoken names."
+      },
+      "mystery": {
+        "question": "Can someone have a lived history even when no birth record admits them?",
+        "visible": "A kitchen stool wears down beneath a wall that officially describes an empty lot.",
+        "evidence": [
+          {
+            "id": "LUE.HundredUnlived.01",
+            "site": "Unnamed address loom",
+            "verb": "Weave a visible non-identifying directional knot",
+            "discovery": "A guest's address exists as a route even when a registry refuses the person's name."
+          },
+          {
+            "id": "LUE.HundredUnlived.02",
+            "site": "Long-use kitchen stool",
+            "verb": "Compare seat repair stitches with the blank occupancy sheet",
+            "discovery": "Years of communal repair predate the authorized household."
+          },
+          {
+            "id": "LUE.HundredUnlived.03",
+            "site": "Consent shrine threshold",
+            "verb": "Ask permission to read a voluntary public testimony",
+            "discovery": "One person's chosen identity is not reducible to a census count."
+          }
+        ],
+        "false_lead": "The residents are ghost copies; direct care, work and memory establish present lives without origin certainty.",
+        "interpretation": "Recognition cannot be coerced as the price of existence; unknown origin is not absence of rights.",
+        "link": "The unclaimed oath syntax is shared with Tharniv's unwritten crown petitions.",
+        "hint": "Ask at the threshold before touching the public testimony.",
+        "do_not_reveal": "Never expose a real character's chosen private name through spell effects without consent."
+      },
+      "routine": [
+        {
+          "id": "LUR.HundredUnlived.01",
+          "window": "dawn",
+          "place": "Two-door kitchen",
+          "trigger": "player passes initial census threshold",
+          "action": "Find a missing water bowl by following voluntary house gestures instead of numbering people",
+          "reaction": "A neighbor thanks the player for asking for directions, not identity",
+          "line": "You can find my door. That is enough for breakfast.",
+          "feedback": "Three location gestures mark safe path",
+          "failure": "A guessed address brings player to a polite wrong door",
+          "recovery": "Recheck gestures; no public shaming",
+          "persistence": "Codex learns gesture only; no mandatory counting"
+        },
+        {
+          "id": "LUR.HundredUnlived.02",
+          "window": "night",
+          "place": "Community address loom",
+          "trigger": "Eillun first story resolved",
+          "action": "Help illuminate a route that can be followed without naming a resident",
+          "reaction": "Shelter witness explains what public knowledge is and isn't allowed",
+          "line": "A path belongs to feet, not to a registry.",
+          "feedback": "New signed footpath is visible without changing main atlas locks",
+          "failure": "Involuntary census arch refuses entry via safe bypass",
+          "recovery": "Take alternate loom street; still sees same story",
+          "persistence": "No involuntary personal flag"
+        }
+      ],
+      "side": {
+        "id": "LUQ.HundredUnlived.UnnumberedDoor",
+        "name": "The Unnumbered Door",
+        "unlock": "Eillun first story resolved; optional",
+        "objective": "Make a guest route legible without forcing residents into the census",
+        "steps": [
+          "Find a lost courier using two public directional gestures",
+          "Ask two hosts independently how they want travelers guided",
+          "Collect lamp glass from an unoccupied repair stand",
+          "Set lamps along an alternate marked alley",
+          "Choose anonymous shared wayfinding or opt-in address plaques"
+        ],
+        "branches": {
+          "care": "Gestural wayfinding guides guests without personal census.",
+          "truth": "Opt-in plaques allow public identification where consent exists."
+        },
+        "failure": "An invalid address knocks at the wrong door without escalating hostility.",
+        "recovery": "Return to the public loom, learn gesture order and retry.",
+        "return_dialogue": "The guest reached our door without knowing our names. We chose to open it.",
+        "save": "New optional contract; no personal census registry implemented"
+      },
+      "asset": [
+        "SM_Unlived_AddressLoom",
+        "SM_Unlived_WornStool",
+        "NS_Unlived_CensusLattice",
+        "SEQ_Unlived_UnnumberedDoor"
+      ],
+      "post": {
+        "held": "One visible route honors people whether or not their names become public.",
+        "many": "Multiple address geometries remain passable with clearly chosen static guide mode."
+      }
+    },
+    {
+      "id": "OrchardOfKings",
+      "title": "The Orchard of Unwritten Kings",
+      "settlements": [
+        "Tharniv"
+      ],
+      "ordinary": "Families tend grafted trees whose fruits are subject to laws never enacted; petitions grow on branches rather than sitting on a throne.",
+      "architecture": "Grafted civic orchards, paper-bark meeting rings, unoccupied crown plinths and root roads fenced by polite petitions.",
+      "custom": "A petitioner leaves one fruit untouched to represent the person absent from the hearing.",
+      "taboo": "No outsider may crown another person by praise alone; the empty throne is not a secret boss weakness.",
+      "governance": "Rotating orchard circles interpret inherited rules; nobody can claim the absent monarch's exclusive mandate.",
+      "labor": "Root pruning, petition sorting, harvest weighing, branch grafting and shade-road maintenance.",
+      "trade": "Fruit pledges, tool repair and public harvest exchanges; laws cannot be bought as loot.",
+      "ecology": "Law roots twist toward unsigned petitions; double-orchard bees pollinate both unchosen grafts.",
+      "weather": "Enforcement roots visibly lift ground before restraining a lane; marked path skirts pressure safely.",
+      "sensory": {
+        "day": "Overripe orchard peel, dry petition paper, creaking boughs like seating benches.",
+        "night": "Empty plinth throws a crown-shaped shadow while no crown exists.",
+        "hazard_cue": "Roots announce their line by raised dirt and fluttering leaves before contact.",
+        "access": "Stable canopy view and ground markers; clue readings available as plain text."
+      },
+      "mystery": {
+        "question": "Why does an unwritten decree decide who may eat?",
+        "visible": "A branch knots itself around a petition whose author never signed.",
+        "evidence": [
+          {
+            "id": "LUE.OrchardOfKings.01",
+            "site": "Unoccupied crown plinth",
+            "verb": "Compare its dust and shadow without taking an imagined crown",
+            "discovery": "The empty shape is a social expectation, not proof of a hidden ruler."
+          },
+          {
+            "id": "LUE.OrchardOfKings.02",
+            "site": "Harvest ledger ring",
+            "verb": "Weigh a rejected apple beside one publicly allocated",
+            "discovery": "Fruit responds to a rule nobody can locate in a signed vote."
+          },
+          {
+            "id": "LUE.OrchardOfKings.03",
+            "site": "Petition tree bark",
+            "verb": "Read two mutually incompatible but still in-force petitions",
+            "discovery": "An Eillun address has been denied harvest access despite no legal judgment."
+          }
+        ],
+        "false_lead": "The crown is cursed by a single necromancer; every petition demonstrates communal complicity instead.",
+        "interpretation": "A society delegated responsibility to a law whose legitimacy was never examined; removing a tyrant alone cannot change habits.",
+        "link": "One denied petition's route gestures match Eillun's consent-based addresses.",
+        "hint": "Leave the untouched fruit on the scale until both records are visible.",
+        "do_not_reveal": "Never turn the empty throne into proof of a preselected royal bloodline."
+      },
+      "routine": [
+        {
+          "id": "LUR.OrchardOfKings.01",
+          "window": "work",
+          "place": "Civic harvest circle",
+          "trigger": "player enters Tharniv before local trial",
+          "action": "Use a public scale to sort split-graft fruit without claiming an automatic title",
+          "reaction": "Orchard worker asks which household has the right to refuse an obligation",
+          "line": "An apple doesn't ask who wrote the law that weighs it.",
+          "feedback": "A second graft shadow reveals readable petition under bark",
+          "failure": "Picking forbidden fruit triggers a verbal challenge, not irreversible faction hostility",
+          "recovery": "Return fruit to tray; inspect petition and scale",
+          "persistence": "Low-stakes local reaction only"
+        },
+        {
+          "id": "LUR.OrchardOfKings.02",
+          "window": "night",
+          "place": "Empty plinth",
+          "trigger": "Tharniv first story resolved",
+          "action": "Observe two residents argue a petition under crown-shaped shadow",
+          "reaction": "No actor pretends the unseen monarch has personally spoken",
+          "line": "The law survived its author. Perhaps it never had one.",
+          "feedback": "Later public marker respects committed civic outcome",
+          "failure": "Night-only clue absent earlier",
+          "recovery": "Read daytime posted petition to find night meeting schedule",
+          "persistence": "Optional listening record"
+        }
+      ],
+      "side": {
+        "id": "LUQ.OrchardOfKings.UntouchedFruit",
+        "name": "The Fruit Left Untouched",
+        "unlock": "Tharniv first chapter resolved; optional",
+        "objective": "Permit harvest access without crowning anyone or deleting a dissenting petition",
+        "steps": [
+          "Find the unsigned harvest prohibition under petition bark",
+          "Hear a grower and a nonresident claimant with conflicting histories",
+          "Balance fruit on an existing mechanical public scale",
+          "Carry a graft token through the law-root safe path",
+          "Choose a common harvest table or an open petition hearing with consent safeguards"
+        ],
+        "branches": {
+          "care": "Common table feeds visitors without invoking an unchosen ruler.",
+          "truth": "Public hearing lists actual legal decisions and preserves dissent."
+        },
+        "failure": "Scale tips if fruit is moved too soon; no fictional invisible guilt counter.",
+        "recovery": "Reset physical balance and reweigh with both tokens.",
+        "return_dialogue": "The fruit fed someone. Nobody had to wear the crown.",
+        "save": "Optional quest, authority remains original orchard progression"
+      },
+      "asset": [
+        "SM_Orchard_EmptyPlinth",
+        "SM_Orchard_PetitionBark",
+        "NS_Orchard_RootTelegraph",
+        "SEQ_Orchard_UntouchedFruit"
+      ],
+      "post": {
+        "held": "Old petitions remain etched as scars on one stable public harvest table.",
+        "many": "Two harvest practices can coexist, explicitly marked rather than phasing players without notice."
+      }
+    },
+    {
+      "id": "FirstAbsence",
+      "title": "The Place Before Place",
+      "settlements": [
+        "Auvren"
+      ],
+      "ordinary": "Travelers maintain markers to departures they never made; witnesses debate whether a threshold can be a home rather than a test.",
+      "architecture": "Northern witness plateau, two founding thresholds, limestone rooms containing their own outside, and an open arena built from public testimony.",
+      "custom": "When someone asks where you come from, it is polite to answer what you choose to carry, not what blood says.",
+      "taboo": "Never require a traveler to complete a private guardian challenge before they may leave the place.",
+      "governance": "No crown or registered state; witnesses curate openly contested entry accounts and a stable public exit.",
+      "labor": "Path chalking, lamp tending, worn step repair, witness listening and maintaining the northern passage.",
+      "trade": "Repair supplies and harmless collected inscriptions; entry to the final path is not purchasable.",
+      "ecology": "Threshold moths gather at doors opened from both sides; origin stones cool in reverse sunset order.",
+      "weather": "Horizon folds over the northern witness land; a legible stable path never disappears with optional effects.",
+      "sensory": {
+        "day": "Air without echo, chalk dust, daylight seemingly arriving from the destination.",
+        "night": "Two distant sunrise tones are perceptible as distinct illuminated bands even with audio muted.",
+        "hazard_cue": "A threshold line draws outward before collision rules change, with explicit stable marker.",
+        "access": "Static-horizon option, reduced distortion, clear route text and no reversed physical controls."
+      },
+      "mystery": {
+        "question": "How can a person arrive before any world grants them a birthplace?",
+        "visible": "A worn footprint points toward an entry gate that was built after the footprint formed.",
+        "evidence": [
+          {
+            "id": "LUE.FirstAbsence.01",
+            "site": "Southern arrival footprint",
+            "verb": "Compare the player's present footfall with older mark without using personal profile",
+            "discovery": "The earlier mark is possible without choosing a predetermined ancestry."
+          },
+          {
+            "id": "LUE.FirstAbsence.02",
+            "site": "Twin founding witnesses",
+            "verb": "Listen to both testimony markers in either order",
+            "discovery": "The accounts contradict without either requiring immediate erasure."
+          },
+          {
+            "id": "LUE.FirstAbsence.03",
+            "site": "Northern public threshold",
+            "verb": "Inspect a stable exit line before opting into the arena",
+            "discovery": "Auvren can hold open a question without paying with someone's life."
+          }
+        ],
+        "false_lead": "The first witness is the creator of the player and therefore may command them; source only supports a remembered impossible arrival.",
+        "interpretation": "The protagonist's shared impossible origin grants no unilateral right to overwrite other lives; the confrontation is about inherited responsibility.",
+        "link": "Both witnesses echo the Bellwold interval without explaining away ordinary civic injustice.",
+        "hint": "The witnesses can be visited in either order; follow marked northern safe line.",
+        "do_not_reveal": "Do not spoil mask-breaking or two mornings in the public first-arrival dialogue."
+      },
+      "routine": [
+        {
+          "id": "LUR.FirstAbsence.01",
+          "window": "dawn",
+          "place": "Threshold lamp stand",
+          "trigger": "player earns first Auvren entry",
+          "action": "Replace one extinguished lamp glass before questioning a waiting witness",
+          "reaction": "Witness speaks as an individual who noticed only the player's entry, not all past choices",
+          "line": "You came here before you came here. I cannot tell you what that makes you.",
+          "feedback": "Old footprint acquires a separate visible cast shadow",
+          "failure": "Wrong lamp glass only refracts light; no fake ancestral choice",
+          "recovery": "Swap with correctly etched glass from adjacent shelf",
+          "persistence": "Discovery note only"
+        },
+        {
+          "id": "LUR.FirstAbsence.02",
+          "window": "night",
+          "place": "Public north-exit steps",
+          "trigger": "Auvren first chapter done and main boss gate true",
+          "action": "Choose to sit and read two incompatible witness accounts before entering northern arena",
+          "reaction": "Witness offers information but refuses to assign final moral ending",
+          "line": "Do not ask me which first day happened. Ask who survived each.",
+          "feedback": "Optional context without additional gate or reward",
+          "failure": "Player can ignore dialogue and take same accessible boss route",
+          "recovery": "Read public placards at any time",
+          "persistence": "No prerequisite flag; original FinalJourney remains authoritative"
+        }
+      ],
+      "side": {
+        "id": "LUQ.FirstAbsence.LeavingMark",
+        "name": "A Mark for Leaving",
+        "unlock": "after Auvren first trial; optional before or after ending",
+        "objective": "Create a reliable public return marker without deciding everyone's first origin",
+        "steps": [
+          "Find the older departure footprint on the southern step",
+          "Hear each public witness in any order",
+          "Collect a safe chalk lens from the lamp stand",
+          "Place it on a public exit rather than a locked private arena door",
+          "Choose a single stable marker or visibly paired route markers; preserve safe exit"
+        ],
+        "branches": {
+          "care": "One legible public exit arrow remains regardless of future ending.",
+          "truth": "Paired departure accounts are posted together with a stable navigation overlay."
+        },
+        "failure": "Choosing an arena-only wall is refused and the chalk lens is returned.",
+        "recovery": "Use the signed public steps and try either branch again before commitment.",
+        "return_dialogue": "A way out is not a verdict about where we began.",
+        "save": "Separate optional LUQ contract, cannot mark boss defeated or FinalJourney state"
+      },
+      "asset": [
+        "SM_Absence_OlderFootprint",
+        "SM_Absence_ChalkLens",
+        "NS_Absence_ThresholdBand",
+        "SEQ_Absence_LeavingMark"
+      ],
+      "post": {
+        "held": "A single public exit keeps old contradiction readable in footnote markers.",
+        "many": "Paired thresholds remain equally navigable; static single-line guidance is available."
+      }
+    }
+  ],
+  "cross_realm_mystery": {
+    "theme": "The Unanswered Interval was institutionalized differently by each society. Evidence can disagree without people being liars.",
+    "chains": [
+      {
+        "id": "LUL.01",
+        "from": "ThreefoldReach",
+        "to": "WidowedRain",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      },
+      {
+        "id": "LUL.02",
+        "from": "WidowedRain",
+        "to": "TidalLedger",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      },
+      {
+        "id": "LUL.03",
+        "from": "HearthBeneath",
+        "to": "SkyBelow",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      },
+      {
+        "id": "LUL.04",
+        "from": "TidalLedger",
+        "to": "CinderSpine",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      },
+      {
+        "id": "LUL.05",
+        "from": "SkyBelow",
+        "to": "HearthBeneath",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      },
+      {
+        "id": "LUL.06",
+        "from": "CinderSpine",
+        "to": "TidalLedger",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      },
+      {
+        "id": "LUL.07",
+        "from": "HundredUnlived",
+        "to": "OrchardOfKings",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      },
+      {
+        "id": "LUL.08",
+        "from": "OrchardOfKings",
+        "to": "HundredUnlived",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      },
+      {
+        "id": "LUL.09",
+        "from": "FirstAbsence",
+        "to": "ThreefoldReach",
+        "player_delivery": "Physical inspectable portable public record or earned atlas crossing; never instant telepathic gossip",
+        "disclosure": "After local artifact read, journal may recommend destination only when source atlas says route reachable",
+        "claim": "Provides comparative context but does not change original storyline's gate or automatically settle local responsibility"
+      }
+    ],
+    "final_reveal_policy": "Nhal-Vey's mask fracture, unmasked battle, two futures, and voluntary echo are never spoiled in arrival material. Auvren witness phrasing may foreshadow contradictions without revealing the final choices.",
+    "puzzle_hints": [
+      "First voluntary hint after 60 seconds of meaningful stalled interaction: identify nearby physical evidence category.",
+      "Second voluntary hint after 120 seconds: name the precise safe location and required observable action.",
+      "Third voluntary hint after 180 seconds: explain the non-spoiler action order without auto-solving; all tiers optional and reset per puzzle."
+    ],
+    "presentation_budget": "No claims of sound, animation, full performance or polished art. All identifiers denote new work packages, not existing assets."
+  }
+}

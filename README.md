@@ -354,3 +354,10 @@ shop transactions and Unreal Editor/runtime tests are still unfinished.
 A separate future-world atlas in source defines nine distinct realms and a
 tested route graph with stages based on earned exploration, village progress
 and mythic crafting. **As of the initial item milestone only the three starting villages had graybox actor source. The subsequent current milestone above adds two frontier outposts, not two finished continents; six atlas regions remain designs.** See [epic rewards and universe design](docs/design/2026-10-09-epic-rewards-and-nine-realms.md).
+
+
+## Lived universe preproduction work orders (10 October 2026)
+
+The canonical nine realms gained a non-authoritative detailed living-world production layer: 27 inspectable physical contradictions, 18 routine encounter scripts, nine optional five-step quests (each with two civic endings), nine cross-realm comparison links and 36 art/audio work packages. They are declared in [the lived-universe JSON](Authoring/lived_universe_atlas.json), rendered to [90 editor reference work orders](Authoring/generated/lived_universe_scene_manifest.json), and explained in [the microdetail production bible](docs/design/lived-universe-microdetail-bible.md).
+
+Run `python Scripts/validate_lived_universe.py --check` before changing or importing the master; `--write` regenerates the work orders. CI and first-PC preflight reject source/output drift. **These documents and GUIDE labels are not UE actors, voice performances, finished side quests or compiled levels.** All preexisting actual main-quest completion and save semantics remain unchanged.

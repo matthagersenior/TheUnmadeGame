@@ -28,6 +28,9 @@ jobs:
       - name: Check every main quest branch, 82 returning people and Unreal staging manifest
         run: python Scripts/build_story_scene_handoff.py --check
 
+      - name: Validate lived-universe clues, routines, side stories and 90 Unreal work orders
+        run: python Scripts/validate_lived_universe.py --check
+
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits
