@@ -96,6 +96,7 @@ public:
         if(value.act<0||value.act>5 ||value.morning<0||value.morning>2||
            value.memorySeed<0||value.memorySeed>5||
            (value.act<=2&&value.morning!=0)||
+           (value.act==0&&value.memorySeed!=0)||
            (value.act>=3&&value.morning==0))return false;
         state_=value;return true;
     }
@@ -154,7 +155,7 @@ public:
            memorySeed<0||memorySeed>5)return {};
         if(act!=FinalAct::Veil&&act!=FinalAct::Unmasked&&act!=FinalAct::EchoAwake)
             return {};
-        if(distanceCm>2200){armed_=false;return {FinalMove::Disengage};}
+        if(distanceCm>2200){armed_=false;return {FinalMove::Disengage,FinalAttack::Bell,0,0,""};}
         const int style=(sequence_+memorySeed+
             (act==FinalAct::Unmasked?1:act==FinalAct::EchoAwake?2:0)+
             (variant==Morning::Many?1:0))%4;
