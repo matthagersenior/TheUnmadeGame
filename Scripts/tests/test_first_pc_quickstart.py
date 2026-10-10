@@ -76,5 +76,18 @@ class PcProductionQuickstart(unittest.TestCase):
         self.assertIn("lived_staging",body)
         self.assertIn("UNMADE_EDITOR_RECEIPT",body)
 
+    def test_ninety_nine_realm_work_orders_are_non_authoritative(self):
+        L=load("unmade_nine_realm_stager","Scripts/unreal_editor/stage_lived_world_manifest.py")
+        source=L.read_plan()
+        sites=list(L.places(source))
+        self.assertEqual(len(sites),90)
+        self.assertEqual(len(set(p for _,p in sites)),90)
+        self.assertTrue(all(j["gameplay_authority"] is False for j,_ in sites))
+        self.assertTrue(all(j["collision"] is False for j,_ in sites))
+        self.assertEqual({j["realm"] for j,_ in sites},set(L.COORDS))
+        self.assertEqual({kind:sum(j["kind"]==kind for j,_ in sites) for kind in L.KINDS},
+                         {"physical_evidence":27,"resident_daily_scene":18,
+                          "optional_side_quest":9,"art_audio_work_package":36})
+
 if __name__=="__main__":
     unittest.main()
