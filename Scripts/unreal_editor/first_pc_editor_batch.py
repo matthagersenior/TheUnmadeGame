@@ -24,6 +24,7 @@ def import_source(name: str, source: Path):
 
 PLAN=import_source("unmade_authoring_contract",ROOT/"Scripts/prepare_unreal_authoring.py")
 STAGER=import_source("unmade_scene_stager",ROOT/"Scripts/unreal_editor/stage_world_manifest.py")
+LIVED=import_source("unmade_lived_workorders",ROOT/"Scripts/unreal_editor/stage_lived_world_manifest.py")
 
 def validate():
     plan=PLAN.authoring_plan()
@@ -32,7 +33,10 @@ def validate():
         raise ValueError("Authoring manifest and dedicated staging map differ")
     if len(stage["actors"])!=plan["expected_staging_actors"]:
         raise ValueError("Staging actor count drift")
-    return plan,stage
+    lived=LIVED.read_plan()
+    if len(lived["work_orders"])!=90:
+        raise ValueError("Nine-realm world work orders changed")
+    return plan,stage,lived
 
 def put_tables(unreal, plan):
     tools=unreal.AssetToolsHelpers.get_asset_tools()
@@ -87,15 +91,30 @@ def put_stage(unreal,stage):
         raise RuntimeError("Incomplete staging actor result")
     return {"map":MAP_PATH,"created":created,"skipped":skipped}
 
-def apply(plan,stage):
+def put_lived_stage(unreal,lived):
+    library=unreal.EditorAssetLibrary
+    map_path=LIVED.MAP
+    if library.does_asset_exist(map_path):
+        if not unreal.EditorLevelLibrary.load_level(map_path):
+            raise RuntimeError("Cannot load dedicated lived-world staging map")
+    elif not unreal.EditorLevelLibrary.new_level(map_path):
+        raise RuntimeError("Cannot create dedicated lived-world staging map")
+    created,skipped=LIVED.apply_in_editor(lived)
+    if created+skipped!=90:
+        raise RuntimeError("Not all lived-universe reference markers placed")
+    return {"map":map_path,"created":created,"skipped":skipped}
+
+def apply(plan,stage,lived):
     if os.environ.get("UNMADE_EDITOR_APPROVED")!="1":
         raise RuntimeError("Editor application requires explicit PowerShell approval")
     import unreal
     tables=put_tables(unreal,plan)
     staged=put_stage(unreal,stage)
+    lived_stage=put_lived_stage(unreal,lived)
     receipt={"status":"EDITOR_IMPORT_ATTEMPT_COMPLETE",
              "note":"Not a completed art or game playtest; only generated editor references",
-             "tables":tables,"staging":staged,"commit":os.environ.get("UNMADE_COMMIT","unknown")}
+             "tables":tables,"staging":staged,"lived_staging":lived_stage,
+             "commit":os.environ.get("UNMADE_COMMIT","unknown")}
     report=os.environ.get("UNMADE_EDITOR_RECEIPT","")
     if not report:
         raise RuntimeError("Refusing to apply without receipt path")
@@ -103,16 +122,17 @@ def apply(plan,stage):
     if not path.parent.is_dir():
         raise RuntimeError("Receipt directory does not exist")
     path.write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
-    unreal.log("UNMADE EDITOR BATCH PASSED: 7 tables / 198 content rows / staging 52")
+    unreal.log("UNMADE EDITOR BATCH PASSED: 7 tables / 198 rows / 52+90 reference cubes")
     return receipt
 
 def main():
-    plan,stage=validate()
+    plan,stage,lived=validate()
     if os.environ.get("UNMADE_EDITOR_APPROVED")!="1":
-        print("DRY RUN ONLY | tables %d | rows %d | noncolliding stage refs %d | map %s"
-              %(len(plan["tables"]),plan["total_rows"],len(stage["actors"]),MAP_PATH))
+        print("DRY RUN ONLY | tables %d | rows %d | stage refs %d+%d | map %s"
+              %(len(plan["tables"]),plan["total_rows"],len(stage["actors"]),
+                len(lived["work_orders"]),MAP_PATH))
         return 0
-    apply(plan,stage)
+    apply(plan,stage,lived)
     print("EDITOR REFERENCE IMPORT COMPLETED; no runtime content or SaveGame changed")
     return 0
 
