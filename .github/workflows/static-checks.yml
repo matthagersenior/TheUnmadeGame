@@ -125,3 +125,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/commitment_rules_test.cpp -o /tmp/unmade-commitment-test
           /tmp/unmade-commitment-test
+
+      - name: Verify six later realm adventures and durable, non-farmable return chapters
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/later_realm_journey_test.cpp -o /tmp/unmade-later-realms
+          /tmp/unmade-later-realms
