@@ -1,3 +1,7 @@
+## Single-source production world pack (October 10)
+
+The project now has a deterministic JSON → **three Unreal DataTable CSVs + 18 native NPC identities + full art/dialogue dossier** authoring pipeline, with CI drift protection and automatic verification in the first-PC preflight. It currently covers all nine realm cultures, eighteen individual later-realm characters with day/night lines and personal knowledge limits, and all ten existing abilities with production-friendly uses, limits and cues. The NPC actors read these actual source names/dialogue. [Authoring and Editor-import guide](Authoring/README.md). **Editor import has not yet been tested**.
+
 ## Six optional third chapters: Echo Quests (October 10)
 
 The six later realms now have a third authored return investigation each, after their existing first-visit and aftermath arcs. The player must inspect two independent material clues, speak with a matching resident witness and confirm one of two long-term civic changes on an actual world control; a visible dispatch appears in a connected realm. Every outcome saves independently and cannot be repeated for free resources. The source also repairs the prototype ground-gap and gate-wall geometry (previously overlapping); native C++ asserts protect the layout, but **Unreal Editor/PIE still must verify player collision and navigation**. See [the six Echo quest writer/implementation bible](docs/design/echo-third-chapter-world-bible.md), [manual acceptance](docs/qa/echo-quest-acceptance.md).

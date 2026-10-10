@@ -1,4 +1,5 @@
 #include "NPC/UnmadeNpcCharacter.h"
+#include "Authoring/UnmadeOuterPeopleData.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "NPC/UnmadeNpcMotionRules.h"
 #include "World/UnmadePrototypeHub.h"
@@ -247,11 +248,22 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     case NpcAction::OfferAid: Line = TEXT("offers to help you on the road."); break;
     default: break;
     }
-    // Every one of the 48 residents has an authored personal line from their identity.
+    // Resident dialogue is source-authored; adaptive reactions never change
+    // stable identifiers or assert knowledge of unobserved remote events.
     FString CharacterLine = AuthoredLine;
     const auto Phase = CachedHub.IsValid()
         ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
-    if (Phase == UnmadeCore::DayPhase::Night)
+    const UnmadeCore::OuterPersonSpec* LocalProfile=nullptr;
+    if(bLaterRealmResident)
+    {
+        const FTCHARToUTF8 Identifier(*NpcId.ToString());
+        LocalProfile=UnmadeCore::FindOuterPerson(Identifier.Get());
+        if(LocalProfile)
+            CharacterLine=FString(UTF8_TO_TCHAR(
+                Phase==UnmadeCore::DayPhase::Night
+                ?LocalProfile->nightLine:LocalProfile->dayLine));
+    }
+    if (Phase == UnmadeCore::DayPhase::Night && !LocalProfile)
         CharacterLine += TEXT(" It feels like the dark has started listening.");
     // A borrowed life affects what people notice, without pretending they know
     // a generated backstory or overwriting this individual's memories.

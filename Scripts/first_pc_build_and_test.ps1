@@ -31,6 +31,10 @@ try {
     & (Join-Path $PSScriptRoot "check_unreal_host.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "preflight.log")
     if($LASTEXITCODE -ne 0){throw "HOST_PREFLIGHT_FAILED: exit $LASTEXITCODE"}
+    Write-Host "Checking editable authoring pack against committed Unreal data tables."
+    & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")
+    if($LASTEXITCODE -ne 0){throw "WORLD_CONTENT_OUT_OF_SYNC: run generator and commit changes"}
     Write-Host "Compiling C++ Editor target; NOT creating content assets."
     & $build "TheUnmadeGameEditor" "Win64" "Development" "-Project=$project" "-WaitMutex" "-NoHotReloadFromIDE" 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "editor-build.log")

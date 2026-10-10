@@ -52,3 +52,6 @@
 
 ### Realm danger source milestone (October 10)
 The six further realms each expose a bounded first-arc danger and a safe lane, with per-pulse identity to avoid duplicate injuries, guarding counterplay for physical strikes and saturated nonlethal strain for intrusive anomalies. Local residents can respond to their own observed warning. Native/model tests and static source integration passed in the PR after implementation; actual UE compilation and real traversal remain outstanding. See `docs/qa/later-realm-hazards.md`.
+
+## Production content pack (10 October)
+**SOURCE WIRED / NATIVE TESTED:** 9 culture art/audio/customs briefs, 18 named distinct outer people with daily voices and knowledge limitations, and 10 established rite execution briefs are available as editable JSON and automatically generated native actor header/Unreal CSVs/complete artist dossier. One content consistency check runs in PR CI and on the first Windows PC build. **ENGINE REQUIRED:** UE Header Tool, DataTable CSV import/reimport, animated people, VO, local translations, soundscapes and visible ability VFX.

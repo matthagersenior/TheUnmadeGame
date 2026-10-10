@@ -20,6 +20,8 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: '3.11'
+      - name: Check canonical nine-realm authoring master and Unreal import outputs
+        run: python Scripts/build_world_content.py --check
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits
@@ -140,3 +142,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/echo_quests_test.cpp -o /tmp/unmade-echo-quests
           /tmp/unmade-echo-quests
+
+      - name: Test exported authoring NPC identities and high-quality dialogue
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/authoring/outer_people_test.cpp -o /tmp/unmade-outer-people
+          /tmp/unmade-outer-people
