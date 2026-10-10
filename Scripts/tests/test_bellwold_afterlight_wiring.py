@@ -37,7 +37,7 @@ class BellwoldAfterlightWiring(unittest.TestCase):
         self.assertIn("bAfterlightSaveRejected=true;",world)
         self.assertIn("UPROPERTY(SaveGame)\n    bool bHasInventorySnapshot = false;",save)
         self.assertNotIn("UPROPERTY(SaveGame)\n    /** Bellwold return-visit story",save)
-        self.assertIn("if(bAfterlightSaveRejected)return false;",world)
+        self.assertIn("if(bAfterlightSaveRejected || bRealmAftermathSaveRejected)return false;",world)
         self.assertIn("Achievement::AfterlightShelter",equipment)
         self.assertIn("Achievement::AfterlightNames",equipment)
     def test_npc_firsthand_testimony_and_offline_scenario(self):
