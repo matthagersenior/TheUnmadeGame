@@ -840,3 +840,58 @@ This scene is a **future dramatic beat**, not automatically present in NPC memor
 The Living Evidence is not a hidden morality score, a false simulation of deep AGI, or a replacement for authored characters. It is a mechanical promise: **the world reacts to what its people could actually know**. The nine realms, eleven distinctive settlements, 82 stable residents, ten reality disciplines, branching main campaign, Nhal-Vey's false victory and both postboss mornings remain the same canon. Writers may ask new questions without forcing the answer to the original impossible interval.
 
 **Source status:** implemented in portable C++17 domain, Unreal C++ source readout/F9 binding, observed/heard NPC dialogue and memory reactions, tests and CI. **Unverified:** real Windows UE5 Editor/PIE compilation, full interface, character performances, scene audiovisual design, cross-realm mail routes and complete narrative aftermath. The accompanying cumulative illustrated Bible remains a dated separately rebuilt publication.
+
+---
+
+## 19. The Folded Dispatch — The Distance Between Knowing and Being Told
+*Volume X optional game chapter · source-implemented physical delivery / future expansion seed*
+
+A letter cannot walk to Bellwold because the player closed an argument in the Crossings. The road between the two towns still has its own mud, workers, customs and people who may fail to recognize an unfamiliar traveler. **The Folded Dispatch** exists so that a player can personally carry one contested civic record to someone with a reason to care.
+
+### The place and the packet
+
+The physical packet waits near Orrel's inkless nail after a real saved Witness Braid decision. If the player chose the **Sheltered Thread**, it carries the terms of a refuge passage without naming the people who may use it. If the player chose the **Public Docket**, it carries an account of the contradictions posted in public, already redacted to avoid publishing protected guests' names. No hidden passenger manifests and no miraculous testimony are enclosed.
+
+It is physically handled through the ordinary **E interaction** within reach and line of sight. The world does not award the packet just because the player is nearby, reads a note in a menu or presses F9. Carrying it uses the same save, so leaving the Crossings and returning later does not erase custody. There is no inventory exploit or respawning reward for collecting the same letter repeatedly. The packet ceases to appear in the world once honestly collected.
+
+### Bellwold's receiver
+
+Hessa's daily work continues whether or not anyone brings a paper to her refuge. She may have heard another person's speculation, but the game must not make her describe a carried document she never received.
+
+Only when the player reaches **Hessa in person**, can stand beside her and has an unobstructed conversation, can the actual packet be handed over. The delivery is marked with the in-world day when Hessa receives it. A player who has never collected the record, who stands near a different resident, or who refuses to travel does not satisfy the handoff.
+
+**With the Sheltered Thread:** Hessa considers the safe passage for unnamed travelers and notices what remains unpaid: protection does not automatically provide a hearing to those excluded from past records. Her line is not generic praise.
+
+**With the Public Docket:** She recognizes the player maintained the redactions, then asks what a fair hearing can ask without turning refuge into surveillance. Her fear has a personal basis rather than a universal reputation penalty.
+
+Her knowledge is therefore grounded in a physical object the player actually handed her. Another resident remains uninformed until they legitimately see or hear a report themselves. The optional delivery does not unlock the main story, complete an offscreen character's arc or identify an absent child.
+
+### A transport that matters
+
+The first playable version keeps the player in control of the transfer. This is not a simulated autonomous Kesta courier run: Kesta can be a future character in this chain only after a specifically authored conversation and dispatch permission. No sky-wide event automatically informs the destination.
+
+A future expansion may present a dangerous route: rain that falls where no ocean exists, a bridge where two maps disagree about a mile, or a registrar asking to read a document its carrier cannot ethically disclose. Those hazards must support fair counterplay, recovered losses, alternate approaches and saved responses; they are **not** already implemented by the current packet pickup.
+
+### Spoken scene for adaptation
+
+*Hessa does not reach for the packet immediately. She finishes washing the chipped cup, then holds out her clean hand.*
+
+**Hessa:** "If that paper came from the Crossings, did you see who sent it?"
+
+**Player-carrier, variable:** "I found it beside the nail. I brought it because you should decide what it means here."
+
+**Hessa:** "Then I know where you found it. I do not yet know why they left it."
+
+*She reads. The refuge lantern has not changed. A guest at the next table continues to eat. There is no musical sting, no revelation that identifies the guest, and no answer to the first missing interval.*
+
+This scene's fully voiced/performance blocking is **editorial intent**, not live imported voice acting or filmed gameplay. The physical source actor, custody state, day stamps, conditional delivered line and persistence are the implemented portion.
+
+### Rules for cross-realm follow-through
+
+- Source-implemented packet is **optional**, physically spawned only after the earlier Braid resolution; collecting and handing over require real proximity/line-of-sight actions.
+- Day-indexed custody stages are `Waiting`, `PlayerCarrying`, `HandDelivered`; they are validated and restored on the same backward-compatible save, with refusal on impossible time ordering or a delivery without a Braid outcome.
+- On failed save writes, the previous custody stage is restored. A staged pickup cannot grant a second reward and a delivered packet cannot be collected again.
+- Hessa's recipient line is restricted to her stable identity and a legitimately delivered packet. Her distinct reaction depends on which document the player transported. No unrelated NPC knows the content because a global quest state changed.
+- Future physical mail routes, traveling NPC Kesta, player ambushes, actor animation, paper props, UMG display, spoken delivery, controller accessibility and full UE PIE validation remain **unbuilt**.
+
+A world becomes memorable not when its mysteries are enormous, but when the distance between two people matters.
