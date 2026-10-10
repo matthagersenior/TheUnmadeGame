@@ -264,3 +264,7 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - Added an offline deterministic six-second preview→confirm domain with target scope, ending, expired/reversed timestamps, invalid-input rejection and explicit cancellation.
 - The actual Unreal player F7/F8 action now checks nearby eligible chapter representatives and existing evidence before invoking any of the prior world-mutation functions.
 - Native C++ CI tests, source-level integration check, and dedicated Unreal automation source exist. No in-engine controller/UX or transactional failure injection has yet been performed.
+
+## 2026-10-10 illustrated continuity packaging
+- Superseding the Volume III illustrated master, Volume IV was rendered to **52 pages** with prior art retained. The packaged ZIP has 39 files and was verified for corruption plus per-file hashes.
+- These are provided in the ChatGPT conversation as downloadable ZIP/DOCX/PDF. No GitHub release asset or Unreal compiled package is implied.

@@ -1,5 +1,5 @@
 # THE UNMADE — Living Canon and Realm Continuity
-**Volume II / October 10, 2026 | Source-aligned narrative guide and expansion standard**
+**Volume IV / October 10, 2026 | Source-aligned narrative guide and expansion standard**
 
 ## Four non-negotiable RPG pillars
 1. **Freedom with consequences:** combat, investigation, diplomacy, crafting and reality manipulation should offer viable, materially different resolutions; the world reflects the choice.
@@ -129,3 +129,6 @@ A separate Unreal automation source test `Unmade.Player.CharacterIdentity` await
 All current F7/F8 final faction, first-frontier, Bellwold Afterlight and actor-backed later-frontier decisions now have source-wired, six-second two-press confirmation bound to the specific arc and choice. A new story target, changed ending, expired time or invalid context cannot reuse an earlier preview. The first press states the specific permanent consequence. Source tests cover this policy; Unreal controller/visual acceptance remains unverified.
 
 An Unreal automation test `Unmade.Story.CommitmentConfirmation` awaits the future host. The final player experience must show the outcome in accessible language with a confirmation countdown and clear cancel option rather than relying only on debug text.
+
+## Illustrated Volume IV record
+The October 10 illustrated **Volume IV: A World Prepared to Respond** updates Volume III by adding a 52-page canon/engineering DOCX, a verified rendered PDF, an unchanged art atlas, source appendix, matrix and hash manifest. It is distributed as a downloadable conversation artifact, not stored as a binary in GitHub. The release is consistent with main `5a068c322ee1f0c72f82da3c5f54673f919b2cdb` at creation; later code commits require a future new edition. No actual 3D gameplay or Unreal build has yet been demonstrated.
