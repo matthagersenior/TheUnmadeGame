@@ -1,5 +1,28 @@
 # Latest illustrated lore publication
 
+**Current edition:** Volume X — *The Unanswered Atlas / Witness Braid* (10 October 2026)  
+**Gameplay source baseline:** merged PR #30, main commit `884bd9c740241a0584a2698a566fb8332a99265d` (source CI passed)  
+**Delivery:** verified conversation downloads; illustration files are not committed as GitHub binaries  
+**Canon change:** optional three-city evidence story and mutually exclusive human-scale public responses, without declaring an answer to any OPEN cosmological mystery.
+
+| Current publication file | Verified result |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Witness_Braid_Update.pdf` | **111 pages**, complete cumulative work; inspected new pages and all PDF text boxes within page boundaries |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Witness_Braid_Update.docx` | Editable complete illustrated master; **52 embedded illustrations retained** |
+| `THE_UNMADE_Volume_X_Illustrated_Witness_Braid_Update.pdf` | **37 pages**, standalone Volume X |
+| `THE_UNMADE_Volume_X_Illustrated_Witness_Braid_Update.docx` | Editable standalone; **5 embedded original illustrations retained** |
+| `THE_UNMADE_Volume_X_Witness_Braid_Complete_Illustrated_Package.zip` | Both refreshed volumes, existing concept art, preserved build source, new Writer/UE addendum and SHA-256 manifest |
+
+**Release QA:** Both editable books rendered to complete PDF/page-image sets; new pages visually inspected for overlap, columns and table breaks. PDF text-block bounds: zero violations across 111+37 pages. ZIP CRC integrity checked, each listed file SHA-256 and length independently reverified, no duplicate names.
+
+**Implemented today:** portable rule system for three firsthand observations plus one later outcome-based revisit, F7/F8 guarded response at Orrel's nail, optional same-save fields with fail-closed corruption and rollback, and different source-spawned visible refuge/public-record structures. **Not certified in Unreal:** UE 5.8 Editor/UHT compile, all playable city geometry, full UMG evidence board, post-choice resident stories, courier delivery, quality animation/sound and release build.
+
+**Publication/source separation:** A green CI is evidence for portable source checks only, not for finished cinematics, voice work or a compiled Windows executable. The latest master files are delivered through this conversation and must be retrieved separately; GitHub source does not automatically contain their binary bytes.
+
+---
+
+# Prior illustrated publication: Volume X all-realm city construction
+
 **Current edition:** Volume X — *The Unanswered Atlas*, All-Realm City Construction Supplement (10 October 2026)  
 **Included merged gameplay-source commit:** `d562fad1c8b553edc72000a5ec2f3cea8c32da62` · PR #28  
 **Distribution:** verified downloadable artifacts in ChatGPT, NOT uploaded as GitHub Release binary assets  
