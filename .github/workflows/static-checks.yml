@@ -135,3 +135,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/later_hazard_test.cpp -o /tmp/unmade-later-hazards
           /tmp/unmade-later-hazards
+
+      - name: Verify six optional third-chapter investigations, save rejection and realm geometry
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/echo_quests_test.cpp -o /tmp/unmade-echo-quests
+          /tmp/unmade-echo-quests

@@ -1,4 +1,5 @@
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeRealmGeometryRules.h"
 #include "Player/UnmadeCharacter.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -120,9 +121,11 @@ void AUnmadePrototypeHub::BuildLaterRealms()
         const FVector Origin(Spec.centerX,Spec.centerY,0);
         // Physical gap separates the settlement from its upper terraces.
         // The selected intervention builds exactly one of two collidable spans.
-        SpawnBlock(Origin+FVector(0,-1150,-50),FVector(52,31,1),
+        SpawnBlock(Origin+FVector(0,UnmadeCore::LaterArenaLayout::SouthCenterY,-50),
+                   FVector(52,UnmadeCore::LaterArenaLayout::SouthHalfY/50.0,1),
                    LaterProp(Index,TEXT("GroundSouth")));
-        SpawnBlock(Origin+FVector(0,2200,-50),FVector(52,15,1),
+        SpawnBlock(Origin+FVector(0,UnmadeCore::LaterArenaLayout::NorthCenterY,-50),
+                   FVector(52,UnmadeCore::LaterArenaLayout::NorthHalfY/50.0,1),
                    LaterProp(Index,TEXT("GroundNorth")));
         // Every settlement silhouette has two differently-proportioned landmarks.
         SpawnBlock(Origin+FVector(-1750,650,170+Index*22),
@@ -146,11 +149,13 @@ void AUnmadePrototypeHub::BuildLaterRealms()
             CueTag);
         // Visual feedback only: never silently collide with this warning.
         SetRiteWorldActorState(CueTag,false);
-        SpawnBlock(Origin+FVector(0,610,140),FVector(50,.55,3),
+        SpawnBlock(Origin+FVector(0,610,140),FVector(55,.55,3),
                    LaterProp(Index,TEXT("Trial.Barrier")));
-        SpawnBlock(Origin+FVector(-850,970,20),FVector(8,12,.35),
+        SpawnBlock(Origin+FVector(-850,UnmadeCore::LaterArenaLayout::BridgeCenterY,20),
+                   FVector(8,UnmadeCore::LaterArenaLayout::BridgeHalfY/50.0,.35),
                    LaterProp(Index,TEXT("Trial.Route.Care")));
-        SpawnBlock(Origin+FVector(850,970,20),FVector(8,12,.35),
+        SpawnBlock(Origin+FVector(850,UnmadeCore::LaterArenaLayout::BridgeCenterY,20),
+                   FVector(8,UnmadeCore::LaterArenaLayout::BridgeHalfY/50.0,.35),
                    LaterProp(Index,TEXT("Trial.Route.Truth")));
         // Two matching consoles lie *on* the potential bridges.
         // Only the chosen bridge is collidable after the first quest;
@@ -167,11 +172,11 @@ void AUnmadePrototypeHub::BuildLaterRealms()
                    FName(UTF8_TO_TCHAR(After.evidenceForTruth)));
         // A continuous physical wall, with two exclusive decision gates.
         // This prevents walking around the "consequence" on the floor.
-        SpawnBlock(Origin+FVector(-1900,2130,160),FVector(14,.55,3.2),
+        SpawnBlock(Origin+FVector(-1925,2130,160),FVector(13.5,.55,3.2),
                    LaterProp(Index,TEXT("Aftermath.Wall.Left")));
-        SpawnBlock(Origin+FVector(0,2130,160),FVector(10,.55,3.2),
+        SpawnBlock(Origin+FVector(0,2130,160),FVector(9,.55,3.2),
                    LaterProp(Index,TEXT("Aftermath.Wall.Middle")));
-        SpawnBlock(Origin+FVector(1900,2130,160),FVector(14,.55,3.2),
+        SpawnBlock(Origin+FVector(1925,2130,160),FVector(13.5,.55,3.2),
                    LaterProp(Index,TEXT("Aftermath.Wall.Right")));
         SpawnBlock(Origin+FVector(-850,2130,160),FVector(8,.55,3.2),
                    LaterProp(Index,TEXT("Aftermath.Gate.Care")));
