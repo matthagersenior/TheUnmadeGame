@@ -1,5 +1,6 @@
 #include "World/UnmadePrototypeHub.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
+#include "Authoring/UnmadeResidentReturnData.h"
 #include "Engine/Engine.h"
 
 bool AUnmadePrototypeHub::RecordResidentConversation(FName ResidentId)
@@ -48,10 +49,20 @@ FString AUnmadePrototypeHub::GetResidentReturnLine(
     const bool LocallyKnown=Home==UnmadeCore::Realm::ThreefoldReach
         ?GetUnansweredRoadEvidence().openingWitnessed
         :UnmadeCore::RoadHas(GetUnansweredRoadEvidence(),Home);
+    const auto* Profile=UnmadeCore::FindReturnDialogue(ID.Get());
+    const auto Level=ResidentRelationships.Level(ID.Get());
+    const bool Aided=ResidentRelationships.Aided(ID.Get());
+    const bool OtherMorning=FinalStory.World()!=UnmadeCore::Morning::Unchosen;
+    // Only if the actor has *actually* met the player on a previous day.
+    // The local public record is not represented as a personal eyewitness claim.
+    if(Profile && Level>=UnmadeCore::Familiarity::Acquainted)
+    {
+        const char* Line=OtherMorning&&LocallyKnown?Profile->newMorning:
+            Aided?Profile->aid:
+            LocallyKnown?Profile->publicLine:Profile->recognize;
+        return FString(UTF8_TO_TCHAR(Line));
+    }
     const auto Text=UnmadeCore::ResidentContinuityLine(
-        ResidentRelationships.Level(ID.Get()),
-        ResidentRelationships.Aided(ID.Get()),
-        LocallyKnown,
-        FinalStory.World()!=UnmadeCore::Morning::Unchosen);
+        Level,Aided,LocallyKnown,OtherMorning);
     return FString(UTF8_TO_TCHAR(Text));
 }
