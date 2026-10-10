@@ -364,6 +364,23 @@ FString AUnmadeNpcCharacter::GetReactionText() const
 
     if(CachedHub.IsValid())
     {
+        // Local observation of changed sky/monuments; do not globally
+        // broadcast a private final-boss memory to every resident.
+        const auto NewMorning=CachedHub->GetNewMorning();
+        if(NewMorning!=UnmadeCore::Morning::Unchosen)
+        {
+            UnmadeCore::Realm Local=UnmadeCore::Realm::ThreefoldReach;
+            if(bLaterRealmResident)Local=LaterHome;
+            else if(bFrontierResident)
+                Local=HomeLocation.Y<0?UnmadeCore::Realm::WidowedRain:
+                    UnmadeCore::Realm::HearthBeneath;
+            CharacterLine+=TEXT(" The sky above our home has changed. ");
+            CharacterLine+=FString(UTF8_TO_TCHAR(
+                UnmadeCore::FinalLocalRecord(NewMorning,Local)));
+        }
+    }
+    if(CachedHub.IsValid())
+    {
         // Only publicly observable changes in the NPC's own home town.
         // Rumors and firsthand player acts remain separate personal memories.
         UnmadeCore::Community Home=UnmadeCore::Community::Count;
