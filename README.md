@@ -1,3 +1,7 @@
+## Nhal-Vey: a final boss that changes the same world (October 10)
+
+A first-defeat **false victory** transitions Nhal-Vey to a more dangerous revealed form. The actual second defeat unlocks two physically confirmed world outcomes—**The Held Morning** and **The Many Mornings**—that do not reset the player's save. Nine locations reveal distinct branch-specific physical inscriptions (18 different authored records); local NPCs react to the changed sky without omniscient knowledge. An **optional** echo rematch has different attack rhythms in each version. All battle phases preserve predictable warning intervals, combat guarding and Fold interruption. This source feature is native-testable and Unreal-actor-wired, **not yet compiled, animated or balance-tested in UE**. [Nhal-Vey story and full production design](docs/design/nhal-vey-final-battle-reality-bible.md) / [Win64 acceptance criteria](docs/qa/final-boss-second-reality.md).
+
 ## Volume VIII illustrated canon — The World Learns to Answer
 
 The latest illustrated development edition is **73-page Volume VIII**, preserving **43 embedded concept illustrations** and the existing **30-artwork atlas**. A checksum-verified **38-file ZIP** includes the editable DOCX, rendered/visually inspected PDF, art, production quality matrix, source appendix and release manifest. New chapters document all six optional dual-rite observatories, all six optional guardians with explicit mercy and combat paths, local witness limitations, and a deterministic eight-minute first-PC demonstration and acceptance procedure.
