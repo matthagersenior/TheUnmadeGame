@@ -160,6 +160,13 @@ public:
     UPROPERTY(SaveGame)
     int32 WitnessEchoReturnMask=0;
 
+    /** Optional Volume X cross-city public response; 0 absent, 1 shelter, 2 docket. */
+    UPROPERTY(SaveGame)
+    bool bHasWitnessBraidSnapshot=false;
+
+    UPROPERTY(SaveGame)
+    int32 WitnessBraidOutcome=0;
+
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)
     bool bHasResidentContinuitySnapshot=false;

@@ -165,3 +165,11 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added noncolliding source-linked actor guides for all 82 saved resident IDs, ten original mastered rite IDs, 54 source-authored main quest steps, 27 physical evidence contracts and nine still-unimplemented side-story concepts; complete isolated planning map has 402 reference actors.
 - Connected the third safe editor map and source validator to the first-PC command and CI. The prototype's actual quest/saves, stage gates, NPC identity continuity, ending alternatives and nine OPEN mysteries remain unchanged.
 - Technical publication update required: these are authored build instructions and markers, **not** fully built or tested Unreal cities, animated characters, voice performances, playable story interactions, finished user interface or shipped content.
+
+
+## 2026-10-10 — Source implementation: the Witness Braid (Volume X section 17)
+
+- Extended existing physical callback investigations across Bellwold, Paperhaven and the Crossings into one **optional** three-source puzzle. All three observations and a later changed reading must be earned before Orrel's bridge nail allows a conclusion; a single lore menu, off-screen speculation or repeated input cannot skip the route.
+- Authored separate human-scale outcomes: **Sheltered Thread** (private refuge cord) or **Public Docket** (redacted public discrepancy record). They create different physically spawned structures and journal text, reuse two-press commitment, and never resolve the nine OPEN mysteries or require a particular protagonist history.
+- Added optional old-save-safe outcome persistence, strict prerequisite validation, fail-closed rejection of corrupted snapshots, rollback when saving fails, non-farmable commitment and no new compulsory boss or quest gate.
+- Updated primary Volume X Markdown canon, living continuity, native C++ regression and source wiring checks. Original illustrated complete edition is still a dated asset, not falsely marked republished. UE compile/PIE and actual embodied content still pending.

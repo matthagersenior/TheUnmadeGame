@@ -735,3 +735,51 @@ No author may steal that future by answering everything at once.
 
 ---
 *Primary editorial sources: Authoring/transmedia_storyworld_v1.json; Authoring/world_content_pack.json; Authoring/resident_return_encounters.json; Authoring/lived_universe_atlas.json; docs/lore/living-world-continuity.md. The historical illustrated release remains a snapshot; this volume is a new dated continuity layer.*
+
+---
+
+## 17. The Witness Braid — An Inquiry That Refuses a Crown
+*Volume X playable interlude · October 10, 2026 · new source-implemented optional storyline*
+
+The Crossings had three roads and three surveyors. Orrel used to say that when all three disagreed, they had at least proved there was ground beneath their feet. Then a blue-corded nail began trembling whenever a traveler said they had come from a place the courts no longer acknowledged.
+
+**The Witness Braid** is what Orrel calls the work of setting incompatible firsthand objects side by side without taking possession of their people. Its principal antagonists are not monsters. They are the ordinary pressure to make a record convenient for the institution reading it, and the equally dangerous temptation to hide a record that could protect someone else.
+
+### Episode scene: three cities, one interval
+
+At **Bellwold**, Hessa's uncounted refuge cup is chipped on one side. She is not sure when it broke. She refuses to have her guests treated as the evidence needed to date it. The public Afterlight choice may make her cup a sign of shelter or documentary testimony, but does not reveal a missing bell-maker.
+
+At **Paperhaven**, Sevrin keeps the reverse of a seal press blank. The Index Hall can add an annotation to a record without publishing a sleeping guest's name. The press bears a date that, according to the most careful archivists, should precede the press's own use. The player is not entitled to conclude that the guest is the impossible person.
+
+At **the Crossings**, Orrel's inkless nail marks a third road, yet the official surveys differ about whether that road ever had a place in the city. Kesta may eventually carry an account to another neighborhood, but only as testimony she could physically deliver. She is not an omniscient courier.
+
+Nothing about these three objects establishes a cosmic verdict. Each is a separate, locally witnessed trace. **Only after personally inspecting all three and returning to at least one after a legitimate local story outcome has changed its meaning** can the player make a public response at Orrel's nail. No book, prophecy, paid upgrade or guardian boss bypasses those observations.
+
+### A choice with architecture, not a cosmetic dialogue reward
+
+The same familiar F7 and F8 controls used by other irreversible decisions require two matching presses inside the game's six-second commitment gate. The player must be physically beside the inkless nail. If a final local quest witness takes priority, that earlier obligation is resolved through its original flow; the Braid never steals another quest's choice.
+
+**F7 — The Sheltered Thread.** A low, horizontal refuge cord becomes physically present nearby. It guides unnamed travelers toward an established shelter without claiming who owns their histories. That protection comes at a cost: Sevrin cannot easily present the complete pattern in the public archive. Future writing can revisit someone excluded from a hearing because the lead remained private. The source currently shows the structure and journals the result; it does not yet implement those later conversations or city-wide AI navigation.
+
+**F8 — The Public Docket.** A taller public record appears instead. It contains the *objects' contradictions* but no protected individuals' names. A witness can challenge an institution with this evidence, yet hostile readers might begin hunting the people who were never named. Orrel fears what publishing even a redacted question could invite. The source currently shows the record, writes the choice and reports a local player event; it does not simulate distant reprisals that have not yet been authored.
+
+Both remain valid, mutually exclusive save outcomes. Neither produces a magical reward, forces an ending or tells the player they chose evil. The named NPCs continue to have private lives outside the protagonist's decision.
+
+### Why the mystery remains alive
+
+There are at least three incompatible causal hypotheses, each belonging to a **speaker**, not to an authoritative omniscient narrator:
+
+- **Hessa's account:** the cup was chipped by a guest who has been erased from the count. This would make refuge an intervention in history, but she cannot prove when it happened.
+- **Sevrin's account:** the inked side of the seal was made during a routine records correction, while the undated side is a later form of intentional consent. This would make the missing entry a policy choice rather than a temporal rupture.
+- **Orrel's account:** a road that was taxed before it was built exposed the contradiction, and the records adapted afterward. That suggests the map failed first, but his nail cannot provide a date.
+
+No automatically awarded quest text chooses among these hypotheses. They are prompts for later revisits, dialogue, an anthology episode, and optional future expansions. The broader nine-realm unresolved questions, customizable protagonist origin, Nhal-Vey's false victory and both alternate mornings are unchanged.
+
+### Canon and production status
+
+- **Implemented in Unreal C++ source:** three existing physical echo relics, a portable Witness Braid state model, prerequisite validation, near-object guarded F7/F8 decisions, durable optional schema-1 SaveGame fields, fail-closed malformed-save behavior, rollback on failed writes, distinct physical source-spawned marker geometries, E-inspection feedback and prototype journal.
+- **Portable test and source-CI required:** first/return evidence, unsupported choice rejection, alternative outcomes, snapshot restoration, save corruption, structural source wiring and lore synchronization.
+- **Not yet engine-verified:** Windows Editor compile, controller input, collision, actual physical navigability, meaningful character animation, UMG evidence-board presentation, authored NPC aftermath dialogues, mailed/public record propagation, full soundscape and lip synchronization.
+- **Illustrated-volume release state:** this Markdown primary canon is updated in the repository. Existing complete illustrated DOCX/PDF/ZIP are dated releases, not automatically reconstructed by this source change.
+
+For a cinematic adaptation, begin not with the missing bell but with an ordinary ink-stained hand touching a blank metal plate. End with a public board or a private cord, and the same nail rattling at the same unheard moment. This is the universe's grammar: *a changed answer does not necessarily change the question*.

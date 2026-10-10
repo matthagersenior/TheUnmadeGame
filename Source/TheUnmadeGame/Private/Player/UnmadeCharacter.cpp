@@ -507,7 +507,11 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
             Hub->ResolveNearbyAfterlight(static_cast<int32>(Ending));
         const bool bResolvedRealmAftermath=!bResolvedFaction && !bResolvedFrontier &&
             !bResolvedAfterlight && Hub->ResolveNearbyRealmAftermath(static_cast<int32>(Ending));
-        if(bResolvedFaction || bResolvedFrontier || bResolvedAfterlight || bResolvedRealmAftermath)
+        const bool bResolvedBraid=!bResolvedFaction && !bResolvedFrontier &&
+            !bResolvedAfterlight && !bResolvedRealmAftermath &&
+            Hub->ResolveNearbyWitnessBraid(static_cast<int32>(Ending));
+        if(bResolvedFaction || bResolvedFrontier || bResolvedAfterlight ||
+           bResolvedRealmAftermath || bResolvedBraid)
         {
             ReconcileEarnedRewards();
             if(bResolvedAfterlight)
@@ -538,10 +542,12 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
                     FName(bRain?TEXT("region.saltwake.port"):TEXT("region.cinderhold.hearth")));
                 }
             }
+            else if(bResolvedBraid)
+                ReportLocalEvent(FName("World.WitnessBraidResolved"),FName("region.crossings.bridge"));
             else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
         else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
-            TEXT("Find your final representative and matching local evidence: faction, frontier, Afterlight or realm aftershock."));
+            TEXT("Find your local final witness, or assemble all three echo relics and return to Orrel's nail."));
         break;
     }
 }

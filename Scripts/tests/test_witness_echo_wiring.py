@@ -44,7 +44,7 @@ class WitnessEchoWiring(unittest.TestCase):
         self.assertIn("int32 WitnessEchoReturnMask=0",save)
         self.assertIn("if(Save->bHasWitnessEchoSnapshot)",hub)
         self.assertIn("bWitnessEchoRejected=true",hub)
-        self.assertIn("bWitnessEchoRejected)return false",hub)
+        self.assertIn("bWitnessEchoRejected || bWitnessBraidRejected)return false;",hub)
         self.assertIn("Save->WitnessEchoFirstMask=",hub)
         self.assertIn("Save->WitnessEchoReturnMask=",hub)
 

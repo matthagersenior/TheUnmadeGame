@@ -6,6 +6,7 @@
 #include "NPC/UnmadeResidentContinuityRules.h"
 #include "World/UnmadeLivingWorldRules.h"
 #include "World/UnmadeWitnessEchoRules.h"
+#include "World/UnmadeWitnessBraidRules.h"
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeRegionalTaskRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
@@ -50,6 +51,8 @@ public:
     bool InspectSite(AUnmadeLoreSite* Site);
     /** Source-authored optional physical callback observations, visible to the journal. */
     FString GetWitnessEchoJournal() const;
+    /** Optional three-city public response near Orrel's physical bridge nail. */
+    bool ResolveNearbyWitnessBraid(int32 Choice);
     void RefreshDistrictMood();
     /** Rebuild public village state from already-saved choices; no extra save flags. */
     void RefreshCommunityConsequences();
@@ -138,7 +141,10 @@ private:
     UnmadeCore::RegionalTaskModel RegionalTasks;
     UnmadeCore::ResidentContinuity ResidentRelationships;
     UnmadeCore::WitnessEchoLedger WitnessEchoes;
+    UnmadeCore::WitnessBraidChronicle WitnessBraid;
     bool bWitnessEchoRejected=false;
+    bool bWitnessBraidRejected=false;
+    void RefreshWitnessBraidWorld();
     bool bResidentContinuityRejected=false;
     UnmadeCore::FactionChronicle Chronicle;
     UnmadeCore::FrontierJourney Frontier;
