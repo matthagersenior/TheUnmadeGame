@@ -97,6 +97,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/evidence_provenance_test.cpp -o /tmp/unmade-evidence-provenance
           /tmp/unmade-evidence-provenance
+      - name: Test saved physical witness note, day-checked custody and receipt
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/witness_dispatch_test.cpp -o /tmp/unmade-witness-dispatch
+          /tmp/unmade-witness-dispatch
 
       - name: Verify three offline settlements and all resident identities
         run: |
