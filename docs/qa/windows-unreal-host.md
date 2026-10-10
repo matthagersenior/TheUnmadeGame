@@ -42,3 +42,7 @@ On a Windows PC with the correct licensed Unreal Engine and Visual Studio C++ wo
 ```
 
 This script runs hardware/toolchain preflight, **Build.bat** for the Editor target and the `Unmade` automation group. It stops on nonzero exit and writes timestamped build and test logs under `TestReports/first-pc-*`. Use `-BuildOnly` for compiler debugging without pretending tests ran. It **does not** install UE, generate authored maps, cook a build, provision cloud resources, prove in-game save/load or certify real-time frame rates. Retain logs and follow the manual QA chapters for combat, frontiers, Afterlight, NPCs and all nine-realm progress.
+
+## Lower-friction first-PC entrypoint (2026-10-10)
+
+When you have a suitable Windows PC with Unreal Engine 5.8 and the Visual Studio C++ workload installed, download/clone the repo and **double-click `START_THE_UNMADE.cmd`**. Its PowerShell script detects UE, validates data/scene plans, runs preflight, builds C++, invokes engine automation, uses isolated Unreal Python authoring imports, and opens the Editor. Seven CSV reference tables (198 rows), a 52-marker scene map and separate 90-marker nine-realm production map are prepared; none is finished gameplay. An invalid compile, missing plugin/API, failed UE import or absent receipt **stops the workflow**. `-InspectOnly`, `-SkipStage`, `-DontOpenEditor` and `-UnrealRoot` are available. [Full instructions](first-pc-one-click-production.md). Windows UE runtime acceptance **remains unverified until a real Windows host is used**.
