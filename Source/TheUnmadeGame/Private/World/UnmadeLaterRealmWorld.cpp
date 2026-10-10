@@ -118,8 +118,12 @@ void AUnmadePrototypeHub::BuildLaterRealms()
         const auto& Spec=UnmadeCore::LaterRealms[Index];
         const auto& After=UnmadeCore::RealmAftermathSpecs[Index+3];
         const FVector Origin(Spec.centerX,Spec.centerY,0);
-        SpawnBlock(Origin+FVector(0,0,-50),FVector(58,58,1),
-                   LaterProp(Index,TEXT("Ground")));
+        // Physical gap separates the settlement from its upper terraces.
+        // The selected intervention builds exactly one of two collidable spans.
+        SpawnBlock(Origin+FVector(0,-1150,-50),FVector(52,31,1),
+                   LaterProp(Index,TEXT("GroundSouth")));
+        SpawnBlock(Origin+FVector(0,2200,-50),FVector(52,15,1),
+                   LaterProp(Index,TEXT("GroundNorth")));
         // Every settlement silhouette has two differently-proportioned landmarks.
         SpawnBlock(Origin+FVector(-1750,650,170+Index*22),
                    FVector(1.0+Index*.28,3.0,3.4+Index*.4),
@@ -139,7 +143,12 @@ void AUnmadePrototypeHub::BuildLaterRealms()
                    LaterProp(Index,TEXT("Trial.Route.Care")));
         SpawnBlock(Origin+FVector(850,970,20),FVector(8,12,.35),
                    LaterProp(Index,TEXT("Trial.Route.Truth")));
-        SpawnBlock(Origin+FVector(0,1130,110),FVector(.55,.55,2.2),
+        // Two matching consoles lie *on* the potential bridges.
+        // Only the chosen bridge is collidable after the first quest;
+        // without it the player cannot simply walk across the void.
+        SpawnBlock(Origin+FVector(-850,1130,110),FVector(.55,.55,2.2),
+                   FName(UTF8_TO_TCHAR(After.mechanismSite)));
+        SpawnBlock(Origin+FVector(850,1130,110),FVector(.55,.55,2.2),
                    FName(UTF8_TO_TCHAR(After.mechanismSite)));
         SpawnBlock(Origin+FVector(0,1480,150),FVector(52,.55,3),
                    LaterProp(Index,TEXT("Aftermath.Barrier")));
@@ -147,6 +156,14 @@ void AUnmadePrototypeHub::BuildLaterRealms()
                    FName(UTF8_TO_TCHAR(After.evidenceForCare)));
         SpawnBlock(Origin+FVector(850,1810,105),FVector(.55,.55,2.1),
                    FName(UTF8_TO_TCHAR(After.evidenceForTruth)));
+        // A continuous physical wall, with two exclusive decision gates.
+        // This prevents walking around the "consequence" on the floor.
+        SpawnBlock(Origin+FVector(-1900,2130,160),FVector(14,.55,3.2),
+                   LaterProp(Index,TEXT("Aftermath.Wall.Left")));
+        SpawnBlock(Origin+FVector(0,2130,160),FVector(10,.55,3.2),
+                   LaterProp(Index,TEXT("Aftermath.Wall.Middle")));
+        SpawnBlock(Origin+FVector(1900,2130,160),FVector(14,.55,3.2),
+                   LaterProp(Index,TEXT("Aftermath.Wall.Right")));
         SpawnBlock(Origin+FVector(-850,2130,160),FVector(8,.55,3.2),
                    LaterProp(Index,TEXT("Aftermath.Gate.Care")));
         SpawnBlock(Origin+FVector(850,2130,160),FVector(8,.55,3.2),
