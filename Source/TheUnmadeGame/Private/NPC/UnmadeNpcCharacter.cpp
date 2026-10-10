@@ -274,6 +274,19 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         }
         else if(HomeSettlement!=UnmadeCore::SettlementId::None)
             Home=static_cast<UnmadeCore::Community>(static_cast<int32>(HomeSettlement));
+        if(bFrontierResident)
+        {
+            const auto Realm=Home==UnmadeCore::Community::Saltwake
+                ?UnmadeCore::Realm::WidowedRain:UnmadeCore::Realm::HearthBeneath;
+            const int32 Ending=CachedHub->GetRealmAftermathEnding(Realm);
+            if(Ending!=0)
+            {
+                const auto& Spec=UnmadeCore::RealmAftermathSpecs[static_cast<int32>(Realm)];
+                CharacterLine+=TEXT(" ");
+                CharacterLine+=FString(UTF8_TO_TCHAR(
+                    Ending==1?Spec.careConsequence:Spec.truthConsequence));
+            }
+        }
         if(Home!=UnmadeCore::Community::Count)
         {
             const auto Outcome=CachedHub->GetCommunityOutcome(Home);
@@ -308,6 +321,18 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             BeliefLine = bDirect
                 ? TEXT("I saw the erased names carved where the registrars could not hide them.")
                 : TEXT("They say the names are public now. I will go and look for my own.");
+        else if (Event.EventKind == FName("World.SaltwakeCistern"))
+            BeliefLine = bDirect ? TEXT("I saw the sluice opened and the shared cistern funded.")
+                                 : TEXT("I heard the storm's water was made common. I did not see the decision.");
+        else if (Event.EventKind == FName("World.SaltwakeLedger"))
+            BeliefLine = bDirect ? TEXT("I witnessed the false rain prices released to the port.")
+                                 : TEXT("They say the harbor invoices lied. I want to examine them.");
+        else if (Event.EventKind == FName("World.CinderholdKiln"))
+            BeliefLine = bDirect ? TEXT("I saw the vent opened and the shared kiln given to the households.")
+                                 : TEXT("I heard there is now a common fire for the coldest homes.");
+        else if (Event.EventKind == FName("World.CinderholdDeed"))
+            BeliefLine = bDirect ? TEXT("I watched the ember deed exposed in the reopened passage.")
+                                 : TEXT("Someone says the old ownership claim was forged.");
         else if (Event.EventKind == FName("World.RiteProtect"))
             BeliefLine = bDirect ? TEXT("I saw you choose to protect the people from a power that could have harmed them.")
                                  : TEXT("Some say you put the villagers first. I hope they are right.");
