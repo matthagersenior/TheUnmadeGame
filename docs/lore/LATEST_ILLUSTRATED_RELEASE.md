@@ -1,5 +1,30 @@
 # Latest illustrated lore publication
 
+**Current edition:** Volume X — *The Unanswered Atlas, The Living Evidence & The Folded Dispatch* (10 October 2026)  
+**Merged source baseline:** `365494e22b4bf29993655607c012a36327c73dc1` · [Living Evidence PR #32](https://github.com/matthagersenior/TheUnmadeGame/pull/32) and [Folded Dispatch PR #33](https://github.com/matthagersenior/TheUnmadeGame/pull/33)  
+**Distribution:** Full PDF, DOCX, art and integrity-checked ZIP in ChatGPT downloads; **not** committed as GitHub Release binary assets.  
+**Novel game/storyworld canon:** source-attributed investigation notebook (Chapter 18), witnessed-versus-heard NPC dialogue, genuinely physically carried Crossings-Bellwold custody and Hessa-only receipt (Chapter 19). All nine OPEN cosmological mysteries remain unanswered.
+
+| Current downloadable publication | Verified quality |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Folded_Dispatch_Update.pdf` | **115 pages**, complete cumulative illustrated master; zero text boundary overflow |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Folded_Dispatch_Update.docx` | Editable cumulative master, **all 52 original embedded illustrations retained** |
+| `THE_UNMADE_Volume_X_Illustrated_Folded_Dispatch_Update.pdf` | **41 pages**, full current Volume X, zero text boundary overflow |
+| `THE_UNMADE_Volume_X_Illustrated_Folded_Dispatch_Update.docx` | Editable standalone, **five original embedded illustrations retained** |
+| `THE_UNMADE_Volume_X_Folded_Dispatch_Complete_Illustrated_Package.zip` | 20 entries: all four current books, eight reference images, preserved prior source/production tools, Chapters 18/19 text, release README, verified SHA-256 per-member manifest |
+
+**Visual/file QA:** Both Word books were rendered to complete image/PDF page sets, recent page montages inspected, a redundant standalone blank page corrected, 115+41 page text geometry checked with no off-page text, original image-object counts asserted, ZIP CRC and all 19 data-member SHA-256 digests checked. Latest source CI on merged PR #33 is **green**; source tests do **not** certify a game build in Unreal.
+
+**Source features now available:** Physical CALL.01/03/04 relics with saved return meanings, Witness Braid two-choice physical aftermath, F9 only-seen provenance notebook, direct/witness-vs-rumor NPC lines, locally bounded gossip, optional staged folded world packet, E collection within LOS, day-indexed saved custody, physical E receipt by Hessa only, branch-specific dialogue and atomic world-save rollback.
+
+**Unverified/unfinished:** Real Windows UE 5.8 Editor/UHT/PIE compile and packaging, production UMG evidence board, controller and accessibility implementation, compelling third-person 3D environments and character animations, actual cross-realm courier NPC routes, voiced dialogue/lip sync, fully choreographed combat/story scenes, QA across complete campaign. No claim of a finished playable RPG is made.
+
+**Authoritative canonical source:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md`, Chapters 17-19. The ZIP includes a preserved chapter-17 source and an illustrated-publication text extract of 18/19. For exact up-to-date canonical Markdown, use GitHub rather than assuming the local extract is byte-identical.
+
+---
+
+# Previous publication: Volume X Witness Braid
+
 **Current edition:** Volume X — *The Unanswered Atlas / Witness Braid* (10 October 2026)  
 **Gameplay source baseline:** merged PR #30, main commit `884bd9c740241a0584a2698a566fb8332a99265d` (source CI passed)  
 **Delivery:** verified conversation downloads; illustration files are not committed as GitHub binaries  
