@@ -147,3 +147,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/authoring/outer_people_test.cpp -o /tmp/unmade-outer-people
           /tmp/unmade-outer-people
+
+      - name: Test every optional dual-rite observatory, safe expiry and ten-powers coverage
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/realm_resonance_test.cpp -o /tmp/unmade-realm-resonance
+          /tmp/unmade-realm-resonance
