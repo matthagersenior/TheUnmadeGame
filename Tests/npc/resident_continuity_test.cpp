@@ -31,7 +31,7 @@ int main(){
     assert(std::strstr(ResidentContinuityLine(journal.Level(Residents[0].id),true,
         false,false),"help")!=nullptr);
     assert(std::strstr(ResidentContinuityLine(Familiarity::Stranger,false,
-        false,false),"first")!=nullptr);
+        false,false),"begin")!=nullptr);
     for(int day=3;day<15;++day)
         journal.Talk(Residents[0].id,day);
     assert(journal.Visits(Residents[0].id)==5);
