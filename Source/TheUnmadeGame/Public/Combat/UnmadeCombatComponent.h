@@ -18,6 +18,9 @@ public:
     void SetGuarding(bool bEnabled);
     void SetGearBonuses(int32 Attack, int32 Armor);
     bool Heal(float Amount);
+    /** A single identified storm/heat pulse, deduplicated by the combat domain. */
+    bool ReceiveHazardPulse(uint64 SourceId,uint64 PulseId,double Damage);
+    bool ReviveAtCheckpoint();
     float GetMissingHealth() const { return GetMaxHealth() - GetHealth(); }
     int32 GetGearAttackBonus() const { return GearAttack; }
     int32 GetGearArmorBonus() const { return GearArmor; }

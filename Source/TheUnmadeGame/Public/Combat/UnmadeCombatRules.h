@@ -34,6 +34,18 @@ public:
         return true;
     }
     bool IsGuarding() const noexcept { return guarding_; }
+    /** A local checkpoint restores agency after defeat without rewinding story,
+        inventory or persistent world decisions. Reject invalid revives atomically. */
+    bool ReviveAtCheckpoint(double healthFraction) noexcept {
+        if(IsAlive() || !std::isfinite(healthFraction) ||
+           healthFraction<=0.0 || healthFraction>1.0)return false;
+        health_=maximumHealth_*healthFraction;
+        guarding_=false;
+        nextAttackAt_=0;
+        swingCounter_=0;
+        seen_.clear();
+        return true;
+    }
 
     bool SetGuarding(bool enabled) noexcept {
         if (!IsAlive() || guarding_ == enabled) return false;
