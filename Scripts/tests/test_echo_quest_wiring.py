@@ -30,7 +30,7 @@ class EchoQuestWiring(unittest.TestCase):
             self.assertIn(term,hub)
         self.assertIn("bEchoSaveRejected=true;",hub)
         self.assertIn("bLaterRealmSaveRejected || bEchoSaveRejected ||",hub)
-        self.assertIn("bResonanceSaveRejected || bGuardianSaveRejected)return false;",hub)
+        self.assertIn("bResonanceSaveRejected || bGuardianSaveRejected ||",hub)
         self.assertIn("InspectEchoQuestSite(",player)
         self.assertIn("TryEchoQuestConversation(",player)
         self.assertIn("GetEchoQuestStage(",player)

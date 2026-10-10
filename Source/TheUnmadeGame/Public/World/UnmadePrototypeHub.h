@@ -17,6 +17,7 @@
 #include "World/UnmadeEchoQuestRules.h"
 #include "World/UnmadeRealmResonanceRules.h"
 #include "Combat/UnmadeRealmGuardianRules.h"
+#include "Combat/UnmadeFinalEncounterRules.h"
 #include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeLaterHazardRules.h"
 #include "TimerManager.h"
@@ -81,6 +82,15 @@ public:
     }
     bool ResolveRealmGuardian(UnmadeCore::Realm Realm,bool bMercy);
     bool TryCalmNearbyGuardian(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    UnmadeCore::FinalAct GetFinalAct() const {return FinalStory.Act();}
+    UnmadeCore::Morning GetNewMorning() const {return FinalStory.World();}
+    int32 GetFinalMemorySeed() const {return FinalStory.MemorySeed();}
+    bool BreakFinalMask();
+    bool BreakFinalCore();
+    bool SettleFinalEcho();
+    bool TryFinalInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool CommitFinalMorning(AUnmadeCharacter* Player,UnmadeCore::Morning Choice);
+    bool WakeFinalEcho();
     int32 GetLaterRealmStage(UnmadeCore::Realm Id) const {return LaterRealm.Stage(Id);}
     int32 GetLaterRealmOutcome(UnmadeCore::Realm Id) const {return LaterRealm.Outcome(Id);}
     int32 GetLaterRealmVisitMask() const {return LaterRealm.Snapshot().visits;}
@@ -139,6 +149,11 @@ private:
     bool bGuardianSaveRejected=false;
     void BuildRealmGuardians();
     void RefreshRealmGuardians();
+    UnmadeCore::FinalJourney FinalStory;
+    UnmadeCore::CommitmentGate FinalCommitGate;
+    bool bFinalSaveRejected=false;
+    void BuildFinalWorld();
+    void RefreshFinalWorld();
     bool bLaterHazardCueVisible[6]={false,false,false,false,false,false};
     void RefreshLaterHazardCues();
     void BuildFrontierAftermath();

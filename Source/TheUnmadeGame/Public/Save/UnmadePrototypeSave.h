@@ -139,6 +139,16 @@ public:
     UPROPERTY(SaveGame)
     TArray<int32> RealmGuardianOutcomes;
 
+    /** Same save, alternate world; never reset the player's equipment or choices. */
+    UPROPERTY(SaveGame)
+    bool bHasFinalEncounterSnapshot=false;
+    UPROPERTY(SaveGame)
+    int32 FinalEncounterStage=0;
+    UPROPERTY(SaveGame)
+    int32 FinalMorningChoice=0;
+    UPROPERTY(SaveGame)
+    int32 FinalMemorySeed=0;
+
     UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;
 
