@@ -157,3 +157,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/realm_guardian_test.cpp -o /tmp/unmade-realm-guardian
           /tmp/unmade-realm-guardian
+
+      - name: Test final boss double reveal, post-boss world and optional rematch
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/final_encounter_test.cpp -o /tmp/unmade-final-encounter
+          /tmp/unmade-final-encounter
