@@ -1,0 +1,324 @@
+{
+  "schema_version": 1,
+  "edition": "2026-10-10",
+  "purpose": "production direction only: does not assert all specified assets or mechanics exist in Unreal",
+  "canonical_order": [
+    "ThreefoldReach",
+    "WidowedRain",
+    "HearthBeneath",
+    "TidalLedger",
+    "SkyBelow",
+    "CinderSpine",
+    "HundredUnlived",
+    "OrchardOfKings",
+    "FirstAbsence"
+  ],
+  "realms": [
+    {
+      "id": "ThreefoldReach",
+      "display": "The Threefold Reach",
+      "signature": "The Unanswered Interval: bell without a last note",
+      "landscape": "Roads stitched through contradictory maps, refugee lanterns and a split-record archive.",
+      "main_question": "Can an unrecorded refuge and an officially documented truth both be real?",
+      "main_verbs": [
+        "Ring the silent bell and mark two observable landmarks",
+        "Carry supplies through the contested neighborhood and speak to local witnesses",
+        "Choose shelter or research testimony with a clear permanent preview"
+      ],
+      "cast": [
+        "Bellwold matron",
+        "Paperhaven tutor",
+        "Crossings refugee witness"
+      ],
+      "mechanism": "Place evidence against the bell sound in Bellwold; compare the absence in Paperhaven without fabricating either account.",
+      "danger": "Moving routes and civic access; neither path is a combat-only choke.",
+      "care": "Preserve public shelter access and lantern use.",
+      "truth": "Make the missing record inspectable without forcefully identifying every protected resident.",
+      "enemy": "Bellwold guardian, existing prototype",
+      "ability": "Witnesscraft identifies firsthand testimony; Living Roads opens earned community paths.",
+      "foreshadow": "Bell silence is later heard in rain, fire and choir; never say Nhal-Vey here.",
+      "return": "A stranger can trace both shelter and archive routes, meeting residents who remember the chosen side.",
+      "held": "The road gains a visible scar through existing public landmarks.",
+      "many": "The same street has two navigable, clearly signposted interpretations.",
+      "assets": [
+        "SM_Reach_BellWithoutClapper",
+        "SM_Reach_RefugeLantern",
+        "NI_Reach_AbsentBellRing",
+        "SEQ_Reach_BellSilence"
+      ],
+      "test": "Choose both paths on separate saves; reload preserves route and individual witness memories."
+    },
+    {
+      "id": "WidowedRain",
+      "display": "Saltwake / The Widowed Rain",
+      "signature": "Missing water as an economic and environmental absence",
+      "landscape": "Dry docks under persistent rain, wet ledgers, hollow ship-roof shelters.",
+      "main_question": "Who owns the proof of a sea that no longer exists?",
+      "main_verbs": [
+        "Collect a shoreline impression from a physical pier and a contradictory wet map",
+        "Avoid a telegraphed tidal storm pulse and use an elevated safe route",
+        "Commit to public rain access or a protected account of loss"
+      ],
+      "cast": [
+        "Sella the drowned navigator",
+        "Thenn the rain keeper",
+        "Harrow the harbor warden"
+      ],
+      "mechanism": "Weather counter, rain sluice and hand-operated storm break; unique audio pulse warns before damage.",
+      "danger": "Rain-lane pulses, with legible blue warning and a reliable dry shelter.",
+      "care": "Shelter ferry users without requiring old ownership papers.",
+      "truth": "Preserve the ledger and collateral history without declaring private survivors debtors.",
+      "enemy": "Rainward tide hazard; local story guardian remains optional",
+      "ability": "Cartography distinguishes mapped and personally verified crossing; Tomorrow Debt offers risky short-term action.",
+      "foreshadow": "A missing tide is dated like a loan due before birth.",
+      "return": "Storm records update to acknowledge actual Rainward public choice; no generic all-knowing NPC reaction.",
+      "held": "The missing coast retains the last honest tide mark.",
+      "many": "Two differently timed shoreline marks remain readable together.",
+      "assets": [
+        "SM_Rain_DryPier",
+        "SM_Rain_TideCounter",
+        "NS_Rain_WarningPulse",
+        "SFX_Rain_BellNoBuoy"
+      ],
+      "test": "A player can walk the storm safe line, save/reload and still inspect both evidence perspectives."
+    },
+    {
+      "id": "HearthBeneath",
+      "display": "Cinderhold / The Hearth Beneath",
+      "signature": "An impossible sun's heat and shared physical obligations",
+      "landscape": "Inward mountain city with public kilns, soot families and thermal canal controls.",
+      "main_question": "Who pays to keep an unowned flame alive?",
+      "main_verbs": [
+        "Trace a heat canal from the common kiln to a cold household",
+        "Manually divert a heat pulse through an insulated channel",
+        "Balance immediate warmth for children against truth about inherited fuel costs"
+      ],
+      "cast": [
+        "Tarin the hearth reader",
+        "Rheva the ember warden",
+        "Ovenna the warmth keeper"
+      ],
+      "mechanism": "Two-channel furnace valve and heat-shutter pair; show actual pipe change and temperature field.",
+      "danger": "Timed heat pulses with stable visual rim and cooled recovery window.",
+      "care": "Keep unregistered homes warm without demanding signatures.",
+      "truth": "Expose the true provenance of fuel and require a public repair plan.",
+      "enemy": "Kiln-hazard encounter, not an arbitrary fire monster",
+      "ability": "Oathbinding ties explicit promises to a measurable heat benefit; Legacy Forging records a genuine deed.",
+      "foreshadow": "Flames lack exactly the same note missing from the Reach's bell.",
+      "return": "Citizens relight hearths based on the route player actually maintained.",
+      "held": "Two shadows belong to one common flame.",
+      "many": "Twin embers suggest coexisting origins without doubling resources.",
+      "assets": [
+        "SM_Hearth_FurnaceValve",
+        "SM_Hearth_HeatPipe",
+        "NS_Hearth_HeatTelegraph",
+        "SFX_Hearth_BreathingKiln"
+      ],
+      "test": "Valve visibly directs heat, hazard has readable counterplay, old community decision survives."
+    },
+    {
+      "id": "TidalLedger",
+      "display": "Drevlach / The Owed Estuary",
+      "signature": "Contracts dated before their signers' birth",
+      "landscape": "Tide clocks in stranded boats, ferry passages and flooded civic ledgers.",
+      "main_question": "Who can pledge a tomorrow for someone not yet born?",
+      "main_verbs": [
+        "Examine ferry receipt and collateral tide impressions on opposite routes",
+        "Work a debt latch to open a permanent physical care or truth bridge",
+        "Return for an Echo investigation and optional two-rite observatory"
+      ],
+      "cast": [
+        "Veynu of the Ninth Due",
+        "Orshel Drywake",
+        "Ezzun Aftermark"
+      ],
+      "mechanism": "Source tags Tidal.Trial.FerryReceipt, Tidal.Trial.CollateralTide, Tidal.Trial.DebtLatch.",
+      "danger": "Ledger tide lanes with visible warning and cover; don't demand repeated debt farming.",
+      "care": "Make a child-safe ferry that never charges future passengers.",
+      "truth": "Publish verifiable fraud without forcibly identifying protected borrowers.",
+      "enemy": "Collector of Unborn Days, optional witnessed guardian",
+      "ability": "Tomorrow Debt + Oathbinding opens calendar observatory only after completed Echo.",
+      "foreshadow": "The ledger implies the world has been taking loans against nonexistent histories.",
+      "return": "Local residents remember ferry or archive outcomes, guardian mercy or defeat, and observatory archive.",
+      "held": "The estuary's promises are carved into visible stable dates.",
+      "many": "Two future and past receipts are presented side by side, not merged into one.",
+      "assets": [
+        "SM_Drevlach_DebtLatch",
+        "SM_Drevlach_FerryGate",
+        "BP_Drevlach_ReceiptEvidence",
+        "SEQ_Drevlach_ChildsafeCrossing"
+      ],
+      "test": "First-quest two routes, aftermath, Echo, optional guardian, optional dual-rite door independently survive reload."
+    },
+    {
+      "id": "SkyBelow",
+      "display": "Orravane / The Inverted Choir",
+      "signature": "Songs physically holding inverted architecture aloft",
+      "landscape": "Hanging neighborhoods and two load-bearing musical support scores.",
+      "main_question": "Can you give silenced people a voice without dropping the homes they support?",
+      "main_verbs": [
+        "Observe the actual support-counterweight under a precarious building",
+        "Tune the fork to a recorded note while keeping an alternate stable load",
+        "Choose shared meter or public excluded chorus, and see the hanging path respond"
+      ],
+      "cast": [
+        "Yllesh Underchord",
+        "Vhaurn Counterweight",
+        "Orru of the Removed Rest"
+      ],
+      "mechanism": "Sky.Trial.Counterweight, Sky.Trial.ForgottenChorus and Sky.Trial.TuningFork.",
+      "danger": "Inverted gravity stress pulse with anchored safe walkway, horizon remains stable in accessibility mode.",
+      "care": "Stabilize homes through a voluntary shared support rhythm.",
+      "truth": "Recover forbidden singers' names without forcing their return to compulsory work.",
+      "enemy": "Missing Chorister, optional guardian with audible pre-strike cadence",
+      "ability": "Unwrite Law + Paradox Convergence opens paired supporting-harmony observatory.",
+      "foreshadow": "The exact missing musical rest is identical to the Unanswered Interval.",
+      "return": "A household's safety and a dissenting score remain independently inspectable.",
+      "held": "All public music includes the erased staff line.",
+      "many": "Two supporting harmonies can be seen without doubling the actual load.",
+      "assets": [
+        "SM_Orravane_HangingStreet",
+        "BP_Orravane_TuningFork",
+        "NS_Orravane_GravityCue",
+        "SFX_Orravane_ChoirSupport"
+      ],
+      "test": "Play both notes without instant collision, examine witnesses and verify chosen physical route remains."
+    },
+    {
+      "id": "CinderSpine",
+      "display": "Vathless / The Yesterday Quarry",
+      "signature": "Erased families compressed into history-bearing stone",
+      "landscape": "Quarry seams, ancestor mortar, rail braces and fossil family portraits.",
+      "main_question": "Can the city keep its homes without treating an ancestor as quarry material?",
+      "main_verbs": [
+        "Read alternate ancestral inscriptions from two sides of a geological cut",
+        "Place a seam clamp or named brace that changes collision-supported access",
+        "Test a dangerous rock lane after its visible fracture warning"
+      ],
+      "cast": [
+        "Ghraet Last-Seam",
+        "Torrun-Mortar",
+        "Issil Againborn"
+      ],
+      "mechanism": "Bones.Trial.SafeWedge, Bones.Trial.LineageStone and Bones.Trial.SeamClamp.",
+      "danger": "Pressure seam collapse with widening crack telegraph and a safe sidestep.",
+      "care": "Preserve accessible braced route and shelter without another erased generation.",
+      "truth": "Display a public family record of the quarry's origin with informed consent.",
+      "enemy": "Mortar Ancestor, optional guardian",
+      "ability": "Legacy Forging + Understanding Bosses opens named-provenance observatory.",
+      "foreshadow": "The name sealed in mortar is not simply old: it belongs to an event removed from recorded chronology.",
+      "return": "Repair homes using explicitly sourced materials while keeping the earlier choice visible.",
+      "held": "Stone names cut from history remain engraved and legible.",
+      "many": "Old and living genealogies appear on overlapping but separable walls.",
+      "assets": [
+        "SM_Vathless_SeamClamp",
+        "SM_Vathless_AncestorWall",
+        "NS_Vathless_CrackCue",
+        "SFX_Vathless_StoneGroan"
+      ],
+      "test": "Source and materials must remain causal; do not pretend a character can be restored by clicking a monument."
+    },
+    {
+      "id": "HundredUnlived",
+      "display": "Eillun / The Unclaimed City",
+      "signature": "People without official beginnings whose consent matters",
+      "landscape": "Doorways without census numbers, shelters behind name latches and voluntary public thresholds.",
+      "main_question": "Can someone exist without owing their identity to the city?",
+      "main_verbs": [
+        "Open a private shelter without entering a guest's name",
+        "Examine an official recognition board and a hidden shelter without merging their records",
+        "Work an identity latch in the ethical direction supported by the witnesses"
+      ],
+      "cast": [
+        "Nhel of No-Entry",
+        "Auvet Keep-Quiet",
+        "Veysha Never-Signed"
+      ],
+      "mechanism": "Unlived.Trial.HiddenShelter, Unlived.Trial.ConsentBoard, Unlived.Trial.NameLatch.",
+      "danger": "Name-scan lane warns before an identity pulse; silence and physical shielding can avoid it.",
+      "care": "Shelter stays reachable without public identity disclosure.",
+      "truth": "Public recognition is opt-in and revocable, not a forced population dump.",
+      "enemy": "Numberless Examiner, optional guardian",
+      "ability": "Witnesscraft + Borrowed Lives opens consent-bounded testimony observatory.",
+      "foreshadow": "Unregistered residents prove that absence and nonexistence are not the same.",
+      "return": "A previously hidden resident chooses whether to speak; never auto-publish a name.",
+      "held": "Quiet houses remain visibly legitimate civic destinations.",
+      "many": "Private refuge and public threshold coexist with voluntary traversal.",
+      "assets": [
+        "SM_Eillun_NameLatch",
+        "BP_Eillun_ConsentPrompt",
+        "SM_Eillun_ShelterDoor",
+        "SFX_Eillun_UnsentLetter"
+      ],
+      "test": "No gameplay branch can reveal an individual's identity without its explicit recorded consent."
+    },
+    {
+      "id": "OrchardOfKings",
+      "display": "Tharniv / The Untitled Orchard",
+      "signature": "Unwritten laws growing from living roots",
+      "landscape": "Root courts, communal fruit stores, roads grafted from consent and a physically empty throne.",
+      "main_question": "How does a court keep enforcing a law nobody approved?",
+      "main_verbs": [
+        "Compare a shared graft to evidence of an empty coronation",
+        "Turn a root-channel control to build one permanent walkable civic road",
+        "Question the untitled court about a legal mandate with no author"
+      ],
+      "cast": [
+        "Serriv Crownless",
+        "Imro Root-Vote",
+        "Eliun No-Coronation"
+      ],
+      "mechanism": "Orchard.Trial.SharedGraft, Orchard.Trial.EmptyCoronation, Orchard.Trial.RootChannel.",
+      "danger": "Roots point at the lane before a timed strike; alternate public path offers counterplay.",
+      "care": "Share the road and harvest without an inherited crown.",
+      "truth": "Expose the unratified court law while preserving living people's right to dissent.",
+      "enemy": "Root Bailiff, optional guardian",
+      "ability": "Living Roads + Oathbinding opens public arboretum archives.",
+      "foreshadow": "The first legal rule was never signed; an answering mechanism continued enforcing it anyway.",
+      "return": "Roots remember elected access and old disputes instead of being magically healed.",
+      "held": "Public harvest shares its path with a visibly empty crown.",
+      "many": "Two readable competing laws remain open to civil challenge.",
+      "assets": [
+        "SM_Tharniv_RootChannel",
+        "SM_Tharniv_EmptyCrown",
+        "NS_Tharniv_RootTell",
+        "BP_Tharniv_GraftedRoad"
+      ],
+      "test": "Change root traversal collision after choice, preserve archive and access, never create an invisible monarch."
+    },
+    {
+      "id": "FirstAbsence",
+      "display": "Auvren / The Before-Place",
+      "signature": "Two truthful beginnings at one usable threshold",
+      "landscape": "Doorways without foundations, contradictory source maps, stable return line and northern final arena.",
+      "main_question": "Why did the world make a consciousness to eat unanswered questions?",
+      "main_verbs": [
+        "Read both stable-memory and contradictory-map evidence before choosing an origin anchor",
+        "Open one real threshold with stable fallback travel",
+        "Confront Nhal-Vey's mask, unveiled form, and deliberate future-choice controls"
+      ],
+      "cast": [
+        "Orriv Before-Arrival",
+        "Thae of the Near Door",
+        "Veilune Both-Mornings"
+      ],
+      "mechanism": "Absence.Trial.StableMemory, Absence.Trial.ContradictoryMap, Absence.Trial.OriginAnchor.",
+      "danger": "Origin distortions, safe marked return; boss has four directional attacks with real windups.",
+      "care": "Reliable passage exists without erasing other origins.",
+      "truth": "Both maps remain inspectable without one mandatory universal history.",
+      "enemy": "Nhal-Vey, two required boss forms, then optional post-ending echo; Unfinished Witness optional guardian",
+      "ability": "Unwrite Law + Cartography opens optional safe-mapping observatory; not needed to finish.",
+      "foreshadow": "Reveal that Nhal-Vey suppresses questions; don't reveal false-victory twist during ordinary traversal.",
+      "return": "Held Morning uses bell/names echo attacks; Many Mornings uses horizon/counterfactual echoes.",
+      "held": "Auvren's threshold keeps one visibly reliable exit after victory.",
+      "many": "Two contradictory dawns appear while a stable exit remains.",
+      "assets": [
+        "SEQ_Auvren_FalseVictory",
+        "SEQ_Auvren_WorldAnswer",
+        "BP_NhalVey_BossPhases",
+        "SM_Auvren_ReturnThreshold"
+      ],
+      "test": "Main story reaches boss without sidequest grind; save preserves identity and all choices through both endings and optional rematch."
+    }
+  ]
+}
