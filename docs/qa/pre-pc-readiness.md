@@ -58,3 +58,6 @@ The six further realms each expose a bounded first-arc danger and a safe lane, w
 
 ## Optional mastered ability observatories (2026-10-10)
 **SOURCE COMPLETE, NATIVE TESTED, ENGINE UNVERIFIED:** Six post-Echo dual-rite observatories use all ten original abilities through real, persisted casts, with separate physical bridge/island and testimony archive, saved deadline and corruption refusal. The source records no spontaneous teleportation, duplicate spell credit or repeatable loot. **Requires Windows UE:** UHT/compile, actual collision, camera/gamepad and audio/FX tests, spell-cooldown fairness and combat effects after crossing. See `docs/qa/realm-resonance-observatories.md`.
+
+## Six guardian trials (2026-10-10)
+**SOURCE WIRED / NATIVE CI GATE:** Six optional, distinct telegraphed enemy guardians are created only after local Echo completion, with a saved two-press nonviolent pact or ordinary combat defeat. Source NPCs register local consequences. **ENGINE REQUIRED:** Unreal Header Tool and Win64 editor compilation, real combat hurtboxes, navigation, timed audio and VFX, individual creature rigs, gamepad accessibility, save fault injection and full optionality validation. These are not finished boss fights.
