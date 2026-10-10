@@ -117,3 +117,6 @@ The graybox source now connects the telegraphed 12-second frontier pulse to worl
 The PC handoff is specified as a repeatable preflight → native Unreal Editor build → actual automation sequence that refuses failures, produces attempt logs, and never provisions a paid machine. Passing GitHub C++17 tests does **not** mean this handoff succeeds or that authored levels and gameplay cinematics are complete.
 
 An engine automation test `Unmade.World.FrontierHazardAndCheckpoint` mirrors the new native hazard/guard/revival rules. It is source-prepared for Unreal, **not executed** without an engine host.
+
+## Identity and the shared impossible origin
+The creator may customize eight independent profile dimensions: body frame, face, hair, voice, skin palette, reality mark, gait and personal calling; names permit validated UTF-8, not only conventional English forms. None can replace the common mystery of `Unmade.Origin.Impossible`, which all protagonists share. Choices are to be realized visually and acoustically in Unreal; source data alone are not finished character art or full UI.
