@@ -321,3 +321,10 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - `AUnmadeRealmGuardian` bypasses the generic instantaneous enemy attack and uses a deterministic visible windup model with normal combat component, block/line-of-sight and Fold stagger. The existing Understanding Bosses rite can now stagger nearby guardians instead of silently pacifying them.
 - The player may choose a two-interaction mercy pact with authored consequence preview, or defeat the guardian in combat. A six-element optional saved outcome stores these mutually exclusive, permanent decisions; corruption and write failure roll back changes without farming.
 - Actual local resident reactions are wired; there is no cross-map omniscient NPC notification. These are prototype graybox creatures with source tests and Unreal automation source, **not** six textured, animated, engine-playtested bosses.
+
+## 2026-10-10 — illustrated Volume VIII release verified
+- Prepared a **73-page** editable Word and matching rendered/visually reviewed PDF, retaining 43 embedded concept illustrations and all 30 prior standalone concept-art assets.
+- New sections detail every dual-rite observatory, all six guardians' historical stakes and two outcomes, first-PC engine acceptance and a repeatable eight-minute smoke demonstration.
+- Built and checksum-verified a **38-file ZIP** with Word, PDF, art, quality matrix, source provenance, release status and SHA-256 manifest.
+- Source roots: merged PR #13 `72792b910f4ef661307c1a62c77814ba3df8e1db`; merged PR #14 `1e7da798ce1acb3a72aecb6258a27b722ece38b2`. Both ran green post-merge `main` CI; this does not prove a Windows Unreal Editor or physical gameplay test.
+- The binary artifact is distributed in the conversation, not committed to the repository, and art remains speculative production concept work.

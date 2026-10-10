@@ -1,3 +1,9 @@
+## Volume VIII illustrated canon — The World Learns to Answer
+
+The latest illustrated development edition is **73-page Volume VIII**, preserving **43 embedded concept illustrations** and the existing **30-artwork atlas**. A checksum-verified **38-file ZIP** includes the editable DOCX, rendered/visually inspected PDF, art, production quality matrix, source appendix and release manifest. New chapters document all six optional dual-rite observatories, all six optional guardians with explicit mercy and combat paths, local witness limitations, and a deterministic eight-minute first-PC demonstration and acceptance procedure.
+
+Source baseline: [merged observatories PR #13](https://github.com/matthagersenior/TheUnmadeGame/pull/13) (`72792b910f4ef661307c1a62c77814ba3df8e1db`) and [merged guardian PR #14](https://github.com/matthagersenior/TheUnmadeGame/pull/14) (`1e7da798ce1acb3a72aecb6258a27b722ece38b2`). Both passed post-merge GitHub native/static CI. The illustrated binaries are **conversation downloads, not checked-in GitHub gameplay assets or Unreal screenshots**.
+
 ## Six optional ethical guardian encounters (October 10)
 
 After completing an outer realm's witnessed Echo story, a unique guardian with a learnable, telegraphed strike is source-spawned near the optional observatory. The player can either combat the guardian using normal health, guarding, Fold and an Understanding Bosses stagger, or use **two deliberate interactions** to make a grounded nonviolent pact. Both endings are saved independently, do not farm rewards and are discussed only by residents of that realm. [Full guardian histories](docs/design/six-realm-guardians.md) and [Win64 acceptance checklist](docs/qa/six-realm-guardians.md). Source tests pass only when CI runs; **the Unreal Editor and final encounter assets remain unverified**.
