@@ -256,3 +256,6 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - Optional backwards-compatible schema-1 SaveGame fields store an atomic snapshot and preserve previous choice states/gear/NPC memories. Corrupt identity data are never silently overwritten by the player profile editor.
 - Blueprint-callable feature/name setters and a temporary character silhouette/prototype C-key profile viewer are source-wired.
 - Native C++ tests and GitHub source contracts cover validity and failure cases; Unreal Editor compilation, a complete character-creation UI, full meshes/hair, animations and audio remain **unverified and incomplete**.
+
+## 2026-10-10 engineering readiness ledger
+The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unreal source-only wiring, PC-required verification and authored-content gaps. It explicitly identifies source work still possible before a PC and disallows claims that a purchased PC alone would finish the game.

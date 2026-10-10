@@ -38,6 +38,10 @@ Six Confluence chambers require mastered ability combinations, a timed dual-cast
 
 See the [Tenfold quest/lore bible](docs/design/2026-10-09-tenfold-rites-quest-bible.md) and [engine QA checklist](docs/qa/tenfold-prototype-qa.md). **No Unreal compilation, animation, visual HUD, full quest production, complete nine-realm world, difficulty benchmark or playtime validation has occurred.** All critical logic works without AI.
 
+## Pre-PC readiness and remaining production gaps
+
+The [maintained readiness ledger](docs/qa/pre-pc-readiness.md) distinguishes what is verified in offline source checks from Unreal-only compilation, art and real gameplay acceptance. It also tracks source work that can be done before acquiring a PC; **an actual finished RPG is not simply waiting for hardware**.
+
 ## First-PC handoff and pre-PC source preparation (October 10, 2026)
 
 Two new deterministic frontier dangers are wired in source: Saltwake's rain surge (16 base damage) and Cinderhold's heat pulse (22 base damage), each with a calm / visible warning / impact cadence. They affect only the marked approach while its mechanism is unresolved. Guard reduces injury, the player can retreat to a safe side route, and an operated mechanism stops later pulses. A defeated player returns after four seconds to the current realm's safe entry at 75% health, without resetting story or NPC memories. **No engine runtime, hazard balance, visuals or controller feel has been verified.**
