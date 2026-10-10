@@ -110,3 +110,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/realm_aftermath_test.cpp -o /tmp/unmade-realm-aftermath
           /tmp/unmade-realm-aftermath
+
+      - name: Test frontier hazard telegraphs, safe routes and remedy
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/frontier_hazard_test.cpp -o /tmp/unmade-frontier-hazards
+          /tmp/unmade-frontier-hazards
