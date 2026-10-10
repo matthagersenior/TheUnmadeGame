@@ -1126,18 +1126,69 @@ void AUnmadeCharacter::BeginPlay()
     ReconcileEarnedRewards();
 }
 
+
+void AUnmadeCharacter::RecoverAtSafeCheckpoint()
+{
+    if(!GetWorld() || !Combat->IsDefeated() ||
+       GetWorld()->GetTimeSeconds()<DefeatRecordedAt+4.0)return;
+    // Safe start platforms exist in the Threefold Reach and each real frontier.
+    // No Story/Inventory/Memory snapshot is reset or rewritten on death.
+    const double Y=GetActorLocation().Y;
+    const FVector Safe=(Y<-45000.0)?FVector(0,-50000,135)
+        :(Y>45000.0)?FVector(0,50000,135):FVector(0,0,135);
+    if(!SetActorLocation(Safe,false,nullptr,ETeleportType::TeleportPhysics))
+        return;
+    if(!Combat->ReviveAtCheckpoint())return;
+    GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+    bPlayerDefeatHandled=false;
+    DefeatRecordedAt=-1.0;
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Green,
+        TEXT("RETURNED TO SAFETY: wounds stabilized, but your choices and witnesses remain."));
+}
+
 void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     FractureModel.Recover(static_cast<double>(DeltaSeconds) *
         (IsValid(Equipment) ? Equipment->StrainRecoveryMultiplier() : 1.0));
+    // The world's clock drives a readable three-stage pulse. A guard reduces
+    // damage through the combat rules; moving out of the marked lane avoids it.
+    if(GetWorld() && !Combat->IsDefeated())
+    {
+        for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        {
+            const auto Hazard=Hub->GetNearbyFrontierHazard(GetActorLocation());
+            if(Hazard.pulseId==0)break;
+            const int32 Index=GetActorLocation().Y<0?0:1;
+            if(Hazard.phase==UnmadeCore::FrontierHazardPhase::Warning &&
+               Hazard.pulseId!=LastHazardWarningPulse[Index])
+            {
+                LastHazardWarningPulse[Index]=Hazard.pulseId;
+                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Yellow,
+                    FString::Printf(TEXT("WARNING: storm/heat surge at world-second %.1f. Guard or leave the marked lane."),
+                        Hub->GetWorldClockSeconds()));
+            }
+            if(Hazard.phase==UnmadeCore::FrontierHazardPhase::Impact &&
+               Hazard.pulseId!=LastHazardImpactPulse[Index])
+            {
+                LastHazardImpactPulse[Index]=Hazard.pulseId;
+                if(Combat->ReceiveHazardPulse(
+                    static_cast<uint64>(0xF0100+Index),Hazard.pulseId,Hazard.damage) && GEngine)
+                    GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Orange,
+                        TEXT("FRONTIER SURGE: you were exposed. Guard next pulse or operate the control."));
+            }
+            break;
+        }
+    }
     if (Combat->IsDefeated() && !bPlayerDefeatHandled)
     {
-        bPlayerDefeatHandled = true;
+        bPlayerDefeatHandled=true;
+        DefeatRecordedAt=GetWorld()?GetWorld()->GetTimeSeconds():0.0;
         GetCharacterMovement()->DisableMovement();
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 12.f, FColor::Red,
-            TEXT("You fell in the prototype encounter. Checkpoint/respawn is not implemented yet."));
+        if (GEngine) GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,
+            TEXT("YOU FELL: returning to this realm's safe entry in four seconds."));
     }
+    if(bPlayerDefeatHandled)RecoverAtSafeCheckpoint();
     ApplyFractureVisuals();
 }
 

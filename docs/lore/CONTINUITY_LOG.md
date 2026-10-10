@@ -22,3 +22,4 @@ Every substantial gameplay addition needs a companion canon update and a regener
 ## 2026-10-10 — PC-readiness source pass (hazard and fail-safe recovery)
 - Added a world-clock-anchored, location-bounded rain/heat pulse domain; hazard damage and warning periods are deterministic, avoid safe settlement routes and end when the corresponding mechanism is operated. Windows Unreal runtime still unverified.
 - Added checkpoint revival to prevent permanent loss of movement on player defeat. Story/world saves are deliberately not reset on recovery; game feel and performance remain engine/creator-gated.
+- Wired visible non-colliding warning strips into Saltwake and Cinderhold, world-clock hazard sampling into the player, guarding counterplay, deduplicated environmental hits and safe checkpoint respawn after four seconds. Gameplay verification awaits Unreal Editor.\n
