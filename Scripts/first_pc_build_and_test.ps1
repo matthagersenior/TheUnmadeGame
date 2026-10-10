@@ -47,6 +47,10 @@ try {
     & python (Join-Path $PSScriptRoot "validate_directors_cut.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "directors-cinema-validation.log")
     if($LASTEXITCODE -ne 0){throw "DIRECTOR_CINEMATIC_INDEX_INVALID"}
+    Write-Host "Validating canonical transmedia lore, actor identities and expansion callbacks."
+    & python (Join-Path $PSScriptRoot "validate_transmedia_storyworld.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "transmedia-continuity-validation.log")
+    if($LASTEXITCODE -ne 0){throw "TRANSMEDIA_LORE_DRIFT"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")

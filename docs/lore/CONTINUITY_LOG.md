@@ -144,3 +144,10 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Authored a separate 56-scene, seven-chapter, 12:15.03 spoiler-inclusive director cut to explain nine settlements, 82 individual source resident identities, ten disciplines, optional lived-world and Echo content, Nhal-Vey's false first victory, both postboss worlds and voluntary echo.
 - Validated rendered MP4 has 48 kHz two-channel AAC for the entire 735.03-second runtime, with audible temporary synthesized narration and scratch music; the source has a deterministic scope index plus a CLI gate that verifies real delivered media when supplied. Media, subtitles and stem downloads remain conversation production artifacts, **not checked-in Unreal assets or playable engine proof**.
 - Source documentation and audio QA updated. The legacy illustrated Volume IX book/art ZIP has not automatically been regenerated. This new editorial edition remains conceptual until actor, animation, professional voice/music and Unreal Sequencer production.
+
+
+## 2026-10-10 — Volume X: The Unanswered Atlas / primary storyworld canon
+- Added a long-form literary Volume X with 11 recognizable canonical settlements, 13 source-registered leads, 9 deliberately open mysteries, 13 multi-use callbacks, original dramatic scenes, a 6-episode seasonal outline and 4 independent proposed expansion narratives.
+- Added Authoring/transmedia_storyworld_v1.json and strict actor/city/mystery/callback validity gates. All original realm IDs, 82 resident identities, story save gates, customizable protagonist and two valid postboss morning variants are preserved.
+- Distinguishes authored objective/source facts from attributed rumors, disputed recollections, open mysteries and adaptation-only staging. Mystery answers need an explicit later canon update; no convenient retcon is permitted.
+- Updated editorial release policy, CI and Windows preflight. No previous illustrated DOCX/PDF was automatically regenerated, and no literary scene is claimed to be a finished Unreal asset or completed novel/series.
