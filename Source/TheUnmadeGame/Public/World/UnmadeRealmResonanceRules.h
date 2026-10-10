@@ -71,7 +71,7 @@ public:
                s.firstCast[i]<0 || s.firstCast[i]>2 ||
                !std::isfinite(s.deadline[i]) || s.deadline[i]<0 ||
                (s.stage[i]==0 && (s.firstCast[i]!=0 || s.deadline[i]!=0)) ||
-               (s.stage[i]==1 && (s.firstCast[i]==0 || s.deadline[i]<=0)) ||
+               (s.stage[i]==1 && (s.firstCast[i]==0 || s.deadline[i]<WindowSeconds)) ||
                (s.stage[i]==2 && (s.firstCast[i]==0 || s.deadline[i]!=0)))return false;
         }
         state_=s;return true;
@@ -90,6 +90,8 @@ public:
         const int cast=spell==spec.first?1:spell==spec.second?2:0;
         if(cast==0)return ResonanceResult::WrongAbility;
         if(state_.stage[idx]==2)return ResonanceResult::AlreadyOpened;
+        if(state_.stage[idx]==1 && worldSeconds<state_.deadline[idx]-WindowSeconds)
+            return ResonanceResult::ClockInvalid;
         if(state_.stage[idx]==1 && worldSeconds<=state_.deadline[idx]) {
             if(cast==state_.firstCast[idx])return ResonanceResult::AlreadyRecorded;
             state_.stage[idx]=2;state_.deadline[idx]=0;
