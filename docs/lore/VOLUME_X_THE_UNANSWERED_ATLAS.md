@@ -783,3 +783,60 @@ No automatically awarded quest text chooses among these hypotheses. They are pro
 - **Illustrated-volume release state:** this Markdown primary canon is updated in the repository. Existing complete illustrated DOCX/PDF/ZIP are dated releases, not automatically reconstructed by this source change.
 
 For a cinematic adaptation, begin not with the missing bell but with an ordinary ink-stained hand touching a blank metal plate. End with a public board or a private cord, and the same nail rattling at the same unheard moment. This is the universe's grammar: *a changed answer does not necessarily change the question*.
+
+---
+
+## 18. The Living Evidence — The Second Truth Is That Someone Told You
+*Volume X playable / adaptation continuity chapter · 10 October 2026*
+
+The phenomenon that most unsettles Sevrin is not the archive's impossible date. It is a perfectly ordinary sentence spoken by a neighbor: **“I know because someone told me.”** The neighbor may be sincere, mistaken, courageous, afraid, or protecting somebody. The sentence is evidence of a conversation, not evidence that the conversation's account was true.
+
+### 18.1 Three objects; three minds
+
+**Hessa / CALL.01 — The Cup.** A refugee under her protection may have chipped the cup before being removed from public records. Hessa *suspects* this and has excellent reasons to distrust any clerk eager to publish the theory. Her private cost: protecting unnamed guests can also leave an exploited household with no paper proof of its existence. Never make the player discover a protected guest's identity as a free collectible reward.
+
+**Sevrin / CALL.03 — The Reverse Seal.** Sevrin believes the unmarked face records a deliberate consent limit. He can demonstrate how a record can be amended without naming its vulnerable subject. But its contradictory date might precede the seal press's own manufacture. His private cost: delaying a correction can become a form of institutional self-protection; he does not always notice when he crosses that line.
+
+**Orrel / CALL.04 — The Inkless Nail.** Orrel suspects the disputed third road was taxed before its route was agreed. He remembers carrying wood beside surveyors who disagreed over where the road lay. Three surveys can all be physically present and still contradict one another. His private cost: he owes wages to builders the city denies it employed.
+
+A player who reads Hessa's cup does **not** automatically learn Sevrin's account. An accessible notebook has slots for only *firsthand physically inspected* relics. On returning after a legitimate local civic decision, the same object may be witnessed again under a different interpretation; that is a change in the available account, not a retroactive rewrite of the first memory.
+
+### 18.2 The map of knowledge is not the map of the world
+
+The evidence notebook is a record **of how the player came to know**, not a canonical verdict tree. It may show the author's claim and the best known objection. Claims must remain attributed to Hessa, Sevrin and Orrel, not to “THE UNIVERSE.” The objective facts are the physical objects, the player's authenticated inspections, saved civic outcomes and the private publication decision. All deeper causal explanations remain OPEN.
+
+A found object has three stages:
+
+1. **Hidden:** Until the player physically visits and inspects the scene, the object's identity, theory and location-specific objection cannot appear in their notebook.
+2. **Personally observed:** The initial text, named author and challenge become visible; neither an NPC's unexplained guess nor a stale memory substitutes for a visit.
+3. **Observed again:** After a valid local choice changes its public meaning, a return interaction preserves both the earlier state and the new reading. This is not proof that one was a lie.
+
+The full cross-city comparison is unlocked only by three personal observations and one changed revisit, regardless of the order in which the player visits. An inaccessible city does not automatically grant clues. A future localization must preserve the explicit markers for *speaker, hearsay and firsthand evidence*.
+
+### 18.3 The people do not have global quest-state vision
+
+When the player publishes the redacted docket, an NPC who physically sees it go up can say:
+
+> “I saw the redacted docket posted. It names no guest; I worry who will search for the people it does not name.”
+
+That resident may become concerned even if the player's intention was benign. If a second resident hears that account from the first in person, they may say:
+
+> “Someone told me a redacted docket was posted. I have not seen it and cannot confirm their explanation.”
+
+They must name their source rather than pretending they stood at the Crossings. The second statement is not an eyewitness account, cannot be propagated again as one, and cannot be used to make a final quest judgment. The same distinction governs the Sheltered Thread's physical refuge cord.
+
+**Rules of knowledge propagation:** An on-site act emits a *distinct* source event for sheltered versus public response; real local line of sight determines which residents directly observe it. An existing spatial conversation loop passes an eyewitness account to a nearby listener as **rumor** with a stable speaker ID. No absent resident, unseen distant city, generic AI output or global story flag confers the event to every NPC. Player dialogue, trust and fear may respond to the event **only if that resident has it in personal memory**.
+
+**Limitations of today's implementation:** The graybox supports a read-only F9 notebook and Blueprint-returned text, source-limited individual dialogue and local one-hop memory propagation. It does not yet have a sophisticated evidence-wall interface, an actual delivery caravan traveling across realms, voice-acted testimony, or a next-morning scene that stages all of the affected characters. Those require later implemented releases.
+
+### 18.4 A missing line at the end of a conversation
+
+In a possible later scene, Kesta brings a folded docket to Hessa. Hessa notices its date before she recognizes the ink. Kesta says she heard Orrel saw the paper posted; her words deliberately stop short of claiming that **she** stood at the nail. Hessa cannot answer whether the date was wrong. She only asks how Kesta knows the person who signed it would consent to the record.
+
+This scene is a **future dramatic beat**, not automatically present in NPC memory or playable Unreal staging. The writer may make Kesta mistaken or late, but may not secretly transform her carried hearsay into eyewitness truth. A television adaptation can dramatize the journey. A game expansion can make the player physically escort the folded testimony; if the caravan is attacked, the knowledge must be delayed rather than magically delivered.
+
+### 18.5 Safeguards for the larger franchise
+
+The Living Evidence is not a hidden morality score, a false simulation of deep AGI, or a replacement for authored characters. It is a mechanical promise: **the world reacts to what its people could actually know**. The nine realms, eleven distinctive settlements, 82 stable residents, ten reality disciplines, branching main campaign, Nhal-Vey's false victory and both postboss mornings remain the same canon. Writers may ask new questions without forcing the answer to the original impossible interval.
+
+**Source status:** implemented in portable C++17 domain, Unreal C++ source readout/F9 binding, observed/heard NPC dialogue and memory reactions, tests and CI. **Unverified:** real Windows UE5 Editor/PIE compilation, full interface, character performances, scene audiovisual design, cross-realm mail routes and complete narrative aftermath. The accompanying cumulative illustrated Bible remains a dated separately rebuilt publication.
