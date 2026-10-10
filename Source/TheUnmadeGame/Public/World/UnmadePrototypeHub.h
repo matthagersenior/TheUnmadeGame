@@ -47,6 +47,7 @@ public:
     bool TryResidentVillageTask(FName ResidentId, bool& bCompleted);
     void TryFactionConversation(FName ResidentId);
     bool ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome);
+    bool GetNearbyCommitPreview(int32 Choice,FName& Scope,FString& Warning) const;
     bool TryTravelFrontier(AUnmadeCharacter* Player);
     bool InspectFrontierClue(AUnmadeCharacter* Player);
     void TryFrontierConversation(FName ResidentId);

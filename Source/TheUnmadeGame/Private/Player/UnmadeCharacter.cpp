@@ -476,6 +476,25 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
     if(!GetWorld())return;
     for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
+        FName Scope=NAME_None;FString Consequence;
+        if(!Hub->GetNearbyCommitPreview(static_cast<int32>(Ending),Scope,Consequence))
+        {
+            CommitmentGate.Cancel();
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Yellow,
+                TEXT("No matching final witness and evidence nearby for this outcome."));
+            break;
+        }
+        const FString ScopeValue=Scope.ToString();
+        const auto Attempt=CommitmentGate.Attempt(
+            std::string(TCHAR_TO_UTF8(*ScopeValue)),static_cast<int32>(Ending),
+            GetWorld()->GetTimeSeconds());
+        if(Attempt!=UnmadeCore::CommitmentAttempt::Confirmed)
+        {
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+                FString::Printf(TEXT("PERMANENT DECISION: %s | Press SAME choice by SAME witness within six seconds."),
+                    *Consequence));
+            break;
+        }
         const bool bResolvedFaction=Hub->ResolveNearbyFaction(Ending);
         const bool bResolvedFrontier=!bResolvedFaction &&
             Hub->ResolveNearbyFrontier(static_cast<int32>(Ending));

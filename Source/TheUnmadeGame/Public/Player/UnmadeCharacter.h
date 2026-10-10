@@ -5,6 +5,7 @@
 #include "Fracture/UnmadeFractureRules.h"
 #include "Player/UnmadeCharacterIdentityRules.h"
 #include "Story/UnmadeConflictRules.h"
+#include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "UnmadeCharacter.generated.h"
@@ -101,6 +102,7 @@ private:
     void CommitSolidarity();
     void CommitTruth();
     void CommitFaction(UnmadeCore::FactionEnding Ending);
+    UnmadeCore::CommitmentGate CommitmentGate;
     void CrossFrontierGateway();
 
     void ChooseShelter();
