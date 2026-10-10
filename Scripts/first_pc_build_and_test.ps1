@@ -39,6 +39,10 @@ try {
     & python (Join-Path $PSScriptRoot "build_cinematic_handoff.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "cinematic-production-validation.log")
     if($LASTEXITCODE -ne 0){throw "CINEMATIC_CONTENT_OUT_OF_SYNC: regenerate and commit data tables"}
+    Write-Host "Checking nine-realm lived-universe authored work orders."
+    & python (Join-Path $PSScriptRoot "validate_lived_universe.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "lived-universe-validation.log")
+    if($LASTEXITCODE -ne 0){throw "LIVED_UNIVERSE_CONTENT_OUT_OF_SYNC: regenerate work order manifest"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")
