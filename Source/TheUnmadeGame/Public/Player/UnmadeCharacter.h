@@ -110,6 +110,7 @@ private:
     void ChooseLocalConflict(UnmadeCore::ConflictChoice Choice);
     void ProgressSupplyActivity();
     void ShowStoryJournal();
+    void ShowEvidenceNotebook();
     bool SaveLocalConflict();
     void ApplyConflictGates();
     UnmadeCore::ConflictModel LocalConflict;

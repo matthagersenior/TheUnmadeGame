@@ -80,6 +80,7 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("StoryResearch", IE_Pressed, this, &AUnmadeCharacter::ChooseResearch);
     PlayerInputComponent->BindAction("SupplyActivity", IE_Pressed, this, &AUnmadeCharacter::ProgressSupplyActivity);
     PlayerInputComponent->BindAction("StoryJournal", IE_Pressed, this, &AUnmadeCharacter::ShowStoryJournal);
+    PlayerInputComponent->BindAction("EvidenceNotebook", IE_Pressed, this, &AUnmadeCharacter::ShowEvidenceNotebook);
     PlayerInputComponent->BindAction("CharacterProfile",IE_Pressed,this,&AUnmadeCharacter::ShowCharacterProfile);
     PlayerInputComponent->BindAction("ItemInventory", IE_Pressed, this, &AUnmadeCharacter::ShowInventory);
     PlayerInputComponent->BindAction("ItemWeapon", IE_Pressed, this, &AUnmadeCharacter::EquipNextWeapon);
@@ -543,7 +544,9 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
                 }
             }
             else if(bResolvedBraid)
-                ReportLocalEvent(FName("World.WitnessBraidResolved"),FName("region.crossings.bridge"));
+                ReportLocalEvent(FName(Ending==UnmadeCore::FactionEnding::Solidarity
+                    ?TEXT("World.WitnessBraidShelter"):TEXT("World.WitnessBraidDocket")),
+                    FName("region.crossings.bridge"));
             else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
         else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
@@ -685,6 +688,20 @@ void AUnmadeCharacter::ProgressSupplyActivity()
     {
         ReconcileEarnedRewards();
         ReportLocalEvent(FName("Player.DeliveredSupplies"), FName("Hub.Shelter"));
+    }
+}
+
+void AUnmadeCharacter::ShowEvidenceNotebook()
+{
+    if(!GetWorld())return;
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+    {
+        const FString Evidence=Hub->GetEvidenceNotebook();
+        // Text-mode input remains useful in the graybox; this same function
+        // is BlueprintPure on the hub for a proper accessible UMG notebook.
+        UE_LOG(LogTemp,Display,TEXT("%s"),*Evidence);
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,Evidence);
+        return;
     }
 }
 

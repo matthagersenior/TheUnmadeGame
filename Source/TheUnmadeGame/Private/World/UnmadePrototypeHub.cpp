@@ -1,4 +1,5 @@
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeEvidenceProvenanceRules.h"
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "Save/UnmadePrototypeSave.h"
@@ -1320,6 +1321,36 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
     if(GEngine)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Yellow,
         FString(UTF8_TO_TCHAR(WitnessBraid.OutcomeText())));
     return true;
+}
+
+FString AUnmadePrototypeHub::GetEvidenceNotebook() const
+{
+    // Read only the existing, persisted firsthand notebook state. Local
+    // accounts are not facts about the nine cosmological OPEN questions.
+    FString Notebook=FString::Printf(
+        TEXT("THE WITNESS BRAID | %d/3 personal objects, %d second readings"),
+        WitnessEchoes.FirstCount(),WitnessEchoes.ReturnCount());
+    for(const auto& Node:UnmadeCore::EvidenceNotebook)
+    {
+        const auto* Seen=UnmadeCore::KnownNotebookNode(WitnessEchoes,Node.id);
+        if(!Seen)continue; // Never name/describe an unvisited object.
+        const auto Stage=UnmadeCore::NotebookStage(WitnessEchoes,Node.id);
+        Notebook+=FString::Printf(TEXT("\\n%s | %s | %s\\n  CLAIM: %s\\n  COUNTERPOINT: %s"),
+            UTF8_TO_TCHAR(Node.id),UTF8_TO_TCHAR(Node.city),
+            Stage==UnmadeCore::EvidenceStage::SeenAgain
+                ?TEXT("observed twice; changed meaning"):TEXT("personally observed"),
+            UTF8_TO_TCHAR(Node.theory),UTF8_TO_TCHAR(Node.challenge));
+    }
+    if(UnmadeCore::NotebookComparisonUnlocked(WitnessEchoes))
+    {
+        Notebook+=TEXT("\\nTHE BRAID CAN BE COMPARED: three firsthand objects and at least one later reading.");
+        Notebook+=FString::Printf(TEXT("\\nRESULT: %s"),UTF8_TO_TCHAR(WitnessBraid.OutcomeText()));
+    }
+    else
+    {
+        Notebook+=TEXT("\\nMISSING: three distinct firsthand objects and one changed reading after a legitimate local civic outcome.");
+    }
+    return Notebook;
 }
 
 FString AUnmadePrototypeHub::GetWitnessEchoJournal() const

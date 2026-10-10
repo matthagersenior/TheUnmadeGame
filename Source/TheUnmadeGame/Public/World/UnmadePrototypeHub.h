@@ -51,6 +51,9 @@ public:
     bool InspectSite(AUnmadeLoreSite* Site);
     /** Source-authored optional physical callback observations, visible to the journal. */
     FString GetWitnessEchoJournal() const;
+    /** Return only firsthand evidence actually inspected, with attributed theories. */
+    UFUNCTION(BlueprintPure,Category="Unmade|Investigation")
+    FString GetEvidenceNotebook() const;
     /** Optional three-city public response near Orrel's physical bridge nail. */
     bool ResolveNearbyWitnessBraid(int32 Choice);
     void RefreshDistrictMood();
