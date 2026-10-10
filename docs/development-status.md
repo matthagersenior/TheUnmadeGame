@@ -234,3 +234,12 @@ No paid hosting authorized or provisioned. The creator currently has Android but
 - The prior Bellwold Afterlight source episode remains the working template.
   The revised complete illustrated package is a separate downloadable
   dated artifact; GitHub docs are the canon source, not proof of in-engine art.
+
+## 2026-10-10 Saltwake and Cinderhold source-integrated return adventures
+- Shared nine-realm aftermath rules now require operating a distinct physical mechanism before either branch's evidence can advance.
+- Unreal C++ actor source spawns Saltwake's Storm Sluice/barrier, Cinderhold's Heat Vent/seal, branch clues, exclusive downstream gates and selected post-choice traversable platforms.
+- E uses nearest-interactable priority and line-of-sight. Previous frontier resolutions and named first/second witnesses gate the new stories; F7/F8 commitments are location-bound and irreversible.
+- New nine-realm save arrays merge with existing version-1 slots; old missing optional fields initialize to zero. Invalid new arrays disable writes rather than silently resetting the previous outcome. Failed SaveGame writes restore the in-memory snapshot.
+- Journal tracks returned chapters; frontier residents reference local visible consequences, while observed player choices remain witness/rumor events.
+- GitHub Python source contracts and C++17 domain tests ran on CI; **the Unreal Editor has still not compiled this source** and no actual controller, navigation, flood/heat gameplay, geometry traversal or in-game save/load has been checked.
+- Full illustrated lore package Volume III is tracked as a separately generated deliverable and should not be claimed from green source CI alone.

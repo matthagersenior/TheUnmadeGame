@@ -99,6 +99,11 @@ Cinderhold's return requires its first hearth accord and the opening of the **He
 
 The six later realms each have a named physical mechanism in `UnmadeRealmAftermathRules.h`. Those are contracts for future places, **not** proof their geometry, actors, cities, audio or hazards have been constructed. Later-world production must first create traversable terrain and encounters, then connect mechanism activation, evidence, witnesses, save rollback, local reactions and irreversible consequences. Each realm must pass the same four standards before it can be called playable.
 
+## Production-grade tests for realm expansion
+A realm does not meet the Bellwold standard from mere authored names. It needs an actual irreversible physical choice that modifies paths, visibly revisited homes, locally grounded witness and rumor responses, saved and restored hazard configuration, two viable investigations and a fair player loop. Saltwake and Cinderhold now have a first source-level pass of that pattern, but lack tested flood/heat damage, real interiors, cinematic encounter staging, travel density and runtime verification.
+
+Later realms require the corresponding real-world control before an aftermath can begin: debt lock, harmonic tuner, seam brace, door of names, root valve and origin dial. Their models exist but actors, traversal, fully responsive hazards and branch-specific NPC performances do not. The expansion acceptance plan is in `docs/design/2026-10-10-physical-realm-adventure-contract.md`.
+
 ## Release ledger
 - **Volume I (October 9, 2026):** initial illustrated canon; nine realm atlas, 64 current NPCs, 58 then-authored items, three bosses, ten rites and six confluences.
 - **Volume II (October 10, 2026):** Bellwold's Second Night, two epic items (60 total), living community consequence system, nine distinct proposed aftershock arcs, continuity test and revised illustrated master.

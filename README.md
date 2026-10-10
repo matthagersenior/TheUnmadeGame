@@ -4,6 +4,14 @@ Dark, surreal, third-person 3D RPG. You play a customizable outcast whose origin
 
 **Status:** foundational Unreal Engine **source scaffold**, not a playable release. No Unreal Editor compilation, map boot, packaged Windows build, or Android streaming session has been verified yet.
 
+## Source milestone — Saltwake and Cinderhold return visits (October 10)
+
+The first frontier adventures now extend beyond entering an outpost and finishing its first three-witness story. After resolving that earlier story, return to Harrow in Saltwake or Rheva in Cinderhold. Each return begins with an active, distance- and sight-gated world control: the **Storm Sluice** or **Heat Vent**. Activating the mechanism disables its blocking collision barrier, allowing investigation of either the communal relief site or the concealed public record. A route-specific resident must testify before F7/F8 can commit the result near its warden.
+
+Each of the two outcomes changes **different collision-enabled passages, walkway/platform geometry, public home-town commentary and witnessed versus rumored NPC memories**. Nine-realm snapshot restoration rejects malformed states and rolls back changes if saving fails. No rewards can be farmed from repeated decisions. The six remaining realms have named future controls in shared C++ rules but **do not yet have world actors or playable levels**.
+
+See [frontier return QA](docs/qa/frontier-aftermaths.md) and [physical adventure standard for all nine realms](docs/design/2026-10-10-physical-realm-adventure-contract.md). **Unreal Editor compilation, traversal, performance and real player verification remain outstanding.**
+
 ## The Second Night — Bellwold Afterlight
 
 An authored return-visit chapter begins only after Bellwold's relief mission
