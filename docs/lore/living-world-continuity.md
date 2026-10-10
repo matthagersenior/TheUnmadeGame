@@ -132,3 +132,6 @@ An Unreal automation test `Unmade.Story.CommitmentConfirmation` awaits the futur
 
 ## Illustrated Volume IV record
 The October 10 illustrated **Volume IV: A World Prepared to Respond** updates Volume III by adding a 52-page canon/engineering DOCX, a verified rendered PDF, an unchanged art atlas, source appendix, matrix and hash manifest. It is distributed as a downloadable conversation artifact, not stored as a binary in GitHub. The release is consistent with main `5a068c322ee1f0c72f82da3c5f54673f919b2cdb` at creation; later code commits require a future new edition. No actual 3D gameplay or Unreal build has yet been demonstrated.
+
+## Six later realm first-visit graybox implementation (source pass)
+The six outer destinations gain authored local trial evidence, two responses, separate control mechanisms, proof-dependent witnesses and independent saved continuities before their existing return-visit aftermaths can begin. Atlas connections require earned attunement; permanent outcomes alter real collision-enabled prototype routes. No level art, authored cities, sound, Unreal build or hands-on playtest is claimed.

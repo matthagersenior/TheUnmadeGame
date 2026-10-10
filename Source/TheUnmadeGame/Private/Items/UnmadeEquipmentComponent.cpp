@@ -1,3 +1,4 @@
+#include "World/UnmadeWorldAtlas.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeConfluenceRules.h"
@@ -349,4 +350,9 @@ FString UUnmadeEquipmentComponent::DescribeInventory() const
             Summary+=FString::Printf(TEXT("%s x%d; "),
                 UTF8_TO_TCHAR(Def.name),Inventory.Quantity(Def.id));
     return Summary;
+}
+
+int32 UUnmadeEquipmentComponent::GetAtlasAttunement() const
+{
+    return UnmadeCore::AttunementFromRewards(Inventory);
 }

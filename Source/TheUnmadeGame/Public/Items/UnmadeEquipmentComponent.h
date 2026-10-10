@@ -22,6 +22,7 @@ public:
     bool Sell(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village);
     bool CraftAt(UnmadeCore::SettlementId Village);
     int32 GetMarks() const { return Economy.Marks(); }
+    int32 GetAtlasAttunement() const;
     FString DescribeInventory() const;
     int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount(); }
     int32 FoldBonusSeconds() const { return Inventory.FoldDurationBonus(); }

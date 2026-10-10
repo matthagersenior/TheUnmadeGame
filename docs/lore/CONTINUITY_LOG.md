@@ -36,3 +36,8 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added Part XVII with source-aligned hazard counterplay, safe checkpoint, eight-dimensional identity, two-press story confirmation, the first-PC build/test command and a truthful content readiness matrix.
 - The complete package includes the 30 original/schematic art assets, quality matrix, source appendix, release status and a SHA-256 manifest; all included ZIP files passed checksum verification.
 - **Distribution boundary:** Volume IV ZIP/DOCX/PDF are generated conversation artifacts, *not committed binary files in this GitHub repository*. Canonical runtime code remains on main. Images remain concept art, never proof of Unreal gameplay.
+
+## 2026-10-10 — Six later realm foundations (source pass)
+- Created six distinct first-visit realm journey rules with protected initial evidence, two physical strategies, control activation, durable route change and old-save compatibility.
+- Added atlas travel scaffolding, per-realm generated landscape blockouts and locally persistent post-arc choices; the game still requires an engine compile/playtest and full art/encounter pass.
+- Repaired duplicate `UPROPERTY(SaveGame)` annotation on the realm aftermath snapshot, an Unreal UHT risk discovered during source review.

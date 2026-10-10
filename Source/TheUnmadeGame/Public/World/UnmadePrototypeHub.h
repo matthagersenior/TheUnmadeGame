@@ -13,6 +13,7 @@
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
+#include "World/UnmadeLaterRealmRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
 
@@ -49,6 +50,7 @@ public:
     bool ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome);
     bool GetNearbyCommitPreview(int32 Choice,FName& Scope,FString& Warning) const;
     bool TryTravelFrontier(AUnmadeCharacter* Player);
+    bool TryTravelAtlas(AUnmadeCharacter* Player);
     bool InspectFrontierClue(AUnmadeCharacter* Player);
     void TryFrontierConversation(FName ResidentId);
     bool ResolveNearbyFrontier(int32 Ending);
@@ -59,6 +61,11 @@ public:
     bool InspectRealmAftermathSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryRealmAftermathConversation(FName ResidentId);
     bool ResolveNearbyRealmAftermath(int32 Choice);
+    bool InspectLaterRealmSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryLaterRealmConversation(FName ResidentId);
+    int32 GetLaterRealmStage(UnmadeCore::Realm Id) const {return LaterRealm.Stage(Id);}
+    int32 GetLaterRealmOutcome(UnmadeCore::Realm Id) const {return LaterRealm.Outcome(Id);}
+    int32 GetLaterRealmVisitMask() const {return LaterRealm.Snapshot().visits;}
     int32 GetRealmAftermathStage(UnmadeCore::Realm Id) const { return RealmAftermath.Stage(Id); }
     int32 GetRealmAftermathEnding(UnmadeCore::Realm Id) const { return RealmAftermath.Ending(Id); }
     /** Clock-synchronized local hazard, no update or damage outside active route. */
@@ -94,6 +101,11 @@ private:
     bool bAfterlightSaveRejected=false;
     UnmadeCore::RealmAftermathChronicle RealmAftermath;
     bool bRealmAftermathSaveRejected=false;
+    UnmadeCore::LaterRealmJourney LaterRealm;
+    bool bLaterRealmSaveRejected=false;
+    void BuildLaterRealms();
+    void BuildAtlasGateways();
+    void RefreshLaterRealmWorld();
     void BuildFrontierAftermath();
     void RefreshRealmAftermathWorld();
     bool bHazardCueVisible[2]={false,false};
