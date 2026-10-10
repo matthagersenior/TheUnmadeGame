@@ -89,6 +89,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/witness_echo_test.cpp -o /tmp/unmade-witness-echo
           /tmp/unmade-witness-echo
+      - name: Verify three-city Witness Braid and mutually exclusive physical responses
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/witness_braid_test.cpp -o /tmp/unmade-witness-braid
+          /tmp/unmade-witness-braid
 
       - name: Verify three offline settlements and all resident identities
         run: |
