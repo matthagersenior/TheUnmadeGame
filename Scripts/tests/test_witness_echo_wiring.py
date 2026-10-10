@@ -52,5 +52,5 @@ class WitnessEchoWiring(unittest.TestCase):
         workflow=source(".github/workflows/static-checks.yml")
         first_pc=source("Scripts/first_pc_build_and_test.ps1")
         self.assertIn("Tests/world/witness_echo_test.cpp",workflow)
-        self.assertIn("Unmade.WitnessEcho",first_pc)
+        self.assertIn("test_witness_echo_wiring.py",first_pc)
 if __name__=="__main__":unittest.main()
