@@ -31,3 +31,8 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added offline deterministic six-second confirmation with scope/choice matching, invalid-input rejection, cancellation and expiry.
 - Integrated scoped source previews before F7/F8 mutations for the faction, frontier and aftermath chapters. No single accidental keypress can commit these paths through the player input entrypoint. Real UI/controller acceptance still pending.
 - Added a dedicated Unreal automation source test and engine/manual QA gate for choice preview, path-change cancellation, save failure and controller accessibility. Actual Unreal acceptance remains outstanding.\n
+## 2026-10-10 — Volume IV illustrated edition: A World Prepared to Respond
+- A new **52-page editable DOCX and rendered PDF** were produced from the Volume III illustrated master, preserving the existing concept-art atlas and Saltwake/Cinderhold route diagrams.
+- Added Part XVII with source-aligned hazard counterplay, safe checkpoint, eight-dimensional identity, two-press story confirmation, the first-PC build/test command and a truthful content readiness matrix.
+- The complete package includes the 30 original/schematic art assets, quality matrix, source appendix, release status and a SHA-256 manifest; all included ZIP files passed checksum verification.
+- **Distribution boundary:** Volume IV ZIP/DOCX/PDF are generated conversation artifacts, *not committed binary files in this GitHub repository*. Canonical runtime code remains on main. Images remain concept art, never proof of Unreal gameplay.

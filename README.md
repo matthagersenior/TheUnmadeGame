@@ -44,6 +44,9 @@ Six Confluence chambers require mastered ability combinations, a timed dual-cast
 
 See the [Tenfold quest/lore bible](docs/design/2026-10-09-tenfold-rites-quest-bible.md) and [engine QA checklist](docs/qa/tenfold-prototype-qa.md). **No Unreal compilation, animation, visual HUD, full quest production, complete nine-realm world, difficulty benchmark or playtime validation has occurred.** All critical logic works without AI.
 
+## Latest illustrated edition
+Volume IV, **A World Prepared to Respond**, adds the source-aligned hazard/recovery/customization/choice-confirmation chapter to the previous illustrated master. A 52-page Word/PDF and 39-file checksum-verified ZIP were generated as **conversation download artifacts**, not source-controlled game assets, Unreal screenshots or a compiled build. The canonical code/lore remains in this repository.
+
 ## Pre-PC readiness and remaining production gaps
 
 The [maintained readiness ledger](docs/qa/pre-pc-readiness.md) distinguishes what is verified in offline source checks from Unreal-only compilation, art and real gameplay acceptance. It also tracks source work that can be done before acquiring a PC; **an actual finished RPG is not simply waiting for hardware**.
