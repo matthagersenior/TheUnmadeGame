@@ -111,6 +111,18 @@ public:
     UPROPERTY(SaveGame)
     TArray<int32> LaterRealmChoices;
 
+    /** Third-chapter optional stories; absent on original schema-1 saves. */
+    UPROPERTY(SaveGame)
+    bool bHasEchoQuestSnapshot=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> EchoQuestStages;
+    UPROPERTY(SaveGame)
+    TArray<int32> EchoQuestEvidence;
+    UPROPERTY(SaveGame)
+    TArray<int32> EchoQuestTestimonies;
+    UPROPERTY(SaveGame)
+    TArray<int32> EchoQuestEndings;
+
     UPROPERTY(SaveGame)
     bool bHasInventorySnapshot = false;
 

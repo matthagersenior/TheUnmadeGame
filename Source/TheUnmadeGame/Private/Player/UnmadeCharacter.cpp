@@ -736,6 +736,11 @@ void AUnmadeCharacter::ShowStoryJournal()
                         UTF8_TO_TCHAR(Region.name),
                         Hub->GetLaterRealmStage(Region.realm),
                         Hub->GetRealmAftermathStage(Region.realm));
+                if(Hub->GetEchoQuestStage(Region.realm)>0)
+                    RealmSummary+=FString::Printf(TEXT(" | Echo %d/3, clues %d/3, ending %d"),
+                        Hub->GetEchoQuestStage(Region.realm),
+                        Hub->GetEchoQuestEvidence(Region.realm),
+                        Hub->GetEchoQuestEnding(Region.realm));
             }
             RealmSummary+=TEXT(" | ");
             RealmSummary+=Hub->DescribeCommunityAt(GetActorLocation());
@@ -915,6 +920,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->InspectEchoQuestSite(this,ResidentDistSq))return;
             if(Hub->InspectLaterRealmSite(this,ResidentDistSq))return;
             if(Hub->InspectRealmAftermathSite(this,ResidentDistSq))return;
         }
@@ -964,6 +970,7 @@ void AUnmadeCharacter::Interact()
             Hub->TryAfterlightConversation(Target->GetStableId());
             Hub->TryRealmAftermathConversation(Target->GetStableId());
             Hub->TryLaterRealmConversation(Target->GetStableId());
+            Hub->TryEchoQuestConversation(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
         }

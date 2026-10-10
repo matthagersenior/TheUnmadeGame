@@ -34,6 +34,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
+    RefreshEchoQuestWorld();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
@@ -68,6 +69,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::BellwoldAfterlight RestoredAfterlight;
     UnmadeCore::RealmAftermathChronicle RestoredRealmAftermath;
     UnmadeCore::LaterRealmJourney RestoredLaterRealm;
+    UnmadeCore::EchoChronicle RestoredEcho;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -170,6 +172,31 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             return;
         }
     }
+    if(Save->bHasEchoQuestSnapshot)
+    {
+        if(Save->EchoQuestStages.Num()!=6 || Save->EchoQuestEvidence.Num()!=6 ||
+           Save->EchoQuestTestimonies.Num()!=6 || Save->EchoQuestEndings.Num()!=6)
+        {
+            bEchoSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Malformed optional echo quest state; writes disabled"));
+            return;
+        }
+        UnmadeCore::EchoSnapshot S;
+        for(int i=0;i<6;++i)
+        {
+            S.stage[i]=Save->EchoQuestStages[i];
+            S.evidence[i]=Save->EchoQuestEvidence[i];
+            S.testimony[i]=Save->EchoQuestTestimonies[i];
+            S.ending[i]=Save->EchoQuestEndings[i];
+        }
+        if(!RestoredEcho.Restore(S))
+        {
+            bEchoSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Corrupt echo quest state rejected; writes disabled"));
+            return;
+        }
+    }
+    EchoQuest=RestoredEcho;
     LaterRealm=RestoredLaterRealm;
     RealmAftermath=RestoredRealmAftermath;
     Afterlight=RestoredAfterlight;
@@ -184,7 +211,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 bool AUnmadePrototypeHub::WriteWorldSnapshot()
 {
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
-       bLaterRealmSaveRejected)return false;
+       bLaterRealmSaveRejected || bEchoSaveRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -241,6 +268,19 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     {
         Save->LaterRealmStages.Add(Later.stage[i]);
         Save->LaterRealmChoices.Add(Later.choice[i]);
+    }
+    const auto Echo=EchoQuest.Snapshot();
+    Save->bHasEchoQuestSnapshot=true;
+    Save->EchoQuestStages.Reset();
+    Save->EchoQuestEvidence.Reset();
+    Save->EchoQuestTestimonies.Reset();
+    Save->EchoQuestEndings.Reset();
+    for(int i=0;i<6;++i)
+    {
+        Save->EchoQuestStages.Add(Echo.stage[i]);
+        Save->EchoQuestEvidence.Add(Echo.evidence[i]);
+        Save->EchoQuestTestimonies.Add(Echo.testimony[i]);
+        Save->EchoQuestEndings.Add(Echo.ending[i]);
     }
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
@@ -1355,6 +1395,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     BuildFrontierAftermath();
     BuildLaterRealms();
     BuildAtlasGateways();
+    BuildEchoQuests();
     BuildCommunityConsequences();
     BuildBellwoldAfterlight();
     // Ten inscriptions across five communities. Each marker is world-space,

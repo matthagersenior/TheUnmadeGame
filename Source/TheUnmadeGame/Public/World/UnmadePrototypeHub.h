@@ -14,6 +14,8 @@
 #include "World/UnmadeFrontierHazardRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
 #include "World/UnmadeLaterRealmRules.h"
+#include "World/UnmadeEchoQuestRules.h"
+#include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeLaterHazardRules.h"
 #include "TimerManager.h"
 #include "UnmadePrototypeHub.generated.h"
@@ -64,6 +66,11 @@ public:
     bool ResolveNearbyRealmAftermath(int32 Choice);
     bool InspectLaterRealmSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryLaterRealmConversation(FName ResidentId);
+    bool InspectEchoQuestSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryEchoQuestConversation(FName ResidentId);
+    int32 GetEchoQuestStage(UnmadeCore::Realm Realm) const {return EchoQuest.Stage(Realm);}
+    int32 GetEchoQuestEnding(UnmadeCore::Realm Realm) const {return EchoQuest.Ending(Realm);}
+    int32 GetEchoQuestEvidence(UnmadeCore::Realm Realm) const {return EchoQuest.Evidence(Realm);}
     int32 GetLaterRealmStage(UnmadeCore::Realm Id) const {return LaterRealm.Stage(Id);}
     int32 GetLaterRealmOutcome(UnmadeCore::Realm Id) const {return LaterRealm.Outcome(Id);}
     int32 GetLaterRealmVisitMask() const {return LaterRealm.Snapshot().visits;}
@@ -108,6 +115,11 @@ private:
     void BuildLaterRealms();
     void BuildAtlasGateways();
     void RefreshLaterRealmWorld();
+    UnmadeCore::EchoChronicle EchoQuest;
+    UnmadeCore::CommitmentGate EchoCommitGate;
+    bool bEchoSaveRejected=false;
+    void BuildEchoQuests();
+    void RefreshEchoQuestWorld();
     bool bLaterHazardCueVisible[6]={false,false,false,false,false,false};
     void RefreshLaterHazardCues();
     void BuildFrontierAftermath();
