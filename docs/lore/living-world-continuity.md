@@ -120,3 +120,5 @@ An engine automation test `Unmade.World.FrontierHazardAndCheckpoint` mirrors the
 
 ## Identity and the shared impossible origin
 The creator may customize eight independent profile dimensions: body frame, face, hair, voice, skin palette, reality mark, gait and personal calling; names permit validated UTF-8, not only conventional English forms. None can replace the common mystery of `Unmade.Origin.Impossible`, which all protagonists share. Choices are to be realized visually and acoustically in Unreal; source data alone are not finished character art or full UI.
+
+The Unreal player source stores all eight selections and the validated chosen name as optional schema-1 profile fields. Bad fields are rejected without replacing the saved profile; failed writes restore the last in-memory selection. A primitive frame/hair silhouette helps verify some shape choices once UE runs, while the other options remain art/animation hooks. `C` displays a debug profile; Blueprint-callable setters allow eventual UMG creator controls. This is not a finished visual customization interface.

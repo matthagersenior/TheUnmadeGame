@@ -61,6 +61,13 @@ AUnmadeCharacter::AUnmadeCharacter()
     PlaceholderBody->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     static ConstructorHelpers::FObjectFinder<UStaticMesh> BodyMesh(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
     if (BodyMesh.Succeeded()) PlaceholderBody->SetStaticMesh(BodyMesh.Object);
+    PlaceholderCrest=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PrototypeHairSilhouette"));
+    PlaceholderCrest->SetupAttachment(GetCapsuleComponent());
+    PlaceholderCrest->SetRelativeLocation(FVector(0,0,82));
+    PlaceholderCrest->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> CrestMesh(
+        TEXT("/Engine/BasicShapes/Cube.Cube"));
+    if(CrestMesh.Succeeded())PlaceholderCrest->SetStaticMesh(CrestMesh.Object);
 }
 
 void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -72,6 +79,7 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("StoryResearch", IE_Pressed, this, &AUnmadeCharacter::ChooseResearch);
     PlayerInputComponent->BindAction("SupplyActivity", IE_Pressed, this, &AUnmadeCharacter::ProgressSupplyActivity);
     PlayerInputComponent->BindAction("StoryJournal", IE_Pressed, this, &AUnmadeCharacter::ShowStoryJournal);
+    PlayerInputComponent->BindAction("CharacterProfile",IE_Pressed,this,&AUnmadeCharacter::ShowCharacterProfile);
     PlayerInputComponent->BindAction("ItemInventory", IE_Pressed, this, &AUnmadeCharacter::ShowInventory);
     PlayerInputComponent->BindAction("ItemWeapon", IE_Pressed, this, &AUnmadeCharacter::EquipNextWeapon);
     PlayerInputComponent->BindAction("ItemArmor", IE_Pressed, this, &AUnmadeCharacter::EquipNextArmor);
@@ -1101,6 +1109,82 @@ bool AUnmadeCharacter::SaveFractureState()
     return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
 }
 
+
+FString AUnmadeCharacter::GetCharacterChosenName() const
+{
+    return FString(UTF8_TO_TCHAR(Identity.Snapshot().chosenName.c_str()));
+}
+
+void AUnmadeCharacter::ApplyIdentitySilhouette()
+{
+    // Primitive-art placeholder: data retains far more detail than this mesh.
+    const auto& Options=Identity.Snapshot().options;
+    static const float Widths[4]={.45f,.54f,.62f,.71f};
+    static const float Heights[4]={1.48f,1.58f,1.65f,1.74f};
+    if(IsValid(PlaceholderBody))
+        PlaceholderBody->SetRelativeScale3D(FVector(
+            Widths[Options[0]],Widths[Options[0]],Heights[Options[0]]));
+    if(IsValid(PlaceholderCrest))
+    {
+        PlaceholderCrest->SetVisibility(Options[2]!=0);
+        PlaceholderCrest->SetRelativeScale3D(FVector(
+            .20f+Options[2]*.035f,.26f+Options[2]*.025f,
+            .09f+Options[2]*.015f));
+    }
+}
+
+bool AUnmadeCharacter::SaveCharacterIdentity()
+{
+    if(bCharacterIdentitySaveRejected)return false;
+    UUnmadePrototypeSave* Save=UUnmadePrototypeSave::LoadOrCreate();
+    if(!Save)return false;
+    const auto& State=Identity.Snapshot();
+    Save->bHasCharacterIdentity=true;
+    Save->CharacterIdentityChoices.Reset();
+    for(const int Choice:State.options)Save->CharacterIdentityChoices.Add(Choice);
+    Save->CharacterChosenName=GetCharacterChosenName();
+    return UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadePrototypeNPC"),0);
+}
+
+bool AUnmadeCharacter::SetCharacterFeature(int32 Aspect,int32 Choice)
+{
+    if(bCharacterIdentitySaveRejected)return false;
+    const auto Before=Identity.Snapshot();
+    if(!Identity.Select(static_cast<UnmadeCore::IdentityAspect>(Aspect),Choice))
+        return false;
+    if(!SaveCharacterIdentity())
+    {
+        Identity.Restore(Before);
+        return false;
+    }
+    ApplyIdentitySilhouette();
+    return true;
+}
+
+bool AUnmadeCharacter::SetCharacterChosenName(const FString& Name)
+{
+    if(bCharacterIdentitySaveRejected)return false;
+    const auto Before=Identity.Snapshot();
+    const std::string Utf8(TCHAR_TO_UTF8(*Name));
+    if(!Identity.Rename(Utf8))return false;
+    if(!SaveCharacterIdentity())
+    {
+        Identity.Restore(Before);
+        return false;
+    }
+    return true;
+}
+
+void AUnmadeCharacter::ShowCharacterProfile()
+{
+    const auto& V=Identity.Snapshot().options;
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+        FString::Printf(TEXT("IDENTITY | %s | Frame %d, Face %d, Hair %d, Voice %d, Palette %d, Mark %d, Gait %d, Calling %d | Origin: THE IMPOSSIBLE"),
+            *GetCharacterChosenName(),V[0],V[1],V[2],V[3],V[4],V[5],V[6],V[7]));
+    // A full creator UI can call SetCharacterFeature/SetCharacterChosenName
+    // from future UMG widgets; keyboard debug text is not a shipped creator.
+}
+
 void AUnmadeCharacter::BeginPlay()
 {
     Super::BeginPlay();
@@ -1115,6 +1199,26 @@ void AUnmadeCharacter::BeginPlay()
             UE_LOG(LogTemp, Warning, TEXT("Invalid fracture save ignored"));
         }
     }
+    if(Save && Save->SchemaVersion==1 && Save->bHasCharacterIdentity)
+    {
+        if(Save->CharacterIdentityChoices.Num()!=8)
+        {
+            bCharacterIdentitySaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid identity field count: preserving saved profile"));
+        }
+        else
+        {
+            UnmadeCore::CharacterIdentitySnapshot Restored;
+            Restored.chosenName=std::string(TCHAR_TO_UTF8(*Save->CharacterChosenName));
+            for(int32 i=0;i<8;++i)Restored.options[i]=Save->CharacterIdentityChoices[i];
+            if(!Identity.Restore(Restored))
+            {
+                bCharacterIdentitySaveRejected=true;
+                UE_LOG(LogTemp,Error,TEXT("Invalid identity snapshot: edits disabled"));
+            }
+        }
+    }
+    ApplyIdentitySilhouette();
     // Older prototype saves have no conflict fields and safely remain unresolved.
     if (Save && Save->SchemaVersion == 1 && Save->bHasConflictSnapshot &&
         !LocalConflict.Restore({Save->LocalConflictChoice, Save->SupplyActivityStage}))
