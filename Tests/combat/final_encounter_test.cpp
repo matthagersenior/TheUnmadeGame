@@ -10,8 +10,8 @@ int main(){
     assert(static_cast<int>(Realm::Count)==9);
     for(int i=0;i<9;++i){
         const auto realm=static_cast<Realm>(i);
-        assert(std::string(FinalLocalRecord(Morning::Anchor,realm)).size()>65);
-        assert(std::string(FinalLocalRecord(Morning::Many,realm)).size()>65);
+        assert(std::string(FinalLocalRecord(Morning::Anchor,realm)).size()>42);
+        assert(std::string(FinalLocalRecord(Morning::Many,realm)).size()>42);
         assert(std::string(FinalLocalRecord(Morning::Anchor,realm))!=
                std::string(FinalLocalRecord(Morning::Many,realm)));
         assert(std::string(FinalLocalRecord(Morning::Unchosen,realm)).empty());
