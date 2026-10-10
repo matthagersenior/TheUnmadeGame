@@ -80,7 +80,8 @@ try{
             $result=Get-Content $receipt -Raw | ConvertFrom-Json
             if($result.status -ne "EDITOR_IMPORT_ATTEMPT_COMPLETE" -or
                @($result.tables).Count -ne 7 -or
-               $result.staging.created+$result.staging.skipped -ne 52){
+               $result.staging.created+$result.staging.skipped -ne 52 -or
+               $result.lived_staging.created+$result.lived_staging.skipped -ne 90){
                 throw "EDITOR_REFERENCE_IMPORT_INCOMPLETE"
             }
         }finally{
