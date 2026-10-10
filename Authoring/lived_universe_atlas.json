@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "edition": "2026-10-10",
-  "status": "preproduction authored: none of the new LUE/LUR/LUQ physical scenes, flags or assets has been implemented or verified in Unreal",
+  "status": "preproduction only: new LUE/LUR/LUQ scenes, save fields, and authored assets are NOT implemented or verified in Unreal",
   "design_intent": "living-world nuance, physical exploration, optional humane microquests, local knowledge boundaries, and a repeatable asset/QA handoff layered on canonical quests",
   "authority": [
     "Source/TheUnmadeGame original quest and save rules",
