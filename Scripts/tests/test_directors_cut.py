@@ -33,7 +33,7 @@ class DirectorsCutContract(unittest.TestCase):
 
     def test_missing_world_or_branch_rejected(self):
         data = copy.deepcopy(self.data)
-        data["chapters"][1]["scenes"][3]["title"] = "UNKNOWN MISSING WORLD"
+        data["chapters"][1]["scenes"][2]["title"] = "UNKNOWN MISSING WORLD"
         with self.assertRaises(ValueError):
             M.verify_index(data)
         data = copy.deepcopy(self.data)
