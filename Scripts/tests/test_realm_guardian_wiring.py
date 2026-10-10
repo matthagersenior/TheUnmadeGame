@@ -17,6 +17,8 @@ class RealmGuardiansWiring(unittest.TestCase):
         self.assertIn("TryCalmNearbyGuardian(",world)
         self.assertIn("ResolveRealmGuardian(",world)
         self.assertIn("Guardians.Restore(Before)",world)
+        self.assertIn("GuardianCommitGate.Attempt(",world)
+        self.assertIn("CommitmentAttempt::Confirmed",world)
         self.assertIn("EchoQuest.Ending(Realm)!=0",world)
         self.assertIn("WriteWorldSnapshot()",world)
     def test_gameplay_and_memories(self):

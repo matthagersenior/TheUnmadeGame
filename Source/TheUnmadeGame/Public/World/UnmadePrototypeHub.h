@@ -135,6 +135,7 @@ private:
     void BuildRealmResonance();
     void RefreshRealmResonanceWorld();
     UnmadeCore::GuardianChronicle Guardians;
+    UnmadeCore::CommitmentGate GuardianCommitGate;
     bool bGuardianSaveRejected=false;
     void BuildRealmGuardians();
     void RefreshRealmGuardians();

@@ -96,6 +96,19 @@ bool AUnmadePrototypeHub::TryCalmNearbyGuardian(
             TEXT("The guardian cannot accept an empty promise. Finish this realm's witnessed Echo."));
         return true;
     }
+    const int Id=UnmadeCore::LaterIndex(Realm);
+    const auto Preview=GuardianCommitGate.Attempt(
+        std::string("Guardian.")+std::to_string(Id),1,GetWorld()->GetTimeSeconds());
+    if(Preview==UnmadeCore::CommitmentAttempt::Preview)
+    {
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+            FString::Printf(TEXT("MERCY PACT: %s. %s Press E on this guardian again within six seconds to confirm."),
+                UTF8_TO_TCHAR(Spec->origin),
+                UTF8_TO_TCHAR(EchoQuest.Ending(Realm)==1?
+                    Spec->careMemory:Spec->truthMemory)));
+        return true;
+    }
+    if(Preview!=UnmadeCore::CommitmentAttempt::Confirmed)return true;
     if(!ResolveRealmGuardian(Realm,true))
     {
         if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Red,
