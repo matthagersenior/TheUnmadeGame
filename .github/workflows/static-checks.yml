@@ -25,6 +25,9 @@ jobs:
       - name: Validate cinematic and realm production source against Unreal CSVs
         run: python Scripts/build_cinematic_handoff.py --check
 
+      - name: Check every main quest branch, 82 returning people and Unreal staging manifest
+        run: python Scripts/build_story_scene_handoff.py --check
+
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits

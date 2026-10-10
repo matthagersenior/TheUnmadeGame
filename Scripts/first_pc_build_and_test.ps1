@@ -31,6 +31,10 @@ try {
     & (Join-Path $PSScriptRoot "check_unreal_host.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "preflight.log")
     if($LASTEXITCODE -ne 0){throw "HOST_PREFLIGHT_FAILED: exit $LASTEXITCODE"}
+    Write-Host "Validating quest branches, 82-person memory and repeatable scene build plan."
+    & python (Join-Path $PSScriptRoot "build_story_scene_handoff.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "story-scene-handoff-validation.log")
+    if($LASTEXITCODE -ne 0){throw "QUEST_SCENE_CONTENT_OUT_OF_SYNC: run generator and commit outputs"}
     Write-Host "Checking cinematic explainer and nine-realm production handoff."
     & python (Join-Path $PSScriptRoot "build_cinematic_handoff.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "cinematic-production-validation.log")
