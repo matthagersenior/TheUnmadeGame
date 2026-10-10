@@ -96,3 +96,9 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Guardians spawn on each upper realm terrace after its Echo decision. Both a deliberate twice-confirmed merciful local pact and actual combat defeat produce exclusive saved 1/2 guardian outcomes; old SaveGames default to unresolved and corrupt states fail closed. Failed writes never silently mark the guardian finished.
 - Mastered Understanding Bosses can briefly expose a nearby guardian to interruption without granting automatic pacification. Local witnesses comment on the aftermath; the player cannot farm the fight or coerce a peaceful choice without prior real testimony.
 - Added native rule tests, source integration checks, Unreal test source, manual realm-by-realm QA and full background/production direction. Actual UHT/UE build, camera/animation, VFX and real combat reachability still require a Windows PC. Volume VII remains the last verified illustrated artifact.
+
+## 2026-10-10 — Volume VIII publication: The World Learns to Answer
+- The 73-page Volume VIII illustrated development Bible expands the merged source-world lore with six post-Echo dual-rite observatories, six optional guardian life histories and combat/mercy alternatives, and a repeatable, scoped eight-minute Windows UE smoke demonstration.
+- Rendered the editable Word to PDF and visually checked the new pages, preserving 43 embedded images and all 30 prior atlas artworks. Produced a 38-entry ZIP with SHA-256 manifest, independently verifying every included digest and ZIP integrity.
+- Gameplay source references: merged PR #13 `72792b910f4ef661307c1a62c77814ba3df8e1db` and PR #14 `1e7da798ce1acb3a72aecb6258a27b722ece38b2`, both already source-CI-green on main.
+- These binaries exist as conversation downloads only. No final 3D models, runtime Unreal screenshots, recorded dialogue, Windows UHT compile or play-tested combat sequences are claimed.
