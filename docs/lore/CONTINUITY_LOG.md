@@ -9,3 +9,5 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Updated the canonical item count from 58 to **60** after adding Ward of the Second Night and Lantern of Unredacted Names.
 - Retained 64 currently authored NPC identities (48 core and 16 frontier); later realms have proposed, unspawned witness IDs.
 - Updated the illustrated package master, art atlas, source documentation, quality matrix and ZIP. The imagery remains speculative artwork rather than actual Unreal gameplay screenshots.
+
+- Added a CI-level source-change gate: gameplay commits must carry updated canonical lore and the continuity log together, in addition to the dated downloadable illustrated edition.

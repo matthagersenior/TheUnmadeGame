@@ -13,7 +13,7 @@ class IllustratedLoreContinuity(unittest.TestCase):
             self.assertIn(name,atlas)
             self.assertIn(name,canon)
         self.assertIn("The Second Night",canon)
-        self.assertIn("60 total",read("docs/lore/CONTINUITY_LOG.md"))
+        self.assertIn("**60**",read("docs/lore/CONTINUITY_LOG.md"))
     def test_all_four_player_pillars_and_signature_mechanics(self):
         canon=read("docs/lore/living-world-continuity.md")
         for term in ("Freedom with consequences","A genuinely living world",

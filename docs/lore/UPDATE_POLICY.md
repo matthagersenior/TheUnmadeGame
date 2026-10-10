@@ -8,3 +8,5 @@
 5. Do not claim automatic artifact regeneration in ChatGPT without an actual repeatable, accessible build path. `Scripts/tests/test_lore_continuity.py` is a guard that catches missing canon coverage and stale item totals; it does not regenerate images or PDFs.
 
 The source guide is version-controlled; the downloadable package is a dated release snapshot that must be rebuilt when canon changes.
+
+**CI enforcement added:** `Scripts/check_lore_change.py` requires both `docs/lore/living-world-continuity.md` and `docs/lore/CONTINUITY_LOG.md` in the same commit as any changed Unreal source file. The illustrated PDF, Word book, art atlas and ZIP still require separate artifact regeneration and visual QA; this source guard does not create or update those downloads automatically.
