@@ -31,6 +31,9 @@ jobs:
       - name: Validate lived-universe clues, routines, side stories and 90 Unreal work orders
         run: python Scripts/validate_lived_universe.py --check
 
+      - name: Validate 56-scene full-universe cinema and stereo audio acceptance contract
+        run: python Scripts/validate_directors_cut.py
+
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits
