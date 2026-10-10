@@ -1,5 +1,30 @@
 # Latest illustrated lore publication
 
+**Current edition:** Volume X — *The Unanswered Atlas*, All-Realm City Construction Supplement (10 October 2026)  
+**Included merged gameplay-source commit:** `d562fad1c8b553edc72000a5ec2f3cea8c32da62` · PR #28  
+**Distribution:** verified downloadable artifacts in ChatGPT, NOT uploaded as GitHub Release binary assets  
+**Changes to literary canon:** None. Eleven layouts interpret already-established cities in production-proxy geometry; all original prose, illustrations, character identities, OPEN mysteries and alternative endings remain intact.
+
+| Updated publication file | Validated result |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_All_Realm_City_Update.pdf` | **108 pages**; visual pages checked, no text beyond page bounds |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_All_Realm_City_Update.docx` | Editable master; **52 embedded original illustrations** retained |
+| `THE_UNMADE_Volume_X_Illustrated_All_Realm_City_Update.pdf` | **35 pages**; full Volume X and current tech appendices |
+| `THE_UNMADE_Volume_X_Illustrated_All_Realm_City_Update.docx` | Editable standalone edition; **5 embedded illustrations** retained |
+| `THE_UNMADE_Volume_X_All_Realm_Complete_Bible_Package.zip` | Includes both PDF/Word editions, complete canonical manuscript, Witness Echo addendum, all-realm build guide, images, publisher recipe and checksum manifest |
+
+**Release QA:** Two Word sources were rendered with the DOCX skill to 108 and 35 page-image sets, representative page montage visually inspected, complete rendered PDFs checked for eleven-city summary, 402 reference coverage and positive page-boundary checks, and the ZIP passed archive integrity plus per-member SHA-256 verification. These are dated publications and do not auto-update from `main`.
+
+**Production source status:** New `Authoring/city_assembly_kits_v1.json` has eight distinct silhouette modules in each of eleven original settlements. `Scripts/build_city_assembly.py` deterministically plans 402 **noncolliding, non-authoritative** Unreal Editor reference actors from 88 signature shapes, 44 street massing strips, 88 housing shells, 82 existing residents, 54 original authored quest beats, ten original reality rites, 27 clue sites and nine explicitly unbuilt side-story leads. The Windows importer stages these in **a third isolated authoring map**; existing seven 198-row tables and 52+90 other guides remain supported.
+
+**Unverified:** UE 5.8 on a real Windows host, Editor Python API import, world geometry and navigation, resident animation/dialogue, real ten-ability casting scenes, real completion of nine optional side stories, end-to-end playability and packaged PC release. Source GitHub CI verifies only offline contracts and portable native-rule code; it cannot certify the engine execution or final art.
+
+**Next mandatory publishing cycle:** Every meaningful canon/gameplay update must regenerate the *entire cumulative illustrated Bible* and current Volume PDFs, Word masters and integrity-checked ZIP. If this cannot be done, call it a publication blocker, not complete delivery.
+
+---
+
+# Previous publication: Volume X first-PC edition
+
 **Current edition:** Volume X — *The Unanswered Atlas*, First-PC Development Supplement (2026-10-10)  
 **Included source revision:** `0981b9108b44f191a7f53c366087edc415e21aaf` · GitHub PR #26  
 **Delivery channel:** verified ChatGPT downloadable files (not GitHub Release binaries)  
