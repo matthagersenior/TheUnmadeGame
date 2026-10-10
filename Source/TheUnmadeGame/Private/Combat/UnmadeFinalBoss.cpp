@@ -94,10 +94,14 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
         FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeFinalBossSight),false);
         Sight.AddIgnoredActor(this);
         Sight.AddIgnoredActor(Player);
-        if(!World->LineTraceTestByChannel(
-            GetActorLocation()+FVector(0,0,65),
-            Player->GetActorLocation()+FVector(0,0,65),
-            ECC_Visibility,Sight))
+        const FVector Offset=Player->GetActorLocation()-GetActorLocation();
+        const double Ahead=FVector::DotProduct(Offset,GetActorForwardVector());
+        const double Side=FVector::DotProduct(Offset,GetActorRightVector());
+        if(UnmadeCore::FinalStrikeInFootprint(Beat.attack,Ahead,Side) &&
+           !World->LineTraceTestByChannel(
+                GetActorLocation()+FVector(0,0,65),
+                Player->GetActorLocation()+FVector(0,0,65),
+                ECC_Visibility,Sight))
         {
             // Apply damage only after the previous warning, through the same
             // authoritative guard/armor/dedup combat component as all foes.
@@ -110,5 +114,9 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
                     Before-Player->GetCombat()->GetHealth()));
         }
     }
-    if(Dist>50)SetActorRotation(Direction.Rotation());
+    // Never auto-track the player through a displayed warning: real
+    // sidestepping must avoid the previously telegraphed hit footprint.
+    if(Dist>50 && (Beat.move==UnmadeCore::FinalMove::Approach ||
+                   Beat.move==UnmadeCore::FinalMove::Still))
+        SetActorRotation(Direction.Rotation());
 }
