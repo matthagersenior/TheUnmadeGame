@@ -1,3 +1,9 @@
+## Current illustrated source edition — Volume VI: Lands That Teach
+
+The latest rendered canon package is a **57-page Volume VI DOCX/PDF**, retaining all 43 embedded illustrations and 30 atlas concept/schematic images, with a verified **38-entry ZIP**, provenance, source appendix, quality matrix and SHA-256 manifest. The edition documents six distinct timed injury/strain danger loops, locally shelter-seeking NPC behavior, and real-Unreal acceptance still required. **It is a conversation download, not an engine screenshot, GitHub binary, or Windows game build.**
+
+Game-source commit: `fe849e839cf7eb3550df9711d99fc42cf50f960f` (merged PR #8; native source CI green). The full Unreal Editor compile, navigability and balance are not tested.
+
 ## Six realm-specific hazard and counterplay loops (October 10, 2026)
 
 The six later-realm first-visit approaches now have independent rhythmic warnings, safe sidelines and distinct stakes: injury from the debt tide, quarry fractures and law roots; nonlethal reality strain from the inverted choir, involuntary census and contradictory horizon. Physical damage respects guarding; nonlethal pressure saturates and recovers. Source-timed cue geometry and locally alert resident routines are wired. Completing the realm's first intervention ends that realm's hazard, with no perpetual penalty. **The hazards are native-test-verified only, not compiled or played in Unreal.** See [six-realm hazard QA](docs/qa/later-realm-hazards.md).

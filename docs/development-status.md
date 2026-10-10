@@ -285,3 +285,9 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - Six source-specific timing/counterplay patterns distinguish injurious environmental pressure from nonlethal reality strain, each with bounded hazard lanes and deliberately safe clue/arrival zones.
 - Added noncolliding visibility cues, a per-realm one-hit-per-pulse player mechanism and dynamically shelter-seeking residents. Operating the corresponding first-arc mechanism permanently disables its local danger.
 - Separate source policy tests and an Unreal automation source test (awaiting first Windows UE build) now accompany a step-by-step realm-specific engine QA checklist. No real-time visuals, VFX, physics, navigation, audio or balance acceptance has yet occurred.
+
+## 2026-10-10 — illustrated Volume VI source documentation package
+- Rendered Volume VI Word and PDF from the complete Volume V illustrated master: **57 pages**, **43 embedded illustrations** retained, **30 image assets** in the existing art atlas.
+- Created a **38-entry ZIP** with editable DOCX/PDF, art, release status, quality matrix, source appendix and manifest. Verified ZIP integrity and SHA-256 of every file.
+- Gameplay source `fe849e839cf7eb3550df9711d99fc42cf50f960f` completed post-merge main source CI; the documentation does not claim engine build or playtest.
+- Binary artifacts are provided in this conversation only, not checked into GitHub, and art is conceptual not gameplay capture.

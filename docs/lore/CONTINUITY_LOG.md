@@ -59,3 +59,9 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - No Unreal Engine compilation or visual/audio playtest. The last rendered Volume V Bible predates this change; a future illustrated update must incorporate it.
 - Local later-realm NPCs seek a deterministic safe lane during an observed local warning/impact and provide hazard-specific guidance. The source model tests the shelter destination for every realm; eventual Unreal NavMesh and locomotion still require engine acceptance.
 - Added a dedicated Unreal automation test `Unmade.World.SixLaterRealmHazards`, a realm-by-realm manual acceptance sheet, and technical pre-PC status. These are source documents and have not been run in UE. Next illustrated Bible volume must capture the implementation; Volume V remains the latest verified rendered art edition.
+
+## 2026-10-10 — Volume VI illustrated edition: Lands That Teach
+- Produced and visually reviewed a new 57-page Word/PDF compendium with two additional sections: six differentiated hazard/counterplay loops and first-PC verification/production provenance. Kept all 43 embedded illustrations and all 30 existing atlas image assets from prior editions.
+- Generated a 38-entry distribution ZIP with source appendix, release status, a six-realm quality matrix and SHA-256 manifest; checked every ZIP entry for integrity and digest correctness.
+- Record pinned to merged gameplay source `fe849e839cf7eb3550df9711d99fc42cf50f960f`, PR #8. GitHub main CI verified only native C++17/Python source tests; Unreal compilation, a runtime hazard experience and GPU frame acceptance are still pending.
+- The illustrated files are provided as downloadable conversation artifacts and are **not** committed to this repository. New concept visuals are **not** claimed as Unreal render footage.
