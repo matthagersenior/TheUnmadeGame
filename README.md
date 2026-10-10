@@ -373,3 +373,8 @@ The source index and 7-chapter timing are in [Authoring/cinematic_directors_cut_
 ## Volume X: primary canon for book, screen and game expansions
 
 The books now have an actively managed literary storyworld: docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md is an original primary narrative volume, not merely a game manual. It dramatizes Bellwold and Orravane, fixes distinct material/civic identities for eleven existing cities, deepens thirteen original actor identities, preserves nine intentional unsolved questions, maps thirteen meaningful callbacks, and prepares novel/film/television/optional game-expansion narratives. Authoring/transmedia_storyworld_v1.json holds stable links and adaptation protections; run python Scripts/validate_transmedia_storyworld.py --check. It does not alter source gameplay, player origins or choose a universal final ending. Earlier illustrated binary editions remain dated snapshots pending deliberate new releases.
+
+
+### Playable-source lore link: Witness Echoes (Volume X)
+
+Volume X is beginning to affect the **game's actual world interactions**, not only its books. Three new physically inspectable graybox relics—Hessa's cup, Sevrin's press and Orrel's nail—are wired through the existing player Interact control, saved as optional first-seen/returned clues, and summarized in the debug journal. Each changes meaning only after a legitimate related local story decision; none hands out a secret finale, forces optional content or resolves an OPEN mystery. See [Volume X Witness Echoes gameplay contract](docs/design/volume-x-witness-echo-gameplay.md). CI tests the portable domain and source integration; Unreal Editor compilation and real level/playtest verification remain unperformed.
