@@ -14,6 +14,7 @@
 #include "World/UnmadeFrontierHazardRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
 #include "World/UnmadeLaterRealmRules.h"
+#include "World/UnmadeCampaignSpineRules.h"
 #include "World/UnmadeEchoQuestRules.h"
 #include "World/UnmadeRealmResonanceRules.h"
 #include "Combat/UnmadeRealmGuardianRules.h"
@@ -89,6 +90,10 @@ public:
     bool BreakFinalCore();
     bool SettleFinalEcho();
     bool TryFinalInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    UnmadeCore::RoadEvidence GetUnansweredRoadEvidence() const;
+    UnmadeCore::RoadGuidance GetUnansweredRoadGuidance() const;
+    FString DescribeUnansweredRoad(AUnmadeCharacter* Player) const;
+    bool InspectUnansweredRoad(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool CommitFinalMorning(AUnmadeCharacter* Player,UnmadeCore::Morning Choice);
     bool WakeFinalEcho();
     int32 GetLaterRealmStage(UnmadeCore::Realm Id) const {return LaterRealm.Stage(Id);}
@@ -152,6 +157,7 @@ private:
     UnmadeCore::FinalJourney FinalStory;
     UnmadeCore::CommitmentGate FinalCommitGate;
     bool bFinalSaveRejected=false;
+    void BuildUnansweredRoad();
     void BuildFinalWorld();
     void RefreshFinalWorld();
     bool bLaterHazardCueVisible[6]={false,false,false,false,false,false};
