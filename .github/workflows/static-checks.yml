@@ -162,3 +162,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/final_encounter_test.cpp -o /tmp/unmade-final-encounter
           /tmp/unmade-final-encounter
+
+      - name: Verify the nine-realm branching main campaign and story-to-boss access
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/unanswered_road_test.cpp -o /tmp/unmade-unanswered-road
+          /tmp/unmade-unanswered-road
