@@ -1,3 +1,8 @@
+## Volume V illustrated package — Six Roads Beyond the Known
+A 55-page Volume V DOCX/PDF was rendered from the Volume IV illustrated master; 30 prior concept/schematic art assets are preserved. The verified 38-file ZIP includes the editable DOCX, PDF, art atlas, quality matrix, source appendix and SHA-256 manifest. The package is a conversation download artifact, not a tracked GitHub binary or Unreal gameplay video.
+
+Source baseline: [merged gameplay PR #6](https://github.com/matthagersenior/TheUnmadeGame/pull/6), commit `61a90178985b34dbffde5eb54a509562d7ae8c38`. The post-merge `main` static/native C++ CI succeeded; Unreal Engine compilation and playtesting remain blocked without a Windows host.
+
 # THE UNMADE
 
 Dark, surreal, third-person 3D RPG. You play a customizable outcast whose origin lies in an impossible version of reality. Living civilizations respond differently to fractures, and NPCs remember what they have personally witnessed or credibly heard.
