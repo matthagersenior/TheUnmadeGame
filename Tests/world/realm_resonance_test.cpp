@@ -1,4 +1,5 @@
 #include "World/UnmadeRealmResonanceRules.h"
+#include "World/UnmadeRealmGeometryRules.h"
 #include <cassert>
 #include <cmath>
 #include <cstring>
@@ -8,6 +9,13 @@
 #include <string>
 using namespace UnmadeCore;
 int main() {
+    static_assert(LaterArenaLayout::Sound(),"observatory span and terrain must physically intersect");
+    const auto last=LaterArenaLayout::North();
+    const auto bridge=LaterArenaLayout::ResonanceSpan();
+    const auto dock=LaterArenaLayout::ResonanceIsland();
+    assert(Overlaps(last,bridge) && Overlaps(bridge,dock));
+    assert(!Overlaps(last,dock));
+    assert(Contains(dock,0,4380));
     std::set<std::string> titles;
     std::uint16_t covered=0;
     RealmResonanceJourney journey;

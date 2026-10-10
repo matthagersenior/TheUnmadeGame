@@ -1,6 +1,7 @@
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeRealmResonanceRules.h"
 #include "World/UnmadeLaterRealmRules.h"
+#include "World/UnmadeRealmGeometryRules.h"
 #include "Player/UnmadeCharacter.h"
 #include "Engine/Engine.h"
 #include "Engine/StaticMeshActor.h"
@@ -24,9 +25,13 @@ void AUnmadePrototypeHub::BuildRealmResonance()
                    ResonanceTag(i,TEXT("Plinth")));
         // An honest extra crossing; absent until both mastered rites are
         // cast at the actual plinth, not a magical fast-travel reward.
-        SpawnBlock(Origin+FVector(0,3850,20),FVector(8,7,.35),
+        constexpr auto Span=UnmadeCore::LaterArenaLayout::ResonanceSpan();
+        constexpr auto Island=UnmadeCore::LaterArenaLayout::ResonanceIsland();
+        SpawnBlock(Origin+FVector(0,(Span.minY+Span.maxY)*.5,20),
+                   FVector(8,(Span.maxY-Span.minY)/100.0,.35),
                    ResonanceTag(i,TEXT("Bridge")));
-        SpawnBlock(Origin+FVector(0,4300,-50),FVector(14,5,1),
+        SpawnBlock(Origin+FVector(0,(Island.minY+Island.maxY)*.5,-50),
+                   FVector(14,(Island.maxY-Island.minY)/100.0,1),
                    ResonanceTag(i,TEXT("Island")));
         SpawnBlock(Origin+FVector(0,4380,105),FVector(.75,.7,2.3),
                    ResonanceTag(i,TEXT("Archive")));
