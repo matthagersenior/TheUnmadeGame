@@ -40,7 +40,7 @@ class ResonanceWiring(unittest.TestCase):
             self.assertIn(field,save)
             self.assertIn(field,hub)
         self.assertIn("bResonanceSaveRejected=true;",hub)
-        self.assertIn("bResonanceSaveRejected || bGuardianSaveRejected)return false;",hub)
+        self.assertIn("bResonanceSaveRejected || bGuardianSaveRejected ||",hub)
         self.assertIn("Resonance=RestoredResonance;",hub)
         self.assertIn("Save->RealmResonanceStages.Num()!=6",hub)
     def test_native_test_in_ci(self):

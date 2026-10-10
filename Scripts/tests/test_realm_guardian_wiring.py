@@ -41,7 +41,8 @@ class RealmGuardiansWiring(unittest.TestCase):
             self.assertIn(field,hub)
         self.assertIn("bGuardianSaveRejected=true;",hub)
         self.assertIn("Guardians=RestoredGuardians;",hub)
-        self.assertIn("bGuardianSaveRejected)return false;",hub)
+        self.assertIn("bGuardianSaveRejected ||",hub)
+        self.assertIn("bFinalSaveRejected)return false;",hub)
         self.assertIn("Save->RealmGuardianOutcomes.Num()!=6",hub)
     def test_ci(self):
         self.assertIn("Tests/combat/realm_guardian_test.cpp",
