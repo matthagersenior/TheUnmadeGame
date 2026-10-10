@@ -1,5 +1,6 @@
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeRealmGeometryRules.h"
+#include "Authoring/UnmadeOuterPeopleData.h"
 #include "Player/UnmadeCharacter.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -202,10 +203,16 @@ void AUnmadePrototypeHub::BuildLaterRealms()
         {
             if(AUnmadeNpcCharacter* Npc=GetWorld()->SpawnActor<AUnmadeNpcCharacter>(
                  Origin+Witness.Offset,FRotator::ZeroRotator))
-                Npc->ConfigureLaterRealm(Spec,Witness.Id,
-                    FString::Printf(TEXT("%s of %s"),Witness.RoleName,
-                                    UTF8_TO_TCHAR(Spec.name)),
-                    Witness.Role,Witness.Temperament,Witness.Line);
+            {
+                const auto* Authored=UnmadeCore::FindOuterPerson(Witness.Id);
+                const FString Display=Authored
+                    ?FString(UTF8_TO_TCHAR(Authored->displayName))
+                    :FString::Printf(TEXT("%s of %s"),Witness.RoleName,
+                                    UTF8_TO_TCHAR(Spec.name));
+                Npc->ConfigureLaterRealm(Spec,Witness.Id,Display,
+                    Witness.Role,Witness.Temperament,
+                    Authored?Authored->dayLine:Witness.Line);
+            }
         }
     }
 }
