@@ -170,3 +170,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/unanswered_road_test.cpp -o /tmp/unmade-unanswered-road
           /tmp/unmade-unanswered-road
+
+      - name: Test stable 82-person relationship snapshots, real returning identity and bounded aid
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/resident_continuity_test.cpp -o /tmp/unmade-resident-continuity
+          /tmp/unmade-resident-continuity
