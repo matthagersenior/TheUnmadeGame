@@ -1,0 +1,1053 @@
+{
+  "schema_version": 1,
+  "edition": "2026-10-10",
+  "title": "THE UNMADE — The Unanswered Atlas: Canon, Cast, Cities & Long-Form Mysteries",
+  "status": "new editorial canon / narrative production contracts; none of the new details is a finished Unreal scene",
+  "canonical_authorities": [
+    "Authoring/world_content_pack.json",
+    "Authoring/resident_return_encounters.json",
+    "Authoring/lived_universe_atlas.json",
+    "Authoring/main_quest_interaction_contracts.json",
+    "docs/lore/living-world-continuity.md"
+  ],
+  "historical_protection": {
+    "stable_realm_ids": true,
+    "stable_npc_ids": true,
+    "preserve_source_quest_state": true,
+    "preserve_two_postboss_mornings": true,
+    "retroactive_hero_lineage": false,
+    "sources_of_knowledge": "direct witness, delivered rumor, public locally observed result, never omniscient state",
+    "unsettled_questions": "never answer by implication or an adaptation-only 'secret truth' that overwrites player choice"
+  },
+  "continuity_lexicon": {
+    "ESTABLISHED": "already directly supported by existing game source or canonical text",
+    "LITERARY_CANON": "new editorial/cultural facts, approved for future adaptation but not yet UE-implemented",
+    "IN_WORLD_CLAIM": "a character's personally attributable statement, may be honestly mistaken",
+    "DISPUTED": "at least two incompatible surviving accounts; no adjudication without new authorized story decision",
+    "OPEN": "deliberately unresolved and must be preserved until explicitly commissioned",
+    "SEALED": "writer-room answer held privately if later defined; no public revelation by accident",
+    "ADAPTATION_VARIANT": "medium-specific staging that changes no causal core"
+  },
+  "volume_spine": [
+    {
+      "id": "VOL.I",
+      "public_role": "The Impossible Origin",
+      "in_world_anchor": "An opening testimony rather than a prophecy",
+      "retained": "The protagonist's origin can be customized, but their arrival is inherently contradictory",
+      "future_use": "First-person contradictory prologues in a literary anthology"
+    },
+    {
+      "id": "VOL.II",
+      "public_role": "What the World Remembers",
+      "in_world_anchor": "Witnesses return to landmarks they once changed",
+      "retained": "Aftermath choices create local, personally attributable memories",
+      "future_use": "Returning-character novellas"
+    },
+    {
+      "id": "VOL.III",
+      "public_role": "The Places We Return To",
+      "in_world_anchor": "Saltwake's sluice and Cinderhold's vent",
+      "retained": "Repair, care, rumor and truth leave physical consequences",
+      "future_use": "Two-city limited series about public responsibility"
+    },
+    {
+      "id": "VOL.IV",
+      "public_role": "The Living Canon",
+      "in_world_anchor": "A ledger that distinguishes source truth from story interpretations",
+      "retained": "Four player-first pillars and nine canonical realms",
+      "future_use": "Adaptation bible and cross-media fact checking"
+    },
+    {
+      "id": "VOL.V",
+      "public_role": "Stories of the Nine",
+      "in_world_anchor": "Alternative witnesses who describe the same historical absence differently",
+      "retained": "Realm-specific moral costs; optional narratives",
+      "future_use": "Stand-alone anthology episodes"
+    },
+    {
+      "id": "VOL.VI",
+      "public_role": "Rites and Consequences",
+      "in_world_anchor": "A test of whether a rule can be unwritten without deleting a life",
+      "retained": "Ten bounded reality disciplines",
+      "future_use": "Mystery-thriller framed around a single misuse"
+    },
+    {
+      "id": "VOL.VII",
+      "public_role": "The Unanswered Road",
+      "in_world_anchor": "A chain of local evidence leading toward responsibility",
+      "retained": "Nonlinear multiple realm pathways; no forced completionist route",
+      "future_use": "Long-running television season spine"
+    },
+    {
+      "id": "VOL.VIII",
+      "public_role": "The Answer and the World After",
+      "in_world_anchor": "The false victory, two mornings and a voluntary echo",
+      "retained": "Nhal-Vey is a delegated suppression mechanism, not universal evil",
+      "future_use": "Sealed ending bible; no public marketing spoilers"
+    },
+    {
+      "id": "VOL.IX",
+      "public_role": "A World That Remembers",
+      "in_world_anchor": "Nine-realm concept-film source and 82 known individuals",
+      "retained": "Film/cinematic production is not equivalent to real Unreal gameplay",
+      "future_use": "Screenplay, art, sound and episode planning"
+    },
+    {
+      "id": "VOL.X",
+      "public_role": "The Unanswered Atlas",
+      "in_world_anchor": "Cities, individual witness dramas and evidence whose interpretation evolves",
+      "retained": "All prior canon held; new specifics are prospective literary canon",
+      "future_use": "Connected anthology, primary character novel, limited television and companion game expansion"
+    }
+  ],
+  "cities": [
+    {
+      "id": "CITY.01",
+      "realm": "ThreefoldReach",
+      "name": "The Crossings",
+      "recognition": "three roads meet under one missing mile",
+      "skyline": "Timber footbridges tied with three competing knots; street tiles from three abandoned maps",
+      "sound": "A humming roadstone counterpoint to market kettles",
+      "social_rule": "Wards refuse to ask a traveler for a name until they have eaten",
+      "civic_power": "Bridge Ledger Court",
+      "personal_stakes": "Orrel marks crossings with an inkless nail; Kesta can deliver testimony but cannot decide which road is right",
+      "anomaly": "The third road runs through an address erased from Paperhaven's publicly dated surveys",
+      "reveal_state": "open",
+      "visual_icon": "three mismatched road knots",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.02",
+      "realm": "ThreefoldReach",
+      "name": "Bellwold",
+      "recognition": "the bell tower whose bell was never cast",
+      "skyline": "Copper-green tower with an empty suspended yoke; refuge lanterns reflected in washed gray stone",
+      "sound": "A missing last bell note followed by the continued noise of people eating",
+      "social_rule": "An uncounted cup is set out even on nights when there are fewer chairs than guests",
+      "civic_power": "The Refuge Ward",
+      "personal_stakes": "Hessa weighs survival against exposure of the erased census; Sorin and Ivera disagree without being enemies",
+      "anomaly": "Rook lights a lantern on a doorstep that only some returning travelers can locate",
+      "reveal_state": "open",
+      "visual_icon": "empty bronze yoke with one lit refuge cup",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.03",
+      "realm": "ThreefoldReach",
+      "name": "Paperhaven",
+      "recognition": "the city where evidence is physically heavier than paper",
+      "skyline": "Chalk vaults, narrow roof-high archives and the dry garden that never grew in rain",
+      "sound": "A scratch of quills that never aligns with the tower clock",
+      "social_rule": "Residents can correct a public record but cannot publish another person's private name without their consent",
+      "civic_power": "Index Hall",
+      "personal_stakes": "Sevrin's authority depends on the library surviving; Toma notices crossed-out lines survive copying",
+      "anomaly": "An index entry cites a volume printed before its press existed",
+      "reveal_state": "open",
+      "visual_icon": "two dry paper leaves under a weight stone",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.04",
+      "realm": "WidowedRain",
+      "name": "Saltwake",
+      "recognition": "the harbor which has weather but no sea",
+      "skyline": "Pier skeletons standing above slate flats; inverted keel roofs and immaculate tide grooves",
+      "sound": "Rain on hulls with no answering water slap",
+      "social_rule": "Leave a rope knot with dry hands before requesting refuge",
+      "civic_power": "Mooring Council",
+      "personal_stakes": "Sella maps what others call impossible; Harrow protects lives on the dry docks but signed old ownership papers",
+      "anomaly": "One buoy rings before the storm instead of after, even when its rope is cut",
+      "reveal_state": "open",
+      "visual_icon": "dry cup inside a tide circle",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.05",
+      "realm": "HearthBeneath",
+      "name": "Cinderhold",
+      "recognition": "the city whose sun rises beneath its foundations",
+      "skyline": "Basalt ventilator ribs, public furnace court, deep angular steps and doubled chimney shadows",
+      "sound": "Metal vent shutters and loaves cracking over too-even heat",
+      "social_rule": "The first cooled coal is given, not sold",
+      "civic_power": "The Ember Commons",
+      "personal_stakes": "Tarin knows the fire's missing beat; Rheva maintains public safety; Ovenna sees the cost borne by vulnerable households",
+      "anomaly": "One oven records a child's birthday in ash before that child's birth",
+      "reveal_state": "open",
+      "visual_icon": "coal with two opposing shadows",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.06",
+      "realm": "TidalLedger",
+      "name": "Drevlach",
+      "recognition": "the debt city where tomorrow is stamped before dawn",
+      "skyline": "Black-teal paper docks, dry counting bridges and silver inverted-date clocks",
+      "sound": "Ink nibs striking account stone as absent oars move",
+      "social_rule": "Read every contract in both directions; silence cannot sign",
+      "civic_power": "Ninth Due Exchange",
+      "personal_stakes": "Veynu keeps contradictory books to protect those named in them; Orshel ferries evidence rather than people",
+      "anomaly": "A negative deposit is attributed to the same unregistered witness in two centuries",
+      "reveal_state": "open",
+      "visual_icon": "upside-down date stamp",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.07",
+      "realm": "SkyBelow",
+      "name": "Orravane",
+      "recognition": "the upside-down city suspended by an absent seventh note",
+      "skyline": "Hanging terraces, counterweighted rooms, honey-gold tuning teeth and chalk rest platforms",
+      "sound": "A chorus with a structurally necessary missing interval",
+      "social_rule": "Tap a load rail before speaking so a voice will not be mistaken for an echo",
+      "civic_power": "Cantors' Support Circle",
+      "personal_stakes": "Yllesh protects occupied buildings; Orru argues that compulsory singing is another kind of erasure",
+      "anomaly": "At each seventh rest an empty platform rocks as though someone sat down",
+      "reveal_state": "open",
+      "visual_icon": "seven rail beads with one empty socket",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.08",
+      "realm": "CinderSpine",
+      "name": "Vathless",
+      "recognition": "the inhabited quarry of concealed names",
+      "skyline": "Houses and family stairways carved from load-bearing old quarry walls",
+      "sound": "A long chisel echo that returns with a different syllable",
+      "social_rule": "No bearing stone may be broken while a household sleeps above it",
+      "civic_power": "The Seam Ward",
+      "personal_stakes": "Ghraet protects structural integrity; Issil asks who has the right to read an erased ancestor aloud",
+      "anomaly": "The quarry's oldest seam bears a mason's mark from Drevlach's future receipt",
+      "reveal_state": "open",
+      "visual_icon": "handprint beneath a bearing seam",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.09",
+      "realm": "HundredUnlived",
+      "name": "Eillun",
+      "recognition": "the city that cannot agree how many people live there",
+      "skyline": "Woven address signs, twin-door kitchens, unsigned lantern ways and a threshold loom",
+      "sound": "Paired door knocks whose second answer sometimes comes first",
+      "social_rule": "Ask how to find someone's home, never demand their official number",
+      "civic_power": "Shelter Pair Assemblies",
+      "personal_stakes": "Nhel maintains counts to deliver food; Auvet protects those who won't be counted; Veysha fears what a census can enforce",
+      "anomaly": "An empty registered plot wears a threshold smooth beneath constant footsteps",
+      "reveal_state": "open",
+      "visual_icon": "two door markers tied by one thread",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.10",
+      "realm": "OrchardOfKings",
+      "name": "Tharniv",
+      "recognition": "the orchard capital with a throne nobody accepted",
+      "skyline": "An empty crown plinth in a grafted apple grove, petition bark and rooted voting circles",
+      "sound": "Autumn leaves shuffling like papers being moved across a hearing desk",
+      "social_rule": "Leave one piece of fruit unclaimed at a hearing",
+      "civic_power": "Rotating Harvest Circle",
+      "personal_stakes": "Serriv refuses easy legitimacy; Imro feeds people rather than theories; Eliun records appeals no throne can adjudicate",
+      "anomaly": "The tree growing over the plinth has older petitions than roots",
+      "reveal_state": "open",
+      "visual_icon": "uncrowned fruit balanced on scales",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    },
+    {
+      "id": "CITY.11",
+      "realm": "FirstAbsence",
+      "name": "Auvren",
+      "recognition": "the threshold city whose departure steps were made before arrival",
+      "skyline": "Limestone rooms that imply an outside within themselves, two founding thresholds and a northern witness plateau",
+      "sound": "A footstep arrives before its audible contact",
+      "social_rule": "When asked where you are from, describe what you carry, not what blood proves",
+      "civic_power": "Open Witness Steps",
+      "personal_stakes": "Orriv remembers arrivals that never happened; Veilune preserves incompatible testimony; Thae keeps exits reliably passable",
+      "anomaly": "The second threshold opens on a morning the city never experienced",
+      "reveal_state": "sealed",
+      "visual_icon": "footprint facing its own approach",
+      "adaption_rule": "Keep the city's material signature, audible identity, civic disagreement, and visible ordinary life; never make its paradox a generic fantasy portal."
+    }
+  ],
+  "character_dossiers": [
+    {
+      "id": "npc.bellwold.matron.001",
+      "display": "Hessa the refuge matron",
+      "anchor": "an uncounted porcelain cup, chipped on its lip",
+      "face": "One thumb permanently marked by hot kettle handles; refuses to stand behind the registration desk",
+      "public_aim": "Keep the refuge open through a second night of danger",
+      "private_need": "Be believed without having to surrender the protected names of the people she saved",
+      "fault": "Quietly decides what others are permitted to know, even when the secrecy becomes paternalism",
+      "wound": "A child she sheltered was once made into a census entry against her promise",
+      "voice": "Warm contralto; ends arguments by asking whether someone has eaten",
+      "relationships": [
+        [
+          "npc.bellwold.healer.001",
+          "Sorin wants triage first; she asks him to make room for one more traveler"
+        ],
+        [
+          "npc.bellwold.childtutor.001",
+          "Ivera asks her to admit when protection becomes silence"
+        ],
+        [
+          "npc.paperhaven.registrar.001",
+          "Sevrin distrusts unverified refuge numbers"
+        ]
+      ],
+      "entrance": "We keep one cup uncounted. It is not missing.",
+      "lie": "If nobody writes down a name, nobody can use it to hurt them.",
+      "contradiction": "Her mercy can conceal harms that records might prevent.",
+      "reappearance": "After a later return, she carries the same cup but lets its owner decide where to sit.",
+      "open_hook": "Why does the cup's hairline crack echo the uncast bell's seam?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "Why does the cup's hairline crack echo the uncast bell's seam?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.bellwold.childtutor.001",
+      "display": "Ivera the tutor",
+      "anchor": "a lesson slate scored with seven lines but only six numerals",
+      "face": "Chalk dust up to one wrist; looks at people's shoes when adults discuss who belongs",
+      "public_aim": "Teach the displaced children to read public records critically",
+      "private_need": "Protect pupils without teaching them that facts are optional",
+      "fault": "Assumes disclosure is always kinder if written clearly",
+      "wound": "An absent name in a class register belonged to a child she knew",
+      "voice": "Fast precise phrasing that slows around protected testimony",
+      "relationships": [
+        [
+          "npc.bellwold.matron.001",
+          "Hessa once hid the very document she needs to teach with"
+        ],
+        [
+          "npc.bellwold.healer.001",
+          "Sorin witnesses the consequences of Ivera's certainty"
+        ]
+      ],
+      "entrance": "If the number is wrong, why is the child still here?",
+      "lie": "Any true entry ought to be public.",
+      "contradiction": "A right to truth can threaten a right to remain anonymous.",
+      "reappearance": "On return she teaches the same lesson with a blank line deliberately left intact.",
+      "open_hook": "The seventh slate line appears on stones she has never visited.",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "The seventh slate line appears on stones she has never visited.",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.paperhaven.registrar.001",
+      "display": "Sevrin the registrar",
+      "anchor": "a two-faced seal press with an unengraved reverse",
+      "face": "Sleeves too short to hide ink burns; one perfect cuff he has not replaced for years",
+      "public_aim": "Keep the official index trustworthy in a world of contradictory maps",
+      "private_need": "Admit the difference between a protected archive and an infallible state",
+      "fault": "Calls caution neutrality even when inaction helps the powerful",
+      "wound": "His own signature certifies a day he can prove never happened",
+      "voice": "Measured, spare, avoids metaphors until frightened",
+      "relationships": [
+        [
+          "npc.bellwold.matron.001",
+          "A standing dispute with Hessa over safe disclosure"
+        ],
+        [
+          "npc.paperhaven.scribe.001",
+          "Toma has copied a contradiction Sevrin ordered protected"
+        ]
+      ],
+      "entrance": "We do not erase. We annotate why a page cannot be shown.",
+      "lie": "The index cannot harm anyone so long as it stays precise.",
+      "contradiction": "Correct records can still be weaponized.",
+      "reappearance": "After certain disclosures, leaves a public annotation beside a protected blank.",
+      "open_hook": "Who wrote the annotation bearing his seal before he earned the office?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "Who wrote the annotation bearing his seal before he earned the office?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.bridgekeeper.001",
+      "display": "Orrel the bridge keeper",
+      "anchor": "a bent inkless nail hung from a blue cord",
+      "face": "Walks each crossing to test it before any merchant caravan; one boot heel worn at an impossible angle",
+      "public_aim": "Make the three roads passable without levying unfair tolls",
+      "private_need": "Prove that a bridge can belong to travelers rather than a charter",
+      "fault": "Will overpromise safe passage rather than turn someone away",
+      "wound": "Once guided a group across a road that no longer appears on a survey",
+      "voice": "Laconic, talks in distances and hands-on details",
+      "relationships": [
+        [
+          "npc.bellwold.matron.001",
+          "Hessa trusts his patrol but not his refusal to turn people away"
+        ],
+        [
+          "npc.paperhaven.registrar.001",
+          "Disputes Sevrin's dates using the wear on bridge stone"
+        ]
+      ],
+      "entrance": "Try the plank. If it gives, it is my fault, not the map's.",
+      "lie": "A road that can be crossed is a road that exists.",
+      "contradiction": "A passable road may still be built on an unacknowledged cost.",
+      "reappearance": "On new mornings he repairs both route variants instead of naming one false.",
+      "open_hook": "The nail vibrates at each of the nine realm thresholds.",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "The nail vibrates at each of the nine realm thresholds.",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.saltwake.navigator.001",
+      "display": "Sella the drowned navigator",
+      "anchor": "a salt-white chart weight shaped like a missing buoy",
+      "face": "Her boots carry dry salt but never dry; measures storms by touching wood rather than sky",
+      "public_aim": "Chart reliable routes through rain without a sea",
+      "private_need": "Have someone believe her memory without making it a public cargo claim",
+      "fault": "Treats people as compass bearings when frightened of losing them",
+      "wound": "Her last crew's log records a return before the vessel departed",
+      "voice": "Breathy rasp that becomes exact and calm for navigation",
+      "relationships": [
+        [
+          "npc.saltwake.harborwarden.001",
+          "Harrow believes her charts but refuses their ownership implications"
+        ],
+        [
+          "npc.saltwake.rainkeeper.001",
+          "Thenn can corroborate measurements, not the voyage she remembers"
+        ]
+      ],
+      "entrance": "That shore is not where you left it. Neither am I.",
+      "lie": "If I draw the coast correctly, everyone can come home.",
+      "contradiction": "A perfect map may not restore a place or its people.",
+      "reappearance": "A late scene shows her charting where travelers actually choose to stand.",
+      "open_hook": "Whose handwriting corrected the final route on her sealed chart?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "Whose handwriting corrected the final route on her sealed chart?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.saltwake.harborwarden.001",
+      "display": "Harrow the harbor warden",
+      "anchor": "a brass tide whistle that makes a sound only in rain",
+      "face": "Wears an old harbor uniform whose stitched rank names a port not on the records",
+      "public_aim": "Keep storm lanes safe and shelter boats from debt seizures",
+      "private_need": "Confess that his signature once enabled an old water ownership claim",
+      "fault": "Uses emergencies as justification for powers he ought to surrender",
+      "wound": "A dry pier took his brother while a formal harbor log called it an ordinary shift",
+      "voice": "Struck-metal commands with long silences after a private question",
+      "relationships": [
+        [
+          "npc.saltwake.navigator.001",
+          "Sella exposes what his office signed"
+        ],
+        [
+          "npc.saltwake.broker.001",
+          "Iva profits from a rule he never formally repealed"
+        ]
+      ],
+      "entrance": "Go up. The rain does not ask whose name is on the quay.",
+      "lie": "Keeping people alive lets us settle the accounts later.",
+      "contradiction": "The accounts determine who receives safety now.",
+      "reappearance": "Watches an open public ferry rail without collecting a permit.",
+      "open_hook": "Why does his whistle call an answering sound below the dry pier?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "Why does his whistle call an answering sound below the dry pier?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.cinderhold.hearthreader.001",
+      "display": "Tarin the hearth reader",
+      "anchor": "a slate with a heat-black space between two engraved beats",
+      "face": "Ink-stained fingers kept away from living flame; speaks to ovens as though asking permission",
+      "public_aim": "Keep the commune's furnace operating without erasing costs",
+      "private_need": "Learn who authored the heat debt before he inherits enforcement of it",
+      "fault": "Confuses the ability to interpret signs with the right to decide household policy",
+      "wound": "His first recorded reading predicted the voice of a child not yet born",
+      "voice": "Gentle clipped syllables, pausing precisely where fire should hiss",
+      "relationships": [
+        [
+          "npc.cinderhold.emberwarden.001",
+          "Rheva values his warnings but rejects his ethical delay"
+        ],
+        [
+          "npc.cinderhold.healer.001",
+          "Ovenna asks whether any formula can justify refusing warmth"
+        ]
+      ],
+      "entrance": "There should be a beat here. The furnace paid for it anyway.",
+      "lie": "Every cost can be measured safely.",
+      "contradiction": "Measurement can erase the fact that no one consented to pay.",
+      "reappearance": "After return he reads a hearth beside a family rather than above them.",
+      "open_hook": "Why does the missing hearth beat match Orravane's unoccupied rest?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "Why does the missing hearth beat match Orravane's unoccupied rest?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.tidal.ledgerkeeper.001",
+      "display": "Veynu of the Ninth Due",
+      "anchor": "braided clock cord with a ninth knot that cannot be tightened",
+      "face": "Ink-dipped fingers and one clean palm deliberately kept open",
+      "public_aim": "Stop lenders binding unborn people to the accounts",
+      "private_need": "Admit that the city survived because he maintained those same accounts",
+      "fault": "Documents harm faster than he dares interrupt it",
+      "wound": "The cradle seal in his custody contains a name he refuses to transcribe",
+      "voice": "Thin nasal resonance; pauses where a sum ought to balance",
+      "relationships": [
+        [
+          "npc.tidal.ferryman.001",
+          "Orshel carries what Veynu fears to publish"
+        ],
+        [
+          "npc.tidal.witness.001",
+          "Ezzun can testify to the seal's creation but not its owner"
+        ]
+      ],
+      "entrance": "Every debt has a creditor. This one had a cradle.",
+      "lie": "A copy of every account will one day make restitution possible.",
+      "contradiction": "The copying office is also the instrument of exploitation.",
+      "reappearance": "Later turns the empty ninth knot into a public question rather than a private bond.",
+      "open_hook": "The knot disappears in the presence of a seal from Paperhaven.",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "The knot disappears in the presence of a seal from Paperhaven.",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.sky.choirmaster.001",
+      "display": "Yllesh Underchord",
+      "anchor": "a tuning fork missing its left prong but still resonant",
+      "face": "Holds breath when entering rooms, counting stress in ceiling joints",
+      "public_aim": "Keep the inhabited hanging terraces standing",
+      "private_need": "Be forgiven for making singers perform beyond consent",
+      "fault": "Turns structural necessity into an excuse to avoid designing alternatives",
+      "wound": "Has heard a voice singing from an empty platform during a communal rest",
+      "voice": "A half-sung middle register; commands never more than six beats",
+      "relationships": [
+        [
+          "npc.sky.dissenter.001",
+          "Orru demands a rest without permission"
+        ],
+        [
+          "npc.sky.structuralist.001",
+          "Vhaurn can invent a mechanical brace if Yllesh releases old standards"
+        ]
+      ],
+      "entrance": "There are six of us. You are hearing seven.",
+      "lie": "We cannot rest until the houses are safe.",
+      "contradiction": "Houses are never safe if residents lose their right to rest.",
+      "reappearance": "At a shared rest interval he remains silent by choice.",
+      "open_hook": "The empty seventh lectern carries a recently worn handprint.",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "The empty seventh lectern carries a recently worn handprint.",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.bones.descendant.001",
+      "display": "Issil Againborn",
+      "anchor": "a clay handprint below a family's erased foundation signature",
+      "face": "Chisel dust in hair despite refusing quarry work; carries memorial rubbings rolled inward",
+      "public_aim": "Restore the names of erased builders without endangering current homes",
+      "private_need": "Know whether remembering an ancestor can also deny an adopted family's right to remain",
+      "fault": "At first mistakes public naming for justice in itself",
+      "wound": "Two incompatible family registers both claim her grandmother",
+      "voice": "Low deliberate sentences; repeats words to test whether they are still true",
+      "relationships": [
+        [
+          "npc.bones.seamwarden.001",
+          "Ghraet must keep her home structurally safe"
+        ],
+        [
+          "npc.bones.mason.001",
+          "Torrun can make supports but refuses to name those beneath his work"
+        ]
+      ],
+      "entrance": "Do not break that stone. My grandmother is holding up a house.",
+      "lie": "A correct name can repair an inherited wrong.",
+      "contradiction": "Correction without consent can create new dispossession.",
+      "reappearance": "Protects a seam and a family at the same time, visibly imperfectly.",
+      "open_hook": "Who is the smaller hand beside the old name?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "Who is the smaller hand beside the old name?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.unlived.caretaker.001",
+      "display": "Auvet Keep-Quiet",
+      "anchor": "a paired doorstep cord threaded through an unsigned brass eye",
+      "face": "Can find a home in darkness by touching the threshold seam; never assumes a neighbor's given name",
+      "public_aim": "Maintain shelter without compulsory registration",
+      "private_need": "Trust that recognition can be freely chosen, including by people who want an official name",
+      "fault": "Can make privacy so absolute that people cannot obtain public care",
+      "wound": "She once turned away a registrar who was genuinely bringing medicine",
+      "voice": "Soft precise rhythm; waits through a silence without using it as consent",
+      "relationships": [
+        [
+          "npc.unlived.censuskeeper.001",
+          "Nhel's counts can distribute food and can expose people"
+        ],
+        [
+          "npc.unlived.challenger.001",
+          "Veysha demands a public debate Auvet would rather postpone"
+        ]
+      ],
+      "entrance": "Find my door by the light. It does not require my name.",
+      "lie": "Leaving names alone always leaves people safe.",
+      "contradiction": "Unrecorded people may also go unnoticed when they need help.",
+      "reappearance": "Offers an opt-in address marker and keeps the anonymous path.",
+      "open_hook": "Whose hand tied the second doorstep cord before anyone lived there?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "Whose hand tied the second doorstep cord before anyone lived there?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.orchard.untitled.001",
+      "display": "Serriv Crownless",
+      "anchor": "an untouched apple balanced on the vacant crown stone",
+      "face": "Wears pruning scars across one forearm; never faces the empty plinth while speaking",
+      "public_aim": "Make the harvest accessible without authorizing a monarch",
+      "private_need": "Stop fearing that refusing authority makes him responsible for every unresolved petition",
+      "fault": "His refusal to lead sometimes allows old laws to rule unopposed",
+      "wound": "He once made a temporary decision people still call a royal decree",
+      "voice": "Quiet, ceremonial cadence that breaks into practical orchard talk",
+      "relationships": [
+        [
+          "npc.orchard.gardener.001",
+          "Imro calls him out when legal debates let food rot"
+        ],
+        [
+          "npc.orchard.historian.001",
+          "Eliun remembers his unsigned emergency order"
+        ]
+      ],
+      "entrance": "Do not bow. That is how these stories begin.",
+      "lie": "If no one sits on the throne, nobody rules unjustly.",
+      "contradiction": "Vacant power can remain coercive through habit.",
+      "reappearance": "Shares the common harvest without offering to reign.",
+      "open_hook": "What signature appears beneath his old refusal on the petition tree?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "What signature appears beneath his old refusal on the petition tree?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    },
+    {
+      "id": "npc.absence.firstwitness.001",
+      "display": "Orriv Before-Arrival",
+      "anchor": "a boot sole whose print appears before the step falls",
+      "face": "Keeps a second pair of shoes with different wear; never walks backward in conversation",
+      "public_aim": "Maintain Auvren's public witness markers and an escape route",
+      "private_need": "Admit that seeing an impossible arrival does not explain that person's destiny",
+      "fault": "Speaks in riddles when clarity would protect others",
+      "wound": "He remembers the protagonist arriving, but also remembers failing to recognize them",
+      "voice": "Low even pitch; anticipates a question then corrects himself",
+      "relationships": [
+        [
+          "npc.absence.caretaker.001",
+          "Thae insists doorways must work regardless of metaphysics"
+        ],
+        [
+          "npc.absence.otherwitness.001",
+          "Veilune preserves his contradictory version instead of choosing one"
+        ]
+      ],
+      "entrance": "You came yesterday. We have not had yesterday yet.",
+      "lie": "If I saw it, I know when it happened.",
+      "contradiction": "Witnessing and understanding are not the same.",
+      "reappearance": "In a changed morning, he says less and guides the visitor out safely.",
+      "open_hook": "Who wrote the second set of footprints beside his?",
+      "continuity_class": "new literary characterization for preproduction; original actor stable ID and gameplay identity unchanged",
+      "protected_unknown": "Who wrote the second set of footprints beside his?",
+      "media": [
+        "game",
+        "novel",
+        "television",
+        "film"
+      ]
+    }
+  ],
+  "mystery_register": [
+    {
+      "id": "MYST.01",
+      "name": "The Cup's Crack",
+      "public_premise": "An uncounted cup in Bellwold bears a fracture reminiscent of the bell mold's missing seam.",
+      "recurrences": "Bellwold cup; refugee meal chit; original tower mold",
+      "grounded_known": "A document can establish how old an object is, but not who chose to leave it for a guest.",
+      "question_stays_open": "Why does the same crack appear in an older archive plate?",
+      "forbidden_shortcut": "Do not decide whose child the cup belonged to or claim it names the protagonist.",
+      "canon_guard": "The Second Night remains about actual shelter and consenting testimony.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    },
+    {
+      "id": "MYST.02",
+      "name": "The Harbor's Last Departure",
+      "public_premise": "Sella's sealed chart is corrected in handwriting not known to her.",
+      "recurrences": "Saltwake dry pier; public tide grooves; Drevlach repair tag",
+      "grounded_known": "An erased geographic fact can leave evidence in institutions.",
+      "question_stays_open": "Who revised the chart while its seal was unbroken?",
+      "forbidden_shortcut": "Do not make the chart a literal map to Nhal-Vey; allow human complicity.",
+      "canon_guard": "Harrow and Sella disagree about who may own a safe route.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    },
+    {
+      "id": "MYST.03",
+      "name": "The Missing Hearth Beat",
+      "public_premise": "Cinderhold's oven slate shows the same absent temporal interval as Orravane's seventh rest.",
+      "recurrences": "Tarin's slate; public hearth pan; Orravane rest tally",
+      "grounded_known": "Two phenomena can share a timing signature without sharing the same cause.",
+      "question_stays_open": "Were the two communities ever in communication before their present chronologies?",
+      "forbidden_shortcut": "Do not prove a single ancient supercivilization as a shortcut.",
+      "canon_guard": "The people needing warmth and shelter have rights now.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    },
+    {
+      "id": "MYST.04",
+      "name": "The Ninth Knot",
+      "public_premise": "Veynu's cord loses a knot in the presence of an old sealed Paperhaven impression.",
+      "recurrences": "Ninth Due cord; cradle seal; Paperhaven press",
+      "grounded_known": "Debt entries can predate their alleged owner.",
+      "question_stays_open": "Who tied the knot, and did they understand its price?",
+      "forbidden_shortcut": "Do not identify an unborn debtor as a predetermined player child.",
+      "canon_guard": "Existing saveable debt decision stays authoritative.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    },
+    {
+      "id": "MYST.05",
+      "name": "The Seventh Rest",
+      "public_premise": "A singerless platform in Orravane registers weight during an authorized silence.",
+      "recurrences": "Empty lectern; rest bench; mechanical brace",
+      "grounded_known": "A resting worker's personal consent is not erased by magic infrastructure.",
+      "question_stays_open": "Is the platform remembering a worker or anticipating one?",
+      "forbidden_shortcut": "Do not reveal the answer by using a generic ghost model.",
+      "canon_guard": "Orru's refusal and Yllesh's fear remain credible.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    },
+    {
+      "id": "MYST.06",
+      "name": "The Smaller Hand",
+      "public_premise": "Vathless's erased mason impression includes a hand too small to belong to the recorded worker.",
+      "recurrences": "Mother-stone; dwelling register; heritage rubbing",
+      "grounded_known": "Memorial records can obscure people without erasing their lived consequences.",
+      "question_stays_open": "Who was the child permitted to touch a bearing wall?",
+      "forbidden_shortcut": "Do not establish a new royal lineage via the handprint.",
+      "canon_guard": "Never demolish occupied housing as a simple heroic solution.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    },
+    {
+      "id": "MYST.07",
+      "name": "The Door Without A Census",
+      "public_premise": "An unregistered Eillun household shows more use than the city's dated map permits.",
+      "recurrences": "Threshold cord; kitchen stool; permission-based testimony",
+      "grounded_known": "People can live meaningful lives without an official history.",
+      "question_stays_open": "Who repaired the house before it was permitted to exist?",
+      "forbidden_shortcut": "Do not frame the residents as illusions or force publication of names.",
+      "canon_guard": "Personhood precedes census consent.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    },
+    {
+      "id": "MYST.08",
+      "name": "The Signed Refusal",
+      "public_premise": "Serriv's old refusal carries a second signature beneath the petition-tree bark.",
+      "recurrences": "Empty crown stone; petition bark; civic harvest scale",
+      "grounded_known": "An unenacted law can still govern as a social contract.",
+      "question_stays_open": "Is the second mark a citizen's counter-signature or a temporal echo?",
+      "forbidden_shortcut": "Do not crown the player or Serriv through a twist.",
+      "canon_guard": "Emergency choice must remain publicly contestable.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    },
+    {
+      "id": "MYST.09",
+      "name": "The Other Footsteps",
+      "public_premise": "Auvren retains a second approach-print beside the protagonist's impossible mark.",
+      "recurrences": "First arrival steps; two witness markers; public exit",
+      "grounded_known": "A person may be witnessed before an origin is established.",
+      "question_stays_open": "Who walked beside the visitor when no one else remembers the journey?",
+      "forbidden_shortcut": "Do not resolve the protagonist's customizable identity or the ultimate cosmology.",
+      "canon_guard": "Nhal-Vey is a delegated mechanism, not sole author of institutional harms.",
+      "unlock_scope": "book / optional game lore / film episode breadcrumbs; no new main quest gate",
+      "answers_status": "OPEN",
+      "continuity_truth": "present clues are new literary directions, not proven runtime observations"
+    }
+  ],
+  "callback_register": [
+    {
+      "id": "CALL.01",
+      "artifact": "Hessa's uncounted cup",
+      "origin_city_id": "CITY.02",
+      "mystery_id": "MYST.01",
+      "seed": "Visible in first shelter meal",
+      "payoff": "Reappears at the returned refuge after local choice",
+      "expansion_bridge": "Cameo in a Saltwake traveler journal only with a dated courier or recorded recollection",
+      "boundary": "The cup's meaning changes, not its ownership"
+    },
+    {
+      "id": "CALL.02",
+      "artifact": "Ivera's seven-line slate",
+      "origin_city_id": "CITY.02",
+      "mystery_id": "MYST.05",
+      "seed": "A teaching tool in Bellwold",
+      "payoff": "A strange mark in an Orravane rest diagram",
+      "expansion_bridge": "Later challenge distinguishes coincident markings from actual historical links",
+      "boundary": "Never declare a child secretly chosen by the seventh line"
+    },
+    {
+      "id": "CALL.03",
+      "artifact": "Sevrin's two-faced press",
+      "origin_city_id": "CITY.03",
+      "mystery_id": "MYST.04",
+      "seed": "Archive redaction scene",
+      "payoff": "Reversed birth-date impression in Drevlach",
+      "expansion_bridge": "Later private copy surfaces with a provenance gap",
+      "boundary": "Proof of a document is not proof of consent"
+    },
+    {
+      "id": "CALL.04",
+      "artifact": "Orrel's inkless nail",
+      "origin_city_id": "CITY.01",
+      "mystery_id": "MYST.09",
+      "seed": "Damaged safe crossing",
+      "payoff": "Rattles near one earned realm gateway",
+      "expansion_bridge": "A future story asks who forged identical nails for a route not yet traveled",
+      "boundary": "No magical global shortcut replaces atlas attunement"
+    },
+    {
+      "id": "CALL.05",
+      "artifact": "Sella's chart weight",
+      "origin_city_id": "CITY.04",
+      "mystery_id": "MYST.02",
+      "seed": "Everyday storm navigation",
+      "payoff": "Used as a counterweight in a later dry ferry scene",
+      "expansion_bridge": "A future expedition observes it points toward an unrecorded shoreline",
+      "boundary": "Never use as a waypoint to mandatory final boss"
+    },
+    {
+      "id": "CALL.06",
+      "artifact": "Harrow's silent whistle",
+      "origin_city_id": "CITY.04",
+      "mystery_id": "MYST.02",
+      "seed": "Storm duty on the pier",
+      "payoff": "An answering sound from under dry boards",
+      "expansion_bridge": "Echoed in a local witness confession",
+      "boundary": "Avoid a generic evil-warden reveal"
+    },
+    {
+      "id": "CALL.07",
+      "artifact": "Tarin's heat slate",
+      "origin_city_id": "CITY.05",
+      "mystery_id": "MYST.03",
+      "seed": "Communal oven inspection",
+      "payoff": "Matched with a choir rest notation",
+      "expansion_bridge": "An optional witness confronts him about the limits of measurement",
+      "boundary": "The furnace does not prove the identity of an absent singer"
+    },
+    {
+      "id": "CALL.08",
+      "artifact": "Veynu's ninth knot",
+      "origin_city_id": "CITY.06",
+      "mystery_id": "MYST.04",
+      "seed": "Public accounting",
+      "payoff": "A missing knot during an archive exchange",
+      "expansion_bridge": "A new story follows who profits from keeping the cord unexamined",
+      "boundary": "Do not imply the child consented"
+    },
+    {
+      "id": "CALL.09",
+      "artifact": "Yllesh's broken fork",
+      "origin_city_id": "CITY.07",
+      "mystery_id": "MYST.05",
+      "seed": "Choir rehearsal",
+      "payoff": "Rest schedule in a private chamber",
+      "expansion_bridge": "Later an artisan recognizes the break pattern from an older supporting rail",
+      "boundary": "A note is not a human life"
+    },
+    {
+      "id": "CALL.10",
+      "artifact": "Issil's handprint",
+      "origin_city_id": "CITY.08",
+      "mystery_id": "MYST.06",
+      "seed": "First household repair",
+      "payoff": "Angles under after-morning lighting",
+      "expansion_bridge": "Later heir admits to covering the mark to prevent unlawful seizure",
+      "boundary": "The family remains housed across revelations"
+    },
+    {
+      "id": "CALL.11",
+      "artifact": "Auvet's door cord",
+      "origin_city_id": "CITY.09",
+      "mystery_id": "MYST.07",
+      "seed": "Anonymous navigation",
+      "payoff": "A voluntary address plaque",
+      "expansion_bridge": "A television cold open uses the same gesture before revealing its city",
+      "boundary": "Never equate identity consent with secrecy imposed by rulers"
+    },
+    {
+      "id": "CALL.12",
+      "artifact": "Serriv's untouched fruit",
+      "origin_city_id": "CITY.10",
+      "mystery_id": "MYST.08",
+      "seed": "Public harvest argument",
+      "payoff": "Post-quest common table",
+      "expansion_bridge": "A child leaves fruit on the empty plinth in a future generation",
+      "boundary": "No sudden acceptance of a blood crown"
+    },
+    {
+      "id": "CALL.13",
+      "artifact": "Orriv's worn boots",
+      "origin_city_id": "CITY.11",
+      "mystery_id": "MYST.09",
+      "seed": "Arrival paradox",
+      "payoff": "Different footprints in the Many Mornings aftermath",
+      "expansion_bridge": "A future narrator tells an incompatible but honest memory",
+      "boundary": "Does not resolve the customizable hero's origin"
+    }
+  ],
+  "transmedia_packages": [
+    {
+      "id": "EXT.BOOK.01",
+      "medium": "novel",
+      "name": "The Cup No Census Claimed",
+      "lead": "npc.bellwold.matron.001",
+      "setting_ids": [
+        "CITY.02",
+        "CITY.03",
+        "CITY.01"
+      ],
+      "premise": "A refuge matron must preserve a family's safety when the records that could clear her of wrongdoing would expose those she promised to protect.",
+      "story_engine": "Who can tell the truth when the truth becomes a map for those looking to punish someone?",
+      "ending_promise": "The shelter survives with a costly compromise; the origin of its uncounted cup is not solved.",
+      "required_callbacks": [
+        "CALL.01",
+        "CALL.02",
+        "CALL.03"
+      ]
+    },
+    {
+      "id": "EXT.TV.01",
+      "medium": "limited_series",
+      "name": "Rain That Has No Sea",
+      "lead": "npc.saltwake.navigator.001",
+      "setting_ids": [
+        "CITY.04",
+        "CITY.06"
+      ],
+      "premise": "A navigator maps harbors omitted from history while a harbor warden confronts the legal disaster he once allowed.",
+      "story_engine": "Each episode pairs a concrete civic repair with evidence of a different impossible transaction.",
+      "ending_promise": "A fairer ferry service exists; the author of the sealed chart alteration remains unknown.",
+      "required_callbacks": [
+        "CALL.05",
+        "CALL.06",
+        "CALL.08"
+      ]
+    },
+    {
+      "id": "EXT.FILM.01",
+      "medium": "film",
+      "name": "The Seventh Rest",
+      "lead": "npc.sky.choirmaster.001",
+      "setting_ids": [
+        "CITY.07",
+        "CITY.05"
+      ],
+      "premise": "The city will fall if its choir stops. The singers will break if they cannot.",
+      "story_engine": "An engineering and consent thriller built around the sound of something that is not being sung.",
+      "ending_promise": "A hard-won scheduled rest is possible without solving the singerless platform.",
+      "required_callbacks": [
+        "CALL.07",
+        "CALL.09"
+      ]
+    },
+    {
+      "id": "EXT.GAME.01",
+      "medium": "game_expansion",
+      "name": "The Roads Beyond the Witness",
+      "lead": "npc.bridgekeeper.001",
+      "setting_ids": [
+        "CITY.01",
+        "CITY.09",
+        "CITY.11"
+      ],
+      "premise": "A series of disputed public crossings links people who refuse inherited titles to places missing from maps.",
+      "story_engine": "Physical investigation, earned atlas routes, guarded choices and individual resident memories.",
+      "ending_promise": "A route opens, not an answer to the protagonist's origins.",
+      "required_callbacks": [
+        "CALL.04",
+        "CALL.11",
+        "CALL.13"
+      ]
+    }
+  ],
+  "rules_for_adaptation": [
+    "Characters may have medium-specific dialogue but their personal motives, name, origin region and limits on knowledge remain consistent.",
+    "No series/novel/movie declares one mutually exclusive player ending the universal canonical ending; adapt with a visible variant label or set before the divergence.",
+    "A local humane victory must not claim that a cosmic villain personally perpetrated every historical injustice.",
+    "A mystery may yield a satisfying local answer while its larger pattern remains legitimately unanswered.",
+    "Distinctive icons, sound motifs, materials and gestures recur naturally; no arbitrary Easter eggs without a provenance path.",
+    "The protagonist's appearance, ancestry and chosen ethics remain free; side protagonists can carry standalone screen stories."
+  ],
+  "release_rule": "Every new volume carries stable IDs, canon facts vs character claims, dated continuity update, callbacks to earlier volumes, future hooks without forced answers, and separate spoiler permissions."
+}
