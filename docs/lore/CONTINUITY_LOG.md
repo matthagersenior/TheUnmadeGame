@@ -46,3 +46,9 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Extended six later realms from future atlas and return-arc data into source-generated physical gap/bridge and civic gate geometry, 18 stable actor identities, earned-atlas travel, first-visit trial decisions and second-visit aftermath evidence/witness/choice paths.
 - A new six-slot optional save snapshot preserves visited, stage and route results without replacing old schema-1 slots. Source checks cover state corruption, rollback and separate realm progress. No Unreal Editor compilation or gameplay performance has been demonstrated.
 - This substantial code milestone requires regenerating the illustrated package as Volume V rather than silently labeling the Volume IV binary current.
+
+## 2026-10-10 — Volume V illustrated canon package verified
+- Produced a 55-page illustrated Volume V Word master and PDF from the Volume IV edition, with the existing 30 art assets retained; rendered and visually inspected the new pages.
+- Assembled 38-file ZIP with quality matrix, source appendix, release status and SHA-256 manifest; verified all entries for integrity and checksums.
+- Source game baseline `61a90178985b34dbffde5eb54a509562d7ae8c38` is merged into main and the GitHub native source CI is green. Volume V package is provided as a conversation download, not a tracked GitHub binary.
+- Honest limit: six later realm levels remain primitive cube source blockouts, not authored UE terrain or verified 3D gameplay.

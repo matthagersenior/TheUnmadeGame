@@ -275,3 +275,8 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - Atlas travel uses the authored adjacency graph and earned attunement. Source-backed saved snapshots preserve six realm visits, stages and route choices, while corrupt saves block mutation. Player-safe checkpoint arrival was extended.
 - 18 later-realm NPC actor identities (three per region) are source-configured, but voice performances and authored characters remain not built.
 - Engine runtime still uncompiled; AI-free deterministic C++ source tests and static integration checks are used only as preliminary verification.
+
+## 2026-10-10 — verified Volume V release materials
+- Completed a 55-page DOCX and rendered PDF preserving Volume IV's illustrated concept atlas, plus an integrity-verified 38-file ZIP containing support documentation, quality matrix, 30 art files and manifest.
+- Gameplay source baseline: `61a90178985b34dbffde5eb54a509562d7ae8c38`; post-merge native/static CI completed successfully on main.
+- The binaries are conversation artifacts and are **not** committed to the repository; illustrations are not Unreal footage. No Unreal build or packaged PC game has been produced.
