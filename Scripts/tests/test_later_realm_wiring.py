@@ -5,7 +5,7 @@ ROOT=pathlib.Path(__file__).resolve().parents[2]
 def src(path):return (ROOT/path).read_text()
 class SixLaterRealmSource(unittest.TestCase):
     def test_world_builders_and_real_travel(self):
-        hub=src("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
+        hub=src("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")+src("Source/TheUnmadeGame/Private/World/UnmadeLaterRealmWorld.cpp")
         header=src("Source/TheUnmadeGame/Public/World/UnmadePrototypeHub.h")
         for symbol in ("BuildLaterRealms()", "InspectLaterRealmSite(", "TryLaterRealmConversation(",
                        "RefreshLaterRealmWorld()", "LaterRealmJourney",
@@ -18,7 +18,7 @@ class SixLaterRealmSource(unittest.TestCase):
     def test_player_and_save(self):
         player=src("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         save=src("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
-        world=src("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
+        world=src("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")+src("Source/TheUnmadeGame/Private/World/UnmadeLaterRealmWorld.cpp")
         for value in ("LaterVisitedMask","LaterRealmStages","LaterRealmChoices","bHasLaterRealmSnapshot"):
             self.assertIn(value,save+world)
         self.assertIn("LaterRealm.Restore(Before)",world)

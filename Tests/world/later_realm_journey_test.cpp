@@ -31,7 +31,7 @@ int main() {
     assert(restored.Restore(saved));
     assert(restored.Outcome(Realm::FirstAbsence)==2);
     auto bad=saved;
-    bad.stage[0]=3;assert(!restored.Restore(bad));
+    bad.stage[0]=4;assert(!restored.Restore(bad));
     bad=saved;bad.stage[5]=1;bad.choice[5]=2;assert(!restored.Restore(bad));
     bad=saved;bad.visits=128;assert(!restored.Restore(bad));
     bad=saved;bad.stage[2]=2;bad.choice[2]=0;assert(!restored.Restore(bad));
