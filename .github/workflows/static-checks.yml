@@ -34,6 +34,9 @@ jobs:
       - name: Validate 56-scene full-universe cinema and stereo audio acceptance contract
         run: python Scripts/validate_directors_cut.py
 
+      - name: Enforce ten-volume storyworld, stable cast/cities and unanswered mystery ledger
+        run: python Scripts/validate_transmedia_storyworld.py --check
+
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits
