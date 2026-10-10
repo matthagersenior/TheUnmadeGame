@@ -32,6 +32,18 @@ Six Confluence chambers require mastered ability combinations, a timed dual-cast
 
 See the [Tenfold quest/lore bible](docs/design/2026-10-09-tenfold-rites-quest-bible.md) and [engine QA checklist](docs/qa/tenfold-prototype-qa.md). **No Unreal compilation, animation, visual HUD, full quest production, complete nine-realm world, difficulty benchmark or playtime validation has occurred.** All critical logic works without AI.
 
+## First-PC handoff and pre-PC source preparation (October 10, 2026)
+
+Two new deterministic frontier dangers are wired in source: Saltwake's rain surge (16 base damage) and Cinderhold's heat pulse (22 base damage), each with a calm / visible warning / impact cadence. They affect only the marked approach while its mechanism is unresolved. Guard reduces injury, the player can retreat to a safe side route, and an operated mechanism stops later pulses. A defeated player returns after four seconds to the current realm's safe entry at 75% health, without resetting story or NPC memories. **No engine runtime, hazard balance, visuals or controller feel has been verified.**
+
+The first Windows PC can run a **single script** to perform host preflight, compile the Unreal Editor target and execute Unreal automation, retaining diagnostic logs. The project still needs authored maps, actual engine verification, animations, UI and sound before it is a complete RPG.
+
+```powershell
+.\Scripts\first_pc_build_and_test.ps1 -UnrealRoot "C:\Program Files\Epic Games\UE_5.8"
+```
+
+See [Windows host acceptance](docs/qa/windows-unreal-host.md).
+
 ## Current source milestone — October 9, 2026
 
 - **Three original villages and two frontier outposts** in graybox actor source:

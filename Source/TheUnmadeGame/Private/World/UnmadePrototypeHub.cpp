@@ -680,6 +680,8 @@ void AUnmadePrototypeHub::BuildFrontierAftermath()
         SpawnBlock(Origin+FVector(0,630,9),FVector(29,7,.16),
             FName(bRain?TEXT("Saltwake.Aftermath.StormCue")
                        :TEXT("Cinderhold.Aftermath.HeatCue")));
+        SetRiteWorldActorState(FName(bRain?TEXT("Saltwake.Aftermath.StormCue")
+                                           :TEXT("Cinderhold.Aftermath.HeatCue")),false);
         const FName CareGate(bRain?TEXT("Saltwake.Aftermath.CareGate")
                                  :TEXT("Cinderhold.Aftermath.CareGate"));
         const FName TruthGate(bRain?TEXT("Saltwake.Aftermath.TruthGate")
