@@ -181,3 +181,11 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Distinct sheltered/public Witness Braid events are witnessed only by physically nearby residents with clear sight. Existing local one-hop social transfer marks later listeners as *rumor*, preserves the named origin and cannot promote gossip into observation. Per-person fear/trust and context-specific authored lines change only when memory has the source.
 - Added no new hidden ending, no undisclosed protected person's identity, no global auto-knowledge and no mandatory quest gate. Existing optional schema-1 evidence and Braid state remain the source of truth. Added offline C++17 and Python source-wiring tests to CI and the first Windows PC preflight.
 - Editorial primary source Volume X Chapter 18 and cumulative illustrated Bible explain the resident theories, authorial ambiguity and current implementation status. Real Unreal Editor test and physical long-distance courier delivery remain clearly pending.
+
+
+## 2026-10-10 — The Folded Dispatch (Volume X Chapter 19)
+
+- Made the optional Witness Braid's consequence **carriable**: an E-inspectable folded Crossings packet exists only after the choice, and the player transports it physically rather than triggering a global message.
+- Added a named Hessa-only E handover in Bellwold; her response depends on the stored Sheltered Thread or Public Docket only after direct receipt. Other NPCs are never silently told the document's contents.
+- Added optional custody stage + collection/receipt day SaveGame fields; malformed or paradoxical snapshots block save overwrites, and failed real writes restore the previous stage. No rewards or main-quest gates.
+- Authored Volume X Chapter 19 and source tests (native and Python) along with first-PC preflight. The written future courier/ambush sequence is separate from today's graybox, and real Windows UE5/physical QA remain pending.
