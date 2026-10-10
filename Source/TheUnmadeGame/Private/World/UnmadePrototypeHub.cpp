@@ -1494,6 +1494,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     BuildRealmResonance();
     BuildRealmGuardians();
     BuildFinalWorld();
+    BuildUnansweredRoad();
     BuildCommunityConsequences();
     BuildBellwoldAfterlight();
     // Ten inscriptions across five communities. Each marker is world-space,

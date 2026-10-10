@@ -35,7 +35,8 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
     if(!IsValid(Hub))return;
     const auto Act=Hub->GetFinalAct();
     const bool bFight=(Act==UnmadeCore::FinalAct::Veil &&
-                       Hub->GetLaterRealmStage(UnmadeCore::Realm::FirstAbsence)==3) ||
+                       Hub->GetLaterRealmStage(UnmadeCore::Realm::FirstAbsence)==3 &&
+                       Hub->GetUnansweredRoadGuidance().bossAccessible) ||
                       Act==UnmadeCore::FinalAct::Unmasked ||
                       Act==UnmadeCore::FinalAct::EchoAwake;
     SetActorHiddenInGame(!bFight);

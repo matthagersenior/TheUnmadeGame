@@ -706,6 +706,7 @@ void AUnmadeCharacter::ShowStoryJournal()
     int32 PaperhavenQuest = 0;
     FString FactionSummary;
     FString RealmSummary;
+    FString MainRoadSummary;
     if (GetWorld())
     {
         for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
@@ -723,6 +724,7 @@ void AUnmadeCharacter::ShowStoryJournal()
                 Hub->FactionStage(UnmadeCore::Faction::Archive),
                 Hub->FactionStage(UnmadeCore::Faction::Roadbound));
             RealmSummary=Hub->GetCurrentRealmName(GetActorLocation());
+            MainRoadSummary=Hub->DescribeUnansweredRoad(this);
             if(Hub->GetAfterlightStage()>0)
                 RealmSummary+=FString::Printf(
                     TEXT(" | Bellwold Afterlight: %d/4"),Hub->GetAfterlightStage());
@@ -762,6 +764,8 @@ void AUnmadeCharacter::ShowStoryJournal()
         GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,FactionSummary);
     if(GEngine && !RealmSummary.IsEmpty())
         GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,RealmSummary);
+    if(GEngine && !MainRoadSummary.IsEmpty())
+        GEngine->AddOnScreenDebugMessage(-1,18.f,FColor::Yellow,MainRoadSummary);
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
@@ -926,6 +930,7 @@ void AUnmadeCharacter::Interact()
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
             if(Hub->TryFinalInteraction(this,ResidentDistSq))return;
+            if(Hub->InspectUnansweredRoad(this,ResidentDistSq))return;
             if(Hub->TryCalmNearbyGuardian(this,ResidentDistSq))return;
             if(Hub->InspectResonanceArchive(this,ResidentDistSq))return;
             if(Hub->InspectEchoQuestSite(this,ResidentDistSq))return;

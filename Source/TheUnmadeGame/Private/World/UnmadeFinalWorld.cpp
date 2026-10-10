@@ -78,7 +78,8 @@ void AUnmadePrototypeHub::RefreshFinalWorld()
 
 bool AUnmadePrototypeHub::BreakFinalMask()
 {
-    if(bFinalSaveRejected||bLaterRealmSaveRejected)return false;
+    if(bFinalSaveRejected||bLaterRealmSaveRejected ||
+       !GetUnansweredRoadGuidance().bossAccessible)return false;
     int held=0,published=0,spared=0;
     for(const auto& Region:UnmadeCore::LaterRealms)
     {
