@@ -29,7 +29,6 @@ class WitnessEchoWiring(unittest.TestCase):
         self.assertIn("AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)",hub)
         self.assertIn("WitnessEchoes.Read(PhysicalUtf8.Get(),LocalOutcome)",hub)
         self.assertIn("WitnessEchoes.Restore(OldEcho)",hub)
-        self.assertIn("(!WriteWorldSnapshot())",hub.replace("&& !WriteWorldSnapshot()",") && (!WriteWorldSnapshot())") if False else hub) if False else None
         self.assertIn("(bNew || bEchoChanged) && !WriteWorldSnapshot()",hub)
         self.assertIn("WitnessEchoSummary=Hub->GetWitnessEchoJournal();",player)
         self.assertIn("WitnessEchoSummary",player)
