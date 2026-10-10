@@ -59,6 +59,10 @@ try {
     & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_witness_echo_wiring.py" 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "witness-echo-source-validation.log")
     if($LASTEXITCODE -ne 0){throw "WITNESS_ECHO_INTEGRATION_INVALID"}
+    Write-Host "Checking three-city Witness Braid and optional persistent outcomes."
+    & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_witness_braid_wiring.py" 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "witness-braid-source-validation.log")
+    if($LASTEXITCODE -ne 0){throw "WITNESS_BRAID_INTEGRATION_INVALID"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")
