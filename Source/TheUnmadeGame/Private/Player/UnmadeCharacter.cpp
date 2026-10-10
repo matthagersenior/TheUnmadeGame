@@ -6,6 +6,7 @@
 #include "Combat/UnmadeCombatComponent.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Combat/UnmadeBossCharacter.h"
+#include "Combat/UnmadeRealmGuardian.h"
 #include "Lexicon/UnmadeLexiconComponent.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "Items/UnmadeItemRules.h"
@@ -292,6 +293,10 @@ void AUnmadeCharacter::ApplyRiteAbility(UnmadeCore::RiteId Rite,
                 TEXT("HOLLOW KEEPER SPARED: testimony ended the battle without a killing blow."));
             break;
         }
+        for(TActorIterator<AUnmadeRealmGuardian> Guardian(World);Guardian;++Guardian)
+            if(FVector::DistSquared(GetActorLocation(),Guardian->GetActorLocation())
+                <FMath::Square(1000.f))
+                Guardian->ExposeToFold(Now,5.0);
         break;
     case UnmadeCore::RiteId::BorrowedLives:
         if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Cyan,
@@ -920,6 +925,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryCalmNearbyGuardian(this,ResidentDistSq))return;
             if(Hub->InspectResonanceArchive(this,ResidentDistSq))return;
             if(Hub->InspectEchoQuestSite(this,ResidentDistSq))return;
             if(Hub->InspectLaterRealmSite(this,ResidentDistSq))return;

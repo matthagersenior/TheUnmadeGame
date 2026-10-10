@@ -1,3 +1,7 @@
+## Six optional ethical guardian encounters (October 10)
+
+After completing an outer realm's witnessed Echo story, a unique guardian with a learnable, telegraphed strike is source-spawned near the optional observatory. The player can either combat the guardian using normal health, guarding, Fold and an Understanding Bosses stagger, or use **two deliberate interactions** to make a grounded nonviolent pact. Both endings are saved independently, do not farm rewards and are discussed only by residents of that realm. [Full guardian histories](docs/design/six-realm-guardians.md) and [Win64 acceptance checklist](docs/qa/six-realm-guardians.md). Source tests pass only when CI runs; **the Unreal Editor and final encounter assets remain unverified**.
+
 ## Six dual-discipline observatories (10 October)
 
 All ten mastered signature rites can now be paired at six **optional, post-Echo-quest physical sites**. Each pair is different, requires two successful real casts at the same upper-terrace plinth within a 120-second saved-world window, and permanently opens a bridge to a local, non-farmable archive that reflects the previously chosen moral outcome. The rules enforce no fake/duplicate casts, old-save compatibility, rollback on write failure and independent state per realm. Source-generated cube locations and local NPC reactions are wired, while **Unreal Editor compilation and physical level playtesting remain pending**. See [full authoring canon](docs/design/realm-resonance-observatories.md) and [Win64 QA checklist](docs/qa/realm-resonance-observatories.md).

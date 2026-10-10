@@ -152,3 +152,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/realm_resonance_test.cpp -o /tmp/unmade-realm-resonance
           /tmp/unmade-realm-resonance
+
+      - name: Test six telegraphed optional guardians and permanent ethical outcomes
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/realm_guardian_test.cpp -o /tmp/unmade-realm-guardian
+          /tmp/unmade-realm-guardian

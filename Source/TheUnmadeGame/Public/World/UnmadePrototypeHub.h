@@ -16,6 +16,7 @@
 #include "World/UnmadeLaterRealmRules.h"
 #include "World/UnmadeEchoQuestRules.h"
 #include "World/UnmadeRealmResonanceRules.h"
+#include "Combat/UnmadeRealmGuardianRules.h"
 #include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeLaterHazardRules.h"
 #include "TimerManager.h"
@@ -75,6 +76,11 @@ public:
     int32 GetRealmResonanceStage(UnmadeCore::Realm Realm) const {return Resonance.Stage(Realm);}
     bool RecordNearbyRealmRite(AUnmadeCharacter* Player,UnmadeCore::RiteId Id);
     bool InspectResonanceArchive(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    UnmadeCore::GuardianOutcome GetRealmGuardianOutcome(UnmadeCore::Realm Realm) const {
+        return Guardians.Outcome(Realm);
+    }
+    bool ResolveRealmGuardian(UnmadeCore::Realm Realm,bool bMercy);
+    bool TryCalmNearbyGuardian(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     int32 GetLaterRealmStage(UnmadeCore::Realm Id) const {return LaterRealm.Stage(Id);}
     int32 GetLaterRealmOutcome(UnmadeCore::Realm Id) const {return LaterRealm.Outcome(Id);}
     int32 GetLaterRealmVisitMask() const {return LaterRealm.Snapshot().visits;}
@@ -128,6 +134,11 @@ private:
     bool bResonanceSaveRejected=false;
     void BuildRealmResonance();
     void RefreshRealmResonanceWorld();
+    UnmadeCore::GuardianChronicle Guardians;
+    UnmadeCore::CommitmentGate GuardianCommitGate;
+    bool bGuardianSaveRejected=false;
+    void BuildRealmGuardians();
+    void RefreshRealmGuardians();
     bool bLaterHazardCueVisible[6]={false,false,false,false,false,false};
     void RefreshLaterHazardCues();
     void BuildFrontierAftermath();

@@ -315,3 +315,9 @@ The tracked `docs/qa/pre-pc-readiness.md` distinguishes native-tested rules, Unr
 - A successful pair creates a persistent new bridge to a separate island and interactable history archive; the archive text acknowledges each realm's care or truth resolution. Local residents recognize only their own opened archive. No infinite repeat rewards or automatic universal game completion.
 - New append-only six-element save fields support replay-safe restore, malformed state refusal, deadline rollback guard, old saves and write-failure rollback. Six native tests and an Unreal automation source test accompany the source actor integration.
 - Portable geometry asserts the new bridge overlaps both the north terrain and a *distinct* archive island. Unreal collision, sound, camera, AI navigation, boss counterplay and player UI remain unverified without the Windows engine.
+
+## 2026-10-10 — six telegraphed guardians and optional mercy
+- Added six distinct guardian names, motivations, warning windows, range/damage/health and local care/truth memories, source-spawned only after their respective completed Echo quest.
+- `AUnmadeRealmGuardian` bypasses the generic instantaneous enemy attack and uses a deterministic visible windup model with normal combat component, block/line-of-sight and Fold stagger. The existing Understanding Bosses rite can now stagger nearby guardians instead of silently pacifying them.
+- The player may choose a two-interaction mercy pact with authored consequence preview, or defeat the guardian in combat. A six-element optional saved outcome stores these mutually exclusive, permanent decisions; corruption and write failure roll back changes without farming.
+- Actual local resident reactions are wired; there is no cross-map omniscient NPC notification. These are prototype graybox creatures with source tests and Unreal automation source, **not** six textured, animated, engine-playtested bosses.

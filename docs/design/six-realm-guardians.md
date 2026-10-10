@@ -1,0 +1,30 @@
+# THE UNMADE — Six Guardians of Unkept Stories
+**Story and combat direction, October 10 2026 — six source-spawned optional defenders, not finished UE bosses.**
+
+## Combat without compulsory violence
+The six later realms should have residents, architectures and histories that make sense even if the protagonist never uses a weapon. An encounter is a **living question** with a readable danger—not a gate that every player must clear through repetitive killing. Each realm's guardian exists only once the player's third, witnessed Echo story is resolved. It appears on the northern terrace near the optional paired-ability plinth, but never blocks main progression. The player has an informed alternative: approach close enough, read the guardian's actual historical grievance and intentionally accept a pact through a two-press six-second confirmation. If the player instead defeats it, that outcome is independently recorded. Both outcomes are permanent; neither grants a farmable infinite reward.
+
+The creature does not use the generic Stalker enemy's instantaneous attacks. A deterministic windup with region-specific timing, reach, damage and recovery creates learnable counterplay. The same guard and armor mechanics used by the ordinary combat system remain authoritative. Temporary Fold exposure can stagger the guardian; using Understanding Bosses near it also creates a short interruption instead of instantly settling the fight. The guardian's source behavior moves by swept prototype movement, not a built navigation mesh. The first Windows Unreal pass must verify every actual attack, animation and movement boundary.
+
+### Drevlach — The Collector of Unborn Days
+A creditor was remade as a chain-bearing witness to contracts signed for people who had not been born. Veynu is responsible for keeping contracts visible, Orshel protects the ferried child, and Ezzun knows how an impossible signature can be genuine and fraudulent at once. The Collector curls a chain of future days across the upper path, telegraphed for 1.8 seconds. The player can evade, guard or interrupt. A peaceful pact preserves the child-safe ferry or the fraud archive as the Echo choice established; a defeat makes the collector's history public without making its violence legitimate. Audio: a coin rolled on dry planks, severed chains with no impact sound.
+
+### Orravane — The Missing Chorister
+The city's suspended homes were held aloft by labor deliberately erased from the score. Yllesh fears structural collapse, Vhaurn can count the actual weight, and Orru knows the forbidden voices. The guardian threatens with a 2.2-second tightening chord, then a note strike. A pact makes listening possible without conscription; a battle can silence the attacking form but cannot erase that it was exploited. Audio: a choir breath halted before the first note, audible meter to support hearing accommodations.
+
+### Vathless — The Mortar Ancestor
+Some stone contains an ancestor's unpaid craft. Ghraet carries quarry governance, Torrun knows structural safety, Issil holds family memory that no registry corroborates. The ancestor raises a heavy hammer for 2.4 seconds, allowing a true retreat. A peaceful settlement remembers the worker and doesn't turn them back into quarry property. If defeated, the community must still name the lost mason. Understanding Bosses may identify the grief and stagger a charge, but must never function as automatic legal consent.
+
+### Eillun — The Numberless Examiner
+A census evolved into a being that strikes people for lacking dates and identifiers. Nhel records paperwork without legal certainty, Auvet guards chosen privacy, Veysha insists public recognition be revocable. The Examiner's narrowing pulse has a 1.65-second windup. Mercy does not force the city to register anyone, while defeating a violent enforcer does not automatically settle everyone else's legal standing. Art: a cracked numeric mask with an empty eye opening, no arbitrary target flashing or epilepsy risk.
+
+### Tharniv — The Root Bailiff
+The unwritten court's enforcement system survived after the people refused to enthrone anyone. Serriv cannot speak for an absent king, Imro knows harvest access, Eliun knows what early refusal meant. The Bailiff's roots visibly point before the 2.0-second strike. A pact keeps common roads open without annexation; defeating the bailiff leaves the citizenry responsible for the law it once enforced. Art: a gown of living roots wrapped around a wooden gavel with no handle.
+
+### Auvren — The Unfinished Witness
+This guardian remembers two beginnings and has been commanded to decide that one was false. Orriv may have seen the hero arrive before arrival, Thae keeps the return path stable, Veilune lived both accounts. Its 2.5-second double-silhouette warning is slow enough to retreat to known ground. Mercy permits incompatible memories to coexist, and combat defeat does not declare an absolute ending to the game. Audio: doubled footfalls, a gentle three-beat safe-return motif, silence preserved as an accessibility option.
+
+## Runtime and QA truth
+The authored `RealmGuardians` array provides names, historical grievances, warning texts, impact data and both community memories. `AUnmadeRealmGuardian` is a prototype enemy subclass with its own windup decision model and normal combat component, not a bespoke rig/phase-rich final boss. `AUnmadePrototypeHub` spawns one per later realm; only completed Echo quests expose them. E within range can preview and confirm an ethical pact. Combat defeat records an alternate result. An optional six-element SaveGame array restores mutually exclusive outcomes, while invalid arrays and failed writes do not silently erase progress. The actual three residents in that realm can read this locally saved choice; unconnected communities do not gain omniscient knowledge.
+
+The next production step is real Unreal compilation, unique VFX/animations, measurable combat telegraphs, accessible player UI and physically tested no-grind alternatives. Source green does not equal playable proof.

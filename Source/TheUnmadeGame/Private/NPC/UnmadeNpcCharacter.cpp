@@ -321,6 +321,17 @@ FString AUnmadeNpcCharacter::GetReactionText() const
                     Home->trialChoiceA:Home->trialChoiceB));
             }
         }
+        const auto GuardianStatus=CachedHub->GetRealmGuardianOutcome(LaterHome);
+        if(GuardianStatus!=UnmadeCore::GuardianOutcome::Unresolved)
+        {
+            const int Idx=UnmadeCore::LaterIndex(LaterHome);
+            if(Idx>=0)
+            {
+                CharacterLine+=GuardianStatus==UnmadeCore::GuardianOutcome::Pacified
+                    ?TEXT(" The old guardian agreed to stop fighting when we answered its question.")
+                    :TEXT(" The guardian fell fighting. Its warning is now preserved as a civic record.");
+            }
+        }
         if(CachedHub->GetRealmResonanceStage(LaterHome)==2)
         {
             const int idx=UnmadeCore::LaterIndex(LaterHome);
