@@ -1,0 +1,1390 @@
+{
+  "schema_version": 1,
+  "edition": "2026-10-10 authored city staging v1",
+  "status": "SOURCE PREPRODUCTION; NOT Unreal-compiled, navigable, lit or final environment art",
+  "authority": [
+    "Authoring/transmedia_storyworld_v1.json",
+    "Authoring/resident_return_encounters.json",
+    "Authoring/main_quest_interaction_contracts.json",
+    "Authoring/world_content_pack.json"
+  ],
+  "intent": "Distinct visual landmarks and automatically linked resident, quest and rite scene guide actors; no game SaveGame or quest authority",
+  "city_count": 11,
+  "cities": [
+    {
+      "id": "CITY.01",
+      "name": "The Crossings",
+      "realm": "ThreefoldReach",
+      "origin_cm": [
+        0,
+        0,
+        0
+      ],
+      "profile": "braided_roads",
+      "modules": [
+        {
+          "slug": "three_way_mile",
+          "kind": "landmark",
+          "local_cm": [
+            0,
+            0,
+            140
+          ],
+          "scale": [
+            1,
+            1,
+            2.8
+          ]
+        },
+        {
+          "slug": "north_footbridge",
+          "kind": "bridge",
+          "local_cm": [
+            0,
+            760,
+            40
+          ],
+          "scale": [
+            1.3,
+            4.5,
+            0.28
+          ]
+        },
+        {
+          "slug": "south_causeway",
+          "kind": "bridge",
+          "local_cm": [
+            -620,
+            -650,
+            35
+          ],
+          "scale": [
+            1.4,
+            3.8,
+            0.26
+          ]
+        },
+        {
+          "slug": "east_footbridge",
+          "kind": "bridge",
+          "local_cm": [
+            720,
+            80,
+            40
+          ],
+          "scale": [
+            3.8,
+            1.1,
+            0.26
+          ]
+        },
+        {
+          "slug": "ledger_court",
+          "kind": "civic",
+          "local_cm": [
+            -820,
+            320,
+            190
+          ],
+          "scale": [
+            4,
+            2.1,
+            3.8
+          ]
+        },
+        {
+          "slug": "kettle_market",
+          "kind": "social",
+          "local_cm": [
+            450,
+            -670,
+            150
+          ],
+          "scale": [
+            3.2,
+            2.4,
+            3
+          ]
+        },
+        {
+          "slug": "roadstone",
+          "kind": "landmark",
+          "local_cm": [
+            340,
+            300,
+            65
+          ],
+          "scale": [
+            0.9,
+            0.9,
+            1.3
+          ]
+        },
+        {
+          "slug": "blue_nail_crossing",
+          "kind": "evidence",
+          "local_cm": [
+            780,
+            -410,
+            95
+          ],
+          "scale": [
+            0.7,
+            0.7,
+            1.9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.02",
+      "name": "Bellwold",
+      "realm": "ThreefoldReach",
+      "origin_cm": [
+        -18000,
+        0,
+        0
+      ],
+      "profile": "vacant_bell",
+      "modules": [
+        {
+          "slug": "empty_bell_yoke",
+          "kind": "landmark",
+          "local_cm": [
+            0,
+            500,
+            510
+          ],
+          "scale": [
+            1.1,
+            1.2,
+            10.2
+          ]
+        },
+        {
+          "slug": "tower_base",
+          "kind": "architecture",
+          "local_cm": [
+            0,
+            500,
+            180
+          ],
+          "scale": [
+            3.6,
+            3.6,
+            3.6
+          ]
+        },
+        {
+          "slug": "refuge_warm_room",
+          "kind": "civic",
+          "local_cm": [
+            -780,
+            -330,
+            165
+          ],
+          "scale": [
+            5.8,
+            4.6,
+            3.3
+          ]
+        },
+        {
+          "slug": "kitchen_meal_table",
+          "kind": "social",
+          "local_cm": [
+            -520,
+            -360,
+            65
+          ],
+          "scale": [
+            2.6,
+            1.3,
+            1.3
+          ]
+        },
+        {
+          "slug": "witness_steps",
+          "kind": "social",
+          "local_cm": [
+            490,
+            -250,
+            95
+          ],
+          "scale": [
+            3,
+            1.5,
+            1.9
+          ]
+        },
+        {
+          "slug": "lantern_lane",
+          "kind": "path",
+          "local_cm": [
+            30,
+            -580,
+            30
+          ],
+          "scale": [
+            1.2,
+            5.8,
+            0.4
+          ]
+        },
+        {
+          "slug": "empty_mold",
+          "kind": "evidence",
+          "local_cm": [
+            450,
+            800,
+            100
+          ],
+          "scale": [
+            2.1,
+            2.1,
+            2
+          ]
+        },
+        {
+          "slug": "uncounted_cup",
+          "kind": "evidence",
+          "local_cm": [
+            -630,
+            -570,
+            75
+          ],
+          "scale": [
+            0.55,
+            0.55,
+            1.5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.03",
+      "name": "Paperhaven",
+      "realm": "ThreefoldReach",
+      "origin_cm": [
+        18000,
+        0,
+        0
+      ],
+      "profile": "chalk_index",
+      "modules": [
+        {
+          "slug": "index_hall",
+          "kind": "civic",
+          "local_cm": [
+            0,
+            470,
+            220
+          ],
+          "scale": [
+            6,
+            3.5,
+            4.4
+          ]
+        },
+        {
+          "slug": "roof_high_archive",
+          "kind": "architecture",
+          "local_cm": [
+            -820,
+            650,
+            310
+          ],
+          "scale": [
+            2.4,
+            4.4,
+            6.2
+          ]
+        },
+        {
+          "slug": "public_redaction_steps",
+          "kind": "social",
+          "local_cm": [
+            370,
+            -120,
+            95
+          ],
+          "scale": [
+            4,
+            2.1,
+            1.9
+          ]
+        },
+        {
+          "slug": "sevrin_press",
+          "kind": "evidence",
+          "local_cm": [
+            430,
+            760,
+            90
+          ],
+          "scale": [
+            0.9,
+            0.9,
+            1.8
+          ]
+        },
+        {
+          "slug": "chalk_vault",
+          "kind": "architecture",
+          "local_cm": [
+            880,
+            440,
+            180
+          ],
+          "scale": [
+            3.2,
+            3.1,
+            3.6
+          ]
+        },
+        {
+          "slug": "dry_leaf_garden",
+          "kind": "social",
+          "local_cm": [
+            -420,
+            -660,
+            55
+          ],
+          "scale": [
+            3.8,
+            2.2,
+            1.1
+          ]
+        },
+        {
+          "slug": "index_scale",
+          "kind": "landmark",
+          "local_cm": [
+            -720,
+            -200,
+            110
+          ],
+          "scale": [
+            1.4,
+            1.5,
+            2.2
+          ]
+        },
+        {
+          "slug": "weighted_register",
+          "kind": "evidence",
+          "local_cm": [
+            850,
+            -540,
+            100
+          ],
+          "scale": [
+            1.6,
+            0.9,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.04",
+      "name": "Saltwake",
+      "realm": "WidowedRain",
+      "origin_cm": [
+        0,
+        -50000,
+        0
+      ],
+      "profile": "dry_harbor",
+      "modules": [
+        {
+          "slug": "pier_skeleton_west",
+          "kind": "bridge",
+          "local_cm": [
+            -790,
+            -160,
+            85
+          ],
+          "scale": [
+            1.25,
+            8,
+            1.7
+          ]
+        },
+        {
+          "slug": "pier_skeleton_east",
+          "kind": "bridge",
+          "local_cm": [
+            790,
+            -160,
+            85
+          ],
+          "scale": [
+            1.25,
+            8,
+            1.7
+          ]
+        },
+        {
+          "slug": "keel_roof_shelter",
+          "kind": "civic",
+          "local_cm": [
+            -380,
+            440,
+            195
+          ],
+          "scale": [
+            5.5,
+            3,
+            3.9
+          ]
+        },
+        {
+          "slug": "tide_groove_marker",
+          "kind": "evidence",
+          "local_cm": [
+            480,
+            -750,
+            65
+          ],
+          "scale": [
+            2.3,
+            2.2,
+            1.3
+          ]
+        },
+        {
+          "slug": "storm_watch_post",
+          "kind": "landmark",
+          "local_cm": [
+            940,
+            490,
+            190
+          ],
+          "scale": [
+            1.4,
+            1.5,
+            3.8
+          ]
+        },
+        {
+          "slug": "mooring_council",
+          "kind": "civic",
+          "local_cm": [
+            300,
+            610,
+            150
+          ],
+          "scale": [
+            3,
+            3.1,
+            3
+          ]
+        },
+        {
+          "slug": "sealed_chart",
+          "kind": "evidence",
+          "local_cm": [
+            -710,
+            620,
+            70
+          ],
+          "scale": [
+            1.3,
+            1,
+            1.4
+          ]
+        },
+        {
+          "slug": "dry_rope_knot",
+          "kind": "social",
+          "local_cm": [
+            0,
+            -640,
+            75
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            1.5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.05",
+      "name": "Cinderhold",
+      "realm": "HearthBeneath",
+      "origin_cm": [
+        0,
+        50000,
+        0
+      ],
+      "profile": "undersun",
+      "modules": [
+        {
+          "slug": "subfoundation_sun_pit",
+          "kind": "landmark",
+          "local_cm": [
+            0,
+            280,
+            100
+          ],
+          "scale": [
+            4.6,
+            4.6,
+            2
+          ]
+        },
+        {
+          "slug": "ventilator_ribs",
+          "kind": "architecture",
+          "local_cm": [
+            -900,
+            600,
+            230
+          ],
+          "scale": [
+            1.2,
+            5.8,
+            4.6
+          ]
+        },
+        {
+          "slug": "public_furnace_court",
+          "kind": "civic",
+          "local_cm": [
+            520,
+            -200,
+            150
+          ],
+          "scale": [
+            4.8,
+            3.1,
+            3
+          ]
+        },
+        {
+          "slug": "communal_oven",
+          "kind": "social",
+          "local_cm": [
+            -700,
+            -550,
+            120
+          ],
+          "scale": [
+            3.8,
+            2.2,
+            2.4
+          ]
+        },
+        {
+          "slug": "double_shadow_stack",
+          "kind": "landmark",
+          "local_cm": [
+            760,
+            760,
+            330
+          ],
+          "scale": [
+            1.6,
+            1.4,
+            6.6
+          ]
+        },
+        {
+          "slug": "ember_commons",
+          "kind": "civic",
+          "local_cm": [
+            -100,
+            830,
+            140
+          ],
+          "scale": [
+            3.4,
+            2.6,
+            2.8
+          ]
+        },
+        {
+          "slug": "heat_beat_slate",
+          "kind": "evidence",
+          "local_cm": [
+            -230,
+            -650,
+            80
+          ],
+          "scale": [
+            1.1,
+            0.8,
+            1.6
+          ]
+        },
+        {
+          "slug": "first_cooled_coal",
+          "kind": "social",
+          "local_cm": [
+            780,
+            -640,
+            60
+          ],
+          "scale": [
+            0.6,
+            0.6,
+            1.2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.06",
+      "name": "Drevlach",
+      "realm": "TidalLedger",
+      "origin_cm": [
+        100000,
+        -50000,
+        0
+      ],
+      "profile": "inverted_dates",
+      "modules": [
+        {
+          "slug": "ninth_due_exchange",
+          "kind": "civic",
+          "local_cm": [
+            0,
+            500,
+            245
+          ],
+          "scale": [
+            6.2,
+            3.9,
+            4.9
+          ]
+        },
+        {
+          "slug": "reverse_clock",
+          "kind": "landmark",
+          "local_cm": [
+            0,
+            760,
+            450
+          ],
+          "scale": [
+            1.2,
+            1.2,
+            9
+          ]
+        },
+        {
+          "slug": "paper_dock",
+          "kind": "bridge",
+          "local_cm": [
+            -900,
+            140,
+            70
+          ],
+          "scale": [
+            1.8,
+            7,
+            1.4
+          ]
+        },
+        {
+          "slug": "dry_count_bridge",
+          "kind": "bridge",
+          "local_cm": [
+            780,
+            -150,
+            70
+          ],
+          "scale": [
+            1.7,
+            6.5,
+            1.4
+          ]
+        },
+        {
+          "slug": "cradle_seal",
+          "kind": "evidence",
+          "local_cm": [
+            -720,
+            -660,
+            105
+          ],
+          "scale": [
+            1.3,
+            1.1,
+            2.1
+          ]
+        },
+        {
+          "slug": "public_audit_table",
+          "kind": "social",
+          "local_cm": [
+            370,
+            -610,
+            90
+          ],
+          "scale": [
+            2.7,
+            1.4,
+            1.8
+          ]
+        },
+        {
+          "slug": "two_date_stamp",
+          "kind": "evidence",
+          "local_cm": [
+            670,
+            650,
+            85
+          ],
+          "scale": [
+            1.4,
+            0.8,
+            1.7
+          ]
+        },
+        {
+          "slug": "negative_ledger",
+          "kind": "social",
+          "local_cm": [
+            -250,
+            140,
+            125
+          ],
+          "scale": [
+            3.5,
+            2.2,
+            2.5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.07",
+      "name": "Orravane",
+      "realm": "SkyBelow",
+      "origin_cm": [
+        -100000,
+        -50000,
+        0
+      ],
+      "profile": "upside_down_choir",
+      "modules": [
+        {
+          "slug": "hanging_terrace_west",
+          "kind": "architecture",
+          "local_cm": [
+            -700,
+            100,
+            310
+          ],
+          "scale": [
+            5.2,
+            3.4,
+            1.1
+          ]
+        },
+        {
+          "slug": "hanging_terrace_east",
+          "kind": "architecture",
+          "local_cm": [
+            720,
+            -120,
+            420
+          ],
+          "scale": [
+            4.6,
+            3.6,
+            1.1
+          ]
+        },
+        {
+          "slug": "counterweight_tower",
+          "kind": "landmark",
+          "local_cm": [
+            100,
+            600,
+            480
+          ],
+          "scale": [
+            1.6,
+            1.6,
+            9.6
+          ]
+        },
+        {
+          "slug": "choir_rest_platform",
+          "kind": "social",
+          "local_cm": [
+            0,
+            -560,
+            130
+          ],
+          "scale": [
+            5.5,
+            1.7,
+            0.7
+          ]
+        },
+        {
+          "slug": "empty_seventh_lectern",
+          "kind": "evidence",
+          "local_cm": [
+            480,
+            -470,
+            160
+          ],
+          "scale": [
+            0.65,
+            0.65,
+            3.2
+          ]
+        },
+        {
+          "slug": "support_bead_rail",
+          "kind": "landmark",
+          "local_cm": [
+            -500,
+            -450,
+            115
+          ],
+          "scale": [
+            1.3,
+            5,
+            1.1
+          ]
+        },
+        {
+          "slug": "cantors_circle",
+          "kind": "civic",
+          "local_cm": [
+            -680,
+            690,
+            155
+          ],
+          "scale": [
+            3.1,
+            2.6,
+            3.1
+          ]
+        },
+        {
+          "slug": "mechanical_brace",
+          "kind": "architecture",
+          "local_cm": [
+            890,
+            640,
+            250
+          ],
+          "scale": [
+            1.6,
+            1.6,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.08",
+      "name": "Vathless",
+      "realm": "CinderSpine",
+      "origin_cm": [
+        100000,
+        50000,
+        0
+      ],
+      "profile": "bearing_seams",
+      "modules": [
+        {
+          "slug": "quarry_wall_west",
+          "kind": "architecture",
+          "local_cm": [
+            -900,
+            50,
+            340
+          ],
+          "scale": [
+            1.4,
+            10,
+            6.8
+          ]
+        },
+        {
+          "slug": "quarry_wall_east",
+          "kind": "architecture",
+          "local_cm": [
+            950,
+            50,
+            340
+          ],
+          "scale": [
+            1.4,
+            10,
+            6.8
+          ]
+        },
+        {
+          "slug": "carved_family_steps",
+          "kind": "path",
+          "local_cm": [
+            -590,
+            -520,
+            130
+          ],
+          "scale": [
+            4.8,
+            2.3,
+            0.8
+          ]
+        },
+        {
+          "slug": "seam_ward",
+          "kind": "civic",
+          "local_cm": [
+            100,
+            620,
+            205
+          ],
+          "scale": [
+            5.8,
+            3,
+            4.1
+          ]
+        },
+        {
+          "slug": "erased_mason_mark",
+          "kind": "evidence",
+          "local_cm": [
+            -730,
+            390,
+            145
+          ],
+          "scale": [
+            0.95,
+            0.95,
+            2.9
+          ]
+        },
+        {
+          "slug": "occupied_house_support",
+          "kind": "architecture",
+          "local_cm": [
+            520,
+            -430,
+            265
+          ],
+          "scale": [
+            3.4,
+            3.6,
+            5.3
+          ]
+        },
+        {
+          "slug": "memorial_rubbing",
+          "kind": "social",
+          "local_cm": [
+            240,
+            -710,
+            100
+          ],
+          "scale": [
+            1.4,
+            0.8,
+            1.8
+          ]
+        },
+        {
+          "slug": "smaller_hand",
+          "kind": "evidence",
+          "local_cm": [
+            680,
+            600,
+            90
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            1.8
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.09",
+      "name": "Eillun",
+      "realm": "HundredUnlived",
+      "origin_cm": [
+        -100000,
+        50000,
+        0
+      ],
+      "profile": "paired_thresholds",
+      "modules": [
+        {
+          "slug": "paired_front_doors",
+          "kind": "landmark",
+          "local_cm": [
+            -170,
+            460,
+            170
+          ],
+          "scale": [
+            4.6,
+            1.3,
+            3.4
+          ]
+        },
+        {
+          "slug": "address_loom",
+          "kind": "civic",
+          "local_cm": [
+            520,
+            230,
+            205
+          ],
+          "scale": [
+            4.2,
+            3.1,
+            4.1
+          ]
+        },
+        {
+          "slug": "twin_kitchen",
+          "kind": "social",
+          "local_cm": [
+            -710,
+            -460,
+            175
+          ],
+          "scale": [
+            4.3,
+            2.9,
+            3.5
+          ]
+        },
+        {
+          "slug": "unregistered_house",
+          "kind": "architecture",
+          "local_cm": [
+            780,
+            -590,
+            240
+          ],
+          "scale": [
+            3.4,
+            3.8,
+            4.8
+          ]
+        },
+        {
+          "slug": "anonymous_lane",
+          "kind": "path",
+          "local_cm": [
+            -160,
+            -570,
+            35
+          ],
+          "scale": [
+            1.2,
+            6,
+            0.3
+          ]
+        },
+        {
+          "slug": "shelter_pair_assembly",
+          "kind": "civic",
+          "local_cm": [
+            30,
+            770,
+            190
+          ],
+          "scale": [
+            5,
+            3.3,
+            3.8
+          ]
+        },
+        {
+          "slug": "unsigned_lantern",
+          "kind": "landmark",
+          "local_cm": [
+            -830,
+            660,
+            125
+          ],
+          "scale": [
+            0.9,
+            0.9,
+            2.5
+          ]
+        },
+        {
+          "slug": "worn_empty_threshold",
+          "kind": "evidence",
+          "local_cm": [
+            770,
+            630,
+            70
+          ],
+          "scale": [
+            1.6,
+            0.9,
+            1.4
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.10",
+      "name": "Tharniv",
+      "realm": "OrchardOfKings",
+      "origin_cm": [
+        200000,
+        0,
+        0
+      ],
+      "profile": "uncrowned_orchard",
+      "modules": [
+        {
+          "slug": "empty_crown_plinth",
+          "kind": "landmark",
+          "local_cm": [
+            0,
+            340,
+            125
+          ],
+          "scale": [
+            2.3,
+            2.3,
+            2.5
+          ]
+        },
+        {
+          "slug": "petition_bark",
+          "kind": "evidence",
+          "local_cm": [
+            680,
+            750,
+            140
+          ],
+          "scale": [
+            1.6,
+            1.6,
+            2.8
+          ]
+        },
+        {
+          "slug": "rooted_hearing_circle",
+          "kind": "civic",
+          "local_cm": [
+            -570,
+            470,
+            80
+          ],
+          "scale": [
+            4.8,
+            4.8,
+            1.6
+          ]
+        },
+        {
+          "slug": "orchard_row_west",
+          "kind": "social",
+          "local_cm": [
+            -850,
+            -330,
+            220
+          ],
+          "scale": [
+            1.3,
+            5.4,
+            4.4
+          ]
+        },
+        {
+          "slug": "orchard_row_east",
+          "kind": "social",
+          "local_cm": [
+            830,
+            -330,
+            220
+          ],
+          "scale": [
+            1.3,
+            5.4,
+            4.4
+          ]
+        },
+        {
+          "slug": "public_harvest_table",
+          "kind": "social",
+          "local_cm": [
+            0,
+            -620,
+            85
+          ],
+          "scale": [
+            3.8,
+            1.4,
+            1.7
+          ]
+        },
+        {
+          "slug": "fruit_scale",
+          "kind": "evidence",
+          "local_cm": [
+            350,
+            610,
+            110
+          ],
+          "scale": [
+            1.8,
+            1.2,
+            2.2
+          ]
+        },
+        {
+          "slug": "rotating_circle_hall",
+          "kind": "civic",
+          "local_cm": [
+            -450,
+            -800,
+            185
+          ],
+          "scale": [
+            3.3,
+            2.1,
+            3.7
+          ]
+        }
+      ]
+    },
+    {
+      "id": "CITY.11",
+      "name": "Auvren",
+      "realm": "FirstAbsence",
+      "origin_cm": [
+        -200000,
+        0,
+        0
+      ],
+      "profile": "before_arrival",
+      "modules": [
+        {
+          "slug": "first_threshold",
+          "kind": "landmark",
+          "local_cm": [
+            -600,
+            390,
+            245
+          ],
+          "scale": [
+            1,
+            4.2,
+            4.9
+          ]
+        },
+        {
+          "slug": "second_threshold",
+          "kind": "landmark",
+          "local_cm": [
+            680,
+            390,
+            245
+          ],
+          "scale": [
+            1,
+            4.2,
+            4.9
+          ]
+        },
+        {
+          "slug": "inside_out_room",
+          "kind": "architecture",
+          "local_cm": [
+            0,
+            200,
+            240
+          ],
+          "scale": [
+            5.4,
+            5.4,
+            4.8
+          ]
+        },
+        {
+          "slug": "northern_witness_plateau",
+          "kind": "civic",
+          "local_cm": [
+            20,
+            830,
+            85
+          ],
+          "scale": [
+            7.2,
+            2.6,
+            1.7
+          ]
+        },
+        {
+          "slug": "step_before_footfall",
+          "kind": "evidence",
+          "local_cm": [
+            -520,
+            -520,
+            85
+          ],
+          "scale": [
+            1.3,
+            0.8,
+            1.7
+          ]
+        },
+        {
+          "slug": "alternative_arrival_marker",
+          "kind": "evidence",
+          "local_cm": [
+            640,
+            -510,
+            90
+          ],
+          "scale": [
+            1.3,
+            0.8,
+            1.8
+          ]
+        },
+        {
+          "slug": "reliable_exit",
+          "kind": "path",
+          "local_cm": [
+            0,
+            -850,
+            45
+          ],
+          "scale": [
+            1.5,
+            3.2,
+            0.9
+          ]
+        },
+        {
+          "slug": "public_testimony_wall",
+          "kind": "social",
+          "local_cm": [
+            870,
+            0,
+            170
+          ],
+          "scale": [
+            2.1,
+            3.7,
+            3.4
+          ]
+        }
+      ]
+    }
+  ]
+}
