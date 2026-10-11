@@ -26,7 +26,11 @@ class UnpaidShiftDirectedWiring(unittest.TestCase):
                      "ClearTimer(BesSubtitleTimer)","UnpaidBeatAt",
                      "Beat->duration","BesDecisionPreview(FName Tag)"):
             self.assertIn(term,present)
-        self.assertNotIn("PlaySound2D(",present)  # no fake audio assets
+        self.assertIn("UGameplayStatics::PlaySound2D(",present)
+        self.assertIn("StaticLoadObject(",present)
+        self.assertIn("BesSubtitleOverlay->DisplayBeat(",present)
+        self.assertIn("BesSubtitleOverlay->ClearBeat()",present)
+        self.assertIn("if(USoundBase* Cue=",present)  # sound remains optional
     def test_player_control_actual_source_state(self):
         hub=read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
