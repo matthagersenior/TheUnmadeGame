@@ -1,3 +1,7 @@
+## Paths and Predators v11 — 11 October 2026
+
+Source adds twelve distinct creature profiles, six elder variants with a half-health rally, six E-operated covered passages and six save-backed local scout surveys. Fold interrupts an enemy wind-up; combat includes a recovery interval. Survey saves fail without applying geometry or objective changes, and malformed saves are preserved. No campaign, wage, inventory or final-boss shortcut is added. **Unreal UHT/PIE and real playtesting remain outstanding.** Updated complete illustrated books and package accompany this source release; see `docs/lore/LATEST_ILLUSTRATED_RELEASE.md`.
+
 ## NEW — Performance and Peril v10 (11 October 2026)
 
 This source pass adds a **real portable skinned glTF kit**: Resident, Beast and Wraith meshes, each with five keyed motion clips; six original PBR material swatches; Unreal skeletal mesh/animation runtime lookups with safe earlier graybox fallbacks; per-site distinctive fossil, prism, bell, archive, wreck and kiln geometry; navigation-path-based enemies (local LOS movement only when nav data is missing); timed warning/impact combat, impact cues; and speaker-scoped physical cinematic blocking with obstruction-checked shots. Actual skeletal import, navigation generation and Unreal 5.8 UHT/PIE must be tested on an engine PC, not inferred from source CI.

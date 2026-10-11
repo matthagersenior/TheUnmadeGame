@@ -9,11 +9,99 @@
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Materials/MaterialInterface.h"
+#include "World/UnmadeFieldSurveySave.h"
+#include "Player/UnmadeCharacter.h"
+#include "Combat/UnmadeCombatComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/Engine.h"
+#include "EngineUtils.h"
+
+namespace {
+const FVector SurveyCenters[6]={FVector(-2250,1940,0),FVector(2350,1920,0),
+    FVector(-20200,1700,0),FVector(20300,1900,0),
+    FVector(-2100,-48000,0),FVector(-2100,52000,0)};
+const TCHAR* SurveyReturns[6]={
+    TEXT("Orren: The ribs hid a maintained footpath. I will mark it for travelers."),
+    TEXT("Vesh: A glass shutter, not a miracle. Now we have another shelter from the watchers."),
+    TEXT("Deryn: You found the service passage. We can tend the bell without crossing the hounds."),
+    TEXT("Isti: The shelf latch was left for a keeper. I will record the route, not invent its missing owner."),
+    TEXT("Halven: The wreck hatch still moves. That gives the net crews a covered way ashore."),
+    TEXT("Varda: The kiln screen opens. Bes's hearth and his unpaid wages are a separate matter.")};
+}
+
+bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
+    double CompetingNpcDistanceSq)
+{
+    if(!GetWorld()||!IsValid(Player)||!IsValid(Player->GetCombat())||
+       Player->GetCombat()->IsDefeated()||!bFieldSurveySaveUsable||FieldSurveyStages.Num()!=6)return false;
+    for(int32 i=0;i<6;++i)
+    {
+        const FVector Switch=SurveyCenters[i]+FVector(-780,-430,80);
+        const FVector Report=SurveyCenters[i]+FVector(0,-870,100);
+        const bool bReporting=FieldSurveyStages[i]>0;
+        const FVector Target=bReporting?Report:Switch;
+        const double Distance=FVector::DistSquared(Player->GetActorLocation(),Target);
+        if(Distance>FMath::Square(260.f)||Distance>CompetingNpcDistanceSq)continue;
+        FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeSurveySight),false);
+        Params.AddIgnoredActor(Player);
+        for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc)
+            if(FVector::DistSquared(Npc->GetActorLocation(),Target)<FMath::Square(50.f))
+                Params.AddIgnoredActor(*Npc);
+        if(GetWorld()->LineTraceTestByChannel(Player->GetActorLocation()+FVector(0,0,40),
+            Target+FVector(0,0,40),ECC_Visibility,Params))continue;
+        const int32 Previous=FieldSurveyStages[i];
+        if(Previous<2)
+        {
+            auto* Save=Cast<UUnmadeFieldSurveySave>(UGameplayStatics::CreateSaveGameObject(
+                UUnmadeFieldSurveySave::StaticClass()));
+            if(!Save)return true;
+            Save->Stages=FieldSurveyStages;
+            Save->Stages[i]=Previous+1;
+            if(!UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadeOptionalFieldSurveys"),0))
+            {
+                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Red,
+                    TEXT("Fieldwork could not save. No route or objective changed; try again."));
+                return true;
+            }
+            FieldSurveyStages=Save->Stages;
+            if(FieldSurveyGates.IsValidIndex(i)&&FieldSurveyGates[i].IsValid())
+            {
+                FieldSurveyGates[i]->SetActorEnableCollision(false);
+                FieldSurveyGates[i]->SetActorHiddenInGame(true);
+            }
+        }
+        if(FieldSurveySigns.IsValidIndex(i)&&FieldSurveySigns[i].IsValid())
+            FieldSurveySigns[i]->GetTextRender()->SetText(FText::FromString(
+                FieldSurveyStages[i]==1?TEXT("RETURN TO THE SCOUT - E TO REPORT"):
+                TEXT("FIELD SURVEY COMPLETE - COVERED PASSAGE OPEN")));
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Cyan,
+            Previous==0?TEXT("Passage opened. Return to the nearby scout and press E to report."):
+                SurveyReturns[i]);
+        return true;
+    }
+    return false;
+}
+
 
 // Optional combat grounds off the civilian streets; no waves or endless respawning.
 void AUnmadePrototypeHub::BuildPlayableEncounters()
 {
     if(!GetWorld())return;
+    FieldSurveyStages.Init(0,6);
+    if(UGameplayStatics::DoesSaveGameExist(TEXT("UnmadeOptionalFieldSurveys"),0))
+    {
+        auto* Save=Cast<UUnmadeFieldSurveySave>(UGameplayStatics::LoadGameFromSlot(
+            TEXT("UnmadeOptionalFieldSurveys"),0));
+        bFieldSurveySaveUsable=false;
+        if(Save&&Save->Version==1&&Save->Stages.Num()==6)
+        {
+            bool bValid=true;
+            for(int32 Stage:Save->Stages)if(Stage<0||Stage>2)bValid=false;
+            if(bValid){FieldSurveyStages=Save->Stages;bFieldSurveySaveUsable=true;}
+        }
+    }
+    FieldSurveyGates.SetNum(6);
+    FieldSurveySigns.SetNum(6);
     struct FSite {
         const TCHAR* Id;
         const TCHAR* Label;
@@ -51,6 +139,14 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
         "I read the missing names here. Something read me back.",
         "The crawler comes ashore at dusk. The drowned watch does not sleep.",
         "The coal beast stalks the kiln road. Bes's house lies safely east."};
+    using Kind=UnmadeCore::CreatureKind;
+    const Kind Species[6][3]={
+        {Kind::Cinderjaw,Kind::PaleStrider,Kind::Cinderjaw},
+        {Kind::Veilwatch,Kind::GleamMoth,Kind::Veilwatch},
+        {Kind::HollowHound,Kind::GriefLantern,Kind::HollowHound},
+        {Kind::Inkmaw,Kind::RedactionEye,Kind::Inkmaw},
+        {Kind::SaltglassCrawler,Kind::DrownedWatch,Kind::SaltglassCrawler},
+        {Kind::Ashmaw,Kind::KilnWisp,Kind::Ashmaw}};
     int32 GuideIndex=0;
     for(const FSite& Site:Sites)
     {
@@ -67,6 +163,34 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             FName(*(Id+TEXT(".WestCover"))));
         SpawnBlock(Site.Center+FVector(720,-100,55),FVector(1.4,.9,1.1),
             FName(*(Id+TEXT(".EastCover"))));
+        // A physical covered side passage. E operates its adjacent latch; the
+        // optional quest requires returning to this site's scout in person.
+        SpawnBlock(Site.Center+FVector(-900,130,0),FVector(3,9,.35),
+            FName(*(Id+TEXT(".SurveyPath"))));
+        SpawnBlock(Site.Center+FVector(-1030,130,120),FVector(.3,9,2.4),
+            FName(*(Id+TEXT(".SurveyWall"))));
+        if(AStaticMeshActor* Gate=GetWorld()->SpawnActor<AStaticMeshActor>(
+            Site.Center+FVector(-900,-300,120),FRotator::ZeroRotator))
+        {
+            Gate->Tags.AddUnique(FName(*(Id+TEXT(".SurveyGate"))));
+            auto* Mesh=Gate->GetStaticMeshComponent();
+            Mesh->SetMobility(EComponentMobility::Movable);
+            Mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
+            Mesh->SetWorldScale3D(FVector(2.5,.3,2.4));
+            FieldSurveyGates[GuideIndex]=Gate;
+            Gate->SetActorEnableCollision(FieldSurveyStages[GuideIndex]==0);
+            Gate->SetActorHiddenInGame(FieldSurveyStages[GuideIndex]>0);
+        }
+        if(ATextRenderActor* Latch=GetWorld()->SpawnActor<ATextRenderActor>(
+            Site.Center+FVector(-780,-430,80),FRotator(0,90,0)))
+        {
+            FieldSurveySigns[GuideIndex]=Latch;
+            Latch->GetTextRender()->SetWorldSize(17.f);
+            Latch->GetTextRender()->SetText(FText::FromString(
+                FieldSurveyStages[GuideIndex]==0?TEXT("E - OPEN COVERED PASSAGE / BEGIN SURVEY"):
+                FieldSurveyStages[GuideIndex]==1?TEXT("RETURN TO THE SCOUT - E TO REPORT"):
+                TEXT("FIELD SURVEY COMPLETE - COVERED PASSAGE OPEN")));
+        }
         // Six unique, collision-bearing landmark silhouettes; recognizable even
         // without optional authored PBR material instances. No single generic box.
         const auto AddLandmark=[&](const TCHAR* Suffix,const TCHAR* EngineShape,
@@ -176,12 +300,12 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             if(AUnmadeEnemyCharacter* Enemy=GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(
                 Site.Center+Spots[i],FRotator::ZeroRotator))
             {
-                const bool bWatcher=i==1;
-                Enemy->ConfigureStyle(bWatcher?UnmadeCore::EnemyStyle::Watcher:
-                    UnmadeCore::EnemyStyle::Stalker);
+                Enemy->ConfigureCreature(Species[GuideIndex][i],i==2);
+                const bool bWatcher=Enemy->GetEnemyStyle()==UnmadeCore::EnemyStyle::Watcher;
                 Enemy->ConfigureEncounter(
                     FName(*FString::Printf(TEXT("%s.Creature.%d"),Site.Id,i)),
-                    Site.Creatures[i],FLinearColor(Site.Accent));
+                    i==2?FString(Site.Creatures[i])+TEXT(" - Elder"):FString(Site.Creatures[i]),
+                    FLinearColor(Site.Accent));
                 Enemy->SetVisualScale(bWatcher?FVector(.7,.7,.9):FVector(1.1,.85,1.05));
             }
         }
