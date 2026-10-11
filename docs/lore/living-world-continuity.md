@@ -343,3 +343,8 @@ Six optional traversable encounter sites now flank the established settlements: 
 The v8 point-light implementation refers to Unreal's publicly exposed PointLightComponent member; runtime compilation remains unverified until Unreal Engine is available.
 
 Six additional source-created named sentries (Orren, Vesh, Deryn, Isti, Halven and Varda) stand near optional field sites with individual authored conversation and normal NPC memory, in safe approach positions outside the ring of hostiles. The Unpaid Shift also has four nonblocking in-world E-prompt signs on the existing hearth, walkout, wage and Mera-guarantee stations; actual effects still require the proper evidence and explicit confirmation.
+
+
+## 2026-10-11 — The Unpaid Shift objective HUD (runtime v9)
+
+Bes's first locally relevant quest now exposes a real native UMG, read-only objective overlay visible only at the Cinderhold or Saltwake play spaces, hidden during directed scenes and outside the local quest. It derives its next instruction from saved visit/evidence/consent/settlement state; its debt, household warmth, cold days and clock day display real ledgers, not fictitious cinematic props or created currency. All economic truth, confirmation, progression, failure and return interactions remain in the established game model. This is source-wired UI, not tested Unreal Editor output and not a regenerated illustrated edition.
