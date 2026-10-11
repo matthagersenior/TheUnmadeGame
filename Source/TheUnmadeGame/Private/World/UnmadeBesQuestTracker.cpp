@@ -22,7 +22,8 @@ void AUnmadePrototypeHub::UpdateBesQuestTracker()
     }
     const FVector At=Player->GetActorLocation();
     const bool NearCinder=FVector::DistSquared2D(At,FVector(0,50000,0))<
-                          FMath::Square(3400.f);
+                          FMath::Square(3400.f)||
+        FVector::DistSquared2D(At,FVector(-2100,52000,0))<FMath::Square(2100.f);
     const bool NearSaltwake=FVector::DistSquared2D(At,FVector(0,-50000,0))<
                           FMath::Square(3400.f);
     if(!NearCinder&&!NearSaltwake)
@@ -58,6 +59,8 @@ void AUnmadePrototypeHub::UpdateBesQuestTracker()
     else
         Goal=TEXT("Choose real relief, a walkout, full pay, or Mera's consent");
 
+    if(NearCinder&&!bCinderholdSaveRejected&&Cinderhold.Save().firstDay>0)
+        Goal=FString(UTF8_TO_TCHAR(Cinderhold.Objective()))+TEXT("\nHousehold: ")+Goal;
     const auto* Worker=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
     const int32 Owed=Worker?Worker->owedMarks:0;
     const FString Evidence=FString::Printf(

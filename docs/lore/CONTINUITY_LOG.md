@@ -293,3 +293,10 @@ Every substantial gameplay addition needs a companion canon update and a regener
 
 ## 2026-10-11 Paths and Predators v11
 Twelve named creature profiles replace site aliases; six elder variants rally below half health. Six saved, physical latch-and-scout surveys open covered passages. Fold interrupts a pending strike with recovery. Existing campaigns, money, consent, mysteries and endings are unchanged. Source-only validation; Unreal UHT/PIE remains outstanding. Complete illustrated books rebuilt from v10.
+
+
+## 2026-10-11 Cinderhold and the Remembered Road v12
+
+Implemented all six requested development priorities within one optional connected adventure: specific relationship memories, interactive environmental evidence and gates, territorial creatures, an authored Blackslag elder with locked tells and a living alternative, grounded ability combinations and warned permanent choices, and intersecting household/fieldwork/return objectives. Added Volume X Chapter 32 and engine acceptance plan. Exact wages, warmth and Mera's consent remain separate authoritative domains; no OPEN mystery or ending was canonized.
+
+Four new three-beat directed scenes and three actual original prototype stereo effects accompany the source; no final voice recording, bespoke skeletal clip or verified Unreal import is claimed. Versioned dependent snapshot validation, atomic paid route persistence, failed-save rollback, actual living elder checks, earned local reports and historical return values are tested. The v11 Blackslag survey remains compatible and yields to Varda after its existing report. The illustrated master and standalone volume are extended from the intact full v11 editions, retaining prior artwork. See current illustrated receipt/digests for delivered files and explicit engine-validation gap.

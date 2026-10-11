@@ -62,6 +62,14 @@ try {
     & python (Join-Path $PSScriptRoot "validate_transmedia_storyworld.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "transmedia-continuity-validation.log")
     if($LASTEXITCODE -ne 0){throw "TRANSMEDIA_LORE_DRIFT"}
+    & python (Join-Path $PSScriptRoot "build_cinderhold_audio.py") --check
+    if($LASTEXITCODE -ne 0){throw "CINDERHOLD_AUDIO_INVALID"}
+    & python (Join-Path $PSScriptRoot "unreal_editor/import_cinderhold_audio.py")
+    if($LASTEXITCODE -ne 0){throw "CINDERHOLD_AUDIO_PLAN_INVALID"}
+    Write-Host "Checking Cinderhold adventure, local abilities and save boundaries."
+    & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_cinderhold_adventure_wiring.py" 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "cinderhold-adventure-source-validation.log")
+    if($LASTEXITCODE -ne 0){throw "CINDERHOLD_ADVENTURE_INTEGRATION_INVALID"}
     Write-Host "Checking physical Witness Echo gameplay integration and save safety."
     & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_witness_echo_wiring.py" 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "witness-echo-source-validation.log")
