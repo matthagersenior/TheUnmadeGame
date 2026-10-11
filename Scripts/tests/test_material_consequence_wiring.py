@@ -18,7 +18,7 @@ class MaterialConsequenceWiring(unittest.TestCase):
                      "InitializeAtDay","MaterialPolicies[static_cast<int>(realm)].dailyNeed"):
             self.assertIn(term,rules)
         self.assertIn("AdvanceMaterialDayIfNeeded();",hub)
-        self.assertIn("Materials.AdvanceAllOneDay(Civic)",hub)
+        self.assertIn("Materials.AdvanceAllOneDay(Civic,BesHousehold.OnWalkout())",hub)
         self.assertIn("WriteWorldSnapshot()",hub)
 
     def test_physical_interaction_and_real_npc_routines(self):
