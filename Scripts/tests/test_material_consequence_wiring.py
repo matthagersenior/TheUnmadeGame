@@ -53,7 +53,8 @@ class MaterialConsequenceWiring(unittest.TestCase):
         self.assertIn("RestoredMaterials.Restore(Data",hub)
         self.assertIn("RestoredMaterials.InitializeAtDay",hub)
         self.assertIn("bMaterialSaveRejected=true;",hub)
-        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected)return false;",hub)
+        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected ||",hub)
+        self.assertIn("bBesHouseholdRejected)return false;",hub)
         self.assertIn("Materials.Restore(Before,Cargo,GetGameDay())",hub)
         self.assertIn("Tests/world/material_consequences_test.cpp",
                       read(".github/workflows/static-checks.yml"))
