@@ -8,6 +8,7 @@
 
 class UUnmadeCombatComponent;
 class UStaticMeshComponent;
+class AUnmadePrototypeHub;
 
 /** Two minimal, locally simulated enemy styles. No language model involved. */
 UCLASS()
@@ -35,4 +36,5 @@ private:
     UnmadeCore::EnemyStyle Style = UnmadeCore::EnemyStyle::Stalker;
     double FoldExposedUntil = -1.0;
     bool bDeathHandled = false;
+    TWeakObjectPtr<AUnmadePrototypeHub> CachedRealityHub;
 };
