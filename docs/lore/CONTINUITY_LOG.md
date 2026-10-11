@@ -268,3 +268,8 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added source regression tests and updated living canon in the same gameplay commit. This is neither a regenerated downloadable illustrated volume nor an Unreal Editor/Windows playtest; final assets, animation, navigation and VO remain distinct production work.
 - Source API compatibility review: use the public APointLight::PointLightComponent property in the lighted encounter blockouts; no gameplay or save-state contract changed.
 - Added six named field scouts with physically present inherited memory/response interactions and four labeled E interaction stations for the Bes/Mera wage dispute. These complement, not replace, the original resident population.
+
+
+## 2026-10-11 — Runtime v9: live quest instructions inside the world
+- Created a non-modal native UMG objective and verified-state ledger overlay for The Unpaid Shift. Its route and current goal change when Bes is heard, his home is inspected, Rheva documents unpaid wages, Mera consents, or settlement occurs. Local radius and cinematic hiding prevent intrusive omniscient information.
+- Wired bounded refresh from the existing prototype hub Tick without creating new quest flags, duplicating evidence or consuming player input. Added regression source tests and updated the canonical continuity text. Unreal UHT/PIE and new illustrated Bible edition are still unverified.

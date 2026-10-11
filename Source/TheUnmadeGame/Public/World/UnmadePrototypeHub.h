@@ -225,6 +225,10 @@ private:
     TWeakObjectPtr<AStaticMeshActor> BesVisibleBasket;
     FVector BesCartRest=FVector::ZeroVector;
     void AnimateBesWorkingCart();
+    void UpdateBesQuestTracker();
+    double NextBesTrackerRefreshAt=0.0;
+    UPROPERTY(Transient)
+    TObjectPtr<class UUnmadeBesQuestTrackerWidget> BesQuestTracker;
     FString BesDecisionPreview(FName Tag) const;
     bool bBesHouseholdRejected=false;
     void RefreshBesHouseholdWorld();

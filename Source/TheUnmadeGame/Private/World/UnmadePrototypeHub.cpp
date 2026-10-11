@@ -1846,6 +1846,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
     AdvanceMaterialDayIfNeeded();
     AnimateBesWorkingCart();
+    UpdateBesQuestTracker();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical
