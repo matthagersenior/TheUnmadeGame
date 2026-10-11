@@ -38,6 +38,7 @@
 class AUnmadeLoreSite;
 class ADirectionalLight;
 class AUnmadeCharacter;
+class AStaticMeshActor;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(
     FUnmadeBesDirectedBeat, FName, SpeakerId,
@@ -207,6 +208,10 @@ private:
     int32 BesActiveScene=-1;
     int32 BesActiveBeat=0;
     void AdvanceBesDirectedBeat();
+    TWeakObjectPtr<AStaticMeshActor> BesWorkingCart;
+    TWeakObjectPtr<AStaticMeshActor> BesVisibleBasket;
+    FVector BesCartRest=FVector::ZeroVector;
+    void AnimateBesWorkingCart();
     FString BesDecisionPreview(FName Tag) const;
     bool bBesHouseholdRejected=false;
     void RefreshBesHouseholdWorld();
