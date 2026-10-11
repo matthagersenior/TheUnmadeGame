@@ -505,12 +505,27 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     }
 
     FString BeliefLine;
+    const auto* LocalPolicy=UnmadeCore::RealmReactionAt(
+        GetActorLocation().X,GetActorLocation().Y);
     const TArray<FUnmadeNpcObservation>& Observations = Memory->GetObservations();
     for (int32 Index = Observations.Num() - 1; Index >= 0; --Index)
     {
         const FUnmadeNpcObservation& Event = Observations[Index];
         const bool bDirect = Event.Evidence == EUnmadeEvidenceKind::Witnessed;
-        if (Event.EventKind == FName("Reality.CareWitnessed"))
+        const bool bLocalReport=LocalPolicy &&
+            Event.SubjectId==FName(*FString::Printf(TEXT("Reality.Realm.%d"),
+                static_cast<int32>(LocalPolicy->realm)));
+        if(bLocalReport && Event.EventKind==FName("Reality.CareWitnessed"))
+            BeliefLine=bDirect
+                ?FString(UTF8_TO_TCHAR(LocalPolicy->careLine))
+                :FString::Printf(TEXT("I heard from %s about a local refuge rite. I have not seen that structure myself."),
+                                 *Event.SpeakerId.ToString());
+        else if(bLocalReport && Event.EventKind==FName("Reality.InquiryWitnessed"))
+            BeliefLine=bDirect
+                ?FString(UTF8_TO_TCHAR(LocalPolicy->inquiryLine))
+                :FString::Printf(TEXT("I heard from %s about the local inquiry. I still need firsthand evidence."),
+                                 *Event.SpeakerId.ToString());
+        else if (Event.EventKind == FName("Reality.CareWitnessed"))
             BeliefLine = bDirect
                 ? TEXT("I saw the reality rite make a passage less dangerous. The debts it left are still ours.")
                 : FString::Printf(TEXT("I heard from %s that a rite opened a safer way; I did not see it."),
