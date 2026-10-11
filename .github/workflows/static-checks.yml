@@ -51,6 +51,10 @@ jobs:
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits
         run: python Scripts/check_lore_change.py
+      - name: Generate and validate 35 real stereo Unpaid Shift Foley assets
+        run: |
+          python Scripts/build_unpaid_shift_audio.py --check
+          python Scripts/unreal_editor/import_unpaid_shift_audio.py
       - name: Run validator unit tests
         run: python -m unittest discover -s Scripts/tests -v
       - name: Compile and test deterministic C++ fracture rules
