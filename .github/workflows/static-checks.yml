@@ -150,6 +150,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/nine_realm_reactions_test.cpp -o /tmp/unmade-nine-realm-reactions
           /tmp/unmade-nine-realm-reactions
+      - name: Verify finite nine-realm households, labor, shortage and save-safe physical deliveries
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/material_consequences_test.cpp -o /tmp/unmade-material-consequences
+          /tmp/unmade-material-consequences
       - name: Test six earned cross-discipline confluence challenges
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/confluence_rules_test.cpp -o /tmp/unmade-confluence-test
