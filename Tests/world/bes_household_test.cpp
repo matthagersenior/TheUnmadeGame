@@ -7,7 +7,7 @@ int main(){
     LivingEconomy wages;
     BesHousehold bes;
     const std::array<RealityPublicResponse,9> civic{};
-    assert(!bes.InspectHome(1)==false || true); // source-only, not an assertion of a save
+    assert(bes.InspectHome(1)==BesOutcome::Blocked);
     assert(bes.HearBes(wages,1)==BesOutcome::Blocked);
     assert(bes.HearRheva(1)==BesOutcome::Blocked);
     // A real unpaid claim arises only after finite town treasury has funded
@@ -49,7 +49,7 @@ int main(){
     assert(wages.Worker(Realm::HearthBeneath)->owedMarks==beforeWages);
     assert(wages.Worker(Realm::HearthBeneath)->shiftsPaid==shifts);
     assert(bes.Save().heatBaskets==4);
-    assert(bes.SetttleFromTown(wages,19)==BesOutcome::Blocked);
+    assert(bes.SettleFromTown(wages,19)==BesOutcome::Blocked);
     // Mera's explicit and individually sourced consent is required before
     // any person may transfer HER owned wages.
     assert(bes.AcceptMeraGuarantee(wages,19)==BesOutcome::Blocked);
