@@ -318,6 +318,15 @@ void AUnmadeCharacter::ApplyRiteAbility(UnmadeCore::RiteId Rite,
     default: break;
     }
 }
+void AUnmadeCharacter::ReportRealityConsequenceEvent(UnmadeCore::RiteId Id)
+{
+    const int Index=static_cast<int>(Id);
+    if(Index<0 || Index>=static_cast<int>(UnmadeCore::RealityProfiles.size()))return;
+    const bool bCare=UnmadeCore::RealityProfiles[Index].care;
+    ReportLocalEvent(FName(bCare?TEXT("Reality.CareWitnessed"):
+        TEXT("Reality.InquiryWitnessed")),FName("region.crossings.reality"));
+}
+
 void AUnmadeCharacter::ReportRiteWitnessEvent()
 {
     ReportLocalEvent(FName("Reality.Rite"),FName("TheUnmade.Tenfold"));
