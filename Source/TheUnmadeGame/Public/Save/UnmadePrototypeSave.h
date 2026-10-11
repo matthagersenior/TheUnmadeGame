@@ -267,6 +267,12 @@ public:
     bool bBesHomeVisited=false;
     UPROPERTY(SaveGame)
     bool bBesRhevaInterviewed=false;
+    UPROPERTY(SaveGame)
+    int32 BesMeraGuaranteeOwed=0;
+    UPROPERTY(SaveGame)
+    bool bBesMeraConsented=false;
+    UPROPERTY(SaveGame)
+    bool bBesMeraGuaranteeUsed=false;
 
 
 
