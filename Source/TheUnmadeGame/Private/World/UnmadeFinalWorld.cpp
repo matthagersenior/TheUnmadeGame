@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Combat/UnmadeFinalBoss.h"
 #include "Combat/UnmadeCombatComponent.h"
@@ -98,7 +99,7 @@ bool AUnmadePrototypeHub::BreakFinalMask()
     // adversary; real receipts become optional counter-testimony to its claim
     // that communities cannot carry one another across incompatible worlds.
     if(LivingTrades.HasEarnedMutualAid() && GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,
+        UnmadeRpgFeedback(-1,15.f,FColor::Cyan,
             TEXT("NHAL-VEY'S CLAIM FALTERS: Saltwake and Cinderhold exchanged real supplies, paid their couriers, and remembered both receipts."));
     // The camera/subtitle echo is authored from the same saved disposition.
     // It never calls BreakCore, changes boss health or grants free combat.
@@ -109,17 +110,17 @@ bool AUnmadePrototypeHub::BreakFinalMask()
     // mutual trade: fully paid work is meaningful, cold days still mattered.
     // A refusal exposes an unresolved wound; neither route bypasses combat.
     if(BesHousehold.Phase()==UnmadeCore::BesPhase::Underwritten&&GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,
+        UnmadeRpgFeedback(-1,16.f,FColor::Cyan,
             FString::Printf(TEXT("MERA'S SACRIFICE REACHES NHAL-VEY: %d borrowed marks moved from one named wage account to another. A different household still holds the claim."),
                 BesHousehold.Save().guaranteeOwed));
     else if(BesHousehold.EndgameWitness()&&GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,
+        UnmadeRpgFeedback(-1,16.f,FColor::Cyan,
             FString::Printf(TEXT("BES'S COUNTER-WITNESS: Real municipal wages were returned; %d recorded cold days cannot be erased by a repaired ledger."),
                 BesHousehold.Save().daysCold));
     else if(BesHousehold.OnWalkout()&&GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Orange,
+        UnmadeRpgFeedback(-1,16.f,FColor::Orange,
             TEXT("NHAL-VEY POINTS TO AN UNPAID HEARTH: Bes still refuses a stolen shift. The cost of an unfinished choice survives."));
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Orange,
+    if(GEngine)UnmadeRpgFeedback(-1,16.f,FColor::Orange,
         FString::Printf(TEXT("FIRST VICTORY WAS A LIE: %s"),
         UTF8_TO_TCHAR(UnmadeCore::LastAdversary.maskReveal)));
     return true;
@@ -131,7 +132,7 @@ bool AUnmadePrototypeHub::BreakFinalCore()
     if(FinalStory.BreakCore()!=UnmadeCore::FinalResult::TrueVictory)return false;
     if(!WriteWorldSnapshot()){FinalStory.Restore(Before);return false;}
     RefreshFinalWorld();
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,22.f,FColor::Yellow,
+    if(GEngine)UnmadeRpgFeedback(-1,22.f,FColor::Yellow,
         FString::Printf(TEXT("NHAL-VEY FALLS: %s Choose an actual world control in Auvren."),
             UTF8_TO_TCHAR(UnmadeCore::LastAdversary.trueReveal)));
     return true;
@@ -146,7 +147,7 @@ bool AUnmadePrototypeHub::CommitFinalMorning(
     if(!WriteWorldSnapshot()){FinalStory.Restore(Before);return false;}
     RefreshFinalWorld();
     const int idx=static_cast<int>(Choice);
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,23.f,FColor::Cyan,
+    if(GEngine)UnmadeRpgFeedback(-1,23.f,FColor::Cyan,
         FString::Printf(TEXT("THE SAME WORLD, ANOTHER MORNING: %s. %s Your gear, quests, and decisions remain."),
             UTF8_TO_TCHAR(UnmadeCore::FinalWorlds[idx].name),
             UTF8_TO_TCHAR(UnmadeCore::FinalWorlds[idx].changedWorld)));
@@ -164,7 +165,7 @@ bool AUnmadePrototypeHub::WakeFinalEcho()
     if(FinalStory.WakeEcho()!=UnmadeCore::FinalResult::EchoStarted)return false;
     if(!WriteWorldSnapshot()){FinalStory.Restore(Before);return false;}
     RefreshFinalWorld();
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Orange,
+    if(GEngine)UnmadeRpgFeedback(-1,13.f,FColor::Orange,
         FString::Printf(TEXT("OPTIONAL ECHO: %s. It remembers the first defeat but uses another rhythm."),
             UTF8_TO_TCHAR(UnmadeCore::FinalWorlds[static_cast<int>(FinalStory.World())].bossReturn)));
     return true;
@@ -176,7 +177,7 @@ bool AUnmadePrototypeHub::SettleFinalEcho()
     if(FinalStory.SettleEcho()!=UnmadeCore::FinalResult::EchoDefeated)return false;
     if(!WriteWorldSnapshot()){FinalStory.Restore(Before);return false;}
     RefreshFinalWorld();
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,
+    if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Green,
         TEXT("THE ECHO HAS ENDED. Your other world remains alive, with every choice remembered."));
     return true;
 }
@@ -214,7 +215,7 @@ bool AUnmadePrototypeHub::TryFinalInteraction(
     if(!action)return false;
     if(action==4)
     {
-        if(GEngine && worldIndex>=0)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Cyan,
+        if(GEngine && worldIndex>=0)UnmadeRpgFeedback(-1,13.f,FColor::Cyan,
             FString(UTF8_TO_TCHAR(UnmadeCore::FinalLocalRecord(
                 FinalStory.World(),static_cast<UnmadeCore::Realm>(worldIndex)))));
         return true;
@@ -222,7 +223,7 @@ bool AUnmadePrototypeHub::TryFinalInteraction(
     if(action==3)
     {
         if(!WakeFinalEcho()&&GEngine)
-            GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+            UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
                 TEXT("The boss's optional new form cannot be summoned yet."));
         return true;
     }
@@ -232,14 +233,14 @@ bool AUnmadePrototypeHub::TryFinalInteraction(
         "TheLastAnswer",action,GetWorld()->GetTimeSeconds());
     if(gate!=UnmadeCore::CommitmentAttempt::Confirmed)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,14.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,14.f,FColor::Yellow,
             FString::Printf(TEXT("PERMANENT NEW MORNING: %s. %s. Press the SAME control again within six seconds to accept."),
                 UTF8_TO_TCHAR(UnmadeCore::FinalWorlds[action].name),
                 UTF8_TO_TCHAR(UnmadeCore::FinalWorlds[action].changedWorld)));
         return true;
     }
     if(!CommitFinalMorning(Player,Choice)&&GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Red,
+        UnmadeRpgFeedback(-1,8.f,FColor::Red,
             TEXT("The new morning was not saved. Your earlier world remains intact."));
     return true;
 }

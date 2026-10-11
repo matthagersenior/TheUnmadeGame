@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -36,10 +37,12 @@ void AUnmadePrototypeHub::BeginPlay()
     BuildRememberedRoads();
     BuildExpeditions();
     BuildIdentity();
+    BuildAdventureDepth();
     RefreshCinderholdAdventure();
     RefreshRememberedRoads();
     RefreshExpeditions();
     RefreshIdentity();
+    RefreshAdventureDepth();
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
@@ -82,7 +85,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bCinderholdSaveRejected=true;
         return;
     }
-    if(Save&&Save->SchemaVersion==1&&(Save->bHasWorldIdentity||Save->bHasExpeditions)&&!Save->bHasLivingWorldSnapshot){bExpeditionSaveRejected=true;return;}
+    if(Save&&Save->SchemaVersion==1&&(Save->bHasAdventureDepth||Save->bHasWorldIdentity||Save->bHasExpeditions)&&!Save->bHasLivingWorldSnapshot){bExpeditionSaveRejected=true;return;}
     if(Save&&Save->SchemaVersion==1&&Save->bHasRememberedRoads&&!Save->bHasLivingWorldSnapshot){bRoadSaveRejected=true;return;}
     if (!Save || Save->SchemaVersion != 1 || !Save->bHasLivingWorldSnapshot) return;
 
@@ -478,6 +481,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     }
     if(Save->bHasExpeditions){std::vector<int> Data;for(int32 V:Save->ExpeditionState)Data.push_back(V);if(!Expeditions.Restore(Data)){bExpeditionSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Expedition save rejected; original protected"));}}
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int32 V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bIdentitySaveRejected=true;UE_LOG(LogTemp,Error,TEXT("World identity save rejected; original protected"));}}
+    if(Save->bHasAdventureDepth){std::vector<int> Data;for(int32 V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bDepthSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Adventure depth save rejected; original protected"));}}
     if(Save->bHasRememberedRoads)
     {
         std::vector<int> Data;for(int32 V:Save->RememberedRoadState)Data.push_back(V);
@@ -515,6 +519,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
     if(bExpeditionSaveRejected)return false;
     if(bIdentitySaveRejected)return false;
+    if(bDepthSaveRejected)return false;
     if(bRoadSaveRejected)return false;
     if(bCinderholdSaveRejected)return false;
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
@@ -528,6 +533,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bBesHouseholdRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
+    Save->bHasAdventureDepth=true;Save->AdventureDepthState.Reset();for(int V:Depth.Pack())Save->AdventureDepthState.Add(V);
     Save->bHasWorldIdentity=true;Save->WorldIdentityState.Reset();for(int V:Identity.Pack())Save->WorldIdentityState.Add(V);
     Save->bHasExpeditions=true;Save->ExpeditionState.Reset();
     for(int V:Expeditions.Pack())Save->ExpeditionState.Add(V);
@@ -764,7 +770,7 @@ bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bComple
     if (!WriteWorldSnapshot())
     {
         RegionalTasks.Restore(Previous);
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+        if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
             TEXT("Village story could not be saved. No progress applied."));
         return false;
     }
@@ -781,7 +787,7 @@ bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bComple
             Line = bCompleted
                 ? TEXT("PAPERHAVEN: the registrar preserves the rescued testimony, even though it contradicts the official record.")
                 : TEXT("PAPERHAVEN: the copyist entrusts you with a missing testimony. Bring it to the registrar.");
-        GEngine->AddOnScreenDebugMessage(-1, 9.f, FColor::Cyan, Line);
+        UnmadeRpgFeedback(-1, 9.f, FColor::Cyan, Line);
     }
     return true;
 }
@@ -824,7 +830,7 @@ void AUnmadePrototypeHub::TryFactionConversation(FName ResidentId)
             : Result==UnmadeCore::FactionResult::ChoiceRequired
             ? TEXT("FACTION DECISION: near this representative, F7 commits to solidarity, F8 to open truth. This cannot be undone.")
             : TEXT("FACTION: another witness adds their part to the chronicle. Speak to the next representative.");
-        GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Cyan,Notice);
+        UnmadeRpgFeedback(-1,9.f,FColor::Cyan,Notice);
     }
 }
 
@@ -935,7 +941,7 @@ bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome
                 return false;
             }
             RefreshCommunityConsequences();
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
                 FString::Printf(TEXT("FACTION ARC RESOLVED: %s. The town remembers your choice."),
                     UTF8_TO_TCHAR(Arc.name)));
             return true;
@@ -995,7 +1001,7 @@ bool AUnmadePrototypeHub::TryTravelFrontier(AUnmadeCharacter* Player)
             if(bNew)WriteWorldSnapshot();
             return false;
         }
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,10.f,FColor::Cyan,
             FString::Printf(TEXT("CROSSING OPEN: %s. Speak to local witnesses and examine the clue."),
                 *GetCurrentRealmName(Destination)));
         return true;
@@ -1024,7 +1030,7 @@ bool AUnmadePrototypeHub::InspectFrontierClue(AUnmadeCharacter* Player)
             return false;
         }
         const auto* Spec=UnmadeCore::FindFrontier(At);
-        if(GEngine && Spec)GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,
+        if(GEngine && Spec)UnmadeRpgFeedback(-1,10.f,FColor::Cyan,
             FString::Printf(TEXT("REALM EVIDENCE: %s"),UTF8_TO_TCHAR(Spec->mystery)));
         return true;
     }
@@ -1055,7 +1061,7 @@ void AUnmadePrototypeHub::TryFrontierConversation(FName ResidentId)
             : Event==UnmadeCore::FrontierEvent::FinalChoice
             ? TEXT("REALM CHOICE: F7 stands with the people; F8 releases the disputed truth.")
             : TEXT("REALM STORY: the next witness waits elsewhere in this settlement.");
-        GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,Notice);
+        UnmadeRpgFeedback(-1,8.f,FColor::Cyan,Notice);
     }
 }
 
@@ -1086,7 +1092,7 @@ bool AUnmadePrototypeHub::ResolveNearbyFrontier(int32 Ending)
                 return false;
             }
             RefreshCommunityConsequences();
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
                 FString::Printf(TEXT("REALM STORY RESOLVED: %s."),
                     UTF8_TO_TCHAR(Outpost.settlementName)));
             return true;
@@ -1136,7 +1142,7 @@ bool AUnmadePrototypeHub::InspectRealmAftermathSite(
     const int32 Stage=RealmAftermath.Stage(At);
     if(Stage==0 || Stage==4)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Cyan,
             Stage==0?TEXT("RETURN STORY LOCKED: resolve the local harbor/hearth accord and talk to its warden.")
                     :FString(UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(At))));
         return true;
@@ -1147,7 +1153,7 @@ bool AUnmadePrototypeHub::InspectRealmAftermathSite(
         :RealmAftermath.Inspect(At,Approach,Approach==1?Spec.evidenceForCare:Spec.evidenceForTruth);
     if(Event==UnmadeCore::RealmAftermathResult::NeedMechanism)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
             TEXT("The flood/heat barrier is still active. Find its physical control first."));
         return true;
     }
@@ -1160,7 +1166,7 @@ bool AUnmadePrototypeHub::InspectRealmAftermathSite(
     }
     RefreshRealmAftermathWorld();
     RefreshFrontierHazardCues();
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Cyan,
+    if(GEngine)UnmadeRpgFeedback(-1,11.f,FColor::Cyan,
         Event==UnmadeCore::RealmAftermathResult::Prepared
         ?TEXT("CONTROL OPERATED: the physical barrier yields. Follow a route to the evidence.")
         :Approach==1
@@ -1192,7 +1198,7 @@ bool AUnmadePrototypeHub::TryRealmAftermathConversation(FName ResidentId)
         RealmAftermath.Restore(Before);
         return false;
     }
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+    if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
         Event==UnmadeCore::RealmAftermathResult::Started
         ?TEXT("AFTERSHOCK: find and operate the local sluice or heat vent, then investigate either physical record.")
         :TEXT("TESTIMONY RECORDED: return to the warden. F7 gives immediate public relief; F8 makes the concealed claim public. Only the evidenced route can be committed."));
@@ -1223,7 +1229,7 @@ bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
             const auto Result=RealmAftermath.Decide(Spec.realm,Choice);
             if(Result==UnmadeCore::RealmAftermathResult::WrongChoice)
             {
-                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+                if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
                     TEXT("This commitment needs its own inspected evidence and named witness."));
                 return false;
             }
@@ -1235,7 +1241,7 @@ bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
             }
             RefreshRealmAftermathWorld();
             RefreshLaterRealmWorld();
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,
+            if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Green,
                 FString::Printf(TEXT("THE REALM CHANGED: %s"),
                     UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(Spec.realm))));
             return true;
@@ -1394,7 +1400,7 @@ bool AUnmadePrototypeHub::TryAfterlightConversation(FName ResidentId)
         const TCHAR* Line=Result==UnmadeCore::AfterlightResult::Started
             ? TEXT("AFTERLIGHT: Hessa needs you back after the Refuge Compact. The second night draws near: examine the shelter's relief cache or the lost-name census.")
             : TEXT("AFTERLIGHT: testimony verified. Return to Hessa. F7 protects those without shelter; F8 publishes the lost names. Your evidence determines what can be chosen.");
-        GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,Line);
+        UnmadeRpgFeedback(-1,12.f,FColor::Cyan,Line);
     }
     return true;
 }
@@ -1428,7 +1434,7 @@ bool AUnmadePrototypeHub::InspectAfterlightClue(AUnmadeCharacter* Player)
             Afterlight.Restore(Before);
             return false;
         }
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,13.f,FColor::Cyan,
             Approach==UnmadeCore::AfterlightChoice::Relief
             ? TEXT("CACHE: the lamps could save the unregistered families. Ask Sorin the healer what this cold will cost.")
             : TEXT("CENSUS: these erased names prove the shelter's history was altered. Ask Ivera the tutor what the children remember."));
@@ -1451,7 +1457,7 @@ bool AUnmadePrototypeHub::ResolveNearbyAfterlight(int32 Choice)
         const auto Result=Afterlight.Resolve(static_cast<UnmadeCore::AfterlightChoice>(Choice));
         if(Result==UnmadeCore::AfterlightResult::WrongEvidence)
         {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
                 TEXT("The choice needs the other evidence and witness. Inspect that path before you commit."));
             return false;
         }
@@ -1462,7 +1468,7 @@ bool AUnmadePrototypeHub::ResolveNearbyAfterlight(int32 Choice)
             return false;
         }
         RefreshAfterlightWorld();
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,
+        if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Green,
             FString::Printf(TEXT("THE SECOND NIGHT: %s"),
                 UTF8_TO_TCHAR(Afterlight.Effect().description)));
         return true;
@@ -1573,37 +1579,37 @@ bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
     {
         Discoveries.Restore(OldMask);
         WitnessEchoes.Restore(OldEcho);
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Red,
+        if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Red,
             TEXT("Exploration progress could not be saved."));
         return false;
     }
     if (GEngine)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 11.f, FColor::Cyan,
+        UnmadeRpgFeedback(-1, 11.f, FColor::Cyan,
             Site->GetInspectionText(Clock.Phase(), ReadStoryChoice()));
         if (bNew)
-            GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
+            UnmadeRpgFeedback(-1, 7.f, FColor::Yellow,
                 FString::Printf(TEXT("LANDMARK DISCOVERED: %d of 6."), Discoveries.Count()));
         if(EchoSpec)
         {
             // A physical object is evidence, not proof of an OPEN mystery.
-            GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Yellow,
+            UnmadeRpgFeedback(-1,12.f,FColor::Yellow,
                 FString::Printf(TEXT("%s | %s"),
                     UTF8_TO_TCHAR(EchoSpec->id),
                     UTF8_TO_TCHAR(UnmadeCore::WitnessEchoText(*EchoSpec,EchoEvent,LocalOutcome))));
             if(Site->GetSiteId()==FName("site.callback.inkless_nail") &&
                UnmadeCore::WitnessBraidChronicle::Ready(WitnessEchoes))
             {
-                GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+                UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
                     FString(UTF8_TO_TCHAR(UnmadeCore::WitnessBraidChronicle::Investigation())));
-                GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Yellow,
+                UnmadeRpgFeedback(-1,11.f,FColor::Yellow,
                     FString(UTF8_TO_TCHAR(WitnessBraid.OutcomeText())));
                 if(WitnessBraid.Outcome()==UnmadeCore::WitnessBraidOutcome::Unresolved)
-                    GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Green,
+                    UnmadeRpgFeedback(-1,8.f,FColor::Green,
                         TEXT("F7: private refuge marker | F8: public redacted record | press twice to commit."));
             }
             if(bEchoChanged)
-                GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
+                UnmadeRpgFeedback(-1,8.f,FColor::Cyan,
                     FString::Printf(TEXT("WITNESS ECHO RECORDED | %s | The question remains open: %s"),
                         UTF8_TO_TCHAR(EchoSpec->title),UTF8_TO_TCHAR(EchoSpec->openQuestion)));
         }
@@ -1634,13 +1640,13 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
     if(!WriteWorldSnapshot())
     {
         WitnessBraid.Restore(Before,WitnessEchoes);
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Red,
+        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Red,
             TEXT("Your braid decision was not saved; no world state was applied."));
         return false;
     }
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Yellow,
+    if(GEngine)UnmadeRpgFeedback(-1,13.f,FColor::Yellow,
         FString(UTF8_TO_TCHAR(WitnessBraid.OutcomeText())));
     return true;
 }
@@ -1669,7 +1675,7 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessReturn(int32 Choice)
         return false;
     }
     RefreshWitnessReturnWorld();
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Yellow,
+    if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Yellow,
         FString(UTF8_TO_TCHAR(ReturnWitness.HessaAfterChoosing())));
     return true;
 }
@@ -1728,7 +1734,7 @@ bool AUnmadePrototypeHub::TryWitnessReturn(AUnmadeCharacter* Player,
                 return false;
             }
             RefreshWitnessReturnWorld();
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+            if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
                 TEXT("HESSA'S REPLY COLLECTED: carry the physical response to Orrel at the Crossings."));
             return true;
         }
@@ -1756,7 +1762,7 @@ bool AUnmadePrototypeHub::TryWitnessReturn(AUnmadeCharacter* Player,
                 return false;
             }
             RefreshWitnessReturnWorld();
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+            if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
                 FString(UTF8_TO_TCHAR(ReturnWitness.OrrelOnReceipt(WitnessBraid.Outcome()))));
             return true;
         }
@@ -1811,7 +1817,7 @@ bool AUnmadePrototypeHub::TryWitnessDispatch(AUnmadeCharacter* Player,
                 return false;
             }
             RefreshWitnessDispatchWorld();
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Yellow,
                 TEXT("FOLDED RECORD COLLECTED: physically carry it to Hessa in Bellwold. Your custody is saved."));
             return true;
         }
@@ -1839,7 +1845,7 @@ bool AUnmadePrototypeHub::TryWitnessDispatch(AUnmadeCharacter* Player,
                 Dispatch.Restore(Before,WitnessBraid.Outcome());
                 return false;
             }
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,14.f,FColor::Green,
+            if(GEngine)UnmadeRpgFeedback(-1,14.f,FColor::Green,
                 FString(UTF8_TO_TCHAR(Dispatch.HessaLine(WitnessBraid.Outcome()))));
             return true;
         }
@@ -1916,6 +1922,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     RefreshRememberedRoads();
     RefreshExpeditions();
     RefreshIdentity();
+    RefreshAdventureDepth();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical
@@ -1952,7 +1959,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
             const TCHAR* PhaseName = Phase == UnmadeCore::DayPhase::Dawn ? TEXT("dawn")
                 : Phase == UnmadeCore::DayPhase::Day ? TEXT("day")
                 : Phase == UnmadeCore::DayPhase::Dusk ? TEXT("dusk") : TEXT("night");
-            GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Purple,
+            UnmadeRpgFeedback(-1, 6.f, FColor::Purple,
                 FString::Printf(TEXT("THE SETTLEMENT: %s settles across the district."), PhaseName));
         }
     }
@@ -1983,14 +1990,14 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
                                      Phase == UnmadeCore::DayPhase::Dusk)
                     ? UTF8_TO_TCHAR(VillageInfo->night)
                     : UTF8_TO_TCHAR(VillageInfo->welcome);
-                GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Yellow,
+                UnmadeRpgFeedback(-1, 8.f, FColor::Yellow,
                     FString::Printf(TEXT("ARRIVED: %s | %s"),
                         UTF8_TO_TCHAR(VillageInfo->name), Line));
             }
         }
         else if (GEngine)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Silver,
+            UnmadeRpgFeedback(-1, 5.f, FColor::Silver,
                 TEXT("ON THE ROAD: Two settlements wait beyond the horizon."));
         }
     }
@@ -2009,7 +2016,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     else if (LastAmbientSite != Near->GetSiteId() || bPhaseChanged)
     {
         LastAmbientSite = Near->GetSiteId();
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Cyan,
+        if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Cyan,
             Near->GetAmbientText(Phase, ReadStoryChoice()));
     }
 }
@@ -2141,7 +2148,7 @@ void AUnmadePrototypeHub::RefreshCommunityConsequences()
             SetRiteWorldActorState(Tag,static_cast<int32>(Next[i].state)==State);
         }
         if(GEngine && Next[i].state!=UnmadeCore::CommunityState::Uncertain)
-            GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Cyan,
+            UnmadeRpgFeedback(-1,9.f,FColor::Cyan,
                 FString::Printf(TEXT("WORLD CHANGED: %s — %s"),
                     UTF8_TO_TCHAR(UnmadeCore::CommunityNames[i]),
                     UTF8_TO_TCHAR(Next[i].visibleChange)));
@@ -2501,7 +2508,7 @@ bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
             ?static_cast<int32>(UnmadeCore::UnpaidScene::MeraOffer)
             :static_cast<int32>(UnmadeCore::UnpaidScene::Ledger));
     if(GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Cyan,
+        UnmadeRpgFeedback(-1,11.f,FColor::Cyan,
             Result==UnmadeCore::BesOutcome::Reported
             ?TEXT("BES: An unpaid real wage is recorded. Inspect his home, then hear Rheva.")
             :Result==UnmadeCore::BesOutcome::ConsentRecorded
@@ -2562,7 +2569,7 @@ bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
             {
                 BesPendingDecision=Decision;
                 BesDecisionExpiresAt=Now+12.0;
-                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,
+                if(GEngine)UnmadeRpgFeedback(-1,12.f,
                     FColor::Yellow,BesDecisionPreview(Decision));
                 return true;
             }
@@ -2586,7 +2593,7 @@ bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
         if(Result==UnmadeCore::BesOutcome::Blocked ||
            Result==UnmadeCore::BesOutcome::NoChange)
         {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
                 TEXT("BES: Need a reported wage, home inspection, Rheva's ledger, actual relief cargo or enough town marks for FULL payment. See J."));
             return true;
         }
@@ -2628,7 +2635,7 @@ bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
                 Story=TEXT("MERA'S SACRIFICE: she physically underwrote Bes with owned wages. Cinderhold still owes Mera; no marks created.");break;
             default:Story=TEXT("Evidence recorded.");
             }
-            GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Cyan,Story);
+            UnmadeRpgFeedback(-1,13.f,FColor::Cyan,Story);
         }
         return true;
     }
@@ -2712,7 +2719,7 @@ bool AUnmadePrototypeHub::TryLivingTradeInteraction(
             if(Done!=UnmadeCore::TradeResult::Collected &&
                Done!=UnmadeCore::TradeResult::Delivered)
             {
-                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+                if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
                     TEXT("TRADE BLOCKED: exact cargo, sufficient origin stock and contracted buyer escrow required."));
                 return true;
             }
@@ -2723,7 +2730,7 @@ bool AUnmadePrototypeHub::TryLivingTradeInteraction(
                 return true;
             }
             RefreshMaterialWorld();
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,
+            if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Green,
                 FString::Printf(TEXT("%s: %s | %s"),
                     bStart?TEXT("SIGNED CARGO COLLECTED"):TEXT("SIGNED CARGO RECEIVED"),
                     UTF8_TO_TCHAR(Contract.cargo),
@@ -2762,7 +2769,7 @@ bool AUnmadePrototypeHub::TryMaterialInteraction(
         // signed cross-realm consignment and secretly double the inventory.
         if(Store && LivingTrades.Cargo().route!=-1)
         {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
                 TEXT("DELIVER THE CONTRACTED FOREIGN CARGO BEFORE COLLECTING A LOCAL RELIEF PACK."));
             return true;
         }
@@ -2775,7 +2782,7 @@ bool AUnmadePrototypeHub::TryMaterialInteraction(
            Result!=UnmadeCore::MaterialAction::Delivered &&
            Result!=UnmadeCore::MaterialAction::Repaired)
         {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Yellow,
                 TEXT("MATERIALS: need sufficient stock, available home capacity or genuine damage. No free goods."));
             return true;
         }
@@ -2792,7 +2799,7 @@ bool AUnmadePrototypeHub::TryMaterialInteraction(
                 :Result==UnmadeCore::MaterialAction::Delivered
                 ?TEXT("DELIVERED: household reserves increased; the pack is gone.")
                 :TEXT("REPAIRED: local depot materials spent; structure condition restored.");
-            GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Green,Action);
+            UnmadeRpgFeedback(-1,9.f,FColor::Green,Action);
         }
         return true;
     }
@@ -2864,7 +2871,7 @@ bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
     {
         RealityLedger.Restore(Before,Clock.ElapsedSeconds());
         OuterReactions.Restore(BeforeOuter,Clock.ElapsedSeconds());
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Red,
+        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Red,
             TEXT("Realm consequence not saved: no civic monument granted."));
         return false;
     }
@@ -2875,7 +2882,7 @@ bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
         ?&RealityLedger:OuterReactions.Read(Policy->realm);
     if(GEngine && Updated)
     {
-        GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,
+        UnmadeRpgFeedback(-1,10.f,FColor::Cyan,
             FString::Printf(TEXT("%s | %s | %s | %s"),
                 UTF8_TO_TCHAR(Policy->city),
                 UTF8_TO_TCHAR(UnmadeCore::RealityProfiles[static_cast<int>(Id)].description),
@@ -2883,7 +2890,7 @@ bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
                 UTF8_TO_TCHAR(UnmadeCore::RealityConsequenceLedger::PublicLine(
                     Updated->PublicResponse()))));
         if(Updated->PublicResponse()!=PreviousResponse)
-            GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Yellow,
+            UnmadeRpgFeedback(-1,10.f,FColor::Yellow,
                 FString::Printf(TEXT("%s: %s"),
                     UTF8_TO_TCHAR(Policy->institution),
                     UTF8_TO_TCHAR(Updated->PublicResponse()==
@@ -3365,7 +3372,7 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
                                 Topic = TEXT("the shelter passage being protected");
                             else if (Event.EventKind == FName("World.ConflictResearch"))
                                 Topic = TEXT("the archive taking control of the route");
-                            GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Silver,
+                            UnmadeRpgFeedback(-1, 7.f, FColor::Silver,
                                 FString::Printf(TEXT("OVERHEARD | %s to %s: I saw %s."),
                                     *Speaker->GetDisplayLabel(), *Listener->GetDisplayLabel(), Topic));
                             bOverheardOne = true;

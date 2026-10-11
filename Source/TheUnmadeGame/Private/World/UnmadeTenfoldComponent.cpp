@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadeTenfoldComponent.h"
 #include "Player/UnmadeCharacter.h"
 #include "World/UnmadePrototypeHub.h"
@@ -265,7 +266,7 @@ void UUnmadeTenfoldComponent::ExplainResult(UnmadeCore::RiteResult Result) const
         Message=TEXT("This five-chapter quest is mastered. Repeat actions give no new rewards.");break;
     default: break;
     }
-    GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Yellow,Message);
+    UnmadeRpgFeedback(-1,7.f,FColor::Yellow,Message);
 }
 
 void UUnmadeTenfoldComponent::ShowRite()
@@ -275,7 +276,7 @@ void UUnmadeTenfoldComponent::ShowRite()
     const int32 Stage=Chronicle.Stage(Spec.id);
     const FString Chapter=Stage>=5?TEXT("MASTERED: return to the world and use this power responsibly.")
         :FString(UTF8_TO_TCHAR(Spec.chapters[Stage]));
-    GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,
+    UnmadeRpgFeedback(-1,16.f,FColor::Cyan,
         FString::Printf(TEXT("RITE %d/10 | %s | Chapter %d/5 | %s"),
             SelectedRite+1,UTF8_TO_TCHAR(Spec.name),FMath::Min(5,Stage+1),*Chapter));
 }
@@ -316,7 +317,7 @@ void UUnmadeTenfoldComponent::CycleConfluence()
     SelectedConfluence=(SelectedConfluence+1)%6;
     if(!GEngine)return;
     const auto& Trial=UnmadeCore::Confluences[SelectedConfluence];
-    GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Yellow,
+    UnmadeRpgFeedback(-1,10.f,FColor::Yellow,
         FString::Printf(TEXT("CONFLUENCE %d/6: %s | %s"),
             SelectedConfluence+1,UTF8_TO_TCHAR(Trial.name),
             UTF8_TO_TCHAR(Trial.chapters[FMath::Min(Confluence.Stage(Trial.id),2)])));
@@ -329,7 +330,7 @@ void UUnmadeTenfoldComponent::StudyConfluence()
     const int Site=FindNearbyConfluence();
     if(Confluence.Stage(Id)!=0)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Cyan,
             FString(UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence]
                 .chapters[FMath::Min(Confluence.Stage(Id),2)])));
         return;
@@ -342,7 +343,7 @@ void UUnmadeTenfoldComponent::StudyConfluence()
     const auto Result=Confluence.Discover(Id,Site,Mastered,Context.frontierVisits);
     if(Result!=UnmadeCore::ConfluenceResult::Advanced)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
             TEXT("Chamber sealed: master both listed disciplines, find its physical altar, and finish earlier trials."));
         return;
     }
@@ -351,7 +352,7 @@ void UUnmadeTenfoldComponent::StudyConfluence()
         Confluence.Restore(Before);
         return;
     }
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+    if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
         FString::Printf(TEXT("CHAMBER UNSEALED: %s | %s"),
             UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence].name),
             UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence].chapters[1])));
@@ -367,7 +368,7 @@ void UUnmadeTenfoldComponent::ChooseConfluence(int32 Outcome)
         Context.verifiedWitnesses,Outcome,Context.now);
     if(Result!=UnmadeCore::ConfluenceResult::Completed)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
             TEXT("Combine both mastered abilities at this chamber within two minutes, with two real witnesses."));
         return;
     }
@@ -381,7 +382,7 @@ void UUnmadeTenfoldComponent::ChooseConfluence(int32 Outcome)
         Player->ReconcileEarnedRewards();
         Player->ReportRiteWitnessEvent();
     }
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Cyan,
+    if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Cyan,
         FString::Printf(TEXT("CONFLUENCE COMPLETE: %s. The outcome is saved."),
             UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence].name)));
 }
@@ -394,14 +395,14 @@ void UUnmadeTenfoldComponent::CycleWorldLaw()
     if(SelectedRite==static_cast<int32>(UnmadeCore::RiteId::BorrowedLives))
     {
         SelectedLife=(SelectedLife+1)%3;
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Cyan,
             FString::Printf(TEXT("Borrowed Life: %s"),
                 SelectedLife==0?TEXT("Forgotten Warrior")
                 :SelectedLife==1?TEXT("Unborn Artisan"):TEXT("Unwritten Archivist")));
         return;
     }
     SelectedLaw=(SelectedLaw+1)%3;
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
+    if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,
         FString::Printf(TEXT("Unwrite Law: %s"),
             SelectedLaw==0?TEXT("Gravity"):SelectedLaw==1?TEXT("Sound"):TEXT("Momentum")));
 }
@@ -426,11 +427,11 @@ bool UUnmadeTenfoldComponent::TryWitnessConversation(FName ResidentId)
     if(ResidentId!=FName(UTF8_TO_TCHAR(Spec.witness)))return false;
     // Quest testimony is always an authored factual passage. AI conversation
     // is optional and never changes whether this interaction succeeds.
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,
+    if(GEngine)UnmadeRpgFeedback(-1,15.f,FColor::Cyan,
         FString::Printf(TEXT("%s | TESTIMONY: %s"),
             UTF8_TO_TCHAR(Spec.name),UTF8_TO_TCHAR(Spec.lore)));
     if(Stage==1)StudyRite();
-    else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+    else if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
         TEXT("You have enough history to face a permanent choice. Gather two direct witnesses, then use F5 or F6."));
     return true;
 }
@@ -580,14 +581,14 @@ void UUnmadeTenfoldComponent::BreakChosenOath()
     {
         if(!Chronicle.RedeemOath(GatherContext()))
         {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
                 TEXT("REDEMPTION: complete Bellwold's relief and faction, earn three distinct deeds and bring three firsthand witnesses."));
             return;
         }
         if(!Persist()){Chronicle.Restore(Before);return;}
         if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
             Player->ReportRedeemedOathEvent();
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Green,
+        if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Green,
             TEXT("OATH RESTORED: the betrayal is still remembered, but witnesses accept your costly restitution."));
         return;
     }
@@ -600,7 +601,7 @@ void UUnmadeTenfoldComponent::BreakChosenOath()
             Player->GetEquipment()->SetTemporaryBonuses(ActiveAttackBonus,0);
         Player->ReportBrokenOathEvent();
     }
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Red,
+    if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Red,
         TEXT("OATH BROKEN: the choice persists, and the oath's power is permanently lost."));
 }
 

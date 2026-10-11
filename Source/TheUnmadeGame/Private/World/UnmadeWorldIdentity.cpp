@@ -1,5 +1,6 @@
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeIdentityRegistry.h"
+#include "World/UnmadeAdventureLayout.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Combat/UnmadePresentation.h"
@@ -17,11 +18,11 @@
 #include "Kismet/GameplayStatics.h"
 namespace {
 FVector Base(int a){auto& s=UnmadeCore::ExpeditionSpecs[a];return FVector(s.x,s.y,95);}
-FVector Puzzle(int a,int n){return Base(a)+FVector(2600+(n-1)*430,17600+700,0);}
+FVector Puzzle(int a,int n){auto p=UnmadeCore::DungeonRoom(a,2);return Base(a)+FVector(p.x+(n-1)*430,15000+p.y+700,0);}
 FVector RepairPost(int a,int n){return Base(a)+FVector(3700,8500+n*3200,0);}
 FVector Service(int a){return Base(a)+FVector(-900,8500,0);}
 bool Near(AUnmadeCharacter* p,FVector at){if(!IsValid(p)||!p->GetCombat()||p->GetCombat()->IsDefeated()||FVector::DistSquared(p->GetActorLocation(),at)>FMath::Square(230.f))return false;FCollisionQueryParams q(SCENE_QUERY_STAT(IdentityInteraction),false);q.AddIgnoredActor(p);return !p->GetWorld()->LineTraceTestByChannel(p->GetActorLocation()+FVector(0,0,35),at+FVector(0,0,65),ECC_Visibility,q);}
-void Tell(const FString& t){if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12,FColor::Cyan,t);}
+
 }
 void AUnmadePrototypeHub::BuildIdentity(){
  if(!GetWorld())return;IdentityPuzzleSigns.SetNum(9);IdentityRepairs.SetNum(27);IdentityPatrols.SetNum(9);
@@ -52,7 +53,7 @@ bool AUnmadePrototypeHub::TryIdentityInteraction(AUnmadeCharacter* p,double comp
  int arc=-1,kind=-1,index=0;double best=FMath::Min(230.*230.,competing);
  auto Add=[&](int a,int k,int n,FVector at){double d=FVector::DistSquared(p->GetActorLocation(),at);if(d<best&&Near(p,at)){best=d;arc=a;kind=k;index=n;}};
  for(int a=0;a<9;++a){Add(a,2,0,Service(a));if(!Survey)for(int n=0;n<3;++n){Add(a,0,n,Puzzle(a,n));Add(a,1,n,RepairPost(a,n));}}
- if(arc<0)return false;if(bIdentitySaveRejected||bExpeditionSaveRejected){Tell(TEXT("Saved world identity rejected; original protected."));return true;}auto before=Identity;auto* e=Expeditions.Arc(arc);bool changed=false,heal=false;const TCHAR* cue=TEXT("inspect");FString line;
+ if(arc<0)return false;if(bIdentitySaveRejected||bExpeditionSaveRejected){NotifyRpg(TEXT("Saved world identity rejected; original protected."));return true;}auto before=Identity;auto* e=Expeditions.Arc(arc);bool changed=false,heal=false;const TCHAR* cue=TEXT("inspect");FString line;
  if(kind==0){if(e->rooms&4)changed=Identity.Operate(arc,index);line=TEXT("Coupled valves change the displayed lights. Match the target; inspect the neighboring valves. A solved mechanism stays solved.");}
  if(kind==1){changed=Identity.Repair(arc,index,e->returned!=0);cue=TEXT("repair");line=changed?TEXT("Waypost repaired. Repair all three roadside posts to open sanctuary recovery and bring the roadkeeper back."):TEXT("Return must be witnessed before repairs. This post may already be sound.");}
  if(kind==2){int kills=0;for(int k=0;k<8;++k)kills+=(e->kills>>k)&1;
@@ -60,7 +61,7 @@ bool AUnmadePrototypeHub::TryIdentityInteraction(AUnmadeCharacter* p,double comp
   else if(!Identity.Arc(arc)->hunt&&kills>=4){if(p->GetCombat()->GetMissingHealth()>0){changed=Identity.Hunt(arc,kills);heal=changed;}line=TEXT("Hunt: defeat four actual dungeon guards. One recovery ration restores up to 35 health; claim while injured.");cue=TEXT("reward");}
   else{if(p->GetCombat()->GetMissingHealth()>0){changed=Identity.Rest(arc,GetGameDay(),e->returned!=0);heal=changed;}line=TEXT("Sanctuary: all three roadposts repaired after return. Up to 35 health once per game day; no reward consumed at full health.");cue=TEXT("release");}
  }
- if(changed&&!WriteWorldSnapshot(p)){Identity=before;Tell(TEXT("Save failed. Quest, service and reward rolled back; retry."));return true;}
+ if(changed&&!WriteWorldSnapshot(p)){Identity=before;NotifyRpg(TEXT("Save failed. Quest, service and reward rolled back; retry."));return true;}
  if(changed){if(heal)p->GetCombat()->Heal(35);UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==1?TEXT("Repair"):TEXT("Inspect")));RefreshIdentity();RefreshExpeditions();}
- Tell(line);return true;
+ NotifyRpg(line);return true;
 }

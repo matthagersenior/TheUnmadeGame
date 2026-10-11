@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "Combat/UnmadeBossCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
@@ -73,7 +74,7 @@ void AUnmadeBossCharacter::Tick(float DeltaSeconds)
     else if(Beat.action==UnmadeCore::BossAction::Telegraph && !bTelegraphShown)
     {
         bTelegraphShown=true;
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Orange,
+        if(GEngine)UnmadeRpgFeedback(-1,3.f,FColor::Orange,
             FString::Printf(TEXT("BOSS WINDUP: %s. Evade or Fold to interrupt!"),
                 UTF8_TO_TCHAR(Profile->name)));
     }
@@ -96,7 +97,7 @@ void AUnmadeBossCharacter::Tick(float DeltaSeconds)
         {
             GetCombat()->SetGearBonuses(FMath::RoundToInt(Beat.damage-Profile->damage),0);
             GetCombat()->TryStrikeTarget(Player->GetCombat(),Now,true,false);
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Red,
+            if(GEngine)UnmadeRpgFeedback(-1,3.f,FColor::Red,
                 FString::Printf(TEXT("%s: %s"),
                     Beat.action==UnmadeCore::BossAction::Shockwave
                         ? TEXT("BELL SHOCKWAVE") :

@@ -21,6 +21,7 @@ public:
     bool Buy(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village,int Trust=0);
     bool Sell(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village);
     bool CraftAt(UnmadeCore::SettlementId Village);
+    UnmadeCore::ItemId EquippedWeapon()const{return Inventory.Equipped(UnmadeCore::GearSlot::Weapon);}
     int32 GetMarks() const { return Economy.Marks(); }
     int32 GetAtlasAttunement() const;
     FString DescribeInventory() const;

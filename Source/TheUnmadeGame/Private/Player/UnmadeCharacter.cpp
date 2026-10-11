@@ -1,4 +1,8 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "Player/UnmadeCharacter.h"
+#include "UI/UnmadeRpgWidget.h"
+#include "Blueprint/UserWidget.h"
+#include "GameFramework/PlayerController.h"
 #include "Combat/UnmadePresentation.h"
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Story/UnmadeConflictGate.h"
@@ -47,6 +51,7 @@ AUnmadeCharacter::AUnmadeCharacter()
     bUseControllerRotationRoll = false;
 
     GetCharacterMovement()->bOrientRotationToMovement = true;
+    GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch=true;
     GetCharacterMovement()->RotationRate = FRotator(0.f, 540.f, 0.f);
 
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -114,6 +119,14 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
         PlayerInputComponent->BindAction("ConfluenceOption1",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::ConfluenceChoice1);
         PlayerInputComponent->BindAction("ConfluenceOption2",IE_Pressed,Tenfold.Get(),&UUnmadeTenfoldComponent::ConfluenceChoice2);
     }
+    PlayerInputComponent->BindAction("DodgeStep",IE_Pressed,this,&AUnmadeCharacter::DodgeStep);
+    PlayerInputComponent->BindAction("Sneak",IE_Pressed,this,&AUnmadeCharacter::StartSneak);
+    PlayerInputComponent->BindAction("Sneak",IE_Released,this,&AUnmadeCharacter::StopSneak);
+    PlayerInputComponent->BindAction("FieldKit",IE_Pressed,this,&AUnmadeCharacter::UseFieldKit);
+    PlayerInputComponent->BindAction("FieldTechnique",IE_Pressed,this,&AUnmadeCharacter::UseFieldTechnique);
+    PlayerInputComponent->BindAction("PersonalChoiceA",IE_Pressed,this,&AUnmadeCharacter::PersonalChoiceA);
+    PlayerInputComponent->BindAction("PersonalChoiceB",IE_Pressed,this,&AUnmadeCharacter::PersonalChoiceB);
+    PlayerInputComponent->BindAction("WorldMap",IE_Pressed,this,&AUnmadeCharacter::OpenWorldMap);
     PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AUnmadeCharacter::AttemptMeleeAttack);
     PlayerInputComponent->BindAction("Guard", IE_Pressed, this, &AUnmadeCharacter::StartGuard);
     PlayerInputComponent->BindAction("Guard", IE_Released, this, &AUnmadeCharacter::StopGuard);
@@ -139,9 +152,10 @@ void AUnmadeCharacter::ReconcileEarnedRewards()
 
 void AUnmadeCharacter::ShowInventory()
 {
+    if(RpgWidget){OpenRpgPage(1);return;}
     ReconcileEarnedRewards();
     if (IsValid(Equipment) && GEngine)
-        GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Cyan, Equipment->DescribeInventory());
+        UnmadeRpgFeedback(-1, 15.f, FColor::Cyan, Equipment->DescribeInventory());
 }
 
 void AUnmadeCharacter::EquipNextWeapon()
@@ -174,11 +188,11 @@ void AUnmadeCharacter::UseHealthPotion()
         if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored))
         {
             if (Restored > 0) FractureModel.Recover(Restored / UnmadeCore::FractureModel::RecoveryPerSecond);
-            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green,
+            if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Green,
                 TEXT("Healing consumed. Health and any Strain recovery applied."));
             return;
         }
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Silver,
+    if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Silver,
         TEXT("No useful healing consumable in your bag."));
 }
 
@@ -193,11 +207,11 @@ void AUnmadeCharacter::UseStrainPotion()
         if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored))
         {
             if (Restored > 0) FractureModel.Recover(Restored / UnmadeCore::FractureModel::RecoveryPerSecond);
-            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
+            if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Cyan,
                 TEXT("Stillness restored: Reality Strain diminished."));
             return;
         }
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Silver,
+    if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Silver,
         TEXT("No useful Strain elixir remains."));
 }
 
@@ -216,12 +230,12 @@ void AUnmadeCharacter::ForgeMythicGear()
     }
     if (!NearForge)
     {
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Yellow,
             TEXT("Waybreaker can only be forged at Bellwold's old workshop."));
         return;
     }
     if (!Equipment->ForgeWaybreaker() && GEngine)
-        GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
+        UnmadeRpgFeedback(-1, 7.f, FColor::Yellow,
             TEXT("The forge requires both village stories, all three villages, two Echo Glass, Bellmetal and Archive Ink."));
 }
 
@@ -294,7 +308,7 @@ void AUnmadeCharacter::ApplyRiteAbility(UnmadeCore::RiteId Rite,
             It->SetActorHiddenInGame(true);
             It->SetActorTickEnabled(false);
             if(IsValid(Equipment))Equipment->Claim(UnmadeCore::Achievement::HollowBell);
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Green,
+            if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Green,
                 TEXT("HOLLOW KEEPER SPARED: testimony ended the battle without a killing blow."));
             break;
         }
@@ -304,19 +318,19 @@ void AUnmadeCharacter::ApplyRiteAbility(UnmadeCore::RiteId Rite,
                 Guardian->ExposeToFold(Now,5.0);
         break;
     case UnmadeCore::RiteId::BorrowedLives:
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Cyan,
             TEXT("ANOTHER LIFE: an unlived fighter's instincts change your attack temporarily."));
         break;
     case UnmadeCore::RiteId::LegacyForging:
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Cyan,
             TEXT("LEGACY STEEL: distinct deeds remembered by your blade increase attack."));
         break;
     case UnmadeCore::RiteId::TomorrowDebt:
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Orange,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Orange,
             TEXT("FUTURE BORROWED: powerful for now; the debt must be repaid tomorrow."));
         break;
     case UnmadeCore::RiteId::Oathbinding:
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Cyan,
             TEXT("OATH ARMOR: a promise carries weight. Breaking it has permanent consequences."));
         break;
     default: break;
@@ -361,7 +375,7 @@ void AUnmadeCharacter::CrossFrontierGateway()
     {
         if(!Hub->TryTravelFrontier(this))
         {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
                 TEXT("No reachable realm crossing. Look for the marked stone gateways."));
         }
         else
@@ -401,7 +415,7 @@ void AUnmadeCharacter::BuyMarketSupplies()
     }
     if(!bMerchantNearby)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
             TEXT("Trade: find a merchant in this village first."));
         return;
     }
@@ -421,10 +435,10 @@ void AUnmadeCharacter::BuyMarketSupplies()
     }
     if(Equipment->Buy(Id,Village,Trust))
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Green,
+        if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Green,
             TEXT("Local materials purchased. Press I to view remaining marks."));
     }
-    else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+    else if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
         TEXT("Trade failed: insufficient marks, no bag space, or unavailable stock."));
 }
 
@@ -455,7 +469,7 @@ void AUnmadeCharacter::SellMarketSupplies()
         : Village==UnmadeCore::SettlementId::Paperhaven
           ? UnmadeCore::ItemId::BlankParchment : UnmadeCore::ItemId::IronScrap;
     if(!Equipment->Sell(Id,Village) && GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+        UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
             TEXT("No tradable surplus of this village's commodity."));
 }
 
@@ -481,12 +495,12 @@ void AUnmadeCharacter::CraftLocalRecipe()
     }
     if(!bNearStation)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
             TEXT("Find the village's workshop or scriptorium to practice a profession."));
         return;
     }
     if(!Equipment->CraftAt(Village) && GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+        UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
             TEXT("No known recipe can be made here with your current skill and materials."));
 }
 
@@ -507,7 +521,7 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
         if(!Hub->GetNearbyCommitPreview(static_cast<int32>(Ending),Scope,Consequence))
         {
             CommitmentGate.Cancel();
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Yellow,
                 TEXT("No matching final witness and evidence nearby for this outcome."));
             break;
         }
@@ -517,7 +531,7 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
             GetWorld()->GetTimeSeconds());
         if(Attempt!=UnmadeCore::CommitmentAttempt::Confirmed)
         {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
                 FString::Printf(TEXT("PERMANENT DECISION: %s | Press SAME choice by SAME witness within six seconds."),
                     *Consequence));
             break;
@@ -577,7 +591,7 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
                     FName("region.bellwold.refuge"));
             else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
-        else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
+        else if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,
             TEXT("Find your local final witness, or assemble all three echo relics and return to Orrel's nail."));
         break;
     }
@@ -622,7 +636,7 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
     if (!GetWorld() || !IsValid(FindNearbyFractureAnchor()))
     {
         PendingStoryChoice = UnmadeCore::ConflictChoice::None;
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Yellow,
             TEXT("Approach the central fracture before deciding the settlement dispute."));
         return;
     }
@@ -633,7 +647,7 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
         PendingStoryChoice = UnmadeCore::ConflictChoice::None;
         if (LocalConflict.Preview(Choice) != UnmadeCore::ConflictResult::NeedsConfirmation)
         {
-            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
+            if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Yellow,
                 TEXT("This dispute is already resolved. Your decision cannot be overridden."));
             return;
         }
@@ -644,7 +658,7 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
             const FString Warning = Choice == UnmadeCore::ConflictChoice::Shelter
                 ? TEXT("SUPPORT SHELTER: open the community passage, close the research route. Press Z / D-pad Up again within six seconds.")
                 : TEXT("SUPPORT RESEARCH: open the archive passage, close the shelter route. Press X / D-pad Down again within six seconds.");
-            GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Orange, Warning);
+            UnmadeRpgFeedback(-1, 7.f, FColor::Orange, Warning);
         }
         return;
     }
@@ -656,7 +670,7 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
     if (!SaveLocalConflict())
     {
         LocalConflict.Restore(Previous);
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+        if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
             TEXT("Dispute decision could not be saved; no world change was applied."));
         return;
     }
@@ -669,7 +683,7 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
         Hub->RefreshCommunityConsequences();
     }
     const bool bShelter = Choice == UnmadeCore::ConflictChoice::Shelter;
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 8.f, FColor::Yellow,
+    if (GEngine) UnmadeRpgFeedback(-1, 8.f, FColor::Yellow,
         bShelter ? TEXT("COMMUNITY ROUTE OPEN; archive closed. This decision persists.")
                  : TEXT("ARCHIVE ROUTE OPEN; community shelter closed. This decision persists."));
     ReportLocalEvent(bShelter ? FName("World.ConflictShelter") : FName("World.ConflictResearch"),
@@ -697,7 +711,7 @@ void AUnmadeCharacter::ProgressSupplyActivity()
         : LocalConflict.CollectSupplies(bNearMarket);
     if (!bProgressed)
     {
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Yellow,
             TEXT("Supply errand: collect once at the market, then deliver at the shelter. Completed deliveries cannot be repeated."));
         return;
     }
@@ -705,11 +719,11 @@ void AUnmadeCharacter::ProgressSupplyActivity()
     if (!SaveLocalConflict())
     {
         LocalConflict.Restore(Previous);
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Red,
+        if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Red,
             TEXT("Supply activity could not be saved; progress restored."));
         return;
     }
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Cyan,
+    if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Cyan,
         bCompletedDelivery ? TEXT("SUPPLIES DELIVERED: the shelter remembers your help.")
                            : TEXT("SUPPLIES COLLECTED: bring these provisions to the shelter."));
     if (bCompletedDelivery)
@@ -728,18 +742,19 @@ void AUnmadeCharacter::ShowEvidenceNotebook()
         // Text-mode input remains useful in the graybox; this same function
         // is BlueprintPure on the hub for a proper accessible UMG notebook.
         UE_LOG(LogTemp,Display,TEXT("%s"),*Evidence);
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,Evidence);
+        if(GEngine)UnmadeRpgFeedback(-1,16.f,FColor::Cyan,Evidence);
         return;
     }
 }
 
 void AUnmadeCharacter::ShowStoryJournal()
 {
+    if(RpgWidget){OpenRpgPage(0);return;}
     if(GetWorld()&&GEngine)for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
-        GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,Hub->GetCinderholdJournal());
+        UnmadeRpgFeedback(-1,12.f,FColor::Cyan,Hub->GetCinderholdJournal());
 
     if(GetWorld()&&GEngine)for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
-        GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,Hub->GetExpeditionJournal()+TEXT("\n")+Hub->GetRoadJournal());
+        UnmadeRpgFeedback(-1,15.f,FColor::Cyan,Hub->GetExpeditionJournal()+TEXT("\n")+Hub->GetRoadJournal());
     ReconcileEarnedRewards();
     FString Decision = TEXT("unresolved");
     if (LocalConflict.Choice() == UnmadeCore::ConflictChoice::Shelter)
@@ -822,38 +837,41 @@ void AUnmadeCharacter::ShowStoryJournal()
             break;
         }
     }
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Cyan,
+    if (GEngine) UnmadeRpgFeedback(-1, 10.f, FColor::Cyan,
         FString::Printf(TEXT("JOURNAL | %s | %s | Villages %d/3, landmarks %d/6 | Bellwold lanterns %d/2 | Paperhaven testimony %d/2 | Dispute: %s | Supplies: %s | VEYL clues: %d/2 | Strain: %.0f/100"),
             *WorldTime, *VillageName, VillagesSeen, SitesSeen,
             BellwoldQuest, PaperhavenQuest, *Decision, *Supply, Clues, FractureModel.CurrentStrain()));
     if(GEngine && !FactionSummary.IsEmpty())
-        GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,FactionSummary);
+        UnmadeRpgFeedback(-1,8.f,FColor::Cyan,FactionSummary);
     if(GEngine && !RealmSummary.IsEmpty())
-        GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Cyan,RealmSummary);
+        UnmadeRpgFeedback(-1,8.f,FColor::Cyan,RealmSummary);
     if(GEngine && !MainRoadSummary.IsEmpty())
-        GEngine->AddOnScreenDebugMessage(-1,18.f,FColor::Yellow,MainRoadSummary);
+        UnmadeRpgFeedback(-1,18.f,FColor::Yellow,MainRoadSummary);
     if(GEngine && !WitnessEchoSummary.IsEmpty())
-        GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,WitnessEchoSummary);
+        UnmadeRpgFeedback(-1,15.f,FColor::Cyan,WitnessEchoSummary);
     if(GEngine && !RealityConsequenceSummary.IsEmpty())
-        GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Yellow,RealityConsequenceSummary);
+        UnmadeRpgFeedback(-1,13.f,FColor::Yellow,RealityConsequenceSummary);
     if(GEngine && !MaterialSummary.IsEmpty())
-        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,MaterialSummary);
+        UnmadeRpgFeedback(-1,16.f,FColor::Cyan,MaterialSummary);
     if(GEngine && !LivelihoodSummary.IsEmpty())
-        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Yellow,LivelihoodSummary);
+        UnmadeRpgFeedback(-1,16.f,FColor::Yellow,LivelihoodSummary);
     if(GEngine && !BesHouseholdSummary.IsEmpty())
-        GEngine->AddOnScreenDebugMessage(-1,17.f,FColor::Cyan,BesHouseholdSummary);
+        UnmadeRpgFeedback(-1,17.f,FColor::Cyan,BesHouseholdSummary);
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
 {
-    if(!GetWorld()||!Combat||Combat->IsDefeated())return;
+    if(!GetWorld()||!Combat||Combat->IsDefeated()||IsRpgMenuOpen())return;
     UnmadePresentation::Sound(this,TEXT("swing"));
     AnimatePlayer(FName(TEXT("Attack")));
     if(GetWorld())PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+.65;
     UWorld* World = GetWorld();
     if (!World || Combat->IsDefeated()) return;
     AUnmadeEnemyCharacter* Target = nullptr;
-    double BestDistanceSq = FMath::Square(240.0);
+    if(IsRpgMenuOpen())return;
+    UnmadeCore::WeaponStyle Style;
+    for(TActorIterator<AUnmadePrototypeHub> Hub(World);Hub;++Hub){Style=Hub->PlayerWeaponStyle(Equipment?Equipment->EquippedWeapon():UnmadeCore::ItemId::Count);Combat->SetWeaponStyle(Style,Hub->GetActiveMastery());break;}
+    double BestDistanceSq = FMath::Square(Style.reach);
     const FVector Facing = GetActorForwardVector().GetSafeNormal2D();
     for (TActorIterator<AUnmadeEnemyCharacter> It(World); It; ++It)
     {
@@ -874,7 +892,7 @@ void AUnmadeCharacter::AttemptMeleeAttack()
     }
     if (!IsValid(Target))
     {
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Silver,
+        if (GEngine) UnmadeRpgFeedback(-1, 2.f, FColor::Silver,
             TEXT("No enemy within melee reach and facing."));
         return;
     }
@@ -884,7 +902,7 @@ void AUnmadeCharacter::AttemptMeleeAttack()
         Target->IsFractureExposed(Now)))
     {
         Target->NotifyPlayerHit(Before-Target->GetCombat()->GetHealth());
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 3.f, FColor::Yellow,
             FString::Printf(TEXT("HIT: %.0f damage, enemy %.0f health."),
                 Before - Target->GetCombat()->GetHealth(), Target->GetCombat()->GetHealth()));
         if (Target->GetCombat()->IsDefeated() && IsValid(Equipment))
@@ -963,6 +981,7 @@ AUnmadeNpcCharacter* FindNearbyCitizen(UWorld* World, FVector Origin, float MaxD
 
 void AUnmadeCharacter::SkipDirectedScene()
 {
+    if(IsRpgMenuOpen()){RpgWidget->Close();return;}
     if(!GetWorld())return;
     for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         if(Hub->IsBesDirectedScenePlaying()){Hub->SkipBesDirectedScene();return;}
@@ -1054,11 +1073,11 @@ void AUnmadeCharacter::Interact()
             const FString Inscription = Lexicon && Lexicon->UnderstandsVeyl()
                 ? TEXT("The inscription: VEYL - the way that remains. It marks a surviving passage.")
                 : TEXT("The inscription is unfamiliar. Investigate it with Glimpse and ask the archivist.");
-            GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Cyan, Inscription);
+            UnmadeRpgFeedback(-1, 7.f, FColor::Cyan, Inscription);
         }
         else if (GEngine)
         {
-            GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan,
+            UnmadeRpgFeedback(-1, 6.f, FColor::Cyan,
                 TEXT("Nothing nearby to inspect or speak to."));
         }
         return;
@@ -1107,7 +1126,7 @@ void AUnmadeCharacter::Interact()
     }
     else if (GEngine)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Cyan, Target->GetReactionText());
+        UnmadeRpgFeedback(-1, 6.f, FColor::Cyan, Target->GetReactionText());
     }
 }
 
@@ -1116,7 +1135,7 @@ void AUnmadeCharacter::OfferAid()
     AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
     if (!Target)
     {
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
             TEXT("Approach a resident before offering aid."));
         return;
     }
@@ -1124,7 +1143,7 @@ void AUnmadeCharacter::OfferAid()
     {
         if (Observation.EventKind == FName("Player.Helped") && Observation.SubjectId == Target->GetStableId())
         {
-            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+            if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
                 TEXT("You have already helped this resident."));
             return;
         }
@@ -1148,14 +1167,14 @@ void AUnmadeCharacter::DemonstrateAnomaly()
     const auto Result = FractureModel.Glimpse(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Discount);
     if (Result != UnmadeCore::Result::Applied)
     {
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
             TEXT("Glimpse unavailable. Get closer to the fracture or recover Strain."));
         return;
     }
     ApplyFractureVisuals();
     if (Lexicon) Lexicon->RecordEvidence(FName("evidence.glimpse"));
     ReconcileEarnedRewards();
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
+    if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Cyan,
         FString::Printf(TEXT("GLIMPSE: another possible version flickers into view (+%d Strain)."),
             8 - Discount));
     UnmadePresentation::Sound(this,TEXT("cast"));
@@ -1178,7 +1197,7 @@ void AUnmadeCharacter::FoldReality()
     const auto Result = FractureModel.Fold(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Extension);
     if (Result != UnmadeCore::Result::Applied)
     {
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
             TEXT("Fold unavailable: already active, out of range, or Strain too high."));
         return;
     }
@@ -1189,7 +1208,7 @@ void AUnmadeCharacter::FoldReality()
             FVector::DistSquared(It->GetActorLocation(), Anchor->GetActorLocation()) < FMath::Square(800.f))
             It->ExposeToFold(GetWorld()->GetTimeSeconds(), 4.0);
     }
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
+    if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Cyan,
         FString::Printf(TEXT("FOLD: barrier vanishes for %d seconds (+24 Strain)."),
             6 + Extension));
     UnmadePresentation::Sound(this,TEXT("cast"));
@@ -1218,7 +1237,7 @@ void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
     if (!GetWorld() || !IsValid(FindNearbyFractureAnchor()))
     {
         PendingRewriteChoice = NAME_None;
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
             TEXT("Approach the anomaly before attempting Rewrite."));
         return;
     }
@@ -1232,13 +1251,13 @@ void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
         PendingRewriteChoice = NAME_None;
         if (Preview != UnmadeCore::Result::NeedsConfirmation)
         {
-            if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+            if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
                 TEXT("This world has already been committed or the choice is unavailable."));
             return;
         }
         PendingRewriteChoice = ChoiceId;
         PendingRewriteExpiresAt = Now + 6.0;
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Orange,
+        if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Orange,
             FString::Printf(TEXT("PERMANENT REWRITE %s (+60 Strain). Press the same key again within 6 seconds to confirm."), *ChoiceString));
         return;
     }
@@ -1247,7 +1266,7 @@ void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
     const auto Result = FractureModel.Rewrite("region.prototype.hub", Choice, true);
     if (Result != UnmadeCore::Result::Applied)
     {
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow,
+        if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
             TEXT("Rewrite refused. Strain may be too high."));
         return;
     }
@@ -1256,11 +1275,11 @@ void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
     {
         FractureModel.Restore(Previous);
         ApplyFractureVisuals();
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+        if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
             TEXT("Rewrite failed to save: world and Strain restored."));
         return;
     }
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
+    if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Yellow,
         FString::Printf(TEXT("REWRITE COMMITTED: %s. This outcome persists across sessions."), *ChoiceString));
     UnmadePresentation::Sound(this,TEXT("cast"));
     PlayIdentityMotion(FName(TEXT("Cast")));
@@ -1372,7 +1391,7 @@ bool AUnmadeCharacter::SetCharacterChosenName(const FString& Name)
 void AUnmadeCharacter::ShowCharacterProfile()
 {
     const auto& V=Identity.Snapshot().options;
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+    if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
         FString::Printf(TEXT("IDENTITY | %s | Frame %d, Face %d, Hair %d, Voice %d, Palette %d, Mark %d, Gait %d, Calling %d | Origin: THE IMPOSSIBLE"),
             *GetCharacterChosenName(),V[0],V[1],V[2],V[3],V[4],V[5],V[6],V[7]));
     // A full creator UI can call SetCharacterFeature/SetCharacterChosenName
@@ -1382,6 +1401,9 @@ void AUnmadeCharacter::ShowCharacterProfile()
 void AUnmadeCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    Combat->EnablePlayerTempo();
+    if(auto* PC=Cast<APlayerController>(GetController())){RpgWidget=CreateWidget<UUnmadeRpgWidget>(PC,UUnmadeRpgWidget::StaticClass());if(RpgWidget)RpgWidget->AddToViewport(30);}
+
     if(USkeletalMesh* Rig=LoadObject<USkeletalMesh>(nullptr,
         TEXT("/Game/UnmadeProduction/Characters/Resident/SK_UnmadeResident.SK_UnmadeResident")))
     {
@@ -1460,7 +1482,7 @@ void AUnmadeCharacter::RecoverAtSafeCheckpoint()
     GetCharacterMovement()->SetMovementMode(MOVE_Walking);
     bPlayerDefeatHandled=false;
     DefeatRecordedAt=-1.0;
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Green,
+    if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Green,
         TEXT("RETURNED TO SAFETY: wounds stabilized, but your choices and witnesses remain."));
 }
 
@@ -1480,10 +1502,11 @@ void AUnmadeCharacter::AnimatePlayer(FName Cue)
 void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    if(!RpgWidget)if(auto* PC=Cast<APlayerController>(GetController())){RpgWidget=CreateWidget<UUnmadeRpgWidget>(PC,UUnmadeRpgWidget::StaticClass());if(RpgWidget)RpgWidget->AddToViewport(30);}
     if(GetWorld() && GetWorld()->GetTimeSeconds()>=PlayerAttackMotionUntil)
         AnimatePlayer(Combat&&Combat->IsDefeated()?FName(TEXT("Death")):Combat&&Combat->IsGuarding()?FName(TEXT("Guard")):GetVelocity().SizeSquared2D()>FMath::Square(12.f)
             ?FName(TEXT("Walk")):FName(TEXT("Idle")));
-    if(GetWorld()&&Combat){float health=Combat->GetHealth();if(LastPresentationHealth>=0&&health<LastPresentationHealth){AnimatePlayer(FName(Combat->IsDefeated()?TEXT("Death"):TEXT("Stagger")));PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+(Combat->IsDefeated()?1.5:.6);UnmadePresentation::Sound(this,Combat->IsDefeated()?TEXT("death"):TEXT("injury"));}LastPresentationHealth=health;
+    if(GetWorld()&&Combat){if(!Combat->IsDefeated())for(TActorIterator<AUnmadePrototypeHub> H(GetWorld());H;++H){Combat->SetWeaponStyle(H->PlayerWeaponStyle(Equipment?Equipment->EquippedWeapon():UnmadeCore::ItemId::Count),H->GetActiveMastery());break;}if(!Combat->IsDefeated())GetCharacterMovement()->MaxWalkSpeed=(bIsCrouched?260:600)*Combat->MoveMultiplier(GetWorld()->GetTimeSeconds());float health=Combat->GetHealth();if(LastPresentationHealth>=0&&health<LastPresentationHealth){AnimatePlayer(FName(Combat->IsDefeated()?TEXT("Death"):TEXT("Stagger")));PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+(Combat->IsDefeated()?1.5:.6);UnmadePresentation::Sound(this,Combat->IsDefeated()?TEXT("death"):TEXT("injury"));}LastPresentationHealth=health;
       if(!Combat->IsDefeated()&&GetCharacterMovement()->IsMovingOnGround()&&GetVelocity().SizeSquared2D()>FMath::Square(20.f)&&GetWorld()->GetTimeSeconds()>=NextFootstepAt){NextFootstepAt=GetWorld()->GetTimeSeconds()+.45;UnmadePresentation::Sound(this,TEXT("footstep_stone"));}}
     FractureModel.Recover(static_cast<double>(DeltaSeconds) *
         (IsValid(Equipment) ? Equipment->StrainRecoveryMultiplier() : 1.0));
@@ -1500,7 +1523,7 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
                Hazard.pulseId!=LastHazardWarningPulse[Index])
             {
                 LastHazardWarningPulse[Index]=Hazard.pulseId;
-                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Yellow,
+                if(GEngine)UnmadeRpgFeedback(-1,3.f,FColor::Yellow,
                     FString::Printf(TEXT("WARNING: storm/heat surge at world-second %.1f. Guard or leave the marked lane."),
                         Hub->GetWorldClockSeconds()));
             }
@@ -1511,7 +1534,7 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
                 if(Combat->ReceiveHazardPulse(
                     static_cast<uint64>(0xF0100+Index),Hazard.pulseId,Hazard.damage *
                         (static_cast<double>(Hub->GetRealmHazardPercent(GetActorLocation()))/100.0)) && GEngine)
-                    GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Orange,
+                    UnmadeRpgFeedback(-1,4.f,FColor::Orange,
                         TEXT("FRONTIER SURGE: you were exposed. Guard next pulse or operate the control."));
             }
             break;
@@ -1531,7 +1554,7 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
                LastLaterHazardWarningPulse[Index]!=Hazard.pulseId)
             {
                 LastLaterHazardWarningPulse[Index]=Hazard.pulseId;
-                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Yellow,
+                if(GEngine)UnmadeRpgFeedback(-1,4.f,FColor::Yellow,
                     FString::Printf(TEXT("%s: %s"),
                         UTF8_TO_TCHAR(UnmadeCore::LaterHazards[Index].label),
                         UTF8_TO_TCHAR(Hazard.warning)));
@@ -1554,12 +1577,12 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
                     {
                         FractureModel.Restore(Before);
                         bApplied=false;
-                        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,
+                        if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Red,
                            TEXT("Unmade could not persist reality strain; the exposure was undone."));
                     }
                 }
                 if(bApplied && GEngine)
-                    GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Orange,
+                    UnmadeRpgFeedback(-1,5.f,FColor::Orange,
                         FString::Printf(TEXT("%s: %s"),
                             UTF8_TO_TCHAR(UnmadeCore::LaterHazards[Index].label),
                             UTF8_TO_TCHAR(Hazard.counterplay)));
@@ -1572,7 +1595,7 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
         bPlayerDefeatHandled=true;
         DefeatRecordedAt=GetWorld()?GetWorld()->GetTimeSeconds():0.0;
         GetCharacterMovement()->DisableMovement();
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,
+        if (GEngine) UnmadeRpgFeedback(-1,5.f,FColor::Red,
             TEXT("YOU FELL: returning to this realm's safe entry in four seconds."));
     }
     if(bPlayerDefeatHandled)RecoverAtSafeCheckpoint();
@@ -1612,7 +1635,7 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
     }
     const FString Line = FString::Printf(TEXT("%s witnessed by %d nearby resident(s)."),
         *EventKind.ToString(), Witnesses);
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 6.f, FColor::Yellow, Line);
+    if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Yellow, Line);
 }
 
 void AUnmadeCharacter::SaveNearbyNpcMemories()
@@ -1630,7 +1653,18 @@ void AUnmadeCharacter::SaveNearbyNpcMemories()
     if (!UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0))
     {
         UE_LOG(LogTemp, Error, TEXT("Unmade prototype NPC memory save failed"));
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+        if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
             TEXT("Could not save NPC memories."));
     }
 }
+
+bool AUnmadeCharacter::IsRpgMenuOpen()const{return RpgWidget&&RpgWidget->IsOpen();}
+void AUnmadeCharacter::OpenRpgPage(int Page){if(RpgWidget)RpgWidget->Open(Page);}
+void AUnmadeCharacter::OpenWorldMap(){OpenRpgPage(2);}
+void AUnmadeCharacter::PersonalChoiceA(){if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)if(Hub->TryDepthInteraction(this,1))return;}
+void AUnmadeCharacter::PersonalChoiceB(){if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)if(Hub->TryDepthInteraction(this,2))return;}
+void AUnmadeCharacter::UseFieldTechnique(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){if(!Hub->UseDepthPower(this))Hub->NotifyRpg(TEXT("Technique needs an earned mastery lesson, stamina, recovery time and a suitable nearby target."));return;}}
+void AUnmadeCharacter::DodgeStep(){if(!GetWorld()||IsRpgMenuOpen()||!Combat->Dodge(GetWorld()->GetTimeSeconds()))return;FVector Direction=GetLastMovementInputVector().GetSafeNormal2D();if(Direction.IsNearlyZero())Direction=GetActorForwardVector();LaunchCharacter(Direction*650,false,false);PlayIdentityMotion(FName(TEXT("Dodge")));UnmadePresentation::Sound(this,TEXT("guard"));}
+void AUnmadeCharacter::RpgMenuAction(FName Action){if(Action==FName(TEXT("Weapon")))EquipNextWeapon();else if(Action==FName(TEXT("Armor")))EquipNextArmor();else if(Action==FName(TEXT("Charm")))EquipNextCharm();else if(Action==FName(TEXT("Heal")))UseHealthPotion();else if(Action==FName(TEXT("ChoiceA")))PersonalChoiceA();else if(Action==FName(TEXT("ChoiceB")))PersonalChoiceB();}
+
+void AUnmadeCharacter::UseFieldKit(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){if(!h->UseDepthFieldKit(this))h->NotifyRpg(TEXT("Use a crafted field kit inside an unresolved dungeon danger chamber. No kit is consumed if there is no benefit."));return;}}

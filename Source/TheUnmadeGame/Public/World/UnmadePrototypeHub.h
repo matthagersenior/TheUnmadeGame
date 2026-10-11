@@ -38,6 +38,9 @@
 #include "World/UnmadeExpeditionRegistry.h"
 #include "World/UnmadeExpeditionRules.h"
 #include "World/UnmadeIdentityRules.h"
+#include "World/UnmadeAdventureDepthRules.h"
+#include "Items/UnmadeItemRules.h"
+#include "Combat/UnmadeCombatStyleRules.h"
 #include "UnmadePrototypeHub.generated.h"
 
 class AUnmadeLoreSite;
@@ -233,6 +236,31 @@ public:
     FString GetExpeditionReaction(FName Person)const;
     UnmadeCore::ExpeditionBenefit ExpeditionBenefit()const{return bExpeditionSaveRejected?UnmadeCore::ExpeditionBenefit{}:Expeditions.Benefit();}
     bool ExpeditionBossYielded(int a)const{auto* t=Expeditions.Arc(a);return !bExpeditionSaveRejected&&t&&t->boss==2;}
+    void BuildAdventureDepth();
+    void RefreshAdventureDepth();
+    bool TryDepthInteraction(AUnmadeCharacter* Player,int Action,double Competing=1000000.);
+    bool UseDepthFieldKit(AUnmadeCharacter* Player);
+    bool UseDepthPower(AUnmadeCharacter* Player);
+    bool SelectDepthTechnique(int Arc,AUnmadeCharacter* Player);
+    FString GetDepthJournal()const;
+    FString GetDepthReaction(FName Person)const;
+    FString GetDepthPrompt(AUnmadeCharacter* Player)const;
+    UnmadeCore::WeaponStyle PlayerWeaponStyle(UnmadeCore::ItemId Legacy)const;
+    int GetActiveMastery()const{auto* S=Depth.Arc(Depth.Active());return bDepthSaveRejected||!S?0:S->training;}
+    TArray<FString> RpgHistory;
+    FString RpgNotice;
+    uint64 RpgNoticeSerial=0;
+    void NotifyRpg(const FString& Text){RpgNotice=Text;++RpgNoticeSerial;if(RpgHistory.IsEmpty()||RpgHistory.Last()!=Text){RpgHistory.Add(Text);if(RpgHistory.Num()>100)RpgHistory.RemoveAt(0);}}
+    int DepthPendingArc=-1,DepthPendingChoice=0;
+    double DepthConfirmUntil=0;
+    bool bDepthSaveRejected=false;
+    UnmadeCore::AdventureDepth Depth;
+    std::array<UnmadeCore::RealmChallenge,9> DepthChallenges;
+    TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>> DepthRetaliators;
+    std::array<double,9> NextDepthThreatSave{};
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthEvidenceActors,DepthCacheActors;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthSecretGates;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> DepthChallengeSigns;
     void BuildIdentity();
     void RefreshIdentity();
     bool TryIdentityInteraction(AUnmadeCharacter* Player,double Competing,bool Survey=false);

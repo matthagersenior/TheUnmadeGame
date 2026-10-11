@@ -13,8 +13,8 @@ class IdentityTests(unittest.TestCase):
    with self.assertRaises(AssertionError):audio.validate(p)
  def test_motion_distinct_and_keyed(self):
   for kind in rigs.KINDS:
-   d=rigs.make_actor(kind);self.assertEqual(len(d['animations']),17)
-   self.assertEqual(len({json.dumps(a['samplers']) for a in d['animations']}),17)
+   d=rigs.make_actor(kind);self.assertEqual(len(d['animations']),19)
+   self.assertEqual(len({json.dumps(a['samplers']) for a in d['animations']}),19)
  def test_world_state_atomic_and_optional(self):
   s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeWorldIdentity.cpp').read_text();self.assertIn('Identity=before',s);self.assertIn('WriteWorldSnapshot(p)',s);self.assertLess(s.index('WriteWorldSnapshot(p)'),s.index('Heal(35)'))
   h=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp').read_text();self.assertIn('if(Save->bHasWorldIdentity)',h);self.assertIn('if(bIdentitySaveRejected)return false;',h)

@@ -20,10 +20,20 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/world_identity_test.cpp -o /tmp/unmade-world-identity
           /tmp/unmade-world-identity
+      - name: Test realm depth, combat style and defense receipts
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/adventure_depth_test.cpp -o /tmp/unmade-depth
+          /tmp/unmade-depth
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/combat_style_test.cpp -o /tmp/unmade-style
+          /tmp/unmade-style
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/defense_receipt_test.cpp -o /tmp/unmade-defense-receipts
+          /tmp/unmade-defense-receipts
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: '3.11'
+      - name: Validate authored personal stories and nine exploration identities
+        run: python Scripts/build_adventure_depth.py --check
       - name: Check identity registry and original sound library
         run: |
           python Scripts/build_world_identity.py --check

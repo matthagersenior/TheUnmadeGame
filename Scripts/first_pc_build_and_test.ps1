@@ -145,5 +145,8 @@ python "$PSScriptRoot/build_frontier_adventures.py" --check
 if ($LASTEXITCODE -ne 0) { throw "Frontier adventure registry failed" }
 
 # v15 portable acceptance before Editor asset imports
-python Scripts/build_world_identity.py --check
+python "$PSScriptRoot/build_world_identity.py" --check
 if ($LASTEXITCODE -ne 0) { throw "World identity registry failed" }
+
+python "$PSScriptRoot/build_adventure_depth.py" --check
+if ($LASTEXITCODE -ne 0) { throw "Adventure depth registry failed" }

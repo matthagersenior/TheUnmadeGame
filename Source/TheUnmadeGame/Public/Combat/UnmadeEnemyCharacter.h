@@ -24,9 +24,12 @@ public:
     virtual void BeginPlay() override;
     void ConfigureCinderholdElder();
     void ConfigureExpedition(int32 Arc,int32 Slot,UnmadeCore::ExpeditionRole Role);
+    bool IsExpeditionArc(int Arc)const{return ExpeditionArc==Arc;}
     bool IsExpeditionEnemy(int32 Arc,int32 Slot)const{return ExpeditionArc==Arc&&ExpeditionSlot==Slot;}
     void ConfigureRoadElder(int32 City){RoadElderCity=City;bCinderholdElder=true;TerritoryHome=GetActorLocation();}
     bool CanBeTargeted() const;
+    FString GetCombatName()const;
+    FString GetCombatWarning()const;
     void ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion=false);
     void ConfigureStyle(UnmadeCore::EnemyStyle NewStyle);
     void SetVisualScale(FVector Scale);

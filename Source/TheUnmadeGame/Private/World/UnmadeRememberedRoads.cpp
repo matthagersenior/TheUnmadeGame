@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeEnemyCharacter.h"
@@ -20,7 +21,7 @@ FVector Keeper(int City){return Yard(City,FVector(1000,1500,25));}
 FVector Checkpoint(int City,int Route){return Yard(City,Route==3?FVector(100,1040,0):FVector(500,440,0));}
 FVector Receiving(int City){return Yard(City,FVector(-300,-350,0));}
 bool Able(AUnmadeCharacter* P){return IsValid(P)&&IsValid(P->GetCombat())&&!P->GetCombat()->IsDefeated();}
-void Say(const FString& Line,FColor Color=FColor::Cyan){if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,Color,Line);}
+void Say(const FString& Line,FColor Color=FColor::Cyan){if(GEngine)UnmadeRpgFeedback(-1,9.f,Color,Line);}
 bool Sight(UWorld* World,AUnmadeCharacter* P,FVector At,double Range,AActor* Ignore=nullptr){
  if(!World||!Able(P)||FVector::DistSquared(P->GetActorLocation(),At)>FMath::Square(Range))return false;
  FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeRoadSight),false);Params.AddIgnoredActor(P);if(Ignore)Params.AddIgnoredActor(Ignore);

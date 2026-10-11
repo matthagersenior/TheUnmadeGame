@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "Combat/UnmadeRealmGuardian.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
@@ -73,7 +74,7 @@ void AUnmadeRealmGuardian::Tick(float DeltaSeconds)
         if(!bWarningShown && GEngine)
         {
             bWarningShown=true;
-            GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Yellow,
+            UnmadeRpgFeedback(-1,3.f,FColor::Yellow,
                 FString::Printf(TEXT("%s: %s"),
                     UTF8_TO_TCHAR(UnmadeCore::RealmGuardians[idx].name),
                     UTF8_TO_TCHAR(UnmadeCore::RealmGuardians[idx].warning)));

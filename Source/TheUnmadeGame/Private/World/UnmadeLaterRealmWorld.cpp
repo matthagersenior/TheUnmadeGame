@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeRealmGeometryRules.h"
 #include "Authoring/UnmadeOuterPeopleData.h"
@@ -80,7 +81,7 @@ bool AUnmadePrototypeHub::TryTravelAtlas(AUnmadeCharacter* Player)
             const int32 Attunement=IsValid(Equipment)?Equipment->GetAtlasAttunement():0;
             if(Attunement<Edge.attunement)
             {
-                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+                if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
                     FString::Printf(TEXT("CROSSING SEALED: attunement %d required (you have %d)."),
                         Edge.attunement,Attunement));
                 return false;
@@ -103,7 +104,7 @@ bool AUnmadePrototypeHub::TryTravelAtlas(AUnmadeCharacter* Player)
                 if(bNewLater||bNewFrontier)WriteWorldSnapshot();
                 return false;
             }
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,
+            if(GEngine)UnmadeRpgFeedback(-1,10.f,FColor::Cyan,
                 FString::Printf(TEXT("PASSAGE OPEN: %s. Listen to local witnesses before acting."),
                     *GetCurrentRealmName(Arrival)));
             return true;
@@ -328,7 +329,7 @@ bool AUnmadePrototypeHub::InspectLaterRealmSite(
     {
         LaterRealm.Restore(Before);
         RealmAftermath.Restore(BeforeAfter);
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Red,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Red,
              TEXT("Could not save this intervention; world state remains unchanged."));
         return true;
     }
@@ -357,7 +358,7 @@ bool AUnmadePrototypeHub::InspectLaterRealmSite(
         else if(RealmAftermath.Stage(Spec.realm)==4)
             Message=FString(UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(Spec.realm)));
         else Message=TEXT("This evidence has not changed; consult the realm journal or its witnesses.");
-        GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,Message);
+        UnmadeRpgFeedback(-1,10.f,FColor::Cyan,Message);
     }
     return true;
 }
@@ -400,7 +401,7 @@ bool AUnmadePrototypeHub::TryLaterRealmConversation(FName ResidentId)
             return false;
         }
         if(GEngine)
-            GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+            UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
                 L==UnmadeCore::LaterResult::Started
                 ?TEXT("FIRST ARRIVAL: inspect two distinct evidence stones, select one approach and operate its control.")
                 :A==UnmadeCore::RealmAftermathResult::Started

@@ -1,261 +1,76 @@
 {
-  "edition": "World Identity v15",
+  "edition": "Adventure Depth v16",
   "date": "2026-10-11",
-  "source_base": "f52d4e5f48314c058e01b951d9351543181e3fd1",
+  "source_base": "99d86b72b1c6d68b430529082ff9abe3c9e5e1e6",
   "engine_compiled": false,
   "engine_playtested": false,
-  "native_cpp_tests": 49,
-  "python_tests": 249,
-  "workflow_validators": 21,
-  "complete_bible_pages": 155,
-  "complete_bible_images": 59,
-  "volume_x_pages": 102,
-  "volume_x_images": 12,
-  "animation_clips": 51,
-  "new_original_wavs": 36,
+  "native_cpp_tests": 52,
+  "python_tests": 255,
+  "workflow_validators": 22,
+  "complete_bible_pages": 158,
+  "complete_bible_images": 60,
+  "volume_x_pages": 107,
+  "volume_x_images": 13,
+  "animation_clips": 57,
+  "new_original_wavs": 0,
   "qa": "All inherited page overviews and new chapter pages visually inspected. Every inherited paragraph, illustration byte and inherited PDF page text retained. Zero empty pages or off-page text blocks. Original rigs statically validated and offline pose contact sheets inspected. Audio PCM, levels, endpoints and hashes validated; engine audition deferred.",
   "files": [
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_World_Identity_v15.docx",
-      "sha256": "7cfe2c4852620f2176c80b4398e172b6c8c624d50b59a608ca6f90cbb2d36a6c",
-      "bytes": 7730167
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Adventure_Depth_v16.docx",
+      "sha256": "7765bbf3163a1320189209d21996a774e3a65c360e03941d9ee8dc63259ac66b",
+      "bytes": 7860842
     },
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_World_Identity_v15.pdf",
-      "sha256": "54c7fd1eac44b4ddaf7267ffa7ddb9cec859d6d3cef38b9e0bacc3c69463298e",
-      "bytes": 5180069
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Adventure_Depth_v16.pdf",
+      "sha256": "6f0cfc5fc8fd5600c6cfff18e4f1b0a782fd8ca8bddc42e301e49e792e257564",
+      "bytes": 5328723
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_World_Identity_v15.docx",
-      "sha256": "bf044c1f5bfacae8b659a6a1473b12a3fe5c680923bd85426993f91cdc030897",
-      "bytes": 5535768
+      "name": "THE_UNMADE_Volume_X_Illustrated_Adventure_Depth_v16.docx",
+      "sha256": "3b954d2000e61425fe44604964dd96c6fc29636f65285eaa20a2cd7d0507f035",
+      "bytes": 5666434
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_World_Identity_v15.pdf",
-      "sha256": "22330349758b37febe56ae3b78439a8c4c6c7fd72e4a3d4c58338c05c7bcb331",
-      "bytes": 3161257
+      "name": "THE_UNMADE_Volume_X_Illustrated_Adventure_Depth_v16.pdf",
+      "sha256": "a83b45a970e30148a422e610a95049822ff900ffc4ee7482f36317d3b69f471f",
+      "bytes": 3313158
     },
     {
-      "name": "THE_UNMADE_v15_World_Identity_Atlas.png",
-      "sha256": "c3d0f3a6ac551ba9b0e22aa1a444b7b235c5de176e3e398e0b7ad32ae2cb2a12",
-      "bytes": 203052
+      "name": "THE_UNMADE_v16_Adventure_Depth_Atlas.png",
+      "sha256": "7007eb04ab2d2a05b851caf433c33bb6f76750e276945ca8401115e6bcd322ac",
+      "bytes": 137395
     }
   ],
   "assets": [
     {
-      "name": "asset_kit/audio/SFX_ID_ambience_auvren.wav",
-      "sha256": "01ae2e8897e2f1745faee175bebbc6708d05bf73aac98d9f8463afa4f020cdf2",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_ambience_cinderhold.wav",
-      "sha256": "53a28a777404831211e2ddf31ef50710654f741ad1e4ee5aa27136f6a8c211f5",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_ambience_crossings.wav",
-      "sha256": "6224bff06117faac0ec78052da6adcbed119466e648b92be33aa434a9f4c3aa4",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_ambience_drevlach.wav",
-      "sha256": "a7bdcebcc5c08fc70077567a747d33489163a8831042d8469d6c97297f6b63e7",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_ambience_eillun.wav",
-      "sha256": "9429b33a2a49b5e51f728e32a8e44306dea8ef0b2c5e26210ca74f5c7e571334",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_ambience_orravane.wav",
-      "sha256": "d35a3838ad6e6d632b64db26d916d9b7e8d2db9399c0c34161a1899e741dc19e",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_ambience_saltwake.wav",
-      "sha256": "431be97f78e96412b21b3b3a5558654e0e580786bb0293f98e651d1367dd6336",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_ambience_tharniv.wav",
-      "sha256": "184942e12120964f8cb01001e9a2b7e7c57d28a0d5f3897202ded3958ed0c935",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_ambience_vathless.wav",
-      "sha256": "d9f749f36ca54aed528e0d88368936f8208cf005838de828dbb13e40cd499c34",
-      "bytes": 352844
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_crush.wav",
-      "sha256": "05dd92594d00bb9d853f023ea0e49f832b8659d08e114a57deda2ec6c37258ba",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_seal.wav",
-      "sha256": "1160c754a4612dc31703516795f6f7085fbadacb3bbfb62aa6fd177ca8be2c97",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_0.wav",
-      "sha256": "38fab319bde9ed92064ed6eb0b7a31b41041a3cef473a8c39f443e6dcc3035ea",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_1.wav",
-      "sha256": "9bbe07985048427ee8365f0eceacc1fde720d4e28d25f078d3769b5a473667ea",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_2.wav",
-      "sha256": "aca68ce84b73da145228aa0080ac8ca9cc4c32e88acb194c9b85825f3fd821d9",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_3.wav",
-      "sha256": "5824327d04ac7aff729f5a563b8b13324ade5ec68b4e42f8be2fbc620bf83f54",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_4.wav",
-      "sha256": "438352f4872cef2bb0f10fa97bf42391fb17fdf004ceafd5fe101981c64da1c0",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_5.wav",
-      "sha256": "0701808c13e5edfe74e3804497a918591a1c6d079a1c971febe5c3157aa6ad97",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_6.wav",
-      "sha256": "66f436b3e6b8c25e2b8ff077a5c6edb01d850ae3af2cfefd8598f496a4f47208",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_7.wav",
-      "sha256": "70b258deb3759c5cd64b6304f3c998d76a58933f9b3a95a6b758847df28de395",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_signature_8.wav",
-      "sha256": "1a0459e51f7522c24308706d1acb463339c63562f92d2268950328e2b3ac67c4",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_boss_sweep.wav",
-      "sha256": "5749bd23ea10a83ac57c19f803176c77ce945ebfaa58bac9f96ea58b150bba75",
-      "bytes": 48554
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_cast.wav",
-      "sha256": "088d5928244cbdfa94f698e3f98c82b3a72ab9418dc0984a2a5da1532b164e92",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_death.wav",
-      "sha256": "1f71e687623cbed845085a1fa6a952730adfc8ada5ab5e41439ac1e3640d0a49",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_footstep_salt.wav",
-      "sha256": "8eaaaa5b5f934709bee5b3788270c23f5d3a402637a8bf239e7db322899021ad",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_footstep_stone.wav",
-      "sha256": "0d12c5456aada53a6c3fcb04fed249e5e30641c970c0264f36b8938900ca1fc0",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_footstep_wood.wav",
-      "sha256": "94c65d701e0b8254420819c93fee5406c9b50bfa0b308fcce37a99d62407710d",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_guard.wav",
-      "sha256": "543a7c5d576bf059f81ceb8f4cefd3ab3944305c50fedcf2d82bc6c28fac213b",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_impact.wav",
-      "sha256": "cb8f0026a36b067019339beb64bc400636628c1599987be5f08b8232a3fa9f18",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_injury.wav",
-      "sha256": "7d6cd2a7a650a8ba2a48efb83f36f4b9343c7594ba3ac4883a9c8e2af02ad4ce",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_inspect.wav",
-      "sha256": "6cd83d7795214afb81e956cf49b50218cfd1b48562b576d27d6e32b773133824",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_release.wav",
-      "sha256": "4a24482b30fb0380700daa5180dcd92022dcd9c1096a9cedba3e1551643f1481",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_repair.wav",
-      "sha256": "fc790ad544dd5b648c035de84ae610ff4cf6fba6ba222ede8869298b8ebb8d0a",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_reward.wav",
-      "sha256": "4b22ec57e19794fc269396b6962e27023217e5f0d03eaff53fb201cf58518ff7",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_swing.wav",
-      "sha256": "1f63681608ac81ab86087b769dc810ef374b7185f10fb83a72fbee2c29114d57",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_warning.wav",
-      "sha256": "ae60dddec6269533657f3b0d87e8386420e7fe033d074888b48a1471abd8fd87",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/SFX_ID_yield.wav",
-      "sha256": "4cc2d7ea2c7df164d91adb52e9de3a287def27ea87e58f86879d5f07b1bfeaf8",
-      "bytes": 24298
-    },
-    {
-      "name": "asset_kit/audio/identity_audio_manifest.json",
-      "sha256": "ae8776afb8cd7e091dfa29662080d1a4641fad76328f575711a37951a4c11469",
-      "bytes": 13241
-    },
-    {
       "name": "asset_kit/previews/SK_UnmadeBeast_Pose_Contact_Sheet.png",
-      "sha256": "1fb99cdff3df37f8f83ecee06cb9a7daa15ede15a5128de133b1df8e078e8c9d",
-      "bytes": 159225
+      "sha256": "13c34532069ee3398f0207068769f6ecd7fd98325c38cd7e865ab9c11378e833",
+      "bytes": 236189
     },
     {
       "name": "asset_kit/previews/SK_UnmadeResident_Pose_Contact_Sheet.png",
-      "sha256": "ee49b7fe20cbe7b8d4d2a9fe4c0bbfee2a808fccb891304343d4912c83bf3cac",
-      "bytes": 138505
+      "sha256": "e6309d6e9eb6dab2200421a319bb6bc04c04b27ebb02d60245a1a0f706020249",
+      "bytes": 206866
     },
     {
       "name": "asset_kit/previews/SK_UnmadeWraith_Pose_Contact_Sheet.png",
-      "sha256": "9b69e716d207d2ebfe398b3b6714d54a029b6af72e7018889742738c3eb0d35d",
-      "bytes": 127781
+      "sha256": "85eede5f8e3c3ca1cd6df68ee7d493ec811815806921557268bd32191d3d6e09",
+      "bytes": 191651
     },
     {
       "name": "asset_kit/rigs/SK_UnmadeBeast.gltf",
-      "sha256": "2b833407b6d91edfa587a4a8cd2343ffd5f1a727e369089b74f1f7f4de4685f0",
-      "bytes": 39547
+      "sha256": "191149b4275b606172dc9229c8f81866e308bc0e995586a5743bfa26e58a88c5",
+      "bytes": 43489
     },
     {
       "name": "asset_kit/rigs/SK_UnmadeResident.gltf",
-      "sha256": "6cbc4188b3ce637d42d07eebfe6a018bb5bad8a8bb7ce734ba66f184cc387b57",
-      "bytes": 39560
+      "sha256": "5621122fe71ba4a7c3edd58178c32369f9b4c17c7026043cc496e4066e27e02f",
+      "bytes": 43508
     },
     {
       "name": "asset_kit/rigs/SK_UnmadeWraith.gltf",
-      "sha256": "9521d048cb6a7ea189316d83aa99b425cb88587f0779ff91f163491311d0d1b6",
-      "bytes": 27692
+      "sha256": "08e4737cb1f25afdaf67b7d2eddc331f5275ceaa8cb6752fd73175b2ad0f57c5",
+      "bytes": 30355
     },
     {
       "name": "asset_kit/rigs/UnmadeSixRegionPBR.gltf",
