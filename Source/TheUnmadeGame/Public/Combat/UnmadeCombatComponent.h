@@ -30,6 +30,7 @@ public:
     bool IsDefeated() const { return !State.IsAlive(); }
 
     UFUNCTION(BlueprintPure, Category="Unmade|Combat")
+    bool IsGuarding()const{return State.IsGuarding();}
     float GetHealth() const { return static_cast<float>(State.Health()); }
 
     UFUNCTION(BlueprintPure, Category="Unmade|Combat")

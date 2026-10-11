@@ -35,9 +35,11 @@ void AUnmadePrototypeHub::BeginPlay()
     BuildCinderholdAdventure();
     BuildRememberedRoads();
     BuildExpeditions();
+    BuildIdentity();
     RefreshCinderholdAdventure();
     RefreshRememberedRoads();
     RefreshExpeditions();
+    RefreshIdentity();
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
@@ -80,7 +82,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bCinderholdSaveRejected=true;
         return;
     }
-    if(Save&&Save->SchemaVersion==1&&Save->bHasExpeditions&&!Save->bHasLivingWorldSnapshot){bExpeditionSaveRejected=true;return;}
+    if(Save&&Save->SchemaVersion==1&&(Save->bHasWorldIdentity||Save->bHasExpeditions)&&!Save->bHasLivingWorldSnapshot){bExpeditionSaveRejected=true;return;}
     if(Save&&Save->SchemaVersion==1&&Save->bHasRememberedRoads&&!Save->bHasLivingWorldSnapshot){bRoadSaveRejected=true;return;}
     if (!Save || Save->SchemaVersion != 1 || !Save->bHasLivingWorldSnapshot) return;
 
@@ -475,6 +477,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         }
     }
     if(Save->bHasExpeditions){std::vector<int> Data;for(int32 V:Save->ExpeditionState)Data.push_back(V);if(!Expeditions.Restore(Data)){bExpeditionSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Expedition save rejected; original protected"));}}
+    if(Save->bHasWorldIdentity){std::vector<int> Data;for(int32 V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bIdentitySaveRejected=true;UE_LOG(LogTemp,Error,TEXT("World identity save rejected; original protected"));}}
     if(Save->bHasRememberedRoads)
     {
         std::vector<int> Data;for(int32 V:Save->RememberedRoadState)Data.push_back(V);
@@ -511,6 +514,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
     if(bExpeditionSaveRejected)return false;
+    if(bIdentitySaveRejected)return false;
     if(bRoadSaveRejected)return false;
     if(bCinderholdSaveRejected)return false;
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
@@ -524,6 +528,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bBesHouseholdRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
+    Save->bHasWorldIdentity=true;Save->WorldIdentityState.Reset();for(int V:Identity.Pack())Save->WorldIdentityState.Add(V);
     Save->bHasExpeditions=true;Save->ExpeditionState.Reset();
     for(int V:Expeditions.Pack())Save->ExpeditionState.Add(V);
     Save->bHasRememberedRoads=true;
@@ -1910,6 +1915,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     RefreshCinderholdAdventure();
     RefreshRememberedRoads();
     RefreshExpeditions();
+    RefreshIdentity();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical

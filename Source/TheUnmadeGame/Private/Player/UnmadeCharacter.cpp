@@ -1,4 +1,5 @@
 #include "Player/UnmadeCharacter.h"
+#include "Combat/UnmadePresentation.h"
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Story/UnmadeConflictGate.h"
 #include "World/UnmadePrototypeHub.h"
@@ -845,6 +846,8 @@ void AUnmadeCharacter::ShowStoryJournal()
 
 void AUnmadeCharacter::AttemptMeleeAttack()
 {
+    if(!GetWorld()||!Combat||Combat->IsDefeated())return;
+    UnmadePresentation::Sound(this,TEXT("swing"));
     AnimatePlayer(FName(TEXT("Attack")));
     if(GetWorld())PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+.65;
     UWorld* World = GetWorld();
@@ -908,6 +911,7 @@ void AUnmadeCharacter::AttemptMeleeAttack()
 
 void AUnmadeCharacter::StartGuard()
 {
+    AnimatePlayer(FName(TEXT("Guard")));
     if (IsValid(Combat)) Combat->SetGuarding(true);
 }
 
@@ -1154,6 +1158,8 @@ void AUnmadeCharacter::DemonstrateAnomaly()
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
         FString::Printf(TEXT("GLIMPSE: another possible version flickers into view (+%d Strain)."),
             8 - Discount));
+    UnmadePresentation::Sound(this,TEXT("cast"));
+    PlayIdentityMotion(FName(TEXT("Cast")));
     ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
     SaveFractureState();
 }
@@ -1186,6 +1192,8 @@ void AUnmadeCharacter::FoldReality()
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan,
         FString::Printf(TEXT("FOLD: barrier vanishes for %d seconds (+24 Strain)."),
             6 + Extension));
+    UnmadePresentation::Sound(this,TEXT("cast"));
+    PlayIdentityMotion(FName(TEXT("Cast")));
     ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
     SaveFractureState();
 }
@@ -1254,6 +1262,8 @@ void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
     }
     if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Yellow,
         FString::Printf(TEXT("REWRITE COMMITTED: %s. This outcome persists across sessions."), *ChoiceString));
+    UnmadePresentation::Sound(this,TEXT("cast"));
+    PlayIdentityMotion(FName(TEXT("Cast")));
     ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
 }
 
@@ -1454,6 +1464,8 @@ void AUnmadeCharacter::RecoverAtSafeCheckpoint()
         TEXT("RETURNED TO SAFETY: wounds stabilized, but your choices and witnesses remain."));
 }
 
+void AUnmadeCharacter::PlayIdentityMotion(FName Cue){PlayerMotion=NAME_None;AnimatePlayer(Cue);if(GetWorld())PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+1;}
+
 void AUnmadeCharacter::AnimatePlayer(FName Cue)
 {
     if(!bSkeletalRigLoaded || Cue==PlayerMotion || !IsValid(GetMesh()))return;
@@ -1461,7 +1473,7 @@ void AUnmadeCharacter::AnimatePlayer(FName Cue)
     const FString Path=TEXT("/Game/UnmadeProduction/Characters/Resident/")+Name+TEXT(".")+Name;
     if(UAnimSequence* Clip=LoadObject<UAnimSequence>(nullptr,*Path))
     {
-        GetMesh()->PlayAnimation(Clip,Cue!=FName(TEXT("Attack")));
+        GetMesh()->PlayAnimation(Clip,Cue==FName(TEXT("Idle"))||Cue==FName(TEXT("Walk"))||Cue==FName(TEXT("Guard")));
         PlayerMotion=Cue;
     }
 }
@@ -1469,8 +1481,10 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     if(GetWorld() && GetWorld()->GetTimeSeconds()>=PlayerAttackMotionUntil)
-        AnimatePlayer(GetVelocity().SizeSquared2D()>FMath::Square(12.f)
+        AnimatePlayer(Combat&&Combat->IsDefeated()?FName(TEXT("Death")):Combat&&Combat->IsGuarding()?FName(TEXT("Guard")):GetVelocity().SizeSquared2D()>FMath::Square(12.f)
             ?FName(TEXT("Walk")):FName(TEXT("Idle")));
+    if(GetWorld()&&Combat){float health=Combat->GetHealth();if(LastPresentationHealth>=0&&health<LastPresentationHealth){AnimatePlayer(FName(Combat->IsDefeated()?TEXT("Death"):TEXT("Stagger")));PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+(Combat->IsDefeated()?1.5:.6);UnmadePresentation::Sound(this,Combat->IsDefeated()?TEXT("death"):TEXT("injury"));}LastPresentationHealth=health;
+      if(!Combat->IsDefeated()&&GetCharacterMovement()->IsMovingOnGround()&&GetVelocity().SizeSquared2D()>FMath::Square(20.f)&&GetWorld()->GetTimeSeconds()>=NextFootstepAt){NextFootstepAt=GetWorld()->GetTimeSeconds()+.45;UnmadePresentation::Sound(this,TEXT("footstep_stone"));}}
     FractureModel.Recover(static_cast<double>(DeltaSeconds) *
         (IsValid(Equipment) ? Equipment->StrainRecoveryMultiplier() : 1.0));
     // The world's clock drives a readable three-stage pulse. A guard reduces

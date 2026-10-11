@@ -42,12 +42,13 @@ public:
 struct DungeonHazard {bool warning=false,danger=false;unsigned long long pulse=0;};
 inline DungeonHazard SampleDungeonHazard(double now,bool disabled){if(disabled||!std::isfinite(now)||now<0||now>1e12)return {};double phase=std::fmod(now,9.0);return {phase<2,phase>=2&&phase<3,static_cast<unsigned long long>(now/9)+1};}
 enum class ExpeditionRole {Sentinel,Skirmisher,Marksman,Disruptor,Boss};
-struct ExpeditionAttack {double reach,windup,recovery,radius,damage;const char* warning;};
+struct ExpeditionAttack {double reach,windup,recovery,radius,damage;const char* warning;int shape=0;};
 inline ExpeditionAttack ExpeditionMove(ExpeditionRole role,int realm,int turn,bool phase){
  if(role==ExpeditionRole::Sentinel)return {280,1.25,1.7,160,18,"SHIELD BREAK - STEP BEHIND"};
  if(role==ExpeditionRole::Skirmisher)return {230,.8,1.2,110,13,"LUNGE - SIDESTEP"};
  if(role==ExpeditionRole::Marksman)return {950,1.6,2.4,130,16,"AIMED SHOT - COVER OR MOVE"};
  if(role==ExpeditionRole::Disruptor)return {650,2.0,2.8,240,11,"FRACTURE PULSE - LEAVE THE MARK"};
+ if(turn%3==2&&realm>=0&&realm<9){constexpr const char* names[]={"MILEGLASS RING - CENTER IS SAFE","UNDERTOW LANE - MOVE SIDEWAYS","KILN FAN - SOUTH HALF IS SAFE","OATH CROSS - DIAGONALS ARE SAFE","CHOIR QUADRANTS - OPPOSITE SIGNS SAFE","SEAM SPLIT - CENTRAL STRIP SAFE","ELSEBORN DIVIDE - MIDDLE BAND SAFE","CROWN SQUARE - LEAVE THE SQUARE","THRESHOLD RIM - CENTER IS SAFE"};return {1100,phase?1.5:2.2,3.2,420,24,names[realm],realm+1};}
  int move=(turn+realm)%3;if(move==0)return {420,1.5,2.5,190,26,"BOSS CRUSH - CLEAR THE MARK"};if(move==1)return {500,phase?.85:1.4,2,270,22,"BOSS SWEEP - WIDE MARK"};return {1100,1.8,2.8,140,20,"BOSS SEAL - BREAK LINE OF SIGHT"};
 }
 struct ExpeditionTick {bool started=false,strike=false,recovering=false;ExpeditionAttack move{};};

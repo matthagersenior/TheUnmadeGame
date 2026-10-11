@@ -1,3 +1,19 @@
+# Current illustrated release — World Identity v15
+
+Date: 11 October 2026. Code baseline: `f52d4e5f48314c058e01b951d9351543181e3fd1`.
+
+Complete cumulative Bible: **155 pages / 59 illustrations** in PDF and DOCX. Complete standalone Volume X: **102 pages / 12 illustrations** in PDF and DOCX. Built from both intact v14 illustrated Word masters, retaining every inherited paragraph and image byte and all inherited PDF page text. The new nine-realm atlas and complete `THE_UNMADE_World_Identity_v15_Complete_Package.zip` include current source, canon, retained art/audio/rig kit, 51 expanded keyed clips, 36 new original WAV sources, offline pose previews, validation receipts and the v15 publisher with previous full v14 Word masters. These seven dated files are saved individually at the Library root and returned as direct downloads. Earlier editions remain intact.
+
+Implemented in source: nine signature boss footprints with counterplay, nine named coupled-valve challenges, 27 optional hunt/survey/road restoration objectives, finite recovery, independent survey maps and earned daily sanctuary services. Repairable roadposts show boss outcome and player restoration. Existing refuge residents return to road-watch duty; conversations remember rescue and repairs. Living yielded bosses remain visible and untargetable. A versioned 46-integer optional save rejects corrupt dependencies and rolls back failed writes before healing or feedback. Existing campaign, original cast, wages, fuel, consent, item IDs and OPEN mysteries retain authority.
+
+Validation: **249 Python tests, 49 compiled portable C++ test executables and 21 Python workflow validators** passed. Both books rendered; page overviews and every new page inspected; no blank pages or off-page text. Expanded glTF bytes and pose previews inspected. WAV format, hash, signal and quiet endpoints checked. ZIP CRC and every member hash verified.
+
+**Unreal compilation, import and engine playtesting remain deferred at the creator's request.** These are original prototype animations and synthetic Foley/ambience, not motion capture, voice acting or a final mix. Nine puzzles are variants of one valve system; existing six-room dungeon layouts remain. Landmarks and repairs are graybox. Returned captives and road-watch residents relocate through saved rules, not cinematic escorts. Footsteps currently route stone only. Sampled signature floor tiles require engine readability review. No packaged executable is claimed. Acceptance: `docs/design/world-identity-v15-acceptance.md`.
+
+Digests: `RELEASE_SHA256_MANIFEST.json`; complete package contains its own member manifest and reproducible builders. CI cannot inspect private Library binaries. No GitHub binary Release is claimed.
+
+---
+
 # Current illustrated release — Frontier Adventures v14
 
 Date: 11 October 2026. Code baseline: `955319dbc800c4e120819522995b0432fa471e26`.

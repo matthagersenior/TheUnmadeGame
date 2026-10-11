@@ -27,6 +27,7 @@ class THEUNMADEGAME_API AUnmadeCharacter : public ACharacter
 
 public:
     AUnmadeCharacter();
+    void PlayIdentityMotion(FName Cue);
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;
@@ -124,6 +125,8 @@ private:
     double PendingStoryExpiresAt = -1.0;
 
     void AttemptMeleeAttack();
+    double NextFootstepAt=0;
+    float LastPresentationHealth=-1;
     void StartGuard();
     void StopGuard();
     bool bPlayerDefeatHandled = false;

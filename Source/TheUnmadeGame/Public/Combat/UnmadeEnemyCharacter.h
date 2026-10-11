@@ -39,6 +39,7 @@ public:
     UnmadeCore::EnemyStyle GetEnemyStyle() const { return Style; }
 
 private:
+    UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> SignatureTiles;
     int32 ExpeditionArc=-1,ExpeditionSlot=-1;
     UnmadeCore::ExpeditionRole ExpeditionRole=UnmadeCore::ExpeditionRole::Sentinel;
     UnmadeCore::ExpeditionPattern ExpeditionPattern;

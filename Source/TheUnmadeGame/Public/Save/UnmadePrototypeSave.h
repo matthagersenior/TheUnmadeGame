@@ -13,6 +13,8 @@ class THEUNMADEGAME_API UUnmadePrototypeSave : public USaveGame
     GENERATED_BODY()
 
 public:
+    UPROPERTY(SaveGame) bool bHasWorldIdentity=false;
+    UPROPERTY(SaveGame) TArray<int32> WorldIdentityState;
     UPROPERTY(SaveGame) bool bHasExpeditions=false;
     UPROPERTY(SaveGame) TArray<int32> ExpeditionState;
     UPROPERTY(SaveGame)

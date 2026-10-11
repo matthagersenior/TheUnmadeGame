@@ -37,6 +37,7 @@
 #include "TimerManager.h"
 #include "World/UnmadeExpeditionRegistry.h"
 #include "World/UnmadeExpeditionRules.h"
+#include "World/UnmadeIdentityRules.h"
 #include "UnmadePrototypeHub.generated.h"
 
 class AUnmadeLoreSite;
@@ -231,6 +232,16 @@ public:
     FString GetExpeditionJournal()const;
     FString GetExpeditionReaction(FName Person)const;
     UnmadeCore::ExpeditionBenefit ExpeditionBenefit()const{return bExpeditionSaveRejected?UnmadeCore::ExpeditionBenefit{}:Expeditions.Benefit();}
+    bool ExpeditionBossYielded(int a)const{auto* t=Expeditions.Arc(a);return !bExpeditionSaveRejected&&t&&t->boss==2;}
+    void BuildIdentity();
+    void RefreshIdentity();
+    bool TryIdentityInteraction(AUnmadeCharacter* Player,double Competing,bool Survey=false);
+    bool bIdentitySaveRejected=false;
+    UnmadeCore::WorldIdentity Identity;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> IdentityRepairs;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> IdentityPuzzleSigns;
+    TArray<TWeakObjectPtr<class AUnmadeNpcCharacter>> IdentityPatrols;
+    std::array<double,9> IdentityNextService{};
     void BuildExpeditions();
     void RefreshExpeditions();
     bool CommitExpeditions(const UnmadeCore::Expeditions& Before,AUnmadeCharacter* Player=nullptr);

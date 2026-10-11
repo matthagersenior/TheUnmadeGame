@@ -38,7 +38,7 @@ class PerformanceV10(unittest.TestCase):
   for item in ("BeginDirectedBlocking","EndDirectedBlocking","BesStagedSpeaker",
                "UnmadeBesCameraObstruction","RestoreBesCamera"):
    self.assertIn(item,s)
- def test_generated_rigs_include_fifteen_valid_keyed_clips(self):
+ def test_generated_rigs_include_expanded_valid_keyed_clips(self):
   generator=ROOT/"Scripts/build_skeletal_performance_kit.py"
   with tempfile.TemporaryDirectory() as d:
    subprocess.run([sys.executable,str(generator),"--out",d],check=True,
@@ -47,12 +47,12 @@ class PerformanceV10(unittest.TestCase):
    for name in ("Resident","Beast","Wraith"):
     g=json.loads((Path(d)/("SK_Unmade"+name+".gltf")).read_text())
     self.assertGreaterEqual(len(g["skins"][0]["joints"]),4)
-    self.assertEqual(len(g["animations"]),5)
+    self.assertEqual(len(g["animations"]),17)
     for anim in g["animations"]:
      self.assertTrue(anim["channels"],anim["name"])
      self.assertTrue(anim["samplers"],anim["name"])
     clips+=len(g["animations"])
-   self.assertEqual(clips,15)
+   self.assertEqual(clips,51)
    palette=json.loads((Path(d)/"UnmadeSixRegionPBR.gltf").read_text())
    self.assertEqual(len(palette["materials"]),6)
 if __name__=="__main__":unittest.main()

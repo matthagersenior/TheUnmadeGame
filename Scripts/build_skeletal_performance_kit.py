@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate ORIGINAL low-poly skinned glTF characters with 5 keyed motion clips.
+"""Generate ORIGINAL low-poly skinned glTF characters with 17 keyed motion clips.
 
 No Blender, network, paid assets or AI generation required. Each GLTF embeds its
 mesh, skin, skeleton, time samplers and animated quaternion keyframes. The
@@ -131,7 +131,7 @@ def make_actor(kind):
     times=[0.,.25,.5,.75,1.]
     time_id=packed.add([(t,) for t in times],"f","SCALAR")
     animations=[]
-    for clip in ["Idle","Walk","Attack","Gesture","Speak"]:
+    for clip in ["Idle","Walk","Attack","Gesture","Speak","Guard","Stagger","Death","Cast","Inspect","Repair","Release","Ranged","Crush","Sweep","Seal","Yield"]:
         samplers=[];channels=[]
         for name,_,_,_ in specs[1:]:
             if clip=="Walk" and ("leg" in name or "front" in name or "rear" in name):
@@ -148,9 +148,17 @@ def make_actor(kind):
                 degrees=[0,9,-5,7,0]
             elif clip=="Idle" and name in ("torso","chest","core"):
                 degrees=[0,3,0,-3,0]
+            elif clip in ("Guard","Stagger","Death","Cast","Inspect","Repair","Release","Ranged","Crush","Sweep","Seal","Yield"):
+                poses={"Guard":[-28,-28,-28,-28,-28],"Stagger":[0,-24,13,-6,0],
+                  "Death":[0,15,48,78,88],"Cast":[0,-25,-65,-40,0],"Inspect":[0,12,25,12,0],
+                  "Repair":[0,38,-30,38,0],"Release":[0,-30,-45,-20,0],"Ranged":[0,-45,-45,12,0],
+                  "Crush":[0,45,65,-55,0],"Sweep":[0,-35,55,30,0],"Seal":[0,-35,-60,-35,0],
+                  "Yield":[0,15,35,35,35]}
+                degrees=poses[clip]
+                if "leg" in name or "rear" in name:degrees=[d*.25 for d in degrees]
             else:
                 continue
-            axis=(1,0,0) if name not in ("core","torso","chest") else (0,0,1)
+            axis=(0,1,0) if clip=="Sweep" else (1,0,0) if name not in ("core","torso","chest") else (0,0,1)
             output=packed.add([angle_quat(axis,d) for d in degrees],"4f","VEC4")
             si=len(samplers)
             samplers.append({"input":time_id,"output":output,"interpolation":"LINEAR"})
