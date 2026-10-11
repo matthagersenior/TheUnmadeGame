@@ -1,3 +1,11 @@
+## NEW — Performance and Peril v10 (11 October 2026)
+
+This source pass adds a **real portable skinned glTF kit**: Resident, Beast and Wraith meshes, each with five keyed motion clips; six original PBR material swatches; Unreal skeletal mesh/animation runtime lookups with safe earlier graybox fallbacks; per-site distinctive fossil, prism, bell, archive, wreck and kiln geometry; navigation-path-based enemies (local LOS movement only when nav data is missing); timed warning/impact combat, impact cues; and speaker-scoped physical cinematic blocking with obstruction-checked shots. Actual skeletal import, navigation generation and Unreal 5.8 UHT/PIE must be tested on an engine PC, not inferred from source CI.
+
+**The complete illustrated Bible was actually rebuilt and issued alongside the code**: 140-page cumulative PDF+DOCX / 54 illustrations and 79-page standalone Volume X PDF+DOCX / 7 illustrations, with new Chapter 30. A verified 31-entry ZIP (30 independently hashed content items) includes both books, retained art/audio, reproducible builders and the model kit. Downloads are in the dated ChatGPT Library path `/The Unmade/Illustrated Bible Editions/2026-10-11 Performance and Peril v10/` and in the companion publication reply. Binary books are NOT public GitHub Release assets. [Current release record](docs/lore/LATEST_ILLUSTRATED_RELEASE.md) | [Complete current literary manuscript](docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md) | [First PC import/QA](docs/design/performance-and-peril-v10-first-pc-acceptance.md).
+
+---
+
 ## CURRENT RELEASE — Playable World v9, Chapters 28–29 (2026-10-11)
 
 **The illustrated Bible has actually been regenerated:** 137-page complete Word/PDF (53 images), 74-page standalone Volume X Word/PDF (6 images), and verified complete development ZIP. Source chapters cover the six playable-region grayboxes and twenty-four new NPC/enemy placements, plus the camera-directed Unpaid Shift scenes and live truthful quest tracker. [Release receipt + digests](docs/lore/LATEST_ILLUSTRATED_RELEASE.md) | [Canonical Volume X](docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md) | [Publication policy](docs/lore/UPDATE_POLICY.md).

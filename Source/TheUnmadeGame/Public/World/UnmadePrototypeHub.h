@@ -216,11 +216,12 @@ private:
     int32 BesActiveScene=-1;
     int32 BesActiveBeat=0;
     void AdvanceBesDirectedBeat();
-    void FrameBesDirectedBeat(FName Speaker,const FString& Cue);
+    void FrameBesDirectedBeat(FName Speaker,const FString& Cue,const FString& Blocking,float Seconds);
     void RestoreBesCamera();
     UPROPERTY(Transient)
     TObjectPtr<ACameraActor> BesShotCamera;
     TWeakObjectPtr<AActor> BesOriginalViewTarget;
+    TWeakObjectPtr<class AUnmadeNpcCharacter> BesStagedSpeaker;
     TWeakObjectPtr<AStaticMeshActor> BesWorkingCart;
     TWeakObjectPtr<AStaticMeshActor> BesVisibleBasket;
     FVector BesCartRest=FVector::ZeroVector;

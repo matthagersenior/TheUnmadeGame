@@ -16,6 +16,8 @@
 #include "Camera/CameraComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimSequence.h"
 #include "Engine/StaticMeshActor.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Components/InputComponent.h"
@@ -838,6 +840,8 @@ void AUnmadeCharacter::ShowStoryJournal()
 
 void AUnmadeCharacter::AttemptMeleeAttack()
 {
+    AnimatePlayer(FName(TEXT("Attack")));
+    if(GetWorld())PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+.65;
     UWorld* World = GetWorld();
     if (!World || Combat->IsDefeated()) return;
     AUnmadeEnemyCharacter* Target = nullptr;
@@ -871,6 +875,7 @@ void AUnmadeCharacter::AttemptMeleeAttack()
     if (Combat->TryStrikeTarget(Target->GetCombat(), Now, true,
         Target->IsFractureExposed(Now)))
     {
+        Target->NotifyPlayerHit(Before-Target->GetCombat()->GetHealth());
         if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Yellow,
             FString::Printf(TEXT("HIT: %.0f damage, enemy %.0f health."),
                 Before - Target->GetCombat()->GetHealth(), Target->GetCombat()->GetHealth()));
@@ -1338,6 +1343,17 @@ void AUnmadeCharacter::ShowCharacterProfile()
 void AUnmadeCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    if(USkeletalMesh* Rig=LoadObject<USkeletalMesh>(nullptr,
+        TEXT("/Game/UnmadeProduction/Characters/Resident/SK_UnmadeResident.SK_UnmadeResident")))
+    {
+        GetMesh()->SetSkeletalMesh(Rig);
+        GetMesh()->SetRelativeLocation(FVector(0,0,-88));
+        GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        PlaceholderBody->SetVisibility(false);
+        PlaceholderCrest->SetVisibility(false);
+        bSkeletalRigLoaded=true;
+        AnimatePlayer(FName(TEXT("Idle")));
+    }
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
         UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
     if (Save && Save->SchemaVersion == 1 && Save->bHasFractureSnapshot)
@@ -1409,9 +1425,23 @@ void AUnmadeCharacter::RecoverAtSafeCheckpoint()
         TEXT("RETURNED TO SAFETY: wounds stabilized, but your choices and witnesses remain."));
 }
 
+void AUnmadeCharacter::AnimatePlayer(FName Cue)
+{
+    if(!bSkeletalRigLoaded || Cue==PlayerMotion || !IsValid(GetMesh()))return;
+    const FString Name=TEXT("AN_UnmadeResident_")+Cue.ToString();
+    const FString Path=TEXT("/Game/UnmadeProduction/Characters/Resident/")+Name+TEXT(".")+Name;
+    if(UAnimSequence* Clip=LoadObject<UAnimSequence>(nullptr,*Path))
+    {
+        GetMesh()->PlayAnimation(Clip,Cue!=FName(TEXT("Attack")));
+        PlayerMotion=Cue;
+    }
+}
 void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    if(GetWorld() && GetWorld()->GetTimeSeconds()>=PlayerAttackMotionUntil)
+        AnimatePlayer(GetVelocity().SizeSquared2D()>FMath::Square(12.f)
+            ?FName(TEXT("Walk")):FName(TEXT("Idle")));
     FractureModel.Recover(static_cast<double>(DeltaSeconds) *
         (IsValid(Equipment) ? Equipment->StrainRecoveryMultiplier() : 1.0));
     // The world's clock drives a readable three-stage pulse. A guard reduces
