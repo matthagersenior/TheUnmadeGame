@@ -1,5 +1,29 @@
 # Latest illustrated lore publication
 
+**Current edition:** *The Unmade — Volume X, Chapter 24: The Living Economy* (11 October 2026)  
+**Merged gameplay baseline:** `22af7af98986b4f158ed8ad8e4e44af8b5a88307` · [PR #43](https://github.com/matthagersenior/TheUnmadeGame/pull/43) · [post-merge CI green](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38144773169)  
+**Authoritative canon:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` §24, *The Living Economy — Nine Households, Two Roads, and the Weight of a Receipt*. Nine named workers, finite wages and arrears, physically carried bilateral supplies, conserved trade money and an earned endgame counter-testimony.
+
+| Released conversation artifact | Validation |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_The_Living_Economy.docx` | **125 pages**, full cumulative editable illustrated lore Bible with all **52** prior embedded illustrations |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_The_Living_Economy.pdf` | **125 rendered pages**, no entirely blank page or text beyond page boundaries |
+| `THE_UNMADE_Volume_X_Illustrated_The_Living_Economy.docx` | **56-page** editable standalone Volume X, retaining all **five** prior illustrations |
+| `THE_UNMADE_Volume_X_Illustrated_The_Living_Economy.pdf` | **56 pages**, no blank page or out-of-bounds text |
+| `THE_UNMADE_Living_Economy_Complete_Illustrated_Package.zip` | **29 entries**, four updated books, eight retained concept-art images, prior editorial and production references, Chapter 24 and v4 QA notes, plus manifest. All **28 content member SHA-256 checks** and ZIP CRC verified |
+
+**Publication QA:** Both editions were extended directly from their complete preceding Word masters (no missing earlier volumes); both fully rendered to PDF and page images, late-page montages visually inspected, all 125+56 pages checked for fully blank pages and text beyond page margins. Counted unchanged Word image objects (52 and five). ZIP files independently read and compared byte lengths and SHA-256 digests against its manifest. The released binaries are conversation downloads, **not** GitHub Release assets.
+
+**Gameplay implemented in source:** Exactly nine canon-named paid workers, identifiable homes, employer treasuries and owned wages; real unpaid obligations, a strictly conserved 288-mark aggregate balance including buyer escrow; real Cinderhold↔Saltwake signed origin withdrawals and destination actor handoffs; foreign typed inventory supporting structural safety only on real shortage days; individual returning-resident dialogue; J/Blueprint economy journal; optional qualified Nhal-Vey first-mask counter-testimony, without shortcut to victory. Additive schema-1 save restoration, corruption guard, rollback on failed writes, native and source tests are integrated.
+
+**Not certified:** Full Windows Unreal UHT/Editor/PIE build and physical traversal QA, animation/lip sync/VO, controller or low-vision finished UI, individually detailed tenancy/wages for all 82 residents, autonomous route NPCs, globally modeled logistics or a finished RPG. Source CI cannot certify any of these.
+
+**PC handoff:** `docs/design/living-economy-v4-first-pc-acceptance.md`.
+
+---
+
+# Previous illustrated publication — Volume X Chapter 23
+
 **Current cumulative edition:** *The Unmade — Volume X, Chapter 23: Local Material Consequences* (11 October 2026)  
 **Game code baseline:** `86d66710bb37e935c9e3968d21b2131e0c620098` · [PR #41](https://github.com/matthagersenior/TheUnmadeGame/pull/41) · [green post-merge CI](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38141337730)  
 **Canon:** Volume X §23, *Local Material Consequences — What the Miracle Costs Tomorrow*. Nine finite, differentiated work/material economies, physical same-realm relief and repair, and authoritative old-save compatibility.  
