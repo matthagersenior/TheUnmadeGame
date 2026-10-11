@@ -91,6 +91,10 @@ private:
     bool SaveCharacterIdentity();
     UnmadeCore::CharacterIdentity Identity;
     bool bCharacterIdentitySaveRejected=false;
+    bool bSkeletalRigLoaded=false;
+    FName PlayerMotion=NAME_None;
+    double PlayerAttackMotionUntil=-1.0;
+    void AnimatePlayer(FName Cue);
     void EquipNextWeapon();
     void EquipNextArmor();
     void EquipNextCharm();

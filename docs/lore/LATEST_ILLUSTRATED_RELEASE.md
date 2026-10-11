@@ -1,5 +1,23 @@
 # Latest illustrated lore publication
 
+## CURRENT RELEASE — Performance and Peril v10 | 11 October 2026
+
+**Actual illustrated release files exist and have been delivered**, not merely mentioned in source:
+- Complete accumulated Bible Word+PDF: **140 pages / 54 embedded illustrations**, preserving all 53 v9 illustrations and adding an original performance/combat schematic.
+- Standalone Volume X Word+PDF: **79 pages / 7 embedded illustrations**, preserving all six v9 figures.
+- 31-entry complete development ZIP with exact **30 SHA-256 content digests and CRC verification**. It retains earlier story art and audio, v9 site schematic, both books, the Chapter 30 full editorial text, Python rebuild scripts and generated source kit.
+- Companion portable glTF kit with **three skinned source meshes, 15 keyed clips and six PBR material swatches**. No binary .uasset or finished Unreal animation is falsely claimed.
+- PDF QA: **0 empty pages / 0 off-page text blocks**; Word-to-PDF renders and closing chapter spreads visually inspected.
+
+**Available dated Library files:** `/The Unmade/Illustrated Bible Editions/2026-10-11 Performance and Peril v10/`. [Filename and SHA-256 ledger](RELEASE_SHA256_MANIFEST.json). The conversation has matching direct download links. **These are not GitHub Releases** and do not auto-update former download links. This new v10 edition supersedes, but does not erase, the v9 publication below.
+
+**Source/gameplay changes:** Characters request stable imported skeletal rigs and deterministic clip names while keeping the visible graybox fallback when absent. Each of six expedition grounds adds three actual themed landmark actors and optional PBR material hook. Enemies sample Unreal NavigationSystem path points, use CharacterMovement, cancel attacks on loss of line of sight, signal timed pre-strikes with a readable overhead warning/light and display target damage flashes. Bes's physically local actors can temporarily face the player, request a speak/gesture clip and release the pose on end/skip. A blocked shot is nudged toward the visible focus. No quest-state, inventory or save-schema short circuit is introduced.
+
+**Verification boundary:** Python generator/rig-schema tests and static code CI are distinct from UE 5.8 UHT/Editor/PIE compile, skeletal import, real navmesh coverage, actual animation playback, accessible balance tests or cinematic visual staging. No such Unreal engine test has been performed or is claimed by this edition.
+
+---
+
+
 ## CURRENT — Playable World v9: Illustrated Bible republished (11 October 2026)
 
 Repaired the missed v8/v9 illustrated publication step. **Complete cumulative Bible: 137-page PDF/DOCX, 53 embedded illustrations; standalone Volume X: 74-page PDF/DOCX, 6 embedded illustrations.** Both were extended from the intact *Audible Shift* source masters, including their prior 52/5 images, plus a clearly labeled six-encounter schematic. New Volume X Chapters 28–29 cover six optional field areas, six named people, eighteen combat placements, shot-based camera cues and the saved-state Unpaid Shift HUD.

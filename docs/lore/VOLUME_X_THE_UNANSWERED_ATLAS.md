@@ -1648,3 +1648,71 @@ Runtime source v8 and v9 were merged into main after source-level CI checks. The
 
 The same narrative invariants that protect the nine realms remain intact: the protagonist’s shared impossible origin is not replaced; established cast identities remain stable; unfinished mysteries stay unfinished; both post-Nhal-Vey futures remain mutually exclusive, player-earned possibilities. An illustration cannot become canonical proof of an unperformed event.
 
+
+
+---
+
+# THE UNMADE — VOLUME X, CHAPTER 30
+
+## THE BODY THAT REMEMBERS: PERFORMANCE AND PERIL
+
+**Playable World v10 · October 11, 2026 · After source revision v9 · Actual asset kit and Unreal source, pending engine acceptance**
+
+> The first honest movement of a frightened person is not an attack. It is the instant they decide whether to stand their ground.
+
+### 30.1 A world is not alive because everything moves
+
+A city requires movement with cause: a worker must be able to stop their shift without becoming a broken animation, a witness must turn to face the person they address, and a creature must reveal its intent before damage arrives. The Unmade has long promised societies with their own account of reality's fractures; these new performances must make that distinction visible instead of substituting motion for identity. Bes's refusal to work is a choice with a saved production cost, not a generic idle state. Rheva's acknowledgment of his unpaid wages must feel like the admission of a person who risks being remembered for it. Mera cannot be posed as an automatic benefactor: the camera can show her consenting only after the authoritative quest state permits the guarantee.
+
+The first v10 production goal is technical modesty with unmistakable accountability. We now supply original **low-poly skinned previsualization figures**—a resident, a four-legged beast and a hovering wraith—each with named idle, walk, attack, gesture and speech clips. Their source is a self-contained portable glTF 2.0 asset. The authored meshes have explicit joint hierarchies and weighted vertices; the animations have sampled rotations keyed to those bones. This is a real step toward skeletal performances, but not a claim of actor likeness, completed facial rigs, retargeting, motion-capture polish or successful Unreal import. Until a Windows machine runs the engine import and validates asset names, the current source intentionally displays its earlier recognizable graybox shapes.
+
+**Canonical performance rule:** a pose may communicate a witnessed decision; it must never manufacture one. An actor's saved observations, unpaid wages, work refusal, suspicion and consent remain in the authoritative economy and narrative rules. A cutscene cannot write a new truth through an animation event that has no gameplay provenance.
+
+### 30.2 Three moving bodies, fifteen authored beginnings
+
+**Resident** has seven bones, including a root, torso, head, two arms and two legs. Five keyed animation tracks provide a walking step, an explicit physical attack, an arm gesture, a small speaking head motion and an idle breath. The first imported residents can include the protagonist, Bes, Rheva, Mera and the six field scouts, but identical geometry is a *temporary shared rig*, not their eventual final character designs. Stable NPC identities, body choices and names survive the visual transition without a save migration.
+
+**Beast** has seven bones and a deliberately lowered body silhouette: root, chest, head and four articulated limbs. Its locomotion and attack clips distinguish a ground creature from a walking town resident. It is the preview performer for Cinderjaw, Hollow Hound, Saltglass Crawler, Ashmaw and other close-fighting hostile actors; species-specific gait, anatomy, fangs, injuries, feeding and behavior remain future art and AI tasks rather than secretly completed work.
+
+**Wraith** has five bones: central root and core, eye and two tendrils. Its pulses read differently from a ground hunter and align with the existing Watcher combat style. The source actor now selects skeletal asset and named clips according to its style. The asset importer must map both the skeletal mesh and all animation sequences to stable `/Game/UnmadeProduction/Characters/...` paths used in C++; a differently named import is not silently treated as successful.
+
+In a first Unreal acceptance pass, each clip should be played while moving, during an attack, while returning to idle, on replay and after a level load. Missing assets must leave a visibly functional fallback. No voice recording, lip synchronization or dynamic facial performance has been produced in this source pass.
+
+### 30.3 Places that have a shape of their own
+
+A settlement's outskirts should be recognized without reading the sign. Ash Road has fossil ribs and a toppled waystone; Glass Cut has high prisms and a shard eye; Forgotten Bells has a suspended silent bell; Torn Archive exposes two displaced shelf-spines and an open folio; Saltglass Quay includes drowned timber piles and a wrecked hull; Blackslag Field has a chimney, broken kiln and slag heart. These are additional real Unreal runtime mesh actors with named tags, collision declared per structure and distinct orientation, built from engine-available primitive types. Their six configurations are no longer the same rectangular platform recited six times.
+
+The color language is equally intentional. An exportable six-region physically based rendering swatch scene supplies ash-bone, pale-glass, bell patina, archive ink, salt foam and kiln slag materials with authored base-color, metalness and roughness values. Unreal scene construction attempts optional region-specific material assets only at documented paths; when they are not imported the geometry remains physically legible rather than disappearing. The glass and water scenes are still prototypes: true refraction, puddles, wetness layers, Niagara weather, high-quality modular meshes, LODs and cooked shader testing await Unreal Editor.
+
+These ruins must leave civilian routes and wages intact. Cover is physical. A doorway used for debt evidence is not decorated into an unwalkable wall. The player must be able to return to a saved household with its previous outcomes, not a new scene replacing an older one with decorative props.
+
+### 30.4 The creature tells the truth before striking
+
+Unmade hostile pursuit now asks Unreal's navigation system for a traversable path, refreshes waypoints on a bounded interval, uses CharacterMovement collision, and will not pretend a swept straight line through solid walls is pathfinding. If navigation data is absent, only clear short local movement is permissible; full ruin pursuit then remains incomplete. Real NavMeshBoundsVolumes, runtime nav generation choices, cover and off-mesh links must be configured in the first Engine pass. Static source tests cannot prove a path exists in a cooked level.
+
+More important for readable combat, the foe's strike now enters a **wind-up** instead of dealing instant damage on the same frame intent is selected. Ground beasts have a shorter warning; watchers telegraph their pulse for longer. The opponent displays an overhead warning and bright local light, giving the player a visible moment to guard, escape or move behind cover. Loss of direct line of sight cancels the pending impact. The actual hit remains a legitimate strike through the original cooldown, guard, armor and fracture model; no new instant-kill power or invisible damage privilege is introduced. Landing a player hit produces a brief target-side impact readout and light response; death still follows the existing no-loot/no-persistent-kill source contract.
+
+This change is **not** a complete modern combat system. Per-species animation synchronized hit windows, positional audio, tactile controller feedback, weapon tracers, i-frames, navigation around other creatures, valid knockback, VFX pooling, real performance metrics and balanced challenge tiers remain explicit missing gates. The current overhead warnings are prototype signals, not a final accessible HUD. The final combat vocabulary must be readable at distance and under low-vision and reduced-motion modes.
+
+### 30.5 Camera blocking is a promise of physical presence
+
+The Unpaid Shift's scripted scene beats already had authored speakers, timed subtitles, Foley and directed camera cues. In v10, a physically nearby named speaker can now hold a temporary staged facing direction and request a keyed speech/gesture clip. The presentation rig checks the shot path for obstruction and slides a blocked camera inward before showing it. Skip and scene completion release the actor's pose and return the original view. The scene does not teleport a remote speaker, drag an NPC out of its workplace, or spend one mark merely by showing a line of dialogue.
+
+The animation is expressly subordinate to the saved house, union/work-refusal state, Rheva witness, Mera consent and material transfers. A return encounter can change how Bes speaks because of a recognized outcome, not because the cinematic system invented a second copy of Bes. When a character's model is unavailable, the authored dialogue, movement continuity and subtitles remain functional. Full naturalistic staging still requires interior collision QA, reverse shots with viable eye lines, gesture-to-audio timing, dynamic actor marks, occlusion near narrow rooms, authored performance differences and Play-in-Editor inspection.
+
+### 30.6 First-PC import and acceptance contract
+
+1. Run the repository's `Scripts/build_skeletal_performance_kit.py --out <folder>` in a regular Python environment to produce the resident, beast, wraith and six-material glTF files. A dated prebuilt ZIP is also in this edition's production kit. The generated files embed the skinning and animation buffers in each glTF; no external binary dependency is required.
+2. In Unreal Editor enable its glTF/Interchange importing path. Import all three character models as skeletal meshes with animation clips and map or rename outputs to `SK_UnmadeResident`, `SK_UnmadeBeast`, `SK_UnmadeWraith` and their `AN_Unmade<Type>_<Idle|Walk|Attack|Gesture|Speak>` animation names in `/Game/UnmadeProduction/Characters/Resident`, `/Beast` and `/Wraith`. Confirm asset browser paths actually match the load strings.
+3. Import the six physically based swatches as material sources into `/Game/UnmadeProduction/Materials/`, with exact optional runtime asset names `MI_AshBone`, `MI_PaleGlass`, `MI_BellPatina`, `MI_ArchiveInk`, `MI_SaltFoam`, and `MI_KilnSlag`. Do not blindly overwrite production materials. If imported as different asset types/names, manually associate approved equivalents.
+4. Provide navmesh volumes over the six play sites and real traversable routes. Press P in the Unreal Editor navigation display and verify that the ground and intended narrow paths are navigable. A colored floor is not itself nav data.
+5. Test one civilian and each combat style, including blocker-occluded pursuit, idle/walk/attack clip switching, line-of-sight breaking mid-wind-up, defending at the warning, impact feedback, defeat and reload. Confirm camera skip restores the player's view and releases temporary actor blocking; inspect shots through doorways and pillar cover.
+6. Replay all financial quest branches and both existing aftermath futures from previously saved games. No new visual feature may create money, witnesses, consent, final boss victory or erased evidence. Document actual Unreal/UHT/PIE results separately from source-check CI. If any asset import fails, leave fallbacks enabled and the release marked not engine-verified.
+
+### 30.7 A small fidelity step toward the unanswered road
+
+A player might enter Blackslag Field while Bes's hearth is cooling, hear Varda describe a beast and return to find the household still waiting on real wages. That continuity—not the number of particles or bones—is the link between cinematic quality and the moral universe. A player might notice the Wraith's longer warning in Glass Cut, learn to break its line of sight, and later recognize the same readable intent in an entirely different realm. What Nhal-Vey takes advantage of is not a fight's spectacle alone, but the accumulated knowledge of what people dared to do before the fight began.
+
+The next pass should replace single-style aliases with species-specific decision trees, ensure navmesh and animation imports work end-to-end under Unreal, differentiate permanent creature encounters from respawns without save corruption, and produce actual in-engine capture of a Cinderhold sequence. No ending has been decided by this edition; the Held Morning, Many Mornings, optional echo and intentionally unanswered mysteries remain open to player-earned consequences.
+
+**Production truth:** 3 generated skinned source characters, 15 embedded keyed animation clips, 6 PBR swatches, 18 added six-site landmark actors and updated runtime integration source. This is a published, source-checked Unreal production increment. It is **not** yet a compiled or played Unreal game build, verified skeletal import, finished character art, recorded cast dialogue or a shippable cinematic quest.

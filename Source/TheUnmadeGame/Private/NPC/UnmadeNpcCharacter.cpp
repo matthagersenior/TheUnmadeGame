@@ -11,6 +11,8 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimSequence.h"
 
 AUnmadeNpcCharacter::AUnmadeNpcCharacter()
 {
@@ -27,11 +29,64 @@ AUnmadeNpcCharacter::AUnmadeNpcCharacter()
     if (Mesh.Succeeded()) PlaceholderVisual->SetStaticMesh(Mesh.Object);
 }
 
+void AUnmadeNpcCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+    TryLoadResidentRig();
+}
+void AUnmadeNpcCharacter::TryLoadResidentRig()
+{
+    // Skeletal animation is activated if the authored asset kit has been
+    // imported to these stable paths; fallback still works without a PC.
+    if(!IsValid(GetMesh()))return;
+    if(USkeletalMesh* Rig=LoadObject<USkeletalMesh>(nullptr,
+        TEXT("/Game/UnmadeProduction/Characters/Resident/SK_UnmadeResident.SK_UnmadeResident")))
+    {
+        GetMesh()->SetSkeletalMesh(Rig);
+        GetMesh()->SetRelativeLocation(FVector(0,0,-88));
+        GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        PlaceholderVisual->SetVisibility(false);
+        bSkeletalRigLoaded=true;
+        AnimateResident(FName(TEXT("Idle")));
+    }
+}
+void AUnmadeNpcCharacter::AnimateResident(FName Cue)
+{
+    if(!bSkeletalRigLoaded||MotionCue==Cue||!IsValid(GetMesh()))return;
+    const FString Name=TEXT("AN_UnmadeResident_")+Cue.ToString();
+    const FString Path=TEXT("/Game/UnmadeProduction/Characters/Resident/")+Name+TEXT(".")+Name;
+    if(UAnimSequence* Clip=LoadObject<UAnimSequence>(nullptr,*Path))
+    {
+        GetMesh()->PlayAnimation(Clip,Cue!=FName(TEXT("Gesture"))&&Cue!=FName(TEXT("Speak")));
+        MotionCue=Cue;
+    }
+}
+void AUnmadeNpcCharacter::BeginDirectedBlocking(FVector LookAt,float Duration,FName Gesture)
+{
+    if(!GetWorld()||Duration<=0.f)return;
+    if(BlockedUntil<0.0)BeforeBlocking=GetActorRotation();
+    BlockedUntil=GetWorld()->GetTimeSeconds()+Duration;
+    FVector Facing=LookAt-GetActorLocation();Facing.Z=0;
+    if(!Facing.IsNearlyZero())SetActorRotation(Facing.Rotation());
+    AnimateResident(Gesture.IsNone()?FName(TEXT("Speak")):Gesture);
+}
+void AUnmadeNpcCharacter::EndDirectedBlocking()
+{
+    if(BlockedUntil<0.0)return;
+    BlockedUntil=-1.0;
+    SetActorRotation(BeforeBlocking);
+    AnimateResident(FName(TEXT("Idle")));
+}
 void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     UWorld* World = GetWorld();
     if (!World || NpcId.IsNone()) return;
+    if(BlockedUntil>=0.0)
+    {
+        if(World->GetTimeSeconds()<BlockedUntil)return;
+        EndDirectedBlocking();
+    }
 
     const AUnmadeCharacter* Player = Cast<AUnmadeCharacter>(
         UGameplayStatics::GetPlayerCharacter(World, 0));
@@ -156,7 +211,9 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     {
         AddActorWorldOffset(Offset, true); // swept graybox collision, no teleporting
         SetActorRotation(Offset.Rotation());
+        AnimateResident(FName(TEXT("Walk")));
     }
+    else AnimateResident(FName(TEXT("Idle")));
 }
 
 void AUnmadeNpcCharacter::ConfigureFrontier(const UnmadeCore::FrontierResident& Resident)

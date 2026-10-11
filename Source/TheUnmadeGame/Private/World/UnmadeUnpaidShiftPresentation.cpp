@@ -51,9 +51,11 @@ void AUnmadePrototypeHub::RestoreBesCamera()
         BesShotCamera=nullptr;
     }
     BesOriginalViewTarget.Reset();
+    if(BesStagedSpeaker.IsValid())BesStagedSpeaker->EndDirectedBlocking();
+    BesStagedSpeaker.Reset();
 }
 
-void AUnmadePrototypeHub::FrameBesDirectedBeat(FName SpeakerId,const FString& Cue)
+void AUnmadePrototypeHub::FrameBesDirectedBeat(FName SpeakerId,const FString& Cue,const FString& Blocking,float Seconds)
 {
     if(!GetWorld() ||
        BesActiveScene>=static_cast<int32>(UnmadeCore::UnpaidScene::MaskPaid))return;
@@ -61,6 +63,8 @@ void AUnmadePrototypeHub::FrameBesDirectedBeat(FName SpeakerId,const FString& Cu
     AUnmadeCharacter* Player=PC?Cast<AUnmadeCharacter>(PC->GetPawn()):nullptr;
     if(!IsValid(Player))return;
 
+    if(BesStagedSpeaker.IsValid())BesStagedSpeaker->EndDirectedBlocking();
+    BesStagedSpeaker.Reset();
     FVector Focus=Player->GetActorLocation()+Player->GetActorForwardVector()*240.f;
     if(SpeakerId!=FName(TEXT("stage")))
     {
@@ -71,6 +75,10 @@ void AUnmadePrototypeHub::FrameBesDirectedBeat(FName SpeakerId,const FString& Cu
             if(FVector::DistSquared2D(It->GetActorLocation(),Player->GetActorLocation())
                 >FMath::Square(1500.f))return; // Never magically cut to a remote actor.
             Focus=It->GetActorLocation();
+            BesStagedSpeaker=*It;
+            It->BeginDirectedBlocking(Player->GetActorLocation(),FMath::Max(.5f,Seconds),
+                Blocking.Contains(TEXT("hand"))||Blocking.Contains(TEXT("ledger"))
+                    ?FName(TEXT("Gesture")):FName(TEXT("Speak")));
             bSpeakerPresent=true;
             break;
         }
@@ -95,7 +103,14 @@ void AUnmadePrototypeHub::FrameBesDirectedBeat(FName SpeakerId,const FString& Cu
     if(Toward.IsNearlyZero())Toward=Player->GetActorForwardVector().GetSafeNormal2D();
     if(Toward.IsNearlyZero())Toward=FVector(1,0,0);
     const FVector Side=FVector::CrossProduct(FVector::UpVector,Toward);
-    const FVector CameraPosition=Focus-Toward*Distance+Side*85.f+FVector(0,0,Height);
+    FVector CameraPosition=Focus-Toward*Distance+Side*85.f+FVector(0,0,Height);
+    FHitResult Occlusion;
+    FCollisionQueryParams CameraParams(SCENE_QUERY_STAT(UnmadeBesCameraObstruction),false);
+    CameraParams.AddIgnoredActor(Player);
+    if(BesStagedSpeaker.IsValid())CameraParams.AddIgnoredActor(BesStagedSpeaker.Get());
+    if(GetWorld()->LineTraceSingleByChannel(
+        Occlusion,Focus,CameraPosition,ECC_Visibility,CameraParams))
+        CameraPosition=FMath::Lerp(Focus,Occlusion.Location,.83f);
     BesShotCamera->SetActorLocationAndRotation(
         CameraPosition,(Focus-CameraPosition).Rotation());
     if(UCameraComponent* Lens=BesShotCamera->GetCameraComponent())
@@ -128,7 +143,8 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
     if(!Beat){SkipBesDirectedScene();return;}
     const FName Speaker(UTF8_TO_TCHAR(Beat->speakerId));
     const FString Subtitle(UTF8_TO_TCHAR(Beat->subtitle));
-    FrameBesDirectedBeat(Speaker,FString(UTF8_TO_TCHAR(Beat->camera)));
+    FrameBesDirectedBeat(Speaker,FString(UTF8_TO_TCHAR(Beat->camera)),
+        FString(UTF8_TO_TCHAR(Beat->blocking)),Beat->duration);
     OnBesDirectedBeat.Broadcast(
         Speaker,Subtitle,FName(UTF8_TO_TCHAR(Beat->camera)),
         FName(UTF8_TO_TCHAR(Beat->foley)),
