@@ -41,7 +41,7 @@ int main() {
     assert(loaded.PublicResponse()==RealityPublicResponse::ContestedAccord);
     assert(!loaded.Active(99).active);
     assert(!loaded.Restore({1024,0,-1,0},100)); // invalid saved masks
-    assert(!loaded.Restore({0,1,-1,0},100)); // wrong doctrine bit for rite 0
+    assert(!loaded.Restore({0,2,-1,0},100)); // Witnesscraft is a care rite
     assert(!loaded.Restore({1,0,-1,0},100)); // wrong doctrine bit for rite 0
     assert(!loaded.Restore({0,0,3,0},100)); // no expiry
     assert(!loaded.Restore({0,0,-1,7},100)); // no active ID
