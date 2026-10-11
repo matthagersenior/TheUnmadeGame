@@ -62,9 +62,9 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             Site.Center+FVector(0,300,345),FRotator::ZeroRotator))
         {
             Lamp->Tags.AddUnique(FName(*(Id+TEXT(".Lantern"))));
-            Lamp->GetPointLightComponent()->SetIntensity(1750.f);
-            Lamp->GetPointLightComponent()->SetAttenuationRadius(950.f);
-            Lamp->GetPointLightComponent()->SetLightColor(FLinearColor(Site.Accent));
+            Lamp->PointLightComponent->SetIntensity(1750.f);
+            Lamp->PointLightComponent->SetAttenuationRadius(950.f);
+            Lamp->PointLightComponent->SetLightColor(FLinearColor(Site.Accent));
         }
         const FVector Spots[3]={FVector(-350,170,100),FVector(350,170,100),
                                  FVector(0,600,100)};
