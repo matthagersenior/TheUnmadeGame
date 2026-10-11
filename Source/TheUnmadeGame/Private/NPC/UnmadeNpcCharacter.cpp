@@ -510,7 +510,17 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     {
         const FUnmadeNpcObservation& Event = Observations[Index];
         const bool bDirect = Event.Evidence == EUnmadeEvidenceKind::Witnessed;
-        if (Event.EventKind == FName("World.ConflictShelter"))
+        if (Event.EventKind == FName("Reality.CareWitnessed"))
+            BeliefLine = bDirect
+                ? TEXT("I saw the reality rite make a passage less dangerous. The debts it left are still ours.")
+                : FString::Printf(TEXT("I heard from %s that a rite opened a safer way; I did not see it."),
+                    *Event.SpeakerId.ToString());
+        else if (Event.EventKind == FName("Reality.InquiryWitnessed"))
+            BeliefLine = bDirect
+                ? TEXT("I watched the structure change under the rite. I want the surveyors to examine it.")
+                : FString::Printf(TEXT("I heard from %s that a structure moved. I have not inspected it."),
+                    *Event.SpeakerId.ToString());
+        else if (Event.EventKind == FName("World.ConflictShelter"))
             BeliefLine = bDirect ? TEXT("I saw you keep the shelter route open.")
                                  : TEXT("I heard you protected the shelter. Is it true?");
         else if (Event.EventKind == FName("World.ConflictResearch"))
