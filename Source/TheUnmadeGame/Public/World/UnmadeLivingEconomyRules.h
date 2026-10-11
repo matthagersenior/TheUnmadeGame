@@ -12,19 +12,20 @@ namespace UnmadeCore {
 struct NamedTradeWorker {
     Realm home;
     const char* stableId;
+    const char* displayName;
     const char* profession;
     const char* household;
 };
 inline constexpr std::array<NamedTradeWorker,9> NamedTradeWorkers={{
-    {Realm::ThreefoldReach,"npc.marketporter.001","market porter","Kesta's rented room"},
-    {Realm::WidowedRain,"npc.saltwake.courier.001","rain courier","Mera's tide-side home"},
-    {Realm::HearthBeneath,"npc.cinderhold.courier.001","ember runner","Bes's shared hearth"},
-    {Realm::TidalLedger,"npc.tidal.ferryman.001","ferryman","Orshel's dock shelter"},
-    {Realm::SkyBelow,"npc.sky.structuralist.001","support steward","Vhaurn's suspended home"},
-    {Realm::CinderSpine,"npc.bones.mason.001","seam mason","Torrun's quarry dwelling"},
-    {Realm::HundredUnlived,"npc.unlived.caretaker.001","refuge caretaker","Auvet's unnamed refuge"},
-    {Realm::OrchardOfKings,"npc.orchard.gardener.001","root gardener","Imro's common plot"},
-    {Realm::FirstAbsence,"npc.absence.caretaker.001","threshold keeper","Thae's doorway"}
+    {Realm::ThreefoldReach,"npc.marketporter.001","Kesta the porter","market porter","Kesta's rented room"},
+    {Realm::WidowedRain,"npc.saltwake.courier.001","Mera the tide courier","rain courier","Mera's tide-side home"},
+    {Realm::HearthBeneath,"npc.cinderhold.courier.001","Bes the coal runner","ember runner","Bes's shared hearth"},
+    {Realm::TidalLedger,"npc.tidal.ferryman.001","Orshel Drywake","ferryman","Orshel's dock shelter"},
+    {Realm::SkyBelow,"npc.sky.structuralist.001","Vhaurn Counterweight","support steward","Vhaurn's suspended home"},
+    {Realm::CinderSpine,"npc.bones.mason.001","Torrun-Mortar","seam mason","Torrun's quarry dwelling"},
+    {Realm::HundredUnlived,"npc.unlived.caretaker.001","Auvet Keep-Quiet","refuge caretaker","Auvet's unnamed refuge"},
+    {Realm::OrchardOfKings,"npc.orchard.gardener.001","Imro Root-Vote","root gardener","Imro's common plot"},
+    {Realm::FirstAbsence,"npc.absence.caretaker.001","Thae of the Near Door","threshold keeper","Thae's doorway"}
 }};
 enum class TradeRoute : int { SaltToHearth=0, HearthToSalt=1 };
 struct TradeContract {
