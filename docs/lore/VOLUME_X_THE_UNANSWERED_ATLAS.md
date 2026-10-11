@@ -1146,3 +1146,86 @@ What ties these moments together is not a palette swap: a player needs to learn 
 The next design horizon is **Local Material Consequence**: turn each realm dependency into an accountable supply and labor system that a player can witness, repair, exploit or safeguard, with actual inventory movements, transaction logs and returning resident scenes. The final confrontation with Nhal-Vey should test what the player has learned about the incompatibility of simultaneous truths, not simply unlock a button that erases history.
 
 *A road made possible by one spell should never make the lives beside it vanish.*
+
+---
+
+## 23. Local Material Consequences — What the Miracle Costs Tomorrow
+*Volume X · deterministic v3 material-and-labor gameplay foundation · 11 October 2026*
+
+The first time a traveler watches Cinderhold's shared ember light a whole hall, the flame looks like a miracle. The next morning, Rheva counts the baskets. The children are still cold. Somebody has to carry fuel from the common store, somebody must tend the kiln, and the half-collapsed stone flue will not mend itself because the protagonist has learned an elegant reality rite.
+
+**The new governing rule of The Unmade is that a resource must exist, be produced or be physically transported before anyone is credited with receiving it.** Each society has specific dependencies and finite units. Its people have work to do even when the player is exploring an entirely different realm.
+
+### 23.1 Nine material identities
+
+| Settlement | Finite stored unit | Labor and household obligation | Damage and recovery |
+|---|---|---|---|
+| The Crossings | Bracing fittings | Bridge carpenters supply safe-passage homes | Repairs consume real bridge fittings; protected passage does not cancel owed wages |
+| Saltwake | Sealed rainwater casks | Rain counters haul casks to storm shelters | Damaged cistern supports require finite casks and labor, not abstract approval |
+| Cinderhold | Common ember baskets | Kiln tenders distribute warmth to heated dwellings | Empty reserves leave homes cold; repairs spend baskets from the communal store |
+| Drevlach | Ferry maintenance iron | Ferry crews maintain docks and homes without seizing future earnings | Repairing a dock cannot silently create a debt in someone's name |
+| Orravane | Resonant support pins | Choir stewards distribute structural support to suspended homes | A shortage affects safety without pretending sound is ordinary masonry |
+| Vathless | Quarry bracing stone | Seam workers support inhabited quarry edges | Damaged stone and missing labor are counted separately from ancestral testimony |
+| Eillun | Consent-safe shelter kits | Refuge builders deliver kits to unregistered homes | A delivered shelter kit does not authorize publishing the guest's identity |
+| Tharniv | Communal root grafts | Root tenders maintain the unclaimed dwellings | A graft is real work, not a deed conferring ownership on a crown |
+| Auvren | Memory anchor stakes | Threshold keepers maintain stable homes | Repairing an anchor does not erase the competing origin account |
+
+These stocks are **different local goods**; one realm's cask cannot magically appear as another realm's basket. Every civilization begins with a small, explicitly defined store and household reserve. Its daily workers produce a bounded number of units, then ordinary local haulage moves units to the homes. Households consume a defined daily need. The warehouse, households and repairs are separate accounts.
+
+### 23.2 The second dawn
+
+Cinderhold's common-store keeper writes a number next to each dwelling. A workday has passed, and the store has been replenished by a finite shift of kiln tenders. Households need seven ember baskets each day. A courier can usually move five from the store to the heated homes. Without intervention, the shortage grows and the integrity of the district's shared structures falls. More baskets in the warehouse do not heat a home that never receives them.
+
+The nine towns advance **once per in-game day using the existing twenty-minute world clock**, not once per screen refresh. Work and household consumption can proceed while the player travels elsewhere, but there is no offline-money faucet or accelerated speculative catch-up for old saves. At night the named residents still retain their own homes and personal schedules.
+
+Once the city suffers shortages, existing named couriers and merchants turn toward actual material depots during daytime routines; other available roles respond at homes. When buildings are damaged, guards or wanderers assigned to that place can turn toward the repair location. Immediate danger and actual individual incident responses still take priority. This is an authored schedule-level work shift, not a claim that every named worker already has detailed wage contracts and animated hands.
+
+### 23.3 A player can help, but the goods must move
+
+There are three material interaction stations per realm: a **stockroom**, a **household relief point**, and a **repair site**. Each is a physical graybox actor with a stable tag. The familiar E key is used inside a small reach radius with an unobstructed sightline, respecting the priority of an even closer resident.
+
+At the stockroom, the protagonist may withdraw **one five-unit relief pack** if that specific city has at least five units to spare. Stock falls immediately and custody goes into the existing SaveGame. The player must carry it physically to the same realm's household relief point. A carried packet from Saltwake cannot be turned into Cinderhold embers; no second packet may be drawn until the first is honestly delivered. On real delivery, exactly five units appear in the household reserve, the delivery counter increases once, and the held packet disappears.
+
+The repair site requires a genuinely damaged structure and enough stored material to pay its **distinct local repair cost**. A successful repair spends those materials and increases structural integrity by eighteen, capped at one hundred; attempting to repair intact masonry earns neither a free resource nor a hidden experience prize. Save failures roll back the changed stock, carried custody, or building integrity before the world confirms completion.
+
+Visible damage, low household reserve and repaired structures are represented by separate, condition-dependent graybox actors. A returning player can see both the support that was repaired and any newly developed shortage. The journal lists the day's store, household reserves, need, available workers, structural condition, deliveries, repairs and carried packet.
+
+### 23.4 The labor of a witnessed reality
+
+Two different mastered and locally witnessed protective rites already contribute to a city's civic public response. The material system uses that *existing proven event* to make one additional worker available to the daily production shift in that realm. It does not materialize goods on cast. The extra worker's output enters the store on the next actual workday and still has to be hauled to homes.
+
+A contradictory civic inquiry does not simply turn into a moral penalty. Witnesses can demand a public investigation while production continues. When both public claims coexist, the material ledger still records concrete labor, goods and unmet household need rather than an invented happiness score. A structure can be repaired and remain politically disputed.
+
+A low structural integrity can reduce the effective number of workers available; shortages further erode structural integrity. A player may have to decide whether to divert finite resources to urgent household warmth or to pay for a repair that makes future labor safer. This is an emerging gameplay conflict rather than a scripted fake choice.
+
+### 23.5 Recognizable inhabitants, not generic labor nodes
+
+**Rheva, Ember Warden:** *“That basket is not a prayer. Somebody carried it here. I can account for every one.”* She recognizes an actual shortage from the communal public supply board, without suddenly knowing what happened to an unrelated city.
+
+**Sella, Navigator of Saltwake:** *“Count the water before you call the new road a rescue. The storm does not promise to stop tomorrow.”* Her weather observations are distinct from Orrel's accounting of bridge fittings.
+
+**The Choir Master of Orravane:** *“A note holds a roof only if someone sings it. Ask the people beneath it how long they can wait.”* The city consumes resonant supports, not magically rebranded rain.
+
+**Orrel:** *“An open bridge and a mended bridge are two different facts. The carpenter who worked here should be remembered for both.”*
+
+These dramatic lines define future authored performance scenes and character voice. The present UE source uses public shortage boards and preserved individual biographies, not these fully voiced cutscenes. A player's labor and civic deeds cannot declare a protected resident's name public.
+
+### 23.6 Production rules and acknowledged limits
+
+The **implemented foundation** includes real finite per-realm store and household accounts, distinct production and need policies, local daily worker output, cumulative work and consumption history, shortage-driven structure damage, public civic influence on daily labor, limited physical pack carrying, same-realm household delivery, finite stock repair, NPC schedule redirection, condition-specific actors, accessible source-readout text for the future UI, save and corrupt-snapshot protection, and portable rules tests.
+
+**Not yet implemented** are individual named labor wages and employment contracts, simulated actual per-NPC labor hours, deep inter-realm commerce, complex supply-chain production recipes, courier missions across realms, animated repair work, fully integrated inventory equipment goods, full resident household tenancy and calendar events, economy-driven enemy factions, detailed economic shops outside the Reach, full voice acting, production art, or Windows Unreal Editor/PIE validation. The current packs are source-level physical quest cargo, not freely tradeable magical inventory items.
+
+The testable continuity requirement is stringent: no delivery without prior finite withdrawal, no two simultaneous five-unit packs, no delivery to the wrong city, no repair without material payment, no stock falling below zero, no false handoff after an unsuccessful save, and no retrospective production windfall merely because a returning player opened an old game.
+
+### 23.7 Future story arcs
+
+**Cinderhold — The Ember Ledger.** A collapsed communal flue puts heating, quarry labor and family obligations in conflict. A player might carry a parcel to a cold shelter, enlist a night-shift keeper, and later confront a well-intentioned warden who guarded the warehouse while homes remained empty. A full authored quest will require exact dialogue branches, named casualties avoided, finite alternate routes and fair recoveries.
+
+**Saltwake — The Ninth Cistern.** Rain can fall for days without everyone receiving water. A vanished tide receipt suggests the water broker sold storage space twice. Repairing a cistern should be economically different from publishing proof, and neither guarantees that the community trusts the other.
+
+**Orravane — A Roof Without a Verse.** When a resonant-support shortage threatens occupied homes, the player may have to choose between transporting support pins and finding the choir member who remembers an erased counterweight melody. In a future voiced scene, audible silence should be a meaningful physical hazard, never merely a missing soundtrack asset.
+
+**Nhal-Vey's eventual reckoning.** The final adversary must confront a protagonist who has learned that being able to change a law does not remove the obligation to live with its consequences. The climax should make use of actual saved trade-offs, not a final cinematic that ignores the people who made the world habitable.
+
+*The universe is extraordinary. Its people still have to get through tomorrow.*

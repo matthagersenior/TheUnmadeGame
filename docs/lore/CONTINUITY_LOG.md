@@ -215,3 +215,12 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - **Real mechanics:** actual local enemy movement changes, actual frontier/later-realm hazard injury and strain modifications; only the Crossings’ existing buy flow gets a bounded real price effect. Do not describe the other worlds' institutional dependency names as completed resource production or trade simulation.
 - Source-limited local NPC memory events now identify the realm and use unique eyewitness or named-source rumor lines. Remote residents are not omniscient; old 82-resident identities and original choice outcomes remain.
 - Added strict native C++17 nine-policy, isolation, expiry and restore tests, Python source wiring and first-PC preflight. Volume X Chapter 22 and detailed design are canonical. Windows Unreal/UHT/PIE, collision/balance, full 3D buildings and cinematic production remain separate unverified gates.
+
+
+## 2026-10-11 — Local Material Consequences (Reality Engine v3, Volume X §23)
+
+- Introduced nine distinct, finite physical settlement materials with warehouse, household, production worker count, daily need, automatic counted local haulage, persistent shortages and damage; each realm's unit is named and non-interchangeable.
+- Added actual E interactions for withdrawing one finite five-unit relief pack, in-person same-realm delivery, and repair that consumes local stock. Both custody and repairs save atomically; failed writes roll back. No no-cost resource spawning, inter-realm item teleportation, duplicate packs or unlimited repair farming.
+- Linked actual previously witnessed civic Shared Passage to one additional daily worker in that realm. Named NPCs with local roles shift schedules toward real shortages, supplies, homes and damage; their authored biographies and dangerous-event priority remain intact.
+- Added local journal, visible shortage/damage/repaired actors, optional old-schema-save-safe 9-town ledger, corrupted-array write guard, portable test and first-PC source-wiring validation. The Volume X cumulative manuscript now includes Chapter 23; illustrated PDF/DOCX publication is a separate distribution step.
+- Not yet complete: UE5 UHT/PIE test, authored full 3D economy levels, individual worker employment contracts, cross-world trading, equipment inventory goods, cinematic voice and complex economic quest branching.

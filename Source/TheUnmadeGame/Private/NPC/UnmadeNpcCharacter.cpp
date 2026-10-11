@@ -107,6 +107,19 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
                 HomeSettlement, Role, Phase, {HomeLocation.X, HomeLocation.Y});
         Speed = Role == UnmadeCore::NpcRole::Courier ? 95.0 : 65.0;
         StopRadius = 80.0;
+        // Public local shortage/damage notices send existing named residents
+        // to warehouse, homes, or repair shift. No omniscient remote patrols.
+        if(CachedHub.IsValid())
+        {
+            const auto Duty=CachedHub->GetMaterialDuty(HomeLocation,Role);
+            if(Duty!=UnmadeCore::MaterialDuty::Regular)
+            {
+                const FVector Site=CachedHub->GetMaterialDutyDestination(HomeLocation,Duty);
+                Target={Site.X,Site.Y};
+                Speed=Role==UnmadeCore::NpcRole::Courier?105.0:80.0;
+                StopRadius=115.0;
+            }
+        }
     }
 
     // The resident reacts only to the warning at their *own current place*.
@@ -291,6 +304,15 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     }
     if (Phase == UnmadeCore::DayPhase::Night && !LocalProfile)
         CharacterLine += TEXT(" It feels like the dark has started listening.");
+    if(CachedHub.IsValid())
+    {
+        const FString PublicSupplyNotice=CachedHub->GetMaterialResidentLine(HomeLocation);
+        if(!PublicSupplyNotice.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=PublicSupplyNotice;
+        }
+    }
     // A borrowed life affects what people notice, without pretending they know
     // a generated backstory or overwriting this individual's memories.
     if(GetWorld())
