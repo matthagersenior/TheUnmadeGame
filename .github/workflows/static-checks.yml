@@ -142,6 +142,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/tenfold_chronicle_test.cpp -o /tmp/unmade-tenfold-test
           /tmp/unmade-tenfold-test
+      - name: Verify ten-rite reality consequence engine, civic testimony and corrupt snapshots
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/reality_consequence_test.cpp -o /tmp/unmade-reality-consequence
+          /tmp/unmade-reality-consequence
       - name: Test six earned cross-discipline confluence challenges
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/confluence_rules_test.cpp -o /tmp/unmade-confluence-test
