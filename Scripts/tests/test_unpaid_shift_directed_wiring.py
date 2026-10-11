@@ -20,7 +20,7 @@ class UnpaidShiftDirectedWiring(unittest.TestCase):
             self.assertIn(term,rules)
         for term in ("FUnmadeBesDirectedBeat","BlueprintAssignable",
                      "PlayBesDirectedScene","SkipBesDirectedScene",
-                     "GetBesDecisionOptions"):
+                     "GetBesDecisionOptions","GetBesDecisionPreviewForStation"):
             self.assertIn(term,header)
         for term in ("SetTimer(BesSubtitleTimer","OnBesDirectedBeat.Broadcast",
                      "ClearTimer(BesSubtitleTimer)","UnpaidBeatAt",
@@ -44,6 +44,7 @@ class UnpaidShiftDirectedWiring(unittest.TestCase):
         self.assertIn("MaybePlayBesReturnScene(Target->GetStableId())",player)
         self.assertIn("RecordBesHouseholdConversation(Target->GetStableId())",player)
         self.assertIn("GetTimeSeconds()",present)
+        self.assertIn("return BesDecisionPreview(StationTag);",present)
         self.assertIn("LastBesReturningSceneAt+60.0",present)
         self.assertIn("AnimateBesWorkingCart();",hub)
         self.assertIn("Bes.WorkingCart",hub)
