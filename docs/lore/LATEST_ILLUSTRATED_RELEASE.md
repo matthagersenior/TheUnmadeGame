@@ -1,5 +1,31 @@
 # Latest illustrated lore publication
 
+**Current edition:** *The Unmade — Volume X, Chapter 27: The Audible Shift* (11 October 2026)  
+**Gameplay source baseline:** `9173ac1569313dc38414feb51084be78f10d16ee` · [PR #50](https://github.com/matthagersenior/TheUnmadeGame/pull/50) · [green feature CI](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38152909481).  
+**Canonical manuscript:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` Chapter 27. V5 Bes wages/relationships and V6 39-beat cinematic scenes remain authoritative; V7 adds actual audio and readable source UI.
+
+| Delivered illustrated edition | Verified |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_The_Audible_Shift.docx` | Full cumulative editable Bible; all **52 previous illustrations retained** |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_The_Audible_Shift.pdf` | **132 pages**, rendered from Word; no fully blank pages or out-of-bounds text |
+| `THE_UNMADE_Volume_X_Illustrated_The_Audible_Shift.docx` | Complete updated editable Volume X; all **five original illustrations retained** |
+| `THE_UNMADE_Volume_X_Illustrated_The_Audible_Shift.pdf` | **67 pages**, no blank pages or out-of-bounds text |
+| `THE_UNMADE_Unpaid_Shift_35_Cue_Foley_Kit.zip` | All 35 real stereo WAV effects, JSON waveform manifest with SHA256, 57-second listening reel and synchronized cue-label SRT |
+| `THE_UNMADE_Unpaid_Shift_Offline_Interactive_Preview.zip` | Offline browser storyboard for phones/desktops; actual choices, finite numeric state, un-cropped previous concept art, interactive captions and original Foley. **Separate prototype; does not modify Unreal SaveGame** |
+| `THE_UNMADE_Audible_Shift_Complete_Illustrated_Development_Package.zip` | **21 ZIP members, 20 content SHA-256 digests plus verified CRC**, containing the four updated books, eight retained original concept-art images, prototype audio, preview, source notes and generator scripts |
+
+**Publication QA:** Both complete Word masters were extended from existing prior illustrated editions rather than reconstructed from an abridged fragment. PDF pages were rendered to PNGs; first and final four pages inspected, original illustration counts checked, entire 132/67-page texts scanned for empty pages and blocks outside page bounds. Bundle member sizes, hashes and ZIP integrity checked independently. Runtime Foley generation is checked in GitHub CI with actual WAV output; Unreal Editor import itself is **not** CI-tested.
+
+**Implemented in v7 source:** 35 original deterministic, 32-kHz, 16-bit, stereo waveform cues keyed to all 39 canonical cinematic beats; a guarded, non-overwriting SoundWave import for the first Windows PC; optional runtime per-beat playback; nonmodal native UMG lower-third captions that wrap, show attributed speakers and clear on skip. The screenplay's existing authoritatively saved financial outcomes are unchanged.
+
+**Not completed:** Recorded human dialog or narration, final voice direction/mixing, finished skeletal animation, full bespoke interiors, Unreal Engine 5.8 UHT/Editor/PIE compile, real gamepad/low-vision UI testing, cinematographic Sequencer camera binding, optimized mobile export or public game release. The prototype listening reel and phone storyboard are **not** footage or music/VO from the finished RPG.
+
+**Distribution:** These binary deliverables are available in the accompanying ChatGPT conversation, not claimed to have been committed to GitHub Releases. Generators, import scripts, gameplay rules and manuscript canon reside in the repository.
+
+---
+
+# Previous illustrated publication — Volume X Chapter 26
+
 **Current cumulative publication:** *The Unmade — Volume X, Chapter 26: The Unpaid Shift — Directed Quest* (11 October 2026).  
 **Gameplay code baseline:** `0a13e9ed7fb408de1684e65541c387d347b6f3b8` · [PR #47](https://github.com/matthagersenior/TheUnmadeGame/pull/47) · [green source CI on final feature branch](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38149270943).  
 **Canonical prose:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` Chapter 26; shot table source `Source/TheUnmadeGame/Public/World/UnmadeUnpaidShiftSceneRules.h`; implementation/Unreal acceptance `docs/design/unpaid-shift-v6-directed-quest-acceptance.md`.
