@@ -17,6 +17,7 @@
 #include "World/UnmadeRealityConsequenceRules.h"
 #include "World/UnmadeRealmReactionRules.h"
 #include "World/UnmadeMaterialConsequencesRules.h"
+#include "World/UnmadeLivingEconomyRules.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
@@ -60,6 +61,10 @@ public:
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetLocalMaterialJournal() const;
     bool TryMaterialInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryLivingTradeInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    FString GetLivingEconomyResidentLine(FName StableId) const;
+    UFUNCTION(BlueprintPure,Category="Unmade|Economy")
+    FString GetLivingEconomyJournal() const;
     UnmadeCore::MaterialDuty GetMaterialDuty(FVector At,UnmadeCore::NpcRole Role) const;
     FVector GetMaterialDutyDestination(FVector At,UnmadeCore::MaterialDuty Duty) const;
     FString GetMaterialResidentLine(FVector At) const;
@@ -167,6 +172,8 @@ private:
     UnmadeCore::RealityConsequenceLedger RealityLedger; // v1: Reach, do not migrate
     UnmadeCore::OuterRealmReactions OuterReactions; // eight isolated world histories
     UnmadeCore::MaterialWorld Materials;
+    UnmadeCore::LivingEconomy LivingTrades;
+    bool bLivingEconomyRejected=false;
     bool bMaterialSaveRejected=false;
     void RefreshMaterialWorld();
     void AdvanceMaterialDayIfNeeded();
