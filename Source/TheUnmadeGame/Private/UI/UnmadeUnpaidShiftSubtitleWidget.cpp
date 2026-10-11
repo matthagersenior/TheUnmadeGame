@@ -33,14 +33,18 @@ void UUnmadeUnpaidShiftSubtitleWidget::NativeConstruct()
     SpeakerText=WidgetTree->ConstructWidget<UTextBlock>();
     SpeakerText->SetAutoWrapText(true);
     SpeakerText->SetColorAndOpacity(FSlateColor(FLinearColor(0.97f,0.82f,0.57f,1.f)));
-    SpeakerText->SetFont(FSlateFontInfo(SpeakerText->GetFont().FontObject,20));
+    FSlateFontInfo SpeakerFont=SpeakerText->GetFont();
+    SpeakerFont.Size=20;
+    SpeakerText->SetFont(SpeakerFont);
     if(UVerticalBoxSlot* S=Stack->AddChildToVerticalBox(SpeakerText))
         S->SetPadding(FMargin(0.f,0.f,0.f,5.f));
 
     SubtitleText=WidgetTree->ConstructWidget<UTextBlock>();
     SubtitleText->SetAutoWrapText(true);
     SubtitleText->SetColorAndOpacity(FSlateColor(FLinearColor::White));
-    SubtitleText->SetFont(FSlateFontInfo(SubtitleText->GetFont().FontObject,25));
+    FSlateFontInfo CaptionFont=SubtitleText->GetFont();
+    CaptionFont.Size=25;
+    SubtitleText->SetFont(CaptionFont);
     Stack->AddChildToVerticalBox(SubtitleText);
     SetVisibility(ESlateVisibility::Collapsed);
 }
