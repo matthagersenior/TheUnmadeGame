@@ -2359,6 +2359,10 @@ FString AUnmadePrototypeHub::GetLocalMaterialJournal() const
 FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
 {
     const auto B=BesHousehold.Save();
+    if(B.phase==static_cast<int>(UnmadeCore::BesPhase::Unheard))
+        return TEXT("BES: No personal wage or household investigation has been heard; speak to the actual Cinderhold courier.");
+    if(!B.wardenInterviewed)
+        return TEXT("BES: The courier personally reported unpaid wages. Inspect his real hearth before requesting Rheva's public record.");
     const auto* Wage=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
     return FString::Printf(
         TEXT("BES / CINDERHOLD: phase %d | hearth baskets %d | cold days %d | walkout days %d | relief receipts %d | Mera guarantee still owed %d marks | employer %d marks | unpaid %d marks | home inspected %s | Rheva's evidence %s | %s"),
