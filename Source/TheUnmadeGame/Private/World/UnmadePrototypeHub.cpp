@@ -2197,7 +2197,10 @@ void AUnmadePrototypeHub::AdvanceMaterialDayIfNeeded()
     const auto Cargo=Materials.Cargo();
     const auto BeforeLiving=LivingTrades.Save();
     if(!Materials.AdvanceAllOneDay(Civic))return;
-    if(!LivingTrades.AdvanceOneDay(GetGameDay()))
+    // Payroll follows the day actually simulated by the material ledger,
+    // never a skipped future clock day after reloading a lagging save.
+    if(!LivingTrades.AdvanceOneDay(Materials.Town(
+        UnmadeCore::Realm::ThreefoldReach)->day))
     {
         Materials.Restore(Before,Cargo,GetGameDay());
         return;
