@@ -31,6 +31,7 @@ class UnpaidShiftDirectedWiring(unittest.TestCase):
         hub=read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         present=read("Source/TheUnmadeGame/Private/World/UnmadeUnpaidShiftPresentation.cpp")
+        final=read("Source/TheUnmadeGame/Private/World/UnmadeFinalWorld.cpp")
         for token in ("BesPendingDecision!=Decision",
                       "BesDecisionExpiresAt=Now+12.0",
                       "BesDecisionPreview(Decision)",
