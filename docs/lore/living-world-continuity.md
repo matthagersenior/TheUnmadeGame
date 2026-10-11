@@ -348,3 +348,8 @@ Six additional source-created named sentries (Orren, Vesh, Deryn, Isti, Halven a
 ## 2026-10-11 — The Unpaid Shift objective HUD (runtime v9)
 
 Bes's first locally relevant quest now exposes a real native UMG, read-only objective overlay visible only at the Cinderhold or Saltwake play spaces, hidden during directed scenes and outside the local quest. It derives its next instruction from saved visit/evidence/consent/settlement state; its debt, household warmth, cold days and clock day display real ledgers, not fictitious cinematic props or created currency. All economic truth, confirmation, progression, failure and return interactions remain in the established game model. This is source-wired UI, not tested Unreal Editor output and not a regenerated illustrated edition.
+
+
+## 2026-10-11 — Published illustrated Bible now covers gameplay v8/v9
+
+The actual user-delivered illustrated editions are no longer stalled at Chapter 27. The dated Playable World v9 edition extends the previous complete Word master to **137 pages / 53 inline illustrations** and the standalone Volume X to **74 pages / 6 inline illustrations**, with the new six-expedition route schematic. Vol X Chapters 28 and 29 describe the six new outlying combat grounds, their six physically present scouts, source-spawned foes, Unreal camera shot selection, skip and saved-evidence-driven quest UI. These are code-source facts, not verified finished Unreal content. ZIP, PDF and Word artifacts have been uploaded to `/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9` in the user's Library, with reproducible source script and digest receipt. Other established identities, mysteries and historical illustrated content remain protected.

@@ -9,6 +9,8 @@ import sys
 
 CANON="docs/lore/living-world-continuity.md"
 LEDGER="docs/lore/CONTINUITY_LOG.md"
+RELEASE="docs/lore/LATEST_ILLUSTRATED_RELEASE.md"
+MANIFEST="docs/lore/RELEASE_SHA256_MANIFEST.json"
 
 def check_changes(changed: list[str]) -> list[str]:
     gameplay=sorted(p for p in changed
@@ -16,7 +18,7 @@ def check_changes(changed: list[str]) -> list[str]:
                     p.endswith((".h",".cpp",".uproject",".uasset",".umap")))
     if not gameplay:
         return []
-    missing=[p for p in (CANON,LEDGER) if p not in changed]
+    missing=[p for p in (CANON,LEDGER,RELEASE,MANIFEST) if p not in changed]
     return missing
 
 def main() -> int:
@@ -35,7 +37,7 @@ def main() -> int:
     missing=check_changes(changed)
     if missing:
         print("Gameplay-source commit missing lore updates:",", ".join(missing))
-        print("Update both canonical lore and continuity ledger in the SAME commit.")
+        print("Update canon, ledger, illustrated release receipt and actual artifact digest manifest in the SAME commit.")
         return 1
     print("Lore source synchronization contract passed.")
     return 0

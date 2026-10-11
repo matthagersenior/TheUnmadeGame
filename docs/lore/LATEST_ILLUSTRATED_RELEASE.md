@@ -1,5 +1,18 @@
 # Latest illustrated lore publication
 
+## CURRENT — Playable World v9: Illustrated Bible republished (11 October 2026)
+
+Repaired the missed v8/v9 illustrated publication step. **Complete cumulative Bible: 137-page PDF/DOCX, 53 embedded illustrations; standalone Volume X: 74-page PDF/DOCX, 6 embedded illustrations.** Both were extended from the intact *Audible Shift* source masters, including their prior 52/5 images, plus a clearly labeled six-encounter schematic. New Volume X Chapters 28–29 cover six optional field areas, six named people, eighteen combat placements, shot-based camera cues and the saved-state Unpaid Shift HUD.
+
+The Word books were raster-rendered; PDF verification found **zero empty pages and zero out-of-page text blocks**. The 22-item ZIP contains both books, the updated art, chapter source, original retained art/audio, builder and a SHA-256 manifest; every archived member passed CRC and SHA-256 checks.
+
+**The files actually exist in the user's private Library folder:** `/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9/`. Download links were provided in the ChatGPT publication reply. These are **not** uploaded to GitHub Releases or served as public URLs. See [dated release SHA-256 receipt](RELEASE_SHA256_MANIFEST.json); preserve the old Chapter 27 publication history below.
+
+**Gameplay source baseline:** `e7d67c05e968510cdd81e9a3727062c29c4f4637`, after merged PRs #52 and #53 and green source CI. This does **not** mean Unreal 5.8 UHT, Editor, PIE, animation, actor voices or full gameplay have been verified.
+
+---
+
+
 **Current edition:** *The Unmade — Volume X, Chapter 27: The Audible Shift* (11 October 2026)  
 **Gameplay source baseline:** `9173ac1569313dc38414feb51084be78f10d16ee` · [PR #50](https://github.com/matthagersenior/TheUnmadeGame/pull/50) · [green feature CI](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38152909481).  
 **Canonical manuscript:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` Chapter 27. V5 Bes wages/relationships and V6 39-beat cinematic scenes remain authoritative; V7 adds actual audio and readable source UI.

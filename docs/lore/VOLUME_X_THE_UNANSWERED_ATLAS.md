@@ -1500,3 +1500,151 @@ The next production wave must replace non-animated blockout performances with ri
 **Still to certify:** actual UE 5.8 UHT compile, imported audio listening in PIE, loudness matching against gameplay audio, spatialized environmental Foley, full staged animations, detailed home materials, professional dialogue, genuine narration, subtitle accessibility testing, cinematics with proper camera blocking, and a complete player-tested quest. Original generated placeholders intentionally sound like prototypes; they must later be replaced without changing the canonical timeline or gameplay ledger.
 
 *A lost wage can be an absent sound. It cannot be an absent person.*
+
+
+---
+
+## 28. THE OUTLYING SIX: A ROAD WITH TEETH
+
+*Volume X  |  Playable exploration and encounters  |  Runtime source v8*
+
+### An invitation is not a marker
+
+> “No road becomes an adventure until someone waits to see if you return.”
+
+The Unmade gains six optional exploration grounds beyond its ordinary market and household routes. They are not a second main quest and do not replace the daily routines of identifiable citizens. They are dangerous margins of familiar places: a ruined causeway, fractured stone, an unsounded bell, a mutilated archive, a salt quay and a field of slag. The player reaches them through existing travel and movement rather than selecting a disconnected text episode.
+
+Each ground carries real runtime geometry for footing, navigation gaps, broken pillars and cover, a readable place sign, a local light source and three hostile placements. Six additional scouts speak individual authored lines before the fighting begins. That is a meaningful advance over pure design notes, but these are still primitive-mesh environments, without bespoke creature rigs, audio behavior, hit reactions or certified Unreal Editor execution.
+
+### The six destinations and the people who warned us
+
+*Figure X-28 appears in the illustrated v9 Bible and its dated source/art ZIP in the user's file Library; it is a route schematic, not Unreal gameplay footage.*
+
+| Site | Region | Named witness | Opponents | Runtime ID |
+|---|---|---|---|---|
+| Ash Road | Threefold Reach | Orren the ash-runner | Cinderjaw / Pale Strider | `Reach.AshRoad` |
+| Glass Cut | Threefold Reach | Vesh the glass warden | Veilwatch / Gleam Moth | `Reach.GlassCut` |
+| Forgotten Bells | Bellwold | Deryn the bell seeker | Hollow Hound / Grief Lantern | `Bellwold.Forgotten` |
+| Torn Archive | Paperhaven | Isti the torn-page keeper | Inkmaw / Redaction Eye | `Paperhaven.Torn` |
+| Saltglass Quay | Saltwake | Halven the net seeker | Saltglass Crawler / Drowned Watch | `Saltwake.Saltglass` |
+| Blackslag Field | Cinderhold | Varda the slag scout | Ashmaw / Kiln Wisp | `Cinderhold.Slag` |
+
+#### 1. Ash Road — The Threefold Reach
+
+Orren the ash-runner watches a bent arch where travelers once crossed without noticing the distance. “Two jaws at the old arch. The third sound is the road taking a breath.” Cinderjaws hold the ground while a Pale Strider calls attention away from the safer opening. Its play loop already has collision and cover; an authored secondary reward, tracking traces and named lasting witness response remain future work. The road should feel like a place where someone survived, not a combat menu.
+
+#### 2. Glass Cut — The Threefold Reach
+
+Vesh the glass warden guards the approach. Veilwatch entities and a Gleam Moth occupy a cold strip of ruin where light appears to be watching the observer. Vesh warns that a watcher answers any light. The current foe implementations reuse two actual combat behaviors; future visuals need refraction cues, a recoverable safe pocket and proof that the player can distinguish watcher telegraphs before the strike lands.
+
+#### 3. Forgotten Bells — Bellwold
+
+Deryn the bell seeker waits outside a stripped memorial. Hollow Hounds patrol the ruined bell footings; a Grief Lantern hangs where a last note should have been. Deryn does not know why the stone rings. This uncertainty is part of canon: a resident may testify to a sound without understanding its source. The route must remain optional to Bellwold shelter obligations and should not silently replace Hessa’s rescued people or the Second Night evidence.
+
+#### 4. Torn Archive — Paperhaven
+
+Isti the torn-page keeper holds one surviving index and admits: “I read the missing names here. Something read me back.” Inkmaws and a Redaction Eye inhabit the outer ruin. The battle should make the paper and the watchers legible even when the player has not yet learned the archival language. Nothing in the encounter can magically disclose Sevrin’s protected evidence or rewrite the player’s local faction decisions.
+
+#### 5. Saltglass Quay — Saltwake
+
+Halven the net seeker stands on the drowned edge. Saltglass Crawlers close on the player and a Drowned Watch keeps distance. The port is part of the Widowed Rain, where Mera’s independent consent and owned-wage claim still matter. The encounter can threaten the route, not decide for Mera, and may not spend her savings through combat loot or convert her testimony into an automatic objective.
+
+#### 6. Blackslag Field — Cinderhold
+
+Varda the slag scout warns of an Ashmaw and a Kiln Wisp among broken heatworks. Bes’s house remains the real center of the city’s moral conflict, rather than an optional combat arena becoming a replacement for his unpaid wages. A player can seek danger outside the town while the household burns its finite basket reserve. The saved walkout must still have its production consequence when the player returns.
+
+### The encounter ledger: what is and is not implemented
+
+- Six runtime site definitions with named identity tags, place signs, local lighting, primitive-geometry cover, and traversable grounds are wired into world startup.
+
+- Three hostile creature actors are spawned per site: eighteen starting placements total. The attacks, guard and Fold exposure reuse the original Stalker and Watcher combat rules. Their creature names and silhouette accents make the threats legible, but they do not yet constitute twelve bespoke animation or AI species.
+
+- Six scouts are spawned as real NPC classes with stable strings, individual dialogue and normal nearby interaction. Scout-specific persistent memory coverage beyond the preexisting canonical population still needs a save/load test.
+
+- The engine source does not yet save which individual field creatures were killed. Defeated field foes can return on a new world load; no permanent extinction or unique loot is claimed.
+
+- Existing cities and the original 82 registered residents are not removed by the field addition. These six extra scouts are additive runtime residents, not silently backfilled into every persistent census or historical story.
+
+### Encounter ethics and open questions
+
+Every danger carries a social consequence only when the game has actually recorded one. A frightened witness may ask the player for help; it must not already know a distant fight ended. A beast cannot generate wage currency. A lost tablet cannot satisfy another city’s firsthand evidence requirement. The player should learn which road is dangerous and why by listening to actual people, inspecting the physical world and risking an encounter, not by triggering omniscient quest text.
+
+These sites deliberately leave questions unresolved: Who stripped the Bellwold bell? Why does the Glass Cut return light like speech? Which records did the Torn Archive refuse to preserve? What waited in the salt after the sea left? Their clues belong to future quests and transmedia callbacks only when authored with provenance; no answer is retrospectively canonized here.
+
+### What the first Unreal playtest must demonstrate
+
+- The player can physically reach all six sites from existing routes without passing through a blocking collider or getting stuck behind an atlas marker.
+
+- The player can speak with each specific scout, differentiate the two combat attack types, see the field names and identify every starting foe.
+
+- Melee, guard, Fold counterplay and defeat/recovery operate without overlapping civilian combat or obstructing Bes’s home, Mera’s station and other commitments.
+
+- Returning after the field encounter leaves previous material deliveries, wage debts, relationship testimony and optional ending state unchanged unless a legitimate rule records a change.
+
+Unreal build/test status: source authored, workflow static checks passed for v8, Windows Unreal Header Tool/Editor/Play-in-Editor and visual animation acceptance have not been run. None of the schematic or inherited concept artwork in this book is a screenshot of a compiled quest.
+
+## 29. THE SHIFT IN YOUR HANDS
+
+*Volume X  |  Camera, agency and truthful objectives  |  Runtime source v8-v9*
+
+### The home is not a cutscene
+
+> “The furnace can be shown with a camera. A promise must still be kept by a person.”
+
+An audience may watch Bes set down his coal basket, but a player must be able to walk inside his house, inspect its finite warmth, hear a specific unpaid worker, check Rheva’s municipal record and choose what they are willing to sacrifice. The Unpaid Shift is a person’s livelihood, not an approval meter. Its story survives only if pictures, sound and interface obey the same save-backed logic.
+
+### Cinematic shots grounded in a nearby body
+
+The v8 runtime now instantiates a native CameraActor for the existing thirty-nine sequential screenplay beats. It interprets the authored camera cue as a wide, close or detail framing and calculates the focus around the current player or a physically nearby named speaker. A distant speaker is not teleported into the player’s view. A 0.3-second camera blend moves the eye without altering household facts; the existing lower-third continues attributing one timed subtitle at a time while the existing import path attempts optional Foley.
+
+Backspace on a keyboard or the designated gamepad View action skips an active directed sequence. The timer and subtitle clear and the original player camera returns. The three saved Nhal-Vey first-mask memories remain captioned without stealing the active combat view; the boss is not defeated by a memory’s emotional force. This is source-level camera direction, not a shot-complete Sequencer with line-of-sight composition, collision avoidance, performance animation, player-input gating or human acting.
+
+### Readable agency: a HUD that tells only what the world knows
+
+The v9 native UMG tracker displays a local quest instruction only when the player approaches the relevant Cinderhold or Saltwake neighborhoods. Its contents derive from actual Bes household and economy snapshots: whether the player heard Bes, saw his home, corroborated the record with Rheva, received Mera’s consent, underwrote the wage or settled the arrears. It shows the real amount of owed marks, the remaining warmth baskets, elapsed cold days and the world day.
+
+It updates at a bounded interval, hides outside the local quest, and disappears during directed scenes. The widget is read-only: it does not create evidence, spend marks, advance a quest phase, apply a reality rite or make a choice for the player. In-world sign prompts point to the already existing hearth, walkout, wage and Mera-guarantee stations; those interactions still require correct proximity, physical evidence and explicit confirmation.
+
+### A continuous player sequence, not a specification
+
+1. Arrive in Cinderhold. Find Bes at his actual work or home routine. Hear that the coal baskets arrived and the wages did not; the camera may frame a nearby figure and the subtitle names Bes.
+
+2. Visit his walkable room. The same cold hearth, bed and wage book remain physical props. Inspect with E. The saved household confirms whether the home was really entered and whether the limited heat is already low.
+
+3. Ask Rheva to corroborate a real ledger entry; hearing a line in a cinematic alone is not a substitute for this interaction.
+
+4. Choose a concrete response: collect and deliver an actual coal pack; support Bes’s refusal of unpaid work; use sufficient treasury marks to repay his wages; or travel to Saltwake, speak with Mera and seek her explicit consent to a limited underwrite from her own earned wages.
+
+5. At a physical station, read the true cost preview. A subsequent confirmation at that station within twelve seconds makes the existing saved transaction—or fails visibly if the required resources are missing.
+
+6. Return after world time advances. Bes’s heat, days without pay, work history and Mera’s outstanding successor claim are still governed by authoritative persistence. Different characters may respond differently, but none is allowed to know what they could not have witnessed or learned.
+
+7. At the eventual Nhal-Vey mask fracture, the preserved witness branch may echo. The scene does not award an automatic victory, erase the creditor or rewrite the player’s final morning.
+
+### Truthful option consequences
+
+| Action | Prerequisite | Real consequence |
+|---|---|---|
+| Warm the home | One source-debited local relief pack; five real baskets | Household warmth rises; municipal arrears remain |
+| Support the walkout | Bes stops work; the affected producer loses his labor | The world registers missing production and future work loss |
+| Municipal restitution | Real town treasury covers all current wage and successor claims | Bes is settled without conjuring currency; prior cold days remain |
+| Mera guarantee | Speak to Mera in person; explicit consent and up to six owned marks | Cinderhold now owes Mera; debt changes hands instead of disappearing |
+
+### What must become visually expressive next
+
+- Replace primitive resident and beast silhouettes with distinct rigged performers, proportional architecture, movement transitions, gestures, expression and readable telegraph animations.
+
+- Stage Bes’s interior with real doorway navigation, meaningful gaze, reactive hearth light, correctly located bed and pay ledger, and visible coal delivery that tracks an actual carried pack.
+
+- Move from source CameraActor cue selection to physically rehearsed shots and player-control boundaries with collision-tested framing, subtitle/sound timing and skip recovery on every branch.
+
+- Add damage/hit feedback, accessible enemy indicators, spatial audio, footsteps and personalized combat memory without letting beast encounters invent loot, wages or final endings.
+
+- Complete Windows Unreal Header Tool, Editor, PIE gameplay, save/reload, accessibility and GPU performance tests before representing this game as engine-verified or polished.
+
+### Acceptance and publication truth
+
+Runtime source v8 and v9 were merged into main after source-level CI checks. The project still requires genuine Unreal compilation, art direction, character animation, voice actors, non-placeholder Foley sound design, camera composition and player-led quest QA. The book is a rebuilt illustrated literary and game-development edition, not a release of playable binaries or a claim that 3D characters are production-finished.
+
+The same narrative invariants that protect the nine realms remain intact: the protagonist’s shared impossible origin is not replaced; established cast identities remain stable; unfinished mysteries stay unfinished; both post-Nhal-Vey futures remain mutually exclusive, player-earned possibilities. An illustration cannot become canonical proof of an unperformed event.
+

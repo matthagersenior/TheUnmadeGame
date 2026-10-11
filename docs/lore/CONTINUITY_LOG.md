@@ -273,3 +273,10 @@ Every substantial gameplay addition needs a companion canon update and a regener
 ## 2026-10-11 — Runtime v9: live quest instructions inside the world
 - Created a non-modal native UMG objective and verified-state ledger overlay for The Unpaid Shift. Its route and current goal change when Bes is heard, his home is inspected, Rheva documents unpaid wages, Mera consents, or settlement occurs. Local radius and cinematic hiding prevent intrusive omniscient information.
 - Wired bounded refresh from the existing prototype hub Tick without creating new quest flags, duplicating evidence or consuming player input. Added regression source tests and updated the canonical continuity text. Unreal UHT/PIE and new illustrated Bible edition are still unverified.
+
+
+## 2026-10-11 — Publication v9 repaired, full illustrated binaries issued
+- Rebuilt the real 132-page master as a 137-page cumulative book and the original 67-page Volume X as 74 pages, preserving all previous chapters, embedded images (52/5 previously) and adding one schematic figure each (53/6 now).
+- Published the two Word masters and two PDFs to the user's private file Library, plus Chapter 28/29 source, atlas artwork and 22-entry ZIP (every member CRC checked, 21 manifest content hashes independently verified).
+- Visual QA: page PNG renders, 0 blank PDF pages and 0 out-of-bounds text blocks. The site schematic is not an Unreal gameplay image. GitHub receipts link Library locations, not invented public release files.
+- Updated the full Volume X editorial source with Chapters 28–29 and strengthened the workflow gate so source commits must also update the release receipt and SHA manifest, not just lore notes. Unreal compilation remains outstanding.
