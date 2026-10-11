@@ -137,11 +137,17 @@ public:
     // Wages are strictly a transfer from the civic employer to named worker.
     // If the municipality lacks funds the named wage becomes an obligation.
     // Payroll marks never enter player inventory or the material warehouse.
-    bool AdvanceOneDay(int day)noexcept{
+    bool AdvanceOneDay(int day,bool besOnWalkout=false)noexcept{
         if(day<1||day>833334)return false;
         for(const auto& w:data_.workers)
             if(w.lastPaidDay>=day)return false;
-        for(auto& w:data_.workers){
+        for(int i=0;i<9;++i){
+            auto& w=data_.workers[i];
+            if(i==2 && besOnWalkout)
+            {
+                w.lastPaidDay=day; // Not a worked shift; no wage or false debt.
+                continue;
+            }
             if(w.employerMarks>=WagePerShift && w.earnedMarks<=100000-WagePerShift){
                 w.employerMarks-=WagePerShift;
                 w.earnedMarks+=WagePerShift;
@@ -151,6 +157,17 @@ public:
             }
             w.lastPaidDay=day;
         }
+        return true;
+    }
+    // Public audited full restitution: exact municipal marks are transferred
+    // to Bes, never borrowed from player income or created on demand.
+    bool PayAllBesArrears()noexcept{
+        auto& w=data_.workers[2];
+        if(w.owedMarks<=0||w.employerMarks<w.owedMarks||
+           w.earnedMarks>100000-w.owedMarks)return false;
+        w.employerMarks-=w.owedMarks;
+        w.earnedMarks+=w.owedMarks;
+        w.owedMarks=0;
         return true;
     }
     // Worker can reclaim arrears when an actual trade receipt replenishes
