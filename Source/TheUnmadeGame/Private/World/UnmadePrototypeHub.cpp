@@ -44,6 +44,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshRiteWorldFromSave();
     RefreshRealityConsequenceWorld();
     RefreshOuterReactionWorld();
+    RefreshMaterialWorld();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
@@ -89,6 +90,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::WitnessReturn RestoredReturn;
     UnmadeCore::RealityConsequenceLedger RestoredReality;
     UnmadeCore::OuterRealmReactions RestoredOuter;
+    UnmadeCore::MaterialWorld RestoredMaterials;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -370,6 +372,33 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             UE_LOG(LogTemp,Error,TEXT("Invalid outer-realm reaction records; save writes blocked"));
         }
     }
+    if(Save->bHasMaterialWorld)
+    {
+        const TArray<int32>* Columns[10]={
+            &Save->MaterialDays,&Save->MaterialStores,&Save->MaterialHouseholds,
+            &Save->MaterialIntegrity,&Save->MaterialProduced,&Save->MaterialConsumed,
+            &Save->MaterialShortageDays,&Save->MaterialLaborHours,
+            &Save->MaterialDeliveries,&Save->MaterialRepairs
+        };
+        bool bValid=true;
+        for(const auto* Column:Columns)if(Column->Num()!=9)bValid=false;
+        UnmadeCore::MaterialWorld::Towns Data{};
+        if(bValid)
+            for(int i=0;i<9;++i)
+                Data[i]={(*Columns[0])[i],(*Columns[1])[i],(*Columns[2])[i],
+                    (*Columns[3])[i],(*Columns[4])[i],(*Columns[5])[i],
+                    (*Columns[6])[i],(*Columns[7])[i],(*Columns[8])[i],
+                    (*Columns[9])[i]};
+        if(!bValid || !RestoredMaterials.Restore(Data,{
+                Save->MaterialCargoRealm,Save->MaterialCargoUnits,
+                Save->MaterialCargoDay},RestoredClock.DayIndex()+1))
+        {
+            bMaterialSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Material stock, labor or cargo corrupt: save writes protected"));
+        }
+    }
+    else RestoredMaterials.InitializeAtDay(RestoredClock.DayIndex()+1);
+    Materials=RestoredMaterials;
     OuterReactions=RestoredOuter;
     RealityLedger=RestoredReality;
     ReturnWitness=RestoredReturn;
@@ -400,7 +429,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bFinalSaveRejected || bResidentContinuityRejected ||
        bWitnessEchoRejected || bWitnessBraidRejected ||
        bWitnessDispatchRejected || bWitnessReturnRejected ||
-       bRealityConsequenceRejected || bOuterReactionsRejected)return false;
+       bRealityConsequenceRejected || bOuterReactionsRejected ||
+       bMaterialSaveRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -527,6 +557,25 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
         Save->OuterActiveRites.Add(Outer.activeRite);
         Save->OuterActiveUntil.Add(Outer.activeUntil);
     }
+    Save->bHasMaterialWorld=true;
+    Save->MaterialDays.Reset();Save->MaterialStores.Reset();
+    Save->MaterialHouseholds.Reset();Save->MaterialIntegrity.Reset();
+    Save->MaterialProduced.Reset();Save->MaterialConsumed.Reset();
+    Save->MaterialShortageDays.Reset();Save->MaterialLaborHours.Reset();
+    Save->MaterialDeliveries.Reset();Save->MaterialRepairs.Reset();
+    for(const auto& T:Materials.Snapshot())
+    {
+        Save->MaterialDays.Add(T.day);Save->MaterialStores.Add(T.store);
+        Save->MaterialHouseholds.Add(T.households);Save->MaterialIntegrity.Add(T.integrity);
+        Save->MaterialProduced.Add(T.produced);Save->MaterialConsumed.Add(T.consumed);
+        Save->MaterialShortageDays.Add(T.shortageDays);
+        Save->MaterialLaborHours.Add(T.laborHours);
+        Save->MaterialDeliveries.Add(T.deliveries);Save->MaterialRepairs.Add(T.repairs);
+    }
+    const auto Shipment=Materials.Cargo();
+    Save->MaterialCargoRealm=Shipment.realm;
+    Save->MaterialCargoUnits=Shipment.units;
+    Save->MaterialCargoDay=Shipment.collectedDay;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -1700,6 +1749,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
+    AdvanceMaterialDayIfNeeded();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical
