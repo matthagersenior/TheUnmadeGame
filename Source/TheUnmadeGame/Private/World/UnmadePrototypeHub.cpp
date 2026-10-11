@@ -2352,6 +2352,150 @@ FString AUnmadePrototypeHub::GetLocalMaterialJournal() const
         T->integrity,T->shortageDays,T->repairs,T->deliveries,*Carry);
 }
 
+FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
+{
+    const auto B=BesHousehold.Save();
+    const auto* Wage=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
+    return FString::Printf(
+        TEXT("BES / CINDERHOLD: phase %d | hearth baskets %d | cold days %d | walkout days %d | relief receipts %d | employer %d marks | unpaid %d marks | home inspected %s | Rheva's evidence %s | %s"),
+        B.phase,B.heatBaskets,B.daysCold,B.daysWalkedOut,B.reliefPacks,
+        Wage?Wage->employerMarks:0,Wage?Wage->owedMarks:0,
+        B.homeVisited?TEXT("yes"):TEXT("no"),
+        B.wardenInterviewed?TEXT("yes"):TEXT("no"),
+        UTF8_TO_TCHAR(UnmadeCore::BesLine(BesHousehold.Phase(),
+            Wage?Wage->owedMarks:0,B.heatBaskets,B.daysCold)));
+}
+
+FString AUnmadePrototypeHub::GetBesHouseholdResidentLine(FName StableId) const
+{
+    const auto State=BesHousehold.Save();
+    const auto* Wage=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
+    if(StableId==FName(TEXT("npc.cinderhold.courier.001")))
+        return FString::Printf(TEXT("Bes: %s I have %d warm baskets in my home, %d days without enough heat, and %d marks still owed. My work stoppage has lasted %d recorded days."),
+            UTF8_TO_TCHAR(UnmadeCore::BesLine(BesHousehold.Phase(),
+                Wage?Wage->owedMarks:0,State.heatBaskets,State.daysCold)),
+            State.heatBaskets,State.daysCold,Wage?Wage->owedMarks:0,
+            State.daysWalkedOut);
+    if(StableId==FName(TEXT("npc.cinderhold.emberwarden.001")) &&
+       State.phase>=static_cast<int>(UnmadeCore::BesPhase::WagesReported))
+        return State.wardenInterviewed
+            ?TEXT("Rheva: I verified the municipal pay record. A rescue cannot erase the claim; a treasury has to pay what it owes.")
+            :TEXT("Rheva: Visit Bes's real home, then return. I will corroborate the municipal books.");
+    if(StableId==FName(TEXT("npc.cinderhold.healer.001")) &&
+       State.phase>=static_cast<int>(UnmadeCore::BesPhase::WagesReported))
+        return State.heatBaskets==0
+            ?TEXT("Ovenna: Bes's hearth is cold. I know the home is hurting, but I do not claim to have witnessed the pay negotiations.")
+            :TEXT("Ovenna: His hearth has warmth today. It does not settle the debt recorded in the town ledger.");
+    return FString();
+}
+
+bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
+{
+    if(bBesHouseholdRejected||bLivingEconomyRejected||bMaterialSaveRejected)return false;
+    const auto Old=BesHousehold.Save();
+    UnmadeCore::BesOutcome Result=UnmadeCore::BesOutcome::Blocked;
+    if(StableId==FName(TEXT("npc.cinderhold.courier.001")))
+        Result=BesHousehold.HearBes(LivingTrades,GetGameDay());
+    else if(StableId==FName(TEXT("npc.cinderhold.emberwarden.001")))
+        Result=BesHousehold.HearRheva(GetGameDay());
+    if(Result==UnmadeCore::BesOutcome::Blocked ||
+       Result==UnmadeCore::BesOutcome::NoChange)return false;
+    if(!WriteWorldSnapshot())
+    {
+        BesHousehold.Restore(Old,GetGameDay());
+        return false;
+    }
+    RefreshBesHouseholdWorld();
+    if(GEngine)
+        GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Cyan,
+            Result==UnmadeCore::BesOutcome::Reported
+            ?TEXT("BES: An unpaid real wage is recorded. Inspect the home beside his route, then hear Rheva.")
+            :TEXT("RHEVA: The household inspection and pay evidence agree. Choose real warmth, a walkout, or funded restitution."));
+    return true;
+}
+
+void AUnmadePrototypeHub::RefreshBesHouseholdWorld()
+{
+    const auto S=BesHousehold.Save();
+    SetRiteWorldActorState(FName(TEXT("Bes.ColdHearth")),S.heatBaskets==0);
+    SetRiteWorldActorState(FName(TEXT("Bes.WarmHearth")),S.heatBaskets>0);
+    SetRiteWorldActorState(FName(TEXT("Bes.WalkoutBanner")),BesHousehold.OnWalkout());
+    SetRiteWorldActorState(FName(TEXT("Bes.PaidRecord")),BesHousehold.EndgameWitness());
+}
+
+bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
+    AUnmadeCharacter* Player,double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player)||!GetWorld()||bBesHouseholdRejected||
+       bMaterialSaveRejected||bLivingEconomyRejected)return false;
+    const FVector At=Player->GetActorLocation();
+    const auto* Region=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!Region||Region->realm!=UnmadeCore::Realm::HearthBeneath)return false;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        const bool Home=It->ActorHasTag(FName(TEXT("Bes.Home")));
+        const bool Walkout=It->ActorHasTag(FName(TEXT("Bes.WalkoutChoice")));
+        const bool Pay=It->ActorHasTag(FName(TEXT("Bes.RestitutionChoice")));
+        if(!Home&&!Walkout&&!Pay)continue;
+        const double DistSq=FVector::DistSquared(At,It->GetActorLocation());
+        if(DistSq>FMath::Square(245.f)||DistSq>=CompetingNpcDistanceSq)continue;
+        FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeBesHome),false);
+        Sight.AddIgnoredActor(Player);Sight.AddIgnoredActor(*It);
+        if(GetWorld()->LineTraceTestByChannel(
+            At+FVector(0,0,70),It->GetActorLocation()+FVector(0,0,65),
+            ECC_Visibility,Sight))continue;
+        const auto Prev=BesHousehold.Save();
+        const auto BeforeMaterials=Materials.Snapshot();
+        const auto BeforeCargo=Materials.Cargo();
+        const auto BeforeLiving=LivingTrades.Save();
+        UnmadeCore::BesOutcome Result=UnmadeCore::BesOutcome::Blocked;
+        if(Home)
+        {
+            if(!Prev.homeVisited)
+                Result=BesHousehold.InspectHome(GetGameDay());
+            else
+                Result=BesHousehold.DeliverHome(Materials,GetGameDay());
+        }
+        else if(Walkout)Result=BesHousehold.BeginWalkout(LivingTrades,GetGameDay());
+        else Result=BesHousehold.SettleFromTown(LivingTrades,GetGameDay());
+        if(Result==UnmadeCore::BesOutcome::Blocked ||
+           Result==UnmadeCore::BesOutcome::NoChange)
+        {
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+                TEXT("BES: Need a reported wage, home inspection, Rheva's ledger, actual relief cargo or enough town marks for FULL payment. See J."));
+            return true;
+        }
+        if(!WriteWorldSnapshot())
+        {
+            Materials.Restore(BeforeMaterials,BeforeCargo,GetGameDay());
+            LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
+            BesHousehold.Restore(Prev,GetGameDay());
+            return true;
+        }
+        RefreshBesHouseholdWorld();
+        RefreshMaterialWorld();
+        if(GEngine)
+        {
+            FString Story;
+            switch(Result)
+            {
+            case UnmadeCore::BesOutcome::HomeInspected:
+                Story=TEXT("HIS HEARTH: Bes has a finite home reserve. Speak to Rheva to authenticate the unpaid wage.");break;
+            case UnmadeCore::BesOutcome::WarmthDelivered:
+                Story=TEXT("WARMTH DELIVERED: five actual baskets leave your custody. His home is warmer, but wages are still owed.");break;
+            case UnmadeCore::BesOutcome::WalkoutBegun:
+                Story=TEXT("BES REFUSES UNPAID WORK: Cinderhold loses one production worker tomorrow. Payroll records no phantom shift.");break;
+            case UnmadeCore::BesOutcome::WagesSettled:
+                Story=TEXT("FULL RESTITUTION: municipal marks actually transferred to Bes. A real shift can now resume.");break;
+            default:Story=TEXT("Evidence recorded.");
+            }
+            GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Cyan,Story);
+        }
+        return true;
+    }
+    return false;
+}
+
 FString AUnmadePrototypeHub::GetLivingEconomyResidentLine(FName StableId) const
 {
     for(int i=0;i<9;++i)
@@ -2746,6 +2890,25 @@ void AUnmadePrototypeHub::BuildForPrototype()
         SpawnBlock(FVector(To.originX+1470,To.originY-180,100),
             FVector(.75,.65,1.7),FName(*(Prefix+TEXT("Finish"))));
     }
+    // Cinderhold's first individual house: distinct evidence, relief,
+    // labor refusal and restitution sites. All use actual collider actors,
+    // save-backed consequences and the same E/LOS interaction rules.
+    const FVector BesTown(0,50000,0);
+    SpawnBlock(BesTown+FVector(1210,610,110),FVector(2.2,1.8,2.1),
+        FName(TEXT("Bes.Home")));
+    SpawnBlock(BesTown+FVector(1430,790,105),FVector(.7,.5,1.75),
+        FName(TEXT("Bes.WalkoutChoice")));
+    SpawnBlock(BesTown+FVector(650,300,100),FVector(.65,.5,1.7),
+        FName(TEXT("Bes.RestitutionChoice")));
+    SpawnBlock(BesTown+FVector(1220,610,260),FVector(.5,.35,.65),
+        FName(TEXT("Bes.ColdHearth")));
+    SpawnBlock(BesTown+FVector(1220,610,250),FVector(1.1,.4,.5),
+        FName(TEXT("Bes.WarmHearth")));
+    SpawnBlock(BesTown+FVector(1430,790,260),FVector(.2,.9,.9),
+        FName(TEXT("Bes.WalkoutBanner")));
+    SpawnBlock(BesTown+FVector(650,300,220),FVector(.85,.2,.9),
+        FName(TEXT("Bes.PaidRecord")));
+    RefreshBesHouseholdWorld();
     // Nine visible work sites, one finite stockroom and household delivery
     // target per region. Actor tags are stable, save fields contain the truth.
     for(int i=0;i<9;++i)
