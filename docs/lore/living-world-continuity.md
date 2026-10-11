@@ -414,3 +414,8 @@ Bes, Varda, Rheva and Ovenna remember only their actual local conversations. Var
 The elder has locked aim marks, 1.6-second slam and 2-second sweep warnings, finite one-strike windows, recovery, cover/vent/Fold interruption and territory. Quieting requires a real living elder; quieted/defeated outcomes persist, with pacified target selection disabled. Other existing source enemies now stop pursuit outside their local territory, using real navigation when available. No full ecology or installed navmesh is claimed.
 
 All existing stable actor/city IDs, callback provenance and nine OPEN mystery boundaries are preserved. This optional branch chooses neither Held Morning nor Many Mornings. Source and portable tests are distinct from outstanding Unreal UHT, editor, navmesh, physical LOS, save/load, sound import, performance and creator acceptance. See `docs/design/cinderhold-adventure-v12-acceptance.md` and the dated illustrated receipt.
+
+
+## 2026 10 11 World of Remembered Roads v13
+
+Implemented optional physical delivery adventures in all nine realms and eleven settlements; all 82 registered residents and six scouts retain stable IDs. Forty-four finite sealed units, carried custody, eleven local mechanism/elder/route branches, dated receiving shelves, witnessed reports and personal home returns. 87 new graybox homes reuse Bes's original household. 22 directed scenes and bounded creature forage/patrol/rest hooks. Existing campaign access, wages, fuel, inventory, consent, endings and OPEN mysteries retain authority. Unreal compilation and playtesting deferred by explicit creator instruction. See Chapter 33 and the v13 acceptance walkthrough.

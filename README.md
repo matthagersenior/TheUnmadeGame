@@ -1,3 +1,9 @@
+# World of Remembered Roads v13
+
+Implemented source now covers nine realms, eleven optional local delivery adventures and all 88 authored people (82 registered residents plus six scouts). Finite carried cargo, physical route checks, named receiving shelves, personal return memories, 87 furnished graybox homes plus Bes's existing house, 22 directed scenes and bounded creature routines.
+
+Unreal compilation/import/PIE is deferred at the creator's request. [Walkthrough and engine acceptance](docs/design/remembered-roads-v13-acceptance.md). [Full canonical chapter](docs/lore/CHAPTER_33_REMEMBERED_ROADS.md). [Authored city and person registry](Authoring/remembered_roads_v13.json).
+
 ## Cinderhold adventure v12
 
 The optional connected milestone is now implemented in source: Bes's household and remembered return, Varda's three-clue fieldwork, Blackslag's authored Sootbound Elder with combat or learned cooling/cadence resolution, and three local route outcomes. Physical inspection and hand maintenance sit alongside Glimpse, Fold combinations and explicit two-step permanent Rewrites. Four directed caption/camera scenes and three generated prototype stereo cues are included; resident memories require actual local reports. Wage, warmth, consent and campaign authority stay with their existing systems. [Walkthrough and outstanding Unreal acceptance](docs/design/cinderhold-adventure-v12-acceptance.md) · [Canonical Chapter 32](docs/lore/CHAPTER_32_CINDERHOLD_ADVENTURE.md) · [Actual illustrated release receipt](docs/lore/LATEST_ILLUSTRATED_RELEASE.md). Portable C++ and source tests do not prove Unreal compilation, navigation, imported voices/animation or gameplay.

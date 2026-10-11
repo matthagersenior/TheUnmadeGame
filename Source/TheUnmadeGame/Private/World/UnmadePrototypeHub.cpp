@@ -33,7 +33,9 @@ void AUnmadePrototypeHub::BeginPlay()
     RestoreLivingWorld();
     RefreshCommunityConsequences();
     BuildCinderholdAdventure();
+    BuildRememberedRoads();
     RefreshCinderholdAdventure();
+    RefreshRememberedRoads();
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
@@ -76,6 +78,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bCinderholdSaveRejected=true;
         return;
     }
+    if(Save&&Save->SchemaVersion==1&&Save->bHasRememberedRoads&&!Save->bHasLivingWorldSnapshot){bRoadSaveRejected=true;return;}
     if (!Save || Save->SchemaVersion != 1 || !Save->bHasLivingWorldSnapshot) return;
 
     UnmadeCore::LivingWorldClock RestoredClock;
@@ -468,6 +471,14 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             UE_LOG(LogTemp,Error,TEXT("Cinderhold adventure corrupt: original world save protected"));
         }
     }
+    if(Save->bHasRememberedRoads)
+    {
+        std::vector<int> Data;for(int32 V:Save->RememberedRoadState)Data.push_back(V);
+        if(!RememberedRoads.Restore(Data,RestoredClock.DayIndex()+1)||
+           (RememberedRoads.City(4)->briefDay&&!Cinderhold.Has(UnmadeCore::ReturnedHome))||
+           (RememberedRoads.City(4)->route&&RememberedRoads.City(4)->route!=Cinderhold.Save().route))
+        {bRoadSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Remembered roads corrupt: original save protected"));}
+    }
     BesHousehold=RestoredBes;
     LivingTrades=RestoredLiving;
     Materials=RestoredMaterials;
@@ -495,6 +506,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
+    if(bRoadSaveRejected)return false;
     if(bCinderholdSaveRejected)return false;
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
        bLaterRealmSaveRejected || bEchoSaveRejected ||
@@ -507,6 +519,9 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bBesHouseholdRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
+    Save->bHasRememberedRoads=true;
+    Save->RememberedRoadState.Reset();
+    for(int V:RememberedRoads.Pack())Save->RememberedRoadState.Add(V);
     Save->bHasLivingWorldSnapshot = true;
     Save->LivingWorldSeconds = Clock.ElapsedSeconds();
     Save->DiscoveredLoreMask = Discoveries.Snapshot();
@@ -1886,6 +1901,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     AnimateBesWorkingCart();
     UpdateBesQuestTracker();
     RefreshCinderholdAdventure();
+    RefreshRememberedRoads();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical

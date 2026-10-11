@@ -37,6 +37,7 @@ bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
     for(int32 i=0;i<6;++i)
     {
         if(i==5&&FieldSurveyStages[i]==2)continue; // Varda remains available for authored dialogue.
+        if(FieldSurveyStages[i]==2)continue; // All completed scouts regain normal conversations.
         const FVector Switch=SurveyCenters[i]+FVector(-780,-430,80);
         const FVector Report=SurveyCenters[i]+FVector(0,-870,100);
         const bool bReporting=FieldSurveyStages[i]>0;

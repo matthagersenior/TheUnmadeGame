@@ -22,6 +22,7 @@ public:
     virtual void Tick(float DeltaSeconds) override;
     virtual void BeginPlay() override;
     void ConfigureCinderholdElder();
+    void ConfigureRoadElder(int32 City){RoadElderCity=City;bCinderholdElder=true;TerritoryHome=GetActorLocation();}
     bool CanBeTargeted() const;
     void ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion=false);
     void ConfigureStyle(UnmadeCore::EnemyStyle NewStyle);
@@ -68,6 +69,7 @@ private:
     double FoldExposedUntil = -1.0;
     bool bDeathHandled = false;
     bool bCinderholdElder=false,bCinderholdQuieted=false;
+    int32 RoadElderCity=-1;
     FVector TerritoryHome=FVector::ZeroVector;
     FVector ElderLockedAim=FVector::ZeroVector;
     double NextElderSaveAttemptAt=0;

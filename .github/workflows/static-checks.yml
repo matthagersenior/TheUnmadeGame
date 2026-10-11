@@ -47,6 +47,12 @@ jobs:
         run: |
           python Scripts/build_city_assembly.py --check
           python Scripts/unreal_editor/stage_city_assembly.py
+      - name: Validate all eleven Remembered Road adventures and every registered person
+        run: python Scripts/build_remembered_roads.py --check
+      - name: Test finite deliveries, authored performances and bounded creature routines
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/remembered_roads_test.cpp -o /tmp/remembered_roads_test
+          /tmp/remembered_roads_test
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits

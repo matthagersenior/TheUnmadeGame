@@ -50,6 +50,9 @@ public:
     UnmadeCore::SettlementId GetHomeSettlement() const { return HomeSettlement; }
 
 private:
+    double NextRoutinePathAt=0;
+    FVector RoutineWaypoint=FVector::ZeroVector;
+    bool bRoutinePathValid=false;
     UPROPERTY(VisibleAnywhere, Category="Unmade|Memory")
     TObjectPtr<UUnmadeMemoryComponent> Memory;
 

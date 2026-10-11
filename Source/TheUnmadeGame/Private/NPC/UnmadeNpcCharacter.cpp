@@ -1,4 +1,6 @@
 #include "NPC/UnmadeNpcCharacter.h"
+#include "NavigationSystem.h"
+#include "NavigationPath.h"
 #include "Authoring/UnmadeOuterPeopleData.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "NPC/UnmadeNpcMotionRules.h"
@@ -160,6 +162,12 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
                 : UnmadeCore::Vec2{HomeLocation.X,HomeLocation.Y})
             : UnmadeCore::LocalRoutineTarget(
                 HomeSettlement, Role, Phase, {HomeLocation.X, HomeLocation.Y});
+        if(CachedHub.IsValid())
+        {
+            FVector RoadTarget;
+            if(CachedHub->RoadRoutineTarget(NpcId,Phase==UnmadeCore::DayPhase::Night,RoadTarget))
+                Target={RoadTarget.X,RoadTarget.Y};
+        }
         Speed = Role == UnmadeCore::NpcRole::Courier ? 95.0 : 65.0;
         StopRadius = 80.0;
         // Public local shortage/damage notices send existing named residents
@@ -204,6 +212,29 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         }
     }
 
+    // Follow a real path around furnished homes when available; the fallback
+    // remains collision-swept and cannot phase through a wall.
+    if(Motion==UnmadeCore::NpcMotion::Approach&&GetWorld())
+    {
+        if(GetWorld()->GetTimeSeconds()>=NextRoutinePathAt)
+        {
+            NextRoutinePathAt=GetWorld()->GetTimeSeconds()+.75;
+            bRoutinePathValid=false;
+            if(auto* Path=UNavigationSystemV1::FindPathToLocationSynchronously(GetWorld(),Current,FVector(Target.x,Target.y,Current.Z),this))
+            if(Path->IsValid()&&!Path->IsPartial()&&Path->PathPoints.Num()>1)
+            {
+                RoutineWaypoint=Path->PathPoints[1];
+                if(FVector::DistSquared2D(Current,RoutineWaypoint)<FMath::Square(85.f)&&Path->PathPoints.Num()>2)RoutineWaypoint=Path->PathPoints[2];
+                bRoutinePathValid=true;
+            }
+        }
+        if(bRoutinePathValid&&FVector::DistSquared2D(Current,RoutineWaypoint)>FMath::Square(35.f))
+        {
+            Target={RoutineWaypoint.X,RoutineWaypoint.Y};
+            StopRadius=FMath::Min(StopRadius,25.0);
+        }
+        else if(bRoutinePathValid){bRoutinePathValid=false;NextRoutinePathAt=0;}
+    }
     const auto NewPosition = UnmadeCore::SteerNpc(
         {Current.X, Current.Y}, Target, Motion, Speed, DeltaSeconds, StopRadius);
     const FVector Offset(NewPosition.x - Current.X, NewPosition.y - Current.Y, 0.0);
@@ -375,6 +406,7 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         CharacterLine += TEXT(" It feels like the dark has started listening.");
     if(CachedHub.IsValid())
     {
+        CharacterLine+=CachedHub->GetRoadResidentLine(NpcId);
         const FString AdventureLine=CachedHub->GetCinderholdResidentLine(NpcId);
         if(!AdventureLine.IsEmpty())CharacterLine+=TEXT(" ")+AdventureLine;
         const FString BesHomeLine=CachedHub->GetBesHouseholdResidentLine(NpcId);

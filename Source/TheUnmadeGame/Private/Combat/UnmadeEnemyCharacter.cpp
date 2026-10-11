@@ -1,4 +1,5 @@
 #include "Combat/UnmadeEnemyCharacter.h"
+#include "Combat/UnmadeCreatureRoutineRules.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
 #include "World/UnmadePrototypeHub.h"
@@ -221,7 +222,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         UGameplayStatics::GetActorOfClass(World,AUnmadePrototypeHub::StaticClass()));
     if(bCinderholdElder&&CachedRealityHub.IsValid())
     {
-        const int32 Resolution=CachedRealityHub->GetCinderholdElderResolution();
+        const int32 Resolution=RoadElderCity>=0?CachedRealityHub->GetRoadElderResolution(RoadElderCity):CachedRealityHub->GetCinderholdElderResolution();
         if(Resolution!=0)
         {
             bCinderholdQuieted=Resolution==2;
@@ -244,7 +245,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
             if(CachedRealityHub.IsValid()&&Now>=NextElderSaveAttemptAt)
             {
                 NextElderSaveAttemptAt=Now+3;
-                if(CachedRealityHub->RecordCinderholdElderDefeat(this))SetActorTickEnabled(false);
+                if(RoadElderCity>=0?CachedRealityHub->RecordRoadElderDefeat(this,RoadElderCity):CachedRealityHub->RecordCinderholdElderDefeat(this))SetActorTickEnabled(false);
             }
             return; // Keep retrying a failed durable receipt, never announce a false victory.
         }
@@ -293,14 +294,18 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     if(bCinderholdElder)
     {
         ElderStep=ElderPattern.Step(Now,bElderSecondPhase,bNearby&&DistanceCm<=420,
-            bClearSight,(CachedRealityHub.IsValid()&&CachedRealityHub->IsCinderholdVentActive())||IsFractureExposed(Now));
+            bClearSight,(CachedRealityHub.IsValid()&&(RoadElderCity>=0?CachedRealityHub->IsRoadCooling(RoadElderCity):CachedRealityHub->IsCinderholdVentActive()))||IsFractureExposed(Now));
         if(ElderStep.warning!=UnmadeCore::SlagAttack::None&&!ElderStep.strike&&ElderLastWarning==UnmadeCore::SlagAttack::None)
             ElderLockedAim=Player->GetActorLocation();
         Intent=(!bNearby||ElderStep.warning!=UnmadeCore::SlagAttack::None||ElderStep.recovering||
-            (CachedRealityHub.IsValid()&&CachedRealityHub->IsCinderholdVentActive())||IsFractureExposed(Now))
+            (CachedRealityHub.IsValid()&&(RoadElderCity>=0?CachedRealityHub->IsRoadCooling(RoadElderCity):CachedRealityHub->IsCinderholdVentActive()))||IsFractureExposed(Now))
             ?UnmadeCore::EnemyIntent::Hold:UnmadeCore::EnemyIntent::Approach;
     }
-    if(bReturnHome)Intent=UnmadeCore::EnemyIntent::Approach;
+    const auto Routine=UnmadeCore::CreatureRoutine(Style,Now,
+        CachedRealityHub.IsValid()&&CachedRealityHub->GetCurrentPhase()==UnmadeCore::DayPhase::Night,bNearby);
+    const FVector RoutineTarget=TerritoryHome+FVector(Routine.offsetX,Routine.offsetY,0);
+    const bool bLocalRoutine=!bNearby&&!bReturnHome&&FVector::DistSquared2D(GetActorLocation(),RoutineTarget)>FMath::Square(80.f);
+    if(bReturnHome||bLocalRoutine)Intent=UnmadeCore::EnemyIntent::Approach;
     if(WindupEndsAt>=0.0 && (Intent!=UnmadeCore::EnemyIntent::Attack||!bClearSight))
         WindupEndsAt=-1.0; // The player can step behind real cover to cancel.
 
@@ -312,7 +317,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         const float BaseSpeed=bSpeciesConfigured?static_cast<float>(Profile.speed):(Style==UnmadeCore::EnemyStyle::Stalker?130.f:95.f);
         const float Speed=BaseSpeed*(bElderSecondPhase?1.25f:1.f)*static_cast<float>(Consequence.enemySpeedPercent)/100.f;
         GetCharacterMovement()->MaxWalkSpeed=FMath::Max(25.f,Speed);
-        const FVector Destination=bReturnHome?TerritoryHome:Intent==UnmadeCore::EnemyIntent::Retreat
+        const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:Intent==UnmadeCore::EnemyIntent::Retreat
             ?GetActorLocation()-Delta.GetSafeNormal()*480.f
             :Player->GetActorLocation();
         if(Now>=NextPathRefreshAt)
@@ -333,7 +338,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
                 }
             }
         }
-        const bool bLocalPathClear=bReturnHome?!World->LineTraceTestByChannel(
+        const bool bLocalPathClear=(bReturnHome||bLocalRoutine)?!World->LineTraceTestByChannel(
             GetActorLocation()+FVector(0,0,55),Destination+FVector(0,0,55),ECC_Visibility,Params):bClearSight;
         FVector Walk=bHasNavWaypoint ? NextNavWaypoint-GetActorLocation()
             :((bLocalPathClear)?Destination-GetActorLocation():FVector::ZeroVector);
@@ -363,14 +368,14 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
             ElderAimMarker->SetWorldLocation(ElderLockedAim-FVector(0,0,85));
             ElderAimMarker->SetWorldScale3D(FVector(Radius/50.f,Radius/50.f,.025f));
             CombatSignal->SetText(FText::FromString(ElderStep.warning==UnmadeCore::SlagAttack::GroundSlam
-                ?TEXT("SOOTBOUND SLAM - STEP OUT OF THE MARK"):
-                 TEXT("CINDER SWEEP - WIDE MARK / TAKE COVER")));
+                ?TEXT("ELDER SLAM - STEP OUT OF THE MARK"):
+                 TEXT("ELDER SWEEP - WIDE MARK / TAKE COVER")));
             TelegraphLight->SetIntensity(4200.f);
             SetMotionCue(FName(TEXT("Attack")));
         }
         else
         {
-            CombatSignal->SetText(FText::FromString(ElderStep.recovering?TEXT("ELDER RECOVERY - OPENING"):TEXT("DEFENDS THE NEST")));
+            CombatSignal->SetText(FText::FromString(ElderStep.recovering?TEXT("ELDER RECOVERY - OPENING"):!bNearby?Routine.activity==UnmadeCore::WildActivity::Forage?TEXT("FORAGING IN ITS TERRITORY"):Routine.activity==UnmadeCore::WildActivity::Patrol?TEXT("PATROLLING ITS TERRITORY"):TEXT("RESTING AT ITS NEST"):TEXT("DEFENDS THE NEST")));
             TelegraphLight->SetIntensity(ElderStep.recovering?850.f:0.f);
         }
         if(ElderStep.strike)
