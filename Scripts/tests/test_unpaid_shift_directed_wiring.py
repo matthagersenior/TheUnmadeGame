@@ -44,6 +44,12 @@ class UnpaidShiftDirectedWiring(unittest.TestCase):
         self.assertIn("RecordBesHouseholdConversation(Target->GetStableId())",player)
         self.assertIn("GetTimeSeconds()",present)
         self.assertIn("LastBesReturningSceneAt+60.0",present)
+        self.assertIn("AnimateBesWorkingCart();",hub)
+        self.assertIn("Bes.WorkingCart",hub)
+        self.assertIn("Bes.WorkingCoal",hub)
+        self.assertIn("SetActorEnableCollision(false)",hub)
+        self.assertIn("BesHousehold.OnWalkout()",present)
+        self.assertIn("BesMaskScene(BesHousehold.Phase())",final)
         for token in ("Bes.ColdHearth","Bes.WarmHearth","Bes.WalkoutBanner",
                       "Bes.GuarantorRecord"):
             self.assertIn(token,hub)
