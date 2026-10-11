@@ -2361,9 +2361,9 @@ FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
     const auto B=BesHousehold.Save();
     const auto* Wage=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
     return FString::Printf(
-        TEXT("BES / CINDERHOLD: phase %d | hearth baskets %d | cold days %d | walkout days %d | relief receipts %d | employer %d marks | unpaid %d marks | home inspected %s | Rheva's evidence %s | %s"),
+        TEXT("BES / CINDERHOLD: phase %d | hearth baskets %d | cold days %d | walkout days %d | relief receipts %d | Mera guarantee still owed %d marks | employer %d marks | unpaid %d marks | home inspected %s | Rheva's evidence %s | %s"),
         B.phase,B.heatBaskets,B.daysCold,B.daysWalkedOut,B.reliefPacks,
-        Wage?Wage->employerMarks:0,Wage?Wage->owedMarks:0,
+        B.guaranteeOwed,Wage?Wage->employerMarks:0,Wage?Wage->owedMarks:0,
         B.homeVisited?TEXT("yes"):TEXT("no"),
         B.wardenInterviewed?TEXT("yes"):TEXT("no"),
         UTF8_TO_TCHAR(UnmadeCore::BesLine(BesHousehold.Phase(),
@@ -2385,6 +2385,13 @@ FString AUnmadePrototypeHub::GetBesHouseholdResidentLine(FName StableId) const
         return State.wardenInterviewed
             ?TEXT("Rheva: I verified the municipal pay record. A rescue cannot erase the claim; a treasury has to pay what it owes.")
             :TEXT("Rheva: Visit Bes's real home, then return. I will corroborate the municipal books.");
+    if(StableId==FName(TEXT("npc.saltwake.courier.001")) &&
+       State.wardenInterviewed)
+        return State.meraGuaranteeUsed
+            ?FString::Printf(TEXT("Mera: I personally advanced my earned marks to Bes. Cinderhold still owes me %d; that risk belongs to my household."),State.guaranteeOwed)
+            :State.meraConsented
+            ?TEXT("Mera: I agreed to lend a MAXIMUM of six of my own earned marks. The physical guarantee record is beside my Saltwake route.")
+            :TEXT("Mera: A city cannot pay an absent courier in words. Ask me in person if you need a bounded loan from my own savings.");
     if(StableId==FName(TEXT("npc.cinderhold.healer.001")) &&
        State.phase>=static_cast<int>(UnmadeCore::BesPhase::WagesReported))
         return State.heatBaskets==0
@@ -2402,6 +2409,8 @@ bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
         Result=BesHousehold.HearBes(LivingTrades,GetGameDay());
     else if(StableId==FName(TEXT("npc.cinderhold.emberwarden.001")))
         Result=BesHousehold.HearRheva(GetGameDay());
+    else if(StableId==FName(TEXT("npc.saltwake.courier.001")))
+        Result=BesHousehold.OfferMeraGuarantee(GetGameDay());
     if(Result==UnmadeCore::BesOutcome::Blocked ||
        Result==UnmadeCore::BesOutcome::NoChange)return false;
     if(!WriteWorldSnapshot())
@@ -2413,8 +2422,10 @@ bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
     if(GEngine)
         GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Cyan,
             Result==UnmadeCore::BesOutcome::Reported
-            ?TEXT("BES: An unpaid real wage is recorded. Inspect the home beside his route, then hear Rheva.")
-            :TEXT("RHEVA: The household inspection and pay evidence agree. Choose real warmth, a walkout, or funded restitution."));
+            ?TEXT("BES: An unpaid real wage is recorded. Inspect his home, then hear Rheva.")
+            :Result==UnmadeCore::BesOutcome::ConsentRecorded
+                ?TEXT("MERA CONSENTS: Her bounded loan is available at the real Saltwake guarantee marker. It will shift the debt, not erase it.")
+                :TEXT("RHEVA: The home and municipal pay record agree. Carry real warmth, walk out, repay the debt, or ask Mera's consent."));
     return true;
 }
 
@@ -2424,7 +2435,10 @@ void AUnmadePrototypeHub::RefreshBesHouseholdWorld()
     SetRiteWorldActorState(FName(TEXT("Bes.ColdHearth")),S.heatBaskets==0);
     SetRiteWorldActorState(FName(TEXT("Bes.WarmHearth")),S.heatBaskets>0);
     SetRiteWorldActorState(FName(TEXT("Bes.WalkoutBanner")),BesHousehold.OnWalkout());
-    SetRiteWorldActorState(FName(TEXT("Bes.PaidRecord")),BesHousehold.EndgameWitness());
+    SetRiteWorldActorState(FName(TEXT("Bes.PaidRecord")),
+        BesHousehold.Phase()==UnmadeCore::BesPhase::Settled);
+    SetRiteWorldActorState(FName(TEXT("Bes.GuarantorRecord")),
+        S.meraGuaranteeUsed&&S.guaranteeOwed>0);
 }
 
 bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
@@ -2434,13 +2448,17 @@ bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
        bMaterialSaveRejected||bLivingEconomyRejected)return false;
     const FVector At=Player->GetActorLocation();
     const auto* Region=UnmadeCore::RealmReactionAt(At.X,At.Y);
-    if(!Region||Region->realm!=UnmadeCore::Realm::HearthBeneath)return false;
+    if(!Region||(Region->realm!=UnmadeCore::Realm::HearthBeneath &&
+                 Region->realm!=UnmadeCore::Realm::WidowedRain))return false;
     for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
     {
         const bool Home=It->ActorHasTag(FName(TEXT("Bes.Home")));
         const bool Walkout=It->ActorHasTag(FName(TEXT("Bes.WalkoutChoice")));
         const bool Pay=It->ActorHasTag(FName(TEXT("Bes.RestitutionChoice")));
-        if(!Home&&!Walkout&&!Pay)continue;
+        const bool Guarantee=It->ActorHasTag(FName(TEXT("Bes.MeraGuarantee")));
+        if(!Home&&!Walkout&&!Pay&&!Guarantee)continue;
+        if(Guarantee && Region->realm!=UnmadeCore::Realm::WidowedRain)continue;
+        if(!Guarantee && Region->realm!=UnmadeCore::Realm::HearthBeneath)continue;
         const double DistSq=FVector::DistSquared(At,It->GetActorLocation());
         if(DistSq>FMath::Square(245.f)||DistSq>=CompetingNpcDistanceSq)continue;
         FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeBesHome),false);
@@ -2461,6 +2479,7 @@ bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
                 Result=BesHousehold.DeliverHome(Materials,GetGameDay());
         }
         else if(Walkout)Result=BesHousehold.BeginWalkout(LivingTrades,GetGameDay());
+        else if(Guarantee)Result=BesHousehold.AcceptMeraGuarantee(LivingTrades,GetGameDay());
         else Result=BesHousehold.SettleFromTown(LivingTrades,GetGameDay());
         if(Result==UnmadeCore::BesOutcome::Blocked ||
            Result==UnmadeCore::BesOutcome::NoChange)
@@ -2490,7 +2509,9 @@ bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
             case UnmadeCore::BesOutcome::WalkoutBegun:
                 Story=TEXT("BES REFUSES UNPAID WORK: Cinderhold loses one production worker tomorrow. Payroll records no phantom shift.");break;
             case UnmadeCore::BesOutcome::WagesSettled:
-                Story=TEXT("FULL RESTITUTION: municipal marks actually transferred to Bes. A real shift can now resume.");break;
+                Story=TEXT("FULL RESTITUTION: real Cinderhold treasury marks paid Bes and any Mera guarantee; work can resume.");break;
+            case UnmadeCore::BesOutcome::GuaranteePaid:
+                Story=TEXT("MERA'S SACRIFICE: she physically underwrote Bes with owned wages. Cinderhold still owes Mera; no marks created.");break;
             default:Story=TEXT("Evidence recorded.");
             }
             GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Cyan,Story);
