@@ -52,6 +52,7 @@ public:
            (s.guaranteeOwed>0&&!s.meraGuaranteeUsed)||
            (s.phase==static_cast<int>(BesPhase::Underwritten)&&
             (!s.meraGuaranteeUsed||s.guaranteeOwed==0))||
+           (s.phase==static_cast<int>(BesPhase::Settled)&&s.guaranteeOwed!=0)||
            (s.phase==0&&(s.firstReportDay!=0||s.homeVisited||
                           s.wardenInterviewed||s.reliefPacks>0||
                           s.meraConsented||s.meraGuaranteeUsed||
@@ -142,7 +143,11 @@ public:
         // physically fulfilled to fund the bargain.
         // Preflight both obligations before changing EITHER account; a failed
         // second payment may never partially mutate the first.
-        if(w->employerMarks<w->owedMarks+record_.guaranteeOwed)return BesOutcome::Blocked;
+        const auto* mera=economy.Worker(Realm::WidowedRain);
+        if(!mera || w->employerMarks<w->owedMarks+record_.guaranteeOwed ||
+           w->earnedMarks>100000-w->owedMarks ||
+           mera->earnedMarks>100000-record_.guaranteeOwed)
+            return BesOutcome::Blocked;
         if(w->owedMarks>0&&!economy.PayAllBesArrears())return BesOutcome::Blocked;
         if(record_.guaranteeOwed>0)
         {
