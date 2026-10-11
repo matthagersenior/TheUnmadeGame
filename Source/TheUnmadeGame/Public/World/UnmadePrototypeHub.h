@@ -86,6 +86,8 @@ public:
     void SkipBesDirectedScene();
     UFUNCTION(BlueprintPure,Category="Unmade|Unpaid Shift")
     FString GetBesDecisionOptions() const;
+    UFUNCTION(BlueprintPure,Category="Unmade|Unpaid Shift")
+    FString GetBesDecisionPreviewForStation(FName StationTag) const;
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetBesHouseholdJournal() const;
     bool HasBesHouseholdWitness() const { return BesHousehold.EndgameWitness(); }
