@@ -2123,6 +2123,168 @@ void AUnmadePrototypeHub::RefreshRealityConsequenceWorld()
         Civic==UnmadeCore::RealityPublicResponse::ContestedAccord);
 }
 
+void AUnmadePrototypeHub::AdvanceMaterialDayIfNeeded()
+{
+    if(bMaterialSaveRejected || Materials.Town(UnmadeCore::Realm::ThreefoldReach)->day>=GetGameDay())
+        return;
+    std::array<UnmadeCore::RealityPublicResponse,9> Civic{};
+    Civic[0]=RealityLedger.PublicResponse();
+    for(int i=1;i<9;++i)
+        if(const auto* L=OuterReactions.Read(static_cast<UnmadeCore::Realm>(i)))
+            Civic[i]=L->PublicResponse();
+    const auto Before=Materials.Snapshot();
+    const auto Cargo=Materials.Cargo();
+    if(!Materials.AdvanceAllOneDay(Civic))return;
+    if(!WriteWorldSnapshot())
+    {
+        Materials.Restore(Before,Cargo,GetGameDay());
+        return;
+    }
+    RefreshMaterialWorld();
+}
+
+void AUnmadePrototypeHub::RefreshMaterialWorld()
+{
+    for(int i=0;i<9;++i)
+    {
+        const auto* Town=Materials.Town(static_cast<UnmadeCore::Realm>(i));
+        if(!Town)continue;
+        const FString Prefix=FString::Printf(TEXT("Material.%d."),i);
+        SetRiteWorldActorState(FName(*(Prefix+TEXT("Shortage"))),
+            Town->households<UnmadeCore::MaterialPolicies[i].dailyNeed);
+        SetRiteWorldActorState(FName(*(Prefix+TEXT("Damaged"))),Town->integrity<65);
+        SetRiteWorldActorState(FName(*(Prefix+TEXT("Repaired"))),
+            Town->repairs>0 && Town->integrity>=65);
+    }
+}
+
+UnmadeCore::MaterialDuty AUnmadePrototypeHub::GetMaterialDuty(
+    FVector At,UnmadeCore::NpcRole Role) const
+{
+    const auto* P=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!P)return UnmadeCore::MaterialDuty::Regular;
+    const auto* T=Materials.Town(P->realm);
+    return T?UnmadeCore::MaterialWorld::Duty(P->realm,Role,*T,Clock.Phase()):
+        UnmadeCore::MaterialDuty::Regular;
+}
+
+FVector AUnmadePrototypeHub::GetMaterialDutyDestination(
+    FVector At,UnmadeCore::MaterialDuty Duty) const
+{
+    const auto* P=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!P)return At;
+    switch(Duty)
+    {
+        case UnmadeCore::MaterialDuty::Haul:
+            return FVector(P->originX+1000,P->originY-830,At.Z);
+        case UnmadeCore::MaterialDuty::Shelter:
+            return FVector(P->originX+1000,P->originY-230,At.Z);
+        case UnmadeCore::MaterialDuty::Repair:
+            return FVector(P->originX+1550,P->originY+300,At.Z);
+        default:return At;
+    }
+}
+
+FString AUnmadePrototypeHub::GetMaterialResidentLine(FVector At) const
+{
+    const auto* P=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!P)return FString();
+    const auto* T=Materials.Town(P->realm);
+    if(!T)return FString();
+    if(T->households<UnmadeCore::MaterialPolicies[static_cast<int>(P->realm)].dailyNeed)
+        return FString::Printf(TEXT("%s household board: only %d units of %s remain. We need a real delivery."),
+            UTF8_TO_TCHAR(P->city),T->households,
+            UTF8_TO_TCHAR(UnmadeCore::MaterialPolicies[static_cast<int>(P->realm)].unit));
+    if(T->integrity<65)
+        return FString::Printf(TEXT("%s workers have posted structural damage: %d/100. Bracing costs actual depot supplies."),
+            UTF8_TO_TCHAR(P->city),T->integrity);
+    return FString::Printf(TEXT("%s's public supply tally lists %d stored units and %d in homes."),
+        UTF8_TO_TCHAR(P->city),T->store,T->households);
+}
+
+FString AUnmadePrototypeHub::GetLocalMaterialJournal() const
+{
+    if(!GetWorld())return TEXT("MATERIALS: world not available");
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return TEXT("MATERIALS: no local position");
+    const auto At=Player->GetActorLocation();
+    const auto* P=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!P)return TEXT("MATERIALS: no local depot in the road between realms.");
+    const int Id=static_cast<int>(P->realm);
+    const auto* T=Materials.Town(P->realm);
+    if(!T)return FString();
+    const auto& Plan=UnmadeCore::MaterialPolicies[Id];
+    const auto C=Materials.Cargo();
+    const FString Carry=C.realm<0?TEXT("no carried relief")
+        :FString::Printf(TEXT("carrying %d %s from %s"),C.units,
+            UTF8_TO_TCHAR(UnmadeCore::MaterialPolicies[C.realm].unit),
+            UTF8_TO_TCHAR(UnmadeCore::RealmReactionPolicies[C.realm].city));
+    return FString::Printf(
+        TEXT("%s | %s: depot %d, homes %d, daily need %d, workers %d, structure %d/100, shortages %d days, repairs %d, relief deliveries %d | %s"),
+        UTF8_TO_TCHAR(P->city),UTF8_TO_TCHAR(Plan.unit),T->store,T->households,
+        Plan.dailyNeed,UnmadeCore::MaterialWorld::Workers(P->realm,T->integrity,
+            P->realm==UnmadeCore::Realm::ThreefoldReach
+                ?RealityLedger.PublicResponse()
+                :OuterReactions.Read(P->realm)->PublicResponse()),
+        T->integrity,T->shortageDays,T->repairs,T->deliveries,*Carry);
+}
+
+bool AUnmadePrototypeHub::TryMaterialInteraction(
+    AUnmadeCharacter* Player,double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player)||!GetWorld()||bMaterialSaveRejected)return false;
+    const auto At=Player->GetActorLocation();
+    const auto* P=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!P)return false;
+    const int i=static_cast<int>(P->realm);
+    const FString Prefix=FString::Printf(TEXT("Material.%d."),i);
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        const bool Store=It->ActorHasTag(FName(*(Prefix+TEXT("Store"))));
+        const bool Home=It->ActorHasTag(FName(*(Prefix+TEXT("Homes"))));
+        const bool Repair=It->ActorHasTag(FName(*(Prefix+TEXT("Repair"))));
+        if(!Store&&!Home&&!Repair)continue;
+        const double Distance=FVector::DistSquared(At,It->GetActorLocation());
+        if(Distance>FMath::Square(250.f)||Distance>=CompetingNpcDistanceSq)continue;
+        FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeMaterialDepot),false);
+        Sight.AddIgnoredActor(Player);
+        Sight.AddIgnoredActor(*It);
+        if(GetWorld()->LineTraceTestByChannel(At+FVector(0,0,65),
+             It->GetActorLocation()+FVector(0,0,60),ECC_Visibility,Sight))
+            continue;
+        const auto Before=Materials.Snapshot();
+        const auto Cargo=Materials.Cargo();
+        const auto Result=Store?Materials.Collect(P->realm,GetGameDay()):
+            Home?Materials.Deliver(P->realm,GetGameDay()):
+                 Materials.Repair(P->realm,GetGameDay());
+        if(Result!=UnmadeCore::MaterialAction::Collected &&
+           Result!=UnmadeCore::MaterialAction::Delivered &&
+           Result!=UnmadeCore::MaterialAction::Repaired)
+        {
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Yellow,
+                TEXT("MATERIALS: need sufficient stock, available home capacity or genuine damage. No free goods."));
+            return true;
+        }
+        if(!WriteWorldSnapshot())
+        {
+            Materials.Restore(Before,Cargo,GetGameDay());
+            return true;
+        }
+        RefreshMaterialWorld();
+        if(GEngine)
+        {
+            const TCHAR* Action=Result==UnmadeCore::MaterialAction::Collected
+                ?TEXT("COLLECTED: deliver the pack to this realm's households.")
+                :Result==UnmadeCore::MaterialAction::Delivered
+                ?TEXT("DELIVERED: household reserves increased; the pack is gone.")
+                :TEXT("REPAIRED: local depot materials spent; structure condition restored.");
+            GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Green,Action);
+        }
+        return true;
+    }
+    return false;
+}
+
 void AUnmadePrototypeHub::RefreshOuterReactionWorld()
 {
     OuterActiveMask=0;
@@ -2340,6 +2502,27 @@ void AUnmadePrototypeHub::BuildForPrototype()
             FName(*(Prefix+TEXT("InquiryLedger"))));
     }
     RefreshOuterReactionWorld();
+    // Nine visible work sites, one finite stockroom and household delivery
+    // target per region. Actor tags are stable, save fields contain the truth.
+    for(int i=0;i<9;++i)
+    {
+        const auto& P=UnmadeCore::RealmReactionPolicies[i];
+        const FVector Origin(P.originX,P.originY,0);
+        const FString Prefix=FString::Printf(TEXT("Material.%d."),i);
+        SpawnBlock(Origin+FVector(1000,-830,100),FVector(.8,.7,1.8),
+            FName(*(Prefix+TEXT("Store"))));
+        SpawnBlock(Origin+FVector(1000,-230,100),FVector(.8,.7,1.8),
+            FName(*(Prefix+TEXT("Homes"))));
+        SpawnBlock(Origin+FVector(1550,300,100),FVector(.8,.7,1.8),
+            FName(*(Prefix+TEXT("Repair"))));
+        SpawnBlock(Origin+FVector(1900,350,165),FVector(.7,.3,2.7),
+            FName(*(Prefix+TEXT("Damaged"))));
+        SpawnBlock(Origin+FVector(1900,350,120),FVector(1.5,.3,1.0),
+            FName(*(Prefix+TEXT("Repaired"))));
+        SpawnBlock(Origin+FVector(1000,-230,240),FVector(.55,.3,.45),
+            FName(*(Prefix+TEXT("Shortage"))));
+    }
+    RefreshMaterialWorld();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={
