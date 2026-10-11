@@ -977,3 +977,87 @@ This sequence is an **authored adaptation treatment**, not already voiced or fil
 - **Still requires Windows UE testing:** actual compiling in the Unreal Editor, physical actor reachability, collision, scrolling text, controller accessibility, fully realized NPC performance, spoken dialogue, UMG evidence board, route hazards, eventual independently traveling couriers and continuous end-to-end gameplay.
 
 The original Unanswered Interval remains unanswered. **The distinctive mystery here is not only what happened before history. It is what two ordinary people decide to do tomorrow.**
+
+---
+
+## 21. The Law of Consequence — The City That Kept Both Scars
+*Volume X · foundational Reality Consequence Engine / first playable Crossings slice · 11 October 2026*
+
+The Unmade can alter the shape of a street, still a bell for a heartbeat, or coax a bridge from its surviving witnesses. But streets are walked upon. Bells have keepers. A bridge may bring a refugee to safety and also bring a tax collector to the door. **The world must change with the alteration, rather than waiting politely for the spell effect to disappear.**
+
+This is *The Law of Consequence*: each legitimate reality action has a mechanically traceable life across architecture, movement, combat, individual witnesses and the city's durable evidence. Neither a universal reputation number nor a single cosmic interpretation can replace those different effects. A character's experience can contradict the city's public response while remaining entirely sincere.
+
+### The crossing and its three transient architectures
+
+The initial gameplay stage takes place within a bounded part of **the Crossings**, not all nine realms simultaneously. A rite cast nearby may briefly make a safe span accessible, strain the passage with a dangerous mass, or give a threshold two visibly incompatible arrangements. The same casting event also modifies how nearby hostile stalkers and watchers close distance. In the prototype the masonry is graybox geometry: a real actor with collision, not a completed animation or architectural art asset.
+
+**The supported architecture outcomes are:**
+
+1. **Safe span:** witness-supported and protective rites produce a temporary physical approach; enemies approach more slowly, creating a legible chance to reposition without freezing them.
+2. **Strained span:** an unbound law or borrowed tomorrow distorts the approach; enemies move more aggressively and the changed physical structure demands attention.
+3. **Double threshold:** a borrowed life or paradox briefly gives the crossing two incompatible built shapes; enemies react with a different pursuit tempo, and the player can use geometry rather than a hidden numerical morality advantage.
+
+A temporary structure expires on the saved **world clock**, not when the camera leaves the region. Leaving and returning does not grant a duplicate ritual. The rite's own strain and cooldown remain governed by the established Tenfold Chronicle; no new arbitrary energy or free power system is invented here.
+
+### Ten disciplines, ten reasons the city responds
+
+| Rite already in canon | Temporary environment | Combat rhythm near the Crossings | Human consequence reading |
+| --- | --- | --- | --- |
+| Unwrite Law | Strained span | Enemies close faster | What supports a house when its laws fail? |
+| Witnesscraft | Safe span | Enemies close more cautiously | Whose independent memory may hold the road? |
+| Borrowed Lives | Double threshold | Enemy pace increases | Who is responsible for work done by a possible other self? |
+| Legacy Forging | Safe span | Approach slows | Can ordinary labor be remembered without becoming compulsory service? |
+| Living Roads | Safe span | Approach slows | Who may use a road owned by neither community? |
+| Tomorrow's Debt | Strained span | Approach accelerates | Who will pay when tomorrow's borrowed strength is gone? |
+| Understanding Bosses | Safe span | Enemies withdraw/approach more slowly | Can mercy leave both victim and witness intact? |
+| Paradox Convergence | Double threshold | Approach quickens | What if both contradictory addresses remain occupied? |
+| Oathbinding | Safe span | Approach slows | Can a public promise protect a nameless guest? |
+| Unreliable Cartography | Safe span | Approach slows modestly | Who is harmed when an uncertain route is printed as certain? |
+
+The table describes source-defined local profiles, **not ten fully animated and realm-specific spell manifestations**. Temporary combat tuning is the enemy's actual swept movement speed, not invented damage calculations or invisible AI strategy. Most rites already have distinct direct abilities elsewhere (for example, Unwrite Law's chosen gravity, sound, or momentum). The consequence engine connects those abilities to the same local world record.
+
+### A civic act cannot happen without witnesses
+
+Hessa would never describe an unobserved reality rite as something she saw. Sevrin would not date a structure that he never examined. Orrel will not infer an entire city agrees with him merely because the player cast a powerful spell twice.
+
+A single cast can alter the temporary masonry even if there are no human onlookers. **Permanent public traces require a mastered rite actually witnessed at the location.** Two distinct qualifying rites on the sheltering side produce a **Shared Passage** record. Two distinct qualifying rites on the interrogating side produce a **Public Inquiry** record. They aren't a score that can be ground by repeating the same spell.
+
+Crucially, if the city has honestly witnessed at least two different examples *of both kinds*, it keeps **both records**: the protective way and the public question. This outcome is called the **Contested Accord**. Neither side of the contradiction is magically erased. One can walk beside a stone supporting access and another requesting structural investigation; a responsible civilization might need both.
+
+No character is told a global event by telepathy. Residents within sight of the actual caster acquire a personal memory. Nearby others can later learn an attributed rumor from that witness through the existing physically bounded conversation rules. They must distinguish *“I saw a crossing change”* from *“I heard that it changed”*. Their trust and fear respond differently to a witnessed protective action versus a witnessed unsettling inquiry; this never silently replaces their authored biography or private concerns.
+
+### The two costs of the same passage
+
+The ordinary market bell rings. A player opens a safer approach with Witnesscraft, and a trader finishes carrying flour that would otherwise have been delayed. The player sees a temporary span and a changed combat lane. A resident who actually witnessed the action remembers its practical help. Her gratitude does **not** prove the bridge's history.
+
+Days later another witness sees Unwrite Law expose the uncertainty beneath the same structure. The investigation gains a defensible public question. When both kinds of testimony accumulate, the city has to hold relief and caution together. For a future cinematic, the sound must start with street life: wooden wheels, worn shoes and the argument of builders. There should be no generic blast of blue light that obscures whether an actual person was helped.
+
+**Orrel:** “It stands long enough for people to cross. That is a fact. It still has to be someone's work.”
+
+**Hessa:** “A fact that makes the road safer is not the same thing as permission to count everyone on it.”
+
+**Sevrin:** “Then show me how the stone was supported. Show me the witness. Tell me which part you know.”
+
+The lines are *authored future scene writing*, not a claim that these specific voice-acted conversations have been imported into Unreal. The in-game source now produces separate direct/heard response text in resident conversations.
+
+### What the engine must never fake
+
+The Crossings model is the **first representative implementation** of a larger system. It provides ten mapped rite profiles, world-clock temporary architecture, tactical changes to actual local enemy movement, physically witnessed resident social reactions, and save-backed public civic structures. It retains the established Tenfold Rite costs/cooldowns and the player’s existing authored faction choices. Its record rejects invalid rite IDs, incompatible witness masks, non-finite durations, contradictory save snapshots and a civic history with an impossible witness type. On failed writes, the new consequence state is rolled back instead of displayed as a completed civic event.
+
+This model does not yet provide physically accurate falling masonry, authored structural engineering puzzles, a complete evacuation simulation, an advanced tactical combat AI, long-term NPC employment changes, production art, unique environmental soundscapes, or bespoke rules in every realm. All remain distinct future deliverables requiring proper assets and Unreal Editor testing. The current Source CI is a portable domain/source check; it is **not** certification of a compiled Windows UE game.
+
+### The nine-realm expansion rule
+
+Every future civilization must receive the same **causal accounting**, not the same civic morality or identical architecture:
+
+- **Bellwold:** count fires, winter shelter beds and protected identities separately. Protection and public recognition can conflict.
+- **Paperhaven:** testimony has a source, consent boundary and disputed chronology. An archive can publish an objection without publishing its vulnerable author.
+- **Saltwake:** a dry harbor's tariffs and stormwater routes turn spatial magic into an economic and engineering question.
+- **Cinderhold:** heat, fuel and communal kilns mean a spell has material beneficiaries, labor costs and dangerous winter trade-offs.
+- **Orravane:** sound maintains suspended homes; a temporary silencing rite needs evacuation planning, not only a damage number.
+- **Drevlach:** a changed address, ancestral labor and the continuity of occupied structures must remain connected.
+- **Other established realms:** their distinct language, law, physical hazards and historical debts determine consequences, never generic biome reskins.
+
+The climax with Nhal-Vey can then test the player's literacy in trade-offs: they must protect lives while confronting incompatible accounts, without acquiring one omnipotent button that makes everyone else agree.
+
+The unresolved question still rattles Orrel's nail. The world no longer pretends the nail is alone.
