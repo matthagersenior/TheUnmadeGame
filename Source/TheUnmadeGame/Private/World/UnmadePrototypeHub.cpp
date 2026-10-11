@@ -625,6 +625,16 @@ bool AUnmadePrototypeHub::GetNearbyCommitPreview(
         Warning=FString(UTF8_TO_TCHAR(UnmadeCore::WitnessBraidChronicle::Warning(Choice)));
         return true;
     }
+    // The original physical packet must be received, and a full morning
+    // must pass. The old two-press irreversible-choice gate remains in charge.
+    if(ReturnWitness.Stage()==UnmadeCore::WitnessReturnStage::AwaitingMorning &&
+       UnmadeCore::WitnessReturn::CanChoose(Dispatch,WitnessBraid.Outcome(),GetGameDay()) &&
+       Nearby(FName("npc.bellwold.matron.001")))
+    {
+        Scope=FName("WitnessReturn.HessaReply");
+        Warning=FString(UTF8_TO_TCHAR(UnmadeCore::WitnessReturn::Warning(Choice)));
+        return true;
+    }
     return false;
 }
 
@@ -1362,6 +1372,125 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
     return true;
 }
 
+bool AUnmadePrototypeHub::ResolveNearbyWitnessReturn(int32 Choice)
+{
+    if(!GetWorld() ||
+       !UnmadeCore::WitnessReturn::CanChoose(Dispatch,WitnessBraid.Outcome(),GetGameDay()))
+        return false;
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return false;
+    bool bHessaNearby=false;
+    for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+    {
+        if(It->GetStableId()==FName("npc.bellwold.matron.001") &&
+           FVector::DistSquared(It->GetActorLocation(),Player->GetActorLocation())
+               <=FMath::Square(390.f)) {bHessaNearby=true;break;}
+    }
+    if(!bHessaNearby)return false;
+    const auto Before=ReturnWitness.Snapshot();
+    if(ReturnWitness.Choose(Choice,GetGameDay(),Dispatch,WitnessBraid.Outcome())!=
+       UnmadeCore::WitnessReturnEvent::Chosen)return false;
+    if(!WriteWorldSnapshot())
+    {
+        ReturnWitness.Restore(Before,Dispatch,WitnessBraid.Outcome(),GetGameDay());
+        return false;
+    }
+    RefreshWitnessReturnWorld();
+    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Yellow,
+        FString(UTF8_TO_TCHAR(ReturnWitness.HessaAfterChoosing())));
+    return true;
+}
+
+void AUnmadePrototypeHub::RefreshWitnessReturnWorld()
+{
+    const auto Stage=ReturnWitness.Stage();
+    SetRiteWorldActorState(FName("WitnessReturn.ReplyNote"),
+        Stage==UnmadeCore::WitnessReturnStage::ReplyPrepared);
+    SetRiteWorldActorState(FName("WitnessReturn.PrivateMarker"),
+        Stage==UnmadeCore::WitnessReturnStage::OrrelReceived &&
+        ReturnWitness.Route()==UnmadeCore::WitnessReturnRoute::PrivateCounsel);
+    SetRiteWorldActorState(FName("WitnessReturn.PublicMarker"),
+        Stage==UnmadeCore::WitnessReturnStage::OrrelReceived &&
+        ReturnWitness.Route()==UnmadeCore::WitnessReturnRoute::PublicHearing);
+}
+
+FString AUnmadePrototypeHub::GetWitnessReturnLine(FName NpcId) const
+{
+    if(NpcId==FName("npc.bellwold.matron.001") &&
+       ReturnWitness.Stage()!=UnmadeCore::WitnessReturnStage::AwaitingMorning)
+        return FString(UTF8_TO_TCHAR(ReturnWitness.HessaAfterChoosing()));
+    if(NpcId==FName("npc.bridgekeeper.001") &&
+       ReturnWitness.Stage()==UnmadeCore::WitnessReturnStage::OrrelReceived)
+        return FString(UTF8_TO_TCHAR(ReturnWitness.OrrelOnReceipt(WitnessBraid.Outcome())));
+    return FString();
+}
+
+bool AUnmadePrototypeHub::TryWitnessReturn(AUnmadeCharacter* Player,
+                                           double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player) || !GetWorld())return false;
+    const auto Stage=ReturnWitness.Stage();
+    if(Stage==UnmadeCore::WitnessReturnStage::ReplyPrepared)
+    {
+        for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+        {
+            if(!It->ActorHasTag(FName("WitnessReturn.ReplyNote")))continue;
+            const double DistSq=FVector::DistSquared(
+                Player->GetActorLocation(),It->GetActorLocation());
+            if(DistSq>FMath::Square(255.f) || DistSq>=CompetingNpcDistanceSq)
+                return false; // The nearest available interaction wins.
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeReturnPickup),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,65),
+                It->GetActorLocation()+FVector(0,0,35),ECC_Visibility,Sight))
+                return false;
+            const auto Before=ReturnWitness.Snapshot();
+            if(ReturnWitness.Take(GetGameDay())!=UnmadeCore::WitnessReturnEvent::PickedUp)
+                return false;
+            if(!WriteWorldSnapshot())
+            {
+                ReturnWitness.Restore(Before,Dispatch,WitnessBraid.Outcome(),GetGameDay());
+                return false;
+            }
+            RefreshWitnessReturnWorld();
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+                TEXT("HESSA'S REPLY COLLECTED: carry the physical response to Orrel at the Crossings."));
+            return true;
+        }
+    }
+    else if(Stage==UnmadeCore::WitnessReturnStage::PlayerCarrying)
+    {
+        for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+        {
+            if(It->GetStableId()!=FName("npc.bridgekeeper.001") ||
+               FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())
+                   >FMath::Square(260.f))continue;
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeReturnReceipt),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,65),
+                It->GetActorLocation()+FVector(0,0,65),ECC_Visibility,Sight))
+                return false;
+            const auto Before=ReturnWitness.Snapshot();
+            if(ReturnWitness.GiveToOrrel(GetGameDay())!=
+               UnmadeCore::WitnessReturnEvent::Delivered)return false;
+            if(!WriteWorldSnapshot())
+            {
+                ReturnWitness.Restore(Before,Dispatch,WitnessBraid.Outcome(),GetGameDay());
+                return false;
+            }
+            RefreshWitnessReturnWorld();
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+                FString(UTF8_TO_TCHAR(ReturnWitness.OrrelOnReceipt(WitnessBraid.Outcome()))));
+            return true;
+        }
+    }
+    return false;
+}
+
 void AUnmadePrototypeHub::RefreshWitnessDispatchWorld()
 {
     SetRiteWorldActorState(FName("WitnessDispatch.FoldedRecord"),
@@ -1856,7 +1985,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName("WitnessDispatch.FoldedRecord"));
     // A reply near Hessa's refuge; different permanent record at the
     // Crossings depending on whether the player kept it private or public.
-    SpawnBlock(FVector(-17410,390,100),FVector(0.45,0.3,0.12),
+    SpawnBlock(FVector(-18480,280,100),FVector(0.45,0.3,0.12),
         FName("WitnessReturn.ReplyNote"));
     SpawnBlock(FVector(-730,-260,95),FVector(0.35,1.5,0.35),
         FName("WitnessReturn.PrivateMarker"));
