@@ -2309,6 +2309,106 @@ FString AUnmadePrototypeHub::GetLocalMaterialJournal() const
         T->integrity,T->shortageDays,T->repairs,T->deliveries,*Carry);
 }
 
+FString AUnmadePrototypeHub::GetLivingEconomyResidentLine(FName StableId) const
+{
+    for(int i=0;i<9;++i)
+    {
+        if(StableId!=FName(UTF8_TO_TCHAR(UnmadeCore::NamedTradeWorkers[i].stableId)))
+            continue;
+        const auto* Worker=LivingTrades.Worker(static_cast<UnmadeCore::Realm>(i));
+        if(!Worker)return FString();
+        return FString::Printf(TEXT("My work as %s pays from a real town treasury. My household, %s, has %d earned marks and %d unpaid marks. I have received %d recorded trade deliveries."),
+            UTF8_TO_TCHAR(UnmadeCore::NamedTradeWorkers[i].profession),
+            UTF8_TO_TCHAR(UnmadeCore::NamedTradeWorkers[i].household),
+            Worker->earnedMarks,Worker->owedMarks,Worker->deliveriesWitnessed);
+    }
+    return FString();
+}
+
+FString AUnmadePrototypeHub::GetLivingEconomyJournal() const
+{
+    if(!GetWorld())return TEXT("LIVELIHOODS: no world available.");
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return FString();
+    const auto At=Player->GetActorLocation();
+    const auto* Local=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!Local)return TEXT("LIVELIHOODS: inter-realm road, no settlement treasury.");
+    const int Id=static_cast<int>(Local->realm);
+    const auto* Worker=LivingTrades.Worker(Local->realm);
+    if(!Worker)return FString();
+    const auto Cargo=LivingTrades.Cargo();
+    const FString Carry=Cargo.route<0?TEXT("no trade cargo")
+        :FString::Printf(TEXT("carrying contracted %s for %s"),
+            UTF8_TO_TCHAR(UnmadeCore::TradeContracts[Cargo.route].cargo),
+            UTF8_TO_TCHAR(UnmadeCore::RealmReactionPolicies[
+                static_cast<int>(UnmadeCore::TradeContracts[Cargo.route].destination)].city));
+    return FString::Printf(TEXT("LIVING ECONOMY %s: %s's employer holds %d marks; %d earned, %d owed to the named household; %d completed shifts | imports to Saltwake %d ember baskets, to Cinderhold %d rain casks | %s | mutual-aid evidence %s"),
+        UTF8_TO_TCHAR(Local->city),
+        UTF8_TO_TCHAR(UnmadeCore::NamedTradeWorkers[Id].stableId),
+        Worker->employerMarks,Worker->earnedMarks,Worker->owedMarks,Worker->shiftsPaid,
+        LivingTrades.Route(UnmadeCore::TradeRoute::HearthToSalt)->foreignStock,
+        LivingTrades.Route(UnmadeCore::TradeRoute::SaltToHearth)->foreignStock,
+        *Carry,LivingTrades.HasEarnedMutualAid()?TEXT("two receipts witnessed"):TEXT("incomplete"));
+}
+
+bool AUnmadePrototypeHub::TryLivingTradeInteraction(
+    AUnmadeCharacter* Player,double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player)||!GetWorld()||bLivingEconomyRejected||bMaterialSaveRejected)return false;
+    const FVector Position=Player->GetActorLocation();
+    const auto* Local=UnmadeCore::RealmReactionAt(Position.X,Position.Y);
+    if(!Local)return false;
+    for(int i=0;i<2;++i)
+    {
+        const auto& Contract=UnmadeCore::TradeContracts[i];
+        const FString Prefix=FString::Printf(TEXT("LivingTrade.%d."),i);
+        for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+        {
+            const bool bStart=It->ActorHasTag(FName(*(Prefix+TEXT("Start"))));
+            const bool bFinish=It->ActorHasTag(FName(*(Prefix+TEXT("Finish"))));
+            if(!bStart&&!bFinish)continue;
+            if((bStart&&Local->realm!=Contract.origin)||
+               (bFinish&&Local->realm!=Contract.destination))continue;
+            const double Distance=FVector::DistSquared(Position,It->GetActorLocation());
+            if(Distance>FMath::Square(260.f)||Distance>=CompetingNpcDistanceSq)continue;
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeLivingTrade),false);
+            Sight.AddIgnoredActor(Player);
+            Sight.AddIgnoredActor(*It);
+            if(GetWorld()->LineTraceTestByChannel(Position+FVector(0,0,65),
+                It->GetActorLocation()+FVector(0,0,65),
+                ECC_Visibility,Sight))continue;
+            const auto BeforeMaterials=Materials.Snapshot();
+            const auto BeforeCargo=Materials.Cargo();
+            const auto BeforeLiving=LivingTrades.Save();
+            const auto Done=bStart
+                ?LivingTrades.Collect(Contract.route,GetGameDay(),Materials)
+                :LivingTrades.Deliver(Contract.route,GetGameDay(),Materials);
+            if(Done!=UnmadeCore::TradeResult::Collected &&
+               Done!=UnmadeCore::TradeResult::Delivered)
+            {
+                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+                    TEXT("TRADE BLOCKED: exact cargo, sufficient origin stock and contracted buyer escrow required."));
+                return true;
+            }
+            if(!WriteWorldSnapshot())
+            {
+                Materials.Restore(BeforeMaterials,BeforeCargo,GetGameDay());
+                LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
+                return true;
+            }
+            RefreshMaterialWorld();
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,
+                FString::Printf(TEXT("%s: %s | %s"),
+                    bStart?TEXT("SIGNED CARGO COLLECTED"):TEXT("SIGNED CARGO RECEIVED"),
+                    UTF8_TO_TCHAR(Contract.cargo),
+                    bStart?TEXT("Carry it by foot or portal to the other town"):
+                           TEXT("Buyer escrow paid to source town; receiving worker remembers you")));
+            return true;
+        }
+    }
+    return false;
+}
+
 bool AUnmadePrototypeHub::TryMaterialInteraction(
     AUnmadeCharacter* Player,double CompetingNpcDistanceSq)
 {
@@ -2582,6 +2682,19 @@ void AUnmadePrototypeHub::BuildForPrototype()
             FName(*(Prefix+TEXT("InquiryLedger"))));
     }
     RefreshOuterReactionWorld();
+    // Physically different collection/receipt points for two authored, paid
+    // Saltwake-Cinderhold contracts. E operates only in the correct realm.
+    for(int i=0;i<2;++i)
+    {
+        const auto& C=UnmadeCore::TradeContracts[i];
+        const auto& From=UnmadeCore::RealmReactionPolicies[static_cast<int>(C.origin)];
+        const auto& To=UnmadeCore::RealmReactionPolicies[static_cast<int>(C.destination)];
+        const FString Prefix=FString::Printf(TEXT("LivingTrade.%d."),i);
+        SpawnBlock(FVector(From.originX+1360,From.originY-830,100),
+            FVector(.75,.65,1.7),FName(*(Prefix+TEXT("Start"))));
+        SpawnBlock(FVector(To.originX+1470,To.originY-180,100),
+            FVector(.75,.65,1.7),FName(*(Prefix+TEXT("Finish"))));
+    }
     // Nine visible work sites, one finite stockroom and household delivery
     // target per region. Actor tags are stable, save fields contain the truth.
     for(int i=0;i<9;++i)
