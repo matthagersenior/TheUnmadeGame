@@ -140,6 +140,9 @@ public:
         // Require full restitution, not a staged "solved" label after a
         // partial transfer. If the treasury is empty, shipments must be
         // physically fulfilled to fund the bargain.
+        // Preflight both obligations before changing EITHER account; a failed
+        // second payment may never partially mutate the first.
+        if(w->employerMarks<w->owedMarks+record_.guaranteeOwed)return BesOutcome::Blocked;
         if(w->owedMarks>0&&!economy.PayAllBesArrears())return BesOutcome::Blocked;
         if(record_.guaranteeOwed>0)
         {
