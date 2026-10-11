@@ -12,7 +12,7 @@ class MaterialConsequenceWiring(unittest.TestCase):
                      "TidalLedger","SkyBelow","CinderSpine","HundredUnlived",
                      "OrchardOfKings","FirstAbsence"):
             self.assertIn("Realm::"+name,rules)
-        for term in ("towns_[i].store-=PackSize","t.households+=PackSize","t.store-=p.repairCost",
+        for term in ("towns_[i].store-=PackSize","towns_[i].households+=PackSize","t.store-=p.repairCost",
                      "t.households-=used","t.produced=","t.laborHours=",
                      "t.shortageDays","t.integrity=","cargo_.realm!=i",
                      "InitializeAtDay","MaterialPolicies[i].dailyNeed"):
