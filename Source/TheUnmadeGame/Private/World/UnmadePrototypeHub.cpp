@@ -2435,6 +2435,14 @@ bool AUnmadePrototypeHub::TryMaterialInteraction(
         if(GetWorld()->LineTraceTestByChannel(At+FVector(0,0,65),
              It->GetActorLocation()+FVector(0,0,60),ECC_Visibility,Sight))
             continue;
+        // One physical carry slot: relief packs cannot coexist with a
+        // signed cross-realm consignment and secretly double the inventory.
+        if(Store && LivingTrades.Cargo().route!=-1)
+        {
+            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+                TEXT("DELIVER THE CONTRACTED FOREIGN CARGO BEFORE COLLECTING A LOCAL RELIEF PACK."));
+            return true;
+        }
         const auto Before=Materials.Snapshot();
         const auto Cargo=Materials.Cargo();
         const auto Result=Store?Materials.Collect(P->realm,GetGameDay()):
