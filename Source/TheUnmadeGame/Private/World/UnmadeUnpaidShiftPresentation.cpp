@@ -52,6 +52,20 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
         &AUnmadePrototypeHub::AdvanceBesDirectedBeat,
         FMath::Max(0.5f,Beat->duration),false);
 }
+void AUnmadePrototypeHub::MaybePlayBesReturnScene(FName StableId)
+{
+    if(!GetWorld()||BesActiveScene>=0 ||
+       BesHousehold.Phase()==UnmadeCore::BesPhase::Unheard)return;
+    const double Now=GetWorld()->GetTimeSeconds();
+    if(Now<LastBesReturningSceneAt+60.0)return;
+    if(StableId==FName(TEXT("npc.cinderhold.courier.001")))
+        PlayBesDirectedScene(static_cast<int32>(UnmadeCore::UnpaidScene::BesReturns));
+    else if(StableId==FName(TEXT("npc.saltwake.courier.001")) &&
+            BesHousehold.Save().meraConsented)
+        PlayBesDirectedScene(static_cast<int32>(UnmadeCore::UnpaidScene::MeraReturns));
+    else return;
+    LastBesReturningSceneAt=Now;
+}
 FString AUnmadePrototypeHub::BesDecisionPreview(FName Tag) const
 {
     const auto House=BesHousehold.Save();
