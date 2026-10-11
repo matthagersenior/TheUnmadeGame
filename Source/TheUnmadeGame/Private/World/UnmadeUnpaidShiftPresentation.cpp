@@ -1,8 +1,25 @@
 #include "World/UnmadePrototypeHub.h"
 #include "Engine/Engine.h"
 #include "TimerManager.h"
+#include "Engine/StaticMeshActor.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
 
+void AUnmadePrototypeHub::AnimateBesWorkingCart()
+{
+    if(!GetWorld()||!BesWorkingCart.IsValid())return;
+    // A small true runtime environmental movement, not a fake claim that
+    // skeletal performance capture or bespoke delivery animation exists.
+    const bool ShiftInProgress=
+        !BesHousehold.OnWalkout() &&
+        Clock.Phase()!=UnmadeCore::DayPhase::Night;
+    const float Sweep=ShiftInProgress
+        ?120.f*FMath::Sin(GetWorld()->GetTimeSeconds()*.48f):0.f;
+    const FVector Target=BesCartRest+FVector(0,Sweep,0);
+    BesWorkingCart->SetActorLocation(Target,false,nullptr,ETeleportType::TeleportPhysics);
+    if(BesVisibleBasket.IsValid())
+        BesVisibleBasket->SetActorLocation(Target+FVector(0,0,66),false,nullptr,
+            ETeleportType::TeleportPhysics);
+}
 void AUnmadePrototypeHub::SkipBesDirectedScene()
 {
     if(GetWorld())GetWorldTimerManager().ClearTimer(BesSubtitleTimer);
