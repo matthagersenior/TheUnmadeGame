@@ -3,6 +3,7 @@
 // Units are realm-specific; a Saltwake water cask is NOT Cinderhold ember fuel.
 // No network, random drops, free stock, or settlement-teleporting inventory.
 #include "World/UnmadeRealmReactionRules.h"
+#include "World/UnmadeLivingWorldRules.h"
 #include <array>
 #include <algorithm>
 #include <cstdint>
