@@ -233,3 +233,12 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Prevented simultaneous relief/trade parcels, wrong-recipient deposits and forged currency/receipts; saved all balances, wage debt, foreign stock, consumed aid and carried manifest atomically with corruption guards and rollback on disk write failure.
 - Returning worker NPCs acknowledge genuinely recorded pay, unpaid wages and receipt histories. Bidirectional delivered aid produces optional Nhal-Vey mask counter-testimony, without bypassing any boss combat or outcome.
 - Authored Volume X §24 and rigorous domain/source tests. Full NPC wage contracts, dynamic shops, trade taxes, escort AI, multi-tenant families and UE5 Windows Editor/PIE/cinematic QA remain pending.
+
+
+## 2026-10-11 — Lives Behind the Ledger (Reality Consequence Engine v5, Volume X §25)
+
+- First source-implemented named **individual home**: Bes at Cinderhold, with real collidable structure, private finite warmth, one unit consumed per actual day, days cold and authored return lines. His complaint is only available after the v4 real municipal pay ledger owes at least two marks.
+- Investigation is not a fake branch: hear Bes, inspect his own hearth, corroborate with Rheva; only then choose physical relief (real carried Cinderhold pack), true walkout (one fewer next-day city worker and no invented shift/salary), or exact funded municipal restitution. Relief does not mark a wage claim paid.
+- Optional named Saltwake guarantor Mera personally consents, then the player travels to a real guarantee station. One bounded owned-wage transfer to Bes preserves money and creates a new accountable claim on Cinderhold **owed to Mera**, not debt erasure. Full restitution must preflight all obligations to prevent partially succeeding on blocked payment.
+- Additive schema-1 household warmth/workday/phase/report/guarantor save records and corruption protection; both existing economy ledgers and household roll back on failed disk writes. NPC routines and real house/civic marker state respond; no global personal gossip.
+- Nhal-Vey's first mask-reveal has differentiated callback for municipal restitution, Mera's personal sacrifice or an unresolved refusal; the existing combat and endings remain mandatory. Native domain tests, source-connection tests, updated cumulative illustrated Bible and explicit Windows UE acceptance remain required release steps.
