@@ -16,6 +16,7 @@
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeRealityConsequenceRules.h"
 #include "World/UnmadeRealmReactionRules.h"
+#include "World/UnmadeMaterialConsequencesRules.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
@@ -56,6 +57,12 @@ public:
     int32 GetRealmTradeTrustBonus(FVector Position) const;
     UFUNCTION(BlueprintPure,Category="Unmade|Reality")
     FString GetRealityConsequenceJournal() const;
+    UFUNCTION(BlueprintPure,Category="Unmade|Economy")
+    FString GetLocalMaterialJournal() const;
+    bool TryMaterialInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    UnmadeCore::MaterialDuty GetMaterialDuty(FVector At,UnmadeCore::NpcRole Role) const;
+    FVector GetMaterialDutyDestination(FVector At,UnmadeCore::MaterialDuty Duty) const;
+    FString GetMaterialResidentLine(FVector At) const;
     int32 GetMinuteOfDay() const { return Clock.MinuteOfDay(); }
     int32 GetDiscoveredCount() const { return Discoveries.Count(); }
     int32 GetVisitedVillageCount() const { return VillagesVisited.Count(); }
@@ -159,6 +166,10 @@ private:
     UnmadeCore::LivingWorldClock Clock;
     UnmadeCore::RealityConsequenceLedger RealityLedger; // v1: Reach, do not migrate
     UnmadeCore::OuterRealmReactions OuterReactions; // eight isolated world histories
+    UnmadeCore::MaterialWorld Materials;
+    bool bMaterialSaveRejected=false;
+    void RefreshMaterialWorld();
+    void AdvanceMaterialDayIfNeeded();
     bool bOuterReactionsRejected=false;
     void RefreshOuterReactionWorld();
     bool bOuterReactionVisualActive=false;
