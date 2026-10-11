@@ -323,8 +323,13 @@ void AUnmadeCharacter::ReportRealityConsequenceEvent(UnmadeCore::RiteId Id)
     const int Index=static_cast<int>(Id);
     if(Index<0 || Index>=static_cast<int>(UnmadeCore::RealityProfiles.size()))return;
     const bool bCare=UnmadeCore::RealityProfiles[Index].care;
+    const auto* Policy=UnmadeCore::RealmReactionAt(
+        GetActorLocation().X,GetActorLocation().Y);
+    if(!Policy)return;
+    const FName Source(*FString::Printf(TEXT("Reality.Realm.%d"),
+        static_cast<int32>(Policy->realm)));
     ReportLocalEvent(FName(bCare?TEXT("Reality.CareWitnessed"):
-        TEXT("Reality.InquiryWitnessed")),FName("region.crossings.reality"));
+        TEXT("Reality.InquiryWitnessed")),Source);
 }
 
 void AUnmadeCharacter::ReportRiteWitnessEvent()
@@ -405,6 +410,9 @@ void AUnmadeCharacter::BuyMarketSupplies()
     {
         const auto Home=static_cast<UnmadeCore::Community>(static_cast<int32>(Village));
         Trust=Hub->GetCommunityOutcome(Home).tradeTrust;
+        // The existing real market price calculation receives a bounded,
+        // time-limited supply/trust credit only in the local Crossings.
+        Trust+=Hub->GetRealmTradeTrustBonus(P);
         break;
     }
     if(Equipment->Buy(Id,Village,Trust))
@@ -1403,7 +1411,8 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
             {
                 LastHazardImpactPulse[Index]=Hazard.pulseId;
                 if(Combat->ReceiveHazardPulse(
-                    static_cast<uint64>(0xF0100+Index),Hazard.pulseId,Hazard.damage) && GEngine)
+                    static_cast<uint64>(0xF0100+Index),Hazard.pulseId,Hazard.damage *
+                        (static_cast<double>(Hub->GetRealmHazardPercent(GetActorLocation()))/100.0)) && GEngine)
                     GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Orange,
                         TEXT("FRONTIER SURGE: you were exposed. Guard next pulse or operate the control."));
             }
@@ -1433,14 +1442,16 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
                LastLaterHazardPulse[Index]!=Hazard.pulseId)
             {
                 LastLaterHazardPulse[Index]=Hazard.pulseId;
+                const double AdjustedSeverity=Hazard.severity *
+                    (static_cast<double>(Hub->GetRealmHazardPercent(GetActorLocation()))/100.0);
                 bool bApplied=false;
                 if(Hazard.effect==UnmadeCore::LaterHazardEffect::Injury)
                     bApplied=Combat->ReceiveHazardPulse(
-                        Hazard.sourceId,Hazard.pulseId,Hazard.severity);
+                        Hazard.sourceId,Hazard.pulseId,AdjustedSeverity);
                 else if(Hazard.effect==UnmadeCore::LaterHazardEffect::Strain)
                 {
                     const auto Before=FractureModel.TakeSnapshot();
-                    bApplied=FractureModel.ApplyEnvironmentalStrain(Hazard.severity);
+                    bApplied=FractureModel.ApplyEnvironmentalStrain(AdjustedSeverity);
                     if(bApplied && !SaveFractureState())
                     {
                         FractureModel.Restore(Before);
