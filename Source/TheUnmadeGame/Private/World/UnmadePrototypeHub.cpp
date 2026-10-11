@@ -441,8 +441,9 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             Save->BesQuestPhase,Save->BesHouseholdDay,
             Save->BesHeatBaskets,Save->BesColdDays,
             Save->BesWalkoutDays,Save->BesReliefPacks,
-            Save->BesFirstReportDay,Save->bBesHomeVisited,
-            Save->bBesRhevaInterviewed};
+            Save->BesFirstReportDay,Save->BesMeraGuaranteeOwed,
+            Save->bBesMeraConsented,Save->bBesMeraGuaranteeUsed,
+            Save->bBesHomeVisited,Save->bBesRhevaInterviewed};
         if(!RestoredBes.Restore(State,RestoredClock.DayIndex()+1))
         {
             bBesHouseholdRejected=true;
@@ -667,6 +668,9 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->BesFirstReportDay=BesRecord.firstReportDay;
     Save->bBesHomeVisited=BesRecord.homeVisited;
     Save->bBesRhevaInterviewed=BesRecord.wardenInterviewed;
+    Save->BesMeraGuaranteeOwed=BesRecord.guaranteeOwed;
+    Save->bBesMeraConsented=BesRecord.meraConsented;
+    Save->bBesMeraGuaranteeUsed=BesRecord.meraGuaranteeUsed;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
