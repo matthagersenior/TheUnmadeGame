@@ -1,5 +1,30 @@
 # Latest illustrated lore publication
 
+**Current edition:** *The Unmade — Volume X, Chapter 21: The Law of Consequence* (11 October 2026)  
+**Merged gameplay baseline:** `73c682cab24e6856bca700d8822fe9b668d85b24` · [Reality Consequence Engine PR #37](https://github.com/matthagersenior/TheUnmadeGame/pull/37) · passing post-merge native/source [CI](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38130436456)  
+**Distribution:** Four locally verified conversation downloads and one integrity-checked ZIP. **The binary illustrations/books are not committed as GitHub Release assets.**  
+**Canon:** Volume X §21 connects all ten original Tenfold rites to a common Crossings first-slice rule for time-bounded architecture, local enemy movement, resident memory and coexisting civic records. Other realms remain future production targets.
+
+| New illustrated publication | Verified result |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Reality_Consequence_Engine.pdf` | **119 pages**, full cumulative Bible, zero blank pages, no page-outside text geometry |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Reality_Consequence_Engine.docx` | Editable cumulative master; **all 52 embedded prior illustrations retained** |
+| `THE_UNMADE_Volume_X_Illustrated_Reality_Consequence_Engine.pdf` | **47 pages**, full updated Volume X, blank trailing page corrected, no overflow |
+| `THE_UNMADE_Volume_X_Illustrated_Reality_Consequence_Engine.docx` | Editable standalone Volume X; **all five embedded original illustrations retained** |
+| `THE_UNMADE_Reality_Consequence_Engine_Complete_Illustrated_Package.zip` | **23 entries**, four refreshed books, eight previous concept art assets, original source/reference material, new Chapter 21 editorial text and production notes, SHA-256 manifests |
+
+**Document release QA:** Word documents rendered to PDF and page images with the docx render pipeline; final-page montages inspected, a standalone orphan page tightened, both final PDFs checked for off-page blocks and fully blank pages, prior illustration counts retained. ZIP CRC, every listed data-member size and SHA-256 digest independently verified. Historic edition receipts and sources below are preserved.
+
+**Implemented gameplay-source scope:** cross-system consequence domain for all ten rites; near-Crossings, world-clock-limited physical graybox scene variants and enemy movement multipliers; individual directly observed versus named-speaker rumor NPC reactions; a public Shared Passage, Public Inquiry or Contested Accord that requires two *distinct mastered and actually witnessed* rites from each applicable class; additive guarded old-save fields; source-and-native tests.
+
+**Not certified or completed:** Real Unreal Editor/UHT/PIE compilation, actual bridge traversability and architectural art, complex combat AI, advanced full 3D/cinematic sound/voice, accessible UMG, bespoke economic and civilian consequence behaviors across the nine realms, or production-quality release. A green source CI does not claim a playable finished game.
+
+**Canonical authored source:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` §21 and `docs/design/reality-consequence-engine-vertical-slice.md`; packaged Chapter 21 is editorial book text, not byte-for-byte copied canonical Markdown.
+
+---
+
+# Previous illustrated release — Volume X §20 / Return of the Witness
+
 **Current edition:** Volume X — *The Unanswered Atlas / The Return of the Witness* (10 October 2026)  
 **Source revision:** `e9e6bea900e3ecbd5f709f6061b975762d5cc634` · merged [PR #35](https://github.com/matthagersenior/TheUnmadeGame/pull/35) · post-merge GitHub source CI green  
 **Distribution:** Full PDF/DOCX and SHA-256 checked ZIP as verified ChatGPT conversation downloads; **not** committed as GitHub Release binaries.  
