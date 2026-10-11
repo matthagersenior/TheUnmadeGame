@@ -1,5 +1,27 @@
 # Latest illustrated lore publication
 
+**Current cumulative publication:** *The Unmade — Volume X, Chapter 26: The Unpaid Shift — Directed Quest* (11 October 2026).  
+**Gameplay code baseline:** `0a13e9ed7fb408de1684e65541c387d347b6f3b8` · [PR #47](https://github.com/matthagersenior/TheUnmadeGame/pull/47) · [green source CI on final feature branch](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38149270943).  
+**Canonical prose:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` Chapter 26; shot table source `Source/TheUnmadeGame/Public/World/UnmadeUnpaidShiftSceneRules.h`; implementation/Unreal acceptance `docs/design/unpaid-shift-v6-directed-quest-acceptance.md`.
+
+| User-downloadable artifact | Release acceptance |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_The_Unpaid_Shift_Directors_Edition.docx` | **130-page** complete cumulative Word master; retained **52** original illustrations |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_The_Unpaid_Shift_Directors_Edition.pdf` | **130 pages**, rendered through document workflow; zero fully blank pages or out-of-bounds text blocks |
+| `THE_UNMADE_Volume_X_Illustrated_The_Unpaid_Shift_Directors_Edition.docx` | **64-page** standalone Volume X, with its original **five** embedded illustrations |
+| `THE_UNMADE_Volume_X_Illustrated_The_Unpaid_Shift_Directors_Edition.pdf` | **64 pages**, rendered and checked; no entirely blank pages or text spilling outside paper |
+| `THE_UNMADE_Unpaid_Shift_Directors_Complete_Illustrated_Package.zip` | **34 entries**, all four current books, eight retained concept art files, earlier publication source references, director's release notes, 13-scene CSV overview and manifest; ZIP CRC and all **33** member SHA-256 checks independently verified |
+
+**Publication QA:** Both versions extend the complete preceding illustrated Word masters, not excerpts. The authoring step asserted all prior images retained (52 cumulative, five Volume X). Both DOCX files were converted to complete PDF and page PNGs; last five page spreads of each inspected. All 130+64 pages checked for empty content and off-page text. The ZIP was re-read, CRC validated, and each content member's exact byte length and SHA-256 independently matched its manifest. Binary books live as verified conversation downloads, **not** falsely described as committed GitHub Release assets.
+
+**Gameplay source:** The Unpaid Shift now has 13 deterministic directed scene IDs, 39 readable timed beats with stable speaker/subtitle/shot/actor/Foley/voice-direction metadata, skippable Blueprint-multicast timeline and caption fallback. Physical choice stations show actual ledger and care costs **before** an explicit second E interaction at that same site within twelve seconds; the v5 resource, consent and world-save authority is unchanged. Bes's former solid house has been replaced by an enterable graybox doorway and separate interior props. A nonblocking real runtime cart/coal prop moves during working routines, pausing on saved refusal. Bes and Mera have throttled, source-limited returning scene beats. Nhal-Vey's real first mask reveal receives an authored, saved-outcome scene with no boss shortcut.
+
+**Still missing, explicitly not certified:** recorded individual performances; generated/recorded Foley and final mix; real Sequencer camera track and professional cinematic lighting; skeletal character animation/IK/lipsync; real UMG subtitle/choice widget; Windows Unreal Engine UHT/Editor/PIE compile and physical playtesting; controller/small-screen safe-area and end-to-end quest QA. The scene names are *production cue identifiers*, not proof audio files or full film sequences exist.
+
+---
+
+# Previous illustrated publication — Volume X Chapter 25
+
 **Current illustrated edition:** *The Unmade — Volume X, Chapter 25: Lives Behind the Ledger* (11 October 2026)  
 **Source gameplay baseline:** `fd87f362f3601cadbbd73080299f59d79a8c6533` · [feature PR #45](https://github.com/matthagersenior/TheUnmadeGame/pull/45) · [strict source tests](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38146976752)  
 **Canon:** Volume X §25, *Lives Behind the Ledger — Bes and the Hearth That Cannot Be Forgiven*. A real Cinderhold wage dispute, individually finite home warmth, personal pay history, voluntary stoppage, consenting guarantor and three possible endgame callbacks.  
