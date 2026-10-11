@@ -24,6 +24,7 @@ public:
           health_(maximumHealth_), damage_(Positive(damage) ? damage : 24.0),
           cooldown_(Positive(cooldown) ? cooldown : 0.75) {}
 
+    bool SetDamage(double damage) noexcept {if(!Positive(damage))return false;damage_=damage;return true;}
     double Health() const noexcept { return health_; }
     double MaximumHealth() const noexcept { return maximumHealth_; }
     bool IsAlive() const noexcept { return health_ > 0; }

@@ -1,3 +1,19 @@
+# Current illustrated release — Frontier Adventures v14
+
+Date: 11 October 2026. Code baseline: `955319dbc800c4e120819522995b0432fa471e26`.
+
+Actual rebuilt books: complete cumulative illustrated Bible **152 pages / 58 illustrations** in PDF and DOCX; complete standalone Volume X **98 pages / 11 illustrations** in PDF and DOCX. Every inherited paragraph and image is retained. New nine-realm atlas and complete `THE_UNMADE_Frontier_Adventures_v14_Complete_Package.zip` include current source, canon, retained art/audio/rig kit, tested publisher and previous full v13 Word masters. The new dated edition is saved as individual files at the Library root and delivered as direct downloads; previous dated editions remain intact.
+
+Source implemented: nine combat/exploration arcs, eighteen new inhabited sites (29 total settlements), 45 new residents, 54 dungeon chambers, 72 ordinary enemies with four tactical roles, nine named phased bosses, 27 evidence records and 18 captive release points. Rescue/evidence branches, dead/yielded bosses, physically changed return gates, removed local patrols, stopped hazards and witnessed returns persist. E/F permanently selects one of 18 equipment options with nine distinct passive techniques; old selections remain owned and can be re-equipped. Existing campaign, original cast, inventory IDs, wages, fuel, consent and OPEN mysteries retain authority. Deliveries remain supporting quests. An earlier malformed NPC function declaration is repaired.
+
+Validation: **245 Python tests; 48 compiled portable C++ executables; 18 Python workflow validator commands**. Full DOCX rendering; all page overviews and new pages inspected; zero empty pages or off-page text blocks; inherited PDF text and image bytes retained. ZIP CRC and member SHA-256 verified.
+
+**Unreal compilation and engine playtesting are deferred at the creator’s request.** Navmesh, collision/LOS, capsule clearance, skeletal imports, camera, balance and save/load in PIE remain unverified. Graybox settlement/dungeon architecture and reused optional rigs are not final art. Captive return is a saved relocation after actual release, not an animated escort simulation. No final VO or packaged executable is claimed. Acceptance: `docs/design/frontier-adventures-v14-acceptance.md`.
+
+Digests: `RELEASE_SHA256_MANIFEST.json`; package contains its own member manifest. No GitHub binary Release is claimed.
+
+---
+
 # Current illustrated release — Remembered Roads v13
 
 Date: 11 October 2026. Code baseline: `4bb974abbf9630a299fa49e6c3e70cbfb700fe20`.

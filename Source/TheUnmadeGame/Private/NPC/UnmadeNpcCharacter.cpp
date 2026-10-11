@@ -81,6 +81,11 @@ void AUnmadeNpcCharacter::EndDirectedBlocking()
 }
 void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
 {
+    if(ExpeditionHomeArc>=0&&ExpeditionCaptive>=0){
+        if(!CachedHub.IsValid())CachedHub=Cast<AUnmadePrototypeHub>(UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass()));
+        if(!CachedHub.IsValid()||CachedHub->ExpeditionCaptiveWaiting(ExpeditionHomeArc,ExpeditionCaptive)){AnimateResident(FName(TEXT("Idle")));return;}
+    }
+
     Super::Tick(DeltaSeconds);
     UWorld* World = GetWorld();
     if (!World || NpcId.IsNone()) return;
@@ -343,6 +348,7 @@ bool AUnmadeNpcCharacter::CanTradeWithPlayer() const
 
 FString AUnmadeNpcCharacter::GetReactionText() const
 {
+    if(CachedHub.IsValid()){const FString Expedition=CachedHub->GetExpeditionReaction(NpcId);if(!Expedition.IsEmpty())return Expedition;}
     // Canonical authored dialogue never requires a model. AI can paraphrase,
     // but it cannot overwrite these deterministic permissions/choices.
     using UnmadeCore::NpcAction;
@@ -721,4 +727,9 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     }
     return FString::Printf(TEXT("%s %s %s %s"),
         *NpcDisplayLabel, Line, *CharacterLine, *BeliefLine);
+}
+
+void AUnmadeNpcCharacter::ConfigureExpeditionResident(FName Id,const FString& Name,UnmadeCore::Realm Home,const FString& Line,int Arc,int Captive){
+ ConfigureIdentity(Id,Name,UnmadeCore::NpcRole::Wanderer,UnmadeCore::NpcTemperament::Steady,UnmadeCore::SettlementId::Crossings,Line);
+ bLaterRealmResident=true;LaterHome=Home;ExpeditionHomeArc=Arc;ExpeditionCaptive=Captive;HomeLocation=GetActorLocation();
 }

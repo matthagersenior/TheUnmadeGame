@@ -1,0 +1,257 @@
+{
+  "version": 1,
+  "arcs": [
+    {
+      "realm": "ThreefoldReach",
+      "city": "Crossings",
+      "frontier": "Rookstep",
+      "refuge": "Lantern Rest",
+      "dungeon": "The Split Charter Vault",
+      "boss": "The Tollkeeper Without a Road",
+      "people": [
+        "Maelin",
+        "Tovin",
+        "Rusk",
+        "Jessa",
+        "Noll"
+      ],
+      "weapon": "Mileglass Edge",
+      "armor": "Witness Brace",
+      "brief": "Find the missing surveyors before the charter is burned.",
+      "clues": [
+        "A toll charter lists people as road fixtures.",
+        "A cut seal identifies the collectors.",
+        "Three contradictory maps share one trapped stair."
+      ],
+      "kill_return": "The The Tollkeeper Without a Road is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Tollkeeper Without a Road yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": 0,
+      "y": 0,
+      "technique": "Marked Opening"
+    },
+    {
+      "realm": "WidowedRain",
+      "city": "Saltwake",
+      "frontier": "Brinewatch",
+      "refuge": "Drywake",
+      "dungeon": "The Hollow Breakwater",
+      "boss": "The Undertow Bailiff",
+      "people": [
+        "Ceryn",
+        "Ossa",
+        "Brelt",
+        "Havin",
+        "Teska"
+      ],
+      "weapon": "Breakwater Spear",
+      "armor": "Rainward Mantle",
+      "brief": "Release the divers held behind the pressure locks.",
+      "clues": [
+        "Water payments conceal a captive labor levy.",
+        "A cracked helmet bears the divers\u2019 signal.",
+        "The dry chamber contains the genuine levy register."
+      ],
+      "kill_return": "The The Undertow Bailiff is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Undertow Bailiff yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": 0,
+      "y": -50000,
+      "technique": "Pressure Read"
+    },
+    {
+      "realm": "HearthBeneath",
+      "city": "Cinderhold",
+      "frontier": "Emberwatch",
+      "refuge": "Snowmelt Rest",
+      "dungeon": "The Furnace Below Blackslag",
+      "boss": "The Ashbound Provost",
+      "people": [
+        "Kerrin",
+        "Dova",
+        "Sarn",
+        "Ilyet",
+        "Fen"
+      ],
+      "weapon": "Kilnfang Maul",
+      "armor": "Cinderguard Plate",
+      "brief": "Recover trapped furnace tenders from the locked lower galleries.",
+      "clues": [
+        "The provost has diverted a communal furnace.",
+        "A scorched shift slate records the false closure.",
+        "A surviving valve diagram reveals the bypass."
+      ],
+      "kill_return": "The The Ashbound Provost is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Ashbound Provost yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": 0,
+      "y": 50000,
+      "technique": "Ember Counter"
+    },
+    {
+      "realm": "TidalLedger",
+      "city": "Drevlach",
+      "frontier": "Oathshoal",
+      "refuge": "Reedwake",
+      "dungeon": "The Foreclosed Anchorage",
+      "boss": "The Interest Warden",
+      "people": [
+        "Velka",
+        "Roven",
+        "Anset",
+        "Deyra",
+        "Sull"
+      ],
+      "weapon": "Undertide Hook",
+      "armor": "Oathwake Coat",
+      "brief": "Free the ferrymen held as collateral in the anchorage.",
+      "clues": [
+        "A forged future debt binds the ferrymen.",
+        "A ship\u2019s seal predates the alleged bargain.",
+        "The counterfoil names the creditor\u2019s own unpaid promise."
+      ],
+      "kill_return": "The The Interest Warden is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Interest Warden yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": 100000,
+      "y": -50000,
+      "technique": "Oath Interrupt"
+    },
+    {
+      "realm": "SkyBelow",
+      "city": "Orravane",
+      "frontier": "Downsong",
+      "refuge": "Quiet Span",
+      "dungeon": "The Fallen Choir Engine",
+      "boss": "The Counterweight Cantor",
+      "people": [
+        "Liora",
+        "Vaun",
+        "Eris",
+        "Kelm",
+        "Sora"
+      ],
+      "weapon": "Downfall Glaive",
+      "armor": "Choirweight Harness",
+      "brief": "Release the riggers suspended in the engine\u2019s holding cages.",
+      "clues": [
+        "The cantor is using prisoners to stabilize a private span.",
+        "A rigger\u2019s knot ties a voice to a counterweight.",
+        "The tuning record proves the public span can stand without prisoners."
+      ],
+      "kill_return": "The The Counterweight Cantor is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Counterweight Cantor yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": -100000,
+      "y": -50000,
+      "technique": "Grounded Fold"
+    },
+    {
+      "realm": "CinderSpine",
+      "city": "Vathless",
+      "frontier": "Seamguard",
+      "refuge": "Kinrest",
+      "dungeon": "The Buried Yesterday Foundry",
+      "boss": "The Last Claimant",
+      "people": [
+        "Aren",
+        "Torva",
+        "Mekk",
+        "Seyl",
+        "Brann"
+      ],
+      "weapon": "Yesterday Pickblade",
+      "armor": "Seamward Shell",
+      "brief": "Extract the seam-workers before their records are crushed.",
+      "clues": [
+        "The claimant treats descendants as expendable mining rights.",
+        "An intact family token survives the spoil.",
+        "The seam register proves the workers\u2019 living claim."
+      ],
+      "kill_return": "The The Last Claimant is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Last Claimant yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": 100000,
+      "y": 50000,
+      "technique": "Seam Read"
+    },
+    {
+      "realm": "HundredUnlived",
+      "city": "Eillun",
+      "frontier": "Elseward",
+      "refuge": "Unlisted Hearth",
+      "dungeon": "The Unentered Census House",
+      "boss": "The Registrar of Empty Beds",
+      "people": [
+        "Neris",
+        "Aella",
+        "Durn",
+        "Ovin",
+        "Meya"
+      ],
+      "weapon": "Elseborn Saber",
+      "armor": "Unlisted Veil",
+      "brief": "Release the caretakers awaiting removal from the census house.",
+      "clues": [
+        "The registrar uses a missing entry as permission to imprison.",
+        "An unsigned blanket list records occupied beds.",
+        "A witness ledger proves the caretakers were present before the census."
+      ],
+      "kill_return": "The The Registrar of Empty Beds is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Registrar of Empty Beds yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": -100000,
+      "y": 50000,
+      "technique": "Unlisted Step"
+    },
+    {
+      "realm": "OrchardOfKings",
+      "city": "Tharniv",
+      "frontier": "Rootwatch",
+      "refuge": "Graft Rest",
+      "dungeon": "The Crownroot Keep",
+      "boss": "The Unwritten Castellan",
+      "people": [
+        "Sivra",
+        "Holl",
+        "Perren",
+        "Alva",
+        "Neyt"
+      ],
+      "weapon": "Crownroot Falchion",
+      "armor": "Commonbark Guard",
+      "brief": "Free the gardeners held beneath a sealed royal graft.",
+      "clues": [
+        "The castellan has claimed a common orchard as crown land.",
+        "A graft tag carries the names of its communal tenders.",
+        "The buried title reserves the root road for everyone."
+      ],
+      "kill_return": "The The Unwritten Castellan is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Unwritten Castellan yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": 200000,
+      "y": 0,
+      "technique": "Root Counter"
+    },
+    {
+      "realm": "FirstAbsence",
+      "city": "Auvren",
+      "frontier": "Threshold Watch",
+      "refuge": "Nearrest",
+      "dungeon": "The Unfinished Bastion",
+      "boss": "The Keeper of the Single Door",
+      "people": [
+        "Thaelin",
+        "Iven",
+        "Roa",
+        "Essel",
+        "Venn"
+      ],
+      "weapon": "Nearness Blade",
+      "armor": "Threshold Ward",
+      "brief": "Recover the witnesses held beyond the unfinished door.",
+      "clues": [
+        "The keeper has closed a shared threshold to enforce one account.",
+        "A tether line proves the witnesses entered voluntarily.",
+        "The original door mark allows more than one return."
+      ],
+      "kill_return": "The The Keeper of the Single Door is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The The Keeper of the Single Door yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "x": -200000,
+      "y": 0,
+      "technique": "Nearness Hold"
+    }
+  ]
+}

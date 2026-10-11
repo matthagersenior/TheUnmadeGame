@@ -53,6 +53,12 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/remembered_roads_test.cpp -o /tmp/remembered_roads_test
           /tmp/remembered_roads_test
+      - name: Validate nine combat exploration adventures and 18 new settlements
+        run: python Scripts/build_frontier_adventures.py --check
+      - name: Test branches, persistent rewards, boss patterns and save rejection
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/expedition_test.cpp -o /tmp/expedition_test
+          /tmp/expedition_test
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits

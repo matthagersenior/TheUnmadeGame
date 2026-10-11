@@ -1,41 +1,41 @@
 {
-  "edition": "Remembered Roads v13",
+  "edition": "Frontier Adventures v14",
   "date": "2026-10-11",
-  "source_base": "4bb974abbf9630a299fa49e6c3e70cbfb700fe20",
+  "source_base": "955319dbc800c4e120819522995b0432fa471e26",
   "engine_compiled": false,
   "engine_playtested": false,
-  "native_cpp_tests": 47,
-  "python_tests": 241,
-  "complete_bible_pages": 148,
-  "complete_bible_images": 57,
-  "volume_x_pages": 92,
-  "volume_x_images": 10,
-  "qa": "All page overviews and new pages visually inspected; all prior paragraphs and image bytes retained; all inherited PDF page text identical; zero empty pages or off-page text blocks.",
+  "native_cpp_tests": 48,
+  "python_tests": 245,
+  "complete_bible_pages": 152,
+  "complete_bible_images": 58,
+  "volume_x_pages": 98,
+  "volume_x_images": 11,
+  "qa": "All page overviews and new chapter pages visually inspected. All prior paragraphs, illustration bytes and inherited PDF page text retained. Zero empty pages or off-page text blocks.",
   "files": [
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Remembered_Roads_v13.docx",
-      "sha256": "54141dbf95a3ccc2ffe0b1d14d7f620ccfedc95294a8d5e4a1e8f6c17281e622",
-      "bytes": 7341642
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Frontier_Adventures_v14.docx",
+      "sha256": "8d0e7520a402db756a9a50a1b746c4c38b427138f51c1278d1c21959abc01f0d",
+      "bytes": 7536695
     },
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Remembered_Roads_v13.pdf",
-      "sha256": "9dee54f7e0763de7611f425bf1c017c008e6681ce4c25e041ac0bafbc1ab9304",
-      "bytes": 4803262
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Frontier_Adventures_v14.pdf",
+      "sha256": "e47095fc58f01a27fcc2108f5d301a6e65a02ea8bec46acbe5700e84e116b957",
+      "bytes": 5003696
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Remembered_Roads_v13.docx",
-      "sha256": "4093954a3bb518dfd6620dea17d72eb7bc000f12225356503efd81d323aa3aa6",
-      "bytes": 5147390
+      "name": "THE_UNMADE_Volume_X_Illustrated_Frontier_Adventures_v14.docx",
+      "sha256": "1087f29a3bd2ef2e5a077c9541fe8d4ebbca3b787d49d5f14130796fbd103b99",
+      "bytes": 5342362
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Remembered_Roads_v13.pdf",
-      "sha256": "5b9755ac5e8303893da396028c823e1a7ffa193761e2bb218c5bbfa6fa82260e",
-      "bytes": 2780545
+      "name": "THE_UNMADE_Volume_X_Illustrated_Frontier_Adventures_v14.pdf",
+      "sha256": "0dd1a30f932e3d2462a435cab01fa31922060ec8f383518fe60ca83c33b7f507",
+      "bytes": 2984071
     },
     {
-      "name": "THE_UNMADE_v13_Remembered_Roads_Atlas.png",
-      "sha256": "0c962402494ddc6fd8f48a6af484e26c0cdf19dcfa63c9a9e252a7d841124857",
-      "bytes": 212744
+      "name": "THE_UNMADE_v14_Frontier_Adventures_Atlas.png",
+      "sha256": "bf5cd2729150cf01fd16df472dbce05caa8258b1c22190988f58b5bdd746d45a",
+      "bytes": 200524
     }
   ]
 }

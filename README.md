@@ -1,3 +1,7 @@
+# Frontier Adventures v14
+
+Nine realm combat and exploration arcs, eighteen new inhabited settlements, nine six-room dungeons, four enemy roles, nine bosses, rescue/evidence resolutions, permanent equipment choices and learned passive techniques. Deliveries remain supporting quests. See `docs/design/frontier-adventures-v14-acceptance.md`. Unreal build and playtesting deferred.
+
 # World of Remembered Roads v13
 
 Implemented source now covers nine realms, eleven optional local delivery adventures and all 88 authored people (82 registered residents plus six scouts). Finite carried cargo, physical route checks, named receiving shelves, personal return memories, 87 furnished graybox homes plus Bes's existing house, 22 directed scenes and bounded creature routines.

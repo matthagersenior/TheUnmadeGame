@@ -305,3 +305,8 @@ Four new three-beat directed scenes and three actual original prototype stereo e
 ## 2026 10 11 World of Remembered Roads v13
 
 Implemented optional physical delivery adventures in all nine realms and eleven settlements; all 82 registered residents and six scouts retain stable IDs. Forty-four finite sealed units, carried custody, eleven local mechanism/elder/route branches, dated receiving shelves, witnessed reports and personal home returns. 87 new graybox homes reuse Bes's original household. 22 directed scenes and bounded creature forage/patrol/rest hooks. Existing campaign access, wages, fuel, inventory, consent, endings and OPEN mysteries retain authority. Unreal compilation and playtesting deferred by explicit creator instruction. See Chapter 33 and the v13 acceptance walkthrough.
+
+
+## 11 October 2026 Frontier Adventures v14
+
+Source implementation adds nine combat/exploration arcs connecting existing cities, eighteen new settlements and six-chamber dungeons. Forty-five new residents, seventy-two enemies, nine named bosses, rescue/evidence branches, 18 alternative equipment rewards and nine passive techniques persist with physical return consequences. Existing 88 people, campaign access, wages, fuel, consent and OPEN mysteries retain authority. Total settlement coverage is 29. Boss surrender permits post-boss physical releases without invented rescues. NPC declaration repair removes a malformed earlier function signature. Full cumulative books and package are rebuilt. Unreal compilation and playtesting remain deferred by the creator.

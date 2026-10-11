@@ -24,15 +24,17 @@ public:
     int32 GetMarks() const { return Economy.Marks(); }
     int32 GetAtlasAttunement() const;
     FString DescribeInventory() const;
-    int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount(); }
-    int32 FoldBonusSeconds() const { return Inventory.FoldDurationBonus(); }
+    int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount()+ExpeditionGlimpse; }
+    int32 FoldBonusSeconds() const { return Inventory.FoldDurationBonus()+ExpeditionFold; }
     double StrainRecoveryMultiplier() const { return Inventory.RecoveryMultiplier(); }
     void SetTemporaryBonuses(int32 Attack,int32 Armor) {
         TemporaryAttack=FMath::Clamp(Attack,-20,80);
         TemporaryArmor=FMath::Clamp(Armor,0,80);
         RefreshCombatBonuses();
     }
+    void SetExpeditionBonuses(int Attack,int Armor,int Glimpse,int Fold){ExpeditionAttack=FMath::Clamp(Attack,0,26);ExpeditionArmor=FMath::Clamp(Armor,0,16);ExpeditionGlimpse=FMath::Clamp(Glimpse,0,3);ExpeditionFold=FMath::Clamp(Fold,0,2);RefreshCombatBonuses();}
 private:
+    int ExpeditionAttack=0,ExpeditionArmor=0,ExpeditionGlimpse=0,ExpeditionFold=0;
     bool Persist(double UpdatedStrain = -1.0);
     bool bSaveRejected = false;
     void RefreshCombatBonuses();

@@ -80,7 +80,8 @@ void AUnmadeEnemyCharacter::ConfigureStyle(UnmadeCore::EnemyStyle NewStyle)
 
 bool AUnmadeEnemyCharacter::CanBeTargeted()const
 {
-    return IsValid(Combat)&&!Combat->IsDefeated()&&!bCinderholdQuieted;
+    return IsValid(Combat)&&!Combat->IsDefeated()&&!bCinderholdQuieted&&
+        (ExpeditionArc<0||(CachedRealityHub.IsValid()&&!CachedRealityHub->ExpeditionEnemyInactive(ExpeditionArc,ExpeditionSlot)));
 }
 void AUnmadeEnemyCharacter::ConfigureCinderholdElder()
 {
@@ -220,6 +221,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     const double Now=World->GetTimeSeconds();
     if(!CachedRealityHub.IsValid())CachedRealityHub=Cast<AUnmadePrototypeHub>(
         UGameplayStatics::GetActorOfClass(World,AUnmadePrototypeHub::StaticClass()));
+    if(ExpeditionArc>=0){TickExpedition(DeltaSeconds);return;}
     if(bCinderholdElder&&CachedRealityHub.IsValid())
     {
         const int32 Resolution=RoadElderCity>=0?CachedRealityHub->GetRoadElderResolution(RoadElderCity):CachedRealityHub->GetCinderholdElderResolution();
@@ -445,4 +447,42 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
             TelegraphLight->SetIntensity(0.f);
         }
     }
+}
+
+void AUnmadeEnemyCharacter::ConfigureExpedition(int32 Arc,int32 Slot,UnmadeCore::ExpeditionRole Role){
+ ExpeditionArc=Arc;ExpeditionSlot=Slot;ExpeditionRole=Role;TerritoryHome=GetActorLocation();
+ const bool Boss=Role==UnmadeCore::ExpeditionRole::Boss;
+ Style=Role==UnmadeCore::ExpeditionRole::Marksman||Role==UnmadeCore::ExpeditionRole::Disruptor?UnmadeCore::EnemyStyle::Watcher:UnmadeCore::EnemyStyle::Stalker;
+ Combat->Configure(Boss?240+Arc*25:Role==UnmadeCore::ExpeditionRole::Sentinel?95+Arc*8:65+Arc*6,UnmadeCore::ExpeditionMove(Role,Arc,0,false).damage,.5);
+ TryLoadEnemyRig();
+}
+void AUnmadeEnemyCharacter::TickExpedition(float DeltaSeconds){
+ UWorld* World=GetWorld();if(!World||!CachedRealityHub.IsValid())return;double Now=World->GetTimeSeconds();
+ bool Inactive=CachedRealityHub->ExpeditionEnemyInactive(ExpeditionArc,ExpeditionSlot);
+ SetActorHiddenInGame(Inactive||Combat->IsDefeated());SetActorEnableCollision(!Inactive&&!Combat->IsDefeated());
+ if(Inactive){GetCharacterMovement()->StopMovementImmediately();ElderAimMarker->SetVisibility(false);TelegraphLight->SetIntensity(0);return;}
+ if(Combat->IsDefeated()){if(Now>=NextElderSaveAttemptAt){NextElderSaveAttemptAt=Now+2;CachedRealityHub->RecordExpeditionDefeat(this,ExpeditionArc,ExpeditionSlot);}return;}
+ auto* P=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(World,0));if(!IsValid(P)||!P->GetCombat()||P->GetCombat()->IsDefeated())return;
+ double Distance=FVector::Dist2D(P->GetActorLocation(),GetActorLocation());
+ bool Territory=FVector::DistSquared2D(P->GetActorLocation(),TerritoryHome)<=FMath::Square(1450.f);
+ FCollisionQueryParams Params(SCENE_QUERY_STAT(ExpeditionAttackSight),false);Params.AddIgnoredActor(this);Params.AddIgnoredActor(P);
+ bool Sight=Territory&&!World->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,55),P->GetActorLocation()+FVector(0,0,55),ECC_Visibility,Params);
+ bool Phase=Combat->GetHealth()<=Combat->GetMaxHealth()*.5;
+ auto Step=ExpeditionPattern.Step(Now,ExpeditionRole,ExpeditionArc,Phase,Sight,Distance,IsFractureExposed(Now));
+ if(Step.started){ExpeditionAim=P->GetActorLocation();bExpeditionWarning=true;}
+ if(!Sight||IsFractureExposed(Now)||Step.recovering)bExpeditionWarning=false;
+ if(Step.strike){bExpeditionWarning=false;if(Sight&&FVector::DistSquared2D(P->GetActorLocation(),ExpeditionAim)<=FMath::Square(Step.move.radius)){
+  Combat->SetAttackDamage(Step.move.damage);
+  Combat->TryStrikeTarget(P->GetCombat(),Now,true,false);
+ }}
+ Combat->SetGuarding(ExpeditionRole==UnmadeCore::ExpeditionRole::Sentinel&&Sight&&!bExpeditionWarning&&!Step.recovering);
+ ElderAimMarker->SetVisibility(bExpeditionWarning);if(bExpeditionWarning){ElderAimMarker->SetWorldLocation(ExpeditionAim-FVector(0,0,85));ElderAimMarker->SetWorldScale3D(FVector(Step.move.radius/50,Step.move.radius/50,.025));CombatSignal->SetText(FText::FromString(UTF8_TO_TCHAR(Step.move.warning)));TelegraphLight->SetIntensity(4000);GetCharacterMovement()->StopMovementImmediately();SetMotionCue(FName(TEXT("Attack")));}
+ else{TelegraphLight->SetIntensity(Step.recovering?700:0);CombatSignal->SetText(FText::FromString(Step.recovering?TEXT("RECOVERY - YOUR OPENING"):TEXT("WATCH THE NEXT ATTACK")));FVector Destination=!Territory?TerritoryHome:P->GetActorLocation();
+  if(Territory&&ExpeditionRole==UnmadeCore::ExpeditionRole::Skirmisher)Destination+=FVector(-(P->GetActorLocation().Y-GetActorLocation().Y),P->GetActorLocation().X-GetActorLocation().X,0).GetSafeNormal()*180;
+  bool Move=!Territory||Distance>Step.move.reach*.85;
+  if(Territory&&(ExpeditionRole==UnmadeCore::ExpeditionRole::Marksman||ExpeditionRole==UnmadeCore::ExpeditionRole::Disruptor)&&Distance<350){Destination=GetActorLocation()+(GetActorLocation()-P->GetActorLocation()).GetSafeNormal2D()*350;Move=true;}
+  if(Move&&!Step.recovering){GetCharacterMovement()->MaxWalkSpeed=ExpeditionRole==UnmadeCore::ExpeditionRole::Skirmisher?210:120;if(Now>=NextPathRefreshAt){NextPathRefreshAt=Now+.6;bHasNavWaypoint=false;if(auto* Path=UNavigationSystemV1::FindPathToLocationSynchronously(World,GetActorLocation(),Destination,this))if(Path->IsValid()&&!Path->IsPartial()&&Path->PathPoints.Num()>1){NextNavWaypoint=Path->PathPoints[1];bHasNavWaypoint=true;}}
+   bool Clear=!World->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,55),Destination+FVector(0,0,55),ECC_Visibility,Params);FVector Walk=bHasNavWaypoint?NextNavWaypoint-GetActorLocation():Clear?Destination-GetActorLocation():FVector::ZeroVector;Walk.Z=0;if(Walk.SizeSquared()>4900){AddMovementInput(Walk.GetSafeNormal());SetActorRotation(Walk.Rotation());}SetMotionCue(FName(TEXT("Walk")));}
+  else GetCharacterMovement()->StopMovementImmediately();
+ }
 }
