@@ -374,6 +374,11 @@ public:
     UPROPERTY(SaveGame)
     TArray<double> ConfluenceWindowEnds;
 
+    UPROPERTY(SaveGame)
+    bool bHasRememberedRoads=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> RememberedRoadState;
+
     /** Merges prototype sub-system writes instead of erasing unrelated state. */
     static UUnmadePrototypeSave* LoadOrCreate()
     {

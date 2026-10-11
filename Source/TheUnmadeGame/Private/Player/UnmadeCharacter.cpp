@@ -737,6 +737,8 @@ void AUnmadeCharacter::ShowStoryJournal()
     if(GetWorld()&&GEngine)for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,Hub->GetCinderholdJournal());
 
+    if(GetWorld()&&GEngine)for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,Hub->GetRoadJournal());
     ReconcileEarnedRewards();
     FString Decision = TEXT("unresolved");
     if (LocalConflict.Choice() == UnmadeCore::ConflictChoice::Shelter)
@@ -1012,6 +1014,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryRoadInteraction(this,ResidentDistSq))return;
             if(Hub->TryCinderholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryFieldSurveyInteraction(this,ResidentDistSq))return;
             if(Hub->TryBesHouseholdInteraction(this,ResidentDistSq))return;
@@ -1075,6 +1078,7 @@ void AUnmadeCharacter::Interact()
             Hub->TryLaterRealmConversation(Target->GetStableId());
             Hub->TryEchoQuestConversation(Target->GetStableId());
             Hub->RecordResidentConversation(Target->GetStableId());
+            Hub->RecordRoadConversation(Target->GetStableId());
             const bool bHouseChanged=Hub->RecordBesHouseholdConversation(Target->GetStableId());
             const bool bAdventureChanged=Hub->RecordCinderholdConversation(Target->GetStableId());
             if(!bHouseChanged&&!bAdventureChanged)
@@ -1128,7 +1132,10 @@ void AUnmadeCharacter::OfferAid()
 void AUnmadeCharacter::DemonstrateAnomaly()
 {
     if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+    {
+        if(Hub->TryRoadAbility(this,0))return;
         if(Hub->TryCinderholdAbility(this,0))return;
+    }
     AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
     if (!GetWorld()) return;
     const int32 Discount = IsValid(Equipment) ? Equipment->GlimpseDiscount() : 0;
@@ -1152,7 +1159,10 @@ void AUnmadeCharacter::DemonstrateAnomaly()
 void AUnmadeCharacter::FoldReality()
 {
     if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+    {
+        if(Hub->TryRoadAbility(this,1))return;
         if(Hub->TryCinderholdAbility(this,1))return;
+    }
     AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
     if (!GetWorld()) return;
     const int32 Extension = IsValid(Equipment) ? Equipment->FoldBonusSeconds() : 0;
@@ -1190,7 +1200,10 @@ void AUnmadeCharacter::RewriteSealed()
 void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
 {
     if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+    {
+        if(Hub->TryRoadAbility(this,2,ChoiceId==FName(TEXT("variant.open"))?2:3))return;
         if(Hub->TryCinderholdAbility(this,2,ChoiceId==FName(TEXT("variant.open"))?2:3))return;
+    }
     if (!GetWorld() || !IsValid(FindNearbyFractureAnchor()))
     {
         PendingRewriteChoice = NAME_None;

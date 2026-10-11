@@ -1,3 +1,19 @@
+# Current illustrated release — Remembered Roads v13
+
+Date: 11 October 2026. Code baseline: `4bb974abbf9630a299fa49e6c3e70cbfb700fe20`.
+
+Actual rebuilt outputs: complete illustrated Bible PDF/DOCX, **148 pages / 57 illustrations**; standalone Volume X PDF/DOCX, **92 pages / 10 illustrations**; world-wide shipment atlas; complete `THE_UNMADE_Remembered_Roads_v13_Complete_Package.zip` with current Unreal source, retained original art/audio/rig kit, prototype Foley, reproducible builder and v12 Word baselines. Every previous paragraph and illustration is retained.
+
+Implemented source: all nine realms, eleven cities and 88 named people; eleven optional physical delivery adventures and elder encounters; 33 clues; 87 new furnished homes alongside Bes's existing home; 348 furniture inspections; finite conserved cargo stock, local route choices, attributed reports and remembered returns; 22 directed three-beat scenes; navigation-aware residents and bounded creature routines. Cinderhold continues its existing adventure and inherits its paid route choice. Existing campaign, wages, fuel, consent and OPEN mysteries retain authority.
+
+Validation: **241 Python tests; 47 compiled portable C++ executables**. Both full books rendered and visually inspected; zero empty pages or off-page text blocks; inherited PDF page text and illustration bytes retained. ZIP CRC and member SHA-256 verified.
+
+**Unreal compilation and engine playtesting are deferred at the user's request.** Imports, navmesh, collision/LOS, scene staging and save/load in PIE remain unverified. No finished VO, bespoke final architecture/animation, playable executable or engine footage is claimed. See `docs/design/remembered-roads-v13-acceptance.md`.
+
+Digests: `RELEASE_SHA256_MANIFEST.json`. The downloadable package has its own member manifest. No binary GitHub Release is claimed.
+
+---
+
 # Current illustrated release — Cinderhold Adventure v12
 
 Date: 11 October 2026. Code baseline: `dcac72039eae43c140af8704f0983182696efd01`. The accompanying v12 commit contains gameplay, canon and artifact digests together.

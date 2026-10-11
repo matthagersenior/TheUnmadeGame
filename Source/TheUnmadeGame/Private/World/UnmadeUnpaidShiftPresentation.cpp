@@ -1,4 +1,5 @@
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeRememberedRoadScenes.h"
 #include "Engine/Engine.h"
 #include "TimerManager.h"
 #include "Engine/StaticMeshActor.h"
@@ -144,17 +145,32 @@ void AUnmadePrototypeHub::PlayCinderholdScene(int32 SceneIndex)
     BesActiveScene=static_cast<int32>(UnmadeCore::UnpaidScene::Count)+SceneIndex;
     AdvanceBesDirectedBeat();
 }
+void AUnmadePrototypeHub::PlayRoadScene(int32 City,bool bReturn)
+{
+    if(!GetWorld()||City<0||City>=11)return;
+    SkipBesDirectedScene();
+    BesActiveScene=static_cast<int32>(UnmadeCore::UnpaidScene::Count)+4+City*2+(bReturn?1:0);
+    AdvanceBesDirectedBeat();
+}
 void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
 {
     if(!GetWorld()||BesActiveScene<0)return;
     const auto Scene=static_cast<UnmadeCore::UnpaidScene>(BesActiveScene);
-    const bool bCinderholdScene=BesActiveScene>=static_cast<int32>(UnmadeCore::UnpaidScene::Count);
-    const auto* Beat=bCinderholdScene?UnmadeCore::CinderholdBeatAt(
+    const int32 RoadScene=BesActiveScene-static_cast<int32>(UnmadeCore::UnpaidScene::Count)-4;
+    const bool bRoadScene=RoadScene>=0&&RoadScene<22;
+    const bool bCinderholdScene=!bRoadScene&&BesActiveScene>=static_cast<int32>(UnmadeCore::UnpaidScene::Count);
+    const UnmadeCore::UnpaidBeat RoadBeat=UnmadeCore::RoadBeatAt(RoadScene/2,(RoadScene%2)==1,BesActiveBeat);
+    const auto* Beat=bRoadScene?(BesActiveBeat<3?&RoadBeat:nullptr):bCinderholdScene?UnmadeCore::CinderholdBeatAt(
         BesActiveScene-static_cast<int32>(UnmadeCore::UnpaidScene::Count),BesActiveBeat):
         UnmadeCore::UnpaidBeatAt(Scene,BesActiveBeat);
     if(!Beat){SkipBesDirectedScene();return;}
     const FName Speaker(UTF8_TO_TCHAR(Beat->speakerId));
     FString Subtitle(UTF8_TO_TCHAR(Beat->subtitle));
+    if(bRoadScene&&Subtitle==TEXT("ROAD_RECEIPT_DYNAMIC"))
+    {
+        const auto* S=RememberedRoads.City(RoadScene/2);
+        Subtitle=FString::Printf(TEXT("Received on day %d. Reported on day %d. Returned to this threshold on day %d."),S->arrivalDay,S->reportDay,S->returnDay);
+    }
     if(bCinderholdScene)
     {
         if(Subtitle==TEXT("FIELD_REPORT_DYNAMIC"))Subtitle=Cinderhold.Save().resolution==2
@@ -178,13 +194,19 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
         FString(UTF8_TO_TCHAR(Beat->voice)),Beat->duration);
     // Always show complete sequential subtitles in a real lower-third widget.
     // A debug caption only remains if the local player cannot create a UI.
-    const FString SpeakerName=Speaker==FName(TEXT("stage"))
+    FString SpeakerName=Speaker==FName(TEXT("stage"))
         ?TEXT("THE UNMADE"):Speaker==FName(TEXT("npc.cinderhold.courier.001"))
             ?TEXT("BES"):Speaker==FName(TEXT("npc.cinderhold.emberwarden.001"))
             ?TEXT("RHEVA"):Speaker==FName(TEXT("npc.saltwake.courier.001"))
             ?TEXT("MERA"):Speaker==FName(TEXT("npc.cinderhold.healer.001"))
             ?TEXT("OVENNA"):Speaker==FName(TEXT("npc.cinderhold.blackslag.scout.001"))
             ?TEXT("VARDA"):Speaker.ToString();
+    if(bRoadScene&&Speaker!=FName(TEXT("stage")))
+    {
+        const FString Stable=Speaker.ToString();
+        const int32 Person=UnmadeCore::RoadPersonIndex(TCHAR_TO_UTF8(*Stable));
+        if(Person>=0)SpeakerName=UTF8_TO_TCHAR(UnmadeCore::RoadPeople[Person].name);
+    }
     if(!IsValid(BesSubtitleOverlay))
     {
         if(APlayerController* PC=GetWorld()->GetFirstPlayerController())

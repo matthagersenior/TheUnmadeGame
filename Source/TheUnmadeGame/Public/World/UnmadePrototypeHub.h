@@ -10,6 +10,7 @@
 #include "World/UnmadeWitnessDispatchRules.h"
 #include "World/UnmadeWitnessReturnRules.h"
 #include "World/UnmadeSettlementRegistry.h"
+#include "World/UnmadeRememberedRoadRules.h"
 #include "World/UnmadeRegionalTaskRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeFrontierRealmRules.h"
@@ -71,6 +72,16 @@ public:
     FString GetRealityConsequenceJournal() const;
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetLocalMaterialJournal() const;
+    bool TryRoadInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryRoadAbility(AUnmadeCharacter* Player,int32 Ability,int32 Choice=0);
+    bool RecordRoadConversation(FName StableId);
+    FString GetRoadResidentLine(FName StableId) const;
+    FString GetRoadJournal() const;
+    bool RoadRoutineTarget(FName StableId,bool bNight,FVector& Target) const;
+    int32 GetRoadElderResolution(int32 City) const;
+    bool IsRoadCooling(int32 City) const;
+    bool RecordRoadElderDefeat(class AUnmadeEnemyCharacter* Elder,int32 City);
+    void PlayRoadScene(int32 City,bool bReturn);
     bool TryCinderholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryCinderholdAbility(AUnmadeCharacter* Player,int32 Ability,int32 Choice=0);
     bool RecordCinderholdConversation(FName StableId);
@@ -279,6 +290,18 @@ private:
     UnmadeCore::SettlementVisits VillagesVisited;
     UnmadeCore::RegionalTaskModel RegionalTasks;
     UnmadeCore::ResidentContinuity ResidentRelationships;
+    UnmadeCore::RememberedRoads RememberedRoads;
+    bool bRoadSaveRejected=false;
+    double NextRoadRefreshAt=0;
+    int32 PendingRoadCity=-1,PendingRoadChoice=0;
+    double PendingRoadExpiresAt=0;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> RoadLaneGates,RoadRecessGates;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> RoadSigns;
+    TWeakObjectPtr<class AStaticMeshActor> RoadCargoVisual;
+    void BuildRememberedRoads();
+    void RefreshRememberedRoads();
+    bool CommitRoads(const UnmadeCore::RememberedRoads& Before,AUnmadeCharacter* StrainOwner=nullptr);
+
     UnmadeCore::WitnessEchoLedger WitnessEchoes;
     UnmadeCore::WitnessBraidChronicle WitnessBraid;
     UnmadeCore::WitnessDispatch Dispatch;
