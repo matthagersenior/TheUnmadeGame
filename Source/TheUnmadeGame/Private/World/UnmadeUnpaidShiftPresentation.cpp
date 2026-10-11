@@ -3,6 +3,12 @@
 #include "TimerManager.h"
 #include "Engine/StaticMeshActor.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
+#include "UI/UnmadeUnpaidShiftSubtitleWidget.h"
+#include "Blueprint/UserWidget.h"
+#include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
+#include "UObject/UObjectGlobals.h"
 
 void AUnmadePrototypeHub::AnimateBesWorkingCart()
 {
@@ -25,6 +31,7 @@ void AUnmadePrototypeHub::SkipBesDirectedScene()
     if(GetWorld())GetWorldTimerManager().ClearTimer(BesSubtitleTimer);
     BesActiveScene=-1;
     BesActiveBeat=0;
+    if(IsValid(BesSubtitleOverlay))BesSubtitleOverlay->ClearBeat();
 }
 void AUnmadePrototypeHub::PlayBesDirectedScene(int32 SceneIndex)
 {
@@ -48,22 +55,41 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
         FName(UTF8_TO_TCHAR(Beat->foley)),
         FString(UTF8_TO_TCHAR(Beat->blocking)),
         FString(UTF8_TO_TCHAR(Beat->voice)),Beat->duration);
-    // Even without a bound cinematic UI or custom voice asset, each row is
-    // readable one at a time and never joins 3 beats into an overfull card.
-    if(GEngine)
+    // Always show complete sequential subtitles in a real lower-third widget.
+    // A debug caption only remains if the local player cannot create a UI.
+    const FString SpeakerName=Speaker==FName(TEXT("stage"))
+        ?TEXT("THE UNMADE"):Speaker==FName(TEXT("npc.cinderhold.courier.001"))
+            ?TEXT("BES"):Speaker==FName(TEXT("npc.cinderhold.emberwarden.001"))
+            ?TEXT("RHEVA"):Speaker==FName(TEXT("npc.saltwake.courier.001"))
+            ?TEXT("MERA"):Speaker==FName(TEXT("npc.cinderhold.healer.001"))
+            ?TEXT("OVENNA"):Speaker.ToString();
+    if(!IsValid(BesSubtitleOverlay))
     {
-        const FString SpeakerName=Speaker==FName(TEXT("stage"))
-            ?TEXT(""):Speaker==FName(TEXT("npc.cinderhold.courier.001"))
-                ?TEXT("Bes: ")
-                :Speaker==FName(TEXT("npc.cinderhold.emberwarden.001"))
-                ?TEXT("Rheva: ")
-                :Speaker==FName(TEXT("npc.saltwake.courier.001"))
-                ?TEXT("Mera: ")
-                :Speaker==FName(TEXT("npc.cinderhold.healer.001"))
-                ?TEXT("Ovenna: "):TEXT("");
-        GEngine->AddOnScreenDebugMessage(-1,Beat->duration,FColor::White,
-            SpeakerName+Subtitle);
+        if(APlayerController* PC=GetWorld()->GetFirstPlayerController())
+        {
+            BesSubtitleOverlay=CreateWidget<UUnmadeUnpaidShiftSubtitleWidget>(
+                PC,UUnmadeUnpaidShiftSubtitleWidget::StaticClass());
+            if(IsValid(BesSubtitleOverlay))BesSubtitleOverlay->AddToViewport(50);
+        }
     }
+    if(IsValid(BesSubtitleOverlay))
+        BesSubtitleOverlay->DisplayBeat(SpeakerName,Subtitle);
+    else if(GEngine)
+        GEngine->AddOnScreenDebugMessage(-1,Beat->duration,FColor::White,
+            SpeakerName+TEXT(": ")+Subtitle);
+
+    // Original generated stereo Foley may be imported at this exact path by
+    // the guarded first-PC Unreal editor helper. Missing sound is explicitly
+    // tolerated, but it NEVER suppresses captions or fails the quest.
+    // These files are texture-only effects; there are no fake spoken voices.
+    const FString AssetName=FString::Printf(TEXT("SFX_US_%s"),
+        UTF8_TO_TCHAR(Beat->foley));
+    const FString AssetPath=FString::Printf(
+        TEXT("/Game/UnmadeProduction/Audio/UnpaidShift/%s.%s"),
+        *AssetName,*AssetName);
+    if(USoundBase* Cue=Cast<USoundBase>(StaticLoadObject(
+        USoundBase::StaticClass(),nullptr,*AssetPath,nullptr,LOAD_NoWarn)))
+        UGameplayStatics::PlaySound2D(GetWorld(),Cue,0.68f);
     ++BesActiveBeat;
     GetWorldTimerManager().SetTimer(BesSubtitleTimer,this,
         &AUnmadePrototypeHub::AdvanceBesDirectedBeat,

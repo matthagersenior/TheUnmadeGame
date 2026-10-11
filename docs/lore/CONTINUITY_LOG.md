@@ -251,3 +251,12 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added first E press for explicit consequence and numerical cost preview, second E within 12 seconds at the same physical choice location for commit. The original save-transaction and one-pack/civic-currency/family-consent rules remain in full force. Investigation itself remains immediate and reversible.
 - New optional exact timed return scenes for Bes and Mera depend on real, locally learned facts and are throttled, and the endgame mask scene is selected from saved restitution, Mera claim or unpaid state without auto-combat shortcuts.
 - Native/source CI checks confirm storyboard completeness, choice UI wiring, enterable building geometry and unchanged world-save contracts. Separate pending Windows UE 5.8 UHT/PIE/Sequencer/audio/actor-playback/render quality and actual accessibility acceptance.
+
+
+## 2026-10-11 — The Audible Shift (Volume X Chapter 27)
+
+- Created original, deterministic and independently checked 35-cue stereo WAV Foley build from the authoritative 39-shot screenplay, using native Python with no external downloads or synthetic imitation of human actors. WAVs are reproducible files on build; no fake final voice.
+- Wired the Unreal timed screenplay to real optional SoundWave playback at canonical import paths, preserving fallback captions when SoundWaves are absent.
+- Added a real non-modal UMG speaker/subtitle lower-third anchored within the image with automatic wrapping, contrast and skip clearing. Added UMG/Slate dependency and source/UI regression tests.
+- Extended Windows quickstart and direct-PC handoff to generate/check Foley and guard imported SoundWave assets from overwriting authored work; run sound validation under CI.
+- Preserved v1–v6 saves, economic transaction authority, 39 screenplay beats and the optional Nhal-Vey branches. Still outstanding: UE/UHT/PIE, recorded voice acting, synchronized lip motion, Foley spatial mixing, tested high-contrast/gamepad accessibility and actual finished cinematics.

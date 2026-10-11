@@ -1447,3 +1447,56 @@ At Nhal-Vey's first mask-break, reuse the exact earlier physical sound: falling 
 **Not yet claimed:** recorded professional dialogue, production Foley WAV files, mixed final soundtrack, automatic Sequencer generation, real 3D skeletal actor animation, finished detailed interior art, actual visually polished UMG choice widget, Unreal Engine Windows UHT/PIE acceptance, controller/device camera testing, or complete AAA film quality. This chapter provides precise scene authoring and source-backed playback hooks so those can be made without inventing the quest from scratch on the first PC.
 
 *The quiet choice must have the weight of a battle, and the battle must remember the quiet choice.*
+
+---
+
+## 27. The Audible Shift — The Sound a Household Keeps
+*Volume X · production-grade sound identity and accessible dialogue delivery contract · 11 October 2026*
+
+Cinderhold has never been silent. There are bellows, grit beneath boots, baskets dragged across stone and the distant metallic disagreement of communal marks being counted. Bes's story changes that soundscape not by adding a grand theme, but by removing the weight-bearing rhythm he supplied. The absence of one worker is something a city should hear.
+
+The sound of **The Unpaid Shift** now has an executable prototype layer. Thirty-nine existing authored beats reference thirty-five individually named Foley cues. Each has a reproducibly generated, original stereo PCM WAV with validated amplitude and a unique recorded SHA-256 digest. These are diegetic *placeholder effects*, not human speech, not claims of award-winning Foley, and not the game's final theatrical mix. They provide working acoustic timing and a consistent library so the first Windows Unreal import does not begin with silence.
+
+### 27.1 Listening as material evidence
+
+**Basket / ash:** A grainy, hollow drop signals a coal basket being set down. It occurs after actual labor rather than as an arbitrary reward sound. Ash footsteps, rattle, stacking and settling are distinct, though currently synthesized from textures rather than field-recorded coal and boots.
+
+**Iron / coin / wages:** Counted metal marks sound crisp and short. A refusal cannot suddenly sound like a triumphant payday. If the municipal ledger cannot actually pay both Bes and a guarantor, no paid-receipt sequence should be allowed to play.
+
+**Paper / consent:** Mera's pledge makes a dry, salt-stiff paper noise. It is quieter than municipal stamping because it is her owned savings, not a public transaction the story should celebrate. A successful promise to Bes that leaves Mera unpaid must retain the paper motif in later returns and in Nhal-Vey's first mask revelation.
+
+**Fire / home:** A warm room and a cold room retain the same address and belongings. A gentle ember catch or fading flame is a supporting sound, never the exclusive communication channel: captions and visible saved household heat must still make the state legible with sound muted.
+
+**Missing shift:** The work rhythm thins out rather than being replaced by an unearned victory fanfare. The absence must remain audible within Cinderhold's wider city ambience. The code has an original synthetic `kiln_missing_rhythm` cue for prototype timing, with final spatial mix and actual worker animation still to author.
+
+**Nhal-Vey:** The soundtrack should refer to the very metal, basket or paper the player encountered earlier. The final opponent does not narrate an instant victory. A sound recalls a recorded life; the fight continues.
+
+### 27.2 The first non-clipping caption contract
+
+The existing timed scene bridge now has a native Unreal UMG caption fallback. Each beat displays its own authored speaker and subtitle in a lower-third region anchored to safe horizontal margins, with wrapping and a restrained dark backdrop. It does not cover the middle of the scene with a long chapter card. It does not steal the player's controls; the screen remains interactive and skip reliably clears the overlay.
+
+This approach is practical rather than decorative: a player who cannot hear, or whose imported SoundWave is missing, receives the exact same dialogue text at the same beat boundaries. A spoken actor's identity is distinct from stage narration. Bes, Rheva, Ovenna and Mera remain recognizable in text even when an optional Foley clip cannot load.
+
+The game should eventually offer subtitle scale presets, contrast levels, separate sound-effect descriptions and on-screen speaker placement appropriate to every supported display. The current native source creates one readable lower-third overlay and timed text; it is *not yet* a polished, audited final localization and accessibility system.
+
+### 27.3 Deterministic audio build and truthful voice boundary
+
+The project's source contains `Scripts/build_unpaid_shift_audio.py`: a deterministic, standard-library-only audio generator. From the canonical 39-beat screenplay header, it exports thirty-five real, independently named, 32-kHz, 16-bit, stereo `SFX_US_*.wav` clips plus a JSON manifest containing sound names, rates, durations, peak/RMS information and SHA-256 digests. The build refuses zero-amplitude or clipping output and verifies the set of expected cues.
+
+`Scripts/unreal_editor/import_unpaid_shift_audio.py` verifies every original WAV before importing. It does not overwrite custom professional SoundWave assets, altered Foley, or separately recorded voices. The Windows quickstart generates the pack, dry-checks the manifest, and—when the authorized Unreal Editor staging phase is enabled—imports the thirty-five named SoundWaves and writes a receipt. Runtime playback attempts only the cue that the current beat actually references; if its file is not present, the subtitled scene still plays.
+
+This is the first working acoustic path for this quest, **not narration**. The project must never describe the source's `voice` direction column as a recorded human line. The actual performances for Bes, Rheva, Ovenna, Mera, the environment and Nhal-Vey require direction, recording, editing, localization, mixing, lip synchronization and device-level tests. The existing narrator assembly kit is for the broader trailer and does not suddenly become a new professional cast.
+
+### 27.4 Living scenes need living people
+
+A warmer hearth still requires actual coal baskets, and a returning Bes still requires his own accumulated cold days, wages and work refusal. Audio cannot create these truths. It responds to them. The highest-order invariant is that the save decides whether a production loss, transfer, consent or return happened; a soundtrack or cutscene may illustrate that event only after a successful authoritative transaction.
+
+The next production wave must replace non-animated blockout performances with rigged characters, motion-blocking and expressive gestures; construct the home's finished stone, bedding, ledger, threshold and work props; author readable interaction cards with explicit per-branch costs; and drive controlled cinematic cameras without losing the player's spatial freedom. A working source caption widget is not the same thing as a finished Unreal Sequencer shot.
+
+### 27.5 Technical status and continuing promises
+
+**Now implemented in source:** generated original 35-effect stereo audio library from 39 named beat cues; exact-asset runtime sound lookup with graceful no-sound behavior; one-at-a-time safe-area native Unreal UMG captions with speaker identification and guaranteed skip clear; source-level build/module dependencies; a guarded first-PC Unreal SoundWave importer with no unintended overwrites; Windows quickstart and CI checks. The v5–v6 household, dialogue, physical choices and saved Nhal-Vey paths remain untouched.
+
+**Still to certify:** actual UE 5.8 UHT compile, imported audio listening in PIE, loudness matching against gameplay audio, spatialized environmental Foley, full staged animations, detailed home materials, professional dialogue, genuine narration, subtitle accessibility testing, cinematics with proper camera blocking, and a complete player-tested quest. Original generated placeholders intentionally sound like prototypes; they must later be replaced without changing the canonical timeline or gameplay ledger.
+
+*A lost wage can be an absent sound. It cannot be an absent person.*

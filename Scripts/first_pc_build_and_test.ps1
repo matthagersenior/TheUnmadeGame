@@ -47,6 +47,13 @@ try {
     & python (Join-Path $PSScriptRoot "validate_lived_universe.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "lived-universe-validation.log")
     if($LASTEXITCODE -ne 0){throw "LIVED_UNIVERSE_CONTENT_OUT_OF_SYNC: regenerate work order manifest"}
+    Write-Host "Building verifiable, real stereo Foley for all 39 Unpaid Shift beats."
+    & python (Join-Path $PSScriptRoot "build_unpaid_shift_audio.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "unpaid-shift-foley-validation.log")
+    if($LASTEXITCODE -ne 0){throw "UNPAID_SHIFT_FOLEY_INVALID"}
+    & python (Join-Path $PSScriptRoot "unreal_editor/import_unpaid_shift_audio.py") 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "unpaid-shift-foley-import-plan.log")
+    if($LASTEXITCODE -ne 0){throw "UNPAID_SHIFT_AUDIO_IMPORT_PLAN_INVALID"}
     Write-Host "Checking complete-universe director cinema source and audio-export contract."
     & python (Join-Path $PSScriptRoot "validate_directors_cut.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "directors-cinema-validation.log")

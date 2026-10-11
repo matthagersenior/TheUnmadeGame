@@ -58,6 +58,14 @@ try{
     & $pythonExe.Source (Join-Path $PSScriptRoot "unreal_editor/first_pc_editor_batch.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $report "staging-dry-run.log")
     if($LASTEXITCODE -ne 0){throw "STAGING_PLAN_INVALID"}
+    $audioDir=Join-Path $repo "Build/UnpaidShiftAudio"
+    & $pythonExe.Source (Join-Path $PSScriptRoot "build_unpaid_shift_audio.py") --out-dir $audioDir --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "unpaid-shift-stereo-foley-validation.log")
+    if($LASTEXITCODE -ne 0){throw "UNPAID_SHIFT_AUDIO_GENERATION_INVALID"}
+    & $pythonExe.Source (Join-Path $PSScriptRoot "unreal_editor/import_unpaid_shift_audio.py") 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "unpaid-shift-import-dry-run.log")
+    if($LASTEXITCODE -ne 0){throw "UNPAID_SHIFT_AUDIO_MANIFEST_INVALID"}
+
     if($InspectOnly){
         Write-Host "INSPECT_ONLY PASS: 7 source DataTables, 52 references, no editor writes"
         @("result=INSPECT_ONLY","commit=$commit","engineRoot=$UnrealRoot") |
@@ -85,6 +93,26 @@ try{
                $result.city_assembly.created+$result.city_assembly.skipped -ne 402){
                 throw "EDITOR_REFERENCE_IMPORT_INCOMPLETE"
             }
+            # Install only original, generated prototype Foley (never overwrite
+            # user-recorded voices or replaced SoundWaves).
+            $env:UNMADE_AUDIO_IMPORT_APPROVED="1"
+            $audioReceipt=Join-Path $report "unpaid-shift-audio-import-receipt.json"
+            $env:UNMADE_AUDIO_IMPORT_RECEIPT=$audioReceipt
+            $audioBatch=Join-Path $PSScriptRoot "unreal_editor/import_unpaid_shift_audio.py"
+            try{
+                & $cmdEditor $project "-unattended" "-nop4" "-nosplash" "-run=pythonscript" "-script=$audioBatch" 2>&1 |
+                    Tee-Object -FilePath (Join-Path $report "unpaid-shift-audio-import.log")
+                if($LASTEXITCODE -ne 0){throw "UNPAID_SHIFT_SOUNDWAVE_IMPORT_FAILED"}
+                if(!(Test-Path $audioReceipt)){throw "AUDIO_IMPORT_RECEIPT_MISSING"}
+                $ar=Get-Content $audioReceipt -Raw | ConvertFrom-Json
+                if($ar.mode -ne "unreal_import_complete" -or $ar.count -ne 35){
+                    throw "UNPAID_SHIFT_SOUNDWAVES_INCOMPLETE"
+                }
+            }finally{
+                Remove-Item Env:UNMADE_AUDIO_IMPORT_APPROVED -ErrorAction SilentlyContinue
+                Remove-Item Env:UNMADE_AUDIO_IMPORT_RECEIPT -ErrorAction SilentlyContinue
+            }
+
         }finally{
             Remove-Item Env:UNMADE_EDITOR_APPROVED -ErrorAction SilentlyContinue
             Remove-Item Env:UNMADE_EDITOR_RECEIPT -ErrorAction SilentlyContinue
