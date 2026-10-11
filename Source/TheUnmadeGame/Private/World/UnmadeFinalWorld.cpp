@@ -100,6 +100,11 @@ bool AUnmadePrototypeHub::BreakFinalMask()
     if(LivingTrades.HasEarnedMutualAid() && GEngine)
         GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,
             TEXT("NHAL-VEY'S CLAIM FALTERS: Saltwake and Cinderhold exchanged real supplies, paid their couriers, and remembered both receipts."));
+    // The camera/subtitle echo is authored from the same saved disposition.
+    // It never calls BreakCore, changes boss health or grants free combat.
+    if(BesHousehold.Phase()!=UnmadeCore::BesPhase::Unheard)
+        PlayBesDirectedScene(static_cast<int32>(
+            UnmadeCore::BesMaskScene(BesHousehold.Phase())));
     // Bes's long-term saved material and wage history is distinct from
     // mutual trade: fully paid work is meaningful, cold days still mattered.
     // A refusal exposes an unresolved wound; neither route bypasses combat.
