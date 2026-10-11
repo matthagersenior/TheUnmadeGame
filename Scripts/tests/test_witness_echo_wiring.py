@@ -46,7 +46,7 @@ class WitnessEchoWiring(unittest.TestCase):
         self.assertIn("bWitnessEchoRejected=true",hub)
         self.assertIn("bWitnessEchoRejected || bWitnessBraidRejected ||",hub)
         self.assertIn("bWitnessDispatchRejected || bWitnessReturnRejected ||",hub)
-        self.assertIn("bRealityConsequenceRejected)return false;",hub)
+        self.assertIn("bRealityConsequenceRejected || bOuterReactionsRejected)return false;",hub)
         self.assertIn("Save->WitnessEchoFirstMask=",hub)
         self.assertIn("Save->WitnessEchoReturnMask=",hub)
 
