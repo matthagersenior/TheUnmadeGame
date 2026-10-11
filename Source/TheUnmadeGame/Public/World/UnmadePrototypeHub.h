@@ -70,6 +70,7 @@ public:
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetBesHouseholdJournal() const;
     bool HasBesHouseholdWitness() const { return BesHousehold.EndgameWitness(); }
+    bool IsBesOnWalkout() const { return BesHousehold.OnWalkout(); }
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetLivingEconomyJournal() const;
     UnmadeCore::MaterialDuty GetMaterialDuty(FVector At,UnmadeCore::NpcRole Role) const;
