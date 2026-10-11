@@ -91,8 +91,11 @@ public:
     }
     bool Restore(const Snapshot& in,const MaterialWorld& material,int currentDay)noexcept{
         if(currentDay<1||currentDay>833334)return false;
+        std::int64_t accountedMarks=in.cargo.route==-1?0:
+            TradeContracts[in.cargo.route].agreedMarks;
         for(int i=0;i<9;++i){
             const auto& w=in.workers[i];
+            accountedMarks+=w.employerMarks+w.earnedMarks;
             if(w.employerMarks<0||w.employerMarks>100000 ||
                w.earnedMarks<0||w.earnedMarks>100000 ||
                w.owedMarks<0||w.owedMarks>100000||
@@ -109,6 +112,15 @@ public:
                r.consumedSupport<0||r.consumedSupport>100000||
                r.paidMarks!=r.deliveries*6||
                r.consumedSupport+r.foreignStock!=r.deliveries*5)return false;
+        // Nine municipal treasuries begin with 32 marks each. No new currency
+        // may appear from a paid shift, trade, or fabricated receipt.
+        if(accountedMarks!=9*32)return false;
+        if(in.workers[1].deliveriesWitnessed!=in.routes[1].deliveries ||
+           in.workers[2].deliveriesWitnessed!=in.routes[0].deliveries)
+            return false;
+        for(int i=0;i<9;++i)
+            if(i!=1&&i!=2&&in.workers[i].deliveriesWitnessed!=0)
+                return false;
         if(in.cargo.route==-1){
             if(in.cargo.collectedDay!=0)return false;
         } else {
