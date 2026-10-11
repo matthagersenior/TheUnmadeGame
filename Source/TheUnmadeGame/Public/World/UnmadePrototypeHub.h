@@ -162,6 +162,7 @@ private:
     bool bOuterReactionsRejected=false;
     void RefreshOuterReactionWorld();
     bool bOuterReactionVisualActive=false;
+    uint8 OuterActiveMask=0;
     bool bRealityConsequenceRejected=false;
     void RefreshRealityConsequenceWorld();
     bool bRealityVisualActive=false;
