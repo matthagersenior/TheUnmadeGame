@@ -20,7 +20,7 @@ class LivingEconomyWiring(unittest.TestCase):
             self.assertIn(key,domain)
         self.assertIn("ExportForContract",material)
         self.assertIn("ReinforceShelter",material)
-        self.assertIn("Materials.AdvanceAllOneDay(Civic)",hub)
+        self.assertIn("Materials.AdvanceAllOneDay(Civic,BesHousehold.OnWalkout())",hub)
         self.assertIn("LivingTrades.AdvanceOneDay(Materials.Town(",hub)
         self.assertIn("LivingTrades.ApplyShelterSupport(Realm,*Town)",hub)
         self.assertIn("Materials.ReinforceShelter(Realm,Support)",hub)
