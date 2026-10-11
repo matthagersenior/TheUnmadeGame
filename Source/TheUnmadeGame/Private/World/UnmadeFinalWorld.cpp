@@ -103,7 +103,11 @@ bool AUnmadePrototypeHub::BreakFinalMask()
     // Bes's long-term saved material and wage history is distinct from
     // mutual trade: fully paid work is meaningful, cold days still mattered.
     // A refusal exposes an unresolved wound; neither route bypasses combat.
-    if(BesHousehold.EndgameWitness()&&GEngine)
+    if(BesHousehold.Phase()==UnmadeCore::BesPhase::Underwritten&&GEngine)
+        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,
+            FString::Printf(TEXT("MERA'S SACRIFICE REACHES NHAL-VEY: %d borrowed marks moved from one named wage account to another. A different household still holds the claim."),
+                BesHousehold.Save().guaranteeOwed));
+    else if(BesHousehold.EndgameWitness()&&GEngine)
         GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,
             FString::Printf(TEXT("BES'S COUNTER-WITNESS: Real municipal wages were returned; %d recorded cold days cannot be erased by a repaired ledger."),
                 BesHousehold.Save().daysCold));
