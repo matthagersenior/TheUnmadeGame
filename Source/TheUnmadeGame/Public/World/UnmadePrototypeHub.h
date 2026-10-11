@@ -184,7 +184,6 @@ private:
     UnmadeCore::BesHousehold BesHousehold;
     bool bBesHouseholdRejected=false;
     void RefreshBesHouseholdWorld();
-    FVector GetBesWorkDestination(FName StableId,FVector Home) const;
     bool bLivingEconomyRejected=false;
     bool bMaterialSaveRejected=false;
     void RefreshMaterialWorld();
