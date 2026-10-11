@@ -100,6 +100,16 @@ bool AUnmadePrototypeHub::BreakFinalMask()
     if(LivingTrades.HasEarnedMutualAid() && GEngine)
         GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,
             TEXT("NHAL-VEY'S CLAIM FALTERS: Saltwake and Cinderhold exchanged real supplies, paid their couriers, and remembered both receipts."));
+    // Bes's long-term saved material and wage history is distinct from
+    // mutual trade: fully paid work is meaningful, cold days still mattered.
+    // A refusal exposes an unresolved wound; neither route bypasses combat.
+    if(BesHousehold.EndgameWitness()&&GEngine)
+        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,
+            FString::Printf(TEXT("BES'S COUNTER-WITNESS: Real municipal wages were returned; %d recorded cold days cannot be erased by a repaired ledger."),
+                BesHousehold.Save().daysCold));
+    else if(BesHousehold.OnWalkout()&&GEngine)
+        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Orange,
+            TEXT("NHAL-VEY POINTS TO AN UNPAID HEARTH: Bes still refuses a stolen shift. The cost of an unfinished choice survives."));
     if(GEngine)GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Orange,
         FString::Printf(TEXT("FIRST VICTORY WAS A LIE: %s"),
         UTF8_TO_TCHAR(UnmadeCore::LastAdversary.maskReveal)));
