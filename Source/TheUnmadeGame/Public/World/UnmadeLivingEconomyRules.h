@@ -116,8 +116,7 @@ public:
                in.cargo.collectedDay<1||in.cargo.collectedDay>currentDay||
                material.Cargo().realm!=-1)return false;
             const auto& contract=TradeContracts[in.cargo.route];
-            const auto* home=material.Town(contract.origin);
-            if(!home||home->day>in.cargo.collectedDay)return false;
+            if(!material.Town(contract.origin))return false;
         }
         data_=in;return true;
     }
