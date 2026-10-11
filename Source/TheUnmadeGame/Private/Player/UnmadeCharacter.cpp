@@ -511,8 +511,11 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
         const bool bResolvedBraid=!bResolvedFaction && !bResolvedFrontier &&
             !bResolvedAfterlight && !bResolvedRealmAftermath &&
             Hub->ResolveNearbyWitnessBraid(static_cast<int32>(Ending));
+        const bool bResolvedReturn=!bResolvedFaction && !bResolvedFrontier &&
+            !bResolvedAfterlight && !bResolvedRealmAftermath && !bResolvedBraid &&
+            Hub->ResolveNearbyWitnessReturn(static_cast<int32>(Ending));
         if(bResolvedFaction || bResolvedFrontier || bResolvedAfterlight ||
-           bResolvedRealmAftermath || bResolvedBraid)
+           bResolvedRealmAftermath || bResolvedBraid || bResolvedReturn)
         {
             ReconcileEarnedRewards();
             if(bResolvedAfterlight)
@@ -547,6 +550,10 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
                 ReportLocalEvent(FName(Ending==UnmadeCore::FactionEnding::Solidarity
                     ?TEXT("World.WitnessBraidShelter"):TEXT("World.WitnessBraidDocket")),
                     FName("region.crossings.bridge"));
+            else if(bResolvedReturn)
+                ReportLocalEvent(FName(Ending==UnmadeCore::FactionEnding::Solidarity
+                    ?TEXT("World.HessaPrivateCounsel"):TEXT("World.HessaPublicHearing")),
+                    FName("region.bellwold.refuge"));
             else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
         }
         else if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Silver,
@@ -956,6 +963,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryWitnessReturn(this,ResidentDistSq))return;
             if(Hub->TryWitnessDispatch(this,ResidentDistSq))return;
             if(Hub->TryFinalInteraction(this,ResidentDistSq))return;
             if(Hub->InspectUnansweredRoad(this,ResidentDistSq))return;
