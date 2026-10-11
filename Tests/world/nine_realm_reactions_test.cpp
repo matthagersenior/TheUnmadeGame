@@ -52,14 +52,14 @@ int main(){
     assert(all.Read(Realm::SkyBelow)->PublicResponse()==RealityPublicResponse::PublicInquiry);
     auto saved=all.Save();
     OuterRealmReactions restored;
-    assert(restored.Restore(saved,25));
+    assert(restored.Restore(saved,30));
     assert(restored.Read(Realm::SkyBelow)->PublicResponse()==RealityPublicResponse::PublicInquiry);
     assert(restored.Read(Realm::WidowedRain)->PublicResponse()==RealityPublicResponse::SharedPassage);
-    assert(!restored.Read(Realm::SkyBelow)->Active(25).active);
+    assert(!restored.Read(Realm::SkyBelow)->Active(30).active);
     const auto before=restored.Save();
     auto corrupt=saved;
     corrupt[1].careWitnessMask=0x400;
-    assert(!restored.Restore(corrupt,25));
+    assert(!restored.Restore(corrupt,30));
     assert(restored.Save()[1].careWitnessMask==before[1].careWitnessMask);
     corrupt=saved;
     corrupt[2].activeRite=100;
