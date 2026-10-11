@@ -206,6 +206,9 @@ private:
     double LastBesReturningSceneAt=-9999.0;
     FName BesPendingDecision;
     double BesDecisionExpiresAt=0.0;
+    // Client-side caption overlay, no required Blueprint/audio content.
+    UPROPERTY(Transient)
+    TObjectPtr<class UUnmadeUnpaidShiftSubtitleWidget> BesSubtitleOverlay;
     FTimerHandle BesSubtitleTimer;
     int32 BesActiveScene=-1;
     int32 BesActiveBeat=0;
