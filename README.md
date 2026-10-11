@@ -1,3 +1,11 @@
+## CURRENT RELEASE — Playable World v9, Chapters 28–29 (2026-10-11)
+
+**The illustrated Bible has actually been regenerated:** 137-page complete Word/PDF (53 images), 74-page standalone Volume X Word/PDF (6 images), and verified complete development ZIP. Source chapters cover the six playable-region grayboxes and twenty-four new NPC/enemy placements, plus the camera-directed Unpaid Shift scenes and live truthful quest tracker. [Release receipt + digests](docs/lore/LATEST_ILLUSTRATED_RELEASE.md) | [Canonical Volume X](docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md) | [Publication policy](docs/lore/UPDATE_POLICY.md).
+
+**Downloads:** User's ChatGPT Library `/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9`, plus the conversation's direct sandbox download links. Binary files are not committed to GitHub; no GitHub Release is claimed. Source CI green on `main` does not constitute a built or playtested Unreal executable.
+
+---
+
 ## The Unpaid Shift — V7 The Audible Shift (2026-10-11)
 
 The 39-beat source cinematic can now generate and load **35 actual original stereo Foley WAV cues** (32 kHz, 16 bit) instead of carrying unused sound names only. Source audio generation includes a reproducible hashed manifest and acoustic nonclipping tests; an authorized Windows Unreal import stage places missing SoundWaves under `/Game/UnmadeProduction/Audio/UnpaidShift/` without replacing custom sounds. During a beat, runtime plays the matching imported effect *if present*. **Actor speech and narration have not been recorded.** Even with no audio, a nonmodal native UMG lower-third shows the attributed speaker and wrapped timed subtitle with safe horizontal margins, and clears on skip. Existing v5/v6 wages, Bes's home, Mera's guarantee and Nhal-Vey memories remain true to their own saves.

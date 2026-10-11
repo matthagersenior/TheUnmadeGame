@@ -1,0 +1,50 @@
+{
+  "release": "Playable World v9: The Outlying Six & The Shift in Your Hands",
+  "date": "2026-10-11",
+  "gameplay_main_sha": "e7d67c05e968510cdd81e9a3727062c29c4f4637",
+  "library_folder": "/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9",
+  "checks": {
+    "full_pdf_pages": 137,
+    "volume_pdf_pages": 74,
+    "full_docx_embedded_illustrations": 53,
+    "volume_docx_embedded_illustrations": 6,
+    "fully_blank_pdf_pages": 0,
+    "out_of_page_text_blocks": 0,
+    "zip_integrity": "CRC + 21 entry SHA256 verified",
+    "unreal_engine_tested": false
+  },
+  "assets": [
+    {
+      "filename": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Playable_World_v9.pdf",
+      "sha256": "36f1ceda6cffc4d78413bc57440e2a0b382d1b96edb49f0c5392f4e0f7539177",
+      "library_path": "/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9/THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Playable_World_v9.pdf"
+    },
+    {
+      "filename": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Playable_World_v9.docx",
+      "sha256": "d88a319ee3d252647cbc06ce3daf7d04156e80c207bc3f61f3d28453c0ae578f",
+      "library_path": "/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9/THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Playable_World_v9.docx"
+    },
+    {
+      "filename": "THE_UNMADE_Volume_X_Illustrated_Playable_World_v9.pdf",
+      "sha256": "6648b25c5f86d88600379fdfaf5ce502cbe39bd8d300c4a8243be16111102f9a",
+      "library_path": "/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9/THE_UNMADE_Volume_X_Illustrated_Playable_World_v9.pdf"
+    },
+    {
+      "filename": "THE_UNMADE_Volume_X_Illustrated_Playable_World_v9.docx",
+      "sha256": "ce0cd3678a78b6e2ea557610f7eb903ead356d5f37c33c9852f50a36f1474211",
+      "library_path": "/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9/THE_UNMADE_Volume_X_Illustrated_Playable_World_v9.docx"
+    },
+    {
+      "filename": "THE_UNMADE_Playable_World_v9_Complete_Illustrated_Package.zip",
+      "sha256": "56ab3b0759248333bf3ef04e205a32376392923e2bc241d80630a251debe301e",
+      "library_path": "/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9/THE_UNMADE_Playable_World_v9_Complete_Illustrated_Package.zip"
+    },
+    {
+      "filename": "THE_UNMADE_Volume_X_Chapters_28_29_Playable_World_v9.md",
+      "sha256": "86e105b2c00e27ca00a418fa827ec9d586e376bc0a058cc61e567f0c101161e7",
+      "library_path": "/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9/THE_UNMADE_Volume_X_Chapters_28_29_Playable_World_v9.md"
+    }
+  ],
+  "not_a_github_release": true,
+  "notes": "Library files are verified dated snapshots; GitHub CI checks source only. No finished Unreal character rigs, professional voiceover or UE 5.8 PIE acceptance claimed."
+}
