@@ -126,6 +126,15 @@ public:
         for(int i=0;i<9;++i)AdvanceOneDay(static_cast<Realm>(i),civic[i]);
         return true;
     }
+    // Exports are removed from the correct warehouse and remain foreign goods
+    // while in custody; receiving cannot turn rainwater into ember baskets.
+    bool ExportForContract(Realm realm,int units,int day)noexcept{
+        const int i=static_cast<int>(realm);
+        if(i<0||i>=9||units<=0||units>10||cargo_.realm!=-1||
+           day<towns_[i].day||towns_[i].store<units)return false;
+        towns_[i].store-=units;
+        return true;
+    }
     MaterialAction Collect(Realm realm,int day)noexcept{
         const int i=static_cast<int>(realm);
         if(i<0||i>=9||cargo_.realm!=-1||day<1||day<towns_[i].day||
