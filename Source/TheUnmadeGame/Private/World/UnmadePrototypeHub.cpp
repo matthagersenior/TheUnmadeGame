@@ -2226,13 +2226,21 @@ void AUnmadePrototypeHub::AdvanceMaterialDayIfNeeded()
     const auto Before=Materials.Snapshot();
     const auto Cargo=Materials.Cargo();
     const auto BeforeLiving=LivingTrades.Save();
-    if(!Materials.AdvanceAllOneDay(Civic))return;
+    const auto BeforeBes=BesHousehold.Save();
+    if(!Materials.AdvanceAllOneDay(Civic,BesHousehold.OnWalkout()))return;
     // Payroll follows the day actually simulated by the material ledger,
     // never a skipped future clock day after reloading a lagging save.
     if(!LivingTrades.AdvanceOneDay(Materials.Town(
+        UnmadeCore::Realm::ThreefoldReach)->day,BesHousehold.OnWalkout()))
+    {
+        Materials.Restore(Before,Cargo,GetGameDay());
+        return;
+    }
+    if(!BesHousehold.AdvanceOneDay(Materials.Town(
         UnmadeCore::Realm::ThreefoldReach)->day))
     {
         Materials.Restore(Before,Cargo,GetGameDay());
+        LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
         return;
     }
     // Actual receipts create a separate, finite reserve of FOREIGN support
@@ -2251,9 +2259,11 @@ void AUnmadePrototypeHub::AdvanceMaterialDayIfNeeded()
     {
         Materials.Restore(Before,Cargo,GetGameDay());
         LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
+        BesHousehold.Restore(BeforeBes,GetGameDay());
         return;
     }
     RefreshMaterialWorld();
+    RefreshBesHouseholdWorld();
 }
 
 void AUnmadePrototypeHub::RefreshMaterialWorld()
