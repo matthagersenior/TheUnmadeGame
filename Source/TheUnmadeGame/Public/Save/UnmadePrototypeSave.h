@@ -188,6 +188,19 @@ public:
     int32 WitnessReturnCollectedDay=0;
     UPROPERTY(SaveGame)
     int32 WitnessReturnDeliveredDay=0;
+    /** Crossings reality-consequence civic testimony. Additive schema-1 record.
+        Temporary cast expires on world clock; witnessed diversity remains. */
+    UPROPERTY(SaveGame)
+    bool bHasRealityConsequenceSnapshot=false;
+    UPROPERTY(SaveGame)
+    int32 RealityCareWitnessMask=0;
+    UPROPERTY(SaveGame)
+    int32 RealityInquiryWitnessMask=0;
+    UPROPERTY(SaveGame)
+    int32 RealityLastRite=-1;
+    UPROPERTY(SaveGame)
+    double RealityActiveUntil=0;
+
 
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)
