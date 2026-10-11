@@ -1988,6 +1988,9 @@ AUnmadePrototypeHub::RealityConsequenceAt(FVector Position) const
 {
     const auto* Policy=UnmadeCore::RealmReactionAt(Position.X,Position.Y);
     if(!Policy)return {};
+    if(Policy->realm==UnmadeCore::Realm::ThreefoldReach &&
+       FVector::DistSquared2D(Position,FVector::ZeroVector)>FMath::Square(2600.f))
+        return {}; // preserve the original v1 Reach focus boundary
     const auto* Ledger=Policy->realm==UnmadeCore::Realm::ThreefoldReach
         ?&RealityLedger:OuterReactions.Read(Policy->realm);
     if(!Ledger)return {};
