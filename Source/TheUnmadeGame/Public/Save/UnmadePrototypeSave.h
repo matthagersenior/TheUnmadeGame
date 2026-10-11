@@ -212,6 +212,25 @@ public:
     TArray<int32> OuterActiveRites;
     UPROPERTY(SaveGame)
     TArray<double> OuterActiveUntil;
+    /** v3 finite material ledger: nine independent settlements with real units.
+        Missing fields default to new, isolated stores on schema-1 saves. */
+    UPROPERTY(SaveGame)
+    bool bHasMaterialWorld=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> MaterialDays, MaterialStores, MaterialHouseholds;
+    UPROPERTY(SaveGame)
+    TArray<int32> MaterialIntegrity, MaterialProduced, MaterialConsumed;
+    UPROPERTY(SaveGame)
+    TArray<int32> MaterialShortageDays, MaterialLaborHours;
+    UPROPERTY(SaveGame)
+    TArray<int32> MaterialDeliveries, MaterialRepairs;
+    UPROPERTY(SaveGame)
+    int32 MaterialCargoRealm=-1;
+    UPROPERTY(SaveGame)
+    int32 MaterialCargoUnits=0;
+    UPROPERTY(SaveGame)
+    int32 MaterialCargoDay=0;
+
 
 
 
