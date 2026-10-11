@@ -747,6 +747,7 @@ void AUnmadeCharacter::ShowStoryJournal()
     FString RealmSummary;
     FString MainRoadSummary;
     FString WitnessEchoSummary;
+    FString RealityConsequenceSummary;
     if (GetWorld())
     {
         for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
@@ -766,6 +767,7 @@ void AUnmadeCharacter::ShowStoryJournal()
             RealmSummary=Hub->GetCurrentRealmName(GetActorLocation());
             MainRoadSummary=Hub->DescribeUnansweredRoad(this);
             WitnessEchoSummary=Hub->GetWitnessEchoJournal();
+            RealityConsequenceSummary=Hub->GetRealityConsequenceJournal();
             if(Hub->GetAfterlightStage()>0)
                 RealmSummary+=FString::Printf(
                     TEXT(" | Bellwold Afterlight: %d/4"),Hub->GetAfterlightStage());
@@ -809,6 +811,8 @@ void AUnmadeCharacter::ShowStoryJournal()
         GEngine->AddOnScreenDebugMessage(-1,18.f,FColor::Yellow,MainRoadSummary);
     if(GEngine && !WitnessEchoSummary.IsEmpty())
         GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,WitnessEchoSummary);
+    if(GEngine && !RealityConsequenceSummary.IsEmpty())
+        GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Yellow,RealityConsequenceSummary);
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
