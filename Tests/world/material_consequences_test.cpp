@@ -34,6 +34,9 @@ int main(){
     assert(w.Cargo().realm==-1);
     assert(w.Town(Realm::HearthBeneath)->households==before[2].households+5);
     assert(w.Deliver(Realm::HearthBeneath,2)==MaterialAction::Blocked);
+    // Condition 80 is genuinely worn: one paid repair is valid, repeated
+    // repairs at condition 98 are not a free repeatable action.
+    assert(w.Repair(Realm::HearthBeneath,2)==MaterialAction::Repaired);
     assert(w.Repair(Realm::HearthBeneath,2)==MaterialAction::NoWork);
     for(int day=2;day<18;++day)assert(w.AdvanceAllOneDay(neutral));
     assert(w.Town(Realm::HearthBeneath)->day==18);
