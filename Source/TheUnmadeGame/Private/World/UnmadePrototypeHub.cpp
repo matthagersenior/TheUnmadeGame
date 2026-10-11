@@ -45,6 +45,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshRealityConsequenceWorld();
     RefreshOuterReactionWorld();
     RefreshMaterialWorld();
+    RefreshBesHouseholdWorld();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
@@ -92,6 +93,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::OuterRealmReactions RestoredOuter;
     UnmadeCore::MaterialWorld RestoredMaterials;
     UnmadeCore::LivingEconomy RestoredLiving;
+    UnmadeCore::BesHousehold RestoredBes;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -433,6 +435,22 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         }
     }
     else RestoredLiving.InitializeAtDay(RestoredClock.DayIndex()+1);
+    if(Save->bHasBesHousehold)
+    {
+        const UnmadeCore::BesHouseholdSnapshot State={
+            Save->BesQuestPhase,Save->BesHouseholdDay,
+            Save->BesHeatBaskets,Save->BesColdDays,
+            Save->BesWalkoutDays,Save->BesReliefPacks,
+            Save->BesFirstReportDay,Save->bBesHomeVisited,
+            Save->bBesRhevaInterviewed};
+        if(!RestoredBes.Restore(State,RestoredClock.DayIndex()+1))
+        {
+            bBesHouseholdRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid Bes household: world save write blocked"));
+        }
+    }
+    else RestoredBes.InitializeAtDay(RestoredClock.DayIndex()+1);
+    BesHousehold=RestoredBes;
     LivingTrades=RestoredLiving;
     Materials=RestoredMaterials;
     OuterReactions=RestoredOuter;
@@ -466,7 +484,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bWitnessEchoRejected || bWitnessBraidRejected ||
        bWitnessDispatchRejected || bWitnessReturnRejected ||
        bRealityConsequenceRejected || bOuterReactionsRejected ||
-       bMaterialSaveRejected || bLivingEconomyRejected)return false;
+       bMaterialSaveRejected || bLivingEconomyRejected ||
+       bBesHouseholdRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -637,6 +656,17 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     }
     Save->LivingTradeCargoRoute=Living.cargo.route;
     Save->LivingTradeCargoDay=Living.cargo.collectedDay;
+    const auto BesRecord=BesHousehold.Save();
+    Save->bHasBesHousehold=true;
+    Save->BesQuestPhase=BesRecord.phase;
+    Save->BesHouseholdDay=BesRecord.day;
+    Save->BesHeatBaskets=BesRecord.heatBaskets;
+    Save->BesColdDays=BesRecord.daysCold;
+    Save->BesWalkoutDays=BesRecord.daysWalkedOut;
+    Save->BesReliefPacks=BesRecord.reliefPacks;
+    Save->BesFirstReportDay=BesRecord.firstReportDay;
+    Save->bBesHomeVisited=BesRecord.homeVisited;
+    Save->bBesRhevaInterviewed=BesRecord.wardenInterviewed;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
