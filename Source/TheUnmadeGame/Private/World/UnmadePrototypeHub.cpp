@@ -44,6 +44,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshRiteWorldFromSave();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
+    RefreshWitnessReturnWorld();
     RefreshDistrictMood();
     LastAmbientPhase = Clock.Phase();
     GetWorldTimerManager().SetTimer(GossipTimer, this, &AUnmadePrototypeHub::SpreadLocalRumors, 8.f, true);
@@ -83,6 +84,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::WitnessEchoLedger RestoredWitnessEcho;
     UnmadeCore::WitnessBraidChronicle RestoredWitnessBraid;
     UnmadeCore::WitnessDispatch RestoredDispatch;
+    UnmadeCore::WitnessReturn RestoredReturn;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -315,6 +317,17 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bWitnessDispatchRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Corrupt witness dispatch custody: writes blocked"));
     }
+    if(Save->bHasWitnessReturnSnapshot &&
+       !RestoredReturn.Restore({Save->WitnessReturnStage,Save->WitnessReturnRoute,
+           Save->WitnessReturnChosenDay,Save->WitnessReturnCollectedDay,
+           Save->WitnessReturnDeliveredDay},
+           RestoredDispatch,RestoredWitnessBraid.Outcome(),
+           RestoredClock.DayIndex()+1))
+    {
+        bWitnessReturnRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Corrupt return-witness custody: writes blocked"));
+    }
+    ReturnWitness=RestoredReturn;
     Dispatch=RestoredDispatch;
     WitnessBraid=RestoredWitnessBraid;
     WitnessEchoes=RestoredWitnessEcho;
@@ -341,7 +354,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bResonanceSaveRejected || bGuardianSaveRejected ||
        bFinalSaveRejected || bResidentContinuityRejected ||
        bWitnessEchoRejected || bWitnessBraidRejected ||
-       bWitnessDispatchRejected)return false;
+       bWitnessDispatchRejected || bWitnessReturnRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -443,6 +456,13 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->WitnessDispatchStage=Post.stage;
     Save->WitnessDispatchCollectedDay=Post.collectedDay;
     Save->WitnessDispatchDeliveredDay=Post.deliveredDay;
+    const auto Reply=ReturnWitness.Snapshot();
+    Save->bHasWitnessReturnSnapshot=true;
+    Save->WitnessReturnStage=Reply.stage;
+    Save->WitnessReturnRoute=Reply.route;
+    Save->WitnessReturnChosenDay=Reply.chosenDay;
+    Save->WitnessReturnCollectedDay=Reply.collectedDay;
+    Save->WitnessReturnDeliveredDay=Reply.deliveredDay;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -1477,6 +1497,9 @@ FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
     if(WitnessBraid.Outcome()!=UnmadeCore::WitnessBraidOutcome::Unresolved)
         Text+=FString::Printf(TEXT(" | CUSTODY: %s"),
             UTF8_TO_TCHAR(Dispatch.PlayerLine(WitnessBraid.Outcome())));
+    if(Dispatch.Stage()==UnmadeCore::WitnessDispatchStage::HandDelivered)
+        Text+=FString::Printf(TEXT(" | RETURN: %s"),
+            UTF8_TO_TCHAR(ReturnWitness.Journal(Dispatch,WitnessBraid.Outcome(),GetGameDay())));
     return Text;
 }
 
@@ -1831,8 +1854,17 @@ void AUnmadePrototypeHub::BuildForPrototype()
     // exists before the Crossings decision; future art replaces this cube.
     SpawnBlock(FVector(-845,-680,90),FVector(0.32,0.34,0.12),
         FName("WitnessDispatch.FoldedRecord"));
+    // A reply near Hessa's refuge; different permanent record at the
+    // Crossings depending on whether the player kept it private or public.
+    SpawnBlock(FVector(-17410,390,100),FVector(0.45,0.3,0.12),
+        FName("WitnessReturn.ReplyNote"));
+    SpawnBlock(FVector(-730,-260,95),FVector(0.35,1.5,0.35),
+        FName("WitnessReturn.PrivateMarker"));
+    SpawnBlock(FVector(-730,-260,95),FVector(0.7,0.4,2.1),
+        FName("WitnessReturn.PublicMarker"));
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
+    RefreshWitnessReturnWorld();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={
