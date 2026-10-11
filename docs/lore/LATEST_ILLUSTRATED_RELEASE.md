@@ -1,5 +1,30 @@
 # Latest illustrated lore publication
 
+**Current cumulative edition:** *The Unmade — Volume X, Chapter 23: Local Material Consequences* (11 October 2026)  
+**Game code baseline:** `86d66710bb37e935c9e3968d21b2131e0c620098` · [PR #41](https://github.com/matthagersenior/TheUnmadeGame/pull/41) · [green post-merge CI](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38141337730)  
+**Canon:** Volume X §23, *Local Material Consequences — What the Miracle Costs Tomorrow*. Nine finite, differentiated work/material economies, physical same-realm relief and repair, and authoritative old-save compatibility.  
+**Distribution:** The full books and package were independently verified as ChatGPT conversation downloads; binaries are **not** committed as GitHub Release assets.
+
+| Updated publication | Verified |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Local_Material_Consequences.docx` | **123-page complete cumulative editable master**, all **52** original illustrations retained |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Local_Material_Consequences.pdf` | **123 pages**, checked for blank pages and text overflow |
+| `THE_UNMADE_Volume_X_Illustrated_Local_Material_Consequences.docx` | **53-page editable Volume X**, five retained illustrations |
+| `THE_UNMADE_Volume_X_Illustrated_Local_Material_Consequences.pdf` | **53 pages**, no blank pages or text outside page bounds |
+| `THE_UNMADE_Local_Material_Consequences_Complete_Illustrated_Package.zip` | **27 entries**, four updated books, eight concept-art files, all previous source references, Chapter 23, production acceptance guide, 26 independently verified SHA-256 digests and ZIP CRC |
+
+**Publication validation:** Both prior cumulative illustrated Word masters were extended, not abridged. Original embedded image counts were asserted (52 and five), complete PDFs were exported from Word, late-page visual montages reviewed, and all 123+53 pages scanned for blank pages and out-of-bounds text blocks. The ZIP was re-read for CRC and every listed member's exact size and SHA-256.
+
+**Implemented source:** Each of nine realms has local counted warehouse stock, household reserve, worker production, daily consumption, shortage-driven structural decay, locally counted haulage and finite material-paid repairs. Players may E-withdraw one five-unit realm-specific pack and E-deliver it physically within the same realm. Named resident routine waypoints adapt to shortages/damage; the source journal and world actors show actual state. Civic witnessed care adds a genuinely productive worker to subsequent shifts, not free instant supply. All data saves as additive optional schema-1 fields, with malformed array guards, old-save current-day initialization, and rollback after failed writes.
+
+**Limits:** Real UE Editor/UHT/PIE compile and gameplay, collision accessibility, authored animation and sound, equipment inventory commodity flows, individual employment/wages, full outer-world trade and household tenancy are not certified or completed. Green native/source CI does not prove a shipped RPG.
+
+**Canonical source:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` Chapter 23, `Source/TheUnmadeGame/Public/World/UnmadeMaterialConsequencesRules.h` and `Tests/world/material_consequences_test.cpp`.
+
+---
+
+# Previous illustrated publication — Volume X Chapter 22
+
 **Current cumulative edition:** *The Unmade — Nine-Realm Reaction System* (11 October 2026)  
 **Game code baseline:** `b97e3df58bd969d38de819074d351c63fab6159a` · [PR #39](https://github.com/matthagersenior/TheUnmadeGame/pull/39) · [green post-merge CI](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38131618589)  
 **Canon:** Volume X Chapter 22, *The Nine-Realm Reaction System — One Rite, Nine Consequences*. Original Reach evidence preserved; eight independently saved policy-driven outer realm histories.  
