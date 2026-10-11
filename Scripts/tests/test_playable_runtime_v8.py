@@ -10,6 +10,10 @@ class RuntimeWorldTest(unittest.TestCase):
             self.assertIn(place,s)
         self.assertIn("for(int32 i=0;i<3;++i)",s)
         self.assertIn("ConfigureEncounter",s)
+        self.assertIn("Guide->ConfigureFrontier",s)
+        self.assertIn("Guide->ConfigureIdentity",s)
+        self.assertIn("Bes.Walkout.Prompt",s)
+        self.assertIn("Mera.Guarantee.Prompt",s)
         self.assertIn("BuildPlayableEncounters();",
                       source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp"))
     def test_camera_can_be_skipped_and_restored(self):

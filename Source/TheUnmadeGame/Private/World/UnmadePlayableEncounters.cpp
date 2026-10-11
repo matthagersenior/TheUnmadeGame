@@ -1,5 +1,6 @@
 #include "World/UnmadePrototypeHub.h"
 #include "Combat/UnmadeEnemyCharacter.h"
+#include "NPC/UnmadeNpcCharacter.h"
 #include "Engine/TextRenderActor.h"
 #include "Components/TextRenderComponent.h"
 #include "Engine/PointLight.h"
@@ -31,6 +32,22 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
         {TEXT("Cinderhold.Slag"),TEXT("BLACKSLAG FIELD"),FVector(-2100,52000,0),
             FColor(246,126,69),{TEXT("Ashmaw"),TEXT("Kiln Wisp"),TEXT("Ashmaw")}}
     };
+    const char* GuideIds[]={
+        "npc.reach.ashroad.scout.001","npc.reach.glasscut.scout.001",
+        "npc.bellwold.forgotten.scout.001","npc.paperhaven.torn.scout.001",
+        "npc.saltwake.saltglass.scout.001","npc.cinderhold.blackslag.scout.001"};
+    const char* GuideNames[]={
+        "Orren the ash-runner","Vesh the glass warden",
+        "Deryn the bell seeker","Isti the torn-page keeper",
+        "Halven the net seeker","Varda the slag scout"};
+    const char* GuideLines[]={
+        "Two jaws at the old arch. The third sound is the road taking a breath.",
+        "The watchers answer any light. Stand near the old stone for cover.",
+        "The hounds hear a bell even after the iron is taken away.",
+        "I read the missing names here. Something read me back.",
+        "The crawler comes ashore at dusk. The drowned watch does not sleep.",
+        "The coal beast stalks the kiln road. Bes's house lies safely east."};
+    int32 GuideIndex=0;
     for(const FSite& Site:Sites)
     {
         const FString Id(Site.Id);
@@ -82,5 +99,55 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
                 Enemy->SetVisualScale(bWatcher?FVector(.7,.7,.9):FVector(1.1,.85,1.05));
             }
         }
+        // A genuinely talkable individual for each field trip, away from its beasts.
+        if(AUnmadeNpcCharacter* Guide=GetWorld()->SpawnActor<AUnmadeNpcCharacter>(
+            Site.Center+FVector(0,-870,100),FRotator::ZeroRotator))
+        {
+            if(GuideIndex>=4)
+            {
+                const UnmadeCore::FrontierResident FrontierGuide={
+                    GuideIds[GuideIndex],GuideNames[GuideIndex],
+                    GuideIndex==4?UnmadeCore::Realm::WidowedRain:
+                                  UnmadeCore::Realm::HearthBeneath,
+                    UnmadeCore::NpcRole::Guard,UnmadeCore::NpcTemperament::Steady,
+                    0,0,GuideLines[GuideIndex]};
+                Guide->ConfigureFrontier(FrontierGuide);
+            }
+            else
+            {
+                const auto Town=GuideIndex==2?UnmadeCore::SettlementId::Bellwold:
+                    GuideIndex==3?UnmadeCore::SettlementId::Paperhaven:
+                                  UnmadeCore::SettlementId::Crossings;
+                Guide->ConfigureIdentity(FName(UTF8_TO_TCHAR(GuideIds[GuideIndex])),
+                    FString(UTF8_TO_TCHAR(GuideNames[GuideIndex])),
+                    UnmadeCore::NpcRole::Guard,UnmadeCore::NpcTemperament::Steady,Town,
+                    FString(UTF8_TO_TCHAR(GuideLines[GuideIndex])));
+            }
+        }
+        ++GuideIndex;
     }
+
+    // Physical quest affordances: prompts point to existing E/LOS stations.
+    // They never alter wage or consent saves, and consume no input themselves.
+    struct FPrompt{FVector At;const TCHAR* Id;const TCHAR* Text;};
+    const FPrompt Prompts[]={
+        {FVector(1205,50540,245),TEXT("Bes.Home.Prompt"),TEXT("E  INSPECT HOME / DELIVER HEAT")},
+        {FVector(1430,50790,350),TEXT("Bes.Walkout.Prompt"),TEXT("E  REVIEW / CONFIRM WALKOUT")},
+        {FVector(650,50300,270),TEXT("Bes.Wages.Prompt"),TEXT("E  REVIEW / CONFIRM WAGES")},
+        {FVector(1230,-49640,285),TEXT("Mera.Guarantee.Prompt"),TEXT("E  REVIEW / CONFIRM GUARANTEE")}
+    };
+    for(const FPrompt& Prompt:Prompts)
+        if(ATextRenderActor* Sign=GetWorld()->SpawnActor<ATextRenderActor>(
+            Prompt.At,FRotator(0,90,0)))
+        {
+            Sign->Tags.AddUnique(FName(Prompt.Id));
+            if(UTextRenderComponent* Label=Sign->GetTextRender())
+            {
+                Label->SetText(FText::FromString(Prompt.Text));
+                Label->SetWorldSize(19.f);
+                Label->SetHorizontalAlignment(EHTA_Center);
+                Label->SetTextRenderColor(FColor(242,199,117));
+                Label->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+            }
+        }
 }

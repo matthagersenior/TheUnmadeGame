@@ -267,3 +267,4 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Spawned six explorable source-runtime ruins outside civilian roads, with obstacles, label and light, plus eighteen named foes reusing the actual attack/guard/fracture systems and two existing enemy attack styles.
 - Added source regression tests and updated living canon in the same gameplay commit. This is neither a regenerated downloadable illustrated volume nor an Unreal Editor/Windows playtest; final assets, animation, navigation and VO remain distinct production work.
 - Source API compatibility review: use the public APointLight::PointLightComponent property in the lighted encounter blockouts; no gameplay or save-state contract changed.
+- Added six named field scouts with physically present inherited memory/response interactions and four labeled E interaction stations for the Bes/Mera wage dispute. These complement, not replace, the original resident population.
