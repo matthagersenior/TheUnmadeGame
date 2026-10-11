@@ -1845,6 +1845,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
     AdvanceMaterialDayIfNeeded();
+    AnimateBesWorkingCart();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical
@@ -2958,6 +2959,23 @@ void AUnmadePrototypeHub::BuildForPrototype()
         SpawnBlock(FVector(To.originX+1470,To.originY-180,100),
             FVector(.75,.65,1.7),FName(*(Prefix+TEXT("Finish"))));
     }
+    // Actual animated graybox delivery prop. Work remains counted by the
+    // material ledger; this visual cart makes the real absent Bes shift legible.
+    const FVector CinderCart(1750,49350,60);
+    SpawnBlock(CinderCart,FVector(1.5,.8,.65),FName(TEXT("Bes.WorkingCart")));
+    SpawnBlock(CinderCart+FVector(0,0,66),FVector(.9,.65,.5),
+        FName(TEXT("Bes.WorkingCoal")));
+    BesCartRest=CinderCart;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        if(It->ActorHasTag(FName(TEXT("Bes.WorkingCart"))))
+            BesWorkingCart=*It;
+        else if(It->ActorHasTag(FName(TEXT("Bes.WorkingCoal"))))
+            BesVisibleBasket=*It;
+    }
+    // Visual motion cannot become a swept physical collision obstruction.
+    if(BesWorkingCart.IsValid())BesWorkingCart->SetActorEnableCollision(false);
+    if(BesVisibleBasket.IsValid())BesVisibleBasket->SetActorEnableCollision(false);
     // Cinderhold's first individual house: distinct evidence, relief,
     // labor refusal and restitution sites. All use actual collider actors,
     // save-backed consequences and the same E/LOS interaction rules.
