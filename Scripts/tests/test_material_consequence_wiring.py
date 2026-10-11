@@ -15,7 +15,7 @@ class MaterialConsequenceWiring(unittest.TestCase):
         for term in ("towns_[i].store-=PackSize","towns_[i].households+=PackSize","t.store-=p.repairCost",
                      "t.households-=used","t.produced=","t.laborHours=",
                      "t.shortageDays","t.integrity=","cargo_.realm!=i",
-                     "InitializeAtDay","MaterialPolicies[i].dailyNeed"):
+                     "InitializeAtDay","MaterialPolicies[static_cast<int>(realm)].dailyNeed"):
             self.assertIn(term,rules)
         self.assertIn("AdvanceMaterialDayIfNeeded();",hub)
         self.assertIn("Materials.AdvanceAllOneDay(Civic)",hub)
