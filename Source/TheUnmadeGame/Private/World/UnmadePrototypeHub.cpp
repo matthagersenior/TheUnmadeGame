@@ -2195,10 +2195,29 @@ void AUnmadePrototypeHub::AdvanceMaterialDayIfNeeded()
             Civic[i]=L->PublicResponse();
     const auto Before=Materials.Snapshot();
     const auto Cargo=Materials.Cargo();
+    const auto BeforeLiving=LivingTrades.Save();
     if(!Materials.AdvanceAllOneDay(Civic))return;
+    if(!LivingTrades.AdvanceOneDay(GetGameDay()))
+    {
+        Materials.Restore(Before,Cargo,GetGameDay());
+        return;
+    }
+    // Actual receipts create a separate, finite reserve of FOREIGN support
+    // goods: casks never become baskets and baskets never become rainwater.
+    for(int i=0;i<9;++i)
+    {
+        const auto Realm=static_cast<UnmadeCore::Realm>(i);
+        const auto* Town=Materials.Town(Realm);
+        if(Town && Town->shortageDays>Before[i].shortageDays)
+        {
+            const int Support=LivingTrades.ApplyShelterSupport(Realm,*Town);
+            if(Support>0)Materials.ReinforceShelter(Realm,Support);
+        }
+    }
     if(!WriteWorldSnapshot())
     {
         Materials.Restore(Before,Cargo,GetGameDay());
+        LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
         return;
     }
     RefreshMaterialWorld();
