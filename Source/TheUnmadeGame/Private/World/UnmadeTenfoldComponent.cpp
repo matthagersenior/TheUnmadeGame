@@ -558,6 +558,12 @@ void UUnmadeTenfoldComponent::InvokeRite()
         UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass())))
     {
         Hub->ApplyRiteEnvironment(Id,Power.duration,Chronicle.IsMastered(Id));
+        // One cast changes the physical realm and its observed human record.
+        // A failed secondary civic save never invents a world consequence;
+        // the independently persisted Tenfold spell still takes effect.
+        if(Hub->RecordRealityConsequence(Id,Power.duration,
+             Chronicle.IsMastered(Id),Player->GetActorLocation()))
+            Player->ReportRealityConsequenceEvent(Id);
         if(Chronicle.IsMastered(Id))
             Hub->RecordNearbyRealmRite(Player,Id);
     }

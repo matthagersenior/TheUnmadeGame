@@ -86,6 +86,16 @@ void UUnmadeMemoryComponent::RecalculateReactions()
         {
             Fear += bDirect ? 30 : 10;
         }
+        else if (Entry.EventKind == FName("Reality.CareWitnessed"))
+        {
+            Trust += bDirect ? 12 : 4; // a witnessed safe passage, not moral alignment
+            Fear += bDirect ? 2 : 1; // transformations remain unsettling
+        }
+        else if (Entry.EventKind == FName("Reality.InquiryWitnessed"))
+        {
+            Trust += bDirect ? 2 : 1;
+            Fear += bDirect ? 14 : 5; // physical uncertainty, not guilt
+        }
         else if (Entry.EventKind == FName("Reality.Anomaly"))
         {
             Fear += bDirect ? 30 : 12;

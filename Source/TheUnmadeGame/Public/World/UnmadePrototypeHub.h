@@ -14,6 +14,7 @@
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeFrontierRealmRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
+#include "World/UnmadeRealityConsequenceRules.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
@@ -46,6 +47,12 @@ public:
     int32 GetGameDay() const { return Clock.DayIndex() + 1; }
     double GetWorldClockSeconds() const { return Clock.ElapsedSeconds(); }
     void ApplyRiteEnvironment(UnmadeCore::RiteId Id,double Duration,bool Mastered);
+    /** One witnessed, local Tenfold cast updates architecture, combat and civic memory. */
+    bool RecordRealityConsequence(UnmadeCore::RiteId Id,double Duration,bool Mastered,
+                                  const FVector& CastPosition);
+    UnmadeCore::RealityConsequenceView RealityConsequenceAt(FVector Position) const;
+    UFUNCTION(BlueprintPure,Category="Unmade|Reality")
+    FString GetRealityConsequenceJournal() const;
     int32 GetMinuteOfDay() const { return Clock.MinuteOfDay(); }
     int32 GetDiscoveredCount() const { return Discoveries.Count(); }
     int32 GetVisitedVillageCount() const { return VillagesVisited.Count(); }
@@ -147,6 +154,10 @@ private:
     UPROPERTY(Transient)
     TObjectPtr<ADirectionalLight> Sunlight;
     UnmadeCore::LivingWorldClock Clock;
+    UnmadeCore::RealityConsequenceLedger RealityLedger;
+    bool bRealityConsequenceRejected=false;
+    void RefreshRealityConsequenceWorld();
+    bool bRealityVisualActive=false;
     UnmadeCore::DiscoveryLedger Discoveries;
     UnmadeCore::SettlementVisits VillagesVisited;
     UnmadeCore::RegionalTaskModel RegionalTasks;

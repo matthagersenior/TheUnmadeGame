@@ -42,6 +42,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
+    RefreshRealityConsequenceWorld();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
@@ -85,6 +86,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::WitnessBraidChronicle RestoredWitnessBraid;
     UnmadeCore::WitnessDispatch RestoredDispatch;
     UnmadeCore::WitnessReturn RestoredReturn;
+    UnmadeCore::RealityConsequenceLedger RestoredReality;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -327,6 +329,19 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bWitnessReturnRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Corrupt return-witness custody: writes blocked"));
     }
+    if(Save->bHasRealityConsequenceSnapshot &&
+       (Save->RealityCareWitnessMask<0 || Save->RealityCareWitnessMask>1023 ||
+        Save->RealityInquiryWitnessMask<0 || Save->RealityInquiryWitnessMask>1023 ||
+        !RestoredReality.Restore({
+            static_cast<uint16>(Save->RealityCareWitnessMask),
+            static_cast<uint16>(Save->RealityInquiryWitnessMask),
+            Save->RealityLastRite,Save->RealityActiveUntil
+        },RestoredClock.ElapsedSeconds())))
+    {
+        bRealityConsequenceRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Invalid reality civic testimony: preservation mode blocks writes"));
+    }
+    RealityLedger=RestoredReality;
     ReturnWitness=RestoredReturn;
     Dispatch=RestoredDispatch;
     WitnessBraid=RestoredWitnessBraid;
@@ -354,7 +369,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bResonanceSaveRejected || bGuardianSaveRejected ||
        bFinalSaveRejected || bResidentContinuityRejected ||
        bWitnessEchoRejected || bWitnessBraidRejected ||
-       bWitnessDispatchRejected || bWitnessReturnRejected)return false;
+       bWitnessDispatchRejected || bWitnessReturnRejected ||
+       bRealityConsequenceRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -463,6 +479,12 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->WitnessReturnChosenDay=Reply.chosenDay;
     Save->WitnessReturnCollectedDay=Reply.collectedDay;
     Save->WitnessReturnDeliveredDay=Reply.deliveredDay;
+    const auto Consequence=RealityLedger.Snapshot();
+    Save->bHasRealityConsequenceSnapshot=true;
+    Save->RealityCareWitnessMask=Consequence.careWitnessMask;
+    Save->RealityInquiryWitnessMask=Consequence.inquiryWitnessMask;
+    Save->RealityLastRite=Consequence.activeRite;
+    Save->RealityActiveUntil=Consequence.activeUntil;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -1646,6 +1668,10 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
         SetRiteWorldActorState(It.Key(),false);
         It.RemoveCurrent();
     }
+    // Stop the temporary physical effect on its deterministic world clock;
+    // permanent witnessed records continue without ticking every cube.
+    if(bRealityVisualActive && !RealityLedger.Active(Clock.ElapsedSeconds()).active)
+        RefreshRealityConsequenceWorld();
     const auto Phase = Clock.Phase();
     const bool bPhaseChanged = Phase != LastAmbientPhase;
     if (bPhaseChanged)
@@ -1904,6 +1930,103 @@ void AUnmadePrototypeHub::RefreshRiteWorldFromSave()
         SetRiteWorldActorState(FName("Rite.MapRoute"),true);
 }
 
+UnmadeCore::RealityConsequenceView
+AUnmadePrototypeHub::RealityConsequenceAt(FVector Position) const
+{
+    if(FVector::DistSquared2D(Position,FVector::ZeroVector)>FMath::Square(2600.f))
+        return {}; // Different societies will receive distinct authored policies.
+    return RealityLedger.Active(Clock.ElapsedSeconds());
+}
+
+FString AUnmadePrototypeHub::GetRealityConsequenceJournal() const
+{
+    const auto Record=RealityLedger.Snapshot();
+    const auto Response=RealityLedger.PublicResponse();
+    const auto Active=RealityLedger.Active(Clock.ElapsedSeconds());
+    FString Result=FString::Printf(
+        TEXT("REALITY AT THE CROSSINGS | witnessed care rites %d/2, inquiry rites %d/2 | %s"),
+        UnmadeCore::RealityConsequenceLedger::Count(Record.careWitnessMask),
+        UnmadeCore::RealityConsequenceLedger::Count(Record.inquiryWitnessMask),
+        UTF8_TO_TCHAR(UnmadeCore::RealityConsequenceLedger::PublicLine(Response)));
+    if(Active.active)
+        Result+=FString::Printf(TEXT(" | TEMPORARY %s, enemy movement %d%%, expires in %.0fs"),
+            UTF8_TO_TCHAR(UnmadeCore::RealityProfiles[Record.activeRite].description),
+            Active.enemySpeedPercent,
+            FMath::Max(0.0,Record.activeUntil-Clock.ElapsedSeconds()));
+    return Result;
+}
+
+void AUnmadePrototypeHub::RefreshRealityConsequenceWorld()
+{
+    const auto Current=RealityLedger.Active(Clock.ElapsedSeconds());
+    bRealityVisualActive=Current.active;
+    SetRiteWorldActorState(FName("Reality.ActiveSafeSpan"),
+        Current.active && Current.architecture==UnmadeCore::RealityArchitecture::SafeSpan);
+    SetRiteWorldActorState(FName("Reality.ActiveStrainedSpan"),
+        Current.active && Current.architecture==UnmadeCore::RealityArchitecture::StrainedSpan);
+    SetRiteWorldActorState(FName("Reality.ActiveDoubleThreshold"),
+        Current.active && Current.architecture==UnmadeCore::RealityArchitecture::DoubleThreshold);
+    const auto Civic=RealityLedger.PublicResponse();
+    SetRiteWorldActorState(FName("Reality.CivicShared"),
+        Civic==UnmadeCore::RealityPublicResponse::SharedPassage ||
+        Civic==UnmadeCore::RealityPublicResponse::ContestedAccord);
+    SetRiteWorldActorState(FName("Reality.CivicInquiry"),
+        Civic==UnmadeCore::RealityPublicResponse::PublicInquiry ||
+        Civic==UnmadeCore::RealityPublicResponse::ContestedAccord);
+}
+
+bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
+    double Duration,bool Mastered,const FVector& CastPosition)
+{
+    if(!GetWorld() || FVector::DistSquared2D(CastPosition,FVector::ZeroVector)>
+       FMath::Square(2600.f))return false;
+    // Player-driven cast already passed the Tenfold strain, cooldown and
+    // discipline rules. This is a local physical/social projection only.
+    bool bWitness=false;
+    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!IsValid(Player))return false;
+    for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+    {
+        if(It->GetStableId().IsNone() ||
+           FVector::DistSquared(CastPosition,It->GetActorLocation())>FMath::Square(720.f))
+            continue;
+        FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeRealityWitness),false);
+        Sight.AddIgnoredActor(Player);
+        Sight.AddIgnoredActor(*It);
+        if(GetWorld()->LineTraceTestByChannel(
+            CastPosition+FVector(0,0,70),
+            It->GetActorLocation()+FVector(0,0,70),ECC_Visibility,Sight))continue;
+        bWitness=true;
+        break;
+    }
+    const auto Before=RealityLedger.Snapshot();
+    const auto PreviousResponse=RealityLedger.PublicResponse();
+    if(!RealityLedger.Cast(Id,Clock.ElapsedSeconds(),Duration,
+                           Mastered,bWitness,true))return false;
+    if(!WriteWorldSnapshot())
+    {
+        RealityLedger.Restore(Before,Clock.ElapsedSeconds());
+        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Red,
+            TEXT("Reality consequence was not saved; civic structures unchanged."));
+        return false;
+    }
+    RefreshRealityConsequenceWorld();
+    if(GEngine)
+    {
+        const FString Line=FString::Printf(
+            TEXT("CROSSINGS: %s | %s | CIVIC: %s"),
+            UTF8_TO_TCHAR(UnmadeCore::RealityProfiles[static_cast<int>(Id)].description),
+            bWitness?TEXT("at least one direct witness"):TEXT("no direct witness"),
+            UTF8_TO_TCHAR(UnmadeCore::RealityConsequenceLedger::PublicLine(
+                RealityLedger.PublicResponse())));
+        GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,Line);
+        if(PreviousResponse!=RealityLedger.PublicResponse())
+            GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Yellow,
+                TEXT("A new physical civic record exists; return to see the city's competing claims."));
+    }
+    return true;
+}
+
 void AUnmadePrototypeHub::ApplyRiteEnvironment(UnmadeCore::RiteId Id,
     double Duration,bool Mastered)
 {
@@ -1994,6 +2117,20 @@ void AUnmadePrototypeHub::BuildForPrototype()
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
+    // The same cast gives different immediate physical geometry and a
+    // separately accumulated, witnessed permanent civic consequence.
+    // These blocks are graybox indicators, NOT finished buildings.
+    SpawnBlock(FVector(620,-1720,125),FVector(4.0,0.85,0.25),
+        FName("Reality.ActiveSafeSpan"));
+    SpawnBlock(FVector(620,-1720,150),FVector(3.0,0.9,1.8),
+        FName("Reality.ActiveStrainedSpan"));
+    SpawnBlock(FVector(620,-1720,170),FVector(3.0,0.75,2.2),
+        FName("Reality.ActiveDoubleThreshold"));
+    SpawnBlock(FVector(1850,-1480,130),FVector(0.5,3.0,0.75),
+        FName("Reality.CivicShared"));
+    SpawnBlock(FVector(1850,-1120,135),FVector(0.65,0.5,2.0),
+        FName("Reality.CivicInquiry"));
+    RefreshRealityConsequenceWorld();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={

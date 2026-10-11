@@ -198,3 +198,11 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Authored four response intersections (original Sheltered Thread/Public Docket crossed with private counsel/public hearing), plus mutually exclusive low/tall return markers after genuine Orrel receipt.
 - Wired source + native unit and source-integration regression tests into CI and the first-PC preflight. Section 20 remains non-omniscient and refuses to make Kesta's future physical delivery an already implemented feature.
 - **Not yet Unreal compiled/playtested**: visual collision, E priority, F7/F8 interaction, companion animations, full dialogue UI and in-person voice. Complete cumulative Bible must be republished separately and retains all earlier volumes.
+
+
+## 2026-10-11 — Reality Consequence Engine: first Crossings vertical slice (Volume X §21)
+
+- Connected ten already-authored Tenfold rites to one deterministic local world-clock consequence system. Casts affect real tagged world-space graybox structure and actual enemy pursuit speed, beyond prior disconnected spell presentation; old Tenfold strain and cooldown remain authoritative.
+- Added separate source-limited local resident observations for caring vs interrogating alterations, with direct-vs-named-rumor dialogue, individual trust/fear and no remote telepathy. Only two different mastered and personally witnessed rites support a lasting civic record; after evidence in both directions, the city holds both protective and inquiring physical markers.
+- Added optional schema-1 save fields for distinct witnessed rite bitsets and temporary effect expiry, fail-closed bad snapshots and in-memory rollback on failed persistence. Portable native and Python source-contract tests plus first-PC preflight added; no new forced main quest, lore answer, or XP loop.
+- Updated authoritative Volume X section 21, living continuity and design specification. Complete illustrated PDF/DOCX remain a separately rendered publication and must be refreshed as part of release; green source CI does not represent a successful Unreal Editor compile or full nine-realm gameplay.

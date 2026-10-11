@@ -1,6 +1,7 @@
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
+#include "World/UnmadePrototypeHub.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/World.h"
@@ -77,6 +78,12 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     if (!IsValid(Player) || !IsValid(Player->GetCombat()) || Player->GetCombat()->IsDefeated())
         return;
 
+    if(!CachedRealityHub.IsValid())
+        CachedRealityHub=Cast<AUnmadePrototypeHub>(
+            UGameplayStatics::GetActorOfClass(World,AUnmadePrototypeHub::StaticClass()));
+    const auto Consequence=CachedRealityHub.IsValid()
+        ?CachedRealityHub->RealityConsequenceAt(GetActorLocation())
+        :UnmadeCore::RealityConsequenceView{};
     FVector Delta = Player->GetActorLocation() - GetActorLocation();
     Delta.Z = 0;
     const double DistanceCm = Delta.Size();
@@ -96,7 +103,11 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     if (Intent == UnmadeCore::EnemyIntent::Approach ||
         Intent == UnmadeCore::EnemyIntent::Retreat)
     {
-        const float Speed = Style == UnmadeCore::EnemyStyle::Stalker ? 130.f : 95.f;
+        const float BaseSpeed = Style == UnmadeCore::EnemyStyle::Stalker ? 130.f : 95.f;
+        // Exact same time-bound consequence that changes the Crossings scene
+        // changes enemy closing/retreat speed. No permanent hidden buff.
+        const float Speed = BaseSpeed *
+            (static_cast<float>(Consequence.enemySpeedPercent)/100.f);
         const float Sign = Intent == UnmadeCore::EnemyIntent::Retreat ? -1.f : 1.f;
         // Swept root movement is only a graybox stand-in for navmesh-backed AI.
         AddActorWorldOffset(Direction * Speed * Sign * FMath::Max(DeltaSeconds, 0.f), true);
