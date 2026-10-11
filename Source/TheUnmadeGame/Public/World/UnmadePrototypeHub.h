@@ -70,6 +70,7 @@ public:
     FString GetRealityConsequenceJournal() const;
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetLocalMaterialJournal() const;
+    bool TryFieldSurveyInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryMaterialInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryLivingTradeInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     FString GetLivingEconomyResidentLine(FName StableId) const;
@@ -193,6 +194,10 @@ public:
     /** Created at runtime so the initial experiment needs no hand-authored .umap. */
     void BuildForPrototype();
     void BuildPlayableEncounters();
+    bool bFieldSurveySaveUsable=true;
+    TArray<int32> FieldSurveyStages;
+    TArray<TWeakObjectPtr<AStaticMeshActor>> FieldSurveyGates;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> FieldSurveySigns;
 
 private:
     bool bBuilt = false;

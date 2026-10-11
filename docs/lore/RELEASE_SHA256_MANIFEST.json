@@ -1,63 +1,41 @@
 {
-  "edition": "Performance and Peril v10",
+  "edition": "Paths and Predators v11",
   "date": "2026-10-11",
-  "book_metrics": {
-    "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Performance_and_Peril_v10": {
-      "pages": 140,
-      "images": 54
-    },
-    "THE_UNMADE_Volume_X_Illustrated_Performance_and_Peril_v10": {
-      "pages": 79,
-      "images": 7
-    }
-  },
+  "source_base": "2beed3883d884852d3919cc537ea7ac8b4e07708",
+  "engine_compiled": false,
+  "engine_playtested": false,
+  "native_cpp_tests": 45,
+  "python_tests": 231,
+  "complete_bible_pages": 142,
+  "complete_bible_images": 55,
+  "volume_x_pages": 82,
+  "volume_x_images": 8,
+  "qa": "Rendered page overview and full-resolution new pages inspected; inherited content retained.",
   "files": [
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Performance_and_Peril_v10.docx",
-      "sha256": "2536f732e41ae23258137c9b5377537e953805d9a3946d006ea1bc7a1cc2a64a",
-      "bytes": 6832240
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Paths_and_Predators_v11.docx",
+      "sha256": "af0f8493e231cbe484adf58e81573d0e3ab1f5d53a61a1c01eb3e537518470db",
+      "bytes": 6911167
     },
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Performance_and_Peril_v10.pdf",
-      "sha256": "a835b45cfbdaf03760931da30825fd3006b7c1188f29c92596decd4317d99c9c",
-      "bytes": 4175054
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Paths_and_Predators_v11.pdf",
+      "sha256": "235680b5208d572585acc192ce18b9953fe960a8b9104b93e4c94ba9c3a4fd3b",
+      "bytes": 4394159
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Performance_and_Peril_v10.docx",
-      "sha256": "df27fab7a010eb8539e24f649cea635d0f0f7437627feceada4982215c59803f",
-      "bytes": 4638070
+      "name": "THE_UNMADE_Volume_X_Illustrated_Paths_and_Predators_v11.docx",
+      "sha256": "596caa182ac251b998332162cd8f3986a02cc5323524651d107f9b77a529a688",
+      "bytes": 4716997
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Performance_and_Peril_v10.pdf",
-      "sha256": "945f1896978891cc83ca2e27d1ba2ca7aedcb764a4e3af034d6471361fdff937",
-      "bytes": 2147195
+      "name": "THE_UNMADE_Volume_X_Illustrated_Paths_and_Predators_v11.pdf",
+      "sha256": "4d0c0ef4b4e1432dec9b495ad61d6f15dfee9893097fe2994d7c8d3911d6b7c6",
+      "bytes": 2357056
     },
     {
-      "name": "THE_UNMADE_Performance_and_Peril_v10_Complete_Illustrated_Package.zip",
-      "sha256": "221be7d32b26ad4c8b300659979fd741b80cdae41c43a362ab114c7a425e6cad",
-      "bytes": 31754969
-    },
-    {
-      "name": "THE_UNMADE_v10_Skeletal_Rigs_and_Materials_Kit.zip",
-      "sha256": "8e447e2f5e39d23f8636fd64b9d5668c92b06edb2a69b242a66849d3a39a4818",
-      "bytes": 12944
-    },
-    {
-      "name": "THE_UNMADE_Volume_X_Chapter_30_Performance_and_Peril_v10.md",
-      "sha256": "2cd2df97176b977630a688d7e6d54e47197ead9927b4f59fbd893f695a5d69c3",
-      "bytes": 12730
-    },
-    {
-      "name": "THE_UNMADE_v10_Performance_Combat_Art_Plate.png",
-      "sha256": "2246f80fe5b990dff974ff39e1c453936c266b9fe471b87e2cfd3ddb7727163a",
-      "bytes": 62995
+      "name": "THE_UNMADE_v11_Field_Survey_Atlas.png",
+      "sha256": "85d564b89bf0df5cd075725ee9d458f29721cbe5703c46718d9c5edd46930602",
+      "bytes": 85789
     }
-  ],
-  "package_entries": 31,
-  "verified_package_member_hashes": 30,
-  "actual_unreal_editor_test": "not yet done",
-  "library_folder": "/The Unmade/Illustrated Bible Editions/2026-10-11 Performance and Peril v10",
-  "unreal_engine_compiled": false,
-  "asset_import_tested": false,
-  "source_change": "Playable World v10 — new Unreal source, pending Unreal Editor build"
+  ]
 }

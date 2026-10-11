@@ -1009,6 +1009,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryFieldSurveyInteraction(this,ResidentDistSq))return;
             if(Hub->TryBesHouseholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryLivingTradeInteraction(this,ResidentDistSq))return;
             if(Hub->TryMaterialInteraction(this,ResidentDistSq))return;

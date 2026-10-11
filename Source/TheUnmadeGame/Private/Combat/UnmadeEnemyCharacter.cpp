@@ -70,6 +70,15 @@ void AUnmadeEnemyCharacter::ConfigureStyle(UnmadeCore::EnemyStyle NewStyle)
     }
 }
 
+void AUnmadeEnemyCharacter::ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion)
+{
+    bElderEncounter=bChampion;
+    Profile=UnmadeCore::CreatureStats(Kind,bChampion);
+    ConfigureStyle(Profile.style);
+    Combat->Configure(Profile.health,Profile.damage,Profile.cooldown);
+    bSpeciesConfigured=true;
+}
+
 void AUnmadeEnemyCharacter::ConfigureEncounter(FName Identity,const FString& Name,
     const FLinearColor& Accent)
 {
@@ -94,7 +103,15 @@ void AUnmadeEnemyCharacter::SetVisualScale(FVector Scale)
 void AUnmadeEnemyCharacter::ExposeToFold(double Now, double Seconds)
 {
     if (FMath::IsFinite(Now) && Now >= 0.0 && Seconds > 0.0)
+    {
         FoldExposedUntil = FMath::Max(FoldExposedUntil, Now + Seconds);
+        if(WindupEndsAt>=0.0)
+        {
+            WindupEndsAt=-1.0;
+            RecoveryEndsAt=Now+1.0;
+            NextWindupAllowedAt=FMath::Max(NextWindupAllowedAt,RecoveryEndsAt);
+        }
+    }
 }
 
 bool AUnmadeEnemyCharacter::IsFractureExposed(double Now) const
@@ -193,6 +210,8 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     UWorld* World=GetWorld();
     if(!World)return;
     const double Now=World->GetTimeSeconds();
+    const bool bElderSecondPhase=bElderEncounter&&
+        Combat->GetHealth()<=Combat->GetMaxHealth()*.5f;
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
         UGameplayStatics::GetPlayerCharacter(World,0));
     if(!IsValid(Player)||!IsValid(Player->GetCombat())||
@@ -215,7 +234,8 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         GetActorLocation()+FVector(0,0,55),
         Player->GetActorLocation()+FVector(0,0,55),ECC_Visibility,Params);
     const auto Intent=bNearby
-        ?UnmadeCore::ChooseEnemyIntent(Style,DistanceCm/100.0,bClearSight)
+        ?(bSpeciesConfigured?UnmadeCore::CreatureIntent(Profile,DistanceCm/100.0,
+            bClearSight,Now<RecoveryEndsAt):UnmadeCore::ChooseEnemyIntent(Style,DistanceCm/100.0,bClearSight))
         :UnmadeCore::EnemyIntent::Approach;
     if(WindupEndsAt>=0.0 && (Intent!=UnmadeCore::EnemyIntent::Attack||!bClearSight))
         WindupEndsAt=-1.0; // The player can step behind real cover to cancel.
@@ -225,8 +245,8 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     if(bNearby && (Intent==UnmadeCore::EnemyIntent::Approach||
        Intent==UnmadeCore::EnemyIntent::Retreat))
     {
-        const float BaseSpeed=Style==UnmadeCore::EnemyStyle::Stalker?130.f:95.f;
-        const float Speed=BaseSpeed*static_cast<float>(Consequence.enemySpeedPercent)/100.f;
+        const float BaseSpeed=bSpeciesConfigured?static_cast<float>(Profile.speed):(Style==UnmadeCore::EnemyStyle::Stalker?130.f:95.f);
+        const float Speed=BaseSpeed*(bElderSecondPhase?1.25f:1.f)*static_cast<float>(Consequence.enemySpeedPercent)/100.f;
         GetCharacterMovement()->MaxWalkSpeed=FMath::Max(25.f,Speed);
         const FVector Destination=Intent==UnmadeCore::EnemyIntent::Retreat
             ?GetActorLocation()-Delta.GetSafeNormal()*480.f
@@ -271,7 +291,8 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     {
         WindupEndsAt=-1.0;
         NextWindupAllowedAt=Now+
-            (Style==UnmadeCore::EnemyStyle::Stalker?1.4:2.25);
+            (bSpeciesConfigured?Profile.cooldown:(Style==UnmadeCore::EnemyStyle::Stalker?1.4:2.25));
+        RecoveryEndsAt=Now+.65;
         SetMotionCue(FName(TEXT("Attack")));
         if(Intent==UnmadeCore::EnemyIntent::Attack && bClearSight)
         {
@@ -288,17 +309,20 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         }
     }
     if(Intent==UnmadeCore::EnemyIntent::Attack && bClearSight &&
-       WindupEndsAt<0.0 && Now>=NextWindupAllowedAt)
+       WindupEndsAt<0.0 && Now>=NextWindupAllowedAt && Now>=RecoveryEndsAt)
     {
         WindupEndsAt=Now+
-            (Style==UnmadeCore::EnemyStyle::Stalker?.65:.95);
+            (bSpeciesConfigured?Profile.windup:(Style==UnmadeCore::EnemyStyle::Stalker?.65:.95));
         SetMotionCue(FName(TEXT("Attack")));
     }
     if(IsValid(CombatSignal)&&IsValid(TelegraphLight))
     {
         if(WindupEndsAt>=0.0)
         {
-            CombatSignal->SetText(FText::FromString(TEXT("!  INCOMING  !")));
+            CombatSignal->SetText(FText::FromString(bSpeciesConfigured
+                ?FString(UTF8_TO_TCHAR(Profile.warning)):FString(TEXT("!  INCOMING  !"))));
+            if(bElderSecondPhase)CombatSignal->SetText(FText::FromString(
+                FString(TEXT("ELDER RALLY - "))+UTF8_TO_TCHAR(Profile.warning)));
             CombatSignal->SetTextRenderColor(FColor(255,109,78));
             TelegraphLight->SetLightColor(FLinearColor(1.f,.16f,.04f));
             TelegraphLight->SetIntensity(3600.f);

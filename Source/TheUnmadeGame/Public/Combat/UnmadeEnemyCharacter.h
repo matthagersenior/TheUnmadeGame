@@ -4,6 +4,7 @@
 #include "GameFramework/Character.h"
 #include "Combat/UnmadeCombatRules.h"
 #include "Combat/UnmadeBossRules.h"
+#include "Combat/UnmadeCreatureRules.h"
 #include "UnmadeEnemyCharacter.generated.h"
 
 class UUnmadeCombatComponent;
@@ -19,6 +20,7 @@ public:
     AUnmadeEnemyCharacter();
     virtual void Tick(float DeltaSeconds) override;
     virtual void BeginPlay() override;
+    void ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion=false);
     void ConfigureStyle(UnmadeCore::EnemyStyle NewStyle);
     void SetVisualScale(FVector Scale);
     void ExposeToFold(double Now, double Seconds = 4.0);
@@ -56,6 +58,10 @@ private:
     void TryLoadEnemyRig();
     void SetMotionCue(FName Motion);
     UnmadeCore::EnemyStyle Style = UnmadeCore::EnemyStyle::Stalker;
+    bool bSpeciesConfigured=false;
+    bool bElderEncounter=false;
+    UnmadeCore::CreatureProfile Profile=UnmadeCore::CreatureStats(UnmadeCore::CreatureKind::Cinderjaw);
+    double RecoveryEndsAt=0.0;
     double FoldExposedUntil = -1.0;
     bool bDeathHandled = false;
     TWeakObjectPtr<AUnmadePrototypeHub> CachedRealityHub;

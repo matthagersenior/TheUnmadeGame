@@ -1,3 +1,17 @@
+# Current illustrated release — Paths and Predators v11
+
+Date: 11 October 2026. Code baseline: `2beed3883d884852d3919cc537ea7ac8b4e07708`. The accompanying v11 commit contains the gameplay, canon and digest updates together.
+
+Actual rebuilt outputs: complete illustrated Bible PDF/DOCX, 142 pages and 55 images; standalone Volume X PDF/DOCX, 82 pages and 8 images; updated six-site field survey atlas; complete ZIP with current source, retained original art/audio and embedded rig kit. Files use the suffix `Paths_and_Predators_v11` and are delivered as direct conversation downloads and persistent files at the Library root. The ZIP is `THE_UNMADE_Paths_and_Predators_v11_Complete_Package.zip`.
+
+Implemented source: twelve creature profiles, six elder encounter variants with a half-health rally, six collision-bearing covered passages, six optional versioned save-backed surveys and local scout acknowledgments, Fold wind-up interruption and recovery. Campaign progression, money, wages, consent and endings retain their original authoritative rules. Creature defeat remains session-local; these elder variants are optional miniboss-style fights, not new campaign bosses.
+
+Validation: 231 Python tests; 45 compiled native C++ test executables; complete DOCX rendering and page overview; new pages inspected at full resolution; PDF text bounds and nonempty-page checks; retained illustration counts and ZIP member checksums. These checks do not compile Unreal. **UHT, skeletal import, navmesh, physical route/LOS tests, save/load in PIE and creator playtesting remain unverified. No playable APK/EXE or in-engine footage is issued.**
+
+Digests: `RELEASE_SHA256_MANIFEST.json`. The package contains its own member manifest. No binary GitHub Release is claimed.
+
+---
+
 # Latest illustrated lore publication
 
 ## CURRENT RELEASE — Performance and Peril v10 | 11 October 2026
