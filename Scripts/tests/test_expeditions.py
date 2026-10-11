@@ -10,7 +10,7 @@ class ExpeditionContracts(unittest.TestCase):
   self.assertEqual(len({p for x in a for p in x['people']}),45);self.assertTrue(all(len(x['clues'])==3 for x in a))
  def test_real_combat_and_atomic_save_hooks(self):
   s=(ROOT/'Source/TheUnmadeGame/Private/Combat/UnmadeEnemyCharacter.cpp').read_text();self.assertIn('Combat->TryStrikeTarget(P->GetCombat()',s);self.assertIn('ExpeditionPattern.Step',s);self.assertIn('SetAttackDamage',s)
-  s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp').read_text();self.assertIn('!e->GetCombat()->IsDefeated()',s);self.assertIn('Expeditions=before',s);self.assertIn('ExpeditionReturnGates',s);self.assertIn('SetExpeditionBonuses',s)
+  s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp').read_text();self.assertIn('!e->GetCombat()->IsDefeated()',s);self.assertIn('Expeditions=before',s);self.assertIn('ExpeditionReturnGates',s);self.assertIn('SetExpeditionBonuses',s);self.assertIn('RestoreCitizens();',s);self.assertIn('Present&&Expeditions.Rescue',s)
  def test_optional_snapshot_and_input_reachability(self):
   s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp').read_text();self.assertIn('if(Save->bHasExpeditions)',s);self.assertIn('if(bExpeditionSaveRejected)return false',s)
   s=(ROOT/'Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp').read_text();self.assertIn('TryExpeditionInteraction',s);self.assertIn('TryExpeditionAbility',s);self.assertIn('GetExpeditionJournal',s)
