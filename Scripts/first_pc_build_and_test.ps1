@@ -140,3 +140,6 @@ try {
 # World-wide authored registry; engine acceptance remains a separate Windows pass.
 python Scripts/build_remembered_roads.py --check
 if ($LASTEXITCODE -ne 0) { throw "Remembered Road registry validation failed" }
+
+python "$PSScriptRoot/build_frontier_adventures.py" --check
+if ($LASTEXITCODE -ne 0) { throw "Frontier adventure registry failed" }

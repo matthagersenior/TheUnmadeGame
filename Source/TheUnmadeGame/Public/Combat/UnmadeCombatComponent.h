@@ -16,6 +16,7 @@ public:
     void Configure(double MaxHealth, double Damage, double Cooldown);
     bool TryStrikeTarget(UUnmadeCombatComponent* Target, double Now, bool bValidHit, bool bFractureExposed);
     void SetGuarding(bool bEnabled);
+    bool SetAttackDamage(double Damage){return State.SetDamage(Damage);}
     void SetGearBonuses(int32 Attack, int32 Armor);
     bool Heal(float Amount);
     /** A single identified storm/heat pulse, deduplicated by the combat domain. */

@@ -24,16 +24,12 @@ public:
     void ConfigureIdentity(FName StableId, const FString& DisplayLabel,
         UnmadeCore::NpcRole InRole, UnmadeCore::NpcTemperament InTemperament,
         UnmadeCore::SettlementId InVillage, const FString& InAuthoredLine);
+    void ConfigureExpeditionResident(FName Id,const FString& Name,UnmadeCore::Realm Home,const FString& Line,int Arc,int Captive=-1);
+    void SetExpeditionHome(FVector At){HomeLocation=At;}
     void ConfigureFrontier(const UnmadeCore::FrontierResident& Resident);
     void ConfigureLaterRealm(const UnmadeCore::LaterRealmSpec& Realm,
         const char* Identity,const FString& Display,
-        double BlockedUntil=-1.0;
-    FRotator BeforeBlocking=FRotator::ZeroRotator;
-    bool bSkeletalRigLoaded=false;
-    FName MotionCue=NAME_None;
-    void TryLoadResidentRig();
-    void AnimateResident(FName Cue);
-    UnmadeCore::NpcRole Role,UnmadeCore::NpcTemperament Temperament,
+        UnmadeCore::NpcRole Role,UnmadeCore::NpcTemperament Temperament,
         const char* AuthoredLine);
     void BeginDirectedBlocking(FVector LookAt, float Duration, FName Gesture);
     void EndDirectedBlocking();
@@ -50,6 +46,13 @@ public:
     UnmadeCore::SettlementId GetHomeSettlement() const { return HomeSettlement; }
 
 private:
+    int ExpeditionHomeArc=-1,ExpeditionCaptive=-1;
+    double BlockedUntil=-1.0;
+    FRotator BeforeBlocking=FRotator::ZeroRotator;
+    bool bSkeletalRigLoaded=false;
+    FName MotionCue=NAME_None;
+    void TryLoadResidentRig();
+    void AnimateResident(FName Cue);
     double NextRoutinePathAt=0;
     FVector RoutineWaypoint=FVector::ZeroVector;
     bool bRoutinePathValid=false;

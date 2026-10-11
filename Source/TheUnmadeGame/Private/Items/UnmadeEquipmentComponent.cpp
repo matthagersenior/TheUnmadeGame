@@ -100,7 +100,7 @@ void UUnmadeEquipmentComponent::RefreshCombatBonuses()
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
     if (IsValid(Player) && IsValid(Player->GetCombat()))
         Player->GetCombat()->SetGearBonuses(
-            Inventory.AttackBonus()+TemporaryAttack,Inventory.ArmorBonus()+TemporaryArmor);
+            Inventory.AttackBonus()+TemporaryAttack+ExpeditionAttack,Inventory.ArmorBonus()+TemporaryArmor+ExpeditionArmor);
 }
 
 bool UUnmadeEquipmentComponent::Claim(UnmadeCore::Achievement Reward)

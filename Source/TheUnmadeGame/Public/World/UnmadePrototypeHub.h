@@ -35,6 +35,8 @@
 #include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeLaterHazardRules.h"
 #include "TimerManager.h"
+#include "World/UnmadeExpeditionRegistry.h"
+#include "World/UnmadeExpeditionRules.h"
 #include "UnmadePrototypeHub.generated.h"
 
 class AUnmadeLoreSite;
@@ -221,8 +223,29 @@ public:
     TArray<TWeakObjectPtr<AStaticMeshActor>> FieldSurveyGates;
     TArray<TWeakObjectPtr<class ATextRenderActor>> FieldSurveySigns;
 
+    bool TryExpeditionInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryExpeditionAbility(AUnmadeCharacter* Player,int32 Kind);
+    bool RecordExpeditionDefeat(class AUnmadeEnemyCharacter* Enemy,int32 Arc,int32 Slot);
+    bool ExpeditionCaptiveWaiting(int Arc,int Captive)const{auto* T=Expeditions.Arc(Arc);return !T||Captive<0||Captive>1||!T->returned||!(T->rescued&(1<<Captive));}
+    bool ExpeditionEnemyInactive(int32 Arc,int32 Slot)const;
+    FString GetExpeditionJournal()const;
+    FString GetExpeditionReaction(FName Person)const;
+    UnmadeCore::ExpeditionBenefit ExpeditionBenefit()const{return bExpeditionSaveRejected?UnmadeCore::ExpeditionBenefit{}:Expeditions.Benefit();}
+    void BuildExpeditions();
+    void RefreshExpeditions();
+    bool CommitExpeditions(const UnmadeCore::Expeditions& Before,AUnmadeCharacter* Player=nullptr);
 private:
     bool bBuilt = false;
+    bool bExpeditionSaveRejected=false;
+    UnmadeCore::Expeditions Expeditions;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> ExpeditionReturnGates,ExpeditionBossGates;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionSigns;
+    double NextExpeditionRefresh=0;
+    std::array<double,9> ExpeditionReleaseUntil{};
+    TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionHazardSigns;
+    std::array<double,9> ExpeditionHazardQuiet{};
+    std::array<double,9> ExpeditionReleaseReady{};
+
     FTimerHandle GossipTimer;
     FTimerHandle WorldSaveTimer;
     UPROPERTY(Transient)

@@ -738,7 +738,7 @@ void AUnmadeCharacter::ShowStoryJournal()
         GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,Hub->GetCinderholdJournal());
 
     if(GetWorld()&&GEngine)for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
-        GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,Hub->GetRoadJournal());
+        GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,Hub->GetExpeditionJournal()+TEXT("\n")+Hub->GetRoadJournal());
     ReconcileEarnedRewards();
     FString Decision = TEXT("unresolved");
     if (LocalConflict.Choice() == UnmadeCore::ConflictChoice::Shelter)
@@ -1014,6 +1014,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryExpeditionInteraction(this,ResidentDistSq))return;
             if(Hub->TryRoadInteraction(this,ResidentDistSq))return;
             if(Hub->TryCinderholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryFieldSurveyInteraction(this,ResidentDistSq))return;
@@ -1133,6 +1134,7 @@ void AUnmadeCharacter::DemonstrateAnomaly()
 {
     if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
+        if(Hub->TryExpeditionAbility(this,0))return;
         if(Hub->TryRoadAbility(this,0))return;
         if(Hub->TryCinderholdAbility(this,0))return;
     }
@@ -1160,6 +1162,7 @@ void AUnmadeCharacter::FoldReality()
 {
     if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
+        if(Hub->TryExpeditionAbility(this,1))return;
         if(Hub->TryRoadAbility(this,1))return;
         if(Hub->TryCinderholdAbility(this,1))return;
     }

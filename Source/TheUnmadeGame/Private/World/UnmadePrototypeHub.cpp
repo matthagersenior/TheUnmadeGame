@@ -34,8 +34,10 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshCommunityConsequences();
     BuildCinderholdAdventure();
     BuildRememberedRoads();
+    BuildExpeditions();
     RefreshCinderholdAdventure();
     RefreshRememberedRoads();
+    RefreshExpeditions();
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
@@ -78,6 +80,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bCinderholdSaveRejected=true;
         return;
     }
+    if(Save&&Save->SchemaVersion==1&&Save->bHasExpeditions&&!Save->bHasLivingWorldSnapshot){bExpeditionSaveRejected=true;return;}
     if(Save&&Save->SchemaVersion==1&&Save->bHasRememberedRoads&&!Save->bHasLivingWorldSnapshot){bRoadSaveRejected=true;return;}
     if (!Save || Save->SchemaVersion != 1 || !Save->bHasLivingWorldSnapshot) return;
 
@@ -471,6 +474,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             UE_LOG(LogTemp,Error,TEXT("Cinderhold adventure corrupt: original world save protected"));
         }
     }
+    if(Save->bHasExpeditions){std::vector<int> Data;for(int32 V:Save->ExpeditionState)Data.push_back(V);if(!Expeditions.Restore(Data)){bExpeditionSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Expedition save rejected; original protected"));}}
     if(Save->bHasRememberedRoads)
     {
         std::vector<int> Data;for(int32 V:Save->RememberedRoadState)Data.push_back(V);
@@ -506,6 +510,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
+    if(bExpeditionSaveRejected)return false;
     if(bRoadSaveRejected)return false;
     if(bCinderholdSaveRejected)return false;
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
@@ -519,6 +524,8 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bBesHouseholdRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
+    Save->bHasExpeditions=true;Save->ExpeditionState.Reset();
+    for(int V:Expeditions.Pack())Save->ExpeditionState.Add(V);
     Save->bHasRememberedRoads=true;
     Save->RememberedRoadState.Reset();
     for(int V:RememberedRoads.Pack())Save->RememberedRoadState.Add(V);
@@ -1902,6 +1909,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     UpdateBesQuestTracker();
     RefreshCinderholdAdventure();
     RefreshRememberedRoads();
+    RefreshExpeditions();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical

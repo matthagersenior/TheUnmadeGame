@@ -6,6 +6,7 @@
 #include "Combat/UnmadeBossRules.h"
 #include "Combat/UnmadeCreatureRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
+#include "World/UnmadeExpeditionRules.h"
 #include "UnmadeEnemyCharacter.generated.h"
 
 class UUnmadeCombatComponent;
@@ -22,6 +23,8 @@ public:
     virtual void Tick(float DeltaSeconds) override;
     virtual void BeginPlay() override;
     void ConfigureCinderholdElder();
+    void ConfigureExpedition(int32 Arc,int32 Slot,UnmadeCore::ExpeditionRole Role);
+    bool IsExpeditionEnemy(int32 Arc,int32 Slot)const{return ExpeditionArc==Arc&&ExpeditionSlot==Slot;}
     void ConfigureRoadElder(int32 City){RoadElderCity=City;bCinderholdElder=true;TerritoryHome=GetActorLocation();}
     bool CanBeTargeted() const;
     void ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion=false);
@@ -36,6 +39,12 @@ public:
     UnmadeCore::EnemyStyle GetEnemyStyle() const { return Style; }
 
 private:
+    int32 ExpeditionArc=-1,ExpeditionSlot=-1;
+    UnmadeCore::ExpeditionRole ExpeditionRole=UnmadeCore::ExpeditionRole::Sentinel;
+    UnmadeCore::ExpeditionPattern ExpeditionPattern;
+    FVector ExpeditionAim=FVector::ZeroVector;
+    bool bExpeditionWarning=false;
+    void TickExpedition(float DeltaSeconds);
     UPROPERTY(VisibleAnywhere, Category="Unmade|Combat")
     TObjectPtr<UUnmadeCombatComponent> Combat;
 
