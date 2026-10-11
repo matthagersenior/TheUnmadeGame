@@ -95,6 +95,10 @@ try {
     & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_bes_household_wiring.py" 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "bes-household-validation.log")
     if($LASTEXITCODE -ne 0){throw "BES_HOUSEHOLD_INVALID"}
+    Write-Host "Verifying authored timed dialogue, honest choice confirmations, enterable Bes home and distinct return scenes."
+    & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_unpaid_shift_directed_wiring.py" 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "unpaid-shift-directed-validation.log")
+    if($LASTEXITCODE -ne 0){throw "UNPAID_SHIFT_DIRECTED_INVALID"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")

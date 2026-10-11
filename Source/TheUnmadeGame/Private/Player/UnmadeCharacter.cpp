@@ -1057,7 +1057,8 @@ void AUnmadeCharacter::Interact()
             Hub->TryLaterRealmConversation(Target->GetStableId());
             Hub->TryEchoQuestConversation(Target->GetStableId());
             Hub->RecordResidentConversation(Target->GetStableId());
-            Hub->RecordBesHouseholdConversation(Target->GetStableId());
+            if(!Hub->RecordBesHouseholdConversation(Target->GetStableId()))
+                Hub->MaybePlayBesReturnScene(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
         }

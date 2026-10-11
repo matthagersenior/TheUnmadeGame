@@ -19,6 +19,7 @@
 #include "World/UnmadeMaterialConsequencesRules.h"
 #include "World/UnmadeLivingEconomyRules.h"
 #include "World/UnmadeBesHouseholdRules.h"
+#include "World/UnmadeUnpaidShiftSceneRules.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
@@ -37,6 +38,13 @@
 class AUnmadeLoreSite;
 class ADirectionalLight;
 class AUnmadeCharacter;
+class AStaticMeshActor;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(
+    FUnmadeBesDirectedBeat, FName, SpeakerId,
+    const FString&, Subtitle, FName, CameraCue,
+    FName, FoleyCue, const FString&, Blocking,
+    const FString&, VoiceDirection, float, DurationSeconds);
 
 UCLASS()
 class THEUNMADEGAME_API AUnmadePrototypeHub : public AActor
@@ -66,7 +74,20 @@ public:
     FString GetLivingEconomyResidentLine(FName StableId) const;
     FString GetBesHouseholdResidentLine(FName StableId) const;
     bool RecordBesHouseholdConversation(FName StableId);
+    void MaybePlayBesReturnScene(FName StableId);
     bool TryBesHouseholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    /** Authored timed subtitle/shot/foley events; binds to UMG and Sequencer.
+        Without production sound assets the captions still work offline. */
+    UPROPERTY(BlueprintAssignable,Category="Unmade|Unpaid Shift")
+    FUnmadeBesDirectedBeat OnBesDirectedBeat;
+    UFUNCTION(BlueprintCallable,Category="Unmade|Unpaid Shift")
+    void PlayBesDirectedScene(int32 SceneIndex);
+    UFUNCTION(BlueprintCallable,Category="Unmade|Unpaid Shift")
+    void SkipBesDirectedScene();
+    UFUNCTION(BlueprintPure,Category="Unmade|Unpaid Shift")
+    FString GetBesDecisionOptions() const;
+    UFUNCTION(BlueprintPure,Category="Unmade|Unpaid Shift")
+    FString GetBesDecisionPreviewForStation(FName StationTag) const;
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetBesHouseholdJournal() const;
     bool HasBesHouseholdWitness() const { return BesHousehold.EndgameWitness(); }
@@ -182,6 +203,18 @@ private:
     UnmadeCore::MaterialWorld Materials;
     UnmadeCore::LivingEconomy LivingTrades;
     UnmadeCore::BesHousehold BesHousehold;
+    double LastBesReturningSceneAt=-9999.0;
+    FName BesPendingDecision;
+    double BesDecisionExpiresAt=0.0;
+    FTimerHandle BesSubtitleTimer;
+    int32 BesActiveScene=-1;
+    int32 BesActiveBeat=0;
+    void AdvanceBesDirectedBeat();
+    TWeakObjectPtr<AStaticMeshActor> BesWorkingCart;
+    TWeakObjectPtr<AStaticMeshActor> BesVisibleBasket;
+    FVector BesCartRest=FVector::ZeroVector;
+    void AnimateBesWorkingCart();
+    FString BesDecisionPreview(FName Tag) const;
     bool bBesHouseholdRejected=false;
     void RefreshBesHouseholdWorld();
     bool bLivingEconomyRejected=false;

@@ -1845,6 +1845,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     Super::Tick(DeltaSeconds);
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
     AdvanceMaterialDayIfNeeded();
+    AnimateBesWorkingCart();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical
@@ -2423,6 +2424,12 @@ bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
         return false;
     }
     RefreshBesHouseholdWorld();
+    PlayBesDirectedScene(
+        Result==UnmadeCore::BesOutcome::Reported
+            ?static_cast<int32>(UnmadeCore::UnpaidScene::FirstWage)
+            :Result==UnmadeCore::BesOutcome::ConsentRecorded
+            ?static_cast<int32>(UnmadeCore::UnpaidScene::MeraOffer)
+            :static_cast<int32>(UnmadeCore::UnpaidScene::Ledger));
     if(GEngine)
         GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Cyan,
             Result==UnmadeCore::BesOutcome::Reported
@@ -2471,6 +2478,27 @@ bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
             At+FVector(0,0,70),It->GetActorLocation()+FVector(0,0,65),
             ECC_Visibility,Sight))continue;
         const auto Prev=BesHousehold.Save();
+        // The first inspection is reversible investigation. Every ensuing
+        // physical choice is deliberately CONFIRMED by a second E at the
+        // same station within 12 real seconds; J/Blueprint gives costs.
+        if(!(Home && !Prev.homeVisited))
+        {
+            const FName Decision=Home?FName(TEXT("Bes.Home")):
+                Walkout?FName(TEXT("Bes.WalkoutChoice")):
+                Pay?FName(TEXT("Bes.RestitutionChoice")):
+                    FName(TEXT("Bes.MeraGuarantee"));
+            const double Now=GetWorld()->GetTimeSeconds();
+            if(BesPendingDecision!=Decision || Now>BesDecisionExpiresAt)
+            {
+                BesPendingDecision=Decision;
+                BesDecisionExpiresAt=Now+12.0;
+                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,
+                    FColor::Yellow,BesDecisionPreview(Decision));
+                return true;
+            }
+        }
+        BesPendingDecision=NAME_None;
+        BesDecisionExpiresAt=0.0;
         const auto BeforeMaterials=Materials.Snapshot();
         const auto BeforeCargo=Materials.Cargo();
         const auto BeforeLiving=LivingTrades.Save();
@@ -2501,6 +2529,18 @@ bool AUnmadePrototypeHub::TryBesHouseholdInteraction(
         }
         RefreshBesHouseholdWorld();
         RefreshMaterialWorld();
+        const int32 Scene=
+            Result==UnmadeCore::BesOutcome::HomeInspected
+                ?static_cast<int32>(UnmadeCore::UnpaidScene::HomeCold)
+            :Result==UnmadeCore::BesOutcome::WarmthDelivered
+                ?static_cast<int32>(UnmadeCore::UnpaidScene::HearthWarm)
+            :Result==UnmadeCore::BesOutcome::WalkoutBegun
+                ?static_cast<int32>(UnmadeCore::UnpaidScene::Refusal)
+            :Result==UnmadeCore::BesOutcome::WagesSettled
+                ?static_cast<int32>(UnmadeCore::UnpaidScene::Restitution)
+            :Result==UnmadeCore::BesOutcome::GuaranteePaid
+                ?static_cast<int32>(UnmadeCore::UnpaidScene::MeraSacrifice):-1;
+        if(Scene>=0)PlayBesDirectedScene(Scene);
         if(GEngine)
         {
             FString Story;
@@ -2919,19 +2959,63 @@ void AUnmadePrototypeHub::BuildForPrototype()
         SpawnBlock(FVector(To.originX+1470,To.originY-180,100),
             FVector(.75,.65,1.7),FName(*(Prefix+TEXT("Finish"))));
     }
+    // Actual animated graybox delivery prop. Work remains counted by the
+    // material ledger; this visual cart makes the real absent Bes shift legible.
+    const FVector CinderCart(1750,49350,60);
+    SpawnBlock(CinderCart,FVector(1.5,.8,.65),FName(TEXT("Bes.WorkingCart")));
+    SpawnBlock(CinderCart+FVector(0,0,66),FVector(.9,.65,.5),
+        FName(TEXT("Bes.WorkingCoal")));
+    BesCartRest=CinderCart;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        if(It->ActorHasTag(FName(TEXT("Bes.WorkingCart"))))
+            BesWorkingCart=*It;
+        else if(It->ActorHasTag(FName(TEXT("Bes.WorkingCoal"))))
+            BesVisibleBasket=*It;
+    }
+    // Visual motion cannot become a swept physical collision obstruction.
+    if(BesWorkingCart.IsValid())BesWorkingCart->SetActorEnableCollision(false);
+    if(BesVisibleBasket.IsValid())BesVisibleBasket->SetActorEnableCollision(false);
     // Cinderhold's first individual house: distinct evidence, relief,
     // labor refusal and restitution sites. All use actual collider actors,
     // save-backed consequences and the same E/LOS interaction rules.
     const FVector BesTown(0,50000,0);
-    SpawnBlock(BesTown+FVector(1210,610,110),FVector(2.2,1.8,2.1),
-        FName(TEXT("Bes.Home")));
+    // Actually enterable 6m by 5.4m SMALL HOME blockout: four wall
+    // stretches and a deliberate 2.1m door opening on the street side.
+    // None of these generic primitives are advertised as final meshes.
+    SpawnBlock(BesTown+FVector(1210,615,10),FVector(6.0,5.4,.20),
+        FName(TEXT("Bes.InteriorFloor")));
+    SpawnBlock(BesTown+FVector(900,615,150),FVector(.35,5.4,3.0),
+        FName(TEXT("Bes.WestWall")));
+    SpawnBlock(BesTown+FVector(1520,615,150),FVector(.35,5.4,3.0),
+        FName(TEXT("Bes.EastWall")));
+    SpawnBlock(BesTown+FVector(1210,330,150),FVector(6.0,.35,3.0),
+        FName(TEXT("Bes.NorthWall")));
+    SpawnBlock(BesTown+FVector(965,890,150),FVector(1.3,.35,3.0),
+        FName(TEXT("Bes.SouthWallWest")));
+    SpawnBlock(BesTown+FVector(1450,890,150),FVector(1.2,.35,3.0),
+        FName(TEXT("Bes.SouthWallEast")));
+    SpawnBlock(BesTown+FVector(1205,540,70),FVector(.9,.55,1.15),
+        FName(TEXT("Bes.Home"))); // true interaction hearth inside room
+    SpawnBlock(BesTown+FVector(1390,450,48),FVector(2.2,1.15,.45),
+        FName(TEXT("Bes.Bed")));
+    SpawnBlock(BesTown+FVector(1020,455,65),FVector(1.0,.65,1.3),
+        FName(TEXT("Bes.WarmthStorage")));
+    SpawnBlock(BesTown+FVector(1400,730,60),FVector(1.05,.65,1.2),
+        FName(TEXT("Bes.PayDesk")));
+    SpawnBlock(BesTown+FVector(1400,735,125),FVector(.55,.35,.2),
+        FName(TEXT("Bes.MissedWageBook")));
+    SpawnBlock(BesTown+FVector(1090,760,30),FVector(.6,.5,.6),
+        FName(TEXT("Bes.ChildHeightStool")));
+    SpawnBlock(BesTown+FVector(1240,845,180),FVector(2.0,.2,.2),
+        FName(TEXT("Bes.DoorLintel")));
     SpawnBlock(BesTown+FVector(1430,790,105),FVector(.7,.5,1.75),
         FName(TEXT("Bes.WalkoutChoice")));
     SpawnBlock(BesTown+FVector(650,300,100),FVector(.65,.5,1.7),
         FName(TEXT("Bes.RestitutionChoice")));
-    SpawnBlock(BesTown+FVector(1220,610,260),FVector(.5,.35,.65),
+    SpawnBlock(BesTown+FVector(1205,545,170),FVector(.45,.4,.6),
         FName(TEXT("Bes.ColdHearth")));
-    SpawnBlock(BesTown+FVector(1220,610,250),FVector(1.1,.4,.5),
+    SpawnBlock(BesTown+FVector(1205,545,170),FVector(.65,.4,.5),
         FName(TEXT("Bes.WarmHearth")));
     SpawnBlock(BesTown+FVector(1430,790,260),FVector(.2,.9,.9),
         FName(TEXT("Bes.WalkoutBanner")));
