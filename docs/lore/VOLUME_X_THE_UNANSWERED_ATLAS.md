@@ -1229,3 +1229,60 @@ The testable continuity requirement is stringent: no delivery without prior fini
 **Nhal-Vey's eventual reckoning.** The final adversary must confront a protagonist who has learned that being able to change a law does not remove the obligation to live with its consequences. The climax should make use of actual saved trade-offs, not a final cinematic that ignores the people who made the world habitable.
 
 *The universe is extraordinary. Its people still have to get through tomorrow.*
+
+---
+
+## 24. The Living Economy — Nine Households, Two Roads, and the Weight of a Receipt
+*Volume X · deterministic v4 livelihood and trade vertical slice · 11 October 2026*
+
+It is easy to speak about the heat of Cinderhold as though heat were its own master. It is more difficult to ask Bes, the coal runner, whether his wages reached the home he shares. The fire may be communal. The baskets are finite. Bes is neither an interchangeable worker count nor a number on a distant reputation meter.
+
+**The Living Economy** gives an existing named resident in each of the nine realms a traceable livelihood: a job, an identifiable home, a finite employer treasury, earned wages, and unpaid obligations. It retains the aggregate v3 workforce for other residents; this is a first *named* accounting layer, not the false claim that every adult of every realm already has a detailed employment contract.
+
+### The owners of work, and the debts that remember it
+
+Kesta's rented room in the Crossings is attached to her work as a porter. Mera works the Saltwake tide route. Bes carries Cinderhold's ember baskets. Orshel maintains Drevlach's dock. Vhaurn keeps Orravane's supports, Torrun maintains a quarry dwelling in Vathless, Auvet builds refuge in Eillun without registering their guests, Imro tends an unclaimed communal plot in Tharniv, and Thae keeps Auvren's threshold.
+
+Each worker's existing, stable identity is used. A wage of two local marks is **transferred** from an initial municipal treasury of thirty-two to the named worker's own earned account for each actually simulated shift. If the employer cannot pay, the earned account is not secretly credited. The missed two marks enter a separate *owed* register. A later payment can discharge an actual debt only from available municipal funds. Money is conserved across all nine employers, their workers and any explicitly reserved trade escrow; the engine may not create marks merely because the player returned.
+
+An owned wage is not a grant of ownership over the common kiln, the dock or the town's warehouse. The v3 stockroom and communal household supplies remain separately counted. This division protects both wages and shared goods from double counting.
+
+### A shipment has two towns and a real destination
+
+Two reciprocal contracts are introduced as a first international-trade route, not a universal teleporting trade system.
+
+**Saltwake to Cinderhold:** Mera's town can release five *sealed rainwater casks* to Cinderhold, where the casks support kiln cooling and safe drinking. The five casks must first be withdrawn from Saltwake's own warehouse, and Cinderhold commits six marks from its finite treasury into escrow. The player physically transports the signed cargo to the separate Cinderhold receiving station. Only at an actual E receipt are the casks credited as **foreign casks** and the escrow released to the source employer. Rainwater never magically becomes ember baskets.
+
+**Cinderhold to Saltwake:** Bes's town can similarly release five *common ember baskets*. Saltwake reserves six marks and the player brings those exact baskets to a separate receiving station. Those baskets become an **imported heating reserve**, not local rainwater.
+
+A single inter-realm consignment may be in custody at a time. It remains carried across game days and saves. The source and destination are both grounded in the atlas, and proximity and line of sight are required at the physical stations. A wrong-city receipt, duplicate collection, insufficient source stock or unreserved payment cannot succeed. Ordinary v3 relief packs cannot silently substitute for these foreign goods.
+
+### What happens after delivery
+
+When a shortage actually occurs in the destination city, a unit of received foreign support can be consumed to reduce damage to occupied infrastructure. The goods' foreign identity remains recorded in their route ledger. This helps the destination survive without pretending a bucket of Saltwake water replaces five baskets of Cinderhold fuel or that a shipment produces its own salary.
+
+The destination's named worker can remember the received contract. Mera or Bes is able to say how much pay is genuinely theirs, what the employer still owes, and how many delivered manifests they have witnessed. Their earlier biographies, return encounters and ordinary movement have not been replaced by generic economy-generated characters.
+
+This work is morally complicated. A city can protect its shelter with a real import while failing to pay a local worker. An authorized contract can save lives while revealing the fragility of a municipal treasury. A familiar visitor may discover that a beloved resident has been owed wages for many days. None of these states is a global Good Person score.
+
+### The earned contradiction at Nhal-Vey's mask
+
+The first defeat of Nhal-Vey reveals that victory was incomplete. If, and **only if**, both reciprocal contracts were physically delivered and saved, that reveal can also acknowledge the documented mutual aid between Saltwake and Cinderhold. Nhal-Vey's claim that incompatible worlds cannot carry one another is challenged by actual receipts, employer payments and human memory.
+
+This is **earned counter-testimony**, not a secret instant-win ability. The existing boss attack sequence, late-game choices, returning echo and unresolved mysteries are preserved. The new line is a connective gameplay reward grounded in earlier civilian action, not a substitute for completing the confrontation.
+
+### The next character-driven chapter
+
+**The Ninth Paybook** should follow a worker who is indispensable yet unpaid. A coming storm forces Saltwake to choose between funding a new shipment, repaying overdue wages and reinforcing homes; Mera refuses to become a free instrument for a player's convenient heroic ending. A genuinely branching quest must allow negotiation, postponement, physical carriage, recovery after failed deals and later consequences.
+
+**The Ember Claim** should give Bes a specific home and a human relationship beyond the current aggregate housing reserve. A complete version would include exact wages, days missed, family obligations, different delivery permissions, and a daily schedule physically tied to his counted output.
+
+**The Two Receipts** should become a voiced late-game conversation in which Bes and Mera can disagree about what the trade meant, without either needing to know the other's private thoughts. Their source-identified histories ought to shape the music, blocking, dialogue and the visual memory of the world.
+
+### Source implementation and honest boundary
+
+**Implemented in this source milestone:** nine canon-stable worker identities with named homes, employer and worker-owned currency ledgers, finite paid shifts, tracked arrears, conserved transaction balances, two escorted physical reciprocal cargo contracts, destination escrow, distinct foreign support inventory, a shortage-dependent consumption benefit, the world-clock save loop, a local trade journal, return dialogue for the nine workers, and an optional receipt-qualified Nhal-Vey mask line. Additional version-one-compatible SaveGame fields and native/source tests reject forged deliveries, impossible balances and corrupted cargo.
+
+**Not yet built or verified:** separately simulated tenant inventories for every resident, comprehensive wage contracts across all NPCs, full route navigation/escort AI, wide-ranging commercial prices, diplomatic taxes, player wage income, household cooking and heating animation, final recorded voices and subtitles, authored cinematics, complex production buildings, Windows Unreal Editor/UHT/PIE compilation, full-world latency and collision QA. The two corridors are a first operational slice, not a fully global transport economy.
+
+*Someone who keeps the world warm must also be allowed to come home.*

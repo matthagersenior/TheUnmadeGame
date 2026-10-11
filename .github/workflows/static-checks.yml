@@ -154,6 +154,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/material_consequences_test.cpp -o /tmp/unmade-material-consequences
           /tmp/unmade-material-consequences
+      - name: Test named wages, escrow conservation and two physically delivered imports
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/living_economy_test.cpp -o /tmp/unmade-living-economy
+          /tmp/unmade-living-economy
       - name: Test six earned cross-discipline confluence challenges
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/confluence_rules_test.cpp -o /tmp/unmade-confluence-test

@@ -230,6 +230,22 @@ public:
     int32 MaterialCargoUnits=0;
     UPROPERTY(SaveGame)
     int32 MaterialCargoDay=0;
+    /** v4 additive named livelihoods and two finite, attributed trade lanes. */
+    UPROPERTY(SaveGame)
+    bool bHasLivingEconomy=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> LivingEmployerMarks,LivingEarnedMarks,LivingOwedMarks;
+    UPROPERTY(SaveGame)
+    TArray<int32> LivingPaidShifts,LivingPaidDays,LivingWorkerReceipts;
+    UPROPERTY(SaveGame)
+    TArray<int32> LivingForeignStock,LivingRouteReceipts;
+    UPROPERTY(SaveGame)
+    TArray<int32> LivingTradePayments,LivingConsumedSupport;
+    UPROPERTY(SaveGame)
+    int32 LivingTradeCargoRoute=-1;
+    UPROPERTY(SaveGame)
+    int32 LivingTradeCargoDay=0;
+
 
 
 

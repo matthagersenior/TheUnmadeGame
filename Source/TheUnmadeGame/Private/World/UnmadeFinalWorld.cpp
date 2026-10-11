@@ -94,6 +94,12 @@ bool AUnmadePrototypeHub::BreakFinalMask()
         LaterRealm.IsComplete(UnmadeCore::Realm::FirstAbsence),Memory)!=
        UnmadeCore::FinalResult::MaskBroken)return false;
     if(!WriteWorldSnapshot()){FinalStory.Restore(Before);return false;}
+    // A mutual-aid contract does not grant automatic victory or erase the
+    // adversary; real receipts become optional counter-testimony to its claim
+    // that communities cannot carry one another across incompatible worlds.
+    if(LivingTrades.HasEarnedMutualAid() && GEngine)
+        GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,
+            TEXT("NHAL-VEY'S CLAIM FALTERS: Saltwake and Cinderhold exchanged real supplies, paid their couriers, and remembered both receipts."));
     if(GEngine)GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Orange,
         FString::Printf(TEXT("FIRST VICTORY WAS A LIE: %s"),
         UTF8_TO_TCHAR(UnmadeCore::LastAdversary.maskReveal)));

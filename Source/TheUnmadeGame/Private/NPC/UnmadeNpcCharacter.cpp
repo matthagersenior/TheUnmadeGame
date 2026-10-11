@@ -306,6 +306,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         CharacterLine += TEXT(" It feels like the dark has started listening.");
     if(CachedHub.IsValid())
     {
+        const FString Livelihood=CachedHub->GetLivingEconomyResidentLine(NpcId);
+        if(!Livelihood.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=Livelihood;
+        }
         const FString PublicSupplyNotice=CachedHub->GetMaterialResidentLine(HomeLocation);
         if(!PublicSupplyNotice.IsEmpty())
         {

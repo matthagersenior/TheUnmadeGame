@@ -55,7 +55,7 @@ class NineRealmWiring(unittest.TestCase):
         self.assertIn("RestoredOuter.Restore(Snapshot,RestoredClock.ElapsedSeconds())",hub)
         self.assertIn("bOuterReactionsRejected=true",hub)
         self.assertIn("bRealityConsequenceRejected || bOuterReactionsRejected ||",hub)
-        self.assertIn("bMaterialSaveRejected)return false;",hub)
+        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected)return false;",hub)
         self.assertIn("OuterReactions.Restore(BeforeOuter,Clock.ElapsedSeconds())",hub)
         self.assertIn("Save->bHasOuterRealmReactions=true;",hub)
         self.assertIn("Tests/world/nine_realm_reactions_test.cpp",

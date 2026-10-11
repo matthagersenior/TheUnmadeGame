@@ -224,3 +224,12 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Linked actual previously witnessed civic Shared Passage to one additional daily worker in that realm. Named NPCs with local roles shift schedules toward real shortages, supplies, homes and damage; their authored biographies and dangerous-event priority remain intact.
 - Added local journal, visible shortage/damage/repaired actors, optional old-schema-save-safe 9-town ledger, corrupted-array write guard, portable test and first-PC source-wiring validation. The Volume X cumulative manuscript now includes Chapter 23; illustrated PDF/DOCX publication is a separate distribution step.
 - Not yet complete: UE5 UHT/PIE test, authored full 3D economy levels, individual worker employment contracts, cross-world trading, equipment inventory goods, cinematic voice and complex economic quest branching.
+
+
+## 2026-10-11 — The Living Economy (Reality Consequence Engine v4, Volume X Chapter 24)
+
+- Connected nine *existing*, source-stable residents to separate owned wages, specific homes, finite 32-mark employer treasuries and accrued payment obligations (2 marks per actual day); preserving player marks, communal stock and all pre-v4 saves.
+- Added two on-foot inter-realm cargo contracts: Saltwake water casks to Cinderhold; Cinderhold ember baskets to Saltwake. Five local units must really leave the originating warehouse; six destination marks are escrowed; only correct E-receipt pays the source town and records foreign typed inventory and a named receiving worker. A future shortage can consume imported support, never turn casks into fuel.
+- Prevented simultaneous relief/trade parcels, wrong-recipient deposits and forged currency/receipts; saved all balances, wage debt, foreign stock, consumed aid and carried manifest atomically with corruption guards and rollback on disk write failure.
+- Returning worker NPCs acknowledge genuinely recorded pay, unpaid wages and receipt histories. Bidirectional delivered aid produces optional Nhal-Vey mask counter-testimony, without bypassing any boss combat or outcome.
+- Authored Volume X §24 and rigorous domain/source tests. Full NPC wage contracts, dynamic shops, trade taxes, escort AI, multi-tenant families and UE5 Windows Editor/PIE/cinematic QA remain pending.
