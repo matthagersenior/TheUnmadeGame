@@ -9,6 +9,11 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
 #include "UObject/UObjectGlobals.h"
+#include "Camera/CameraActor.h"
+#include "Camera/CameraComponent.h"
+#include "NPC/UnmadeNpcCharacter.h"
+#include "Player/UnmadeCharacter.h"
+#include "EngineUtils.h"
 
 void AUnmadePrototypeHub::AnimateBesWorkingCart()
 {
@@ -26,11 +31,84 @@ void AUnmadePrototypeHub::AnimateBesWorkingCart()
         BesVisibleBasket->SetActorLocation(Target+FVector(0,0,66),false,nullptr,
             ETeleportType::TeleportPhysics);
 }
+void AUnmadePrototypeHub::RestoreBesCamera()
+{
+    if(GetWorld())
+    {
+        if(APlayerController* PC=GetWorld()->GetFirstPlayerController())
+        {
+            AActor* Original=BesOriginalViewTarget.Get();
+            if(!IsValid(Original))Original=PC->GetPawn();
+            if(IsValid(Original)&&IsValid(BesShotCamera)&&
+               PC->GetViewTarget()==BesShotCamera.Get())
+                PC->SetViewTargetWithBlend(Original,.25f);
+        }
+    }
+    if(IsValid(BesShotCamera))
+    {
+        // Allow time for the return blend to finish before removing the rig.
+        BesShotCamera->SetLifeSpan(.40f);
+        BesShotCamera=nullptr;
+    }
+    BesOriginalViewTarget.Reset();
+}
+
+void AUnmadePrototypeHub::FrameBesDirectedBeat(FName SpeakerId,const FString& Cue)
+{
+    if(!GetWorld() ||
+       BesActiveScene>=static_cast<int32>(UnmadeCore::UnpaidScene::MaskPaid))return;
+    APlayerController* PC=GetWorld()->GetFirstPlayerController();
+    AUnmadeCharacter* Player=PC?Cast<AUnmadeCharacter>(PC->GetPawn()):nullptr;
+    if(!IsValid(Player))return;
+
+    FVector Focus=Player->GetActorLocation()+Player->GetActorForwardVector()*240.f;
+    if(SpeakerId!=FName(TEXT("stage")))
+    {
+        bool bSpeakerPresent=false;
+        for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+        {
+            if(It->GetStableId()!=SpeakerId)continue;
+            if(FVector::DistSquared2D(It->GetActorLocation(),Player->GetActorLocation())
+                >FMath::Square(1500.f))return; // Never magically cut to a remote actor.
+            Focus=It->GetActorLocation();
+            bSpeakerPresent=true;
+            break;
+        }
+        if(!bSpeakerPresent)return;
+    }
+    Focus.Z+=100.f;
+
+    if(!IsValid(BesShotCamera))
+    {
+        BesOriginalViewTarget=PC->GetViewTarget();
+        BesShotCamera=GetWorld()->SpawnActor<ACameraActor>(
+            Player->GetActorLocation()+FVector(-270,0,230),FRotator::ZeroRotator);
+    }
+    if(!IsValid(BesShotCamera))return;
+    const bool bWide=Cue.Contains(TEXT("wide"))||Cue.Contains(TEXT("roof"));
+    const bool bDetail=Cue.Contains(TEXT("hand"))||Cue.Contains(TEXT("insert"))||
+        Cue.Contains(TEXT("detail"))||Cue.Contains(TEXT("basket"));
+    const bool bClose=Cue.Contains(TEXT("close"))||Cue.Contains(TEXT("portrait"));
+    const float Distance=bWide?630.f:bDetail?165.f:bClose?220.f:350.f;
+    const float Height=bWide?230.f:bDetail?60.f:bClose?90.f:140.f;
+    FVector Toward=(Focus-Player->GetActorLocation()).GetSafeNormal2D();
+    if(Toward.IsNearlyZero())Toward=Player->GetActorForwardVector().GetSafeNormal2D();
+    if(Toward.IsNearlyZero())Toward=FVector(1,0,0);
+    const FVector Side=FVector::CrossProduct(FVector::UpVector,Toward);
+    const FVector CameraPosition=Focus-Toward*Distance+Side*85.f+FVector(0,0,Height);
+    BesShotCamera->SetActorLocationAndRotation(
+        CameraPosition,(Focus-CameraPosition).Rotation());
+    if(UCameraComponent* Lens=BesShotCamera->GetCameraComponent())
+        Lens->SetFieldOfView(bWide?67.f:bDetail?42.f:bClose?48.f:58.f);
+    PC->SetViewTargetWithBlend(BesShotCamera,.3f);
+}
+
 void AUnmadePrototypeHub::SkipBesDirectedScene()
 {
     if(GetWorld())GetWorldTimerManager().ClearTimer(BesSubtitleTimer);
     BesActiveScene=-1;
     BesActiveBeat=0;
+    RestoreBesCamera();
     if(IsValid(BesSubtitleOverlay))BesSubtitleOverlay->ClearBeat();
 }
 void AUnmadePrototypeHub::PlayBesDirectedScene(int32 SceneIndex)
@@ -50,6 +128,7 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
     if(!Beat){SkipBesDirectedScene();return;}
     const FName Speaker(UTF8_TO_TCHAR(Beat->speakerId));
     const FString Subtitle(UTF8_TO_TCHAR(Beat->subtitle));
+    FrameBesDirectedBeat(Speaker,FString(UTF8_TO_TCHAR(Beat->camera)));
     OnBesDirectedBeat.Broadcast(
         Speaker,Subtitle,FName(UTF8_TO_TCHAR(Beat->camera)),
         FName(UTF8_TO_TCHAR(Beat->foley)),

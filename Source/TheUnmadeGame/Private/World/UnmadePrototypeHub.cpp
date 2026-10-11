@@ -2862,6 +2862,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     // Walking ground: top at Z=0; center at -50 with 1*100 cm tall mesh.
     SpawnBlock(FVector(0, 0, -50), FVector(52, 52, 1), FName("Hub.Ground"));
     BuildVillages();
+    BuildPlayableEncounters();
     BuildFrontiers();
     BuildFrontierAftermath();
     BuildLaterRealms();

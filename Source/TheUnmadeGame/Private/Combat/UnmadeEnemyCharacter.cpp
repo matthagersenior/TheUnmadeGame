@@ -9,6 +9,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/Engine.h"
+#include "Components/TextRenderComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 AUnmadeEnemyCharacter::AUnmadeEnemyCharacter()
 {
@@ -21,6 +23,17 @@ AUnmadeEnemyCharacter::AUnmadeEnemyCharacter()
     static ConstructorHelpers::FObjectFinder<UStaticMesh> Cube(TEXT("/Engine/BasicShapes/Cube.Cube"));
     if (Cube.Succeeded()) TemporaryEnemyVisual->SetStaticMesh(Cube.Object);
     TemporaryEnemyVisual->SetRelativeScale3D(FVector(0.65, 0.65, 1.2));
+    EncounterCrest=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CreatureCrest"));
+    EncounterCrest->SetupAttachment(GetCapsuleComponent());
+    EncounterCrest->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> Sphere(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
+    if(Sphere.Succeeded())EncounterCrest->SetStaticMesh(Sphere.Object);
+    EncounterLabel=CreateDefaultSubobject<UTextRenderComponent>(TEXT("CreatureName"));
+    EncounterLabel->SetupAttachment(GetCapsuleComponent());
+    EncounterLabel->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    EncounterLabel->SetRelativeLocation(FVector(0,0,125));
+    EncounterLabel->SetHorizontalAlignment(EHTA_Center);
+    EncounterLabel->SetWorldSize(22.f);
 }
 
 void AUnmadeEnemyCharacter::ConfigureStyle(UnmadeCore::EnemyStyle NewStyle)
@@ -36,6 +49,20 @@ void AUnmadeEnemyCharacter::ConfigureStyle(UnmadeCore::EnemyStyle NewStyle)
         Combat->Configure(85.0, 14.0, 1.4);
         TemporaryEnemyVisual->SetRelativeScale3D(FVector(0.65, 0.65, 1.2));
     }
+}
+
+void AUnmadeEnemyCharacter::ConfigureEncounter(FName Identity,const FString& Name,
+    const FLinearColor& Accent)
+{
+    if(Identity.IsNone()||Name.IsEmpty())return;
+    Tags.AddUnique(Identity);
+    EncounterLabel->SetText(FText::FromString(Name));
+    EncounterLabel->SetTextRenderColor(Accent.ToFColor(true));
+    const bool bWatch=Style==UnmadeCore::EnemyStyle::Watcher;
+    EncounterCrest->SetRelativeLocation(bWatch?FVector(0,0,95):FVector(38,0,45));
+    EncounterCrest->SetRelativeScale3D(bWatch?FVector(.18,.5,.55):FVector(.48,.43,.3));
+    if(UMaterialInstanceDynamic* Body=TemporaryEnemyVisual->CreateAndSetMaterialInstanceDynamic(0))
+        Body->SetVectorParameterValue(TEXT("Color"),Accent);
 }
 
 void AUnmadeEnemyCharacter::SetVisualScale(FVector Scale)

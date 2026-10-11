@@ -117,6 +117,7 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
     PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
     PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AUnmadeCharacter::Interact);
+    PlayerInputComponent->BindAction("SkipDirectedScene",IE_Pressed,this,&AUnmadeCharacter::SkipDirectedScene);
     PlayerInputComponent->BindAction("OfferAid", IE_Pressed, this, &AUnmadeCharacter::OfferAid);
     PlayerInputComponent->BindAction("AnomalyPulse", IE_Pressed, this, &AUnmadeCharacter::DemonstrateAnomaly);
     PlayerInputComponent->BindAction("FoldReality", IE_Pressed, this, &AUnmadeCharacter::FoldReality);
@@ -944,6 +945,13 @@ AUnmadeNpcCharacter* FindNearbyCitizen(UWorld* World, FVector Origin, float MaxD
     }
     return Nearest;
 }
+}
+
+void AUnmadeCharacter::SkipDirectedScene()
+{
+    if(!GetWorld())return;
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        if(Hub->IsBesDirectedScenePlaying()){Hub->SkipBesDirectedScene();return;}
 }
 
 void AUnmadeCharacter::Interact()

@@ -39,6 +39,7 @@ class AUnmadeLoreSite;
 class ADirectionalLight;
 class AUnmadeCharacter;
 class AStaticMeshActor;
+class ACameraActor;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(
     FUnmadeBesDirectedBeat, FName, SpeakerId,
@@ -84,6 +85,7 @@ public:
     void PlayBesDirectedScene(int32 SceneIndex);
     UFUNCTION(BlueprintCallable,Category="Unmade|Unpaid Shift")
     void SkipBesDirectedScene();
+    bool IsBesDirectedScenePlaying() const { return BesActiveScene>=0; }
     UFUNCTION(BlueprintPure,Category="Unmade|Unpaid Shift")
     FString GetBesDecisionOptions() const;
     UFUNCTION(BlueprintPure,Category="Unmade|Unpaid Shift")
@@ -190,6 +192,7 @@ public:
 
     /** Created at runtime so the initial experiment needs no hand-authored .umap. */
     void BuildForPrototype();
+    void BuildPlayableEncounters();
 
 private:
     bool bBuilt = false;
@@ -213,6 +216,11 @@ private:
     int32 BesActiveScene=-1;
     int32 BesActiveBeat=0;
     void AdvanceBesDirectedBeat();
+    void FrameBesDirectedBeat(FName Speaker,const FString& Cue);
+    void RestoreBesCamera();
+    UPROPERTY(Transient)
+    TObjectPtr<ACameraActor> BesShotCamera;
+    TWeakObjectPtr<AActor> BesOriginalViewTarget;
     TWeakObjectPtr<AStaticMeshActor> BesWorkingCart;
     TWeakObjectPtr<AStaticMeshActor> BesVisibleBasket;
     FVector BesCartRest=FVector::ZeroVector;
