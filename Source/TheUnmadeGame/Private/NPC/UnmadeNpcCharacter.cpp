@@ -264,6 +264,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
         // Only the named person who actually received the carried packet gets
         // delivery knowledge; other residents need witnessed local testimony.
+        const FString ReturnReply=CachedHub->GetWitnessReturnLine(NpcId);
+        if(!ReturnReply.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=ReturnReply;
+        }
         const FString PhysicalReceipt=CachedHub->GetWitnessDispatchRecipientLine(NpcId);
         if(!PhysicalReceipt.IsEmpty())
         {

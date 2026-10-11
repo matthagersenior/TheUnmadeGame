@@ -8,6 +8,7 @@
 #include "World/UnmadeWitnessEchoRules.h"
 #include "World/UnmadeWitnessBraidRules.h"
 #include "World/UnmadeWitnessDispatchRules.h"
+#include "World/UnmadeWitnessReturnRules.h"
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeRegionalTaskRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
@@ -58,6 +59,9 @@ public:
     bool TryWitnessDispatch(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     /** Only Hessa can read the physically delivered document from the world state. */
     FString GetWitnessDispatchRecipientLine(FName NpcId) const;
+    bool TryWitnessReturn(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool ResolveNearbyWitnessReturn(int32 Choice);
+    FString GetWitnessReturnLine(FName NpcId) const;
     /** Optional three-city public response near Orrel's physical bridge nail. */
     bool ResolveNearbyWitnessBraid(int32 Choice);
     void RefreshDistrictMood();
@@ -150,6 +154,9 @@ private:
     UnmadeCore::WitnessEchoLedger WitnessEchoes;
     UnmadeCore::WitnessBraidChronicle WitnessBraid;
     UnmadeCore::WitnessDispatch Dispatch;
+    UnmadeCore::WitnessReturn ReturnWitness;
+    bool bWitnessReturnRejected=false;
+    void RefreshWitnessReturnWorld();
     bool bWitnessDispatchRejected=false;
     void RefreshWitnessDispatchWorld();
     bool bWitnessEchoRejected=false;

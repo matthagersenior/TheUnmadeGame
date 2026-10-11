@@ -175,6 +175,19 @@ public:
     int32 WitnessDispatchCollectedDay=0;
     UPROPERTY(SaveGame)
     int32 WitnessDispatchDeliveredDay=0;
+    /** Optional return-reply custody; zero state on all old schema-1 saves. */
+    UPROPERTY(SaveGame)
+    bool bHasWitnessReturnSnapshot=false;
+    UPROPERTY(SaveGame)
+    int32 WitnessReturnStage=0;
+    UPROPERTY(SaveGame)
+    int32 WitnessReturnRoute=0;
+    UPROPERTY(SaveGame)
+    int32 WitnessReturnChosenDay=0;
+    UPROPERTY(SaveGame)
+    int32 WitnessReturnCollectedDay=0;
+    UPROPERTY(SaveGame)
+    int32 WitnessReturnDeliveredDay=0;
 
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)
