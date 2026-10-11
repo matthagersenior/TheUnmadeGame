@@ -101,6 +101,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/witness_dispatch_test.cpp -o /tmp/unmade-witness-dispatch
           /tmp/unmade-witness-dispatch
+      - name: Test Hessa's next-day reply, physical custody and four branch intersections
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/witness_return_test.cpp -o /tmp/unmade-witness-return
+          /tmp/unmade-witness-return
 
       - name: Verify three offline settlements and all resident identities
         run: |
