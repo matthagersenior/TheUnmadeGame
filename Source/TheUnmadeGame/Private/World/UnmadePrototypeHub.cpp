@@ -2933,6 +2933,13 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Bes.WalkoutBanner")));
     SpawnBlock(BesTown+FVector(650,300,220),FVector(.85,.2,.9),
         FName(TEXT("Bes.PaidRecord")));
+    // Mera's real Saltwake testimony / owned-wage lending site. Reached by
+    // travel, only usable after speaking to her in person.
+    const FVector Saltwake(0,-50000,0);
+    SpawnBlock(Saltwake+FVector(1230,360,100),FVector(.65,.7,1.65),
+        FName(TEXT("Bes.MeraGuarantee")));
+    SpawnBlock(Saltwake+FVector(1230,360,225),FVector(.7,.25,1.0),
+        FName(TEXT("Bes.GuarantorRecord")));
     RefreshBesHouseholdWorld();
     // Nine visible work sites, one finite stockroom and household delivery
     // target per region. Actor tags are stable, save fields contain the truth.
