@@ -155,7 +155,12 @@ public:
         if(i<0||i>=2||data_.cargo.route!=-1||day<1||
            world.Cargo().realm!=-1)return TradeResult::Blocked;
         const auto& c=TradeContracts[i];
+        auto& buyer=data_.workers[static_cast<int>(c.destination)];
+        if(buyer.employerMarks<c.agreedMarks)return TradeResult::Blocked;
         if(!world.ExportForContract(c.origin,c.units,day))return TradeResult::Blocked;
+        // Signed buyer escrow: destination cannot run out of funds during
+        // a long physical journey. Funds are committed, not minted.
+        buyer.employerMarks-=c.agreedMarks;
         data_.cargo={i,day};
         return TradeResult::Collected;
     }
@@ -168,19 +173,20 @@ public:
         auto& buyer=data_.workers[static_cast<int>(c.destination)];
         auto& seller=data_.workers[static_cast<int>(c.origin)];
         auto& record=data_.routes[i];
-        if(!destination||day<destination->day||buyer.employerMarks<c.agreedMarks||
+        if(!destination||day<destination->day||
            seller.employerMarks>100000-c.agreedMarks||
            record.foreignStock>100-c.units||
            record.deliveries>=100000||
            buyer.deliveriesWitnessed>=100000)
             return TradeResult::Blocked;
-        buyer.employerMarks-=c.agreedMarks;
+        // Release the escrow already taken when the buyer authorized cargo.
         seller.employerMarks+=c.agreedMarks;
         ++buyer.deliveriesWitnessed;
         record.foreignStock+=c.units;
         ++record.deliveries;
         record.paidMarks+=c.agreedMarks;
         data_.cargo={};
+        PayArrears(c.origin);
         return TradeResult::Delivered;
     }
     // Imported baskets/casks remain foreign goods. A real local shortage
