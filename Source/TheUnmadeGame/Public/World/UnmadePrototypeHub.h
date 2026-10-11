@@ -51,6 +51,7 @@ public:
     bool RecordRealityConsequence(UnmadeCore::RiteId Id,double Duration,bool Mastered,
                                   const FVector& CastPosition);
     UnmadeCore::RealityConsequenceView RealityConsequenceAt(FVector Position) const;
+    UFUNCTION(BlueprintPure,Category="Unmade|Reality")
     FString GetRealityConsequenceJournal() const;
     int32 GetMinuteOfDay() const { return Clock.MinuteOfDay(); }
     int32 GetDiscoveredCount() const { return Discoveries.Count(); }
@@ -156,6 +157,7 @@ private:
     UnmadeCore::RealityConsequenceLedger RealityLedger;
     bool bRealityConsequenceRejected=false;
     void RefreshRealityConsequenceWorld();
+    bool bRealityVisualActive=false;
     UnmadeCore::DiscoveryLedger Discoveries;
     UnmadeCore::SettlementVisits VillagesVisited;
     UnmadeCore::RegionalTaskModel RegionalTasks;
