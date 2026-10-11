@@ -73,6 +73,7 @@ public:
     FString GetLivingEconomyResidentLine(FName StableId) const;
     FString GetBesHouseholdResidentLine(FName StableId) const;
     bool RecordBesHouseholdConversation(FName StableId);
+    void MaybePlayBesReturnScene(FName StableId);
     bool TryBesHouseholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     /** Authored timed subtitle/shot/foley events; binds to UMG and Sequencer.
         Without production sound assets the captions still work offline. */
@@ -199,6 +200,7 @@ private:
     UnmadeCore::MaterialWorld Materials;
     UnmadeCore::LivingEconomy LivingTrades;
     UnmadeCore::BesHousehold BesHousehold;
+    double LastBesReturningSceneAt=-9999.0;
     FName BesPendingDecision;
     double BesDecisionExpiresAt=0.0;
     FTimerHandle BesSubtitleTimer;
