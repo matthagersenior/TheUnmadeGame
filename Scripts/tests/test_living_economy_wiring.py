@@ -20,7 +20,7 @@ class LivingEconomyWiring(unittest.TestCase):
             self.assertIn(key,domain)
         self.assertIn("ExportForContract",material)
         self.assertIn("ReinforceShelter",material)
-        self.assertIn("Materials.AdvanceAllOneDay(Civic)",hub)
+        self.assertIn("Materials.AdvanceAllOneDay(Civic,BesHousehold.OnWalkout())",hub)
         self.assertIn("LivingTrades.AdvanceOneDay(Materials.Town(",hub)
         self.assertIn("LivingTrades.ApplyShelterSupport(Realm,*Town)",hub)
         self.assertIn("Materials.ReinforceShelter(Realm,Support)",hub)
@@ -54,7 +54,8 @@ class LivingEconomyWiring(unittest.TestCase):
             self.assertIn(field,save)
         for field in ("RestoredLiving.InitializeAtDay","RestoredLiving.Restore(",
                       "bLivingEconomyRejected=true","Save->bHasLivingEconomy=true",
-                      "bMaterialSaveRejected || bLivingEconomyRejected)return false;"):
+                      "bMaterialSaveRejected || bLivingEconomyRejected ||",
+                      "bBesHouseholdRejected)return false;"):
             self.assertIn(field,hub)
         self.assertIn("Tests/world/living_economy_test.cpp",
                       read(".github/workflows/static-checks.yml"))

@@ -91,6 +91,10 @@ try {
     & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_living_economy_wiring.py" 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "living-economy-validation.log")
     if($LASTEXITCODE -ne 0){throw "LIVING_ECONOMY_INVALID"}
+    Write-Host "Testing Bes home, Rheva evidence, honest working refusal, Mera's owned-wage guarantee, and final memory."
+    & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_bes_household_wiring.py" 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "bes-household-validation.log")
+    if($LASTEXITCODE -ne 0){throw "BES_HOUSEHOLD_INVALID"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")

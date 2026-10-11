@@ -245,6 +245,35 @@ public:
     int32 LivingTradeCargoRoute=-1;
     UPROPERTY(SaveGame)
     int32 LivingTradeCargoDay=0;
+    /** v5: Bes's own dwelling, documented wage dispute and irreducible costs.
+        Additive schema-1 fields: pre-v5 saves begin on their existing day. */
+    UPROPERTY(SaveGame)
+    bool bHasBesHousehold=false;
+    UPROPERTY(SaveGame)
+    int32 BesQuestPhase=0;
+    UPROPERTY(SaveGame)
+    int32 BesHouseholdDay=1;
+    UPROPERTY(SaveGame)
+    int32 BesHeatBaskets=1;
+    UPROPERTY(SaveGame)
+    int32 BesColdDays=0;
+    UPROPERTY(SaveGame)
+    int32 BesWalkoutDays=0;
+    UPROPERTY(SaveGame)
+    int32 BesReliefPacks=0;
+    UPROPERTY(SaveGame)
+    int32 BesFirstReportDay=0;
+    UPROPERTY(SaveGame)
+    bool bBesHomeVisited=false;
+    UPROPERTY(SaveGame)
+    bool bBesRhevaInterviewed=false;
+    UPROPERTY(SaveGame)
+    int32 BesMeraGuaranteeOwed=0;
+    UPROPERTY(SaveGame)
+    bool bBesMeraConsented=false;
+    UPROPERTY(SaveGame)
+    bool bBesMeraGuaranteeUsed=false;
+
 
 
 

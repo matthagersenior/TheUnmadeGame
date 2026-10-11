@@ -758,6 +758,7 @@ void AUnmadeCharacter::ShowStoryJournal()
     FString RealityConsequenceSummary;
     FString MaterialSummary;
     FString LivelihoodSummary;
+    FString BesHouseholdSummary;
     if (GetWorld())
     {
         for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
@@ -780,6 +781,7 @@ void AUnmadeCharacter::ShowStoryJournal()
             RealityConsequenceSummary=Hub->GetRealityConsequenceJournal();
             MaterialSummary=Hub->GetLocalMaterialJournal();
             LivelihoodSummary=Hub->GetLivingEconomyJournal();
+            BesHouseholdSummary=Hub->GetBesHouseholdJournal();
             if(Hub->GetAfterlightStage()>0)
                 RealmSummary+=FString::Printf(
                     TEXT(" | Bellwold Afterlight: %d/4"),Hub->GetAfterlightStage());
@@ -829,6 +831,8 @@ void AUnmadeCharacter::ShowStoryJournal()
         GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,MaterialSummary);
     if(GEngine && !LivelihoodSummary.IsEmpty())
         GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Yellow,LivelihoodSummary);
+    if(GEngine && !BesHouseholdSummary.IsEmpty())
+        GEngine->AddOnScreenDebugMessage(-1,17.f,FColor::Cyan,BesHouseholdSummary);
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
@@ -992,6 +996,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryBesHouseholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryLivingTradeInteraction(this,ResidentDistSq))return;
             if(Hub->TryMaterialInteraction(this,ResidentDistSq))return;
             if(Hub->TryWitnessReturn(this,ResidentDistSq))return;
@@ -1052,6 +1057,7 @@ void AUnmadeCharacter::Interact()
             Hub->TryLaterRealmConversation(Target->GetStableId());
             Hub->TryEchoQuestConversation(Target->GetStableId());
             Hub->RecordResidentConversation(Target->GetStableId());
+            Hub->RecordBesHouseholdConversation(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
         }

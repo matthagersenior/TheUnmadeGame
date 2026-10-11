@@ -158,6 +158,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/living_economy_test.cpp -o /tmp/unmade-living-economy
           /tmp/unmade-living-economy
+      - name: Test Cinderhold wage dispute, personal house, cold days, work refusal and real guarantor
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/bes_household_test.cpp -o /tmp/unmade-bes-household
+          /tmp/unmade-bes-household
       - name: Test six earned cross-discipline confluence challenges
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/confluence_rules_test.cpp -o /tmp/unmade-confluence-test

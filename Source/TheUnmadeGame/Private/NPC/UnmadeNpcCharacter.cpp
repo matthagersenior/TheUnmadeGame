@@ -111,13 +111,25 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         // to warehouse, homes, or repair shift. No omniscient remote patrols.
         if(CachedHub.IsValid())
         {
-            const auto Duty=CachedHub->GetMaterialDuty(HomeLocation,Role);
-            if(Duty!=UnmadeCore::MaterialDuty::Regular)
+            // Only Bes himself knows his chosen work refusal; ordinary
+            // shortages and remote NPCs cannot order him back to the depot.
+            if(NpcId==FName(TEXT("npc.cinderhold.courier.001")) &&
+               CachedHub->IsBesOnWalkout())
             {
-                const FVector Site=CachedHub->GetMaterialDutyDestination(HomeLocation,Duty);
-                Target={Site.X,Site.Y};
-                Speed=Role==UnmadeCore::NpcRole::Courier?105.0:80.0;
-                StopRadius=115.0;
+                Target={1210.0,50610.0}; // his actual Cinderhold hearth
+                Speed=65.0;
+                StopRadius=155.0;
+            }
+            else
+            {
+                const auto Duty=CachedHub->GetMaterialDuty(HomeLocation,Role);
+                if(Duty!=UnmadeCore::MaterialDuty::Regular)
+                {
+                    const FVector Site=CachedHub->GetMaterialDutyDestination(HomeLocation,Duty);
+                    Target={Site.X,Site.Y};
+                    Speed=Role==UnmadeCore::NpcRole::Courier?105.0:80.0;
+                    StopRadius=115.0;
+                }
             }
         }
     }
@@ -306,6 +318,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         CharacterLine += TEXT(" It feels like the dark has started listening.");
     if(CachedHub.IsValid())
     {
+        const FString BesHomeLine=CachedHub->GetBesHouseholdResidentLine(NpcId);
+        if(!BesHomeLine.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=BesHomeLine;
+        }
         const FString Livelihood=CachedHub->GetLivingEconomyResidentLine(NpcId);
         if(!Livelihood.IsEmpty())
         {

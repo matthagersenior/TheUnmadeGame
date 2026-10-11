@@ -46,7 +46,8 @@ class RealmGuardiansWiring(unittest.TestCase):
         self.assertIn("bWitnessEchoRejected || bWitnessBraidRejected ||",hub)
         self.assertIn("bWitnessDispatchRejected || bWitnessReturnRejected ||",hub)
         self.assertIn("bRealityConsequenceRejected || bOuterReactionsRejected ||",hub)
-        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected)return false;",hub)
+        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected ||",hub)
+        self.assertIn("bBesHouseholdRejected)return false;",hub)
         self.assertIn("Save->RealmGuardianOutcomes.Num()!=6",hub)
     def test_ci(self):
         self.assertIn("Tests/combat/realm_guardian_test.cpp",

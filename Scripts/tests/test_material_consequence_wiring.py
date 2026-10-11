@@ -18,7 +18,7 @@ class MaterialConsequenceWiring(unittest.TestCase):
                      "InitializeAtDay","MaterialPolicies[static_cast<int>(realm)].dailyNeed"):
             self.assertIn(term,rules)
         self.assertIn("AdvanceMaterialDayIfNeeded();",hub)
-        self.assertIn("Materials.AdvanceAllOneDay(Civic)",hub)
+        self.assertIn("Materials.AdvanceAllOneDay(Civic,BesHousehold.OnWalkout())",hub)
         self.assertIn("WriteWorldSnapshot()",hub)
 
     def test_physical_interaction_and_real_npc_routines(self):
@@ -53,7 +53,8 @@ class MaterialConsequenceWiring(unittest.TestCase):
         self.assertIn("RestoredMaterials.Restore(Data",hub)
         self.assertIn("RestoredMaterials.InitializeAtDay",hub)
         self.assertIn("bMaterialSaveRejected=true;",hub)
-        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected)return false;",hub)
+        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected ||",hub)
+        self.assertIn("bBesHouseholdRejected)return false;",hub)
         self.assertIn("Materials.Restore(Before,Cargo,GetGameDay())",hub)
         self.assertIn("Tests/world/material_consequences_test.cpp",
                       read(".github/workflows/static-checks.yml"))

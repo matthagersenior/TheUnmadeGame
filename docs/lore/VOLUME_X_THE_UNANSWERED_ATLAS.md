@@ -1286,3 +1286,75 @@ This is **earned counter-testimony**, not a secret instant-win ability. The exis
 **Not yet built or verified:** separately simulated tenant inventories for every resident, comprehensive wage contracts across all NPCs, full route navigation/escort AI, wide-ranging commercial prices, diplomatic taxes, player wage income, household cooking and heating animation, final recorded voices and subtitles, authored cinematics, complex production buildings, Windows Unreal Editor/UHT/PIE compilation, full-world latency and collision QA. The two corridors are a first operational slice, not a fully global transport economy.
 
 *Someone who keeps the world warm must also be allowed to come home.*
+
+---
+
+## 25. Lives Behind the Ledger — Bes and the Hearth That Cannot Be Forgiven
+*Volume X · Character and consequence chapter · 11 October 2026*
+
+Cinderhold has a communal flame, and that is the first misunderstanding. The heat does not carry itself. Bes carries it. He has a door, a floor marked with ash, a name in the work ledger and a place he returns to when the baskets become too heavy. The city counts his work in full and his pay only when money exists. The reader should remember him for the tone of his voice when he realizes those numbers have stopped agreeing.
+
+### A house before a heroic choice
+
+The coal runner's home is not an unlockable illustration or a quest-stage flag presented as architecture. In the blockout it is a collidable, visitable house beside his Cinderhold route. Its small hearth possesses a **separate, finite reserve of warming baskets**, not an unexplained copy of the communal warehouse. A workday consumes one unit of household warmth. When the reserve is gone, the household records a genuinely cold day. Taking a different path through the level cannot rewind a day of cold.
+
+The traveler encounters the problem only after the existing municipality has actually missed Bes's wages. Initially, speaking to him is ordinary conversation; no fabricated debt unlocks the investigation. Once the unpaid count is real, Bes can state what was taken from his time. The player then **visits his home** and has a reason to know whom the work affects. Only after that inspection may Rheva, Cinderhold's named ember warden, corroborate the municipal ledger. Her corroboration is not mind reading: she reads a local public wage account as the person charged with defending it. Ovenna, the existing warmth keeper, knows the home's cold or warmth without pretending to have attended a negotiation she missed.
+
+The physical investigation makes three claims separate: **the city needs heat**, **Bes needs money**, and **his household needs both**. Solving one cannot quietly tick the others as complete.
+
+### The Unpaid Shift — exact playable investigation
+
+| Stage | Physical objective / gate | Saved consequence |
+| --- | --- | --- |
+| 0: A working life | Speak to Bes on his established route. The nine-realm payroll must first record two or more unpaid marks; otherwise there is no fabricated emergency. | Existing daily schedules, identity and wage records remain |
+| 1: Testimony | Hear Bes's direct account of missed pay; return to his actual hearth and interact within reach and sightline. | First report day and personal home inspection |
+| 2: Corroboration | Return to Rheva and listen to the town's documented missing wages. | A publicly sourced, genuine dispute; choice markers become meaningful |
+| 3A: Immediate warmth | Collect one *real, five-basket* local relief pack at Cinderhold's stockroom, physically carry it to Bes's home, and interact again. | Bes receives five counted home heat units; communal stock already fell on pickup; wage debt remains. The house looks warmer |
+| 3B: Refuse the shift | Interact with Bes's walkout marker while real wages remain owed. | Bes stops reporting worked shifts; one effective worker disappears from Cinderhold's daily production until the dispute is genuinely settled; lost workdays persist |
+| 3C: Restitution | Interact with the warden's restitution record after the municipality really has sufficient available marks for **both Bes and any transferred guarantor debt**. | Only actual funds transfer; any insufficient treasury blocks the choice without a partial hidden payment. Bes resumes the ordinary route |
+| 3D: Voluntary guarantee | With Rheva's record in hand, travel to Saltwake and speak personally to the existing courier Mera. After her explicit recorded consent, interact with her real guarantee station. | At most six of **Mera's own earned marks** transfer to Bes, reducing his old unpaid wage. Cinderhold now owes Mera the transferred claim; it has *not* been erased |
+| Return: A world changed | Come back after a real workday, inspect the home's reserve, and speak again to Bes, Rheva or Ovenna. | Actual cold-day history, missed workdays, relief packets, wage transfers and guarantor obligations determine the responses |
+
+No option is a universal moral winner. Relief without wages may prevent immediate cold while leaving Bes exploited. A walkout respects his right to refuse work but can reduce the output of a city sheltering other people. Municipal restitution uses real money that may be unavailable without accountable trade or later repayments. Mera's loan preserves Bes's dignity yet places her own household's earned security at risk. The final judgment belongs to players and residents, not an opaque approval bar.
+
+### Three people whose stories must not merge
+
+**Bes, Coal Runner.** He knows the weight of the basket and the day he was not paid. During an active walkout, when not handling danger or a personally observed emergency, he physically returns to his actual hearth instead of wandering back to a warehouse shift. The game's actual next-day material output drops by one worker, and his wage account records neither a phantom paid shift nor additional debt for work he refused. His normal routine returns only when the saved wage issue is resolved.
+
+> “You saw the basket arrive. Did you see me leave the house before the ash was cold?”
+
+**Rheva, Ember Warden.** She protects the flame and the common treasury, but a genuinely empty ledger can defeat her good intentions. The player must speak with her after visiting the actual home, because no claim of independent civic evidence should be granted by the player hearing only one side. A settlement can be safe for a night and still unjust to the person keeping the doors open.
+
+> “I am charged with counting embers. I was wrong when I thought that meant I had counted everything.”
+
+**Mera, Tide Courier of Saltwake.** She has her own job, life, earned wages and cold nights. The player cannot seize her savings to make another civilization look virtuous. The guarantee must be preceded by a face-to-face conversation in her home city; her distinct consenting record is saved. Her mark transfer is capped so the script cannot strip her entire life away by repeatedly activating a prop. If she lends, the Cinderhold obligation is **reassigned** to Mera. A later genuine payment must transfer actual available municipal funds back to her account. The city has not forgiven itself.
+
+> “I can afford to help him once. You cannot call it charity when you have written my name beneath the city’s unpaid debt.”
+
+These are authored future performance lines, not claims of newly recorded voices. The present game source provides shorter situational text through the existing named residents, material ledgers, source-backed interactions and J journal.
+
+### Playable recovery: no false failure states
+
+When there is no unpaid wage, the player can learn Bes's character but cannot open a counterfeit dispute. When Bes's home has not been inspected, Rheva's formal corroboration is withheld. Without five actual source-debited baskets in the player's single carry slot, the home cannot receive relief. Repeating the same delivery after the parcel is gone cannot print five more baskets. At a shop or workshop, the player cannot carry a second inter-realm trade contract over this pack.
+
+If the town cannot pay all its recorded obligations, the restitution station truthfully blocks payment. A failed write restores all three implicated records—the material stock and carried parcel, the named wage accounts and the personal house—before any success message is displayed. Corrupted, impossible, contradictory or future-dated household histories protect the older save against being overwritten.
+
+On Mera's path, a refusal to give consent is not the same as a player selecting a hidden dialogue option. Only speaking to her in Saltwake records an offer; only the physical guarantee station moves actual available owned marks. One consent cannot be replayed indefinitely. If her six-mark limit covers only part of Bes's debt, the remainder remains payable and the quest does not lie that it is settled. If it covers all of Bes's wages, the family can leave the immediate dispute but Cinderhold continues to owe Mera.
+
+A long journey cannot automatically erase a recorded day without warmth. A settlement restarts with its old v3/v4 world clock and wage balance, and an old save that has never heard of Bes's personal household begins the v5 ledger on the current day—without inventing past relief or retroactively confiscating pay.
+
+### The World That Knows His Name: Nhal-Vey callback
+
+At the first mask-breaking revelation, Nhal-Vey's certainty is challenged by what the world actually remembers. When the municipality genuinely paid Bes and any guarantor, there is counter-testimony of fulfilled obligation. When Mera underwrote the debt but her claim remains outstanding, the cinematic can show how one person kept another's household alive **without pretending the community solved its problem**. When Bes is still on walkout, Nhal-Vey can point to his empty shift as an uncomfortable truth.
+
+The same battle still has to be fought. None of these narratives grants a free strike, cancels a boss phase, confers a secret instant victory or dictates the ultimate morning. Their difference is dramatic and ethical: the final adversary can no longer argue about worlds without encountering *specific people who lived with the player's earlier decisions*.
+
+The proposed future scene has three distinct sound anchors: Bes setting an empty coal basket on the threshold; Rheva counting the small metal marks against the rim of a ledger; Mera sealing a consented debt in salt-stiff paper. The soundtrack must respect the first silence after Bes refuses work. Clear subtitles, environmental sound and separately identifiable voices are mandatory for the final cinematic. Placeholder blockout props and on-screen text are not a release-ready performance.
+
+### Engineering and adaptation boundary
+
+**Source implemented:** real payable and unpaid wages from v4; finite separate household warmth and daily cold/absence accounting; three-stage personally inspected investigation; separate relief, walkout, municipal restitution and bounded named-worker guarantee mechanics; reduced future Cinderhold production on walkout; removed phantom wages during refusal; true depot-debited five-unit relief; explicit consented Mera transfer; separate persistent public markers for warmth, refusal, restitution and outstanding guarantor claim; old-save additive fields, atomic rollback and native/source regression tests. Returning Bes, Rheva, Ovenna and Mera have grounded lines; Nhal-Vey's existing mask reveal can make distinct optional callbacks.
+
+**Still not complete:** fully interactive private family interiors, a walkable enacted court hearing with performance-captured dialogue, optional full branching cinematics, per-person meals/wages for the other 73 named residents, freeform patronage and employment arbitration, real diplomatic repayment economy, robust Unreal Engine 5.8 Editor/PIE build, production animation and audio. These are explicit later deliverables. The documented quest is one first authored **vertical slice**, not a declaration that the full game is finished.
+
+*In a world where the impossible person can rewrite reality, sometimes the impossible act is to pay the person who carried the coal.*

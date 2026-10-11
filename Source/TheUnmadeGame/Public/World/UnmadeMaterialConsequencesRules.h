@@ -94,13 +94,13 @@ public:
                         ((civic==RealityPublicResponse::SharedPassage||
                           civic==RealityPublicResponse::ContestedAccord)?1:0));
     }
-    bool AdvanceOneDay(Realm realm,RealityPublicResponse civic)noexcept{
+    bool AdvanceOneDay(Realm realm,RealityPublicResponse civic,int missingWorkers=0)noexcept{
         const int i=static_cast<int>(realm);
         if(i<0||i>=9)return false;
         auto& t=towns_[i];
         if(t.day>=833334)return false;
         const auto& p=MaterialPolicies[i];
-        const int workers=Workers(realm,t.integrity,civic);
+        const int workers=std::max(0,Workers(realm,t.integrity,civic)-missingWorkers);
         // Labor is finite per in-world day. Output is warehouse material, not
         // directly credited to household stock or player inventory.
         const int output=workers*p.outputPerWorker;
@@ -121,9 +121,10 @@ public:
     }
     // Bound CPU per tick: one in-world day of each town, never simulate 800k days
     // synchronously after a corrupt or arbitrarily advanced saved clock.
-    bool AdvanceAllOneDay(const std::array<RealityPublicResponse,9>& civic)noexcept{
+    bool AdvanceAllOneDay(const std::array<RealityPublicResponse,9>& civic,bool besWalkout=false)noexcept{
         for(int i=0;i<9;++i)if(towns_[i].day>=833334)return false;
-        for(int i=0;i<9;++i)AdvanceOneDay(static_cast<Realm>(i),civic[i]);
+        for(int i=0;i<9;++i)
+            AdvanceOneDay(static_cast<Realm>(i),civic[i],i==2&&besWalkout?1:0);
         return true;
     }
     // Exports are removed from the correct warehouse and remain foreign goods
@@ -152,6 +153,16 @@ public:
         towns_[i].store-=PackSize;
         cargo_={i,PackSize,day};
         return MaterialAction::Collected;
+    }
+    // Physically deliver an already-withdrawn, carried local pack to a
+    // *specific* home; the stockroom has already been debited at collection.
+    bool DeliverToNamedHome(Realm realm,int day)noexcept{
+        const int i=static_cast<int>(realm);
+        if(i<0||i>=9||cargo_.realm!=i||cargo_.units!=PackSize||
+           day<cargo_.collectedDay||day<towns_[i].day)return false;
+        cargo_={};
+        towns_[i].deliveries=std::min(MaxAmount,towns_[i].deliveries+1);
+        return true;
     }
     MaterialAction Deliver(Realm realm,int day)noexcept{
         const int i=static_cast<int>(realm);

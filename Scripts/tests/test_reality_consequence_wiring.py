@@ -62,7 +62,8 @@ class RealityConsequenceIntegration(unittest.TestCase):
         self.assertIn("RestoredReality.Restore({",hub)
         self.assertIn("bRealityConsequenceRejected=true;",hub)
         self.assertIn("bRealityConsequenceRejected || bOuterReactionsRejected ||",hub)
-        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected)return false;",hub)
+        self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected ||",hub)
+        self.assertIn("bBesHouseholdRejected)return false;",hub)
         self.assertIn("RealityLedger.Restore(Before,Clock.ElapsedSeconds());",hub)
         self.assertIn("if(!WriteWorldSnapshot())",hub)
         self.assertIn("Tests/world/reality_consequence_test.cpp",
