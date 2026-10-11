@@ -118,9 +118,9 @@ FString AUnmadePrototypeHub::BesDecisionPreview(FName Tag) const
 }
 FString AUnmadePrototypeHub::GetBesDecisionOptions() const
 {
-    return FString::Printf(TEXT("%s | %s | %s | %s"),
-        *BesDecisionPreview(FName(TEXT("Bes.Home"))),
-        *BesDecisionPreview(FName(TEXT("Bes.WalkoutChoice"))),
-        *BesDecisionPreview(FName(TEXT("Bes.RestitutionChoice"))),
-        *BesDecisionPreview(FName(TEXT("Bes.MeraGuarantee"))));
+    return TEXT("Four physical choices: deliver Bes's ember pack; support his voluntary walkout; pay all municipal claims; or ask Mera in Saltwake to risk her own wages. Approach one station for the exact real cost.");
+}
+FString AUnmadePrototypeHub::GetBesDecisionPreviewForStation(FName StationTag) const
+{
+    return BesDecisionPreview(StationTag);
 }
