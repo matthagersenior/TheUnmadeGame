@@ -2347,7 +2347,7 @@ FString AUnmadePrototypeHub::GetLivingEconomyJournal() const
                 static_cast<int>(UnmadeCore::TradeContracts[Cargo.route].destination)].city));
     return FString::Printf(TEXT("LIVING ECONOMY %s: %s's employer holds %d marks; %d earned, %d owed to the named household; %d completed shifts | imports to Saltwake %d ember baskets, to Cinderhold %d rain casks | %s | mutual-aid evidence %s"),
         UTF8_TO_TCHAR(Local->city),
-        UTF8_TO_TCHAR(UnmadeCore::NamedTradeWorkers[Id].stableId),
+        UTF8_TO_TCHAR(UnmadeCore::NamedTradeWorkers[Id].displayName),
         Worker->employerMarks,Worker->earnedMarks,Worker->owedMarks,Worker->shiftsPaid,
         LivingTrades.Route(UnmadeCore::TradeRoute::HearthToSalt)->foreignStock,
         LivingTrades.Route(UnmadeCore::TradeRoute::SaltToHearth)->foreignStock,
