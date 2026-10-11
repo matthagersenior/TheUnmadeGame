@@ -18,6 +18,7 @@
 #include "World/UnmadeRealmReactionRules.h"
 #include "World/UnmadeMaterialConsequencesRules.h"
 #include "World/UnmadeLivingEconomyRules.h"
+#include "World/UnmadeBesHouseholdRules.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
@@ -63,6 +64,12 @@ public:
     bool TryMaterialInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryLivingTradeInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     FString GetLivingEconomyResidentLine(FName StableId) const;
+    FString GetBesHouseholdResidentLine(FName StableId) const;
+    bool RecordBesHouseholdConversation(FName StableId);
+    bool TryBesHouseholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    UFUNCTION(BlueprintPure,Category="Unmade|Economy")
+    FString GetBesHouseholdJournal() const;
+    bool HasBesHouseholdWitness() const { return BesHousehold.EndgameWitness(); }
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetLivingEconomyJournal() const;
     UnmadeCore::MaterialDuty GetMaterialDuty(FVector At,UnmadeCore::NpcRole Role) const;
@@ -173,6 +180,10 @@ private:
     UnmadeCore::OuterRealmReactions OuterReactions; // eight isolated world histories
     UnmadeCore::MaterialWorld Materials;
     UnmadeCore::LivingEconomy LivingTrades;
+    UnmadeCore::BesHousehold BesHousehold;
+    bool bBesHouseholdRejected=false;
+    void RefreshBesHouseholdWorld();
+    FVector GetBesWorkDestination(FName StableId,FVector Home) const;
     bool bLivingEconomyRejected=false;
     bool bMaterialSaveRejected=false;
     void RefreshMaterialWorld();
