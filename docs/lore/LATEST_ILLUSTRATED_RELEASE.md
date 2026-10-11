@@ -1,5 +1,30 @@
 # Latest illustrated lore publication
 
+**Current cumulative edition:** *The Unmade — Nine-Realm Reaction System* (11 October 2026)  
+**Game code baseline:** `b97e3df58bd969d38de819074d351c63fab6159a` · [PR #39](https://github.com/matthagersenior/TheUnmadeGame/pull/39) · [green post-merge CI](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38131618589)  
+**Canon:** Volume X Chapter 22, *The Nine-Realm Reaction System — One Rite, Nine Consequences*. Original Reach evidence preserved; eight independently saved policy-driven outer realm histories.  
+**Asset distribution:** Full editable and PDF books, concept art and chapter history via verified conversation downloads. Binary books are **not** claimed committed as GitHub Release assets.
+
+| Publication | Independently checked |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Nine_Realm_Reactions.docx` | **121-page complete cumulative master**, **52 embedded original illustrations** |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Nine_Realm_Reactions.pdf` | **121 pages**, zero blank pages or off-page text blocks, rendered from Word |
+| `THE_UNMADE_Volume_X_Illustrated_Nine_Realm_Reactions.docx` | Editable **50-page** standalone Volume X, five retained original illustrations |
+| `THE_UNMADE_Volume_X_Illustrated_Nine_Realm_Reactions.pdf` | **50 pages**, zero blank pages or off-page text blocks, final orphan page corrected |
+| `THE_UNMADE_Nine_Realm_Reactions_Complete_Illustrated_Package.zip` | **25 entries**; four current books, eight retained concept-art assets, prior production sources, Chapter 22 extract, per-file SHA-256 manifest |
+
+**Release checks:** Both editable masters were fully rendered to PDF/page images; final-page layout reviewed; all 121+50 pages checked for blank pages and out-of-bounds text; original illustration object counts asserted. ZIP integrity checked (CRC); all 24 content-member lengths and SHA-256 hashes independently checked against the manifest.
+
+**Source-implemented v2:** All nine region policies; eight additive schema-1 evidence arrays with independent local witnesses plus prior Reach record; actual local enemy pursuit, original realm hazard injury/Strain multipliers, Crossings market price modifier, local source-tagged direct/heard NPC dialogue, temporary and permanent physical graybox markers, strict source/native tests and Windows first-PC preflight.
+
+**Still pending:** Windows UE 5.8 UHT/Editor/PIE compile, real navigable custom architecture meshes, sophisticated tactical enemy AI, full eight outer realm producer-consumer economy, household routines, audio/VO/lip sync, accessible polished UI, full campaign completion and public release build. Green source CI does not certify these.
+
+**Authoritative manuscript:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md`, §22 and `docs/design/nine-realm-reaction-system-acceptance.md`. The packaged editorial extract supplements the repo source; it is not a replacement for the canonical Markdown.
+
+---
+
+# Previous illustrated publication — Volume X Chapter 21
+
 **Current edition:** *The Unmade — Volume X, Chapter 21: The Law of Consequence* (11 October 2026)  
 **Merged gameplay baseline:** `73c682cab24e6856bca700d8822fe9b668d85b24` · [Reality Consequence Engine PR #37](https://github.com/matthagersenior/TheUnmadeGame/pull/37) · passing post-merge native/source [CI](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38130436456)  
 **Distribution:** Four locally verified conversation downloads and one integrity-checked ZIP. **The binary illustrations/books are not committed as GitHub Release assets.**  
