@@ -189,3 +189,12 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added a named Hessa-only E handover in Bellwold; her response depends on the stored Sheltered Thread or Public Docket only after direct receipt. Other NPCs are never silently told the document's contents.
 - Added optional custody stage + collection/receipt day SaveGame fields; malformed or paradoxical snapshots block save overwrites, and failed real writes restore the previous stage. No rewards or main-quest gates.
 - Authored Volume X Chapter 19 and source tests (native and Python) along with first-PC preflight. The written future courier/ambush sequence is separate from today's graybox, and real Windows UE5/physical QA remain pending.
+
+
+## 2026-10-10 — The Return of the Witness (Volume X Chapter 20)
+
+- Implemented optional next-day Hessa reply with 2 safeguarded F7/F8 dispositions; original Folded Dispatch must be physically delivered first, and the response cannot be chosen on that same world day.
+- Added separate in-world E-pickup near Hessa and E-delivery to Orrel, saved custody days and a real named recipient. Failed writes roll back. Uncollected answers cannot be delivered or duplicated.
+- Authored four response intersections (original Sheltered Thread/Public Docket crossed with private counsel/public hearing), plus mutually exclusive low/tall return markers after genuine Orrel receipt.
+- Wired source + native unit and source-integration regression tests into CI and the first-PC preflight. Section 20 remains non-omniscient and refuses to make Kesta's future physical delivery an already implemented feature.
+- **Not yet Unreal compiled/playtested**: visual collision, E priority, F7/F8 interaction, companion animations, full dialogue UI and in-person voice. Complete cumulative Bible must be republished separately and retains all earlier volumes.
