@@ -756,6 +756,7 @@ void AUnmadeCharacter::ShowStoryJournal()
     FString MainRoadSummary;
     FString WitnessEchoSummary;
     FString RealityConsequenceSummary;
+    FString MaterialSummary;
     if (GetWorld())
     {
         for (TActorIterator<AUnmadePrototypeHub> Hub(GetWorld()); Hub; ++Hub)
@@ -776,6 +777,7 @@ void AUnmadeCharacter::ShowStoryJournal()
             MainRoadSummary=Hub->DescribeUnansweredRoad(this);
             WitnessEchoSummary=Hub->GetWitnessEchoJournal();
             RealityConsequenceSummary=Hub->GetRealityConsequenceJournal();
+            MaterialSummary=Hub->GetLocalMaterialJournal();
             if(Hub->GetAfterlightStage()>0)
                 RealmSummary+=FString::Printf(
                     TEXT(" | Bellwold Afterlight: %d/4"),Hub->GetAfterlightStage());
@@ -821,6 +823,8 @@ void AUnmadeCharacter::ShowStoryJournal()
         GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,WitnessEchoSummary);
     if(GEngine && !RealityConsequenceSummary.IsEmpty())
         GEngine->AddOnScreenDebugMessage(-1,13.f,FColor::Yellow,RealityConsequenceSummary);
+    if(GEngine && !MaterialSummary.IsEmpty())
+        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,MaterialSummary);
 }
 
 void AUnmadeCharacter::AttemptMeleeAttack()
@@ -984,6 +988,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryMaterialInteraction(this,ResidentDistSq))return;
             if(Hub->TryWitnessReturn(this,ResidentDistSq))return;
             if(Hub->TryWitnessDispatch(this,ResidentDistSq))return;
             if(Hub->TryFinalInteraction(this,ResidentDistSq))return;
