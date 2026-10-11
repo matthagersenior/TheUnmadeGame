@@ -54,7 +54,8 @@ class LivingEconomyWiring(unittest.TestCase):
             self.assertIn(field,save)
         for field in ("RestoredLiving.InitializeAtDay","RestoredLiving.Restore(",
                       "bLivingEconomyRejected=true","Save->bHasLivingEconomy=true",
-                      "bMaterialSaveRejected || bLivingEconomyRejected)return false;"):
+                      "bMaterialSaveRejected || bLivingEconomyRejected ||",
+                      "bBesHouseholdRejected)return false;"):
             self.assertIn(field,hub)
         self.assertIn("Tests/world/living_economy_test.cpp",
                       read(".github/workflows/static-checks.yml"))
