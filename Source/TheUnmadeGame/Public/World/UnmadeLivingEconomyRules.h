@@ -91,8 +91,9 @@ public:
     }
     bool Restore(const Snapshot& in,const MaterialWorld& material,int currentDay)noexcept{
         if(currentDay<1||currentDay>833334)return false;
-        std::int64_t accountedMarks=in.cargo.route==-1?0:
-            TradeContracts[in.cargo.route].agreedMarks;
+        std::int64_t accountedMarks=
+            in.cargo.route>=0&&in.cargo.route<2
+                ?TradeContracts[in.cargo.route].agreedMarks:0;
         for(int i=0;i<9;++i){
             const auto& w=in.workers[i];
             accountedMarks+=w.employerMarks+w.earnedMarks;
