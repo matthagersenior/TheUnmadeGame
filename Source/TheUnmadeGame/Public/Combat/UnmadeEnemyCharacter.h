@@ -22,6 +22,7 @@ public:
     void SetVisualScale(FVector Scale);
     void ExposeToFold(double Now, double Seconds = 4.0);
     bool IsFractureExposed(double Now) const;
+    void ConfigureEncounter(FName Identity,const FString& Name,const FLinearColor& Accent);
 
     UUnmadeCombatComponent* GetCombat() const { return Combat; }
     UnmadeCore::EnemyStyle GetEnemyStyle() const { return Style; }
@@ -32,6 +33,10 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Unmade|Visual")
     TObjectPtr<UStaticMeshComponent> TemporaryEnemyVisual;
+    UPROPERTY(VisibleAnywhere,Category="Unmade|Visual")
+    TObjectPtr<UStaticMeshComponent> EncounterCrest;
+    UPROPERTY(VisibleAnywhere,Category="Unmade|Visual")
+    TObjectPtr<class UTextRenderComponent> EncounterLabel;
 
     UnmadeCore::EnemyStyle Style = UnmadeCore::EnemyStyle::Stalker;
     double FoldExposedUntil = -1.0;

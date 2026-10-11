@@ -132,6 +132,7 @@ private:
     void MoveForward(float Value);
     void MoveRight(float Value);
     void Interact();
+    void SkipDirectedScene();
     void OfferAid();
     void DemonstrateAnomaly();
     void ReportLocalEvent(FName EventKind, FName SubjectId = NAME_None);

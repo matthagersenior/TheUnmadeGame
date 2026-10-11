@@ -260,3 +260,9 @@ Every substantial gameplay addition needs a companion canon update and a regener
 - Added a real non-modal UMG speaker/subtitle lower-third anchored within the image with automatic wrapping, contrast and skip clearing. Added UMG/Slate dependency and source/UI regression tests.
 - Extended Windows quickstart and direct-PC handoff to generate/check Foley and guard imported SoundWave assets from overwriting authored work; run sound validation under CI.
 - Preserved v1–v6 saves, economic transaction authority, 39 screenplay beats and the optional Nhal-Vey branches. Still outstanding: UE/UHT/PIE, recorded voice acting, synchronized lip motion, Foley spatial mixing, tested high-contrast/gamepad accessibility and actual finished cinematics.
+
+
+## 2026-10-11 — Runtime v8: playable-directed cameras and six encounter grounds
+- Wired sequential Unpaid Shift subtitles and Foley to an actual camera rig, range-checked named speakers, differentiated shot lenses, and player skip restoring the original view. Nhal-Vey boss-memory beats remain on the gameplay camera.
+- Spawned six explorable source-runtime ruins outside civilian roads, with obstacles, label and light, plus eighteen named foes reusing the actual attack/guard/fracture systems and two existing enemy attack styles.
+- Added source regression tests and updated living canon in the same gameplay commit. This is neither a regenerated downloadable illustrated volume nor an Unreal Editor/Windows playtest; final assets, animation, navigation and VO remain distinct production work.
