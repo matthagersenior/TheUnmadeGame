@@ -1,5 +1,30 @@
 # Latest illustrated lore publication
 
+**Current edition:** Volume X — *The Unanswered Atlas / The Return of the Witness* (10 October 2026)  
+**Source revision:** `e9e6bea900e3ecbd5f709f6061b975762d5cc634` · merged [PR #35](https://github.com/matthagersenior/TheUnmadeGame/pull/35) · post-merge GitHub source CI green  
+**Distribution:** Full PDF/DOCX and SHA-256 checked ZIP as verified ChatGPT conversation downloads; **not** committed as GitHub Release binaries.  
+**Literary change:** Volume X chapter 20 continues the two-way physical testimony quest with Hessa's next-day reply, two independently chosen disclosure routes, and four original-choice-versus-reply consequences. It does not solve any of the nine OPEN mysteries.
+
+| Latest publication | Verified result |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Return_of_the_Witness.pdf` | **117 pages**, complete cumulative illustrated Bible, all pages rendered, no blank pages and no text out-of-page |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Return_of_the_Witness.docx` | Editable complete master, **52 preserved original illustrations** |
+| `THE_UNMADE_Volume_X_Illustrated_Return_of_the_Witness.pdf` | **44 pages**, standalone current Volume X, zero off-page text blocks |
+| `THE_UNMADE_Volume_X_Illustrated_Return_of_the_Witness.docx` | Editable standalone master, **five preserved original illustrations** |
+| `THE_UNMADE_Volume_X_Return_of_the_Witness_Complete_Illustrated_Package.zip` | **21 checked entries** including four updated books, existing eight concept art files, previous source/production guides, new chapter 20 editorial extract, README and per-member SHA-256 manifest |
+
+**Document QA:** Both books rendered from DOCX to complete PDF and page PNG sets; final five-page montages visually inspected, all 117+44 pages scanned for blank pages and text-box boundary violations (none), illustration object counts unchanged, ZIP CRC and 20 listed data-member lengths/digests independently verified.
+
+**Playable-source progress:** After a previous real Crossings-to-Hessa dispatch, the next in-world day unlocks a deliberate Hessa choice, F7 protected counsel or F8 redacted hearing, both using the same guarded two-press control. A source-spawned E-collectible reply must be physically carried from Bellwold to Orrel, E-delivered by stable identity and line of sight. Four separately authored Orrel returns, private/public consequence actors, additively saved day-by-day custody, invalid-date rejection, rollback and native source regression tests are implemented.
+
+**Unverified:** Actual Windows Unreal 5.8 Editor/UHT/PIE compile/playtest, actor reachability and collision, production UMG, animations, lip sync, natural voiced dialogue, long-distance NPC messenger AI and playable end-to-end complete campaign. Source CI cannot certify a full UE game.
+
+**Canonical source:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` §20, and `docs/design/volume-x-return-of-witness-quest.md`. The ZIP's extracted chapter is editorial and is not represented as a byte-exact GitHub manuscript mirror. Do not publish this dated edition as final game content.
+
+---
+
+# Previous publication: The Folded Dispatch (Volume X §19)
+
 **Current edition:** Volume X — *The Unanswered Atlas, The Living Evidence & The Folded Dispatch* (10 October 2026)  
 **Merged source baseline:** `365494e22b4bf29993655607c012a36327c73dc1` · [Living Evidence PR #32](https://github.com/matthagersenior/TheUnmadeGame/pull/32) and [Folded Dispatch PR #33](https://github.com/matthagersenior/TheUnmadeGame/pull/33)  
 **Distribution:** Full PDF, DOCX, art and integrity-checked ZIP in ChatGPT downloads; **not** committed as GitHub Release binary assets.  
