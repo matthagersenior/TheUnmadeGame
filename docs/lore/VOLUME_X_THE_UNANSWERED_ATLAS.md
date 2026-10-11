@@ -1358,3 +1358,92 @@ The proposed future scene has three distinct sound anchors: Bes setting an empty
 **Still not complete:** fully interactive private family interiors, a walkable enacted court hearing with performance-captured dialogue, optional full branching cinematics, per-person meals/wages for the other 73 named residents, freeform patronage and employment arbitration, real diplomatic repayment economy, robust Unreal Engine 5.8 Editor/PIE build, production animation and audio. These are explicit later deliverables. The documented quest is one first authored **vertical slice**, not a declaration that the full game is finished.
 
 *In a world where the impossible person can rewrite reality, sometimes the impossible act is to pay the person who carried the coal.*
+
+---
+
+## 26. The Unpaid Shift — Directed Quest
+*Volume X · sequence, performance, sound and interactive screenplay · October 2026*
+
+The Unpaid Shift must be the scene in which The Unmade's grandeur learns how to hold still. The player has learned to change impossible laws and walk between mutually incompatible kingdoms, yet a small hearth still goes cold when Bes stops carrying coal. The story must not ask the viewer to admire an economy UI. It must ask the player to **recognize a person**.
+
+### 26.1 A name spoken before the plot
+
+At the first wage report, the camera does not rush to Bes's face. We begin with the town's heat lattice: ten houses sharing one orange pulse, each vent giving a subtly different pitch. There is no narrated cosmological explanation. A cart comes into view. Its left wheel catches on a rut; Bes shifts the weight expertly to keep a basket from falling. His normal shift is established *before* he says he was not paid.
+
+His opening performance is short, almost careless: **“The baskets arrived. My wages didn't.”** A hollow basket settles on stone, and the town's rhythmic kiln clatter continues without him. That missing beat must return when he refuses another unpaid shift and again at Nhal-Vey's first mask-break.
+
+The three-minute walk home should have ordinary affordances. Bes knows which vent to avoid; he steps over a worn stone his neighbors don't notice. Ovenna checks a pipe. Another household moves through the frame. Ambient citizens should never pause in unison awaiting a quest flag. This scene is authored in staging notes and temporary spatial targets; it is **not** yet fully animated or voice-recorded in the runtime.
+
+### 26.2 The hearth must be enterable and knowable
+
+Bes's source-level home now has a deliberately open doorway and separate blockout pieces: floor, four partial boundaries, a bed, one private warmth store, a pay desk with a separate record, a low stool, a lintel, and the hearth itself. The old giant solid block carrying the `Bes.Home` tag is replaced by the actual inspectable hearth fixture. In finished art, keep the rooms small enough that the player's camera must adjust naturally; do not turn this working person's home into a palace.
+
+**Camera path:** retain player navigation down the street; the doorway frames the interior in a genuine over-the-shoulder view. At inspection, cut to a waist-height side shot of the dwindling basket, then a gentle pan to the pay desk. The hearth is not a glowing reward orb. When empty, its light loses color in two stages, and distant street noise becomes clearer through the opening. When five actual baskets arrive, an ember ignites reluctantly. The remaining wage book stays untouched.
+
+**Environmental storytelling:** The low stool suggests somebody else uses the room but does not invent a new, named dependent without a written biography. A cup has been repaired three times. The ledger sits in a dry corner because Bes cares about a piece of paper more than he pretends. The room becomes familiar before any moral choice appears.
+
+### 26.3 Three voices and a person who refuses narration
+
+Bes speaks with contained precision; avoid a theatrical heroic baritone. His breath should be interrupted by physical exertion, not melodrama. Rheva speaks quickly at first because she has rehearsed defending the communal heat policy; she slows when she finds the missing wage entry. Mera refuses to become a saint on demand. Her consent is a distinct action, spoken in Saltwake with water audible, not an automatic player option projected into a menu while standing in Cinderhold.
+
+Ovenna can say the home is cold when it genuinely is. She cannot announce that Rheva has admitted liability unless her knowledge path actually includes that statement. The local model remains optional and may not replace these canonical sourced facts.
+
+The voice priority is **authored human recordings** with alternative caption tracks. Text-to-speech is only a labeled rehearsal fallback, not the official voice for Bes, Rheva, Mera or Ovenna. If an asset is missing, play the timed caption and the correct ambient bed rather than silently passing a subtitle-free event.
+
+### 26.4 A complete first directed beat library
+
+There are thirteen authored scene IDs, each with **three sequential beats**. Every row contains exact speaker identity, full subtitle, camera-rig name, physical actor-blocking note, Foley cue ID, performance instruction, and timing duration. These rows are in `UnmadeUnpaidShiftSceneRules.h` and exposed via a skippable Unreal timed event bridge. The entire library is not played as one long cutscene; a scene only runs when its corresponding verified quest moment occurs.
+
+| Scene ID | Dramatic function | Sonic signature | Player control |
+| --- | --- | --- | --- |
+| FirstWage | Bes's real unpaid work interrupts normal life | basket on stone; continuing kiln pulse | normal movement resumes |
+| HomeCold | separate the household's warmth from municipal money | door draft; flame dwindles | inspect room and documents |
+| HearthWarm | real delivery helps a person without erasing a debt | five coal baskets; ignition without triumph sting | leave, return, or pursue wages |
+| Ledger | Rheva independently corroborates the record | metal pay mark, dry paper, held silence | informed physical options appear |
+| Refusal | Bes chooses his own labor absence | released harness, **missing kiln beat** | one fewer worker next day |
+| Restitution | existing municipal funds return to actual people | individual metal marks counted, receipt signed | saved labor resumes |
+| MeraOffer | Saltwake resident is asked, not automatically drafted | rain, rope, coin touch | travel and confirm her choice |
+| MeraSacrifice | real owned wages move; creditor identity changes | a single coin crossing a table; wet paper seal | new successor obligation remains |
+| BesReturns | the same home records warmth, cold and workdays | earlier room tone with altered ember | recognizes repeat visitor |
+| MeraReturns | other city holds the true claim | damp paper, one distant bell | preserves her independence |
+| MaskPaid | Nhal-Vey faces fulfilled debt | counted pay mark echoed as resistance | original boss battle remains |
+| MaskUnderwritten | personal sacrifice resists easy ideological judgment | unfinished folded-paper note | original boss battle remains |
+| MaskUnpaid | the enemy confronts the cost of an empty work shift | one **missing mechanical beat** | original boss battle remains |
+
+The native source timeline is intentionally compact: roughly three very short spoken or silent shots per event. A player should hear the whole claim without surrendering control for an unskippable minute. Scene timing is deterministic and validated by source tests; no hidden network model can rewrite what was witnessed.
+
+### 26.5 Four choices, each with an understandable cost
+
+The first press of E at an eligible material station now previews the exact action **and the real numbers**. That is a consequence preview, not a commit. A second E at the same station within twelve seconds confirms it. Switching stations or waiting longer requires a new preview. This is especially important when the choice affects someone else's savings. A visual controller treatment should use the same two-step contract, not a separate magical “skip warning” path.
+
+The home inspection itself remains a non-committal investigation: players need not confirm twice merely to look at a room. Afterward, delivery to that home consumes one previously source-debited Cinderhold pack. The strike choice really changes output and Bes's recorded shifts. Town restitution must be pre-funded and satisfy both claimants. Mera's action is gated on *her own* previously recorded direct consent in Saltwake. No alternate line is offered if the engine cannot honor the corresponding transaction.
+
+Menus must show outcomes in complete, non-moralizing language, including **what is *not* solved**. Relief: “five baskets go to this hearth; municipal pay remains owed.” Walkout: “Bes refuses a shift; Cinderhold produces less tomorrow.” Restitution: “actual town marks transfer to Bes and Mera.” Mera's guarantee: “her money moves and the town still owes her.” No approval score or fabricated permanent happy ending.
+
+### 26.6 Interaction and subtitle safety
+
+A cinema-grade layout must keep the actor, props, and physical world visible while the text remains readable on a phone-sized screen and 16:9 display. The black bar is not a place to hide gameplay. A lower-third subtitle region should have a strong contrast backdrop when needed, an adjustable scale, safe insets, no art cropping, and no more than one authored beat at a time. **Never overlay two chapters' dialogue into a single static panel or cut a scene illustration to force the text on screen.**
+
+The authored presentation bridge emits timed Blueprint multicast events containing speaker ID, actual subtitle, shot cue, Foley cue, blocking and voice direction. It has a skip/clear function and a native readable caption fallback. The bridge does **not** invent a finished voice asset, create a Sequencer track, bake an animation, or synthesize convincing Foley by naming a file. Those are explicit Unreal production tasks. Captions are available even when the future voice component is disabled or a localization fails.
+
+Accessibility and controller requirements: distinct prompts for Inspect versus Commit, second-press confirmation that works on gamepads, optional auto-advance with enough reading time, adjustable subtitle background and scale, complete sound captions where needed, camera-shake reduction, no interaction based only on color, and motion-reduced camera transitions. Skipping a scene never skips the underlying source-authoritative wage transaction.
+
+### 26.7 Returning to the familiar
+
+An NPC must be able to recognize that the person speaking to them has returned. On an eligible later encounter, Bes or Mera can run a short, throttled reprise of the same interior or dock framing rather than the initial exposition. The game engine derives the numeric balances from the real saved record, and the authored return beat supplements them. No scene plays for a resident who has never reported a wage dispute. The return scene is rate-limited; a player should not be punished with identical speeches on every rapid interaction.
+
+The best reaction is sometimes an altered routine rather than another paragraph: Bes still walks home during refusal, and the worksite has a discernible empty place. The first time the player visits his house during the night, it should feel different from the same room after restitution. The heat returns because real goods were delivered, not because the scene camera decided the player chose the benevolent ending.
+
+### 26.8 Music and silence as a recurring argument
+
+The production motif consists of four layers: a slow mechanical beat from shared kiln work; sparse ember movement at the hearth; Saltwake's irregular percussive water; and a near-silent human breath. In the ordinary city these layers coexist imperfectly. After the strike, the missing kiln beat must be *subtracted*, not replaced with melodramatic strings. If Mera underwrites Bes, let Saltwake's water enter Cinderhold's soundtrack as a dissonant, brief response, but never as a magical claim that a water cask has turned into fuel.
+
+At Nhal-Vey's first mask-break, reuse the exact earlier physical sound: falling basket, metal marks, or sealed paper depending on the saved branch. Three memories can then be distinct to the ear **before** exposition explains them. The boss's existing soundtrack, combat phases and unsolved lore must survive this callback. The missing sound of Chapter One remains a separate unresolved cosmological mystery.
+
+### 26.9 What is implemented and what is still demanded
+
+**Current source milestone:** complete 39-beat deterministic screenplay matrix with explicit actor/camera/Foley/VO direction; timed, skippable scene event bridge; backward-compatible text subtitle fallback; informed double-interaction commitment at the physical stations; an actually enterable multi-part home blockout with work-life props; distinct later Bes/Mera scene triggers; authored optional mask-break return; CI contracts and updated cumulative canon.
+
+**Not yet claimed:** recorded professional dialogue, production Foley WAV files, mixed final soundtrack, automatic Sequencer generation, real 3D skeletal actor animation, finished detailed interior art, actual visually polished UMG choice widget, Unreal Engine Windows UHT/PIE acceptance, controller/device camera testing, or complete AAA film quality. This chapter provides precise scene authoring and source-backed playback hooks so those can be made without inventing the quest from scratch on the first PC.
+
+*The quiet choice must have the weight of a battle, and the battle must remember the quiet choice.*
