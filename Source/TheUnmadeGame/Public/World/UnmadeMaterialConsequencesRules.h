@@ -52,6 +52,13 @@ public:
         const int i=static_cast<int>(realm);
         return i>=0&&i<9?&towns_[i]:nullptr;
     }
+    /** Schema-1 saves predating materials start at their current day;
+        they do not retroactively earn weeks of imaginary production. */
+    bool InitializeAtDay(int day)noexcept {
+        if(day<1||day>833334)return false;
+        for(auto& town:towns_)town.day=day;
+        return true;
+    }
     const MaterialCargo& Cargo()const noexcept{return cargo_;}
     Towns Snapshot()const noexcept{return towns_;}
     static constexpr int MaxAmount=1000000;
