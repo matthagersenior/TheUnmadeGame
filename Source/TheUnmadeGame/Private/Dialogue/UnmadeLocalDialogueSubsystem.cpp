@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "Dialogue/UnmadeLocalDialogueSubsystem.h"
 
 #include "Dialogue/UnmadeDialoguePolicy.h"
@@ -26,7 +27,7 @@ void UUnmadeLocalDialogueSubsystem::Present(FName NpcId, const FString& Line, bo
     // Prototype UI only. Future HUD subscribes to OnDialogueReady instead.
     if (GEngine)
     {
-        GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Cyan, Line);
+        UnmadeRpgFeedback(-1, 7.f, FColor::Cyan, Line);
     }
 }
 

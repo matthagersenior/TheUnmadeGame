@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeCampaignSpineRules.h"
 #include "World/UnmadeFrontierRealmRules.h"
@@ -148,8 +149,8 @@ bool AUnmadePrototypeHub::InspectUnansweredRoad(
             UTF8_TO_TCHAR(IsKnown?Chapter.witnessedDiscovery:Chapter.localQuestion),
             UTF8_TO_TCHAR(IsKnown?Chapter.nextDirection:
                 "The first local story must be genuinely resolved before its secret can be explained."));
-        GEngine->AddOnScreenDebugMessage(-1,16.f,FColor::Cyan,Text);
-        GEngine->AddOnScreenDebugMessage(-1,14.f,FColor::Yellow,
+        UnmadeRpgFeedback(-1,16.f,FColor::Cyan,Text);
+        UnmadeRpgFeedback(-1,14.f,FColor::Yellow,
                                         DescribeUnansweredRoad(Player));
     }
     return true; // Story reading is freely revisitable and NEVER an item farm.

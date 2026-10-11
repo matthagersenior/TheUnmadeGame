@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -61,7 +62,7 @@ bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
             Save->Stages[i]=Previous+1;
             if(!UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadeOptionalFieldSurveys"),0))
             {
-                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Red,
+                if(GEngine)UnmadeRpgFeedback(-1,4.f,FColor::Red,
                     TEXT("Fieldwork could not save. No route or objective changed; try again."));
                 return true;
             }
@@ -76,7 +77,7 @@ bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
             FieldSurveySigns[i]->GetTextRender()->SetText(FText::FromString(
                 FieldSurveyStages[i]==1?TEXT("RETURN TO THE SCOUT - E TO REPORT"):
                 TEXT("FIELD SURVEY COMPLETE - COVERED PASSAGE OPEN")));
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Cyan,
             Previous==0?TEXT("Passage opened. Return to the nearby scout and press E to report."):
                 SurveyReturns[i]);
         return true;

@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
 #include "Authoring/UnmadeResidentReturnData.h"
@@ -17,7 +18,7 @@ bool AUnmadePrototypeHub::RecordResidentConversation(FName ResidentId)
     if(!WriteWorldSnapshot())
     {
         ResidentRelationships.Restore(Old);
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6,FColor::Red,
+        if(GEngine)UnmadeRpgFeedback(-1,6,FColor::Red,
             TEXT("The encounter was not saved; relationship progress has not changed."));
         return false;
     }
@@ -35,7 +36,7 @@ bool AUnmadePrototypeHub::RecordResidentAid(FName ResidentId)
     if(!WriteWorldSnapshot())
     {
         ResidentRelationships.Restore(Old);
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,6,FColor::Red,
+        if(GEngine)UnmadeRpgFeedback(-1,6,FColor::Red,
             TEXT("Aid recognition was not saved; the previous history is unchanged."));
         return false;
     }

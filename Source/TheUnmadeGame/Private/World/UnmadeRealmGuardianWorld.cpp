@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Combat/UnmadeRealmGuardian.h"
 #include "Combat/UnmadeCombatComponent.h"
@@ -56,7 +57,7 @@ bool AUnmadePrototypeHub::ResolveRealmGuardian(
     RefreshRealmGuardians();
     const int idx=UnmadeCore::LaterIndex(Realm);
     if(idx>=0 && GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+        UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
             FString::Printf(TEXT("GUARDIAN %s: %s. The community remembers."),
                 bMercy?TEXT("PACIFIED"):TEXT("DEFEATED"),
                 UTF8_TO_TCHAR(UnmadeCore::RealmGuardians[idx].name)));
@@ -92,7 +93,7 @@ bool AUnmadePrototypeHub::TryCalmNearbyGuardian(
     if(!Spec)return false;
     if(EchoQuest.Ending(Realm)==0)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
             TEXT("The guardian cannot accept an empty promise. Finish this realm's witnessed Echo."));
         return true;
     }
@@ -101,7 +102,7 @@ bool AUnmadePrototypeHub::TryCalmNearbyGuardian(
         std::string("Guardian.")+std::to_string(Id),1,GetWorld()->GetTimeSeconds());
     if(Preview==UnmadeCore::CommitmentAttempt::Preview)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
             FString::Printf(TEXT("MERCY PACT: %s. %s Press E on this guardian again within six seconds to confirm."),
                 UTF8_TO_TCHAR(Spec->origin),
                 UTF8_TO_TCHAR(EchoQuest.Ending(Realm)==1?
@@ -111,14 +112,14 @@ bool AUnmadePrototypeHub::TryCalmNearbyGuardian(
     if(Preview!=UnmadeCore::CommitmentAttempt::Confirmed)return true;
     if(!ResolveRealmGuardian(Realm,true))
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Red,
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Red,
             TEXT("Guardian pact could not be saved; no resolution was recorded."));
         return true;
     }
     if(GEngine)
     {
         const int choice=EchoQuest.Ending(Realm);
-        GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Green,
+        UnmadeRpgFeedback(-1,11.f,FColor::Green,
             FString::Printf(TEXT("%s: %s"),
                 UTF8_TO_TCHAR(Spec->name),
                 UTF8_TO_TCHAR(choice==1?Spec->careMemory:Spec->truthMemory)));

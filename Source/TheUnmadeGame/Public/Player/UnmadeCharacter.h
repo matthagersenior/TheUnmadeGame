@@ -28,6 +28,18 @@ class THEUNMADEGAME_API AUnmadeCharacter : public ACharacter
 public:
     AUnmadeCharacter();
     void PlayIdentityMotion(FName Cue);
+    void RpgMenuAction(FName Action);
+    void OpenRpgPage(int Page);
+    void DodgeStep();
+    void StartSneak(){Crouch();}
+    void StopSneak(){UnCrouch();}
+    void UseFieldTechnique();
+    void UseFieldKit();
+    void PersonalChoiceA();
+    void PersonalChoiceB();
+    void OpenWorldMap();
+    bool IsRpgMenuOpen()const;
+    UPROPERTY(Transient) TObjectPtr<class UUnmadeRpgWidget> RpgWidget;
     virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;

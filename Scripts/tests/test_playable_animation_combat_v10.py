@@ -47,12 +47,12 @@ class PerformanceV10(unittest.TestCase):
    for name in ("Resident","Beast","Wraith"):
     g=json.loads((Path(d)/("SK_Unmade"+name+".gltf")).read_text())
     self.assertGreaterEqual(len(g["skins"][0]["joints"]),4)
-    self.assertEqual(len(g["animations"]),17)
+    self.assertEqual(len(g["animations"]),19)
     for anim in g["animations"]:
      self.assertTrue(anim["channels"],anim["name"])
      self.assertTrue(anim["samplers"],anim["name"])
     clips+=len(g["animations"])
-   self.assertEqual(clips,51)
+   self.assertEqual(clips,57)
    palette=json.loads((Path(d)/"UnmadeSixRegionPBR.gltf").read_text())
    self.assertEqual(len(palette["materials"]),6)
 if __name__=="__main__":unittest.main()

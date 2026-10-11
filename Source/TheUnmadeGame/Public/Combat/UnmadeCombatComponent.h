@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Combat/UnmadeCombatRules.h"
+#include "Combat/UnmadeCombatStyleRules.h"
 #include "UnmadeCombatComponent.generated.h"
 
 /** Authoritative native combat state. No LLM or paid service involved. */
@@ -12,6 +13,20 @@ class THEUNMADEGAME_API UUnmadeCombatComponent : public UActorComponent
     GENERATED_BODY()
 public:
     UUnmadeCombatComponent();
+    virtual void TickComponent(float Delta,ELevelTick Tick,FActorComponentTickFunction* Function)override;
+    void EnablePlayerTempo(){bPlayerTempo=true;SetComponentTickEnabled(true);}
+    void SetWeaponStyle(UnmadeCore::WeaponStyle Value,int Training){Style=Value;Mastery=FMath::Clamp(Training,0,3);State.SetCooldown(Style.cooldown);}
+    float GetStamina()const{return bPlayerTempo?Tempo.Stamina():100;}
+    bool Dodge(double Now){if(IsDefeated()||!bPlayerTempo||!Tempo.Dodge(Now,Mastery))return false;State.SetGuarding(false);return true;}
+    void GrantEvasion(double Now,double Seconds){Tempo.GrantEvasion(Now,Seconds);}
+    void GrantWard(double Now){WardUntil=Now+6;}
+    bool UsePower(double Now){return !IsDefeated()&&bPlayerTempo&&Tempo.Power(Now);}
+    void ApplyStatus(UnmadeCore::CombatStatus Type,double Seconds);
+    bool IsStaggered(double Now)const{return Now<StaggerUntil;}
+    float MoveMultiplier(double Now)const{return Now<StatusUntil&&Status==UnmadeCore::CombatStatus::Slow?.55f:1.f;}
+    void Stagger(double Now,double Seconds){StaggerUntil=FMath::Max(StaggerUntil,Now+Seconds);}
+    FString GetCombatFeedback()const{return Feedback;}
+
 
     void Configure(double MaxHealth, double Damage, double Cooldown);
     bool TryStrikeTarget(UUnmadeCombatComponent* Target, double Now, bool bValidHit, bool bFractureExposed);
@@ -30,7 +45,6 @@ public:
     bool IsDefeated() const { return !State.IsAlive(); }
 
     UFUNCTION(BlueprintPure, Category="Unmade|Combat")
-    bool IsGuarding()const{return State.IsGuarding();}
     float GetHealth() const { return static_cast<float>(State.Health()); }
 
     UFUNCTION(BlueprintPure, Category="Unmade|Combat")
@@ -40,6 +54,14 @@ public:
     bool IsGuarding() const { return State.IsGuarding(); }
 
 private:
+    bool bPlayerTempo=false;
+    UnmadeCore::CombatTempo Tempo;
+    UnmadeCore::WeaponStyle Style;
+    UnmadeCore::CombatStatus Status=UnmadeCore::CombatStatus::None;
+    double StatusUntil=0,NextBurn=0,StaggerUntil=0,WardUntil=0;
+    uint64 BurnPulse=0;
+    int Mastery=0;
+    FString Feedback;
     UnmadeCore::Combatant State;
     int32 GearAttack = 0;
     int32 GearArmor = 0;

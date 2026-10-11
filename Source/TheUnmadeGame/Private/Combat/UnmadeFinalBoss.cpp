@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "Combat/UnmadeFinalBoss.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
@@ -77,7 +78,7 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
     else if(Beat.move==UnmadeCore::FinalMove::Telegraph)
     {
         if(!bWarningShown && GEngine)
-            GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Orange,
+            UnmadeRpgFeedback(-1,4.f,FColor::Orange,
                 FString::Printf(TEXT("NHAL-VEY: %s (%.1f s warning)"),
                     UTF8_TO_TCHAR(Beat.warning),Beat.warningSeconds));
         bWarningShown=true;
@@ -85,7 +86,7 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
     else if(Beat.move==UnmadeCore::FinalMove::Stagger)
     {
         if(bWarningShown && GEngine)
-            GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Green,
+            UnmadeRpgFeedback(-1,3.f,FColor::Green,
                 TEXT("The last law breaks for a heartbeat. Your Fold interrupted the strike."));
         bWarningShown=false;
     }
@@ -110,7 +111,7 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
             GetCombat()->SetGearBonuses(
                 FMath::Max(0,FMath::RoundToInt(Beat.damage-17)),0);
             GetCombat()->TryStrikeTarget(Player->GetCombat(),Now,true,false);
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,3.f,FColor::Red,
+            if(GEngine)UnmadeRpgFeedback(-1,3.f,FColor::Red,
                 FString::Printf(TEXT("A remembered attack lands: %.0f injury."),
                     Before-Player->GetCombat()->GetHealth()));
         }

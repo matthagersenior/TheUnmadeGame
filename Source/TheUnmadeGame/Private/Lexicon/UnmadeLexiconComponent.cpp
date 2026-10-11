@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "Lexicon/UnmadeLexiconComponent.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Kismet/GameplayStatics.h"
@@ -50,7 +51,7 @@ bool UUnmadeLexiconComponent::RecordEvidence(FName EvidenceId)
     if (!UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0))
     {
         Lexicon.Restore(Previous);
-        if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Red,
+        if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
             TEXT("Could not save language discovery. Progress not applied."));
         return false;
     }
@@ -60,7 +61,7 @@ bool UUnmadeLexiconComponent::RecordEvidence(FName EvidenceId)
         const FString Message = UnderstandsVeyl()
             ? TEXT("VEYL UNDERSTOOD: 'the way that remains.' You can read the fracture inscription.")
             : TEXT("VEYL: first of two clues recorded. An archivist might recognize this mark.");
-        GEngine->AddOnScreenDebugMessage(-1, 7.f, FColor::Cyan, Message);
+        UnmadeRpgFeedback(-1, 7.f, FColor::Cyan, Message);
     }
     return true;
 }

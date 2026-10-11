@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeEchoQuestRules.h"
 #include "World/UnmadeLaterRealmRules.h"
@@ -99,7 +100,7 @@ bool AUnmadePrototypeHub::TryEchoQuestConversation(FName ResidentId)
            Result!=UnmadeCore::EchoResult::Testified)
         {
             if(Result==UnmadeCore::EchoResult::NeedEvidence && GEngine)
-                GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Yellow,
+                UnmadeRpgFeedback(-1,7.f,FColor::Yellow,
                    TEXT("Two separate physical clues are required before testimony."));
             return false;
         }
@@ -108,7 +109,7 @@ bool AUnmadePrototypeHub::TryEchoQuestConversation(FName ResidentId)
         }
         RefreshEchoQuestWorld();
         if(GEngine)
-            GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,
+            UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
                 Result==UnmadeCore::EchoResult::Started
                 ?FString::Printf(TEXT("NEW THIRD CHAPTER: %s — collect both material clues, not repeated errands."),
                     UTF8_TO_TCHAR(Q.title))
@@ -162,7 +163,7 @@ bool AUnmadePrototypeHub::InspectEchoQuestSite(
             std::string("Echo.")+std::to_string(idx),choice,GetWorld()->GetTimeSeconds());
         if(Confirmation!=UnmadeCore::CommitmentAttempt::Confirmed)
         {
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Yellow,
+            if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
                 FString::Printf(TEXT("PROPOSED PERMANENT CHANGE: %s — press the SAME civic control again within six seconds."),
                     UTF8_TO_TCHAR(choice==1?Q.resultCare:Q.resultTruth)));
             return true;
@@ -172,7 +173,7 @@ bool AUnmadePrototypeHub::InspectEchoQuestSite(
     }
     if(action==4)
     {
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,9.f,FColor::Cyan,
+        if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Cyan,
             FString::Printf(TEXT("THE NEIGHBOR'S RECORD: %s"),UTF8_TO_TCHAR(Q.farRealmMessage)));
         return true;
     }
@@ -182,7 +183,7 @@ bool AUnmadePrototypeHub::InspectEchoQuestSite(
         if(!WriteWorldSnapshot())
         {
             EchoQuest.Restore(Before);
-            if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,FColor::Red,
+            if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Red,
                 TEXT("Unable to persist the echo; the change was not applied."));
             return true;
         }
@@ -199,7 +200,7 @@ bool AUnmadePrototypeHub::InspectEchoQuestSite(
             :Result==UnmadeCore::EchoResult::WrongChoice
             ?TEXT("This account needs a matching local witness; changing it requires further testimony.")
             :TEXT("Read both unique clues, obtain testimony, then choose its matching civic control.");
-        GEngine->AddOnScreenDebugMessage(-1,11.f,FColor::Cyan,Line);
+        UnmadeRpgFeedback(-1,11.f,FColor::Cyan,Line);
     }
     return true;
 }

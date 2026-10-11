@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeRealmResonanceRules.h"
 #include "World/UnmadeLaterRealmRules.h"
@@ -86,7 +87,7 @@ bool AUnmadePrototypeHub::RecordNearbyRealmRite(
                 if(!WriteWorldSnapshot())
                 {
                     Resonance.Restore(Before);
-                    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Red,
+                    if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Red,
                         TEXT("Your rite succeeded, but its resonance did not save; try again."));
                     return true;
                 }
@@ -109,7 +110,7 @@ bool AUnmadePrototypeHub::RecordNearbyRealmRite(
                 else if(Result==UnmadeCore::ResonanceResult::AlreadyOpened)
                     Notice=TEXT("The observatory remains permanently open. Cross to inspect its records.");
                 else Notice=TEXT("The observatory remains sealed until its earlier story is resolved.");
-                GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,Notice);
+                UnmadeRpgFeedback(-1,10.f,FColor::Cyan,Notice);
             }
             return true;
         }
@@ -148,7 +149,7 @@ bool AUnmadePrototypeHub::InspectResonanceArchive(
     if(!Best || index<0)return false;
     const auto& Spec=UnmadeCore::RealmResonances[index];
     const int choice=EchoQuest.Ending(Spec.realm);
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,15.f,FColor::Cyan,
+    if(GEngine)UnmadeRpgFeedback(-1,15.f,FColor::Cyan,
         FString::Printf(TEXT("%s | %s | %s"),
             UTF8_TO_TCHAR(Spec.title),UTF8_TO_TCHAR(Spec.openedArchive),
             UTF8_TO_TCHAR(choice==1?Spec.responseCare:Spec.responseTruth)));

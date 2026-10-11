@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
@@ -20,7 +21,7 @@ const TCHAR* ClueText[3]={
     TEXT("Varda's service log: two turns cool the vent. The kiln lane draws the plume; the archive lane must stay sheltered."),
     TEXT("The cadence plate reads: two short knocks, a pause, one low knock. Cool the vent first, then sound it at the nest.")};
 void Notice(const FString& Text,FColor Color=FColor::Cyan) {
-    if(GEngine)GEngine->AddOnScreenDebugMessage(-1,8.f,Color,Text);
+    if(GEngine)UnmadeRpgFeedback(-1,8.f,Color,Text);
 }
 void SlagSound(UWorld* World,const TCHAR* Cue,FVector At){
     const FString Name=FString(TEXT("SFX_CH_"))+Cue;

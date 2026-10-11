@@ -14,10 +14,10 @@ def preview(source,out):
  out.mkdir(parents=True,exist_ok=True)
  for kind in ['Resident','Beast','Wraith']:
   d=json.loads((source/('SK_Unmade'+kind+'.gltf')).read_text());blob=base64.b64decode(d['buffers'][0]['uri'].split(',')[1]);skin=d['skins'][0];prim=d['meshes'][0]['primitives'][0];attrs=prim['attributes'];pos=read_accessor(d,blob,attrs['POSITION']);joints=read_accessor(d,blob,attrs['JOINTS_0']).astype(int);weights=read_accessor(d,blob,attrs['WEIGHTS_0']);faces=read_accessor(d,blob,prim['indices']).reshape(-1,3);inv=read_accessor(d,blob,skin['inverseBindMatrices']).reshape(-1,4,4).transpose(0,2,1);parents={c:i for i,n in enumerate(d['nodes']) for c in n.get('children',[])}
-  sheet=Image.new('RGB',(1200,17*175),'white');draw=ImageDraw.Draw(sheet)
+  sheet=Image.new('RGB',(1550,len(d['animations'])*175),'white');draw=ImageDraw.Draw(sheet)
   for row,anim in enumerate(d['animations']):
    draw.text((10,row*175+5),anim['name'],fill='black')
-   for column,key in enumerate([0,2,4]):
+   for column,key in enumerate([0,1,2,4]):
     rotation={ch['target']['node']:read_accessor(d,blob,anim['samplers'][ch['sampler']]['output'])[key] for ch in anim['channels']};globals={}
     def transform(i):
      if i in globals:return globals[i]

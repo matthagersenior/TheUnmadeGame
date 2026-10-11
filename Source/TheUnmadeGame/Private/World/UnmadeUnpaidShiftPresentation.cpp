@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeRememberedRoadScenes.h"
 #include "Engine/Engine.h"
@@ -219,7 +220,7 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
     if(IsValid(BesSubtitleOverlay))
         BesSubtitleOverlay->DisplayBeat(SpeakerName,Subtitle);
     else if(GEngine)
-        GEngine->AddOnScreenDebugMessage(-1,Beat->duration,FColor::White,
+        UnmadeRpgFeedback(-1,Beat->duration,FColor::White,
             SpeakerName+TEXT(": ")+Subtitle);
 
     // Original generated stereo Foley may be imported at this exact path by

@@ -25,6 +25,7 @@ public:
           cooldown_(Positive(cooldown) ? cooldown : 0.75) {}
 
     bool SetDamage(double damage) noexcept {if(!Positive(damage))return false;damage_=damage;return true;}
+    bool SetCooldown(double value)noexcept{if(!Positive(value))return false;cooldown_=value;return true;}
     double Health() const noexcept { return health_; }
     double MaximumHealth() const noexcept { return maximumHealth_; }
     bool IsAlive() const noexcept { return health_ > 0; }
@@ -43,7 +44,7 @@ public:
         health_=maximumHealth_*healthFraction;
         guarding_=false;
         nextAttackAt_=0;
-        swingCounter_=0;
+        // Preserve monotonically increasing outgoing swing receipts across revival.
         seen_.clear();
         return true;
     }
@@ -61,6 +62,8 @@ public:
         nextAttackAt_ = now + cooldown_;
         return {AttackOutcome::Started, ++swingCounter_, damage_};
     }
+    bool DuplicateHit(std::uint64_t source,std::uint64_t pulse)const{for(const auto& x:seen_)if(x.first==source&&pulse<=x.second)return true;return false;}
+    bool AcknowledgeHit(std::uint64_t source,std::uint64_t pulse){if(!source||!pulse||DuplicateHit(source,pulse))return false;auto i=std::find_if(seen_.begin(),seen_.end(),[source](const auto& x){return x.first==source;});if(i!=seen_.end())i->second=pulse;else{if(seen_.size()==32)seen_.erase(seen_.begin());seen_.emplace_back(source,pulse);}return true;}
     HitOutcome ReceiveHit(std::uint64_t attackerId, std::uint64_t swingId,
                           double baseDamage, bool fractureExposed, double defense = 0.0) {
         if (!IsAlive()) return HitOutcome::AlreadyDefeated;

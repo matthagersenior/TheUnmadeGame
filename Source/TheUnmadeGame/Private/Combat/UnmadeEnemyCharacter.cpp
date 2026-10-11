@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Combat/UnmadePresentation.h"
 #include "World/UnmadeIdentityRules.h"
@@ -8,6 +9,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/World.h"
+#include "EngineUtils.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
@@ -313,6 +315,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     const FVector RoutineTarget=TerritoryHome+FVector(Routine.offsetX,Routine.offsetY,0);
     const bool bLocalRoutine=!bNearby&&!bReturnHome&&FVector::DistSquared2D(GetActorLocation(),RoutineTarget)>FMath::Square(80.f);
     if(bReturnHome||bLocalRoutine)Intent=UnmadeCore::EnemyIntent::Approach;
+    if(Combat->IsStaggered(Now)){Intent=UnmadeCore::EnemyIntent::Hold;WindupEndsAt=-1;}
     if(WindupEndsAt>=0.0 && (Intent!=UnmadeCore::EnemyIntent::Attack||!bClearSight))
         WindupEndsAt=-1.0; // The player can step behind real cover to cancel.
 
@@ -323,7 +326,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     {
         const float BaseSpeed=bSpeciesConfigured?static_cast<float>(Profile.speed):(Style==UnmadeCore::EnemyStyle::Stalker?130.f:95.f);
         const float Speed=BaseSpeed*(bElderSecondPhase?1.25f:1.f)*static_cast<float>(Consequence.enemySpeedPercent)/100.f;
-        GetCharacterMovement()->MaxWalkSpeed=FMath::Max(25.f,Speed);
+        GetCharacterMovement()->MaxWalkSpeed=FMath::Max(25.f,Speed)*Combat->MoveMultiplier(Now);
         const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:Intent==UnmadeCore::EnemyIntent::Retreat
             ?GetActorLocation()-Delta.GetSafeNormal()*480.f
             :Player->GetActorLocation();
@@ -411,7 +414,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
             const float Before=Player->GetCombat()->GetHealth();
             if(Combat->TryStrikeTarget(Player->GetCombat(),Now,true,false))
             {
-                if(GEngine)GEngine->AddOnScreenDebugMessage(-1,1.4f,FColor::Red,
+                if(GEngine)UnmadeRpgFeedback(-1,1.4f,FColor::Red,
                     FString::Printf(TEXT("%s: -%.0f HP"),
                         Style==UnmadeCore::EnemyStyle::Stalker
                             ?TEXT("BEAST STRIKE"):TEXT("WATCHER PULSE"),
@@ -478,7 +481,10 @@ void AUnmadeEnemyCharacter::TickExpedition(float DeltaSeconds){
  FCollisionQueryParams Params(SCENE_QUERY_STAT(ExpeditionAttackSight),false);Params.AddIgnoredActor(this);Params.AddIgnoredActor(P);
  bool Sight=Territory&&!World->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,55),P->GetActorLocation()+FVector(0,0,55),ECC_Visibility,Params);
  bool Phase=Combat->GetHealth()<=Combat->GetMaxHealth()*.5;
- auto Step=ExpeditionPattern.Step(Now,ExpeditionRole,ExpeditionArc,Phase,Sight,Distance,IsFractureExposed(Now));
+ if(P->bIsCrouched&&Distance>350)Sight=false;
+ int Warnings=0;bool ShieldSupport=false;for(TActorIterator<AUnmadeEnemyCharacter> Ally(World);Ally;++Ally){if(*Ally==this||!Ally->IsExpeditionArc(ExpeditionArc)||!Ally->CanBeTargeted())continue;Warnings+=Ally->bExpeditionWarning?1:0;if(Ally->ExpeditionRole==UnmadeCore::ExpeditionRole::Sentinel&&Ally->GetCombat()->IsGuarding()&&FVector::DistSquared2D(Ally->GetActorLocation(),GetActorLocation())<FMath::Square(500.f))ShieldSupport=true;}
+ if(!bExpeditionWarning&&Warnings>=2)Sight=false;Combat->SetGearBonuses(0,ShieldSupport?4:0);
+ auto Step=ExpeditionPattern.Step(Now,ExpeditionRole,ExpeditionArc,Phase,Sight,Distance,IsFractureExposed(Now)||Combat->IsStaggered(Now));
  if(Step.started){UnmadePresentation::Sound(this,TEXT("warning"));ExpeditionAim=P->GetActorLocation();bExpeditionWarning=true;}
  if(!Sight||IsFractureExposed(Now)||Step.recovering)bExpeditionWarning=false;
  if(Step.strike){FString strikeCue=Step.move.shape?FString::Printf(TEXT("boss_signature_%d"),ExpeditionArc):ExpeditionRole==UnmadeCore::ExpeditionRole::Boss?TEXT("boss_crush"):TEXT("swing");UnmadePresentation::Sound(this,*strikeCue);SetMotionCue(FName(Step.move.shape?TEXT("Seal"):ExpeditionRole==UnmadeCore::ExpeditionRole::Marksman?TEXT("Ranged"):TEXT("Crush")));bExpeditionWarning=false;FVector Offset=P->GetActorLocation()-ExpeditionAim;if(Sight&&UnmadeCore::SignatureHit(Step.move.shape,Offset.X,Offset.Y,Step.move.radius)){
@@ -492,8 +498,11 @@ void AUnmadeEnemyCharacter::TickExpedition(float DeltaSeconds){
   if(Territory&&ExpeditionRole==UnmadeCore::ExpeditionRole::Skirmisher)Destination+=FVector(-(P->GetActorLocation().Y-GetActorLocation().Y),P->GetActorLocation().X-GetActorLocation().X,0).GetSafeNormal()*180;
   bool Move=!Territory||Distance>Step.move.reach*.85;
   if(Territory&&(ExpeditionRole==UnmadeCore::ExpeditionRole::Marksman||ExpeditionRole==UnmadeCore::ExpeditionRole::Disruptor)&&Distance<350){Destination=GetActorLocation()+(GetActorLocation()-P->GetActorLocation()).GetSafeNormal2D()*350;Move=true;}
-  if(Move&&!Step.recovering){GetCharacterMovement()->MaxWalkSpeed=ExpeditionRole==UnmadeCore::ExpeditionRole::Skirmisher?210:120;if(Now>=NextPathRefreshAt){NextPathRefreshAt=Now+.6;bHasNavWaypoint=false;if(auto* Path=UNavigationSystemV1::FindPathToLocationSynchronously(World,GetActorLocation(),Destination,this))if(Path->IsValid()&&!Path->IsPartial()&&Path->PathPoints.Num()>1){NextNavWaypoint=Path->PathPoints[1];bHasNavWaypoint=true;}}
+  if(Move&&!Step.recovering){GetCharacterMovement()->MaxWalkSpeed=(ExpeditionRole==UnmadeCore::ExpeditionRole::Skirmisher?210:120)*Combat->MoveMultiplier(Now);if(Now>=NextPathRefreshAt){NextPathRefreshAt=Now+.6;bHasNavWaypoint=false;if(auto* Path=UNavigationSystemV1::FindPathToLocationSynchronously(World,GetActorLocation(),Destination,this))if(Path->IsValid()&&!Path->IsPartial()&&Path->PathPoints.Num()>1){NextNavWaypoint=Path->PathPoints[1];bHasNavWaypoint=true;}}
    bool Clear=!World->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,55),Destination+FVector(0,0,55),ECC_Visibility,Params);FVector Walk=bHasNavWaypoint?NextNavWaypoint-GetActorLocation():Clear?Destination-GetActorLocation():FVector::ZeroVector;Walk.Z=0;if(Walk.SizeSquared()>4900){AddMovementInput(Walk.GetSafeNormal());SetActorRotation(Walk.Rotation());}SetMotionCue(FName(TEXT("Walk")));}
   else{GetCharacterMovement()->StopMovementImmediately();if(Now>HitFlashEndsAt)SetMotionCue(FName(Combat->IsGuarding()?TEXT("Guard"):TEXT("Idle")));}
  }
 }
+
+FString AUnmadeEnemyCharacter::GetCombatName()const{return EncounterLabel?EncounterLabel->Text.ToString():TEXT("Enemy");}
+FString AUnmadeEnemyCharacter::GetCombatWarning()const{return CombatSignal?CombatSignal->Text.ToString():FString();}

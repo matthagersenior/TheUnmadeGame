@@ -1,3 +1,4 @@
+#include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadeWorldAtlas.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "World/UnmadeTenfoldChronicle.h"
@@ -109,7 +110,7 @@ bool UUnmadeEquipmentComponent::Claim(UnmadeCore::Achievement Reward)
     const auto Before=Inventory.Snapshot();
     if (Inventory.Claim(Reward)!=UnmadeCore::RewardResult::Awarded) return false;
     if (!Persist()) { Inventory.Restore(Before); return false; }
-    if (GEngine) GEngine->AddOnScreenDebugMessage(-1,6.f,FColor::Yellow,
+    if (GEngine) UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
         TEXT("EARNED REWARD: press I for items, weapon and armor."));
     return true;
 }
@@ -244,7 +245,7 @@ bool UUnmadeEquipmentComponent::ForgeWaybreaker()
     const auto Before=Inventory.Snapshot();
     if(!Inventory.ForgeWaybreaker()) return false;
     if(!Persist()) { Inventory.Restore(Before); return false; }
-    if(GEngine) GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Orange,
+    if(GEngine) UnmadeRpgFeedback(-1,10.f,FColor::Orange,
         TEXT("MYTHIC FORGED: WAYBREAKER, THE IMPOSSIBLE ROAD"));
     return true;
 }
@@ -321,7 +322,7 @@ bool UUnmadeEquipmentComponent::CraftAt(UnmadeCore::SettlementId Village)
             Economy.Restore(BeforeMoney);
             return false;
         }
-        if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Yellow,
+        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Yellow,
             FString::Printf(TEXT("CRAFTED: %s. Profession progress saved."),
                 UTF8_TO_TCHAR(Recipe.title)));
         return true;
