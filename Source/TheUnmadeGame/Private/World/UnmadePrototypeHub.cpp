@@ -43,6 +43,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
     RefreshRealityConsequenceWorld();
+    RefreshOuterReactionWorld();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
@@ -87,6 +88,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::WitnessDispatch RestoredDispatch;
     UnmadeCore::WitnessReturn RestoredReturn;
     UnmadeCore::RealityConsequenceLedger RestoredReality;
+    UnmadeCore::OuterRealmReactions RestoredOuter;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -341,6 +343,34 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bRealityConsequenceRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Invalid reality civic testimony: preservation mode blocks writes"));
     }
+    // All-or-nothing restoration: corrupt arrays never partially overwrite
+    // otherwise valid histories in any of the eight outer realms.
+    if(Save->bHasOuterRealmReactions)
+    {
+        bool bValid=Save->OuterCareMasks.Num()==8 &&
+            Save->OuterInquiryMasks.Num()==8 &&
+            Save->OuterActiveRites.Num()==8 &&
+            Save->OuterActiveUntil.Num()==8;
+        UnmadeCore::OuterRealmReactions::Snapshot Snapshot{};
+        if(bValid)
+        {
+            for(int i=0;i<8;++i)
+            {
+                const int Care=Save->OuterCareMasks[i],Inquiry=Save->OuterInquiryMasks[i];
+                if(Care<0||Care>1023||Inquiry<0||Inquiry>1023)
+                { bValid=false;break; }
+                Snapshot[i]={
+                    static_cast<uint16>(Care),static_cast<uint16>(Inquiry),
+                    Save->OuterActiveRites[i],Save->OuterActiveUntil[i]};
+            }
+        }
+        if(!bValid || !RestoredOuter.Restore(Snapshot,RestoredClock.ElapsedSeconds()))
+        {
+            bOuterReactionsRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid outer-realm reaction records; save writes blocked"));
+        }
+    }
+    OuterReactions=RestoredOuter;
     RealityLedger=RestoredReality;
     ReturnWitness=RestoredReturn;
     Dispatch=RestoredDispatch;
@@ -370,7 +400,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bFinalSaveRejected || bResidentContinuityRejected ||
        bWitnessEchoRejected || bWitnessBraidRejected ||
        bWitnessDispatchRejected || bWitnessReturnRejected ||
-       bRealityConsequenceRejected)return false;
+       bRealityConsequenceRejected || bOuterReactionsRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -485,6 +515,18 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->RealityInquiryWitnessMask=Consequence.inquiryWitnessMask;
     Save->RealityLastRite=Consequence.activeRite;
     Save->RealityActiveUntil=Consequence.activeUntil;
+    Save->bHasOuterRealmReactions=true;
+    Save->OuterCareMasks.Reset();
+    Save->OuterInquiryMasks.Reset();
+    Save->OuterActiveRites.Reset();
+    Save->OuterActiveUntil.Reset();
+    for(const auto& Outer:OuterReactions.Save())
+    {
+        Save->OuterCareMasks.Add(Outer.careWitnessMask);
+        Save->OuterInquiryMasks.Add(Outer.inquiryWitnessMask);
+        Save->OuterActiveRites.Add(Outer.activeRite);
+        Save->OuterActiveUntil.Add(Outer.activeUntil);
+    }
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -1672,6 +1714,17 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     // permanent witnessed records continue without ticking every cube.
     if(bRealityVisualActive && !RealityLedger.Active(Clock.ElapsedSeconds()).active)
         RefreshRealityConsequenceWorld();
+    if(bOuterReactionVisualActive)
+    {
+        bool AnyActive=false;
+        for(int i=1;i<9;++i)
+        {
+            const auto* Ledger=OuterReactions.Read(static_cast<UnmadeCore::Realm>(i));
+            if(Ledger && Ledger->Active(Clock.ElapsedSeconds()).active){AnyActive=true;break;}
+        }
+        if(!AnyActive)RefreshOuterReactionWorld();
+        else RefreshOuterReactionWorld(); // update only during active effects
+    }
     const auto Phase = Clock.Phase();
     const bool bPhaseChanged = Phase != LastAmbientPhase;
     if (bPhaseChanged)
