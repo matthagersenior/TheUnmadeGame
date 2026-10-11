@@ -61,7 +61,7 @@ class RealityConsequenceIntegration(unittest.TestCase):
             self.assertIn(key,save)
         self.assertIn("RestoredReality.Restore({",hub)
         self.assertIn("bRealityConsequenceRejected=true;",hub)
-        self.assertIn("bRealityConsequenceRejected)return false;",hub)
+        self.assertIn("bRealityConsequenceRejected || bOuterReactionsRejected)return false;",hub)
         self.assertIn("RealityLedger.Restore(Before,Clock.ElapsedSeconds());",hub)
         self.assertIn("if(!WriteWorldSnapshot())",hub)
         self.assertIn("Tests/world/reality_consequence_test.cpp",

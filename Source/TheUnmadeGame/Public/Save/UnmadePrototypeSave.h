@@ -200,6 +200,19 @@ public:
     int32 RealityLastRite=-1;
     UPROPERTY(SaveGame)
     double RealityActiveUntil=0;
+    /** v2: isolated eight outer realm consequence ledgers, never overwrite
+        old Reach fields; absent arrays are valid on any existing schema-1 save. */
+    UPROPERTY(SaveGame)
+    bool bHasOuterRealmReactions=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> OuterCareMasks;
+    UPROPERTY(SaveGame)
+    TArray<int32> OuterInquiryMasks;
+    UPROPERTY(SaveGame)
+    TArray<int32> OuterActiveRites;
+    UPROPERTY(SaveGame)
+    TArray<double> OuterActiveUntil;
+
 
 
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */

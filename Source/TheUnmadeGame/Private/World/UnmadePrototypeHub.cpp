@@ -43,6 +43,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshLaterHazardCues();
     RefreshRiteWorldFromSave();
     RefreshRealityConsequenceWorld();
+    RefreshOuterReactionWorld();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
@@ -87,6 +88,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::WitnessDispatch RestoredDispatch;
     UnmadeCore::WitnessReturn RestoredReturn;
     UnmadeCore::RealityConsequenceLedger RestoredReality;
+    UnmadeCore::OuterRealmReactions RestoredOuter;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -341,6 +343,34 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bRealityConsequenceRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Invalid reality civic testimony: preservation mode blocks writes"));
     }
+    // All-or-nothing restoration: corrupt arrays never partially overwrite
+    // otherwise valid histories in any of the eight outer realms.
+    if(Save->bHasOuterRealmReactions)
+    {
+        bool bValid=Save->OuterCareMasks.Num()==8 &&
+            Save->OuterInquiryMasks.Num()==8 &&
+            Save->OuterActiveRites.Num()==8 &&
+            Save->OuterActiveUntil.Num()==8;
+        UnmadeCore::OuterRealmReactions::Snapshot Snapshot{};
+        if(bValid)
+        {
+            for(int i=0;i<8;++i)
+            {
+                const int Care=Save->OuterCareMasks[i],Inquiry=Save->OuterInquiryMasks[i];
+                if(Care<0||Care>1023||Inquiry<0||Inquiry>1023)
+                { bValid=false;break; }
+                Snapshot[i]={
+                    static_cast<uint16>(Care),static_cast<uint16>(Inquiry),
+                    Save->OuterActiveRites[i],Save->OuterActiveUntil[i]};
+            }
+        }
+        if(!bValid || !RestoredOuter.Restore(Snapshot,RestoredClock.ElapsedSeconds()))
+        {
+            bOuterReactionsRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid outer-realm reaction records; save writes blocked"));
+        }
+    }
+    OuterReactions=RestoredOuter;
     RealityLedger=RestoredReality;
     ReturnWitness=RestoredReturn;
     Dispatch=RestoredDispatch;
@@ -370,7 +400,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bFinalSaveRejected || bResidentContinuityRejected ||
        bWitnessEchoRejected || bWitnessBraidRejected ||
        bWitnessDispatchRejected || bWitnessReturnRejected ||
-       bRealityConsequenceRejected)return false;
+       bRealityConsequenceRejected || bOuterReactionsRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -485,6 +515,18 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->RealityInquiryWitnessMask=Consequence.inquiryWitnessMask;
     Save->RealityLastRite=Consequence.activeRite;
     Save->RealityActiveUntil=Consequence.activeUntil;
+    Save->bHasOuterRealmReactions=true;
+    Save->OuterCareMasks.Reset();
+    Save->OuterInquiryMasks.Reset();
+    Save->OuterActiveRites.Reset();
+    Save->OuterActiveUntil.Reset();
+    for(const auto& Outer:OuterReactions.Save())
+    {
+        Save->OuterCareMasks.Add(Outer.careWitnessMask);
+        Save->OuterInquiryMasks.Add(Outer.inquiryWitnessMask);
+        Save->OuterActiveRites.Add(Outer.activeRite);
+        Save->OuterActiveUntil.Add(Outer.activeUntil);
+    }
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -1672,6 +1714,17 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     // permanent witnessed records continue without ticking every cube.
     if(bRealityVisualActive && !RealityLedger.Active(Clock.ElapsedSeconds()).active)
         RefreshRealityConsequenceWorld();
+    if(bOuterReactionVisualActive)
+    {
+        uint8 ActiveNow=0;
+        for(int i=1;i<9;++i)
+        {
+            const auto* Ledger=OuterReactions.Read(static_cast<UnmadeCore::Realm>(i));
+            if(Ledger && Ledger->Active(Clock.ElapsedSeconds()).active)
+                ActiveNow|=static_cast<uint8>(1u<<(i-1));
+        }
+        if(ActiveNow!=OuterActiveMask)RefreshOuterReactionWorld();
+    }
     const auto Phase = Clock.Phase();
     const bool bPhaseChanged = Phase != LastAmbientPhase;
     if (bPhaseChanged)
@@ -1933,9 +1986,37 @@ void AUnmadePrototypeHub::RefreshRiteWorldFromSave()
 UnmadeCore::RealityConsequenceView
 AUnmadePrototypeHub::RealityConsequenceAt(FVector Position) const
 {
-    if(FVector::DistSquared2D(Position,FVector::ZeroVector)>FMath::Square(2600.f))
-        return {}; // Different societies will receive distinct authored policies.
-    return RealityLedger.Active(Clock.ElapsedSeconds());
+    const auto* Policy=UnmadeCore::RealmReactionAt(Position.X,Position.Y);
+    if(!Policy)return {};
+    if(Policy->realm==UnmadeCore::Realm::ThreefoldReach &&
+       FVector::DistSquared2D(Position,FVector::ZeroVector)>FMath::Square(2600.f))
+        return {}; // preserve the original v1 Reach focus boundary
+    const auto* Ledger=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+        ?&RealityLedger:OuterReactions.Read(Policy->realm);
+    if(!Ledger)return {};
+    const auto Current=Ledger->Active(Clock.ElapsedSeconds());
+    const auto Adjusted=UnmadeCore::RealmEffect(Policy->realm,*Ledger,Clock.ElapsedSeconds());
+    if(!Adjusted.active)return {};
+    return {Current.architecture,Adjusted.enemySpeedPercent,Current.care,true};
+}
+
+int32 AUnmadePrototypeHub::GetRealmHazardPercent(FVector Position) const
+{
+    const auto* Policy=UnmadeCore::RealmReactionAt(Position.X,Position.Y);
+    if(!Policy)return 100;
+    const auto* Ledger=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+        ?&RealityLedger:OuterReactions.Read(Policy->realm);
+    return Ledger
+        ?UnmadeCore::RealmEffect(Policy->realm,*Ledger,Clock.ElapsedSeconds()).hazardPercent
+        :100;
+}
+
+int32 AUnmadePrototypeHub::GetRealmTradeTrustBonus(FVector Position) const
+{
+    const auto* Policy=UnmadeCore::RealmReactionAt(Position.X,Position.Y);
+    if(!Policy || Policy->realm!=UnmadeCore::Realm::ThreefoldReach)return 0;
+    return UnmadeCore::RealmEffect(Policy->realm,RealityLedger,
+                                  Clock.ElapsedSeconds()).tradeTrustBonus;
 }
 
 FString AUnmadePrototypeHub::GetRealityConsequenceJournal() const
@@ -1953,6 +2034,23 @@ FString AUnmadePrototypeHub::GetRealityConsequenceJournal() const
             UTF8_TO_TCHAR(UnmadeCore::RealityProfiles[Record.activeRite].description),
             Active.enemySpeedPercent,
             FMath::Max(0.0,Record.activeUntil-Clock.ElapsedSeconds()));
+    const ACharacter* Player=GetWorld()
+        ?UGameplayStatics::GetPlayerCharacter(GetWorld(),0):nullptr;
+    if(IsValid(Player))
+    {
+        if(const auto* Local=UnmadeCore::RealmReactionAt(
+            Player->GetActorLocation().X,Player->GetActorLocation().Y))
+        {
+            const auto* Led=Local->realm==UnmadeCore::Realm::ThreefoldReach
+                ?&RealityLedger:OuterReactions.Read(Local->realm);
+            if(Led)
+                Result+=FString::Printf(TEXT(" | %s: %s | LAW: %s | MATERIAL: %s | DEPENDENCE: %s"),
+                    UTF8_TO_TCHAR(Local->city),
+                    UTF8_TO_TCHAR(UnmadeCore::RealityConsequenceLedger::PublicLine(Led->PublicResponse())),
+                    UTF8_TO_TCHAR(Local->institution),
+                    UTF8_TO_TCHAR(Local->material),UTF8_TO_TCHAR(Local->dependence));
+        }
+    }
     return Result;
 }
 
@@ -1975,16 +2073,44 @@ void AUnmadePrototypeHub::RefreshRealityConsequenceWorld()
         Civic==UnmadeCore::RealityPublicResponse::ContestedAccord);
 }
 
+void AUnmadePrototypeHub::RefreshOuterReactionWorld()
+{
+    OuterActiveMask=0;
+    for(int i=1;i<9;++i)
+    {
+        const auto Realm=static_cast<UnmadeCore::Realm>(i);
+        const auto* Ledger=OuterReactions.Read(Realm);
+        if(!Ledger)continue;
+        const auto Current=Ledger->Active(Clock.ElapsedSeconds());
+        const auto State=Ledger->PublicResponse();
+        const FString Prefix=FString::Printf(TEXT("RealmReaction.%d."),i);
+        const auto Toggle=[this,&Prefix](const TCHAR* Suffix,bool Enabled) {
+            SetRiteWorldActorState(FName(*(Prefix+Suffix)),Enabled);
+        };
+        Toggle(TEXT("SafeSpan"),Current.active &&
+               Current.architecture==UnmadeCore::RealityArchitecture::SafeSpan);
+        Toggle(TEXT("StrainedSpan"),Current.active &&
+               Current.architecture==UnmadeCore::RealityArchitecture::StrainedSpan);
+        Toggle(TEXT("DoubleThreshold"),Current.active &&
+               Current.architecture==UnmadeCore::RealityArchitecture::DoubleThreshold);
+        Toggle(TEXT("CareLedger"),State==UnmadeCore::RealityPublicResponse::SharedPassage ||
+               State==UnmadeCore::RealityPublicResponse::ContestedAccord);
+        Toggle(TEXT("InquiryLedger"),State==UnmadeCore::RealityPublicResponse::PublicInquiry ||
+               State==UnmadeCore::RealityPublicResponse::ContestedAccord);
+        if(Current.active)OuterActiveMask|=static_cast<uint8>(1u<<(i-1));
+    }
+    bOuterReactionVisualActive=OuterActiveMask!=0;
+}
+
 bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
     double Duration,bool Mastered,const FVector& CastPosition)
 {
-    if(!GetWorld() || FVector::DistSquared2D(CastPosition,FVector::ZeroVector)>
-       FMath::Square(2600.f))return false;
-    // Player-driven cast already passed the Tenfold strain, cooldown and
-    // discipline rules. This is a local physical/social projection only.
-    bool bWitness=false;
-    const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+    if(!GetWorld())return false;
+    const auto* Policy=UnmadeCore::RealmReactionAt(CastPosition.X,CastPosition.Y);
+    if(!Policy)return false; // no unsupported in-between-world projections
+    ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
     if(!IsValid(Player))return false;
+    bool bWitness=false;
     for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
     {
         if(It->GetStableId().IsNone() ||
@@ -1996,33 +2122,47 @@ bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
         if(GetWorld()->LineTraceTestByChannel(
             CastPosition+FVector(0,0,70),
             It->GetActorLocation()+FVector(0,0,70),ECC_Visibility,Sight))continue;
-        bWitness=true;
-        break;
+        bWitness=true;break;
     }
     const auto Before=RealityLedger.Snapshot();
-    const auto PreviousResponse=RealityLedger.PublicResponse();
-    if(!RealityLedger.Cast(Id,Clock.ElapsedSeconds(),Duration,
-                           Mastered,bWitness,true))return false;
+    const auto BeforeOuter=OuterReactions.Save();
+    const auto* Prior=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+        ?&RealityLedger:OuterReactions.Read(Policy->realm);
+    if(!Prior)return false;
+    const auto PreviousResponse=Prior->PublicResponse();
+    const bool Applied=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+        ?RealityLedger.Cast(Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness,true)
+        :OuterReactions.Cast(Policy->realm,Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness);
+    if(!Applied)return false;
     if(!WriteWorldSnapshot())
     {
         RealityLedger.Restore(Before,Clock.ElapsedSeconds());
+        OuterReactions.Restore(BeforeOuter,Clock.ElapsedSeconds());
         if(GEngine)GEngine->AddOnScreenDebugMessage(-1,7.f,FColor::Red,
-            TEXT("Reality consequence was not saved; civic structures unchanged."));
+            TEXT("Realm consequence not saved: no civic monument granted."));
         return false;
     }
-    RefreshRealityConsequenceWorld();
-    if(GEngine)
+    if(Policy->realm==UnmadeCore::Realm::ThreefoldReach)
+        RefreshRealityConsequenceWorld();
+    else RefreshOuterReactionWorld();
+    const auto* Updated=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+        ?&RealityLedger:OuterReactions.Read(Policy->realm);
+    if(GEngine && Updated)
     {
-        const FString Line=FString::Printf(
-            TEXT("CROSSINGS: %s | %s | CIVIC: %s"),
-            UTF8_TO_TCHAR(UnmadeCore::RealityProfiles[static_cast<int>(Id)].description),
-            bWitness?TEXT("at least one direct witness"):TEXT("no direct witness"),
-            UTF8_TO_TCHAR(UnmadeCore::RealityConsequenceLedger::PublicLine(
-                RealityLedger.PublicResponse())));
-        GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,Line);
-        if(PreviousResponse!=RealityLedger.PublicResponse())
+        GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Cyan,
+            FString::Printf(TEXT("%s | %s | %s | %s"),
+                UTF8_TO_TCHAR(Policy->city),
+                UTF8_TO_TCHAR(UnmadeCore::RealityProfiles[static_cast<int>(Id)].description),
+                bWitness?TEXT("direct local witness"):TEXT("unwitnessed"),
+                UTF8_TO_TCHAR(UnmadeCore::RealityConsequenceLedger::PublicLine(
+                    Updated->PublicResponse()))));
+        if(Updated->PublicResponse()!=PreviousResponse)
             GEngine->AddOnScreenDebugMessage(-1,10.f,FColor::Yellow,
-                TEXT("A new physical civic record exists; return to see the city's competing claims."));
+                FString::Printf(TEXT("%s: %s"),
+                    UTF8_TO_TCHAR(Policy->institution),
+                    UTF8_TO_TCHAR(Updated->PublicResponse()==
+                        UnmadeCore::RealityPublicResponse::PublicInquiry
+                        ?Policy->inquiryLine:Policy->careLine)));
     }
     return true;
 }
@@ -2131,6 +2271,25 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnBlock(FVector(1850,-1120,135),FVector(0.65,0.5,2.0),
         FName("Reality.CivicInquiry"));
     RefreshRealityConsequenceWorld();
+    // Eight distinct, optional local testimony tables. The original Reach
+    // assets and v1 save stay unchanged; nothing teleports remote knowledge.
+    for(int i=1;i<9;++i)
+    {
+        const auto& Policy=UnmadeCore::RealmReactionPolicies[i];
+        const FVector Origin(Policy.originX,Policy.originY,0);
+        const FString Prefix=FString::Printf(TEXT("RealmReaction.%d."),i);
+        SpawnBlock(Origin+FVector(-1550,-1300,60),FVector(3.8,.8,.22),
+            FName(*(Prefix+TEXT("SafeSpan"))));
+        SpawnBlock(Origin+FVector(-1550,-1300,130),FVector(.8,2.0,2.0),
+            FName(*(Prefix+TEXT("StrainedSpan"))));
+        SpawnBlock(Origin+FVector(-1550,-1300,140),FVector(1.8,1.2,2.3),
+            FName(*(Prefix+TEXT("DoubleThreshold"))));
+        SpawnBlock(Origin+FVector(-2100,700,130),FVector(.35,2.4,.8),
+            FName(*(Prefix+TEXT("CareLedger"))));
+        SpawnBlock(Origin+FVector(2100,700,130),FVector(.6,.4,2.1),
+            FName(*(Prefix+TEXT("InquiryLedger"))));
+    }
+    RefreshOuterReactionWorld();
     // Ten inscriptions across five communities. Each marker is world-space,
     // independently discoverable, and checked for distance and visibility.
     const FVector RitualSites[10]={

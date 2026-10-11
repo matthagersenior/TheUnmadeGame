@@ -146,6 +146,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/reality_consequence_test.cpp -o /tmp/unmade-reality-consequence
           /tmp/unmade-reality-consequence
+      - name: Test nine-realm physics, isolated civic memories and atomic save validation
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/nine_realm_reactions_test.cpp -o /tmp/unmade-nine-realm-reactions
+          /tmp/unmade-nine-realm-reactions
       - name: Test six earned cross-discipline confluence challenges
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/confluence_rules_test.cpp -o /tmp/unmade-confluence-test

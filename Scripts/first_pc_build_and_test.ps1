@@ -79,6 +79,10 @@ try {
     & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_reality_consequence_wiring.py" 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "reality-consequence-source-validation.log")
     if($LASTEXITCODE -ne 0){throw "REALITY_CONSEQUENCE_INVALID"}
+    Write-Host "Checking all nine realm reactions, local source provenance and isolated world saves."
+    & python -m unittest discover -s (Join-Path $repo "Scripts/tests") -p "test_nine_realm_reactions_wiring.py" 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "nine-realm-reactions-validation.log")
+    if($LASTEXITCODE -ne 0){throw "NINE_REALM_REACTIONS_INVALID"}
     Write-Host "Checking editable authoring pack against committed Unreal data tables."
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")

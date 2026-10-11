@@ -15,6 +15,7 @@
 #include "World/UnmadeFrontierRealmRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeRealityConsequenceRules.h"
+#include "World/UnmadeRealmReactionRules.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
@@ -51,6 +52,8 @@ public:
     bool RecordRealityConsequence(UnmadeCore::RiteId Id,double Duration,bool Mastered,
                                   const FVector& CastPosition);
     UnmadeCore::RealityConsequenceView RealityConsequenceAt(FVector Position) const;
+    int32 GetRealmHazardPercent(FVector Position) const;
+    int32 GetRealmTradeTrustBonus(FVector Position) const;
     UFUNCTION(BlueprintPure,Category="Unmade|Reality")
     FString GetRealityConsequenceJournal() const;
     int32 GetMinuteOfDay() const { return Clock.MinuteOfDay(); }
@@ -154,7 +157,12 @@ private:
     UPROPERTY(Transient)
     TObjectPtr<ADirectionalLight> Sunlight;
     UnmadeCore::LivingWorldClock Clock;
-    UnmadeCore::RealityConsequenceLedger RealityLedger;
+    UnmadeCore::RealityConsequenceLedger RealityLedger; // v1: Reach, do not migrate
+    UnmadeCore::OuterRealmReactions OuterReactions; // eight isolated world histories
+    bool bOuterReactionsRejected=false;
+    void RefreshOuterReactionWorld();
+    bool bOuterReactionVisualActive=false;
+    uint8 OuterActiveMask=0;
     bool bRealityConsequenceRejected=false;
     void RefreshRealityConsequenceWorld();
     bool bRealityVisualActive=false;
