@@ -1061,3 +1061,88 @@ Every future civilization must receive the same **causal accounting**, not the s
 The climax with Nhal-Vey can then test the player's literacy in trade-offs: they must protect lives while confronting incompatible accounts, without acquiring one omnipotent button that makes everyone else agree.
 
 The unresolved question still rattles Orrel's nail. The world no longer pretends the nail is alone.
+
+---
+
+## 22. The Nine-Realm Reaction System — One Rite, Nine Consequences
+*Volume X · evolving franchise and game design Bible · 11 October 2026*
+
+The greatest error in any map of The Unmade is to assume the same spell is the same *event* everywhere. Stone, water, sound, winter heat, the ownership of time, missing names, and unfinished laws are not interchangeable materials. Each civilization must deal with what a change physically threatens, what it costs to repair, who is allowed to document it, and who actually witnessed it.
+
+The **Nine-Realm Reaction System** extends the first local Crossings model with nine different policies over the world’s real atlas coordinates. It preserves the existing Reach ledger so the player's older choices remain true. Eight additional civic histories—one per outer realm—record what each community can justify with its own witnesses. None inherits evidence from a distant city merely because the hero has visited both.
+
+### 22.1 The physical distinction
+
+Every realm uses the existing ten learned Tenfold rites. The original strain and cooldown rules remain the price paid for a cast. In a world where the cast is locally supported, it manifests as one of three temporary physical graybox forms—safe span, strained span, or contradictory threshold—yet the *same* form can have a different hazard and combat meaning.
+
+Consider Living Roads:
+- In **Saltwake**, the wardens see a possible passage to a shared rain cistern. The temporary road lessens storm exposure, but does not invent fresh water. Net-menders and water brokers may disagree over what maintaining the channel costs.
+- In **Cinderhold**, the temporary route is a distribution line for community embers. A safer path lessens the immediate burden of heat surges, while the assembly still has to decide which household supplies the fuel.
+- In **Orravane**, the same passage depends on song as structural support. The safer path dampens the strain of a falling note rather than changing the physical idea of rain or coal.
+
+The danger system consumes actual realm-specific percentages for the current hazard pulse, distinguishing physical injury from reality strain. Nearby enemies also consume each realm's different movement multiplier: a Stalker in the Inverted Choir should not move as though standing on an ordinary dry road. The source implementation does *not* claim full fluid dynamics, acoustics, or bespoke boss tactical AI.
+
+### 22.2 Nine cultures, their materials, and their laws
+
+| Realm and recognizable settlement | What is actually at risk | Institution and standing civic question |
+| --- | --- | --- |
+| **Threefold Reach / the Crossings** | Contracted stone, builders' wages and safe refuge passage | Bridge Ledger Court: whose survey defines a road, and who paid to build it? |
+| **Widowed Rain / Saltwake** | Counted stormwater, dry-harbor tolls and the shared cistern | Rainward tally: who sold the same storm twice? |
+| **Hearth Beneath / Cinderhold** | Communal embers, winter heat and shared kilns | Hearth assembly: can a family keep warm without owning the flame? |
+| **Tidal Ledger / Drevlach** | Collateral, ferry dues and tomorrow's indebted passage | Debt adjudicators: can a future wage be seized for a journey that never happened? |
+| **Sky Below / Orravane** | Load-bearing song, counterweights and inhabited suspended roofs | Inverted choir: when one verse is erased, which families must be evacuated? |
+| **Cinder Spine / Vathless** | Quarry seams, wages, displaced builders and family memory | Quarry council: who is responsible when the mine works an ancestry out of the record? |
+| **Hundred Unlived / Eillun** | Anonymous shelter, unregistered doors and consent | Consent census: may an impossible citizen be named without permission? |
+| **Orchard of Kings / Tharniv** | Communal grafts, inheritance and roots that carry unwritten law | Untitled court: who claims ownership of a road that grew before the crown existed? |
+| **First Absence / Auvren** | Stable memories, competing origins and usable geometry | First witnesses: how can a passage be trusted when both maps are valid locally? |
+
+These are authoritative realm policies. They provide distinct local environmental effects and the words attached to real civic evidence. **The full producer-consumer simulation for water, fuel, wages, collateral and roofs is future engineering**. Their named dependencies are defined now precisely so future economic transactions, evacuation scenes and quests can implement them without reinventing the societies.
+
+### 22.3 Personal history resists a shared story
+
+A resident does not receive a scene's knowledge from a realm-wide global integer. An actual cast must happen inside the correct local world focus. A nearby stable NPC with a clear line of sight can receive the cast as a personal observation. Existing, bounded conversation may later pass the report as hearsay with the original speaker's stable identity. The report carries its **realm source**, so a witness to Saltwake's storm cannot be mistaken for a witness to Cinderhold's kiln.
+
+Named examples:
+
+**Thenn of Saltwake** may hear the rain counted and challenge a broker with the tally. His skepticism is local: it should not make him immediately know how Orrel's bridge was built.
+
+**Rheva of Cinderhold** may welcome a safe ember channel but still ask which household bears the night watch. She has been guarding the flame since before the protagonist arrived.
+
+**The Choir Master of Orravane** can interpret a changed harmonic span as a support warning without naming a hidden singer. A firsthand verse is different from hearing another choir member describe it.
+
+**The Unlived Census Keeper of Eillun** may insist on consent before opening a registration door. Creating a passage is not permission to register every traveler.
+
+These are attributed character points of view. A live character may contradict a local civic record while retaining their own relationships and identity. Player dialogue must continue to distinguish “I saw” from “someone told me.” The stable resident ID is not discarded when moving between scenes.
+
+### 22.4 Civics that can disagree without resetting each other
+
+The Crossings retains its preexisting, independent civic record. The eight outer realms now possess additional save-backed records. In each, the author’s familiar evidence rule is applied independently: two **different**, mastered, locally witnessed caring rites can create a protected public passage; two different interrogating rites can create a public inquiry. When both forms of testimony exist, both civic markers must survive side by side: the Contested Accord.
+
+Nothing about a care record makes its citizens universally benevolent. A shared safe passage can still be expensive. An inquiry can be brave or cruel depending on the subsequent institutions. The engine records evidence that a decision is publicly supportable, not the best or only moral answer.
+
+There are new source-spawned tangible temporary forms and two persistent marker positions for each outer realm. The same single world clock determines expiry; there are no hidden long-term buffs when moving to a new realm and no remote automatic civic consent.
+
+### 22.5 A lived gameplay journey
+
+The traveler enters Saltwake during a storm pulse. The player's acquired rite briefly changes a shelter approach, and the injury from the active local weather pressure adjusts. The player can see the change and feel a different tactical pursuit from an enemy. A navigator who genuinely saw the transformation acquires a firsthand memory; the rain keeper hears the story later only if someone can pass it on.
+
+The next passage to Cinderhold has no right to borrow Saltwake's proof. The traveler may cast the same learned rite there, but the heat pressure and enemy movement are different, and Rheva's civic assembly has its own memory. The player may earn enough firsthand testimony to support a common ember channel. In Orravane, a falling note can increase *strain* instead of damaging flesh; one spectacular cast cannot satisfy the choir's two-distinct-rite requirement.
+
+What ties these moments together is not a palette swap: a player needs to learn how a city's dependencies alter the same skill, choose appropriate counterplay, and respect what witnesses actually know. The sequel or television adaptation can return to those same people in later years without replacing them with anonymous exposition.
+
+### 22.6 Source implementation, quality limits and next acts
+
+**Implemented at this source milestone:**
+- Nine canon-aligned region policies tied to their existing atlas coordinates and actual local cast positions.
+- Preserved v1 Crossings history plus eight completely separated, optional schema-1 save records, with atomic restoration and prevention of corrupted-data overwrites.
+- A locally active three-form architectural world prop per outer realm, and independent physically represented care/inquiry/contested civic records.
+- Real local enemy pursuit speed variation and pressure changes applied to the game’s existing storm, ember, tide, quarry, census, roots and unmooring hazard pulses, including both actual health injury and reality strain.
+- Named, local, direct-versus-heard NPC reactions with source-identity isolation. No remote reputation teleportation.
+- In the existing Crossings market, a small temporary supply/trust adjustment is passed to the actual bounded purchase-price rule; other realms' proposed economic dependencies do not yet pretend to be running full trading systems.
+- A world journal capable of describing the current realm’s actual materials, institutions and civic position, with native source and pipeline tests.
+
+**Still to engineer and playtest:** real authored walkable meshes instead of block proxies, rooted plants and physics-supported bridges, self-contained sound simulation, dynamic navigation/cover AI, real resource flows and trade in eight outer realms, individual household and employment impacts, full voice performances, controller-compatible evidence UI, low-vision access, full game balance and Windows Unreal Editor/PIE verification.
+
+The next design horizon is **Local Material Consequence**: turn each realm dependency into an accountable supply and labor system that a player can witness, repair, exploit or safeguard, with actual inventory movements, transaction logs and returning resident scenes. The final confrontation with Nhal-Vey should test what the player has learned about the incompatibility of simultaneous truths, not simply unlock a button that erases history.
+
+*A road made possible by one spell should never make the lives beside it vanish.*
