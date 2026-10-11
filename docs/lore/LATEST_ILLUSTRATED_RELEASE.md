@@ -1,5 +1,30 @@
 # Latest illustrated lore publication
 
+**Current illustrated edition:** *The Unmade — Volume X, Chapter 25: Lives Behind the Ledger* (11 October 2026)  
+**Source gameplay baseline:** `fd87f362f3601cadbbd73080299f59d79a8c6533` · [feature PR #45](https://github.com/matthagersenior/TheUnmadeGame/pull/45) · [strict source tests](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38146976752)  
+**Canon:** Volume X §25, *Lives Behind the Ledger — Bes and the Hearth That Cannot Be Forgiven*. A real Cinderhold wage dispute, individually finite home warmth, personal pay history, voluntary stoppage, consenting guarantor and three possible endgame callbacks.  
+**Binary distribution:** Generated and checked conversation artifacts, **not** represented as committed GitHub Release binaries.
+
+| Delivered illustrated publication | Verified result |
+| --- | --- |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Lives_Behind_the_Ledger.docx` | **127-page** complete cumulative Word master; **all 52 original embedded illustrations retained** |
+| `THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Lives_Behind_the_Ledger.pdf` | **127 pages**, fully rendered from Word with no empty pages or out-of-bounds text blocks |
+| `THE_UNMADE_Volume_X_Illustrated_Lives_Behind_the_Ledger.docx` | **59-page** editable standalone Volume X; **all five embedded prior illustrations retained** |
+| `THE_UNMADE_Volume_X_Illustrated_Lives_Behind_the_Ledger.pdf` | **59 pages**, fully rendered and checked; short orphan final page corrected |
+| `THE_UNMADE_Lives_Behind_the_Ledger_Complete_Illustrated_Package.zip` | **32 entries**, including four updated books, eight original concept art files, earlier manuscript/production references, Chapter 25 editorial extract, first-PC acceptance notes and build script. ZIP CRC and **31 individual SHA-256 digests** independently verified |
+
+**Release QA:** Both Word books extended directly from their previous full illustrated editions, without abridgment. Each was fully rendered into a PDF and page images. Final-page montages checked by sight, no fully blank page, no text outside page bounds, retained 52 and five embedded images. The 60-page initial standalone was tightened to 59 pages without removing narrative material. Each data member's byte length and SHA-256 was validated against the package manifest, and ZIP CRC passed.
+
+**Gameplay status:** Source-implemented branch includes Bes's independently dated real hearth, real waged-versus-unpaid shift history, actual personal home inquiry and Rheva corroboration, finite carrying/delivery, costly one-worker walkout, exact municipal payroll restitution, in-person and limited Mera guarantee reallocating owned wages with a separate owed successor claim, saved outcome-specific returning dialogue and optional Nhal-Vey mask-response. It preserves v1–v4 world-save ledgers and gameplay gates and passed native C++17/source-integration tests.
+
+**Production gate outstanding:** Unreal Engine Windows UHT/Editor/PIE compile, actor reachability/collision, polished choice UI, responsive and accessible narrative controls, full 3D home interiors, performance-captured dialog, environmental Foley, voices, music, synchronized subtitles, wider family/employer simulations and end-to-end QA. Passing source CI is not a certification of playable production quality.
+
+**Authoritative work:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` §25, `Source/TheUnmadeGame/Public/World/UnmadeBesHouseholdRules.h` and `docs/design/lives-behind-the-ledger-v5-acceptance.md`.
+
+---
+
+# Previous illustrated publication — Volume X Chapter 24
+
 **Current edition:** *The Unmade — Volume X, Chapter 24: The Living Economy* (11 October 2026)  
 **Merged gameplay baseline:** `22af7af98986b4f158ed8ad8e4e44af8b5a88307` · [PR #43](https://github.com/matthagersenior/TheUnmadeGame/pull/43) · [post-merge CI green](https://github.com/matthagersenior/TheUnmadeGame/actions/runs/38144773169)  
 **Authoritative canon:** `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` §24, *The Living Economy — Nine Households, Two Roads, and the Weight of a Receipt*. Nine named workers, finite wages and arrears, physically carried bilateral supplies, conserved trade money and an earned endgame counter-testimony.
