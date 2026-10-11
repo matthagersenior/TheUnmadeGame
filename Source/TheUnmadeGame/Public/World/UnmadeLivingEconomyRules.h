@@ -170,6 +170,28 @@ public:
         w.owedMarks=0;
         return true;
     }
+    // Mera may explicitly consent to guarantee another person's overdue pay.
+    // This transfers owned marks and the claim; the city still owes Mera.
+    bool UnderwriteBesFromMera(int marks)noexcept{
+        auto& guarantor=data_.workers[1];
+        auto& bes=data_.workers[2];
+        if(marks<=0||marks>6||guarantor.earnedMarks<marks||
+           bes.owedMarks<marks||bes.earnedMarks>100000-marks)return false;
+        guarantor.earnedMarks-=marks;
+        bes.earnedMarks+=marks;
+        bes.owedMarks-=marks;
+        return true;
+    }
+    // A later real municipal surplus can repay the guarantor.
+    bool RepayMeraGuarantee(int marks)noexcept{
+        auto& town=data_.workers[2];
+        auto& mera=data_.workers[1];
+        if(marks<=0||town.employerMarks<marks||
+           mera.earnedMarks>100000-marks)return false;
+        town.employerMarks-=marks;
+        mera.earnedMarks+=marks;
+        return true;
+    }
     // Worker can reclaim arrears when an actual trade receipt replenishes
     // the municipal treasury, not merely because the player returns.
     bool PayArrears(Realm realm)noexcept{
