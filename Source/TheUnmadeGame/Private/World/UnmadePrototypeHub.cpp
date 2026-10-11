@@ -91,6 +91,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::RealityConsequenceLedger RestoredReality;
     UnmadeCore::OuterRealmReactions RestoredOuter;
     UnmadeCore::MaterialWorld RestoredMaterials;
+    UnmadeCore::LivingEconomy RestoredLiving;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -398,6 +399,41 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         }
     }
     else RestoredMaterials.InitializeAtDay(RestoredClock.DayIndex()+1);
+    if(Save->bHasLivingEconomy)
+    {
+        const TArray<int32>* Workers[6]={
+            &Save->LivingEmployerMarks,&Save->LivingEarnedMarks,
+            &Save->LivingOwedMarks,&Save->LivingPaidShifts,
+            &Save->LivingPaidDays,&Save->LivingWorkerReceipts
+        };
+        const TArray<int32>* Routes[4]={
+            &Save->LivingForeignStock,&Save->LivingRouteReceipts,
+            &Save->LivingTradePayments,&Save->LivingConsumedSupport
+        };
+        bool bValid=true;
+        for(const auto* Col:Workers)if(Col->Num()!=9)bValid=false;
+        for(const auto* Col:Routes)if(Col->Num()!=2)bValid=false;
+        auto Saved=RestoredLiving.Save();
+        if(bValid)
+        {
+            for(int i=0;i<9;++i)
+                Saved.workers[i]={(*Workers[0])[i],(*Workers[1])[i],
+                    (*Workers[2])[i],(*Workers[3])[i],
+                    (*Workers[4])[i],(*Workers[5])[i]};
+            for(int i=0;i<2;++i)
+                Saved.routes[i]={(*Routes[0])[i],(*Routes[1])[i],
+                    (*Routes[2])[i],(*Routes[3])[i]};
+            Saved.cargo={Save->LivingTradeCargoRoute,Save->LivingTradeCargoDay};
+        }
+        if(!bValid||!RestoredLiving.Restore(
+            Saved,RestoredMaterials,RestoredClock.DayIndex()+1))
+        {
+            bLivingEconomyRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Living Economy corrupted: save writes protected"));
+        }
+    }
+    else RestoredLiving.InitializeAtDay(RestoredClock.DayIndex()+1);
+    LivingTrades=RestoredLiving;
     Materials=RestoredMaterials;
     OuterReactions=RestoredOuter;
     RealityLedger=RestoredReality;
@@ -430,7 +466,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
        bWitnessEchoRejected || bWitnessBraidRejected ||
        bWitnessDispatchRejected || bWitnessReturnRejected ||
        bRealityConsequenceRejected || bOuterReactionsRejected ||
-       bMaterialSaveRejected)return false;
+       bMaterialSaveRejected || bLivingEconomyRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
     Save->bHasLivingWorldSnapshot = true;
@@ -576,6 +612,31 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->MaterialCargoRealm=Shipment.realm;
     Save->MaterialCargoUnits=Shipment.units;
     Save->MaterialCargoDay=Shipment.collectedDay;
+    const auto Living=LivingTrades.Save();
+    Save->bHasLivingEconomy=true;
+    Save->LivingEmployerMarks.Reset();Save->LivingEarnedMarks.Reset();
+    Save->LivingOwedMarks.Reset();Save->LivingPaidShifts.Reset();
+    Save->LivingPaidDays.Reset();Save->LivingWorkerReceipts.Reset();
+    for(const auto& Worker:Living.workers)
+    {
+        Save->LivingEmployerMarks.Add(Worker.employerMarks);
+        Save->LivingEarnedMarks.Add(Worker.earnedMarks);
+        Save->LivingOwedMarks.Add(Worker.owedMarks);
+        Save->LivingPaidShifts.Add(Worker.shiftsPaid);
+        Save->LivingPaidDays.Add(Worker.lastPaidDay);
+        Save->LivingWorkerReceipts.Add(Worker.deliveriesWitnessed);
+    }
+    Save->LivingForeignStock.Reset();Save->LivingRouteReceipts.Reset();
+    Save->LivingTradePayments.Reset();Save->LivingConsumedSupport.Reset();
+    for(const auto& Route:Living.routes)
+    {
+        Save->LivingForeignStock.Add(Route.foreignStock);
+        Save->LivingRouteReceipts.Add(Route.deliveries);
+        Save->LivingTradePayments.Add(Route.paidMarks);
+        Save->LivingConsumedSupport.Add(Route.consumedSupport);
+    }
+    Save->LivingTradeCargoRoute=Living.cargo.route;
+    Save->LivingTradeCargoDay=Living.cargo.collectedDay;
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
