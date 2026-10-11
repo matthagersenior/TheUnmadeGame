@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+"""Original deterministic procedural sound sources. No recordings, VO or paid assets."""
+from pathlib import Path
+import argparse,hashlib,json,math,random,struct,wave
+RATE=22050
+EVENTS=['swing','impact','guard','injury','death','cast','inspect','repair','release','reward','warning','boss_crush','boss_sweep','boss_seal','yield','footstep_stone','footstep_wood','footstep_salt']
+EVENTS += ['boss_signature_'+str(n) for n in range(9)]
+REALMS=['crossings','saltwake','cinderhold','drevlach','orravane','vathless','eillun','tharniv','auvren']
+def build(out):
+ out.mkdir(parents=True,exist_ok=True);rows=[]
+ for n,name in enumerate(EVENTS+['ambience_'+x for x in REALMS]):
+  loop=name.startswith('ambience_');duration=8 if loop else 1.1 if name.startswith('boss_') else .55
+  rng=random.Random(1500+n);data=[]
+  for i in range(int(RATE*duration)):
+   t=i/RATE;env=math.sin(math.pi*t/duration)**2 if loop else min(1,t/.015)*math.exp(-t*7/duration)*min(1,(duration-t)/.025)
+   f=48+n*9 if loop else 100+n*17
+   v=env*(.12*math.sin(2*math.pi*f*t)+.045*math.sin(2*math.pi*(f*1.503)*t)+.04*(rng.random()*2-1))
+   data.append(int(v*32767))
+  path=out/('SFX_ID_'+name+'.wav')
+  with wave.open(str(path),'wb') as w:w.setparams((1,2,RATE,0,'NONE','not compressed'));w.writeframes(struct.pack('<'+'h'*len(data),*data))
+  rows.append({'cue':name,'file':path.name,'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'loop':loop,'duration':duration,'peak':max(abs(v) for v in data)/32767,'rms':math.sqrt(sum(v*v for v in data)/len(data))/32767,'unreal_asset':'/Game/UnmadeProduction/Audio/Identity/SFX_ID_'+name})
+ m={'schema':1,'license':'Original project-authored procedural sources; same license as repository','production_status':'PROTOTYPE_SYNTHETIC_FOLEY_AND_AMBIENCE_NOT_FINAL_MIX_OR_VO','assets':rows}
+ (out/'identity_audio_manifest.json').write_text(json.dumps(m,indent=2)+'\n');return m
+def validate(out):
+ m=json.loads((out/'identity_audio_manifest.json').read_text());assert len(m['assets'])==36
+ for a in m['assets']:
+  p=out/a['file'];assert hashlib.sha256(p.read_bytes()).hexdigest()==a['sha256']
+  with wave.open(str(p)) as w:
+   assert (w.getnchannels(),w.getsampwidth(),w.getframerate())==(1,2,RATE)
+   raw=w.readframes(w.getnframes());v=struct.unpack('<'+'h'*(len(raw)//2),raw)
+   assert 0<max(abs(x) for x in v)<32767 and abs(v[0])<50 and abs(v[-1])<50
+ return m
+if __name__=='__main__':
+ p=argparse.ArgumentParser();p.add_argument('--out',type=Path,required=True);a=p.parse_args();build(a.out);validate(a.out);print('PASS: 36 original WAV sources')

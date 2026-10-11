@@ -1,0 +1,167 @@
+{
+  "schema": 1,
+  "realms": [
+    {
+      "realm_index": 0,
+      "city": "Crossings",
+      "mechanism": "Charter Signal",
+      "hint": "Light every road signal",
+      "ambience": "crossings",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    },
+    {
+      "realm_index": 1,
+      "city": "Saltwake",
+      "mechanism": "Breakwater Pumps",
+      "hint": "Drain outer pumps; keep middle dark",
+      "ambience": "saltwake",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    },
+    {
+      "realm_index": 2,
+      "city": "Cinderhold",
+      "mechanism": "Kiln Pressure",
+      "hint": "Open two intake valves; close exhaust",
+      "ambience": "cinderhold",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    },
+    {
+      "realm_index": 3,
+      "city": "Drevlach",
+      "mechanism": "Oath Buoys",
+      "hint": "Float the two downstream buoys",
+      "ambience": "drevlach",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    },
+    {
+      "realm_index": 4,
+      "city": "Orravane",
+      "mechanism": "Choir Counterweights",
+      "hint": "Ground only the first counterweight",
+      "ambience": "orravane",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    },
+    {
+      "realm_index": 5,
+      "city": "Vathless",
+      "mechanism": "Yesterday Seams",
+      "hint": "Expose only the oldest seam",
+      "ambience": "vathless",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    },
+    {
+      "realm_index": 6,
+      "city": "Eillun",
+      "mechanism": "Census Lamps",
+      "hint": "Leave only the unlisted lamp lit",
+      "ambience": "eillun",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    },
+    {
+      "realm_index": 7,
+      "city": "Tharniv",
+      "mechanism": "Root Grafts",
+      "hint": "Restore all three grafts",
+      "ambience": "tharniv",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    },
+    {
+      "realm_index": 8,
+      "city": "Auvren",
+      "mechanism": "Threshold Lamps",
+      "hint": "Light the two boundary lamps",
+      "ambience": "auvren",
+      "side_quests": [
+        "Clear four dungeon guards for one recovery ration",
+        "Survey three records and solve the mechanism for a hazard map",
+        "Repair three roadside posts after your witnessed return to open sanctuary rest"
+      ],
+      "service": "Sanctuary recovery once per game day after repairs",
+      "reward_types": [
+        "one-time health recovery",
+        "permanent local hazard suppression and map",
+        "daily sanctuary service"
+      ]
+    }
+  ]
+}

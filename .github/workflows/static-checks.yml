@@ -16,10 +16,18 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 2
+      - name: Test realm identity mechanisms and signature attack footprints
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/world_identity_test.cpp -o /tmp/unmade-world-identity
+          /tmp/unmade-world-identity
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
           python-version: '3.11'
+      - name: Check identity registry and original sound library
+        run: |
+          python Scripts/build_world_identity.py --check
+          python Scripts/build_identity_audio.py --out /tmp/unmade-identity-audio
       - name: Check canonical nine-realm authoring master and Unreal import outputs
         run: python Scripts/build_world_content.py --check
       - name: Validate cinematic and realm production source against Unreal CSVs

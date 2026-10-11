@@ -1,4 +1,5 @@
 #include "Combat/UnmadeCombatComponent.h"
+#include "Combat/UnmadePresentation.h"
 #include "GameFramework/Actor.h"
 
 UUnmadeCombatComponent::UUnmadeCombatComponent()
@@ -24,6 +25,7 @@ bool UUnmadeCombatComponent::Heal(float Amount)
 
 void UUnmadeCombatComponent::SetGuarding(bool bEnabled)
 {
+    if(bEnabled&&!State.IsGuarding())UnmadePresentation::Sound(GetOwner(),TEXT("guard"));
     State.SetGuarding(bEnabled);
 }
 
@@ -47,6 +49,7 @@ bool UUnmadeCombatComponent::TryStrikeTarget(UUnmadeCombatComponent* Target, dou
     const auto Hit = Target->State.ReceiveHit(
         static_cast<std::uint64_t>(OwnerActor->GetUniqueID()),
         Swing.swingId, Swing.baseDamage + GearAttack, bFractureExposed, Target->GearArmor);
+    if(Hit==UnmadeCore::HitOutcome::Applied){UnmadePresentation::Sound(Target->GetOwner(),Target->IsDefeated()?TEXT("death"):Target->State.IsGuarding()?TEXT("guard"):TEXT("impact"));}
     return Hit == UnmadeCore::HitOutcome::Applied;
 }
 
