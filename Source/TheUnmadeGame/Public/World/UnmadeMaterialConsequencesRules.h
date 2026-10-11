@@ -135,6 +135,16 @@ public:
         towns_[i].store-=units;
         return true;
     }
+    // Foreign relief does not become a local basket or cask. A physically
+    // received import can avert two points of shortage-related structural
+    // deterioration, accounted separately from the town's own consumption.
+    bool ReinforceShelter(Realm realm,int foreignSupport)noexcept{
+        const int i=static_cast<int>(realm);
+        if(i<0||i>=9||foreignSupport<1||foreignSupport>2 ||
+           towns_[i].integrity>=100)return false;
+        towns_[i].integrity=std::min(100,towns_[i].integrity+2*foreignSupport);
+        return true;
+    }
     MaterialAction Collect(Realm realm,int day)noexcept{
         const int i=static_cast<int>(realm);
         if(i<0||i>=9||cargo_.realm!=-1||day<1||day<towns_[i].day||
