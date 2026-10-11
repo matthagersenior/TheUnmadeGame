@@ -375,6 +375,8 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         CharacterLine += TEXT(" It feels like the dark has started listening.");
     if(CachedHub.IsValid())
     {
+        const FString AdventureLine=CachedHub->GetCinderholdResidentLine(NpcId);
+        if(!AdventureLine.IsEmpty())CharacterLine+=TEXT(" ")+AdventureLine;
         const FString BesHomeLine=CachedHub->GetBesHouseholdResidentLine(NpcId);
         if(!BesHomeLine.IsEmpty())
         {

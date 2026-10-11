@@ -55,6 +55,10 @@ jobs:
         run: |
           python Scripts/build_unpaid_shift_audio.py --check
           python Scripts/unreal_editor/import_unpaid_shift_audio.py
+      - name: Validate original Cinderhold signal and positional Foley import plan
+        run: |
+          python Scripts/build_cinderhold_audio.py --check
+          python Scripts/unreal_editor/import_cinderhold_audio.py
       - name: Run validator unit tests
         run: python -m unittest discover -s Scripts/tests -v
       - name: Compile and test deterministic C++ fracture rules
@@ -69,6 +73,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/combat_rules_test.cpp -o /tmp/unmade-combat-test
           /tmp/unmade-combat-test
+      - name: Test complete optional Cinderhold adventure and authored elder
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/cinderhold_adventure_test.cpp -o /tmp/unmade-cinderhold
+          /tmp/unmade-cinderhold
       - name: Test twelve creature profiles and fair elder counterplay
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/creature_rules_test.cpp -o /tmp/unmade-creatures

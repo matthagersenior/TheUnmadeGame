@@ -244,7 +244,7 @@ bool AUnmadeCharacter::HasNearbyHollowKeeper() const
     for(TActorIterator<AUnmadeBossCharacter> It(World);It;++It)
     {
         if(It->GetBossId()!=UnmadeCore::BossId::HollowBell ||
-           It->GetCombat()->IsDefeated() ||
+           !It->CanBeTargeted() ||
            FVector::DistSquared(GetActorLocation(),It->GetActorLocation())>FMath::Square(1400.f))
             continue;
         FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeRiteKeeperSight),false);
@@ -271,7 +271,7 @@ void AUnmadeCharacter::ApplyRiteAbility(UnmadeCore::RiteId Rite,
         {
             for(TActorIterator<AUnmadeEnemyCharacter> It(World);It;++It)
             {
-                if(It->GetCombat()->IsDefeated() ||
+                if(!It->CanBeTargeted() ||
                    FVector::DistSquared(GetActorLocation(),It->GetActorLocation())>FMath::Square(850.f))
                     continue;
                 if(SelectedLaw==1)It->ExposeToFold(Now,Effect.duration);
@@ -734,6 +734,9 @@ void AUnmadeCharacter::ShowEvidenceNotebook()
 
 void AUnmadeCharacter::ShowStoryJournal()
 {
+    if(GetWorld()&&GEngine)for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Cyan,Hub->GetCinderholdJournal());
+
     ReconcileEarnedRewards();
     FString Decision = TEXT("unresolved");
     if (LocalConflict.Choice() == UnmadeCore::ConflictChoice::Shelter)
@@ -849,7 +852,7 @@ void AUnmadeCharacter::AttemptMeleeAttack()
     const FVector Facing = GetActorForwardVector().GetSafeNormal2D();
     for (TActorIterator<AUnmadeEnemyCharacter> It(World); It; ++It)
     {
-        if (It->GetCombat()->IsDefeated()) continue;
+        if (!It->CanBeTargeted()) continue;
         FVector Toward = It->GetActorLocation() - GetActorLocation();
         Toward.Z = 0;
         const double DistSq = Toward.SizeSquared();
@@ -1009,6 +1012,7 @@ void AUnmadeCharacter::Interact()
             :FMath::Square(310.f)+1.f;
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
+            if(Hub->TryCinderholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryFieldSurveyInteraction(this,ResidentDistSq))return;
             if(Hub->TryBesHouseholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryLivingTradeInteraction(this,ResidentDistSq))return;
@@ -1071,7 +1075,9 @@ void AUnmadeCharacter::Interact()
             Hub->TryLaterRealmConversation(Target->GetStableId());
             Hub->TryEchoQuestConversation(Target->GetStableId());
             Hub->RecordResidentConversation(Target->GetStableId());
-            if(!Hub->RecordBesHouseholdConversation(Target->GetStableId()))
+            const bool bHouseChanged=Hub->RecordBesHouseholdConversation(Target->GetStableId());
+            const bool bAdventureChanged=Hub->RecordCinderholdConversation(Target->GetStableId());
+            if(!bHouseChanged&&!bAdventureChanged)
                 Hub->MaybePlayBesReturnScene(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
@@ -1121,6 +1127,8 @@ void AUnmadeCharacter::OfferAid()
 
 void AUnmadeCharacter::DemonstrateAnomaly()
 {
+    if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        if(Hub->TryCinderholdAbility(this,0))return;
     AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
     if (!GetWorld()) return;
     const int32 Discount = IsValid(Equipment) ? Equipment->GlimpseDiscount() : 0;
@@ -1143,6 +1151,8 @@ void AUnmadeCharacter::DemonstrateAnomaly()
 
 void AUnmadeCharacter::FoldReality()
 {
+    if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        if(Hub->TryCinderholdAbility(this,1))return;
     AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
     if (!GetWorld()) return;
     const int32 Extension = IsValid(Equipment) ? Equipment->FoldBonusSeconds() : 0;
@@ -1156,7 +1166,7 @@ void AUnmadeCharacter::FoldReality()
     ApplyFractureVisuals();
     for (TActorIterator<AUnmadeEnemyCharacter> It(GetWorld()); It; ++It)
     {
-        if (!It->GetCombat()->IsDefeated() &&
+        if (!!It->CanBeTargeted() &&
             FVector::DistSquared(It->GetActorLocation(), Anchor->GetActorLocation()) < FMath::Square(800.f))
             It->ExposeToFold(GetWorld()->GetTimeSeconds(), 4.0);
     }
@@ -1179,6 +1189,8 @@ void AUnmadeCharacter::RewriteSealed()
 
 void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
 {
+    if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        if(Hub->TryCinderholdAbility(this,2,ChoiceId==FName(TEXT("variant.open"))?2:3))return;
     if (!GetWorld() || !IsValid(FindNearbyFractureAnchor()))
     {
         PendingRewriteChoice = NAME_None;

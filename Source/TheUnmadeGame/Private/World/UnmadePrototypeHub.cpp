@@ -32,6 +32,8 @@ void AUnmadePrototypeHub::BeginPlay()
     BuildForPrototype();
     RestoreLivingWorld();
     RefreshCommunityConsequences();
+    BuildCinderholdAdventure();
+    RefreshCinderholdAdventure();
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
@@ -69,6 +71,11 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 {
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
         UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+    if(Save&&Save->SchemaVersion==1&&Save->bHasCinderholdAdventure&&!Save->bHasLivingWorldSnapshot)
+    {
+        bCinderholdSaveRejected=true;
+        return;
+    }
     if (!Save || Save->SchemaVersion != 1 || !Save->bHasLivingWorldSnapshot) return;
 
     UnmadeCore::LivingWorldClock RestoredClock;
@@ -99,7 +106,8 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
         !RestoredTasks.Restore({Save->BellwoldTaskStage, Save->PaperhavenTaskStage}))
     {
-        UE_LOG(LogTemp, Warning, TEXT("Invalid living world state ignored"));
+        bCinderholdSaveRejected=true;
+        UE_LOG(LogTemp, Warning, TEXT("Invalid living world state ignored; Cinderhold writes protected"));
         return;
     }
     if (Save->bHasFactionChronicle)
@@ -451,6 +459,15 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         }
     }
     else RestoredBes.InitializeAtDay(RestoredClock.DayIndex()+1);
+    if(Save->bHasCinderholdAdventure)
+    {
+        const auto& S=Save->CinderholdAdventureState;
+        if(S.Num()!=10||!Cinderhold.Restore({S[0],S[1],S[2],S[3],S[4],S[5],S[6],S[7],S[8],S[9]},RestoredClock.DayIndex()+1))
+        {
+            bCinderholdSaveRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Cinderhold adventure corrupt: original world save protected"));
+        }
+    }
     BesHousehold=RestoredBes;
     LivingTrades=RestoredLiving;
     Materials=RestoredMaterials;
@@ -476,8 +493,9 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     RegionalTasks = RestoredTasks;
 }
 
-bool AUnmadePrototypeHub::WriteWorldSnapshot()
+bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
+    if(bCinderholdSaveRejected)return false;
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
        bLaterRealmSaveRejected || bEchoSaveRejected ||
        bResonanceSaveRejected || bGuardianSaveRejected ||
@@ -658,6 +676,26 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot()
     Save->LivingTradeCargoRoute=Living.cargo.route;
     Save->LivingTradeCargoDay=Living.cargo.collectedDay;
     const auto BesRecord=BesHousehold.Save();
+    const auto Adventure=Cinderhold.Save();
+    Save->bHasCinderholdAdventure=true;
+    Save->CinderholdAdventureState={Adventure.version,Adventure.memories,Adventure.clues,
+        Adventure.resolution,Adventure.route,Adventure.firstDay,Adventure.returnDay,
+        Adventure.returnedHeat,Adventure.returnedColdDays,Adventure.returnedOwed};
+    if(IsValid(StrainOwner))
+    {
+        // Preserve a malformed pre-existing fracture record instead of replacing
+        // it with the pawn's fallback when a local paid decision is attempted.
+        if(Save->bHasFractureSnapshot)
+        {
+            UnmadeCore::FractureModel Check("region.prototype.hub",{"variant.open","variant.sealed"});
+            const std::string PreviousVariant=Save->WorldVariantId.IsNone()?std::string():std::string(TCHAR_TO_UTF8(*Save->WorldVariantId.ToString()));
+            if(!Check.Restore({PreviousVariant,Save->PlayerStrain}))return false;
+        }
+        const auto Reality=StrainOwner->GetRealitySnapshot();
+        Save->bHasFractureSnapshot=true;
+        Save->PlayerStrain=Reality.strain;
+        Save->WorldVariantId=Reality.variant.empty()?NAME_None:FName(UTF8_TO_TCHAR(Reality.variant.c_str()));
+    }
     Save->bHasBesHousehold=true;
     Save->BesQuestPhase=BesRecord.phase;
     Save->BesHouseholdDay=BesRecord.day;
@@ -1847,6 +1885,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     AdvanceMaterialDayIfNeeded();
     AnimateBesWorkingCart();
     UpdateBesQuestTracker();
+    RefreshCinderholdAdventure();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical

@@ -16,6 +16,7 @@
 #include "Components/PointLightComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Animation/AnimSequence.h"
+#include "Sound/SoundBase.h"
 
 AUnmadeEnemyCharacter::AUnmadeEnemyCharacter()
 {
@@ -52,6 +53,12 @@ AUnmadeEnemyCharacter::AUnmadeEnemyCharacter()
     TelegraphLight->SetIntensity(0.f);
     TelegraphLight->SetAttenuationRadius(350.f);
     TelegraphLight->SetLightColor(FLinearColor(1.f,.22f,.09f));
+    ElderAimMarker=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SootboundLockedAim"));
+    ElderAimMarker->SetupAttachment(GetCapsuleComponent());
+    ElderAimMarker->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> Cylinder(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
+    if(Cylinder.Succeeded())ElderAimMarker->SetStaticMesh(Cylinder.Object);
+    ElderAimMarker->SetVisibility(false);
 }
 
 void AUnmadeEnemyCharacter::ConfigureStyle(UnmadeCore::EnemyStyle NewStyle)
@@ -70,6 +77,15 @@ void AUnmadeEnemyCharacter::ConfigureStyle(UnmadeCore::EnemyStyle NewStyle)
     }
 }
 
+bool AUnmadeEnemyCharacter::CanBeTargeted()const
+{
+    return IsValid(Combat)&&!Combat->IsDefeated()&&!bCinderholdQuieted;
+}
+void AUnmadeEnemyCharacter::ConfigureCinderholdElder()
+{
+    bCinderholdElder=true;
+    TerritoryHome=GetActorLocation();
+}
 void AUnmadeEnemyCharacter::ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion)
 {
     bElderEncounter=bChampion;
@@ -84,6 +100,7 @@ void AUnmadeEnemyCharacter::ConfigureEncounter(FName Identity,const FString& Nam
 {
     if(Identity.IsNone()||Name.IsEmpty())return;
     Tags.AddUnique(Identity);
+    TerritoryHome=GetActorLocation();
     TryLoadEnemyRig();
     EncounterLabel->SetText(FText::FromString(Name));
     EncounterLabel->SetTextRenderColor(Accent.ToFColor(true));
@@ -105,6 +122,7 @@ void AUnmadeEnemyCharacter::ExposeToFold(double Now, double Seconds)
     if (FMath::IsFinite(Now) && Now >= 0.0 && Seconds > 0.0)
     {
         FoldExposedUntil = FMath::Max(FoldExposedUntil, Now + Seconds);
+        if(bCinderholdElder)ElderPattern.Interrupt(Now);
         if(WindupEndsAt>=0.0)
         {
             WindupEndsAt=-1.0;
@@ -122,6 +140,7 @@ bool AUnmadeEnemyCharacter::IsFractureExposed(double Now) const
 void AUnmadeEnemyCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    TerritoryHome=GetActorLocation();
     TryLoadEnemyRig();
 }
 
@@ -195,8 +214,40 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     if(!IsValid(Combat))return;
+    UWorld* World=GetWorld();
+    if(!World)return;
+    const double Now=World->GetTimeSeconds();
+    if(!CachedRealityHub.IsValid())CachedRealityHub=Cast<AUnmadePrototypeHub>(
+        UGameplayStatics::GetActorOfClass(World,AUnmadePrototypeHub::StaticClass()));
+    if(bCinderholdElder&&CachedRealityHub.IsValid())
+    {
+        const int32 Resolution=CachedRealityHub->GetCinderholdElderResolution();
+        if(Resolution!=0)
+        {
+            bCinderholdQuieted=Resolution==2;
+            SetActorHiddenInGame(Resolution==1);
+            SetActorEnableCollision(false);
+            GetCharacterMovement()->StopMovementImmediately();
+            ElderAimMarker->SetVisibility(false);
+            TelegraphLight->SetIntensity(0);
+            CombatSignal->SetText(FText::FromString(Resolution==2?TEXT("ELDER QUIETED - ALIVE"):TEXT("ELDER DEFEATED")));
+            SetMotionCue(FName(TEXT("Idle")));
+            SetActorTickEnabled(false);
+            return;
+        }
+    }
     if(Combat->IsDefeated())
     {
+        if(bCinderholdElder)
+        {
+            SetActorEnableCollision(false);SetActorHiddenInGame(true);
+            if(CachedRealityHub.IsValid()&&Now>=NextElderSaveAttemptAt)
+            {
+                NextElderSaveAttemptAt=Now+3;
+                if(CachedRealityHub->RecordCinderholdElderDefeat(this))SetActorTickEnabled(false);
+            }
+            return; // Keep retrying a failed durable receipt, never announce a false victory.
+        }
         if(!bDeathHandled)
         {
             bDeathHandled=true;
@@ -207,9 +258,6 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         }
         return;
     }
-    UWorld* World=GetWorld();
-    if(!World)return;
-    const double Now=World->GetTimeSeconds();
     const bool bElderSecondPhase=bElderEncounter&&
         Combat->GetHealth()<=Combat->GetMaxHealth()*.5f;
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
@@ -226,29 +274,45 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     FVector Delta=Player->GetActorLocation()-GetActorLocation();
     Delta.Z=0;
     const double DistanceCm=Delta.Size();
-    const bool bNearby=DistanceCm<=1800.0 && DistanceCm>=1.0;
+    const double TerritoryRadius=bCinderholdElder?950.0:1100.0;
+    const bool bOutsideTerritory=FVector::DistSquared2D(Player->GetActorLocation(),TerritoryHome)>FMath::Square(TerritoryRadius)||
+        FVector::DistSquared2D(GetActorLocation(),TerritoryHome)>FMath::Square(TerritoryRadius);
+    const bool bReturnHome=bOutsideTerritory&&FVector::DistSquared2D(GetActorLocation(),TerritoryHome)>FMath::Square(85.f);
+    const bool bNearby=!bOutsideTerritory&&DistanceCm<=1800.0 && DistanceCm>=1.0;
     FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeEnemySight),false);
     Params.AddIgnoredActor(this);
     Params.AddIgnoredActor(Player);
     const bool bClearSight=bNearby && !World->LineTraceTestByChannel(
         GetActorLocation()+FVector(0,0,55),
         Player->GetActorLocation()+FVector(0,0,55),ECC_Visibility,Params);
-    const auto Intent=bNearby
+    auto Intent=bNearby
         ?(bSpeciesConfigured?UnmadeCore::CreatureIntent(Profile,DistanceCm/100.0,
             bClearSight,Now<RecoveryEndsAt):UnmadeCore::ChooseEnemyIntent(Style,DistanceCm/100.0,bClearSight))
-        :UnmadeCore::EnemyIntent::Approach;
+        :UnmadeCore::EnemyIntent::Hold;
+    UnmadeCore::SlagElderStep ElderStep;
+    if(bCinderholdElder)
+    {
+        ElderStep=ElderPattern.Step(Now,bElderSecondPhase,bNearby&&DistanceCm<=420,
+            bClearSight,(CachedRealityHub.IsValid()&&CachedRealityHub->IsCinderholdVentActive())||IsFractureExposed(Now));
+        if(ElderStep.warning!=UnmadeCore::SlagAttack::None&&!ElderStep.strike&&ElderLastWarning==UnmadeCore::SlagAttack::None)
+            ElderLockedAim=Player->GetActorLocation();
+        Intent=(!bNearby||ElderStep.warning!=UnmadeCore::SlagAttack::None||ElderStep.recovering||
+            (CachedRealityHub.IsValid()&&CachedRealityHub->IsCinderholdVentActive())||IsFractureExposed(Now))
+            ?UnmadeCore::EnemyIntent::Hold:UnmadeCore::EnemyIntent::Approach;
+    }
+    if(bReturnHome)Intent=UnmadeCore::EnemyIntent::Approach;
     if(WindupEndsAt>=0.0 && (Intent!=UnmadeCore::EnemyIntent::Attack||!bClearSight))
         WindupEndsAt=-1.0; // The player can step behind real cover to cancel.
 
     // Navigation must be grounded in a real Unreal navigation path.
     // Never treat a direct root sweep through a pillar as pathfinding.
-    if(bNearby && (Intent==UnmadeCore::EnemyIntent::Approach||
+    if((bNearby||bReturnHome) && (Intent==UnmadeCore::EnemyIntent::Approach||
        Intent==UnmadeCore::EnemyIntent::Retreat))
     {
         const float BaseSpeed=bSpeciesConfigured?static_cast<float>(Profile.speed):(Style==UnmadeCore::EnemyStyle::Stalker?130.f:95.f);
         const float Speed=BaseSpeed*(bElderSecondPhase?1.25f:1.f)*static_cast<float>(Consequence.enemySpeedPercent)/100.f;
         GetCharacterMovement()->MaxWalkSpeed=FMath::Max(25.f,Speed);
-        const FVector Destination=Intent==UnmadeCore::EnemyIntent::Retreat
+        const FVector Destination=bReturnHome?TerritoryHome:Intent==UnmadeCore::EnemyIntent::Retreat
             ?GetActorLocation()-Delta.GetSafeNormal()*480.f
             :Player->GetActorLocation();
         if(Now>=NextPathRefreshAt)
@@ -269,8 +333,10 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
                 }
             }
         }
+        const bool bLocalPathClear=bReturnHome?!World->LineTraceTestByChannel(
+            GetActorLocation()+FVector(0,0,55),Destination+FVector(0,0,55),ECC_Visibility,Params):bClearSight;
         FVector Walk=bHasNavWaypoint ? NextNavWaypoint-GetActorLocation()
-            :((bClearSight)?Destination-GetActorLocation():FVector::ZeroVector);
+            :((bLocalPathClear)?Destination-GetActorLocation():FVector::ZeroVector);
         Walk.Z=0;
         if(Walk.SizeSquared2D()>FMath::Square(70.f))
         {
@@ -287,6 +353,40 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         if(bNearby)SetActorRotation(Delta.GetSafeNormal2D().Rotation());
     }
 
+    if(bCinderholdElder)
+    {
+        const bool Warning=ElderStep.warning!=UnmadeCore::SlagAttack::None&&!ElderStep.strike;
+        ElderAimMarker->SetVisibility(Warning);
+        if(Warning)
+        {
+            const float Radius=ElderStep.warning==UnmadeCore::SlagAttack::GroundSlam?190.f:260.f;
+            ElderAimMarker->SetWorldLocation(ElderLockedAim-FVector(0,0,85));
+            ElderAimMarker->SetWorldScale3D(FVector(Radius/50.f,Radius/50.f,.025f));
+            CombatSignal->SetText(FText::FromString(ElderStep.warning==UnmadeCore::SlagAttack::GroundSlam
+                ?TEXT("SOOTBOUND SLAM - STEP OUT OF THE MARK"):
+                 TEXT("CINDER SWEEP - WIDE MARK / TAKE COVER")));
+            TelegraphLight->SetIntensity(4200.f);
+            SetMotionCue(FName(TEXT("Attack")));
+        }
+        else
+        {
+            CombatSignal->SetText(FText::FromString(ElderStep.recovering?TEXT("ELDER RECOVERY - OPENING"):TEXT("DEFENDS THE NEST")));
+            TelegraphLight->SetIntensity(ElderStep.recovering?850.f:0.f);
+        }
+        if(ElderStep.strike)
+        {
+            if(USoundBase* Sound=LoadObject<USoundBase>(nullptr,TEXT("/Game/UnmadeProduction/Audio/Cinderhold/SFX_CH_elder_ground.SFX_CH_elder_ground"),nullptr,LOAD_NoWarn))
+                UGameplayStatics::PlaySoundAtLocation(World,Sound,ElderLockedAim,.7f);
+        }
+        if(ElderStep.strike&&bClearSight&&DistanceCm<=420)
+        {
+            const float Radius=ElderStep.warning==UnmadeCore::SlagAttack::GroundSlam?190.f:260.f;
+            if(FVector::DistSquared2D(Player->GetActorLocation(),ElderLockedAim)<=FMath::Square(Radius))
+                Combat->TryStrikeTarget(Player->GetCombat(),Now,true,false);
+        }
+        ElderLastWarning=Warning?ElderStep.warning:UnmadeCore::SlagAttack::None;
+        return;
+    }
     if(WindupEndsAt>=0.0 && Now>=WindupEndsAt)
     {
         WindupEndsAt=-1.0;

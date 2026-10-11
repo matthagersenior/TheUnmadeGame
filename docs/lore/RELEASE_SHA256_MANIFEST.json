@@ -1,41 +1,41 @@
 {
-  "edition": "Paths and Predators v11",
+  "edition": "Cinderhold Adventure v12",
   "date": "2026-10-11",
-  "source_base": "2beed3883d884852d3919cc537ea7ac8b4e07708",
+  "source_base": "dcac72039eae43c140af8704f0983182696efd01",
   "engine_compiled": false,
   "engine_playtested": false,
-  "native_cpp_tests": 45,
-  "python_tests": 231,
-  "complete_bible_pages": 142,
-  "complete_bible_images": 55,
-  "volume_x_pages": 82,
-  "volume_x_images": 8,
-  "qa": "Rendered page overview and full-resolution new pages inspected; inherited content retained.",
+  "native_cpp_tests": 46,
+  "python_tests": 236,
+  "complete_bible_pages": 145,
+  "complete_bible_images": 56,
+  "volume_x_pages": 87,
+  "volume_x_images": 9,
+  "qa": "All page overviews and new pages inspected; all inherited paragraphs and illustrations retained; no empty pages or off-page text blocks.",
   "files": [
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Paths_and_Predators_v11.docx",
-      "sha256": "af0f8493e231cbe484adf58e81573d0e3ab1f5d53a61a1c01eb3e537518470db",
-      "bytes": 6911167
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Cinderhold_Adventure_v12.docx",
+      "sha256": "2e38e2a1122ed98206d322f5c6d69584055c9f543a0a48c3f806a270c278154c",
+      "bytes": 7138853
     },
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Paths_and_Predators_v11.pdf",
-      "sha256": "235680b5208d572585acc192ce18b9953fe960a8b9104b93e4c94ba9c3a4fd3b",
-      "bytes": 4394159
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Cinderhold_Adventure_v12.pdf",
+      "sha256": "36a5d6dc0da8cce24c1e6493f4704337d989bdcaac9650fdaef0562f6861adfe",
+      "bytes": 4607806
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Paths_and_Predators_v11.docx",
-      "sha256": "596caa182ac251b998332162cd8f3986a02cc5323524651d107f9b77a529a688",
-      "bytes": 4716997
+      "name": "THE_UNMADE_Volume_X_Illustrated_Cinderhold_Adventure_v12.docx",
+      "sha256": "868926ebaebf5871693fc0361441cb20ac1b67b97de4731b1499c26ce2abe899",
+      "bytes": 4944688
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Paths_and_Predators_v11.pdf",
-      "sha256": "4d0c0ef4b4e1432dec9b495ad61d6f15dfee9893097fe2994d7c8d3911d6b7c6",
-      "bytes": 2357056
+      "name": "THE_UNMADE_Volume_X_Illustrated_Cinderhold_Adventure_v12.pdf",
+      "sha256": "4b4f4fb9230428eb8db69ea7f46c2821cc1b13173e46a0e8284b8cc382a7500f",
+      "bytes": 2580476
     },
     {
-      "name": "THE_UNMADE_v11_Field_Survey_Atlas.png",
-      "sha256": "85d564b89bf0df5cd075725ee9d458f29721cbe5703c46718d9c5edd46930602",
-      "bytes": 85789
+      "name": "THE_UNMADE_v12_Cinderhold_Adventure_Atlas.png",
+      "sha256": "9af93606f237a65005f8d9a5cdad7c5debbefa27503a9259be9ef7bbb0f6f9b6",
+      "bytes": 242553
     }
   ]
 }

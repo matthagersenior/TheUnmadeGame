@@ -250,6 +250,10 @@ public:
     UPROPERTY(SaveGame)
     bool bHasBesHousehold=false;
     UPROPERTY(SaveGame)
+    bool bHasCinderholdAdventure=false;
+    UPROPERTY(SaveGame)
+    TArray<int32> CinderholdAdventureState;
+    UPROPERTY(SaveGame)
     int32 BesQuestPhase=0;
     UPROPERTY(SaveGame)
     int32 BesHouseholdDay=1;

@@ -3,6 +3,7 @@
 #include "TimerManager.h"
 #include "Engine/StaticMeshActor.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
+#include "World/UnmadeCinderholdSceneRules.h"
 #include "UI/UnmadeUnpaidShiftSubtitleWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerController.h"
@@ -58,7 +59,8 @@ void AUnmadePrototypeHub::RestoreBesCamera()
 void AUnmadePrototypeHub::FrameBesDirectedBeat(FName SpeakerId,const FString& Cue,const FString& Blocking,float Seconds)
 {
     if(!GetWorld() ||
-       BesActiveScene>=static_cast<int32>(UnmadeCore::UnpaidScene::MaskPaid))return;
+       (BesActiveScene>=static_cast<int32>(UnmadeCore::UnpaidScene::MaskPaid)&&
+        BesActiveScene<static_cast<int32>(UnmadeCore::UnpaidScene::Count)))return;
     APlayerController* PC=GetWorld()->GetFirstPlayerController();
     AUnmadeCharacter* Player=PC?Cast<AUnmadeCharacter>(PC->GetPawn()):nullptr;
     if(!IsValid(Player))return;
@@ -135,14 +137,38 @@ void AUnmadePrototypeHub::PlayBesDirectedScene(int32 SceneIndex)
     BesActiveScene=SceneIndex;
     AdvanceBesDirectedBeat();
 }
+void AUnmadePrototypeHub::PlayCinderholdScene(int32 SceneIndex)
+{
+    if(!GetWorld()||SceneIndex<0||SceneIndex>=4)return;
+    SkipBesDirectedScene();
+    BesActiveScene=static_cast<int32>(UnmadeCore::UnpaidScene::Count)+SceneIndex;
+    AdvanceBesDirectedBeat();
+}
 void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
 {
     if(!GetWorld()||BesActiveScene<0)return;
     const auto Scene=static_cast<UnmadeCore::UnpaidScene>(BesActiveScene);
-    const auto* Beat=UnmadeCore::UnpaidBeatAt(Scene,BesActiveBeat);
+    const bool bCinderholdScene=BesActiveScene>=static_cast<int32>(UnmadeCore::UnpaidScene::Count);
+    const auto* Beat=bCinderholdScene?UnmadeCore::CinderholdBeatAt(
+        BesActiveScene-static_cast<int32>(UnmadeCore::UnpaidScene::Count),BesActiveBeat):
+        UnmadeCore::UnpaidBeatAt(Scene,BesActiveBeat);
     if(!Beat){SkipBesDirectedScene();return;}
     const FName Speaker(UTF8_TO_TCHAR(Beat->speakerId));
-    const FString Subtitle(UTF8_TO_TCHAR(Beat->subtitle));
+    FString Subtitle(UTF8_TO_TCHAR(Beat->subtitle));
+    if(bCinderholdScene)
+    {
+        if(Subtitle==TEXT("FIELD_REPORT_DYNAMIC"))Subtitle=Cinderhold.Save().resolution==2
+            ?TEXT("The elder quieted alive. Your chosen route goes in the report beside it.")
+            :TEXT("The elder is dead. Your chosen route goes in the report beside it.");
+        else if(Subtitle==TEXT("BES_REPORT_DYNAMIC"))Subtitle=Cinderhold.Save().resolution==2
+            ?TEXT("You left the elder alive. I will remember that when I think of the road.")
+            :TEXT("You killed the elder. I will remember that when I think of the road.");
+        else if(Subtitle==TEXT("HOME_RETURN_DYNAMIC"))
+        {
+            const auto Return=Cinderhold.Save();
+            Subtitle=FString::Printf(TEXT("On day %d: %d baskets in the hearth reserve. %d cold days remembered. %d marks owed to Bes at this visit."),Return.returnDay,Return.returnedHeat,Return.returnedColdDays,Return.returnedOwed);
+        }
+    }
     FrameBesDirectedBeat(Speaker,FString(UTF8_TO_TCHAR(Beat->camera)),
         FString(UTF8_TO_TCHAR(Beat->blocking)),Beat->duration);
     OnBesDirectedBeat.Broadcast(
@@ -157,7 +183,8 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
             ?TEXT("BES"):Speaker==FName(TEXT("npc.cinderhold.emberwarden.001"))
             ?TEXT("RHEVA"):Speaker==FName(TEXT("npc.saltwake.courier.001"))
             ?TEXT("MERA"):Speaker==FName(TEXT("npc.cinderhold.healer.001"))
-            ?TEXT("OVENNA"):Speaker.ToString();
+            ?TEXT("OVENNA"):Speaker==FName(TEXT("npc.cinderhold.blackslag.scout.001"))
+            ?TEXT("VARDA"):Speaker.ToString();
     if(!IsValid(BesSubtitleOverlay))
     {
         if(APlayerController* PC=GetWorld()->GetFirstPlayerController())

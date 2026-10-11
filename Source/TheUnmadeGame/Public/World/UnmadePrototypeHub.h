@@ -19,6 +19,7 @@
 #include "World/UnmadeMaterialConsequencesRules.h"
 #include "World/UnmadeLivingEconomyRules.h"
 #include "World/UnmadeBesHouseholdRules.h"
+#include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
@@ -70,6 +71,16 @@ public:
     FString GetRealityConsequenceJournal() const;
     UFUNCTION(BlueprintPure,Category="Unmade|Economy")
     FString GetLocalMaterialJournal() const;
+    bool TryCinderholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryCinderholdAbility(AUnmadeCharacter* Player,int32 Ability,int32 Choice=0);
+    bool RecordCinderholdConversation(FName StableId);
+    FString GetCinderholdResidentLine(FName StableId) const;
+    FString GetCinderholdJournal() const;
+    bool RecordCinderholdElderDefeat(class AUnmadeEnemyCharacter* Elder);
+    bool IsCinderholdElderResolved() const { return !bCinderholdSaveRejected&&Cinderhold.Resolved(); }
+    int32 GetCinderholdElderResolution() const { return bCinderholdSaveRejected?0:Cinderhold.Save().resolution; }
+    bool IsCinderholdVentActive() const;
+    void PlayCinderholdScene(int32 Scene);
     bool TryFieldSurveyInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryMaterialInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryLivingTradeInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
@@ -211,6 +222,21 @@ private:
     UnmadeCore::MaterialWorld Materials;
     UnmadeCore::LivingEconomy LivingTrades;
     UnmadeCore::BesHousehold BesHousehold;
+    UnmadeCore::CinderholdAdventure Cinderhold;
+    bool bCinderholdSaveRejected=false;
+    int32 CinderholdMaintenanceTurns=0;
+    double CinderholdNextMaintenanceAt=0;
+    int32 CinderholdPendingRoute=0;
+    double CinderholdConfirmUntil=-1;
+    double NextCinderholdRefreshAt=0;
+    void BuildCinderholdAdventure();
+    void RefreshCinderholdAdventure();
+    bool CommitCinderhold(const UnmadeCore::CinderholdAdventure& Before,AUnmadeCharacter* StrainOwner=nullptr);
+    TWeakObjectPtr<AStaticMeshActor> CinderholdVentWheel;
+    TWeakObjectPtr<AStaticMeshActor> CinderholdKilnGate;
+    TWeakObjectPtr<AStaticMeshActor> CinderholdArchiveGate;
+    TWeakObjectPtr<class ATextRenderActor> CinderholdVentSign;
+    TWeakObjectPtr<class ATextRenderActor> CinderholdHomeSign;
     double LastBesReturningSceneAt=-9999.0;
     FName BesPendingDecision;
     double BesDecisionExpiresAt=0.0;
@@ -314,7 +340,7 @@ private:
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;
     void RestoreLivingWorld();
     void SaveLivingWorld();
-    bool WriteWorldSnapshot();
+    bool WriteWorldSnapshot(AUnmadeCharacter* StrainOwner=nullptr);
     int32 ReadStoryChoice() const;
     void SpawnLoreSite(UnmadeCore::District District, FName SiteId,
         const TCHAR* Name, const TCHAR* DayLine, const TCHAR* NightLine, FVector Position);

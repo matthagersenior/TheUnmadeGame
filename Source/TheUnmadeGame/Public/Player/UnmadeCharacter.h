@@ -35,6 +35,7 @@ public:
     bool IsBorrowedLifeActive() const;
     int32 GetBorrowedCraftLevel() const;
     int32 GetBorrowedLifeRole() const;
+    UnmadeCore::FractureSnapshot GetRealitySnapshot() const { return FractureModel.TakeSnapshot(); }
     double GetRealityStrain() const { return FractureModel.CurrentStrain(); }
     bool SpendRealityStrain(int32 Cost) { return FractureModel.SpendStrain(Cost); }
     void RefundRealityStrain(int32 Cost) {

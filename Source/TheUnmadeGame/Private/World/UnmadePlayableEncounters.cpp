@@ -36,6 +36,7 @@ bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
        Player->GetCombat()->IsDefeated()||!bFieldSurveySaveUsable||FieldSurveyStages.Num()!=6)return false;
     for(int32 i=0;i<6;++i)
     {
+        if(i==5&&FieldSurveyStages[i]==2)continue; // Varda remains available for authored dialogue.
         const FVector Switch=SurveyCenters[i]+FVector(-780,-430,80);
         const FVector Report=SurveyCenters[i]+FVector(0,-870,100);
         const bool bReporting=FieldSurveyStages[i]>0;
@@ -304,8 +305,10 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
                 const bool bWatcher=Enemy->GetEnemyStyle()==UnmadeCore::EnemyStyle::Watcher;
                 Enemy->ConfigureEncounter(
                     FName(*FString::Printf(TEXT("%s.Creature.%d"),Site.Id,i)),
-                    i==2?FString(Site.Creatures[i])+TEXT(" - Elder"):FString(Site.Creatures[i]),
+                    GuideIndex==5&&i==2?TEXT("Sootbound Elder"):
+                        i==2?FString(Site.Creatures[i])+TEXT(" - Elder"):FString(Site.Creatures[i]),
                     FLinearColor(Site.Accent));
+                if(GuideIndex==5&&i==2)Enemy->ConfigureCinderholdElder();
                 Enemy->SetVisualScale(bWatcher?FVector(.7,.7,.9):FVector(1.1,.85,1.05));
             }
         }

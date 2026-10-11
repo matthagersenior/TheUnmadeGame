@@ -5,6 +5,7 @@
 #include "Combat/UnmadeCombatRules.h"
 #include "Combat/UnmadeBossRules.h"
 #include "Combat/UnmadeCreatureRules.h"
+#include "World/UnmadeCinderholdAdventureRules.h"
 #include "UnmadeEnemyCharacter.generated.h"
 
 class UUnmadeCombatComponent;
@@ -20,6 +21,8 @@ public:
     AUnmadeEnemyCharacter();
     virtual void Tick(float DeltaSeconds) override;
     virtual void BeginPlay() override;
+    void ConfigureCinderholdElder();
+    bool CanBeTargeted() const;
     void ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion=false);
     void ConfigureStyle(UnmadeCore::EnemyStyle NewStyle);
     void SetVisualScale(FVector Scale);
@@ -64,5 +67,13 @@ private:
     double RecoveryEndsAt=0.0;
     double FoldExposedUntil = -1.0;
     bool bDeathHandled = false;
+    bool bCinderholdElder=false,bCinderholdQuieted=false;
+    FVector TerritoryHome=FVector::ZeroVector;
+    FVector ElderLockedAim=FVector::ZeroVector;
+    double NextElderSaveAttemptAt=0;
+    UnmadeCore::SlagElderPattern ElderPattern;
+    UnmadeCore::SlagAttack ElderLastWarning=UnmadeCore::SlagAttack::None;
+    UPROPERTY(VisibleAnywhere,Category="Unmade|Combat Feedback")
+    TObjectPtr<UStaticMeshComponent> ElderAimMarker;
     TWeakObjectPtr<AUnmadePrototypeHub> CachedRealityHub;
 };

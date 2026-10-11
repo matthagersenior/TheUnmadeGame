@@ -1,3 +1,19 @@
+# Current illustrated release — Cinderhold Adventure v12
+
+Date: 11 October 2026. Code baseline: `dcac72039eae43c140af8704f0983182696efd01`. The accompanying v12 commit contains gameplay, canon and artifact digests together.
+
+Actual rebuilt outputs: complete illustrated Bible PDF/DOCX, **145 pages / 56 illustrations**; complete standalone Volume X PDF/DOCX, **87 pages / 9 illustrations**; exact source-position Cinderhold adventure atlas; complete ZIP with current Unreal source, retained original art/audio/rig kit, three generated prototype Foley cues, reproducible book builder and v11 masters. The new dated editions preserve every earlier paragraph and illustration. Filenames use `Cinderhold_Adventure_v12` and are supplied as direct downloads and saved files. Package: `THE_UNMADE_Cinderhold_Adventure_v12_Complete_Package.zip`.
+
+Implemented source: Bes household inspection and remembered return; Varda briefing/report; three physical clues; vent cooling and cadence alternative; territorial Sootbound Elder with locked-aim ground slam and half-health sweep; two persistent elder outcomes; three route choices; local Glimpse/Fold and warned Rewrite with physical alternatives; witnessed personal reactions; four directed three-beat scenes with captions/camera/optional clip hooks. Failed saves roll back paid route decisions; wage, household fuel, consent, campaign and OPEN mysteries retain their prior authority.
+
+Validation: **236 Python tests; 46 compiled portable C++ executables**; full DOCX/PDF render; all page overviews and new pages visually inspected; zero empty pages / off-page text blocks; all 142 inherited Bible PDF pages pixel-identical; all 82 inherited Volume X pages text-identical with old image bytes retained. ZIP CRC and member SHA-256 verified.
+
+**Unreal UHT/Editor compilation, imports, navmesh, physical collision/LOS, real scene staging, save/load in PIE and creator playtesting remain outstanding.** No finished VO, bespoke elder animation, engine footage or playable EXE/APK is claimed. See `docs/design/cinderhold-adventure-v12-acceptance.md` for the full walkthrough and engine acceptance matrix.
+
+Digests: `RELEASE_SHA256_MANIFEST.json`; package has its own member manifest. No binary GitHub Release is claimed.
+
+---
+
 # Current illustrated release — Paths and Predators v11
 
 Date: 11 October 2026. Code baseline: `2beed3883d884852d3919cc537ea7ac8b4e07708`. The accompanying v11 commit contains the gameplay, canon and digest updates together.
