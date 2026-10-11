@@ -170,7 +170,9 @@ public:
            world.Cargo().realm!=-1)return TradeResult::Blocked;
         const auto& c=TradeContracts[i];
         auto& buyer=data_.workers[static_cast<int>(c.destination)];
-        if(buyer.employerMarks<c.agreedMarks)return TradeResult::Blocked;
+        if(day<buyer.lastPaidDay ||
+           day<data_.workers[static_cast<int>(c.origin)].lastPaidDay ||
+           buyer.employerMarks<c.agreedMarks)return TradeResult::Blocked;
         if(!world.ExportForContract(c.origin,c.units,day))return TradeResult::Blocked;
         // Signed buyer escrow: destination cannot run out of funds during
         // a long physical journey. Funds are committed, not minted.
@@ -188,6 +190,7 @@ public:
         auto& seller=data_.workers[static_cast<int>(c.origin)];
         auto& record=data_.routes[i];
         if(!destination||day<destination->day||
+           day<buyer.lastPaidDay||day<seller.lastPaidDay||
            seller.employerMarks>100000-c.agreedMarks||
            record.foreignStock>100-c.units||
            record.deliveries>=100000||
