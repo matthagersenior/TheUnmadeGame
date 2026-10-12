@@ -1,6 +1,6 @@
 # THE UNMADE — First playable milestone tracker
 
-**Tracked revision:** 2026-10-09. Source of truth: GitHub `main`. This file records **source readiness**, not an engine-tested playable game.
+**Tracked revision:** 2026-10-12. Source of truth: GitHub `main`. This file records **source readiness**, not an engine-tested playable game. Older milestone rows below are historical snapshots; current source scope is summarized here and in the [PC-independent readiness ledger](pre-pc-readiness.md).
 
 | Milestone | Source | Evidence / missing verification |
 |---|---|---|
@@ -10,7 +10,7 @@
 | Six crafting recipes, three professions and finite village economies | Source present | Native test coverage; shop proximity, workstation use and UI are engine-unverified |
 | Three faction chronicles and two frontier arcs | Source present | Native tests; NPC conversation and save persistence unverified inside Unreal |
 | Inventory and equipment (60 authored items) | Source present | Native tests; models, combat effects, trading and inventory UI unverified |
-| 64 named NPCs across three villages and two frontier outposts, memory and routines | Present | Native rules CI; Unreal actor movement and save/load unverified |
+| 82 persistent resident identities across current relationship/memory systems | Source present | Native rules CI; final actor placement, movement and save/load unverified in Unreal |
 | Optional locally hosted language model | Adapter present, off by default | Game fully functions without model by design; model inference untested |
 | Three-tier fracture with Strain and persistent Rewrite | Source present | Native rules CI; Unreal timers/visuals/collision unverified |
 | Melee, guard, Stalker and Watcher | Source present | Native rules CI; animations, projectiles and navigation absent |
@@ -23,7 +23,7 @@
 | Append-only inventory catalog save migration | Source implementation | Previous save files must still be tested in Unreal |
 | Android remote playtest | Not provisioned | Approved, cost-capped GPU host and authenticated Pixel Streaming required |
 
-## Verification procedure
+## Current source milestone — v21 parity gate (12 October 2026)\n\nNine-realm source contracts now share a CI-enforced parity floor for identity, evidence, choices, consequences, optional return arcs, sensory/access cues and production handoffs. The gate is `Scripts/tests/test_gameplay_parity.py`; its limits and the shared standards for menus, cinematics, abilities, enemies, economies, relationships, saves, accessibility and performance are recorded in [gameplay parity and completion](gameplay-parity-v21.md). This adds source validation and acceptance criteria. It does not change the engine status below.\n\n## Verification procedure
 
 GitHub Actions compiles native C++17 tests covering fracture rules, NPC decisions and movement, combat/bosses, crafting, economies, factions, frontier stories, language discovery, the branching story, and a combined no-AI scenario. It also runs Python source-contract tests. Those are valid source-level results, **not an Unreal build pass**.
 
@@ -62,7 +62,7 @@ On a provisioned Windows Unreal GPU host, run `Scripts/check_unreal_host.ps1`, b
 | Six Confluence chambers and 120s dual-power puzzles | Native model + physical marker source | Chamber collision, casting and witness playtest required |
 | 60 named items and sixteen earned rite/confluence relics | Native item tests + saved achievement integration | Inventory/equipment UI and save migration unverified in Unreal |
 | Oath betrayal/restitution, debt exhaustion, branching law/history consequences | C++ source and tests | Live NPC/world reactions, difficulty and pacing unverified |
-| Full nine-realm RPG, audio, cinematics, authored levels | Not completed | Six other realms remain concepts; three have source footholds |
+| Full nine-realm RPG, audio, cinematics, authored levels | Source authored across nine realms; not playable-complete | Source-spawned graybox chunks and authored content contracts exist; authored/imported maps, audio, animation and traversal remain engine-unverified |
 
 This is a **meaningfully expanded code foundation**, not a finished game.
 See [Tenfold QA](tenfold-prototype-qa.md).
