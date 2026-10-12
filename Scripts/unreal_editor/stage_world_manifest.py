@@ -69,7 +69,6 @@ def apply_in_editor(m):
             # artist mesh remains intact when the staging plan is re-run.
             if mesh_path and component:
                 current=component.get_editor_property("static_mesh")
-                current_path=current.get_path_name() if current else ""
                 if is_engine_cube_placeholder(current,default_mesh):
                     component.set_static_mesh(mesh)
                     updated+=1
