@@ -32,6 +32,13 @@ class FirstBuildDiagnosticsTests(unittest.TestCase):
         self.assertLess(compile_at, catch_at)
         self.assertNotIn("python ", self.build[catch_at:])
 
+    def test_first_pc_script_has_one_complete_body_without_duplicate_fragments(self):
+        self.assertEqual(self.build.count("$repo="), 1)
+        self.assertEqual(self.build.count('Write-Host "Compiling C++ Editor target'), 1)
+        self.assertEqual(self.build.count("} catch {"), 1)
+        self.assertNotIn("\n){", self.build)
+        self.assertTrue(self.build.rstrip().endswith("}"))
+
     def test_host_preflight_reports_exact_engine_and_build_toolchain(self):
         for evidence in (
             "Engine/Build/Build.version",
