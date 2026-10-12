@@ -1,5 +1,5 @@
 # THE UNMADE — PC-independent readiness ledger
-**As of 2026-10-10 | This is a live engineering backlog, not a release-complete certification.**
+**Updated 2026-10-12 | Live engineering backlog; this is not a release-complete certification. Historical entries below retain their original dates.**
 
 ## Evidence codes
 - **NATIVE TESTED** — deterministic C++17 tests run under GitHub Actions (not Unreal).
@@ -11,7 +11,7 @@
 | System | Source preparation | Remaining approval gate |
 |---|---|---|
 | Third-person pawn, camera, travel | Runtime-generated prototype hub and gates (SOURCE WIRED) | ENGINE REQUIRED: actual map/boot/collision |
-| Adaptive NPCs | 64 distinct identifiers; witness vs rumor, decisions and limited movement (NATIVE TESTED + SOURCE WIRED) | ENGINE REQUIRED: crowds, NavMesh and real animations |
+| Adaptive NPCs and relationships | 82 persistent resident identities; witness vs rumor, decisions, continuity and limited movement (NATIVE TESTED + SOURCE WIRED) | ENGINE REQUIRED: final actor placement, crowds, NavMesh, animation and save/load |
 | Player identity | Eight feature values, validated name, immutable origin, backward-compatible save, blueprint access (NATIVE TESTED + SOURCE WIRED) | CONTENT MISSING: UMG creator, rig, hairstyles, face/hair/skin materials |
 | Reality and signature disciplines | Native Glimpse/Fold/Rewrite, ten rites and six confluences (NATIVE TESTED + SOURCE WIRED) | CONTENT MISSING: authored hazards/VFX, controller affordance, in-world puzzle play |
 | Combat and recovery | Two enemy styles, three boss patterns, guarding, deduplication and 75%-health safe respawn (NATIVE TESTED + SOURCE WIRED) | ENGINE REQUIRED: hit VFX, stamina/difficulty tuning and real play |
@@ -21,13 +21,13 @@
 | Nine-realm atlas | Distinct future scripts, witness names, controls, paths and ethical choices (NATIVE TESTED) | CONTENT MISSING: six graybox realm chunks are now source-spawned, but they are **not authored or engine-tested levels** |
 | Windows host bootstrap | `Scripts/first_pc_build_and_test.ps1` with preflight, build and automation, per-attempt logs | ENGINE REQUIRED: actually running it on a supported host |
 
-## Pre-PC backlog (can continue now, not yet complete)
+## Current source milestone: cross-realm parity (12 October 2026)\n\nA new Python CI gate verifies the nine realm authoring tracks stay aligned and that each realm retains distinct identity, main and optional quest choices, return reactions, evidence, sensory cues, accessibility cues and production handoffs. The shared acceptance standard now names consistent requirements for menus/HUD, cinematics/dialogue, exploration, abilities, enemies/bosses, economy/crafting, relationships, saves, accessibility and performance. See [gameplay parity and completion standard](gameplay-parity-v21.md). This verifies authored source only; it does not close the Unreal build or playtest gates.\n\nThe current menu source includes eight pages and 28 bound actions, with text scaling, high contrast, reduced flashes, controller prompts and remapping represented in settings. Controller focus, navigation, rendered layouts and actual effect of every preference remain engine acceptance work. Cinematic handoff plans and realm production references are source assets; rendered sequences, captured footage, final audio and imported world assets are not claimed complete.\n\n## Pre-PC backlog (can continue now, not yet complete)
 1. **SOURCE WIRED / NATIVE TESTED:** irreversible F7/F8 previews now require a second same-arc, same-ending press within six seconds. The pending remaining gate is UE controller, UI and save-failure playtesting.
 2. **SOURCE WIRED / NATIVE TESTED / ENGINE UNVERIFIED:** Six different world-timed dangers apply health injury or nonlethal reality strain. Six optional third-chapter Echo investigations add two proofs and a verified local witness per realm, plus source-world consequences. Now prioritize distinct enemies, advanced ability interaction, professional dialogue/cinematic/audio content and true navigation. No engine playtest yet.
 3. Improve save transaction integrity across combat health/checkpoints, quests, NPC memory, equipment and worlds; test bad arrays, failed writes and repeated saves.
 4. Author navigation and controller-accessible UI interaction specifications, first-party feedback, item/quest/inventory states, audio cue sheets and localization text independent of a PC.
 5. Create source-verifiable quests and world consequences per realm, not merely names, stat counters or 3D placeholders; validate performance budgets and progression without infinite grinding.
-6. Add automated release/quality gates for architecture coverage and progressive content migration, keeping original player-first promises intact.
+6. Extend source gates to catch feature wiring gaps and run player-first acceptance scenarios across all realm choices; keep the new parity gate strict as content changes.
 7. Maintain canonical lore and dated illustrated assets when the project crosses a real content milestone. Source tests cannot prove the visual package has been reissued.
 
 ## Work that requires a real Unreal-capable environment to finish
