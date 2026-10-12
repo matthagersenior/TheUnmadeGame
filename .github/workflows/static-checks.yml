@@ -36,6 +36,25 @@ jobs:
           /tmp/unmade-style
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/defense_receipt_test.cpp -o /tmp/unmade-defense-receipts
           /tmp/unmade-defense-receipts
+      - name: Parse first-PC PowerShell entry points
+        shell: pwsh
+        run: |
+          $paths = @(
+            "Scripts/first_pc_build_and_test.ps1",
+            "Scripts/first_pc_quickstart.ps1",
+            "Scripts/check_unreal_host.ps1",
+            "Scripts/run_ue_tests.ps1"
+          )
+          foreach ($path in $paths) {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD $path), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error "${path}:$($_.Extent.StartLineNumber): $($_.Message)" }
+              exit 1
+            }
+          }
+
       - name: Set up Python
         uses: actions/setup-python@v7
         with:

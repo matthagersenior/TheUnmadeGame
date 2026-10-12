@@ -32,6 +32,13 @@ class FirstBuildDiagnosticsTests(unittest.TestCase):
         self.assertLess(compile_at, catch_at)
         self.assertNotIn("python ", self.build[catch_at:])
 
+    def test_first_pc_script_has_one_complete_body_without_duplicate_fragments(self):
+        self.assertEqual(self.build.count("$repo="), 1)
+        self.assertEqual(self.build.count('Write-Host "Compiling C++ Editor target'), 1)
+        self.assertEqual(self.build.count("} catch {"), 2)
+        self.assertNotIn("\n){", self.build)
+        self.assertTrue(self.build.rstrip().endswith("}"))
+
     def test_host_preflight_reports_exact_engine_and_build_toolchain(self):
         for evidence in (
             "Engine/Build/Build.version",
@@ -53,6 +60,13 @@ class FirstBuildDiagnosticsTests(unittest.TestCase):
         self.assertIn('if(!$SkipStage -and !$BuildOnly)', self.quickstart)
         self.assertIn('if(!$DontOpenEditor -and !$BuildOnly)', self.quickstart)
         self.assertIn("BUILT_NOT_TESTED_NOT_STAGED", self.quickstart)
+
+    def test_host_preflight_runs_in_child_process_and_preserves_failure_receipt(self):
+        invocation = '& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "check_unreal_host.ps1")'
+        self.assertIn(invocation, self.build)
+        self.assertIn('$preflightExit = $LASTEXITCODE', self.build)
+        self.assertIn('HOST_PREFLIGHT_FAILED: exit $preflightExit', self.build)
+        self.assertNotRegex(self.build, r'(?m)^\s*& \(Join-Path \$PSScriptRoot "check_unreal_host\.ps1"\)')
 
     def test_double_click_failure_message_points_to_real_report_folder(self):
         self.assertIn("TestReports/quickstart-*", self.launcher)
