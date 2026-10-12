@@ -25,10 +25,10 @@ try {
     if(-not (Test-Path -PathType Leaf $project)){throw "PROJECT_NOT_FOUND: $project"}
     if(-not (Test-Path -PathType Leaf $build)){throw "UNREAL_BUILD_NOT_FOUND: $build"}
     if(-not [string]::IsNullOrWhiteSpace($TestFilter) -and
-       $TestFilter -notmatch '^Unmade(\.[a-zA-Z0-9_]+)*){
+       $TestFilter -notmatch '^Unmade(\.[a-zA-Z0-9_]+)*$'){
         throw "INVALID_TEST_FILTER: expected Unmade or Unmade.<group>"
     }
-    & (Join-Path $PSScriptRoot "check_unreal_host.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
+        & (Join-Path $PSScriptRoot "check_unreal_host.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "preflight.log")
     if($LASTEXITCODE -ne 0){throw "HOST_PREFLIGHT_FAILED: exit $LASTEXITCODE"}
     & python (Join-Path $PSScriptRoot "build_player_experience.py") --check 2>&1 |
