@@ -10,7 +10,7 @@ Freedom with lasting, understandable consequences. A living community that remem
 - **Cinderhold / The Ember That Chose No Heir:** after the original hearth resolution, operate Heat Vent to remove heat seal; investigate Common Kiln + Ovenna or Ember Deed + Tarin; return to Rheva. A Public Kiln or Unsealed Passage, mutually exclusive route gates and remembered local consequences persist. *Source pass; simulated thermal damage, live fire, additional interior navigation and new combat are not present.*
 
 ## Six later realms — required *physical-first* production sequences
-These are contracted gameplay designs only. The named controls are defined in deterministic rules; none has an Unreal actor or traversable level yet.
+These are contracted gameplay designs with deterministic source rules and source-spawned graybox chunks. None is an authored/imported Unreal map with engine-verified traversal yet; collision, navigation and presentation remain untested in-editor.
 
 | Realm and first meaningful action | Hazard and learnable counterplay | Two viable investigations | Return consequence and replay reason |
 |---|---|---|---|
