@@ -8,4 +8,4 @@ Use annotated source milestone tags and GitHub releases only against a passing m
 
 Repository metadata: description “A dark, surreal third-person RPG where reality and memory conflict.” Topics: unreal-engine, rpg, ue5. Prefer squash merging for future changes.
 
-The Publish verified source milestone workflow creates the initial source-v16 prerelease after successful main push CI. Subsequent milestones use manual dispatch with a new tag; an existing published initial milestone is left intact.
+The Publish verified source milestone workflow creates the initial source-v17 prerelease after successful main push CI. Subsequent milestones use manual dispatch with a new tag; an existing published initial milestone is left intact.

@@ -24,6 +24,10 @@ public:
     virtual void BeginPlay() override;
     void ConfigureCinderholdElder();
     void ConfigureExpedition(int32 Arc,int32 Slot,UnmadeCore::ExpeditionRole Role);
+    void ConfigureWingGuardian(int Arc);
+    void ConfigureWingObserver();
+    bool IsWingObserver()const{return bWingObserver;}
+    bool IsWingGuardian(int Arc)const{return bWingGuardian&&ExpeditionArc==Arc;}
     bool IsExpeditionArc(int Arc)const{return ExpeditionArc==Arc;}
     bool IsExpeditionEnemy(int32 Arc,int32 Slot)const{return ExpeditionArc==Arc&&ExpeditionSlot==Slot;}
     void ConfigureRoadElder(int32 City){RoadElderCity=City;bCinderholdElder=true;TerritoryHome=GetActorLocation();}
@@ -46,9 +50,11 @@ private:
     int32 ExpeditionArc=-1,ExpeditionSlot=-1;
     UnmadeCore::ExpeditionRole ExpeditionRole=UnmadeCore::ExpeditionRole::Sentinel;
     UnmadeCore::ExpeditionPattern ExpeditionPattern;
+    FVector NormalLockedAim=FVector::ZeroVector;
     FVector ExpeditionAim=FVector::ZeroVector;
-    bool bExpeditionWarning=false;
+    bool bExpeditionWarning=false,bWingGuardian=false,bWingObserver=false;
     void TickExpedition(float DeltaSeconds);
+    void TickWingObserver(float DeltaSeconds);
     UPROPERTY(VisibleAnywhere, Category="Unmade|Combat")
     TObjectPtr<UUnmadeCombatComponent> Combat;
 

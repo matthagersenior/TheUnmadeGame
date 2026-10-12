@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Unique source milestone tag (for example source-v16)
+        description: Unique source milestone tag (for example source-v17)
         required: true
         type: string
 permissions:
@@ -27,7 +27,7 @@ jobs:
             if (context.ref !== 'refs/heads/main') throw new Error('Dispatch only from main');
             const automatic = context.eventName === 'workflow_run';
             const sha = automatic ? context.payload.workflow_run.head_sha : context.sha;
-            const tag = automatic ? 'source-v16' : process.env.RELEASE_TAG;
+            const tag = automatic ? 'source-v17' : process.env.RELEASE_TAG;
             if (!/^source-v[0-9]+(?:\.[0-9]+)*(?:-[a-z0-9]+)?$/.test(tag)) throw new Error('Invalid source milestone tag');
             const repo = {...context.repo};
             const runs = await github.rest.actions.listWorkflowRuns({...repo, workflow_id: 'static-checks.yml', head_sha: sha, event: 'push'});

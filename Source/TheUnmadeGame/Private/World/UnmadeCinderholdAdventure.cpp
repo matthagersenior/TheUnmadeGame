@@ -1,3 +1,4 @@
+#include "UI/UnmadePlayerPreferences.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Player/UnmadeCharacter.h"
@@ -27,7 +28,7 @@ void SlagSound(UWorld* World,const TCHAR* Cue,FVector At){
     const FString Name=FString(TEXT("SFX_CH_"))+Cue;
     const FString Path=FString::Printf(TEXT("/Game/UnmadeProduction/Audio/Cinderhold/%s.%s"),*Name,*Name);
     if(USoundBase* Sound=LoadObject<USoundBase>(nullptr,*Path,nullptr,LOAD_NoWarn))
-        UGameplayStatics::PlaySoundAtLocation(World,Sound,At,.65f);
+        UGameplayStatics::PlaySoundAtLocation(World,Sound,At,.65f*GetDefault<UUnmadePlayerPreferences>()->AudioVolume);
 }
 bool Able(AUnmadeCharacter* P){return IsValid(P)&&IsValid(P->GetCombat())&&!P->GetCombat()->IsDefeated();}
 bool LocalSight(UWorld* World,AUnmadeCharacter* Player,FVector Target,double Limit) {

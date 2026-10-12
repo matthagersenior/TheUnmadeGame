@@ -1,5 +1,6 @@
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadeWorldAtlas.h"
+#include "World/UnmadeExpeditionRegistry.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeConfluenceRules.h"
@@ -60,6 +61,10 @@ void UUnmadeEquipmentComponent::BeginPlay()
             return;
         }
     }
+    UnmadeCore::Expeditions Earned;
+    if(!ReadOwnedExpeditions(Earned)){bSaveRejected=true;return;}
+    if(Save&&Save->bHasUnifiedLoadout){if(Save->UnifiedRealmLoadout.Num()!=3){bSaveRejected=true;return;}Loadout={Save->UnifiedRealmLoadout[0],Save->UnifiedRealmLoadout[1],Save->UnifiedRealmLoadout[2]};if(!Loadout.Valid(Earned)){bSaveRejected=true;return;}}
+    else Loadout=UnmadeCore::UnifiedLoadout::Migrate(Earned);
     const auto Previous=Inventory.Snapshot();
     if (Inventory.Claim(UnmadeCore::Achievement::Starter)==UnmadeCore::RewardResult::Awarded)
     {
@@ -75,6 +80,8 @@ bool UUnmadeEquipmentComponent::Persist(double UpdatedStrain)
     if (bSaveRejected) return false;
     UUnmadePrototypeSave* Save=UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
+    UnmadeCore::Expeditions Earned;if(!ReadOwnedExpeditions(Earned)||!Loadout.Valid(Earned))return false;
+    Save->bHasUnifiedLoadout=true;Save->UnifiedRealmLoadout={Loadout.weapon,Loadout.armor,Loadout.technique};
     const auto& Snapshot=Inventory.Snapshot();
     Save->ItemQuantities.Reset();
     for (int Amount : Snapshot.quantities) Save->ItemQuantities.Add(Amount);
@@ -96,13 +103,8 @@ bool UUnmadeEquipmentComponent::Persist(double UpdatedStrain)
     return UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadePrototypeNPC"),0);
 }
 
-void UUnmadeEquipmentComponent::RefreshCombatBonuses()
-{
-    AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
-    if (IsValid(Player) && IsValid(Player->GetCombat()))
-        Player->GetCombat()->SetGearBonuses(
-            Inventory.AttackBonus()+TemporaryAttack+ExpeditionAttack,Inventory.ArmorBonus()+TemporaryArmor+ExpeditionArmor);
-}
+FIntPoint UUnmadeEquipmentComponent::NativeGearBonuses()const{int attack=Inventory.AttackBonus(),armor=Inventory.ArmorBonus();for(int slot=0;slot<2;++slot)if((slot==0?Loadout.weapon:Loadout.armor)>=0)if(auto* item=UnmadeCore::FindItem(Inventory.Equipped(static_cast<UnmadeCore::GearSlot>(slot)))){attack-=item->attack;armor-=item->armor;}return FIntPoint(FMath::Max(0,attack+TemporaryAttack+ExpeditionAttack+BuildAttack),FMath::Max(0,armor+TemporaryArmor+ExpeditionArmor+BuildArmor));}
+void UUnmadeEquipmentComponent::RefreshCombatBonuses(){auto* p=Cast<AUnmadeCharacter>(GetOwner());if(p&&p->GetCombat()){auto b=NativeGearBonuses();p->GetCombat()->SetGearBonuses(b.X,b.Y);}}
 
 bool UUnmadeEquipmentComponent::Claim(UnmadeCore::Achievement Reward)
 {
@@ -197,25 +199,16 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
     ReconcileCivicContracts(Save);
 }
 
-bool UUnmadeEquipmentComponent::EquipNext(UnmadeCore::GearSlot Slot)
-{
-    if (bSaveRejected) return false;
-    const auto Before=Inventory.Snapshot();
-    const int32 count=static_cast<int32>(UnmadeCore::ItemId::Count);
-    const auto Current=Inventory.Equipped(Slot);
-    const int32 currentIndex = Current == UnmadeCore::ItemId::Count ? -1 : static_cast<int32>(Current);
-    for(int32 step=1;step<=count;++step)
-    {
-        const int32 index=(currentIndex+step)%count;
-        const auto* Def=UnmadeCore::FindItem(static_cast<UnmadeCore::ItemId>(index));
-        if(!Def || Def->slot!=Slot || Inventory.Quantity(Def->id)<1) continue;
-        if(!Inventory.Equip(Def->id)) return false;
-        if(!Persist()) { Inventory.Restore(Before); return false; }
-        RefreshCombatBonuses();
-        return true;
-    }
-    return false;
+bool UUnmadeEquipmentComponent::ReadOwnedExpeditions(UnmadeCore::Expeditions& Out)const{const auto* Save=Cast<UUnmadePrototypeSave>(UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));if(!Save)return true;if(Save->SchemaVersion!=1)return false;if(!Save->bHasExpeditions)return true;std::vector<int> p;for(int v:Save->ExpeditionState)p.push_back(v);return Out.Restore(p);}
+bool UUnmadeEquipmentComponent::SelectRealmReward(int Arc){if(bSaveRejected||Arc<0||Arc>=9)return false;UnmadeCore::Expeditions Earned;if(!ReadOwnedExpeditions(Earned)||!Earned.Arc(Arc)->reward)return false;auto old=Loadout;if(Earned.Arc(Arc)->reward==1)Loadout.weapon=Arc;else Loadout.armor=Arc;Loadout.technique=Arc;if(!Persist()){Loadout=old;return false;}auto b=Loadout.Benefit();SetExpeditionBonuses(b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);return true;}
+bool UUnmadeEquipmentComponent::EquipNext(UnmadeCore::GearSlot Slot){
+ if(bSaveRejected)return false;UnmadeCore::Expeditions Earned;if(!ReadOwnedExpeditions(Earned))return false;const auto Before=Inventory.Snapshot();auto Old=Loadout;
+ int count=static_cast<int>(UnmadeCore::ItemId::Count),current=static_cast<int>(Inventory.Equipped(Slot));int selected=Slot==UnmadeCore::GearSlot::Weapon?Loadout.weapon:Slot==UnmadeCore::GearSlot::Armor?Loadout.armor:-1;if(selected>=0)current=count+selected;int total=count+(Slot==UnmadeCore::GearSlot::Charm?0:9);
+ for(int step=1;step<=total;++step){int index=(current+step)%total;if(index>=count){int a=index-count;if(Earned.Arc(a)->reward!=(Slot==UnmadeCore::GearSlot::Weapon?1:2))continue;if(Slot==UnmadeCore::GearSlot::Weapon)Loadout.weapon=a;else Loadout.armor=a;Loadout.technique=a;}else{auto* Def=UnmadeCore::FindItem(static_cast<UnmadeCore::ItemId>(index));if(!Def||Def->slot!=Slot||Inventory.Quantity(Def->id)<1)continue;if(!Inventory.Equip(Def->id))return false;if(Slot==UnmadeCore::GearSlot::Weapon)Loadout.weapon=-1;if(Slot==UnmadeCore::GearSlot::Armor)Loadout.armor=-1;}
+  if(!Persist()){Inventory.Restore(Before);Loadout=Old;return false;}auto b=Loadout.Benefit();SetExpeditionBonuses(b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);return true;
+ }return false;
 }
+FString UUnmadeEquipmentComponent::DescribeComparison()const{FString t=TEXT("EQUIPMENT COMPARISON / one active weapon and armor\n");int weapon=Loadout.weapon>=0?7+Loadout.weapon*2:0,armor=Loadout.armor>=0?5+Loadout.armor:0;if(Loadout.weapon<0)if(auto* d=UnmadeCore::FindItem(Inventory.Equipped(UnmadeCore::GearSlot::Weapon)))weapon=d->attack;if(Loadout.armor<0)if(auto* d=UnmadeCore::FindItem(Inventory.Equipped(UnmadeCore::GearSlot::Armor)))armor=d->armor;UnmadeCore::Expeditions e;if(!ReadOwnedExpeditions(e))return TEXT("Equipment record invalid; protected.");for(const auto& item:UnmadeCore::ItemCatalog)if(Inventory.Quantity(item.id)>0&&(item.slot==UnmadeCore::GearSlot::Weapon||item.slot==UnmadeCore::GearSlot::Armor)){bool w=item.slot==UnmadeCore::GearSlot::Weapon;t+=FString::Printf(TEXT("%s: %+d %s compared with active slot\n"),UTF8_TO_TCHAR(item.name),w?item.attack-weapon:item.armor-armor,w?TEXT("attack"):TEXT("armor"));}for(int a=0;a<9;++a)if(e.Arc(a)->reward){bool w=e.Arc(a)->reward==1;int value=w?7+a*2:5+a;t+=FString::Printf(TEXT("%s: +%d %s (%+d compared with active slot) %s\n"),UTF8_TO_TCHAR(w?UnmadeCore::ExpeditionSpecs[a].weapon:UnmadeCore::ExpeditionSpecs[a].armor),value,w?TEXT("attack"):TEXT("armor"),value-(w?weapon:armor),(w?Loadout.weapon:Loadout.armor)==a?TEXT("[ACTIVE]"):TEXT("[OWNED]"));}auto benefit=Loadout.Benefit();t+=FString::Printf(TEXT("Technique: +%d attack, +%d armor; Glimpse discount %d, Fold extension %d. Charm and build effects remain additional.\n"),Loadout.technique>=0?benefit.attack-(Loadout.weapon>=0?7+Loadout.weapon*2:0):0,Loadout.technique>=0?benefit.armor-(Loadout.armor>=0?5+Loadout.armor:0):0,benefit.glimpseDiscount,benefit.foldSeconds);return t;}
 
 bool UUnmadeEquipmentComponent::UseConsumable(UnmadeCore::ItemId Id,
     double CurrentStrain,int32& OutStrain)
@@ -333,14 +326,14 @@ bool UUnmadeEquipmentComponent::CraftAt(UnmadeCore::SettlementId Village)
 FString UUnmadeEquipmentComponent::DescribeInventory() const
 {
     FString Summary=FString::Printf(TEXT("GEAR: +%d attack, +%d armor | "),
-        Inventory.AttackBonus(),Inventory.ArmorBonus());
+        NativeGearBonuses().X,NativeGearBonuses().Y);
     for(int32 i=0;i<3;++i)
     {
         const auto* Def=UnmadeCore::FindItem(
             Inventory.Equipped(static_cast<UnmadeCore::GearSlot>(i)));
         Summary+=FString::Printf(TEXT("%s: %s | "),
             i==0?TEXT("Weapon"):i==1?TEXT("Armor"):TEXT("Charm"),
-            Def?UTF8_TO_TCHAR(Def->name):TEXT("Empty"));
+            i==0&&Loadout.weapon>=0?UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[Loadout.weapon].weapon):i==1&&Loadout.armor>=0?UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[Loadout.armor].armor):Def?UTF8_TO_TCHAR(Def->name):TEXT("Empty"));
     }
     Summary+=FString::Printf(TEXT("Marks %d | Smith %d, Apothecary %d, Scribe %d | BAG: "),
         Economy.Marks(),Economy.Skill(UnmadeCore::Profession::Smith),
@@ -350,7 +343,7 @@ FString UUnmadeEquipmentComponent::DescribeInventory() const
         if(Inventory.Quantity(Def.id)>0)
             Summary+=FString::Printf(TEXT("%s x%d; "),
                 UTF8_TO_TCHAR(Def.name),Inventory.Quantity(Def.id));
-    return Summary;
+    return Summary+TEXT("\n")+DescribeComparison();
 }
 
 int32 UUnmadeEquipmentComponent::GetAtlasAttunement() const

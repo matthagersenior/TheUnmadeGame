@@ -1,10 +1,14 @@
 # Development history
 
-Historical source milestones and publication claims, preserved from the former README. These entries describe their dated baseline; consult the root README for current status.
+Historical milestones describe their dated baseline. Consult the root README for current status.
+
+## Player Experience v17 — 12 October 2026
+
+Timed contact and traveling shots, unified equipment, optional dungeon wings and guardians, furnished settlement services, conditional relationships, earned builds, objectives/maps, accessibility settings and input rebinding. [Acceptance](design/player-experience-v17-acceptance.md).
 
 ## Adventure Depth v16 — 11 October 2026
 
-Nine distinct dungeon routes/challenges, nine personal accords, services in 29 settlements, weapon styles and stamina defenses, earned equipment techniques, and native RPG menus. [Acceptance](design/adventure-depth-v16-acceptance.md).
+Nine distinct dungeon routes/challenges, personal accords, services in 29 settlements, weapon styles, stamina defenses, equipment techniques and native menus. [Acceptance](design/adventure-depth-v16-acceptance.md).
 
 ## World Identity v15 — 11 October 2026
 

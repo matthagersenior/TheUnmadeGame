@@ -1,81 +1,47 @@
 {
-  "edition": "Adventure Depth v16",
-  "date": "2026-10-11",
-  "source_base": "99d86b72b1c6d68b430529082ff9abe3c9e5e1e6",
+  "edition": "Player Experience v17",
+  "date": "2026-10-12",
+  "source_base": "6e760ad86fccdb8a58f808aedaeacc1628b399f9",
   "engine_compiled": false,
   "engine_playtested": false,
-  "native_cpp_tests": 52,
-  "python_tests": 255,
-  "workflow_validators": 22,
-  "complete_bible_pages": 158,
-  "complete_bible_images": 60,
-  "volume_x_pages": 107,
-  "volume_x_images": 13,
+  "python_tests": 262,
+  "native_cpp_tests": 55,
+  "workflow_validators": 25,
+  "complete_bible_pages": 162,
+  "complete_bible_images": 61,
+  "volume_x_pages": 113,
+  "volume_x_images": 14,
   "animation_clips": 57,
   "new_original_wavs": 0,
-  "qa": "All inherited page overviews and new chapter pages visually inspected. Every inherited paragraph, illustration byte and inherited PDF page text retained. Zero empty pages or off-page text blocks. Original rigs statically validated and offline pose contact sheets inspected. Audio PCM, levels, endpoints and hashes validated; engine audition deferred.",
+  "wing_room_areas": 27,
+  "wing_guardians": 9,
+  "relationship_scenes": 36,
+  "settlement_service_rooms": 29,
   "files": [
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Adventure_Depth_v16.docx",
-      "sha256": "7765bbf3163a1320189209d21996a774e3a65c360e03941d9ee8dc63259ac66b",
-      "bytes": 7860842
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Player_Experience_v17.docx",
+      "bytes": 8006772,
+      "sha256": "7ee46eac38c354b4b723e14f73520f4e5f9eeb189b364993518fb014b23f4fff"
     },
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Adventure_Depth_v16.pdf",
-      "sha256": "6f0cfc5fc8fd5600c6cfff18e4f1b0a782fd8ca8bddc42e301e49e792e257564",
-      "bytes": 5328723
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Player_Experience_v17.pdf",
+      "bytes": 5486797,
+      "sha256": "d314bfc0c694f3006ffdc80afbf07277f7b8d30841dec75059c4bc53663fdaec"
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Adventure_Depth_v16.docx",
-      "sha256": "3b954d2000e61425fe44604964dd96c6fc29636f65285eaa20a2cd7d0507f035",
-      "bytes": 5666434
+      "name": "THE_UNMADE_Volume_X_Illustrated_Player_Experience_v17.docx",
+      "bytes": 5812405,
+      "sha256": "57ed7bfe21188b42983b1ec49eb67b69e13d7902e19a844ae60901f9cf7dd391"
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Adventure_Depth_v16.pdf",
-      "sha256": "a83b45a970e30148a422e610a95049822ff900ffc4ee7482f36317d3b69f471f",
-      "bytes": 3313158
+      "name": "THE_UNMADE_Volume_X_Illustrated_Player_Experience_v17.pdf",
+      "bytes": 3473887,
+      "sha256": "9a7c3468a945764e5d299b2c2ba034f8668074284ef6d3983597342972f28c3b"
     },
     {
-      "name": "THE_UNMADE_v16_Adventure_Depth_Atlas.png",
-      "sha256": "7007eb04ab2d2a05b851caf433c33bb6f76750e276945ca8401115e6bcd322ac",
-      "bytes": 137395
-    }
-  ],
-  "assets": [
-    {
-      "name": "asset_kit/previews/SK_UnmadeBeast_Pose_Contact_Sheet.png",
-      "sha256": "13c34532069ee3398f0207068769f6ecd7fd98325c38cd7e865ab9c11378e833",
-      "bytes": 236189
-    },
-    {
-      "name": "asset_kit/previews/SK_UnmadeResident_Pose_Contact_Sheet.png",
-      "sha256": "e6309d6e9eb6dab2200421a319bb6bc04c04b27ebb02d60245a1a0f706020249",
-      "bytes": 206866
-    },
-    {
-      "name": "asset_kit/previews/SK_UnmadeWraith_Pose_Contact_Sheet.png",
-      "sha256": "85eede5f8e3c3ca1cd6df68ee7d493ec811815806921557268bd32191d3d6e09",
-      "bytes": 191651
-    },
-    {
-      "name": "asset_kit/rigs/SK_UnmadeBeast.gltf",
-      "sha256": "191149b4275b606172dc9229c8f81866e308bc0e995586a5743bfa26e58a88c5",
-      "bytes": 43489
-    },
-    {
-      "name": "asset_kit/rigs/SK_UnmadeResident.gltf",
-      "sha256": "5621122fe71ba4a7c3edd58178c32369f9b4c17c7026043cc496e4066e27e02f",
-      "bytes": 43508
-    },
-    {
-      "name": "asset_kit/rigs/SK_UnmadeWraith.gltf",
-      "sha256": "08e4737cb1f25afdaf67b7d2eddc331f5275ceaa8cb6752fd73175b2ad0f57c5",
-      "bytes": 30355
-    },
-    {
-      "name": "asset_kit/rigs/UnmadeSixRegionPBR.gltf",
-      "sha256": "50d6696165907d2e3bf795d029b6a2b5bd3e5b93154a39a3d742a4942acd3855",
-      "bytes": 7894
+      "name": "THE_UNMADE_v17_Player_Experience_Atlas.png",
+      "bytes": 152551,
+      "sha256": "36972fe3736b04fcbeeaa81e841c4b779335da624118b7d6093f94ede1a84b74"
     }
   ]
 }
