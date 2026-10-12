@@ -49,7 +49,7 @@ This builds the Editor target and runs Unreal automation with retained reports. 
 - `Scripts/` and `Tests/`: generators, validation and engine handoff.
 - [Canonical manuscript manifest](docs/lore/bible_sources.json) and [publication workflow](docs/publishing.md).
 - [Development history](docs/CHANGELOG.md) and [latest dated illustrated edition](docs/lore/LATEST_ILLUSTRATED_RELEASE.md).
-- [Binary asset admission](docs/qa/git-lfs.md) and [contribution/release workflow](CONTRIBUTING.md).
+- [First-build diagnostics](docs/qa/first-build-diagnostics.md), [binary asset admission](docs/qa/git-lfs.md) and [contribution/release workflow](CONTRIBUTING.md).
 
 Gameplay is deterministic and offline by default. Optional local dialogue uses a disabled-by-default adapter with authored fallback; see [local dialogue architecture](docs/architecture/local-npc-llm.md).
 
