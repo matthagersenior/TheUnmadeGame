@@ -4,6 +4,7 @@ param(
 )
 $ErrorActionPreference = "Stop"
 $issues = New-Object 'System.Collections.Generic.List[string]'
+$project = Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..")).Path "TheUnmadeGame.uproject"
 $os = Get-CimInstance Win32_OperatingSystem
 Write-Host "Windows: $($os.Caption) | version $($os.Version) | build $($os.BuildNumber) | $($os.OSArchitecture)"
 if ($os.OSArchitecture -notmatch '64') { $issues.Add("A 64-bit Windows host is required for the Win64 Editor target") }
@@ -33,7 +34,6 @@ if (-not (Test-Path $buildVersionPath -PathType Leaf)) {
         }
     } catch { $issues.Add("Could not parse Engine/Build/Build.version") }
 }
-$project = Join-Path (Resolve-Path (Join-Path $PSScriptRoot "..")).Path "TheUnmadeGame.uproject"
 if (-not (Test-Path $project -PathType Leaf)) { $issues.Add("TheUnmadeGame.uproject not found") }
 if ($MinimumFreeDiskGB -lt 1) { $issues.Add("MinimumFreeDiskGB must be positive") }
 try {
