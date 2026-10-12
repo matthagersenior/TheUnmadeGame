@@ -69,7 +69,10 @@ void UUnmadeMemoryComponent::RecalculateReactions()
     for (const FUnmadeNpcObservation& Entry : Observations)
     {
         const bool bDirect = Entry.Evidence == EUnmadeEvidenceKind::Witnessed;
-        if (Entry.EventKind == FName("Player.Helped"))
+        if(Entry.EventKind==FName("World.PersonalReserve")||Entry.EventKind==FName("World.LocalRepair")){Trust+=bDirect?8:2;}
+        else if(Entry.EventKind==FName("World.PersonalWitness")){Trust+=bDirect?4:1;Fear+=bDirect?4:1;}
+        else if(Entry.EventKind==FName("World.LocalMediation")){Trust+=bDirect?6:2;}
+        else if (Entry.EventKind == FName("Player.Helped"))
         {
             Trust += bDirect ? 25 : 10;
         }

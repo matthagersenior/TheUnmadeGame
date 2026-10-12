@@ -28,7 +28,7 @@ class GearSourceContract(unittest.TestCase):
                       "Target->GetCombat()->IsDefeated()", "Achievement::FirstWatcher"):
             self.assertIn(token,player)
         combat=read("Source/TheUnmadeGame/Private/Combat/UnmadeCombatComponent.cpp")
-        self.assertIn("Swing.baseDamage + GearAttack",combat)
+        self.assertIn("Swing.baseDamage+GearAttack",combat)
         self.assertIn("Target->GearArmor",combat)
 
     def test_earned_rewards_only_from_canonical_saved_state(self):

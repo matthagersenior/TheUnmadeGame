@@ -1,5 +1,6 @@
 #include "UI/UnmadeRpgFeedback.h"
 #include "Player/UnmadeCharacter.h"
+#include "UI/UnmadePlayerPreferences.h"
 #include "UI/UnmadeRpgWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "GameFramework/PlayerController.h"
@@ -9,6 +10,7 @@
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeLoreSite.h"
 #include "Combat/UnmadeCombatComponent.h"
+#include "Combat/UnmadeTravelingProjectile.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Combat/UnmadeBossCharacter.h"
 #include "Combat/UnmadeRealmGuardian.h"
@@ -141,8 +143,8 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("RewriteSealed", IE_Pressed, this, &AUnmadeCharacter::RewriteSealed);
     PlayerInputComponent->BindAxis("MoveForward", this, &AUnmadeCharacter::MoveForward);
     PlayerInputComponent->BindAxis("MoveRight", this, &AUnmadeCharacter::MoveRight);
-    PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-    PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+    PlayerInputComponent->BindAxis("Turn", this, &AUnmadeCharacter::TurnView);
+    PlayerInputComponent->BindAxis("LookUp", this, &AUnmadeCharacter::LookView);
 }
 
 void AUnmadeCharacter::ReconcileEarnedRewards()
@@ -859,52 +861,21 @@ void AUnmadeCharacter::ShowStoryJournal()
         UnmadeRpgFeedback(-1,17.f,FColor::Cyan,BesHouseholdSummary);
 }
 
-void AUnmadeCharacter::AttemptMeleeAttack()
-{
-    if(!GetWorld()||!Combat||Combat->IsDefeated()||IsRpgMenuOpen())return;
-    UnmadePresentation::Sound(this,TEXT("swing"));
-    AnimatePlayer(FName(TEXT("Attack")));
-    if(GetWorld())PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+.65;
-    UWorld* World = GetWorld();
-    if (!World || Combat->IsDefeated()) return;
-    AUnmadeEnemyCharacter* Target = nullptr;
-    if(IsRpgMenuOpen())return;
-    UnmadeCore::WeaponStyle Style;
-    for(TActorIterator<AUnmadePrototypeHub> Hub(World);Hub;++Hub){Style=Hub->PlayerWeaponStyle(Equipment?Equipment->EquippedWeapon():UnmadeCore::ItemId::Count);Combat->SetWeaponStyle(Style,Hub->GetActiveMastery());break;}
-    double BestDistanceSq = FMath::Square(Style.reach);
-    const FVector Facing = GetActorForwardVector().GetSafeNormal2D();
-    for (TActorIterator<AUnmadeEnemyCharacter> It(World); It; ++It)
-    {
-        if (!It->CanBeTargeted()) continue;
-        FVector Toward = It->GetActorLocation() - GetActorLocation();
-        Toward.Z = 0;
-        const double DistSq = Toward.SizeSquared();
-        if (DistSq >= BestDistanceSq || FVector::DotProduct(Facing, Toward.GetSafeNormal()) < 0.2)
-            continue;
-        FCollisionQueryParams Params(SCENE_QUERY_STAT(UnmadeMeleeSight), false);
-        Params.AddIgnoredActor(this);
-        Params.AddIgnoredActor(*It);
-        if (World->LineTraceTestByChannel(GetActorLocation() + FVector(0, 0, 60),
-            It->GetActorLocation() + FVector(0, 0, 60), ECC_Visibility, Params))
-            continue;
-        Target = *It;
-        BestDistanceSq = DistSq;
-    }
-    if (!IsValid(Target))
-    {
-        if (GEngine) UnmadeRpgFeedback(-1, 2.f, FColor::Silver,
-            TEXT("No enemy within melee reach and facing."));
-        return;
-    }
-    const float Before = Target->GetCombat()->GetHealth();
-    const double Now = World->GetTimeSeconds();
-    if (Combat->TryStrikeTarget(Target->GetCombat(), Now, true,
-        Target->IsFractureExposed(Now)))
-    {
-        Target->NotifyPlayerHit(Before-Target->GetCombat()->GetHealth());
-        if (GEngine) UnmadeRpgFeedback(-1, 3.f, FColor::Yellow,
-            FString::Printf(TEXT("HIT: %.0f damage, enemy %.0f health."),
-                Before - Target->GetCombat()->GetHealth(), Target->GetCombat()->GetHealth()));
+void AUnmadeCharacter::AttemptMeleeAttack(){
+ if(!GetWorld()||!Combat||Combat->IsDefeated()||IsRpgMenuOpen())return;UnmadeCore::WeaponStyle Style;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){Style=h->PlayerWeaponStyle(Equipment?Equipment->EquippedWeapon():UnmadeCore::ItemId::Count);Combat->SetWeaponStyle(Style,h->GetActiveMastery());break;}
+ double now=GetWorld()->GetTimeSeconds();if(!Combat->BeginWeaponStrike(now))return;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){h->LearnExperienceTutorial(2,this);break;}WeaponStrikeStarted=now;WeaponStrikeRhythm=Style.cooldown;WeaponReach=Style.reach;bFocusProjectile=Equipment&&Equipment->RealmWeapon()<0&&Equipment->EquippedWeapon()==UnmadeCore::ItemId::RedactedScepter;PreviousWeaponTip=GetActorLocation()+FVector(0,0,55)+GetActorForwardVector().RotateAngleAxis(-45,FVector::UpVector)*WeaponReach;UnmadePresentation::Sound(this,TEXT("swing"));AnimatePlayer(FName(TEXT("Attack")));if(GetMesh())GetMesh()->SetPlayRate(1.f/Style.cooldown);PlayerAttackMotionUntil=now+Style.cooldown;
+}
+void AUnmadeCharacter::TickWeaponContact(){
+ if(!GetWorld()||!Combat)return;double now=GetWorld()->GetTimeSeconds();if(Combat->IsDefeated()||Combat->IsStaggered(now)||Combat->IsGuarding()||IsRpgMenuOpen()){Combat->CancelWeaponStrike();return;}if(!Combat->ContactActive(now))return;
+ if(bFocusProjectile){uint64 id=0;double damage=0;UnmadeCore::CombatStatus status=UnmadeCore::CombatStatus::None;if(Combat->ReservedPlayerShot(now,id,damage,status)){FVector muzzle=GetActorLocation()+FVector(0,0,55)+GetActorForwardVector()*80;if(auto* shot=GetWorld()->SpawnActor<AUnmadeTravelingProjectile>(muzzle,FRotator::ZeroRotator))shot->Fire(this,muzzle+GetControlRotation().Vector()*WeaponReach,damage,id,1200,WeaponReach,status);}return;}
+ FVector start=GetActorLocation()+FVector(0,0,55);double contact=FMath::Clamp(WeaponStrikeRhythm*.22,.10,.25),width=FMath::Clamp(WeaponStrikeRhythm*.22,.10,.22);double f=FMath::Clamp((now-WeaponStrikeStarted-contact)/width,0.,1.);FVector tip=start+GetActorForwardVector().RotateAngleAxis(-45+90*f,FVector::UpVector)*WeaponReach;
+ if(GetMesh()&&GetMesh()->DoesSocketExist(TEXT("WeaponTip")))tip=GetMesh()->GetSocketLocation(TEXT("WeaponTip"));
+ FCollisionObjectQueryParams objects;objects.AddObjectTypesToQuery(ECC_Pawn);FCollisionQueryParams q(SCENE_QUERY_STAT(WeaponContactSweep),false);q.AddIgnoredActor(this);TArray<FHitResult> hits;
+ // Sweep the blade span and its previous tip; LOS excludes targets behind cover.
+ GetWorld()->SweepMultiByObjectType(hits,start,tip,FQuat::Identity,objects,FCollisionShape::MakeSphere(35),q);TArray<FHitResult> arc;GetWorld()->SweepMultiByObjectType(arc,PreviousWeaponTip,tip,FQuat::Identity,objects,FCollisionShape::MakeSphere(35),q);hits.Append(arc);PreviousWeaponTip=tip;
+ for(const auto& hit:hits){auto* enemy=Cast<AUnmadeEnemyCharacter>(hit.GetActor());if(!enemy||!enemy->CanBeTargeted())continue;FVector toward=enemy->GetActorLocation()-start;if(toward.Size2D()>WeaponReach+65||FVector::DotProduct(GetActorForwardVector(),toward.GetSafeNormal2D())<.2)continue;FCollisionQueryParams sight(q);sight.AddIgnoredActor(enemy);if(GetWorld()->LineTraceTestByChannel(start,enemy->GetActorLocation()+FVector(0,0,55),ECC_Visibility,sight))continue;float before=enemy->GetCombat()->GetHealth();if(Combat->ResolveWeaponContact(enemy->GetCombat(),now,enemy->IsFractureExposed(now)))HandleMeleeImpact(enemy,before);break;}
+}
+void AUnmadeCharacter::HandleMeleeImpact(AUnmadeEnemyCharacter* Target,float Before){if(!Target)return;Target->NotifyPlayerHit(Before-Target->GetCombat()->GetHealth());
         if (Target->GetCombat()->IsDefeated() && IsValid(Equipment))
         {
             const AUnmadeBossCharacter* Boss=Cast<AUnmadeBossCharacter>(Target);
@@ -923,12 +894,12 @@ void AUnmadeCharacter::AttemptMeleeAttack()
             else Equipment->Claim(Target->GetEnemyStyle()==UnmadeCore::EnemyStyle::Stalker
                 ? UnmadeCore::Achievement::FirstStalker:UnmadeCore::Achievement::FirstWatcher);
         }
-        ReportLocalEvent(FName("Player.Fought"), FName("combat.prototype.enemy"));
-    }
+    ReportLocalEvent(FName("Player.Fought"),FName("combat.prototype.enemy"));
 }
 
 void AUnmadeCharacter::StartGuard()
 {
+    if(IsRpgMenuOpen())return;
     AnimatePlayer(FName(TEXT("Guard")));
     if (IsValid(Combat)) Combat->SetGuarding(true);
 }
@@ -938,6 +909,8 @@ void AUnmadeCharacter::StopGuard()
     if (IsValid(Combat)) Combat->SetGuarding(false);
 }
 
+void AUnmadeCharacter::TurnView(float Value){AddControllerYawInput(Value*GetDefault<UUnmadePlayerPreferences>()->CameraSensitivity);}
+void AUnmadeCharacter::LookView(float Value){AddControllerPitchInput(Value*GetDefault<UUnmadePlayerPreferences>()->CameraSensitivity);}
 void AUnmadeCharacter::MoveForward(float Value)
 {
     if (!Controller || FMath::IsNearlyZero(Value))
@@ -971,6 +944,7 @@ AUnmadeNpcCharacter* FindNearbyCitizen(UWorld* World, FVector Origin, float MaxD
         const float DistSq = FVector::DistSquared(Origin, It->GetActorLocation());
         if (DistSq < BestDistSq)
         {
+            FCollisionQueryParams sight(SCENE_QUERY_STAT(ResidentConversationSight),false);sight.AddIgnoredActor(*It);if(auto* player=UGameplayStatics::GetPlayerCharacter(World,0))sight.AddIgnoredActor(player);if(World->LineTraceTestByChannel(Origin+FVector(0,0,50),It->GetActorLocation()+FVector(0,0,50),ECC_Visibility,sight))continue;
             Nearest = *It;
             BestDistSq = DistSq;
         }
@@ -989,6 +963,7 @@ void AUnmadeCharacter::SkipDirectedScene()
 
 void AUnmadeCharacter::Interact()
 {
+    if(IsRpgMenuOpen()||!Combat||Combat->IsDefeated())return;
     AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
     AUnmadeLoreSite* NearestSite = nullptr;
     double BestSiteDistSq = FMath::Square(280.f);
@@ -1103,6 +1078,8 @@ void AUnmadeCharacter::Interact()
             Hub->TryEchoQuestConversation(Target->GetStableId());
             Hub->RecordResidentConversation(Target->GetStableId());
             Hub->RecordRoadConversation(Target->GetStableId());
+            Hub->RecordExperienceConversation(Target->GetStableId(),this);
+            Hub->LearnExperienceTutorial(0,this);
             const bool bHouseChanged=Hub->RecordBesHouseholdConversation(Target->GetStableId());
             const bool bAdventureChanged=Hub->RecordCinderholdConversation(Target->GetStableId());
             if(!bHouseChanged&&!bAdventureChanged)
@@ -1401,6 +1378,7 @@ void AUnmadeCharacter::ShowCharacterProfile()
 void AUnmadeCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    GetMutableDefault<UUnmadePlayerPreferences>()->ApplyMappings();
     Combat->EnablePlayerTempo();
     if(auto* PC=Cast<APlayerController>(GetController())){RpgWidget=CreateWidget<UUnmadeRpgWidget>(PC,UUnmadeRpgWidget::StaticClass());if(RpgWidget)RpgWidget->AddToViewport(30);}
 
@@ -1476,6 +1454,7 @@ void AUnmadeCharacter::RecoverAtSafeCheckpoint()
         Safe=FVector(Realm.centerX,Realm.centerY-1170,135);
         break;
     }
+    for(TActorIterator<AUnmadePrototypeHub> H(GetWorld());H;++H){H->ExperienceCheckpoint(Current,Safe);break;}
     if(!SetActorLocation(Safe,false,nullptr,ETeleportType::TeleportPhysics))
         return;
     if(!Combat->ReviveAtCheckpoint())return;
@@ -1495,6 +1474,7 @@ void AUnmadeCharacter::AnimatePlayer(FName Cue)
     const FString Path=TEXT("/Game/UnmadeProduction/Characters/Resident/")+Name+TEXT(".")+Name;
     if(UAnimSequence* Clip=LoadObject<UAnimSequence>(nullptr,*Path))
     {
+        GetMesh()->SetPlayRate(1);
         GetMesh()->PlayAnimation(Clip,Cue==FName(TEXT("Idle"))||Cue==FName(TEXT("Walk"))||Cue==FName(TEXT("Guard")));
         PlayerMotion=Cue;
     }
@@ -1502,11 +1482,12 @@ void AUnmadeCharacter::AnimatePlayer(FName Cue)
 void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    TickWeaponContact();
     if(!RpgWidget)if(auto* PC=Cast<APlayerController>(GetController())){RpgWidget=CreateWidget<UUnmadeRpgWidget>(PC,UUnmadeRpgWidget::StaticClass());if(RpgWidget)RpgWidget->AddToViewport(30);}
     if(GetWorld() && GetWorld()->GetTimeSeconds()>=PlayerAttackMotionUntil)
         AnimatePlayer(Combat&&Combat->IsDefeated()?FName(TEXT("Death")):Combat&&Combat->IsGuarding()?FName(TEXT("Guard")):GetVelocity().SizeSquared2D()>FMath::Square(12.f)
             ?FName(TEXT("Walk")):FName(TEXT("Idle")));
-    if(GetWorld()&&Combat){if(!Combat->IsDefeated())for(TActorIterator<AUnmadePrototypeHub> H(GetWorld());H;++H){Combat->SetWeaponStyle(H->PlayerWeaponStyle(Equipment?Equipment->EquippedWeapon():UnmadeCore::ItemId::Count),H->GetActiveMastery());break;}if(!Combat->IsDefeated())GetCharacterMovement()->MaxWalkSpeed=(bIsCrouched?260:600)*Combat->MoveMultiplier(GetWorld()->GetTimeSeconds());float health=Combat->GetHealth();if(LastPresentationHealth>=0&&health<LastPresentationHealth){AnimatePlayer(FName(Combat->IsDefeated()?TEXT("Death"):TEXT("Stagger")));PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+(Combat->IsDefeated()?1.5:.6);UnmadePresentation::Sound(this,Combat->IsDefeated()?TEXT("death"):TEXT("injury"));}LastPresentationHealth=health;
+    if(GetWorld()&&Combat){if(!Combat->IsDefeated())for(TActorIterator<AUnmadePrototypeHub> H(GetWorld());H;++H){Combat->SetWeaponStyle(H->PlayerWeaponStyle(Equipment?Equipment->EquippedWeapon():UnmadeCore::ItemId::Count),H->GetActiveMastery());{auto b=H->ActiveBuild();PlayerBuildSpeed=b.speed;if(Equipment)Equipment->SetBuildBonuses(b.attack,b.armor);}break;}if(!Combat->IsDefeated())GetCharacterMovement()->MaxWalkSpeed=(bIsCrouched?260:600)*PlayerBuildSpeed*Combat->MoveMultiplier(GetWorld()->GetTimeSeconds());float health=Combat->GetHealth();if(LastPresentationHealth>=0&&health<LastPresentationHealth){AnimatePlayer(FName(Combat->IsDefeated()?TEXT("Death"):TEXT("Stagger")));PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+(Combat->IsDefeated()?1.5:.6);UnmadePresentation::Sound(this,Combat->IsDefeated()?TEXT("death"):TEXT("injury"));}LastPresentationHealth=health;
       if(!Combat->IsDefeated()&&GetCharacterMovement()->IsMovingOnGround()&&GetVelocity().SizeSquared2D()>FMath::Square(20.f)&&GetWorld()->GetTimeSeconds()>=NextFootstepAt){NextFootstepAt=GetWorld()->GetTimeSeconds()+.45;UnmadePresentation::Sound(this,TEXT("footstep_stone"));}}
     FractureModel.Recover(static_cast<double>(DeltaSeconds) *
         (IsValid(Equipment) ? Equipment->StrainRecoveryMultiplier() : 1.0));

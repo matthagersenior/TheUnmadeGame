@@ -31,6 +31,10 @@ try {
     & (Join-Path $PSScriptRoot "check_unreal_host.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "preflight.log")
     if($LASTEXITCODE -ne 0){throw "HOST_PREFLIGHT_FAILED: exit $LASTEXITCODE"}
+    & python (Join-Path $PSScriptRoot "build_player_experience.py") --check
+    if($LASTEXITCODE -ne 0){throw "EXPERIENCE_REGISTRY_FAILED"}
+    & python (Join-Path $PSScriptRoot "validate_cpp_literals.py")
+    if($LASTEXITCODE -ne 0){throw "CPP_LITERAL_FAILED"}
     Write-Host "Validating quest branches, 82-person memory and repeatable scene build plan."
     & python (Join-Path $PSScriptRoot "build_story_scene_handoff.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "story-scene-handoff-validation.log")

@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "Combat/UnmadeCombatRules.h"
 #include "Combat/UnmadeCombatStyleRules.h"
+#include "Combat/UnmadeContactRules.h"
 #include "UnmadeCombatComponent.generated.h"
 
 /** Authoritative native combat state. No LLM or paid service involved. */
@@ -19,12 +20,25 @@ public:
     float GetStamina()const{return bPlayerTempo?Tempo.Stamina():100;}
     bool Dodge(double Now){if(IsDefeated()||!bPlayerTempo||!Tempo.Dodge(Now,Mastery))return false;State.SetGuarding(false);return true;}
     void GrantEvasion(double Now,double Seconds){Tempo.GrantEvasion(Now,Seconds);}
+    void GrantPressure(double Now){PressureUntil=Now+60;}
+    void GrantQuiet(double Now){QuietUntil=Now+60;}
+    bool HasQuietLens(double Now)const{return Now<QuietUntil;}
+    bool HasTemporaryStatus()const;
+    void ClearTemporaryStatus(){Status=UnmadeCore::CombatStatus::None;StatusUntil=0;}
     void GrantWard(double Now){WardUntil=Now+6;}
     bool UsePower(double Now){return !IsDefeated()&&bPlayerTempo&&Tempo.Power(Now);}
     void ApplyStatus(UnmadeCore::CombatStatus Type,double Seconds);
     bool IsStaggered(double Now)const{return Now<StaggerUntil;}
     float MoveMultiplier(double Now)const{return Now<StatusUntil&&Status==UnmadeCore::CombatStatus::Slow?.55f:1.f;}
-    void Stagger(double Now,double Seconds){StaggerUntil=FMath::Max(StaggerUntil,Now+Seconds);}
+    void Stagger(double Now,double Seconds){if(Resistance.Take(Now,Seconds,bHeavyResistance)){StaggerUntil=FMath::Max(StaggerUntil,Now+Seconds);Contact.Cancel();}}
+    void SetHeavyResistance(bool Heavy){bHeavyResistance=Heavy;}
+    bool BeginWeaponStrike(double Now);
+    bool ContactActive(double Now)const{return Contact.Active(Now);}
+    bool ResolveWeaponContact(UUnmadeCombatComponent* Target,double Now,bool Exposed);
+    bool ReservedPlayerShot(double Now,uint64& Id,double& Damage,UnmadeCore::CombatStatus& Status);
+    bool ReserveProjectile(double Now,uint64& Id,double& Damage);
+    bool ReceiveTravelingHit(AActor* Source,uint64 Id,double Damage,double Now);
+    void CancelWeaponStrike(){Contact.Cancel();}
     FString GetCombatFeedback()const{return Feedback;}
 
 
@@ -54,10 +68,16 @@ public:
     bool IsGuarding() const { return State.IsGuarding(); }
 
 private:
+    UnmadeCore::ContactWindow Contact;
+    UnmadeCore::StaggerResistance Resistance;
+    bool bHeavyResistance=false;
+    uint64 ReservedSwing=0;double ReservedDamage=0;UnmadeCore::StyleSwing ReservedStyle;
+    bool ApplyReservedHit(UUnmadeCombatComponent* Target,double Now,uint64 Swing,double Damage,bool Exposed,const UnmadeCore::StyleSwing& Styled);
     bool bPlayerTempo=false;
     UnmadeCore::CombatTempo Tempo;
     UnmadeCore::WeaponStyle Style;
     UnmadeCore::CombatStatus Status=UnmadeCore::CombatStatus::None;
+    double PressureUntil=0,QuietUntil=0;
     double StatusUntil=0,NextBurn=0,StaggerUntil=0,WardUntil=0;
     uint64 BurnPulse=0;
     int Mastery=0;

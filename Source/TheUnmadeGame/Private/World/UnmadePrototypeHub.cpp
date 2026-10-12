@@ -38,11 +38,13 @@ void AUnmadePrototypeHub::BeginPlay()
     BuildExpeditions();
     BuildIdentity();
     BuildAdventureDepth();
+    BuildPlayerExperience();
     RefreshCinderholdAdventure();
     RefreshRememberedRoads();
     RefreshExpeditions();
     RefreshIdentity();
     RefreshAdventureDepth();
+    RefreshPlayerExperience();
     RefreshAfterlightWorld();
     RefreshRealmAftermathWorld();
     RefreshLaterRealmWorld();
@@ -85,7 +87,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bCinderholdSaveRejected=true;
         return;
     }
-    if(Save&&Save->SchemaVersion==1&&(Save->bHasAdventureDepth||Save->bHasWorldIdentity||Save->bHasExpeditions)&&!Save->bHasLivingWorldSnapshot){bExpeditionSaveRejected=true;return;}
+    if(Save&&Save->SchemaVersion==1&&(Save->bHasPlayerExperience||Save->bHasAdventureDepth||Save->bHasWorldIdentity||Save->bHasExpeditions)&&!Save->bHasLivingWorldSnapshot){bExpeditionSaveRejected=true;return;}
     if(Save&&Save->SchemaVersion==1&&Save->bHasRememberedRoads&&!Save->bHasLivingWorldSnapshot){bRoadSaveRejected=true;return;}
     if (!Save || Save->SchemaVersion != 1 || !Save->bHasLivingWorldSnapshot) return;
 
@@ -482,6 +484,8 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     if(Save->bHasExpeditions){std::vector<int> Data;for(int32 V:Save->ExpeditionState)Data.push_back(V);if(!Expeditions.Restore(Data)){bExpeditionSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Expedition save rejected; original protected"));}}
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int32 V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bIdentitySaveRejected=true;UE_LOG(LogTemp,Error,TEXT("World identity save rejected; original protected"));}}
     if(Save->bHasAdventureDepth){std::vector<int> Data;for(int32 V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bDepthSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Adventure depth save rejected; original protected"));}}
+    if(Save->bHasPlayerExperience){std::vector<int> Data;for(int V:Save->PlayerExperienceState)Data.push_back(V);if(!Experience.Restore(Data,Expeditions,Depth,RestoredClock.DayIndex()+1)){bExperienceRejected=true;UE_LOG(LogTemp,Error,TEXT("Player experience save rejected; original protected"));}}
+
     if(Save->bHasRememberedRoads)
     {
         std::vector<int> Data;for(int32 V:Save->RememberedRoadState)Data.push_back(V);
@@ -520,6 +524,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
     if(bExpeditionSaveRejected)return false;
     if(bIdentitySaveRejected)return false;
     if(bDepthSaveRejected)return false;
+    if(bExperienceRejected)return false;
     if(bRoadSaveRejected)return false;
     if(bCinderholdSaveRejected)return false;
     if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||
@@ -533,6 +538,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bBesHouseholdRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
+    Save->bHasPlayerExperience=true;Save->PlayerExperienceState.Reset();for(int V:Experience.Pack())Save->PlayerExperienceState.Add(V);
     Save->bHasAdventureDepth=true;Save->AdventureDepthState.Reset();for(int V:Depth.Pack())Save->AdventureDepthState.Add(V);
     Save->bHasWorldIdentity=true;Save->WorldIdentityState.Reset();for(int V:Identity.Pack())Save->WorldIdentityState.Add(V);
     Save->bHasExpeditions=true;Save->ExpeditionState.Reset();
@@ -1923,6 +1929,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     RefreshExpeditions();
     RefreshIdentity();
     RefreshAdventureDepth();
+    RefreshPlayerExperience();
     RefreshFrontierHazardCues();
     RefreshLaterHazardCues();
     // Unmastered bridges and overlapping histories are temporary physical

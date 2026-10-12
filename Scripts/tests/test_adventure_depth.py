@@ -23,4 +23,4 @@ class DepthContracts(unittest.TestCase):
   self.assertTrue(literals)
   self.assertTrue(all('\n' not in literal for literal in literals),'ordinary C++ strings cannot contain literal line breaks')
   for x in ['OnDialogueReady.AddUniqueDynamic','OnDialogueReady.RemoveDynamic','SetIgnoreMoveInput(false)','SetWidgetToFocus','UScrollBox','DescribeUnansweredRoad','SelectDepthTechnique']:self.assertIn(x,s)
-  p=(ROOT/'Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp').read_text();self.assertIn('if(!RpgWidget)',p);self.assertIn('Combat->Dodge',p);self.assertIn('FMath::Square(Style.reach)',p)
+  p=(ROOT/'Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp').read_text();self.assertIn('if(!RpgWidget)',p);self.assertIn('Combat->Dodge',p);self.assertIn('WeaponReach=Style.reach',p);self.assertIn('SweepMultiByObjectType',p)

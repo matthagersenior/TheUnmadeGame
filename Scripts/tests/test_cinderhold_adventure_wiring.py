@@ -36,7 +36,7 @@ class CinderholdAdventureWiring(unittest.TestCase):
                      'ELDER RECOVERY - OPENING'):
             self.assertIn(term,s)
         player=read('Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp')
-        self.assertIn('if (!It->CanBeTargeted()) continue;',player)
+        self.assertIn('!enemy->CanBeTargeted()',player)
         for action in ('TryCinderholdAbility(this,0)','TryCinderholdAbility(this,1)',
                        'TryCinderholdAbility(this,2,','TryCinderholdInteraction(this,ResidentDistSq)',
                        'RecordCinderholdConversation(Target->GetStableId())','GetCinderholdJournal()'):

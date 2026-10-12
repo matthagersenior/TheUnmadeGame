@@ -1,3 +1,4 @@
+#include "UI/UnmadePlayerPreferences.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeRememberedRoadScenes.h"
@@ -234,7 +235,7 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
         *AssetName,*AssetName);
     if(USoundBase* Cue=Cast<USoundBase>(StaticLoadObject(
         USoundBase::StaticClass(),nullptr,*AssetPath,nullptr,LOAD_NoWarn)))
-        UGameplayStatics::PlaySound2D(GetWorld(),Cue,0.68f);
+        UGameplayStatics::PlaySound2D(GetWorld(),Cue,0.68f*GetDefault<UUnmadePlayerPreferences>()->AudioVolume);
     ++BesActiveBeat;
     GetWorldTimerManager().SetTimer(BesSubtitleTimer,this,
         &AUnmadePrototypeHub::AdvanceBesDirectedBeat,
