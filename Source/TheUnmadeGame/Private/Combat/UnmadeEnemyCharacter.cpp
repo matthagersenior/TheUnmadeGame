@@ -1,3 +1,4 @@
+#include "Combat/UnmadeEncounterPerformanceRules.h"
 #include "UI/UnmadePlayerPreferences.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Combat/UnmadeEnemyCharacter.h"
@@ -185,6 +186,9 @@ void AUnmadeEnemyCharacter::TryLoadEnemyRig()
 
 void AUnmadeEnemyCharacter::SetMotionCue(FName Motion)
 {
+    if(GetWorld()&&CurrentMotion==FName(TEXT("Death"))&&Combat&&Combat->IsDefeated()&&Motion!=FName(TEXT("Death")))return;
+    if(GetWorld()&&GetWorld()->GetTimeSeconds()<MotionHeldUntil&&(Motion==FName(TEXT("Idle"))||Motion==FName(TEXT("Walk"))))return;
+
     if(GetWorld()&&GetWorld()->GetTimeSeconds()<HitFlashEndsAt&&Motion!=FName(TEXT("Stagger"))&&Motion!=FName(TEXT("Death")))return;
     if(!bSkeletalRigLoaded || Motion==CurrentMotion || !IsValid(GetMesh()))return;
     const FString Root=Style==UnmadeCore::EnemyStyle::Watcher
@@ -198,6 +202,7 @@ void AUnmadeEnemyCharacter::SetMotionCue(FName Motion)
     {
         GetMesh()->PlayAnimation(Sequence,Motion==FName(TEXT("Idle"))||Motion==FName(TEXT("Walk"))||Motion==FName(TEXT("Guard")));
         CurrentMotion=Motion;
+        if(GetWorld())MotionHeldUntil=GetWorld()->GetTimeSeconds()+UnmadeCore::MotionHold(Motion==FName(TEXT("Stagger"))?3:Motion==FName(TEXT("Crush"))||Motion==FName(TEXT("Ranged"))?2:Motion==FName(TEXT("Attack"))||Motion==FName(TEXT("Seal"))?1:0);
     }
     else if(Motion!=FName(TEXT("Attack")))
     {
@@ -471,6 +476,7 @@ void AUnmadeEnemyCharacter::ConfigureExpedition(int32 Arc,int32 Slot,UnmadeCore:
  Style=Role==UnmadeCore::ExpeditionRole::Marksman||Role==UnmadeCore::ExpeditionRole::Disruptor?UnmadeCore::EnemyStyle::Watcher:UnmadeCore::EnemyStyle::Stalker;
  Combat->SetHeavyResistance(Boss);
  Combat->Configure(Boss?240+Arc*25:Role==UnmadeCore::ExpeditionRole::Sentinel?95+Arc*8:65+Arc*6,UnmadeCore::ExpeditionMove(Role,Arc,0,false).damage,.5);
+ if(Boss&&Arc>=0&&Arc<9){const auto& shape=UnmadeCore::EncounterPerformances[Arc];auto* prop=NewObject<UStaticMeshComponent>(this);prop->SetupAttachment(GetCapsuleComponent());prop->RegisterComponent();prop->SetCollisionEnabled(ECollisionEnabled::NoCollision);prop->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,shape.shape==1?TEXT("/Engine/BasicShapes/Sphere.Sphere"):shape.shape==2?TEXT("/Engine/BasicShapes/Cone.Cone"):TEXT("/Engine/BasicShapes/Cube.Cube")));prop->SetRelativeLocation(FVector(45,0,95));prop->SetRelativeScale3D(FVector(shape.propX,shape.propY,shape.propZ));}
  TryLoadEnemyRig();
 }
 void AUnmadeEnemyCharacter::ConfigureWingGuardian(int Arc){bWingGuardian=true;ConfigureExpedition(Arc,9,UnmadeCore::ExpeditionRole::Boss);Combat->Configure(150+Arc*12,18+Arc*2,.6);}
@@ -489,7 +495,7 @@ void AUnmadeEnemyCharacter::TickExpedition(float DeltaSeconds){
  bool Sight=Territory&&!World->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,55),P->GetActorLocation()+FVector(0,0,55),ECC_Visibility,Params);
  bool Phase=Combat->GetHealth()<=Combat->GetMaxHealth()*.5;
  if((P->bIsCrouched||P->GetCombat()->HasQuietLens(Now))&&Distance>350)Sight=false;
- int Warnings=0;bool ShieldSupport=false;for(TActorIterator<AUnmadeEnemyCharacter> Ally(World);Ally;++Ally){if(*Ally==this||!Ally->IsExpeditionArc(ExpeditionArc)||!Ally->CanBeTargeted())continue;Warnings+=Ally->bExpeditionWarning?1:0;if(Ally->ExpeditionRole==UnmadeCore::ExpeditionRole::Sentinel&&Ally->GetCombat()->IsGuarding()&&FVector::DistSquared2D(Ally->GetActorLocation(),GetActorLocation())<FMath::Square(500.f))ShieldSupport=true;}
+ int Warnings=0;bool ShieldSupport=false;for(auto weak:CachedRealityHub->CachedEnemies()){auto* Ally=weak.Get();if(!Ally||Ally==this||!Ally->IsExpeditionArc(ExpeditionArc)||!Ally->CanBeTargeted())continue;Warnings+=Ally->bExpeditionWarning?1:0;if(Ally->ExpeditionRole==UnmadeCore::ExpeditionRole::Sentinel&&Ally->GetCombat()->IsGuarding()&&FVector::DistSquared2D(Ally->GetActorLocation(),GetActorLocation())<FMath::Square(500.f))ShieldSupport=true;}
  if(!bExpeditionWarning&&Warnings>=2)Sight=false;Combat->SetGearBonuses(0,ShieldSupport?4:0);
  auto Step=ExpeditionPattern.Step(Now,ExpeditionRole,ExpeditionArc,Phase,Sight,Distance,IsFractureExposed(Now)||Combat->IsStaggered(Now));
  if(Step.started){UnmadePresentation::Sound(this,TEXT("warning"));ExpeditionAim=P->GetActorLocation();bExpeditionWarning=true;}
@@ -501,7 +507,7 @@ void AUnmadeEnemyCharacter::TickExpedition(float DeltaSeconds){
  }}
  if(bExpeditionWarning&&Step.move.shape){for(int i=0;i<SignatureTiles.Num();++i){double x=((i%9)-4)*Step.move.radius/4.,y=((i/9)-4)*Step.move.radius/4.;auto* tile=SignatureTiles[i].Get();tile->SetVisibility(UnmadeCore::SignatureHit(Step.move.shape,x,y,Step.move.radius));tile->SetWorldLocation(ExpeditionAim+FVector(x,y,-82));tile->SetWorldRotation(FRotator::ZeroRotator);tile->SetWorldScale3D(FVector(Step.move.radius/400.,Step.move.radius/400.,.025));}}
  Combat->SetGuarding(ExpeditionRole==UnmadeCore::ExpeditionRole::Sentinel&&Sight&&!bExpeditionWarning&&!Step.recovering);
- ElderAimMarker->SetVisibility(bExpeditionWarning);if(bExpeditionWarning){ElderAimMarker->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,Step.move.shape==8?TEXT("/Engine/BasicShapes/Cube.Cube"):TEXT("/Engine/BasicShapes/Cylinder.Cylinder")));ElderAimMarker->SetWorldLocation(ExpeditionAim-FVector(0,0,85));ElderAimMarker->SetWorldScale3D(FVector(Step.move.radius/50,Step.move.radius/50,.025));CombatSignal->SetText(FText::FromString(UTF8_TO_TCHAR(Step.move.warning)));TelegraphLight->SetIntensity(4000);GetCharacterMovement()->StopMovementImmediately();SetMotionCue(FName(Step.move.shape?TEXT("Seal"):ExpeditionRole==UnmadeCore::ExpeditionRole::Marksman?TEXT("Ranged"):TEXT("Attack")));}
+ ElderAimMarker->SetVisibility(bExpeditionWarning);if(bExpeditionWarning){ElderAimMarker->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,Step.move.shape==8?TEXT("/Engine/BasicShapes/Cube.Cube"):TEXT("/Engine/BasicShapes/Cylinder.Cylinder")));ElderAimMarker->SetWorldLocation(ExpeditionAim-FVector(0,0,85));ElderAimMarker->SetWorldScale3D(FVector(Step.move.radius/50,Step.move.radius/50,.025));CombatSignal->SetText(FText::FromString((ExpeditionRole==UnmadeCore::ExpeditionRole::Boss?FString(UTF8_TO_TCHAR(UnmadeCore::EncounterPerformances[ExpeditionArc].warning))+TEXT("\n"):FString())+UTF8_TO_TCHAR(Step.move.warning)));TelegraphLight->SetIntensity(4000);GetCharacterMovement()->StopMovementImmediately();SetMotionCue(FName(Step.move.shape?TEXT("Seal"):ExpeditionRole==UnmadeCore::ExpeditionRole::Marksman?TEXT("Ranged"):TEXT("Attack")));}
  else{TelegraphLight->SetIntensity(Step.recovering?700:0);CombatSignal->SetText(FText::FromString(Step.recovering?TEXT("RECOVERY - YOUR OPENING"):TEXT("WATCH THE NEXT ATTACK")));FVector Destination=!Territory?TerritoryHome:P->GetActorLocation();
   if(Territory&&ExpeditionRole==UnmadeCore::ExpeditionRole::Skirmisher)Destination+=FVector(-(P->GetActorLocation().Y-GetActorLocation().Y),P->GetActorLocation().X-GetActorLocation().X,0).GetSafeNormal()*180;
   bool Move=!Territory||Distance>Step.move.reach*.85;

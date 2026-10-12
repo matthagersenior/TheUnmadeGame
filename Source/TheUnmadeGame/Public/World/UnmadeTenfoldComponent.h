@@ -12,6 +12,7 @@ class THEUNMADEGAME_API UUnmadeTenfoldComponent : public UActorComponent
 {
     GENERATED_BODY()
 public:
+    bool HasRejectedSave()const{return bSaveRejected;}
     UUnmadeTenfoldComponent();
     virtual void BeginPlay() override;
     virtual void TickComponent(float DeltaSeconds,ELevelTick TickType,

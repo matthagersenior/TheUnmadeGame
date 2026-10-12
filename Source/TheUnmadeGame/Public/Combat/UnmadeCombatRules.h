@@ -26,6 +26,7 @@ public:
 
     bool SetDamage(double damage) noexcept {if(!Positive(damage))return false;damage_=damage;return true;}
     bool SetCooldown(double value)noexcept{if(!Positive(value))return false;cooldown_=value;return true;}
+    bool RestoreHealth(double value) noexcept {if(!std::isfinite(value)||value<0||value>maximumHealth_)return false;health_=value;return true;}
     double Health() const noexcept { return health_; }
     double MaximumHealth() const noexcept { return maximumHealth_; }
     bool IsAlive() const noexcept { return health_ > 0; }

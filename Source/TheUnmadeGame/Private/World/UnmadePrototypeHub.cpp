@@ -1,3 +1,9 @@
+#include "Save/UnmadeSessionRules.h"
+#include "UI/UnmadePlayerPreferences.h"
+#include "Components/TextRenderComponent.h"
+#include "Engine/TextRenderActor.h"
+#include "Combat/UnmadeCombatComponent.h"
+#include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
@@ -30,6 +36,7 @@ AUnmadePrototypeHub::AUnmadePrototypeHub()
 void AUnmadePrototypeHub::BeginPlay()
 {
     Super::BeginPlay();
+    if(auto* record=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot()))if(record->bHasPlayerResume)GeometryFocus=record->ResumePosition;
     BuildForPrototype();
     RestoreLivingWorld();
     RefreshCommunityConsequences();
@@ -67,12 +74,13 @@ void AUnmadePrototypeHub::BeginPlay()
     GetWorldTimerManager().SetTimer(GossipTimer, this, &AUnmadePrototypeHub::SpreadLocalRumors, 8.f, true);
     // Persist passage of time at measured intervals, not every rendered frame.
     GetWorldTimerManager().SetTimer(WorldSaveTimer, this, &AUnmadePrototypeHub::SaveLivingWorld, 60.f, true);
+    bWorldReady=true;
 }
 
 int32 AUnmadePrototypeHub::ReadStoryChoice() const
 {
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+        UnmadeSave::LoadGameFromSlot());
     if (!Save || Save->SchemaVersion != 1 || !Save->bHasConflictSnapshot)
         return 0;
     return FMath::Clamp(Save->LocalConflictChoice, 0, 2);
@@ -81,7 +89,7 @@ int32 AUnmadePrototypeHub::ReadStoryChoice() const
 void AUnmadePrototypeHub::RestoreLivingWorld()
 {
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+        UnmadeSave::LoadGameFromSlot());
     if(Save&&Save->SchemaVersion==1&&Save->bHasCinderholdAdventure&&!Save->bHasLivingWorldSnapshot)
     {
         bCinderholdSaveRejected=true;
@@ -521,6 +529,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
+    if(!bFieldSurveySaveUsable)return false;
     if(bExpeditionSaveRejected)return false;
     if(bIdentitySaveRejected)return false;
     if(bDepthSaveRejected)return false;
@@ -538,6 +547,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bBesHouseholdRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
+    Save->bHasFieldSurveys=true;Save->FieldSurveyStages=FieldSurveyStages;
     Save->bHasPlayerExperience=true;Save->PlayerExperienceState.Reset();for(int V:Experience.Pack())Save->PlayerExperienceState.Add(V);
     Save->bHasAdventureDepth=true;Save->AdventureDepthState.Reset();for(int V:Depth.Pack())Save->AdventureDepthState.Add(V);
     Save->bHasWorldIdentity=true;Save->WorldIdentityState.Reset();for(int V:Identity.Pack())Save->WorldIdentityState.Add(V);
@@ -759,7 +769,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
         Save->ResidentEncounterLastDays.Add(RS.lastDay[i]);
         Save->ResidentEncounterAidFlags.Add(RS.aids[i]);
     }
-    return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
+    return UnmadeSave::SaveGameToSlot(Save);
 }
 
 bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bCompleted)
@@ -1001,6 +1011,7 @@ bool AUnmadePrototypeHub::TryTravelFrontier(AUnmadeCharacter* Player)
             Frontier.Restore(Before);
             return false;
         }
+        PrepareRealmGeometry(Destination,100000);
         if(!Player->SetActorLocation(Destination,false,nullptr,ETeleportType::TeleportPhysics))
         {
             Frontier.Restore(Before);
@@ -1919,6 +1930,8 @@ FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
 
 void AUnmadePrototypeHub::Tick(float DeltaSeconds)
 {
+    RefreshSimulationBudget();
+
     Super::Tick(DeltaSeconds);
     if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
     AdvanceMaterialDayIfNeeded();
@@ -2038,6 +2051,9 @@ void AUnmadePrototypeHub::SpawnLoreSite(UnmadeCore::District District, FName Sit
 
 void AUnmadePrototypeHub::SpawnBlock(FVector Center, FVector Scale, FName Label)
 {
+    const bool floor=Scale.Z<=.8&&Scale.X>=10&&Scale.Y>=10;
+    if(!SpawningDeferred&&!floor&&FVector::DistSquared2D(Center,GeometryFocus)>FMath::Square(30000.f)){DeferredBlocks.Add({Center,Scale,Label});return;}
+
     UWorld* World = GetWorld();
     UStaticMesh* Cube = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cube.Cube"));
     if (!World || !Cube) return;
@@ -2200,7 +2216,7 @@ void AUnmadePrototypeHub::SetRiteWorldActorState(FName Tag,bool bEnabled)
 void AUnmadePrototypeHub::RefreshRiteWorldFromSave()
 {
     const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+        UnmadeSave::LoadGameFromSlot());
     if(!Save || !Save->bHasTenfoldChronicle || Save->RiteStages.Num()!=10)return;
     if(Save->RiteStages[1]==5)
         SetRiteWorldActorState(FName("Rite.WitnessBridge"),true);
@@ -2925,7 +2941,7 @@ void AUnmadePrototypeHub::ApplyRiteEnvironment(UnmadeCore::RiteId Id,
     if(Mastered && Id==UnmadeCore::RiteId::ParadoxConvergence)
     {
         const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
-            UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+            UnmadeSave::LoadGameFromSlot());
         bPermanent=Save && Save->bHasTenfoldChronicle &&
             Save->RiteChoices.Num()==10 && Save->RiteChoices[7]==2;
     }
@@ -3237,7 +3253,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
 
     // Restore physical access independently of player BeginPlay order.
     const UUnmadePrototypeSave* SavedConflict = Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+        UnmadeSave::LoadGameFromSlot());
     if (SavedConflict && SavedConflict->SchemaVersion == 1 && SavedConflict->bHasConflictSnapshot)
     {
         UnmadeCore::ConflictModel Restored;
@@ -3273,7 +3289,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
         {UnmadeCore::BossId::UnfinishedPilgrim,FVector(0,-2120,100)}
     };
     const UUnmadePrototypeSave* EncounterSave=Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+        UnmadeSave::LoadGameFromSlot());
     for(const BossPlacement& Location:Encounters)
     {
         UnmadeCore::Achievement BossReward=UnmadeCore::Achievement::Count;
@@ -3303,7 +3319,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
 
 void AUnmadePrototypeHub::RestoreCitizens()
 {
-    const USaveGame* Raw = UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0);
+    const USaveGame* Raw = UnmadeSave::LoadGameFromSlot();
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(Raw);
     if (!Save || Save->SchemaVersion != 1) return;
     for (TActorIterator<AUnmadeNpcCharacter> It(GetWorld()); It; ++It)
@@ -3402,6 +3418,15 @@ void AUnmadePrototypeHub::SaveCitizens()
         if (!It->GetStableId().IsNone())
             Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
     }
-    if (!UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0))
+    if (!UnmadeSave::SaveGameToSlot(Save))
         UE_LOG(LogTemp, Error, TEXT("Unmade NPC social update save failed"));
+}
+
+void AUnmadePrototypeHub::PrepareRealmGeometry(const FVector& at,int limit){if(!GetWorld()||limit<1)return;int made=0;SpawningDeferred=true;for(int i=DeferredBlocks.Num()-1;i>=0&&made<limit;--i)if(FVector::DistSquared2D(at,DeferredBlocks[i].Center)<FMath::Square(30000.f)){auto b=DeferredBlocks[i];DeferredBlocks.RemoveAtSwap(i);SpawnBlock(b.Center,b.Scale,b.Label);++made;}SpawningDeferred=false;}
+void AUnmadePrototypeHub::RefreshSimulationBudget(){
+ if(!GetWorld())return;auto* player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));if(!player)return;const double now=GetWorld()->GetTimeSeconds();PrepareRealmGeometry(player->GetActorLocation());
+ if(now>=NextRuntimeCache){NextRuntimeCache=now+5;RuntimeEnemies.Reset();RuntimePeople.Reset();RuntimeSigns.Reset();for(TActorIterator<AUnmadeEnemyCharacter> a(GetWorld());a;++a)RuntimeEnemies.Add(*a);for(TActorIterator<AUnmadeNpcCharacter> a(GetWorld());a;++a)RuntimePeople.Add(*a);for(TActorIterator<ATextRenderActor> a(GetWorld());a;++a)RuntimeSigns.Add(*a);}
+ if(now<NextSimulationBudget)return;NextSimulationBudget=now+1;for(auto e:RuntimeEnemies)if(e.IsValid()){double dt=UnmadeCore::SimulationInterval(FVector::Dist2D(player->GetActorLocation(),e->GetActorLocation()),true);e->SetActorTickInterval(dt);if(e->GetCombat())e->GetCombat()->SetComponentTickInterval(dt);}
+ for(auto n:RuntimePeople)if(n.IsValid())n->SetActorTickInterval(UnmadeCore::SimulationInterval(FVector::Dist2D(player->GetActorLocation(),n->GetActorLocation()),false));
+ auto* prefs=GetDefault<UUnmadePlayerPreferences>();for(auto sign:RuntimeSigns)if(sign.IsValid()){FString current=sign->GetTextRender()->Text.ToString();if(!SignFormatted.Contains(sign)||current!=SignFormatted[sign])SignOriginal.Add(sign,current);FString shown=prefs->FormatControls(SignOriginal[sign]);if(shown!=current)sign->GetTextRender()->SetText(FText::FromString(shown));SignFormatted.Add(sign,shown);}
 }

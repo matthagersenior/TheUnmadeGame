@@ -1,3 +1,4 @@
+#include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Lexicon/UnmadeLexiconComponent.h"
 #include "Save/UnmadePrototypeSave.h"
@@ -13,7 +14,7 @@ void UUnmadeLexiconComponent::BeginPlay()
 {
     Super::BeginPlay();
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+        UnmadeSave::LoadGameFromSlot());
     if (!Save || Save->SchemaVersion != 1) return;
     std::vector<std::string> Evidence;
     Evidence.reserve(Save->LexiconEvidence.Num());
@@ -24,12 +25,13 @@ void UUnmadeLexiconComponent::BeginPlay()
     }
     if (!Lexicon.Restore(Evidence))
     {
-        UE_LOG(LogTemp, Warning, TEXT("Invalid lexicon evidence in save ignored"));
+        bSaveRejected=true;UE_LOG(LogTemp, Warning, TEXT("Invalid lexicon evidence protected; writes disabled"));
     }
 }
 
 bool UUnmadeLexiconComponent::RecordEvidence(FName EvidenceId)
 {
+    if(bSaveRejected)return false;
     const auto Previous = Lexicon.Snapshot();
     const FString Text = EvidenceId.ToString();
     if (!Lexicon.RecordEvidence("term.veyl", std::string(TCHAR_TO_UTF8(*Text))))
@@ -48,7 +50,7 @@ bool UUnmadeLexiconComponent::RecordEvidence(FName EvidenceId)
         Save->LexiconEvidence.Add(FName(UTF8_TO_TCHAR(Id.c_str())));
     }
 
-    if (!UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0))
+    if (!UnmadeSave::SaveGameToSlot(Save))
     {
         Lexicon.Restore(Previous);
         if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,

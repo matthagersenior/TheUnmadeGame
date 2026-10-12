@@ -1,3 +1,4 @@
+#include "Save/UnmadeSessionRules.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadePlayerExperienceRegistry.h"
@@ -124,3 +125,7 @@ FString AUnmadePrototypeHub::GetExperienceMap(int a,AUnmadeCharacter* p)const{if
 bool AUnmadePrototypeHub::SelectExperienceBuild(int a,AUnmadeCharacter* p){if(!p||bExperienceRejected)return false;auto old=Experience;if(!Experience.SelectBuild(a)){NotifyRpg(TEXT("Earn a build or binding in this realm first, or select a different owned build."));return false;}if(!CommitExperience(old,p))return false;NotifyRpg(TEXT("Owned realm build selected without spending insight. Equipment and active technique remain independently selected."));return true;}
 
 bool AUnmadePrototypeHub::RecordWingObserver(AUnmadeEnemyCharacter* e){if(bExperienceRejected||WingObserver.Get()!=e||!e||!e->IsWingObserver()||!e->GetCombat()->IsDefeated())return false;auto old=Experience;if(!Experience.ClearObserver(6))return Experience.ObserverCleared();return CommitExperience(old,nullptr);}
+
+bool AUnmadePrototypeHub::TryFieldCraft(AUnmadeCharacter* p,int a){if(a<0||a>=9||!p||!p->GetEquipment()||!KnowsFieldRecipe(a)||!ExperienceServicesOpen(a)||bExperienceRejected){NotifyRpg(TEXT("Earn this field recipe in its wing, then use the local workbench during open hours."));return false;}bool local=false;for(int site=0;site<(a==0?5:3);++site)local=local||Near(p,Hall(a,site)+FVector(0,1000,0));if(!local){NotifyRpg(TEXT("Approach this realm’s physical workbench to craft its recipe."));return false;}bool made=p->GetEquipment()->CraftFieldRecipe(a,true);NotifyRpg(made?TEXT("Selected field recipe crafted and saved. Ingredients spent; original wages and local insight are unchanged."):TEXT("Craft not completed: check ingredients, output capacity and save availability."));return made;}
+
+FName AUnmadePrototypeHub::ServiceWorkCue(FName person,const FVector& at)const{int a,n;if(!PersonIndex(person,a,n)||bExperienceRejected||!Experience.Arc(a)->repair||!ExperienceServicesOpen(a)||FVector::DistSquared2D(at,Hall(a,0)+FVector(0,1000,0))>FMath::Square(650.f)||!GetWorld()||FMath::Fmod(GetWorld()->GetTimeSeconds()+a*2+n,16.0)>5)return NAME_None;int cue=UnmadeCore::WorkMotion(a,n);return FName(cue==0?TEXT("Repair"):cue==1?TEXT("Inspect"):TEXT("Gesture"));}

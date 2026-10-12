@@ -320,3 +320,14 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/realm_journey_test.cpp -o /tmp/unmade-realm-journey
           /tmp/unmade-realm-journey
+
+      - name: Test ordinary spending, profile recovery and regional crafting dependencies
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/save/session_policy_test.cpp -o /tmp/unmade-session-policy
+          /tmp/unmade-session-policy
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/items/field_craft_test.cpp -o /tmp/unmade-field-craft
+          /tmp/unmade-field-craft
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/progression_resilience_test.cpp -o /tmp/unmade-progression-resilience
+          /tmp/unmade-progression-resilience
+      - name: Repeat gameplay dependency audit
+        run: python Scripts/audit_gameplay_dependencies.py --check

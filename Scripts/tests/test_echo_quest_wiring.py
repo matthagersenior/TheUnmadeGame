@@ -19,7 +19,7 @@ class EchoQuestWiring(unittest.TestCase):
         self.assertIn("RefreshEchoQuestWorld();",hub)
         self.assertIn("SetRiteWorldActorState(",echo)
         self.assertIn("GetWorld()->LineTraceTestByChannel(",echo)
-        self.assertIn("UGameplayStatics::SaveGameToSlot(",hub)
+        self.assertIn("UnmadeSave::SaveGameToSlot(",hub)
     def test_atomic_saves_and_controller(self):
         save=source("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
         hub=source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")

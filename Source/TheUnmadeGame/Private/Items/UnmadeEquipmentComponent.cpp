@@ -1,3 +1,5 @@
+#include "Items/UnmadeFieldCraftRules.h"
+#include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadeWorldAtlas.h"
 #include "World/UnmadeExpeditionRegistry.h"
@@ -19,7 +21,7 @@ void UUnmadeEquipmentComponent::BeginPlay()
 {
     Super::BeginPlay();
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+        UnmadeSave::LoadGameFromSlot());
     if (Save && Save->SchemaVersion == 1 && Save->bHasInventorySnapshot)
     {
         UnmadeCore::InventorySnapshot Snapshot;
@@ -100,7 +102,7 @@ bool UUnmadeEquipmentComponent::Persist(double UpdatedStrain)
         Save->PlayerStrain = UpdatedStrain;
         Save->bHasFractureSnapshot = true;
     }
-    return UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadePrototypeNPC"),0);
+    return UnmadeSave::SaveGameToSlot(Save);
 }
 
 FIntPoint UUnmadeEquipmentComponent::NativeGearBonuses()const{int attack=Inventory.AttackBonus(),armor=Inventory.ArmorBonus();for(int slot=0;slot<2;++slot)if((slot==0?Loadout.weapon:Loadout.armor)>=0)if(auto* item=UnmadeCore::FindItem(Inventory.Equipped(static_cast<UnmadeCore::GearSlot>(slot)))){attack-=item->attack;armor-=item->armor;}return FIntPoint(FMath::Max(0,attack+TemporaryAttack+ExpeditionAttack+BuildAttack),FMath::Max(0,armor+TemporaryArmor+ExpeditionArmor+BuildArmor));}
@@ -120,7 +122,7 @@ bool UUnmadeEquipmentComponent::Claim(UnmadeCore::Achievement Reward)
 void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
 {
     const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+        UnmadeSave::LoadGameFromSlot());
     if (bSaveRejected || !Save || Save->SchemaVersion!=1) return;
     const int32 Sites=Save->DiscoveredLoreMask;
     struct Entry { UnmadeCore::Achievement Id; bool Earned; };
@@ -199,7 +201,7 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
     ReconcileCivicContracts(Save);
 }
 
-bool UUnmadeEquipmentComponent::ReadOwnedExpeditions(UnmadeCore::Expeditions& Out)const{const auto* Save=Cast<UUnmadePrototypeSave>(UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));if(!Save)return true;if(Save->SchemaVersion!=1)return false;if(!Save->bHasExpeditions)return true;std::vector<int> p;for(int v:Save->ExpeditionState)p.push_back(v);return Out.Restore(p);}
+bool UUnmadeEquipmentComponent::ReadOwnedExpeditions(UnmadeCore::Expeditions& Out)const{const auto* Save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());if(!Save)return true;if(Save->SchemaVersion!=1)return false;if(!Save->bHasExpeditions)return true;std::vector<int> p;for(int v:Save->ExpeditionState)p.push_back(v);return Out.Restore(p);}
 bool UUnmadeEquipmentComponent::SelectRealmReward(int Arc){if(bSaveRejected||Arc<0||Arc>=9)return false;UnmadeCore::Expeditions Earned;if(!ReadOwnedExpeditions(Earned)||!Earned.Arc(Arc)->reward)return false;auto old=Loadout;if(Earned.Arc(Arc)->reward==1)Loadout.weapon=Arc;else Loadout.armor=Arc;Loadout.technique=Arc;if(!Persist()){Loadout=old;return false;}auto b=Loadout.Benefit();SetExpeditionBonuses(b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);return true;}
 bool UUnmadeEquipmentComponent::EquipNext(UnmadeCore::GearSlot Slot){
  if(bSaveRejected)return false;UnmadeCore::Expeditions Earned;if(!ReadOwnedExpeditions(Earned))return false;const auto Before=Inventory.Snapshot();auto Old=Loadout;
@@ -296,31 +298,15 @@ bool UUnmadeEquipmentComponent::Sell(UnmadeCore::ItemId Id,
     return true;
 }
 
-bool UUnmadeEquipmentComponent::CraftAt(UnmadeCore::SettlementId Village)
-{
-    if(bSaveRejected)return false;
-    for(const auto& Recipe:UnmadeCore::Recipes)
-    {
-        if(Recipe.workshop!=Village)continue;
-        const auto BeforeItems=Inventory.Snapshot();
-        const auto BeforeMoney=Economy.Snapshot();
-        const AUnmadeCharacter* OwnerPlayer=Cast<AUnmadeCharacter>(GetOwner());
-        const int32 Borrowed=IsValid(OwnerPlayer)?OwnerPlayer->GetBorrowedCraftLevel():0;
-        if(Economy.Craft(Inventory,Recipe.id,Village,Borrowed)
-           !=UnmadeCore::EconomyResult::Completed)
-            continue;
-        if(!Persist())
-        {
-            Inventory.Restore(BeforeItems);
-            Economy.Restore(BeforeMoney);
-            return false;
-        }
-        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Yellow,
-            FString::Printf(TEXT("CRAFTED: %s. Profession progress saved."),
-                UTF8_TO_TCHAR(Recipe.title)));
-        return true;
-    }
-    return false;
+bool UUnmadeEquipmentComponent::CraftAt(UnmadeCore::SettlementId village,int recipe){
+ if(bSaveRejected)return false;auto old=Inventory.Snapshot();auto money=Economy.Snapshot();auto* player=Cast<AUnmadeCharacter>(GetOwner());int borrowed=player?player->GetBorrowedCraftLevel():0;auto result=Economy.Craft(Inventory,static_cast<UnmadeCore::RecipeId>(recipe),village,borrowed);if(result!=UnmadeCore::EconomyResult::Completed)return false;if(!Persist()){Inventory.Restore(old);Economy.Restore(money);return false;}return true;
+}
+bool UUnmadeEquipmentComponent::CraftFieldRecipe(int realm,bool learned){if(bSaveRejected)return false;auto old=Inventory.Snapshot();auto money=Economy.Snapshot();if(UnmadeCore::CraftField(Inventory,realm,learned)!=UnmadeCore::EconomyResult::Completed)return false;Economy.Practice(UnmadeCore::FieldRecipes[realm].profession);if(!Persist()){Inventory.Restore(old);Economy.Restore(money);return false;}return true;}
+FString UUnmadeEquipmentComponent::DescribeRecipe(int n)const{
+ if(n<0||n>=15)return TEXT("Select a recipe.");const char* name;UnmadeCore::ItemId a,b,out;int na,nb,count;
+ if(n<6){auto& r=UnmadeCore::Recipes[n];name=r.title;a=r.inputA;b=r.inputB;na=r.unitsA;nb=r.unitsB;out=r.output;count=r.unitsOut;}else{auto& r=UnmadeCore::FieldRecipes[n-6];name=r.name;a=r.a;b=r.b;na=r.na;nb=r.nb;out=r.output;count=r.count;}
+ FString requirement; if(n<6){const auto& r=UnmadeCore::Recipes[n];requirement=FString::Printf(TEXT("Workshop: %s. Profession %s, skill %d (current %d; borrowed skill may apply).\n"),r.workshop==UnmadeCore::SettlementId::Bellwold?TEXT("Bellwold"):TEXT("Paperhaven"),r.profession==UnmadeCore::Profession::Smith?TEXT("Smith"):r.profession==UnmadeCore::Profession::Scribe?TEXT("Scribe"):TEXT("Apothecary"),r.skill,Economy.Skill(r.profession));}
+ return requirement+FString::Printf(TEXT("%s\nNeeds %s %d (owned %d), %s %d (owned %d).\nCreates %s x%d. Materials are spent only after a successful saved craft.\n"),UTF8_TO_TCHAR(name),UTF8_TO_TCHAR(UnmadeCore::FindItem(a)->name),na,Inventory.Quantity(a),UTF8_TO_TCHAR(UnmadeCore::FindItem(b)->name),nb,Inventory.Quantity(b),UTF8_TO_TCHAR(UnmadeCore::FindItem(out)->name),count);
 }
 
 FString UUnmadeEquipmentComponent::DescribeInventory() const

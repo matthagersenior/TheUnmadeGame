@@ -12,6 +12,7 @@ class THEUNMADEGAME_API UUnmadeLexiconComponent : public UActorComponent
     GENERATED_BODY()
 
 public:
+    bool HasRejectedSave()const{return bSaveRejected;}
     UUnmadeLexiconComponent();
     virtual void BeginPlay() override;
 
@@ -25,5 +26,6 @@ public:
     int32 GetClueCount() const;
 
 private:
+    bool bSaveRejected=false;
     UnmadeCore::LexiconModel Lexicon;
 };

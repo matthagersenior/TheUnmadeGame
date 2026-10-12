@@ -446,3 +446,10 @@ Independent realm weapon/armor/passive technique selections replace the relevant
 ## Nine Realm Journeys v18
 
 All nine existing expedition routes now register actual chamber arrival before enabling encounters. Numbered direction signs follow existing layouts, with physical markers along the earned return walk. Branch and one-equipment decisions preview then confirm; real return witnesses require clear sight. The journal reads the actual equipment owner and tracks sixteen derived stages, including unclaimed rewards. Drevlach alone permits the optional wing guardian to yield. Old schemas, wages, consent, item IDs, campaign endings and OPEN mysteries are preserved. Fifty-four composed branch/accord paths and a cumulative nine-realm session supplement existing campaign coverage. Native geometry and performances still require deferred Unreal acceptance.
+
+
+## Complete RPG Loops v19 12 October 2026
+
+Source implemented: deed-gated free mastery across nine realms; kits restricted to danger benefit; four independent non-destructive profiles with prior-record backup and safe-settlement health/stamina resume; optional fieldwork profile migration; 27 controller-accessible actual actions on seven menu pages; selected six workshop and nine earned field recipes, five trade goods; mapped prompts and signs; deferred distant primitive blocks, cached actors and distance cadence independent of the clock; distinct boss signatures/warnings and timed service gestures. Existing IDs, supplies, consent, wages, endings and OPEN mysteries remain authoritative.
+
+Second audit fixed isolated fieldwork saves, stale profile confirmation and automatic crafting. Repeat with `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`. Unreal compilation, imports, storage interruption, focus, navigation, timing and complete walkthroughs remain deferred. See Chapter 39 and `docs/design/complete-rpg-loops-v19-acceptance.md`.

@@ -1,3 +1,4 @@
+#include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadeTenfoldComponent.h"
 #include "Player/UnmadeCharacter.h"
@@ -26,7 +27,7 @@ void UUnmadeTenfoldComponent::BeginPlay()
 {
     Super::BeginPlay();
     const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+        UnmadeSave::LoadGameFromSlot());
     if(!Save || Save->SchemaVersion!=1 || !Save->bHasTenfoldChronicle)return;
     UnmadeCore::TenfoldSnapshot State;
     if(Save->RiteStages.Num()!=10 || Save->RiteChoices.Num()!=10 ||
@@ -132,7 +133,7 @@ bool UUnmadeTenfoldComponent::Persist(bool bWriteStrain)
         Save->PlayerStrain=Player->GetRealityStrain();
         Save->bHasFractureSnapshot=true;
     }
-    return UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadePrototypeNPC"),0);
+    return UnmadeSave::SaveGameToSlot(Save);
 }
 
 UnmadeCore::RiteContext UUnmadeTenfoldComponent::GatherContext()
@@ -145,7 +146,7 @@ UnmadeCore::RiteContext UUnmadeTenfoldComponent::GatherContext()
     Ctx.now=World->GetTimeSeconds();
     Ctx.day=1;
     const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"),0));
+        UnmadeSave::LoadGameFromSlot());
     if(Save && Save->SchemaVersion==1)
     {
         Ctx.villageVisits=Save->VisitedSettlementsMask;

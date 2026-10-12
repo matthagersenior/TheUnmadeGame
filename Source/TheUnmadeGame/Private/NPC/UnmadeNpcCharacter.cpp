@@ -250,7 +250,7 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         SetActorRotation(Offset.Rotation());
         AnimateResident(FName(TEXT("Walk")));
     }
-    else AnimateResident(FName(TEXT("Idle")));
+    else {FName work=CachedHub.IsValid()?CachedHub->ServiceWorkCue(NpcId,Current):NAME_None;AnimateResident(work.IsNone()?FName(TEXT("Idle")):work);}
 }
 
 void AUnmadeNpcCharacter::ConfigureFrontier(const UnmadeCore::FrontierResident& Resident)

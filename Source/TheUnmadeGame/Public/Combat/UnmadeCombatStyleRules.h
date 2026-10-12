@@ -14,6 +14,7 @@ struct StyleSwing {bool started=false;int combo=0;double multiplier=1;};
 class CombatTempo {
  double energy=100,last=-1,ready=0,comboUntil=0,dodgeUntil=0,parryUntil=0,powerReady=0,guardReady=0;int combo=0;
 public:
+ bool RestoreEnergy(double value){if(!std::isfinite(value)||value<0||value>100)return false;Reset();energy=value;return true;}
  double Stamina()const{return energy;}
  void Reset(){*this=CombatTempo{};}
  void Tick(double now,bool guarding,int training){if(!std::isfinite(now)||now<0||(last>=0&&now<last))return;double dt=last<0?0:std::min(2.,now-last);last=now;energy=std::clamp(energy+dt*(guarding?-9.:14.+std::clamp(training,0,3)*2),0.,100.);}

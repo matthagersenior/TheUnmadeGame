@@ -15,7 +15,7 @@ public:
  bool Route(int a,bool physical){if(!Arc(a)||!physical||arcs[a].route)return false;arcs[a].route=1;arcs[a].favor+=2;return true;}
  bool Secret(int a,bool physical){if(!Arc(a)||!physical||!arcs[a].route||arcs[a].secret)return false;arcs[a].secret=1;arcs[a].favor+=2;return true;}
  bool CounterThreat(int a){if(!Arc(a)||arcs[a].choice!=2||arcs[a].counterThreat)return false;arcs[a].counterThreat=1;arcs[a].favor+=2;return true;}
- int Price(int a,int service)const{auto* s=Arc(a);if(!s)return 99;return service==0?(s->choice==1?1:2):service==2&&s->choice==2?1:2;}
+ int Price(int a,int service)const{auto* s=Arc(a);if(!s)return 99;return service==0?(s->choice==1?1:2):service==2?0:2;}
  bool Buy(int a,int service,int day,bool benefit){if(!Arc(a)||!arcs[a].choice||service<0||service>2||day<1||day>1000000||!benefit)return false;auto& s=arcs[a];int cost=Price(a,service);if(s.favor<cost)return false;
  if(service==0){if(s.purchases>=4||s.tradeDay>=day)return false;s.purchases++;s.tradeDay=day;}
  if(service==1){if(s.kits>=3)return false;s.kits++;}
@@ -28,7 +28,7 @@ public:
  for(int a=0;a<9;++a){auto& s=n[a];s={p[j],p[j+1],p[j+2],p[j+3],p[j+4],p[j+5],p[j+6],p[j+7],p[j+8],p[j+9],p[j+10],p[j+11]};j+=12;auto* v=e.Arc(a);
  if(s.offered<0||s.offered>1||s.witness<0||s.witness>1||s.evidence<0||s.evidence>1||s.choice<0||s.choice>2||s.route<0||s.route>1||s.secret<0||s.secret>1||s.favor<0||s.favor>9||s.training<0||s.training>3||s.kits<0||s.kits>3||s.purchases<0||s.purchases>4||s.tradeDay<0||s.tradeDay>day||s.counterThreat<0||s.counterThreat>1||(s.counterThreat&&s.choice!=2))return false;
  if((s.offered&&!(v->visited&1))||(s.witness&&!s.offered)||(s.evidence&&(!s.witness||!(v->rooms&8)))||(s.choice&&(!s.evidence||!v->boss))||(s.route&&!(v->rooms&4))||(s.secret&&(!s.route||!(v->rooms&8)))||(s.training>1&&!s.route)||(s.training>2&&!s.secret)||((s.training||s.kits||s.purchases)&&!s.choice)||(s.purchases==0)!=(s.tradeDay==0))return false;
- int earned=(s.choice==1?4:s.choice==2?3:0)+s.route*2+s.secret*2+s.counterThreat*2;int spent=s.training*(s.choice==2?1:2)+s.kits*2+s.purchases*(s.choice==1?1:2);if(s.favor+spent>earned)return false;}
+ int earned=(s.choice==1?4:s.choice==2?3:0)+s.route*2+s.secret*2+s.counterThreat*2;int spent=s.kits*2+s.purchases*(s.choice==1?1:2);if(s.favor+spent>earned)return false;}
  if(p[1]>=0&&!n[p[1]].choice)return false;
  arcs=n;active=p[1];return true;}
 };

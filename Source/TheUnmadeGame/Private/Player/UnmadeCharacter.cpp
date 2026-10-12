@@ -1,3 +1,4 @@
+#include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Player/UnmadeCharacter.h"
 #include "UI/UnmadePlayerPreferences.h"
@@ -421,7 +422,7 @@ void AUnmadeCharacter::BuyMarketSupplies()
             TEXT("Trade: find a merchant in this village first."));
         return;
     }
-    const auto Id=Village==UnmadeCore::SettlementId::Bellwold
+    const auto Id=SelectedTrade!=UnmadeCore::ItemId::Count?SelectedTrade:Village==UnmadeCore::SettlementId::Bellwold
         ? UnmadeCore::ItemId::WildHerbs
         : Village==UnmadeCore::SettlementId::Paperhaven
           ? UnmadeCore::ItemId::BlankParchment : UnmadeCore::ItemId::IronScrap;
@@ -466,7 +467,7 @@ void AUnmadeCharacter::SellMarketSupplies()
         }
     }
     if(!bMerchantNearby)return;
-    const auto Id=Village==UnmadeCore::SettlementId::Bellwold
+    const auto Id=SelectedTrade!=UnmadeCore::ItemId::Count?SelectedTrade:Village==UnmadeCore::SettlementId::Bellwold
         ? UnmadeCore::ItemId::WildHerbs
         : Village==UnmadeCore::SettlementId::Paperhaven
           ? UnmadeCore::ItemId::BlankParchment : UnmadeCore::ItemId::IronScrap;
@@ -475,8 +476,11 @@ void AUnmadeCharacter::SellMarketSupplies()
             TEXT("No tradable surplus of this village's commodity."));
 }
 
-void AUnmadeCharacter::CraftLocalRecipe()
+void AUnmadeCharacter::CraftLocalRecipe(){OpenRpgPage(5);}
+void AUnmadeCharacter::CraftRecipeSelection(int Recipe)
 {
+    if(!GetWorld()||!Combat||Combat->IsDefeated())return;
+    if(Recipe>=6&&Recipe<15){for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){h->TryFieldCraft(this,Recipe-6);return;}}
     if(!IsValid(Equipment) || !GetWorld())return;
     const FVector P=GetActorLocation();
     const auto Village=UnmadeCore::SettlementAt(P.X,P.Y);
@@ -501,7 +505,7 @@ void AUnmadeCharacter::CraftLocalRecipe()
             TEXT("Find the village's workshop or scriptorium to practice a profession."));
         return;
     }
-    if(!Equipment->CraftAt(Village) && GEngine)
+    if(!Equipment->CraftAt(Village,Recipe) && GEngine)
         UnmadeRpgFeedback(-1,6.f,FColor::Yellow,
             TEXT("No known recipe can be made here with your current skill and materials."));
 }
@@ -618,7 +622,7 @@ bool AUnmadeCharacter::SaveLocalConflict()
     Save->bHasConflictSnapshot = true;
     Save->LocalConflictChoice = Snapshot.choice;
     Save->SupplyActivityStage = Snapshot.supplies;
-    return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
+    return UnmadeSave::SaveGameToSlot(Save);
 }
 
 void AUnmadeCharacter::ApplyConflictGates()
@@ -1296,7 +1300,7 @@ bool AUnmadeCharacter::SaveFractureState()
         ? NAME_None : FName(UTF8_TO_TCHAR(Snapshot.variant.c_str()));
     Save->PlayerStrain = Snapshot.strain;
     Save->bHasFractureSnapshot = true;
-    return UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0);
+    return UnmadeSave::SaveGameToSlot(Save);
 }
 
 
@@ -1333,7 +1337,7 @@ bool AUnmadeCharacter::SaveCharacterIdentity()
     Save->CharacterIdentityChoices.Reset();
     for(const int Choice:State.options)Save->CharacterIdentityChoices.Add(Choice);
     Save->CharacterChosenName=GetCharacterChosenName();
-    return UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadePrototypeNPC"),0);
+    return UnmadeSave::SaveGameToSlot(Save);
 }
 
 bool AUnmadeCharacter::SetCharacterFeature(int32 Aspect,int32 Choice)
@@ -1378,6 +1382,7 @@ void AUnmadeCharacter::ShowCharacterProfile()
 void AUnmadeCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    UnmadeSave::RegisterPlayer(this);
     GetMutableDefault<UUnmadePlayerPreferences>()->ApplyMappings();
     Combat->EnablePlayerTempo();
     if(auto* PC=Cast<APlayerController>(GetController())){RpgWidget=CreateWidget<UUnmadeRpgWidget>(PC,UUnmadeRpgWidget::StaticClass());if(RpgWidget)RpgWidget->AddToViewport(30);}
@@ -1394,14 +1399,14 @@ void AUnmadeCharacter::BeginPlay()
         AnimatePlayer(FName(TEXT("Idle")));
     }
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
-        UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+        UnmadeSave::LoadGameFromSlot());
     if (Save && Save->SchemaVersion == 1 && Save->bHasFractureSnapshot)
     {
         const FString Variant = Save->WorldVariantId.IsNone()
             ? TEXT("") : Save->WorldVariantId.ToString();
         if (!FractureModel.Restore({std::string(TCHAR_TO_UTF8(*Variant)), Save->PlayerStrain}))
         {
-            UE_LOG(LogTemp, Warning, TEXT("Invalid fracture save ignored"));
+            bFractureSaveRejected=true;UE_LOG(LogTemp, Warning, TEXT("Invalid fracture save protected; writes disabled"));
         }
     }
     if(Save && Save->SchemaVersion==1 && Save->bHasCharacterIdentity)
@@ -1428,7 +1433,7 @@ void AUnmadeCharacter::BeginPlay()
     if (Save && Save->SchemaVersion == 1 && Save->bHasConflictSnapshot &&
         !LocalConflict.Restore({Save->LocalConflictChoice, Save->SupplyActivityStage}))
     {
-        UE_LOG(LogTemp, Warning, TEXT("Invalid local conflict snapshot ignored"));
+        bConflictSaveRejected=true;UE_LOG(LogTemp, Warning, TEXT("Invalid local conflict snapshot protected; writes disabled"));
     }
     ApplyFractureVisuals();
     ApplyConflictGates();
@@ -1482,6 +1487,8 @@ void AUnmadeCharacter::AnimatePlayer(FName Cue)
 void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    RestoreSessionWhenReady();
+    if(bSessionRestored&&GetWorld()&&GetWorld()->GetTimeSeconds()>=NextSessionSave){NextSessionSave=GetWorld()->GetTimeSeconds()+20;SaveSessionNow();}
     TickWeaponContact();
     if(!RpgWidget)if(auto* PC=Cast<APlayerController>(GetController())){RpgWidget=CreateWidget<UUnmadeRpgWidget>(PC,UUnmadeRpgWidget::StaticClass());if(RpgWidget)RpgWidget->AddToViewport(30);}
     if(GetWorld() && GetWorld()->GetTimeSeconds()>=PlayerAttackMotionUntil)
@@ -1631,7 +1638,7 @@ void AUnmadeCharacter::SaveNearbyNpcMemories()
         if (!It->GetStableId().IsNone())
             Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
     }
-    if (!UGameplayStatics::SaveGameToSlot(Save, TEXT("UnmadePrototypeNPC"), 0))
+    if (!UnmadeSave::SaveGameToSlot(Save))
     {
         UE_LOG(LogTemp, Error, TEXT("Unmade prototype NPC memory save failed"));
         if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
@@ -1646,6 +1653,17 @@ void AUnmadeCharacter::PersonalChoiceA(){if(GetWorld())for(TActorIterator<AUnmad
 void AUnmadeCharacter::PersonalChoiceB(){if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)if(Hub->TryDepthInteraction(this,2))return;}
 void AUnmadeCharacter::UseFieldTechnique(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){if(!Hub->UseDepthPower(this))Hub->NotifyRpg(TEXT("Technique needs an earned mastery lesson, stamina, recovery time and a suitable nearby target."));return;}}
 void AUnmadeCharacter::DodgeStep(){if(!GetWorld()||IsRpgMenuOpen()||!Combat->Dodge(GetWorld()->GetTimeSeconds()))return;FVector Direction=GetLastMovementInputVector().GetSafeNormal2D();if(Direction.IsNearlyZero())Direction=GetActorForwardVector();LaunchCharacter(Direction*650,false,false);PlayIdentityMotion(FName(TEXT("Dodge")));UnmadePresentation::Sound(this,TEXT("guard"));}
-void AUnmadeCharacter::RpgMenuAction(FName Action){if(Action==FName(TEXT("Weapon")))EquipNextWeapon();else if(Action==FName(TEXT("Armor")))EquipNextArmor();else if(Action==FName(TEXT("Charm")))EquipNextCharm();else if(Action==FName(TEXT("Heal")))UseHealthPotion();else if(Action==FName(TEXT("ChoiceA")))PersonalChoiceA();else if(Action==FName(TEXT("ChoiceB")))PersonalChoiceB();}
+void AUnmadeCharacter::RpgMenuAction(FName Action){if(!Combat||Combat->IsDefeated())return;if(Action==FName(TEXT("Weapon")))EquipNextWeapon();else if(Action==FName(TEXT("Armor")))EquipNextArmor();else if(Action==FName(TEXT("Charm")))EquipNextCharm();else if(Action==FName(TEXT("Heal")))UseHealthPotion();else if(Action==FName(TEXT("ChoiceA")))PersonalChoiceA();else if(Action==FName(TEXT("ChoiceB")))PersonalChoiceB();else if(Action==FName(TEXT("AnomalyPulse"))){DemonstrateAnomaly();}else if(Action==FName(TEXT("FoldReality"))){FoldReality();}else if(Action==FName(TEXT("RewriteOpen"))){RewriteOpen();}else if(Action==FName(TEXT("RewriteSealed"))){RewriteSealed();}else if(Action==FName(TEXT("FrontierTravel"))){CrossFrontierGateway();}else if(Action==FName(TEXT("RiteNext"))){if(Tenfold)Tenfold->NextRite();}else if(Action==FName(TEXT("RitePrevious"))){if(Tenfold)Tenfold->PreviousRite();}else if(Action==FName(TEXT("RiteStudy"))){if(Tenfold)Tenfold->StudyRite();}else if(Action==FName(TEXT("RiteUse"))){if(Tenfold)Tenfold->InvokeRite();}else if(Action==FName(TEXT("RiteChoice1"))){if(Tenfold)Tenfold->DecideSolidarity();}else if(Action==FName(TEXT("RiteChoice2"))){if(Tenfold)Tenfold->DecideTruth();}else if(Action==FName(TEXT("RiteBreak"))){if(Tenfold)Tenfold->BreakChosenOath();}else if(Action==FName(TEXT("RiteLaw"))){if(Tenfold)Tenfold->CycleWorldLaw();}else if(Action==FName(TEXT("ConfluenceCycle"))){if(Tenfold)Tenfold->CycleConfluence();}else if(Action==FName(TEXT("ConfluenceStudy"))){if(Tenfold)Tenfold->StudyConfluence();}else if(Action==FName(TEXT("ConfluenceOption1"))){if(Tenfold)Tenfold->ConfluenceChoice1();}else if(Action==FName(TEXT("ConfluenceOption2"))){if(Tenfold)Tenfold->ConfluenceChoice2();}else if(Action==FName(TEXT("FactionSolidarity"))){CommitSolidarity();}else if(Action==FName(TEXT("FactionTruth"))){CommitTruth();}else if(Action==FName(TEXT("StoryShelter"))){ChooseShelter();}else if(Action==FName(TEXT("StoryResearch"))){ChooseResearch();}else if(Action==FName(TEXT("OfferAid"))){OfferAid();}else if(Action==FName(TEXT("SupplyActivity"))){ProgressSupplyActivity();}else if(Action==FName(TEXT("FieldKit"))){UseFieldKit();}else if(Action==FName(TEXT("FieldTechnique"))){UseFieldTechnique();}else if(Action==FName(TEXT("ItemStrain"))){UseStrainPotion();}else if(Action==FName(TEXT("ItemForge"))){ForgeMythicGear();}}
 
 void AUnmadeCharacter::UseFieldKit(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){if(!h->UseDepthFieldKit(this))h->NotifyRpg(TEXT("Use a crafted field kit inside an unresolved dungeon danger chamber. No kit is consumed if there is no benefit."));return;}}
+
+void AUnmadeCharacter::RestoreSessionWhenReady(){
+ if(bSessionRestored||!GetWorld())return;AUnmadePrototypeHub* hub=nullptr;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){hub=*h;break;}if(!hub||!hub->IsWorldReady())return;
+ auto* save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());if(save&&save->bHasPlayerResume){FVector safe(0,0,135);hub->ExperienceCheckpoint(save->ResumePosition,safe);hub->PrepareRealmGeometry(safe,100000);if(!SetActorLocation(safe,false,nullptr,ETeleportType::TeleportPhysics))return;Combat->RestoreSession(save->ResumeHealth,save->ResumeStamina);}bSessionRestored=true;NextSessionSave=GetWorld()->GetTimeSeconds()+20;
+}
+void AUnmadeCharacter::CaptureSession(UUnmadePrototypeSave* save)const{
+ if(!save||!bSessionRestored||!GetWorld()||!Combat)return;FVector safe(0,0,135);for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){h->ExperienceCheckpoint(GetActorLocation(),safe);break;}save->bHasPlayerResume=true;save->ResumePosition=safe;save->ResumeHealth=Combat->GetHealth();save->ResumeStamina=Combat->GetStamina();
+}
+bool AUnmadeCharacter::SaveSessionNow(){RestoreSessionWhenReady();if(!bSessionRestored||!GetWorld())return false;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h)return h->SavePlayerSession(this);return false;}
+
+void AUnmadeCharacter::TradeSelection(UnmadeCore::ItemId item,bool buy){SelectedTrade=item;if(buy)BuyMarketSupplies();else SellMarketSupplies();SelectedTrade=UnmadeCore::ItemId::Count;}

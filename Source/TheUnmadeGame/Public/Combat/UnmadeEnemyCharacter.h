@@ -46,6 +46,7 @@ public:
     UnmadeCore::EnemyStyle GetEnemyStyle() const { return Style; }
 
 private:
+    double MotionHeldUntil=0;
     UPROPERTY() TArray<TObjectPtr<UStaticMeshComponent>> SignatureTiles;
     int32 ExpeditionArc=-1,ExpeditionSlot=-1;
     UnmadeCore::ExpeditionRole ExpeditionRole=UnmadeCore::ExpeditionRole::Sentinel;

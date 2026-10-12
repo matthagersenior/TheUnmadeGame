@@ -37,7 +37,7 @@ class PrototypeSourceContractTests(unittest.TestCase):
         self.assertIn('FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f)', p)
         self.assertIn("LineTraceTestByChannel", p)
         self.assertIn('TEXT("You have already helped this resident.")', p)
-        self.assertIn("UGameplayStatics::SaveGameToSlot", p)
+        self.assertIn("UnmadeSave::SaveGameToSlot", p)
 
     def test_local_rumors_have_a_real_sharing_path(self):
         p = source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")

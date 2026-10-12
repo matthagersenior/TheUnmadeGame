@@ -7,6 +7,8 @@ UCLASS(Config=GameUserSettings)
 class THEUNMADEGAME_API UUnmadePlayerPreferences : public UObject {
  GENERATED_BODY()
 public:
+ UPROPERTY(Config) int ActiveProfile=0;
+ UPROPERTY(Config) bool UseBackup=false;
  UPROPERTY(Config) float TextScale=1;
  UPROPERTY(Config) float CameraSensitivity=1;
  UPROPERTY(Config) float AudioVolume=1;
@@ -29,4 +31,5 @@ public:
  bool Bind(int Action,FKey Key,FString& Reason);
  FString Describe()const;
  FString ControlPrompt()const;
+ FString FormatControls(const FString& Text)const;
 };

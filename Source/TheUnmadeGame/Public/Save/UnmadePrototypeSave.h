@@ -1,18 +1,23 @@
 #pragma once
 
+#include "Save/UnmadeSaveSession.h"
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "UnmadePrototypeSave.generated.h"
 
-/** Prototype save: NPC observations and one authored world choice; not yet a full RPG save system. */
+/** Versioned cross-system record with optional safe resume state; profiles and backup routing are shared. */
 UCLASS()
 class THEUNMADEGAME_API UUnmadePrototypeSave : public USaveGame
 {
     GENERATED_BODY()
 
 public:
+    UPROPERTY(SaveGame) bool bHasPlayerResume=false;
+    UPROPERTY(SaveGame) FVector ResumePosition=FVector(0,0,135);
+    UPROPERTY(SaveGame) float ResumeHealth=100;
+    UPROPERTY(SaveGame) float ResumeStamina=100;
     UPROPERTY(SaveGame) bool bHasAdventureDepth=false;
     UPROPERTY(SaveGame) TArray<int32> AdventureDepthState;
     UPROPERTY(SaveGame) bool bHasWorldIdentity=false;
@@ -390,14 +395,17 @@ public:
     UPROPERTY(SaveGame) bool bHasUnifiedLoadout=false;
     UPROPERTY(SaveGame) TArray<int32> UnifiedRealmLoadout;
 
+    UPROPERTY(SaveGame) bool bHasFieldSurveys=false;
+    UPROPERTY(SaveGame) TArray<int32> FieldSurveyStages;
+
     /** Merges prototype sub-system writes instead of erasing unrelated state. */
     static UUnmadePrototypeSave* LoadOrCreate()
     {
         UUnmadePrototypeSave* Existing = Cast<UUnmadePrototypeSave>(
-            UGameplayStatics::LoadGameFromSlot(TEXT("UnmadePrototypeNPC"), 0));
+            UnmadeSave::LoadGameFromSlot());
         if (Existing) return Existing->SchemaVersion == 1 ? Existing : nullptr;
         // Never replace an existing but unreadable save with an empty one.
-        if (UGameplayStatics::DoesSaveGameExist(TEXT("UnmadePrototypeNPC"), 0))
+        if (UnmadeSave::HasRecord())
             return nullptr;
         return Cast<UUnmadePrototypeSave>(UGameplayStatics::CreateSaveGameObject(StaticClass()));
     }
