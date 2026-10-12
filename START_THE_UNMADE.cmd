@@ -15,10 +15,10 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%~dp0Scripts\first_pc_q
 set "RESULT=%ERRORLEVEL%"
 echo.
 if not "%RESULT%"=="0" (
-  echo STOPPED: open TestReportsquickstart-* to see the failure.
+  echo STOPPED: open TestReports/quickstart-* to see the failure.
   echo No claim is made that this game was compiled or tested.
 ) else (
-  echo SUCCESS: Unreal Editor is opening if installed and verified.
+  echo SUCCESS: selected build steps passed; see the quickstart report for exact result.
 )
 echo.
 pause
