@@ -26,3 +26,8 @@ TestReports/
 *.pfx
 # Keep the actual Unreal Content/ source in Git LFS
 !Content/
+
+# Python and generated manuscript output
+__pycache__/
+*.py[cod]
+PublicationBuild/
