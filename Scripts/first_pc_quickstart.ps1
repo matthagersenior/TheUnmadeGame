@@ -5,6 +5,7 @@ param(
     [switch]$InspectOnly,
     [switch]$SkipStage,
     [switch]$DontOpenEditor,
+    [switch]$BuildOnly,
     [int]$MinimumFreeDiskGB=100
 )
 $ErrorActionPreference="Stop"
@@ -72,10 +73,10 @@ try{
             Set-Content -Path (Join-Path $report "result.txt") -Encoding UTF8
         exit 0
     }
-    & (Join-Path $PSScriptRoot "first_pc_build_and_test.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
+    & (Join-Path $PSScriptRoot "first_pc_build_and_test.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB -BuildOnly:$BuildOnly 2>&1 |
         Tee-Object -FilePath (Join-Path $report "build-automation-master.log")
     if($LASTEXITCODE -ne 0){throw "EDITOR_BUILD_OR_AUTOMATION_FAILED: see build-automation-master.log"}
-    if(!$SkipStage){
+    if(!$SkipStage -and !$BuildOnly){
         $env:UNMADE_EDITOR_APPROVED="1"
         $env:UNMADE_EDITOR_RECEIPT=$receipt
         $env:UNMADE_COMMIT=$commit
@@ -119,11 +120,13 @@ try{
             Remove-Item Env:UNMADE_COMMIT -ErrorAction SilentlyContinue
         }
     }
-    $mode=if($SkipStage){"COMPILED_AND_TESTED_NOT_STAGED"}else{"EDITOR_COMPILED_TESTED_AND_REFERENCES_STAGED"}
+    if($BuildOnly){$mode="BUILT_NOT_TESTED_NOT_STAGED"}
+    elseif($SkipStage){$mode="COMPILED_AND_TESTED_NOT_STAGED"}
+    else{$mode="EDITOR_COMPILED_TESTED_AND_REFERENCES_STAGED"}
     @("result=$mode","commit=$commit","engineRoot=$UnrealRoot","report=$report") |
         Set-Content -Path (Join-Path $report "result.txt") -Encoding UTF8
     Write-Host "PASS $mode; report and source commit in $report"
-    if(!$DontOpenEditor){
+    if(!$DontOpenEditor -and !$BuildOnly){
         Start-Process -FilePath $editor -ArgumentList ('"'+$project+'"')
         Write-Host "Opening Unreal Editor. Staging reference blocks are NOT finished gameplay art."
     }

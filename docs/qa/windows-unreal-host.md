@@ -1,6 +1,6 @@
 # THE UNMADE — Windows Unreal build host gate
 
-**Status:** Written procedure only. No Unreal-capable host is provisioned or tested.
+**Status:** Written procedure only. No Unreal-capable host is provisioned or tested. For the exact Editor target, compile-only command, host diagnostics and error triage, see [first-build diagnostics](first-build-diagnostics.md).
 
 ## No-cost checks on a prospective Windows GPU host
 
