@@ -28,9 +28,13 @@ try {
        $TestFilter -notmatch '^Unmade(\.[a-zA-Z0-9_]+)*$'){
         throw "INVALID_TEST_FILTER: expected Unmade or Unmade.<group>"
     }
-    & (Join-Path $PSScriptRoot "check_unreal_host.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
+    # Run the host check in a child PowerShell process. The preflight uses exit
+    # codes for standalone use; child isolation keeps a failure from bypassing
+    # this script's catch block and its retained failure.txt receipt.
+    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "check_unreal_host.ps1") -UnrealRoot $UnrealRoot -MinimumFreeDiskGB $MinimumFreeDiskGB 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "preflight.log")
-    if($LASTEXITCODE -ne 0){throw "HOST_PREFLIGHT_FAILED: exit $LASTEXITCODE"}
+    $preflightExit = $LASTEXITCODE
+    if($preflightExit -ne 0){throw "HOST_PREFLIGHT_FAILED: exit $preflightExit"}
     & python (Join-Path $PSScriptRoot "build_player_experience.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "player-experience-validation.log")
     if($LASTEXITCODE -ne 0){throw "EXPERIENCE_REGISTRY_FAILED"}
