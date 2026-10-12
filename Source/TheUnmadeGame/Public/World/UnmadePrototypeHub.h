@@ -36,6 +36,7 @@
 #include "World/UnmadeLaterHazardRules.h"
 #include "TimerManager.h"
 #include "World/UnmadeExpeditionRegistry.h"
+#include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadeExpeditionRules.h"
 #include "World/UnmadeIdentityRules.h"
 #include "World/UnmadeAdventureDepthRules.h"
@@ -298,6 +299,8 @@ public:
     void RefreshExpeditions();
     bool CommitExpeditions(const UnmadeCore::Expeditions& Before,AUnmadeCharacter* Player=nullptr);
 private:
+    UnmadeCore::ExpeditionConfirmation ExpeditionPendingDecision;
+    bool ConfirmExpeditionDecision(int Arc,int Kind,int Value);
     UnmadeCore::PlayerExperience Experience;
     bool bExperienceRejected=false;
     double NextExperienceRefresh=0,ExperienceWaitConfirm=-1;

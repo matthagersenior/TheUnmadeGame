@@ -6,7 +6,7 @@ Explore nine authored realms through combat, investigation, rescue and reality-c
 
 ## Current status
 
-Current source milestone: **Player Experience v17**. The repository contains Unreal C++ gameplay, generated graybox world assembly, portable rules, authored narrative data and prototype asset generators. No packaged playable release is available.
+Current source milestone: **Nine Realm Journeys v18**. The repository contains Unreal C++ gameplay, generated graybox world assembly, portable rules, authored narrative data and prototype asset generators. No packaged playable release is available.
 
 | Evidence | Scope |
 | --- | --- |
@@ -14,7 +14,7 @@ Current source milestone: **Player Experience v17**. The repository contains Unr
 | Source-only | Unreal gameplay integration, graybox settlements/dungeons, native menus, animation/audio import plans |
 | Untested in engine | UHT/Editor compilation, imported assets, movement/navigation/collision, rendered UI, campaign playtests and packaging |
 
-Detailed checks: [engine acceptance](docs/design/player-experience-v17-acceptance.md), [Windows host setup](docs/qa/windows-unreal-host.md), [Unreal CI](docs/qa/unreal-ci.md).
+Detailed checks: [engine acceptance](docs/design/nine-realm-journeys-v18-acceptance.md), [Windows host setup](docs/qa/windows-unreal-host.md), [Unreal CI](docs/qa/unreal-ci.md).
 
 ## Quick start
 

@@ -315,3 +315,8 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/resident_continuity_test.cpp -o /tmp/unmade-resident-continuity
           /tmp/unmade-resident-continuity
+
+      - name: Verify composed nine-realm journeys, confirmations and reloads
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/realm_journey_test.cpp -o /tmp/unmade-realm-journey
+          /tmp/unmade-realm-journey

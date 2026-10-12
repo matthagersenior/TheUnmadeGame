@@ -1,3 +1,7 @@
+# Nine Realm Journeys v18
+
+Physical chamber arrival and encounter receipts now agree across nine realms. Added explicit journey objectives, route signs, confirmation previews and composed reload tests. Fixed journal equipment ownership and restricted wing surrender to Drevlach. Full illustrated v18 publication extends v17; engine acceptance is deferred.
+
 # Development history
 
 Historical milestones describe their dated baseline. Consult the root README for current status.

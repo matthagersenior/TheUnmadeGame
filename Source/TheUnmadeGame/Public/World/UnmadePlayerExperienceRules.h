@@ -36,7 +36,7 @@ public:
  bool OfferWing(int a,const Expeditions& e){if(!Arc(a)||!e.Arc(a)->rooms||arcs[a].offered)return false;arcs[a].offered=1;return true;}
  bool WingStep(int a,int step,bool physical){if(!Arc(a)||!physical||step<0||step>2||!arcs[a].offered)return false;auto& s=arcs[a];if((s.steps&(1<<step))||(step&&!(s.steps&(1<<(step-1)))))return false;s.steps|=1<<step;return true;}
  bool RestartCooling(int a){if(a!=2||!arcs[a].offered||arcs[a].guardian||arcs[a].steps==7||!arcs[a].steps)return false;arcs[a].steps=0;return true;}
- bool Guardian(int a,bool yielded=false){if(!Arc(a)||arcs[a].steps!=7||arcs[a].guardian)return false;arcs[a].guardian=yielded?2:1;arcs[a].insight+=2;return true;}
+ bool Guardian(int a,bool yielded=false){if((yielded&&a!=3)||!Arc(a)||arcs[a].steps!=7||arcs[a].guardian)return false;arcs[a].guardian=yielded?2:1;arcs[a].insight+=2;return true;}
  bool CompleteWing(int a){if(!Arc(a)||!arcs[a].guardian||arcs[a].complete)return false;arcs[a].complete=1;arcs[a].insight+=3;return true;}
  bool Visit(int a,int person,int day){if(!Arc(a)||person<0||person>4||day<1||day>1000000||arcs[a].days[person]>=day)return false;auto& s=arcs[a];s.days[person]=day;s.visits[person]=std::min(5,s.visits[person]+1);return true;}
  bool Scene(int a,int scene,const Expeditions& e,const AdventureDepth& d){if(!Arc(a)||scene<0||scene>3)return false;auto& s=arcs[a];auto* v=e.Arc(a);auto* p=d.Arc(a);if(s.scenes&(1<<scene))return false;bool allowed=scene==0?s.offered&&s.visits[4]>=1:scene==1?s.guardian&&s.visits[3]>=2:scene==2?s.complete&&p->choice&&s.visits[0]>=2:v->returned&&v->rescued==3&&s.visits[1]>=1&&s.visits[2]>=1;if(!allowed)return false;s.scenes|=1<<scene;s.insight+=1;return true;}
@@ -50,7 +50,7 @@ public:
    if(s.offered<0||s.offered>1||(s.steps!=0&&s.steps!=1&&s.steps!=3&&s.steps!=7)||s.guardian<0||s.guardian>2||s.complete<0||s.complete>1||s.build<0||s.build>3||s.tool<0||s.tool>1||s.recipe<0||s.recipe>1||s.privilege<0||s.privilege>1||s.insight<0||s.insight>9||s.spent<0||s.spent>1000||s.repair<0||s.repair>1||s.reconciled<0||s.reconciled>1||s.scenes<0||s.scenes>15)return false;
    if(s.serviceDay<0||s.serviceDay>day||s.serviceUses<0||s.serviceUses>2||((s.serviceUses==0)!=(s.serviceDay==0))||(s.serviceUses&&!s.privilege))return false;
    for(int k=0;k<5;++k)if(s.visits[k]<0||s.visits[k]>5||s.days[k]<0||s.days[k]>day||((s.visits[k]==0)!=(s.days[k]==0)))return false;
-   if((s.offered&&!e.Arc(a)->rooms)||(s.steps&&!s.offered)||(s.guardian&&s.steps!=7)||(s.complete&&!s.guardian)||((s.build||s.tool||s.recipe||s.privilege||s.repair)&&!s.complete)||(s.repair&&!d.Arc(a)->choice)||(s.reconciled&&(!s.repair||d.Arc(a)->choice!=2||s.visits[3]<2)))return false;
+   if((s.offered&&!e.Arc(a)->rooms)||(s.steps&&!s.offered)||(s.guardian&&s.steps!=7)||(s.guardian==2&&a!=3)||(s.complete&&!s.guardian)||((s.build||s.tool||s.recipe||s.privilege||s.repair)&&!s.complete)||(s.repair&&!d.Arc(a)->choice)||(s.reconciled&&(!s.repair||d.Arc(a)->choice!=2||s.visits[3]<2)))return false;
    int count=0;for(int k=0;k<4;++k)if(s.scenes&(1<<k))count++;int earned=(s.guardian?2:0)+s.complete*3+count;
    int minimum=(s.build?2:0)+s.tool+s.recipe+s.privilege+s.repair;if(s.spent<minimum||s.insight+s.spent!=earned)return false;
    if((s.scenes&1)&&(!s.offered||s.visits[4]<1))return false;

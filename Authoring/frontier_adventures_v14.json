@@ -23,8 +23,8 @@
         "A cut seal identifies the collectors.",
         "Three contradictory maps share one trapped stair."
       ],
-      "kill_return": "The The Tollkeeper Without a Road is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Tollkeeper Without a Road yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Tollkeeper Without a Road is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Tollkeeper Without a Road yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": 0,
       "y": 0,
       "technique": "Marked Opening"
@@ -48,11 +48,11 @@
       "brief": "Release the divers held behind the pressure locks.",
       "clues": [
         "Water payments conceal a captive labor levy.",
-        "A cracked helmet bears the divers\u2019 signal.",
+        "A cracked helmet bears the divers’ signal.",
         "The dry chamber contains the genuine levy register."
       ],
-      "kill_return": "The The Undertow Bailiff is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Undertow Bailiff yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Undertow Bailiff is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Undertow Bailiff yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": 0,
       "y": -50000,
       "technique": "Pressure Read"
@@ -79,8 +79,8 @@
         "A scorched shift slate records the false closure.",
         "A surviving valve diagram reveals the bypass."
       ],
-      "kill_return": "The The Ashbound Provost is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Ashbound Provost yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Ashbound Provost is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Ashbound Provost yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": 0,
       "y": 50000,
       "technique": "Ember Counter"
@@ -104,11 +104,11 @@
       "brief": "Free the ferrymen held as collateral in the anchorage.",
       "clues": [
         "A forged future debt binds the ferrymen.",
-        "A ship\u2019s seal predates the alleged bargain.",
-        "The counterfoil names the creditor\u2019s own unpaid promise."
+        "A ship’s seal predates the alleged bargain.",
+        "The counterfoil names the creditor’s own unpaid promise."
       ],
-      "kill_return": "The The Interest Warden is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Interest Warden yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Interest Warden is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Interest Warden yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": 100000,
       "y": -50000,
       "technique": "Oath Interrupt"
@@ -129,14 +129,14 @@
       ],
       "weapon": "Downfall Glaive",
       "armor": "Choirweight Harness",
-      "brief": "Release the riggers suspended in the engine\u2019s holding cages.",
+      "brief": "Release the riggers suspended in the engine’s holding cages.",
       "clues": [
         "The cantor is using prisoners to stabilize a private span.",
-        "A rigger\u2019s knot ties a voice to a counterweight.",
+        "A rigger’s knot ties a voice to a counterweight.",
         "The tuning record proves the public span can stand without prisoners."
       ],
-      "kill_return": "The The Counterweight Cantor is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Counterweight Cantor yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Counterweight Cantor is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Counterweight Cantor yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": -100000,
       "y": -50000,
       "technique": "Grounded Fold"
@@ -161,10 +161,10 @@
       "clues": [
         "The claimant treats descendants as expendable mining rights.",
         "An intact family token survives the spoil.",
-        "The seam register proves the workers\u2019 living claim."
+        "The seam register proves the workers’ living claim."
       ],
-      "kill_return": "The The Last Claimant is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Last Claimant yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Last Claimant is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Last Claimant yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": 100000,
       "y": 50000,
       "technique": "Seam Read"
@@ -191,8 +191,8 @@
         "An unsigned blanket list records occupied beds.",
         "A witness ledger proves the caretakers were present before the census."
       ],
-      "kill_return": "The The Registrar of Empty Beds is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Registrar of Empty Beds yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Registrar of Empty Beds is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Registrar of Empty Beds yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": -100000,
       "y": 50000,
       "technique": "Unlisted Step"
@@ -219,8 +219,8 @@
         "A graft tag carries the names of its communal tenders.",
         "The buried title reserves the root road for everyone."
       ],
-      "kill_return": "The The Unwritten Castellan is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Unwritten Castellan yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Unwritten Castellan is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Unwritten Castellan yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": 200000,
       "y": 0,
       "technique": "Root Counter"
@@ -247,8 +247,8 @@
         "A tether line proves the witnesses entered voluntarily.",
         "The original door mark allows more than one return."
       ],
-      "kill_return": "The The Keeper of the Single Door is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
-      "mercy_return": "The The Keeper of the Single Door yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+      "kill_return": "The Keeper of the Single Door is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+      "mercy_return": "The Keeper of the Single Door yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
       "x": -200000,
       "y": 0,
       "technique": "Nearness Hold"
