@@ -10,6 +10,9 @@ on:
         description: Unique source milestone tag (for example source-v17)
         required: true
         type: string
+concurrency:
+  group: source-release-publisher
+  cancel-in-progress: false
 permissions:
   contents: write
   actions: read
@@ -39,6 +42,18 @@ jobs:
                 return;
               } catch (error) { if (error.status !== 404) throw error; }
             }
-            const annotated = await github.rest.git.createTag({...repo, tag, message: `Verified source milestone ${tag}; engine acceptance remains separate.`, object: sha, type: 'commit'});
-            await github.rest.git.createRef({...repo, ref: `refs/tags/${tag}`, sha: annotated.data.sha});
+            let existing;
+            try {
+              existing = (await github.rest.git.getRef({...repo, ref: `tags/${tag}`})).data.object;
+            } catch (error) { if (error.status !== 404) throw error; }
+            if (existing) {
+              const target = existing.type === 'tag'
+                ? (await github.rest.git.getTag({...repo, tag_sha: existing.sha})).data.object
+                : existing;
+              if (target.type !== 'commit' || target.sha !== sha) throw new Error('Existing tag points to a different commit; refusing to move it');
+              core.info('Resuming publication from the existing verified tag.');
+            } else {
+              const annotated = await github.rest.git.createTag({...repo, tag, message: `Verified source milestone ${tag}; engine acceptance remains separate.`, object: sha, type: 'commit'});
+              await github.rest.git.createRef({...repo, ref: `refs/tags/${tag}`, sha: annotated.data.sha});
+            }
             await github.rest.repos.createRelease({...repo, tag_name: tag, name: `The Unmade ${tag} (source prerelease)`, prerelease: true, body: 'Source milestone with passing static and portable-rule CI. No packaged executable or Unreal runtime verification is claimed. See README for current evidence and docs/qa/unreal-ci.md for engine acceptance. Canonical manuscript artifacts are attached to the source CI run; illustrated editions remain separately dated publications.'});

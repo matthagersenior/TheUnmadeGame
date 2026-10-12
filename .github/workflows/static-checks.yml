@@ -100,6 +100,10 @@ jobs:
           name: canonical-manuscript-${{ github.sha }}
           path: PublicationBuild/
           if-no-files-found: error
+      - name: Validate documentation and binary admission
+        run: python Scripts/validate_hygiene.py
+      - name: Test release publication and interrupted-run recovery
+        run: node Scripts/tests/source_release_test.cjs
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits
