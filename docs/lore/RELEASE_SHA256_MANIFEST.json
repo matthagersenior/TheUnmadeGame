@@ -1,16 +1,16 @@
 {
-  "edition": "Player Experience v17",
+  "edition": "Nine Realm Journeys v18",
   "date": "2026-10-12",
-  "source_base": "6e760ad86fccdb8a58f808aedaeacc1628b399f9",
+  "source_base": "f6170399957e081c2dc3301eb6ed4c17bfbe019a",
   "engine_compiled": false,
   "engine_playtested": false,
-  "python_tests": 262,
-  "native_cpp_tests": 55,
-  "workflow_validators": 25,
-  "complete_bible_pages": 162,
-  "complete_bible_images": 61,
-  "volume_x_pages": 113,
-  "volume_x_images": 14,
+  "python_tests": 272,
+  "native_cpp_tests": 56,
+  "workflow_validators": 29,
+  "complete_bible_pages": 165,
+  "complete_bible_images": 62,
+  "volume_x_pages": 117,
+  "volume_x_images": 15,
   "animation_clips": 57,
   "new_original_wavs": 0,
   "wing_room_areas": 27,
@@ -19,29 +19,29 @@
   "settlement_service_rooms": 29,
   "files": [
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Player_Experience_v17.docx",
-      "bytes": 8006772,
-      "sha256": "7ee46eac38c354b4b723e14f73520f4e5f9eeb189b364993518fb014b23f4fff"
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Realm_Journeys_v18.docx",
+      "bytes": 8156339,
+      "sha256": "f9718ee30ca8d20ac15ba64d910d7af72f951a6e4ef5aa5cbf5c479c1f8c49d9"
     },
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Player_Experience_v17.pdf",
-      "bytes": 5486797,
-      "sha256": "d314bfc0c694f3006ffdc80afbf07277f7b8d30841dec75059c4bc53663fdaec"
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Realm_Journeys_v18.pdf",
+      "bytes": 5638764,
+      "sha256": "51b6ff378499829482de4cd78f0b65441e7d448e08693986f8a7225de090f49d"
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Player_Experience_v17.docx",
-      "bytes": 5812405,
-      "sha256": "57ed7bfe21188b42983b1ec49eb67b69e13d7902e19a844ae60901f9cf7dd391"
+      "name": "THE_UNMADE_Volume_X_Illustrated_Realm_Journeys_v18.docx",
+      "bytes": 5961987,
+      "sha256": "7618f1444336845995bcbd15293034e0cda867933c016e6bd480a9eebce571ed"
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Player_Experience_v17.pdf",
-      "bytes": 3473887,
-      "sha256": "9a7c3468a945764e5d299b2c2ba034f8668074284ef6d3983597342972f28c3b"
+      "name": "THE_UNMADE_Volume_X_Illustrated_Realm_Journeys_v18.pdf",
+      "bytes": 3627151,
+      "sha256": "f19e21755341bd92c852f7eeae9fac0a6312ea9fd87f3f2bbc38f43cddb5a240"
     },
     {
-      "name": "THE_UNMADE_v17_Player_Experience_Atlas.png",
-      "bytes": 152551,
-      "sha256": "36972fe3736b04fcbeeaa81e841c4b779335da624118b7d6093f94ede1a84b74"
+      "name": "THE_UNMADE_v18_Realm_Journeys_Atlas.png",
+      "bytes": 158441,
+      "sha256": "ebfbeed277f415626f063e3c00eac7fde2563e03d703d33b7ca65036e903e772"
     }
   ]
 }
