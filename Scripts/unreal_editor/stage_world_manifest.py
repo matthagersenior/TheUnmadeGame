@@ -23,6 +23,11 @@ def resolve_static_mesh(unreal,asset_hint,fallback):
         if asset is not None and isinstance(asset,unreal.StaticMesh):
             return asset,path
     return fallback,None
+def is_engine_cube_placeholder(current_asset,default_mesh):
+    """Only generated cube proxies may be upgraded; artist meshes are preserved."""
+    return (current_asset is not None and default_mesh is not None and
+            current_asset.get_path_name()==default_mesh.get_path_name())
+
 def read_plan(path=MANIFEST):
     m=json.loads(path.read_text(encoding="utf-8"))
     if m.get("schema_version")!=1 or m.get("editor_level_name")!="Unmade_AuthoringStaging":
@@ -65,7 +70,7 @@ def apply_in_editor(m):
             if mesh_path and component:
                 current=component.get_editor_property("static_mesh")
                 current_path=current.get_path_name() if current else ""
-                if current_path==default_mesh.get_path_name():
+                if is_engine_cube_placeholder(current,default_mesh):
                     component.set_static_mesh(mesh)
                     updated+=1
             skipped+=1
