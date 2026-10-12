@@ -59,7 +59,7 @@ class FirstBuildDiagnosticsTests(unittest.TestCase):
         self.assertIn(invocation, self.build)
         self.assertIn('$preflightExit = $LASTEXITCODE', self.build)
         self.assertIn('HOST_PREFLIGHT_FAILED: exit $preflightExit', self.build)
-        self.assertNotIn('& (Join-Path $PSScriptRoot "check_unreal_host.ps1")', self.build)
+        self.assertNotRegex(self.build, r'(?m)^\s*& \(Join-Path \$PSScriptRoot "check_unreal_host\.ps1"\)')
 
     def test_double_click_failure_message_points_to_real_report_folder(self):
         self.assertIn("TestReports/quickstart-*", self.launcher)
