@@ -41,6 +41,7 @@
 #include "World/UnmadeAdventureDepthRules.h"
 #include "Items/UnmadeItemRules.h"
 #include "Combat/UnmadeCombatStyleRules.h"
+#include "World/UnmadePlayerExperienceRules.h"
 #include "UnmadePrototypeHub.generated.h"
 
 class AUnmadeLoreSite;
@@ -62,6 +63,28 @@ class THEUNMADEGAME_API AUnmadePrototypeHub : public AActor
 
 public:
     AUnmadePrototypeHub();
+    bool TryExperienceInteraction(AUnmadeCharacter* Player,double Competing);
+    bool RecordExperienceConversation(FName Id,AUnmadeCharacter* Player);
+    bool ExperienceRoutineTarget(FName Id,const FVector& Current,FVector& Target)const;
+    FString ExperienceReaction(FName Id)const;
+    FString GetExperienceJournal()const;
+    FString GetExperienceMap(int Realm,AUnmadeCharacter* Player)const;
+    FString GetTrackedObjective()const;
+    bool IsRealmKnown(int Realm)const;
+    bool TrackExperienceRealm(int Realm,AUnmadeCharacter* Player);
+    bool SelectExperienceBuild(int Realm,AUnmadeCharacter* Player);
+    bool ExperienceAction(int Action,AUnmadeCharacter* Player);
+    bool ExperienceServicesOpen(int Realm)const;
+    FString ExperienceServiceHours(int Realm)const;
+    bool WingObserverInactive()const{return bExperienceRejected||!Experience.Arc(6)->offered||Experience.ObserverCleared();}
+    bool RecordWingObserver(class AUnmadeEnemyCharacter* Observer);
+    bool WingGuardianInactive(int Realm)const;
+    bool WingGuardianYielded(int Realm)const;
+    bool RecordWingGuardian(class AUnmadeEnemyCharacter* Guardian,int Realm);
+    UnmadeCore::BuildEffect ActiveBuild()const;
+    bool ExperienceCheckpoint(const FVector& Current,FVector& Destination)const;
+    void LearnExperienceTutorial(int Bit,AUnmadeCharacter* Player);
+
     virtual void BeginPlay() override;
     virtual void Tick(float DeltaSeconds) override;
     UnmadeCore::DayPhase GetCurrentPhase() const { return Clock.Phase(); }
@@ -248,6 +271,7 @@ public:
     UnmadeCore::WeaponStyle PlayerWeaponStyle(UnmadeCore::ItemId Legacy)const;
     int GetActiveMastery()const{auto* S=Depth.Arc(Depth.Active());return bDepthSaveRejected||!S?0:S->training;}
     TArray<FString> RpgHistory;
+    FString RpgSceneNotice;double RpgSceneUntil=0;
     FString RpgNotice;
     uint64 RpgNoticeSerial=0;
     void NotifyRpg(const FString& Text){RpgNotice=Text;++RpgNoticeSerial;if(RpgHistory.IsEmpty()||RpgHistory.Last()!=Text){RpgHistory.Add(Text);if(RpgHistory.Num()>100)RpgHistory.RemoveAt(0);}}
@@ -274,6 +298,19 @@ public:
     void RefreshExpeditions();
     bool CommitExpeditions(const UnmadeCore::Expeditions& Before,AUnmadeCharacter* Player=nullptr);
 private:
+    UnmadeCore::PlayerExperience Experience;
+    bool bExperienceRejected=false;
+    double NextExperienceRefresh=0,ExperienceWaitConfirm=-1;
+    std::array<double,9> WingRelayDeadline{};
+    mutable TArray<FVector> EscortTrail;
+    TWeakObjectPtr<class AUnmadeEnemyCharacter> WingObserver;
+    TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>> WingGuardians;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> WingExitGates,SettlementRoomGates,SettlementRepairs,WingLift,WingRootGates;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> ExperienceSigns;
+    void BuildPlayerExperience();
+    void RefreshPlayerExperience();
+    bool CommitExperience(const UnmadeCore::PlayerExperience& Before,AUnmadeCharacter* Player);
+    bool ExperienceScene(int Realm,int Scene,AUnmadeCharacter* Player);
     bool bBuilt = false;
     bool bExpeditionSaveRejected=false;
     UnmadeCore::Expeditions Expeditions;

@@ -170,6 +170,7 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         if(CachedHub.IsValid())
         {
             FVector RoadTarget;
+            if(CachedHub->ExperienceRoutineTarget(NpcId,Current,RoadTarget))Target={RoadTarget.X,RoadTarget.Y};
             if(CachedHub->RoadRoutineTarget(NpcId,Phase==UnmadeCore::DayPhase::Night,RoadTarget))
                 Target={RoadTarget.X,RoadTarget.Y};
         }

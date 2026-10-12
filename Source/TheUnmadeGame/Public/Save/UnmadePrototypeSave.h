@@ -385,6 +385,11 @@ public:
     UPROPERTY(SaveGame)
     TArray<int32> RememberedRoadState;
 
+    UPROPERTY(SaveGame) bool bHasPlayerExperience=false;
+    UPROPERTY(SaveGame) TArray<int32> PlayerExperienceState;
+    UPROPERTY(SaveGame) bool bHasUnifiedLoadout=false;
+    UPROPERTY(SaveGame) TArray<int32> UnifiedRealmLoadout;
+
     /** Merges prototype sub-system writes instead of erasing unrelated state. */
     static UUnmadePrototypeSave* LoadOrCreate()
     {

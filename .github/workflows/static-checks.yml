@@ -16,6 +16,14 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 2
+      - name: Test integration rewards, unified equipment and bounded weapon contact
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/player_experience_test.cpp -o /tmp/unmade-experience
+          /tmp/unmade-experience
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/items/unified_loadout_test.cpp -o /tmp/unmade-loadout
+          /tmp/unmade-loadout
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/contact_window_test.cpp -o /tmp/unmade-contact
+          /tmp/unmade-contact
       - name: Test realm identity mechanisms and signature attack footprints
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/world_identity_test.cpp -o /tmp/unmade-world-identity
@@ -32,6 +40,11 @@ jobs:
         uses: actions/setup-python@v7
         with:
           python-version: '3.11'
+      - name: Validate authored wings, lexical C++ and editor contact handoff
+        run: |
+          python Scripts/build_player_experience.py --check
+          python Scripts/validate_cpp_literals.py
+          python Scripts/unreal_editor/install_combat_events.py
       - name: Validate authored personal stories and nine exploration identities
         run: python Scripts/build_adventure_depth.py --check
       - name: Check identity registry and original sound library

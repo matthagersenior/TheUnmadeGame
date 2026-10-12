@@ -74,6 +74,10 @@ public:
     UFUNCTION(BlueprintPure, Category="Unmade|Identity")
     FString GetCharacterChosenName() const;
 
+    void NotifyProjectileImpact(class AUnmadeEnemyCharacter* Target,float Before){HandleMeleeImpact(Target,Before);}
+    void NotifyWeaponContact(){TickWeaponContact();}
+    void ReportIntegrationEvent(FName Event,FName Subject){ReportLocalEvent(Event,Subject);}
+    void RecoverIntegrationStrain(double Amount){FractureModel.Recover(Amount/UnmadeCore::FractureModel::RecoveryPerSecond);}
 private:
     UPROPERTY(VisibleAnywhere, Category="Camera")
     TObjectPtr<USpringArmComponent> CameraBoom;
@@ -137,6 +141,12 @@ private:
     double PendingStoryExpiresAt = -1.0;
 
     void AttemptMeleeAttack();
+    void TickWeaponContact();
+    void HandleMeleeImpact(class AUnmadeEnemyCharacter* Target,float Before);
+    double PlayerBuildSpeed=1;
+    bool bFocusProjectile=false;
+    double WeaponStrikeStarted=-1,WeaponStrikeRhythm=.75,WeaponReach=240;
+    FVector PreviousWeaponTip=FVector::ZeroVector;
     double NextFootstepAt=0;
     float LastPresentationHealth=-1;
     void StartGuard();
@@ -149,6 +159,8 @@ private:
     uint64 LastLaterHazardPulse[6]={0,0,0,0,0,0};
     void RecoverAtSafeCheckpoint();
 
+    void TurnView(float Value);
+    void LookView(float Value);
     void MoveForward(float Value);
     void MoveRight(float Value);
     void Interact();

@@ -1,8 +1,9 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "InputCoreTypes.h"
 #include "UnmadeRpgWidget.generated.h"
-class UButton;class USizeBox;class UTextBlock;class UBorder;class UProgressBar;class UCanvasPanel;
+class UWrapBox;class UButton;class USizeBox;class UTextBlock;class UBorder;class UProgressBar;class UCanvasPanel;
 UCLASS()
 class THEUNMADEGAME_API UUnmadeRpgWidget : public UUserWidget {
  GENERATED_BODY()
@@ -15,10 +16,15 @@ protected:
  virtual void NativeConstruct()override;
  virtual void NativeDestruct()override;
  virtual void NativeTick(const FGeometry& Geometry,float Delta)override;
+ virtual FReply NativeOnMouseButtonDown(const FGeometry& Geometry,const FPointerEvent& Event)override;
  virtual FReply NativeOnKeyDown(const FGeometry& Geometry,const FKeyEvent& Event)override;
 private:
- int Page=0,SelectedRealm=0;bool bOpen=false,bPausedWorld=false;double NextRefresh=0,NoticeUntil=0;
+ int Page=0,SelectedRealm=0,JournalCategory=0,CaptureBinding=0;float AppliedTextScale=1;bool bOpen=false,bPausedWorld=false;double NextRefresh=0,NoticeUntil=0;
+ TMap<TWeakObjectPtr<UTextBlock>,int32> BaseFonts;
  FString LastNotice;uint64 LastNoticeSerial=0;
+ UPROPERTY() TArray<TObjectPtr<UButton>> RealmButtons;
+ UPROPERTY() TArray<TObjectPtr<UWrapBox>> ActionGroups;
+ UPROPERTY() TObjectPtr<UTextBlock> Objective;
  UPROPERTY() TObjectPtr<UButton> InitialFocus;
  UPROPERTY() TObjectPtr<UTextBlock> EnemyText;
  UPROPERTY() TObjectPtr<UBorder> Panel;
@@ -32,6 +38,36 @@ private:
  UPROPERTY() TObjectPtr<UCanvasPanel> MapCanvas;
  UPROPERTY() TObjectPtr<USizeBox> MapContainer;
  void Refresh();
+ bool CaptureControl(FKey Key);
+ void Upgrade(int Option);
+ UFUNCTION() void Settings();
+ UFUNCTION() void Track();
+ UFUNCTION() void SelectBuild();
+ UFUNCTION() void JournalNext();
+ UFUNCTION() void BuildDuelist();
+ UFUNCTION() void BuildWarden();
+ UFUNCTION() void BuildPathfinder();
+ UFUNCTION() void EarnTool();
+ UFUNCTION() void CraftBinding();
+ UFUNCTION() void EarnPrivilege();
+ UFUNCTION() void RepairTown();
+ UFUNCTION() void Mediate();
+ UFUNCTION() void Specialty();
+ UFUNCTION() void Rest();
+ UFUNCTION() void TextLarger();
+ UFUNCTION() void TextSmaller();
+ UFUNCTION() void CameraCycle();
+ UFUNCTION() void AudioCycle();
+ UFUNCTION() void Contrast();
+ UFUNCTION() void Flashes();
+ UFUNCTION() void PromptMode();
+ UFUNCTION() void Tutorials();
+ UFUNCTION() void BindAttack();
+ UFUNCTION() void BindDodge();
+ UFUNCTION() void BindInteract();
+ UFUNCTION() void BindGuard();
+ UFUNCTION() void BindTechnique();
+
  void SelectRealm(int Index);
  UFUNCTION() void Journal();
  UFUNCTION() void Equipment();

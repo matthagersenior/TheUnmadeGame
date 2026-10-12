@@ -18,7 +18,7 @@ class OfflineCombatContract(unittest.TestCase):
         p=src("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         hub=src("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         ini=src("Config/DefaultInput.ini")
-        for token in ('BindAction("Attack"', 'BindAction("Guard"', "TryStrikeTarget(",
+        for token in ('BindAction("Attack"', 'BindAction("Guard"', "ResolveWeaponContact(",
                       "LineTraceTestByChannel", "ExposeToFold("):
             self.assertIn(token,p)
         self.assertEqual(hub.count("SpawnActor<AUnmadeEnemyCharacter>("),2)
