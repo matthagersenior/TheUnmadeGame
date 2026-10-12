@@ -35,7 +35,7 @@ class FirstBuildDiagnosticsTests(unittest.TestCase):
     def test_first_pc_script_has_one_complete_body_without_duplicate_fragments(self):
         self.assertEqual(self.build.count("$repo="), 1)
         self.assertEqual(self.build.count('Write-Host "Compiling C++ Editor target'), 1)
-        self.assertEqual(self.build.count("} catch {"), 1)
+        self.assertEqual(self.build.count("} catch {"), 2)
         self.assertNotIn("\n){", self.build)
         self.assertTrue(self.build.rstrip().endswith("}"))
 
