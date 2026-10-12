@@ -35,6 +35,9 @@ The existing 18 later-realm actor instances now use the generated names, voice-l
 3. Save the three editor DataTables in Content Browser; when the JSON changes, regenerate and **reimport the same CSV files**, preserving asset paths/Blueprint references. Content Browser reimport and UHT compilation have not been performed in this environment.
 4. Assign scene assets and animation/voice performances by stable NPC ID, not by display name; map a `DataTableRowHandle` keyed to the automatically generated `Name` column if building Blueprint NPC archetypes.
 5. Attach map-specific geometry and cinematics to the source-tagged actors already created in `UnmadePrototypeHub`, `UnmadeLaterRealmWorld` and `UnmadeEchoQuestWorld`. Preserve their tags and state gates until you have a tested replacement or you will silently break saved quests.
+
+The separate `Unmade_AuthoringStaging` map is a source-reference scene, not a gameplay map. To connect its 16 static-mesh hints to real imports, place each mesh at `/Game/UnmadeProduction/Assets/<AssetName>.<AssetName>` using its exact `SM_*` hint as the asset name. The staging script loads matching meshes when present and uses non-colliding engine-cube proxies when they are absent. Re-running it upgrades only markers whose mesh is still the engine cube; existing custom meshes are preserved. Niagara, sound, Blueprint and sequence hints remain reference markers until their type-specific import paths are authored.
+
 6. Create localization tables keyed by stable NPC/site/ritual IDs. Day/night dialogue in JSON is English production source text; multilingual translations have not been produced.
 7. Test two complete story resolutions plus an Echo side chapter per realm, all six dangers, save/resume, movement, camera, accessibility and the full `Unmade` UE automation filter. The import/export tests do **not** constitute a compiled level.
 

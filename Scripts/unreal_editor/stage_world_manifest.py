@@ -3,10 +3,31 @@
 Defaults to safe inspection; apply only inside dedicated staging map.
 Offline --dry-run works on phone/CI with standard Python 3.11.
 """
-import argparse,json,sys
+import argparse,json,sys,re
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 MANIFEST=ROOT/"Authoring/generated/scene_build_manifest.json"
+STATIC_MESH_ROOT="/Game/UnmadeProduction/Assets"
+
+def static_mesh_asset_path(asset_hint):
+    """Canonical Unreal object path for a staged static-mesh hint, if applicable."""
+    if not isinstance(asset_hint,str) or not re.fullmatch(r"SM_[A-Za-z0-9_]+",asset_hint):
+        return None
+    return f"{STATIC_MESH_ROOT}/{asset_hint}.{asset_hint}"
+
+def resolve_static_mesh(unreal,asset_hint,fallback):
+    """Load a production mesh when imported; otherwise retain the visible cube proxy."""
+    path=static_mesh_asset_path(asset_hint)
+    if path:
+        asset=unreal.load_asset(path)
+        if asset is not None and isinstance(asset,unreal.StaticMesh):
+            return asset,path
+    return fallback,None
+def is_engine_cube_placeholder(current_asset,default_mesh):
+    """Only engine-cube placeholders may be upgraded; custom meshes are preserved."""
+    return (current_asset is not None and default_mesh is not None and
+            current_asset.get_path_name()==default_mesh.get_path_name())
+
 def read_plan(path=MANIFEST):
     m=json.loads(path.read_text(encoding="utf-8"))
     if m.get("schema_version")!=1 or m.get("editor_level_name")!="Unmade_AuthoringStaging":
@@ -37,11 +58,22 @@ def apply_in_editor(m):
     if not default_mesh: raise RuntimeError("BasicShapes.Cube is unavailable; no scene changes")
     created=0
     skipped=0
+    updated=0
     for item in m["actors"]:
         label=item["label"]
+        mesh,mesh_path=resolve_static_mesh(unreal,item.get("asset_hint"),default_mesh)
         if label in existing:
+            actor=existing[label]
+            component=actor.get_component_by_class(unreal.StaticMeshComponent)
+            # Upgrade only a marker whose current mesh is still the engine cube.
+            # Any custom artist mesh remains intact when the plan is re-run.
+            if mesh_path and component:
+                current=component.get_editor_property("static_mesh")
+                if is_engine_cube_placeholder(current,default_mesh):
+                    component.set_static_mesh(mesh)
+                    updated+=1
             skipped+=1
-            continue # Never alter an existing stage or gameplay actor.
+            continue
         x,y,z=item["position_cm"]
         a=unreal.EditorLevelLibrary.spawn_actor_from_class(
             unreal.StaticMeshActor,unreal.Vector(x,y,z))
@@ -49,15 +81,15 @@ def apply_in_editor(m):
         a.set_actor_label(label)
         component=a.get_component_by_class(unreal.StaticMeshComponent)
         if component:
-            component.set_static_mesh(default_mesh)
+            component.set_static_mesh(mesh)
             component.set_collision_enabled(unreal.CollisionEnabled.NO_COLLISION)
         a.set_actor_scale3d(unreal.Vector(.6,.6,1.4))
         # No SaveGame, quest-choice or authoritative actor tags changed.
         created+=1
-    if created>0:
+    if created>0 or updated>0:
         unreal.EditorLevelLibrary.save_current_level()
-    unreal.log("THE UNMADE scene staging: created %d, skipped %d stable labels"
-               %(created,skipped))
+    unreal.log("THE UNMADE scene staging: created %d, mesh-upgraded %d, skipped %d stable labels"
+               %(created,updated,skipped))
     return created,skipped
 
 def main():
@@ -68,8 +100,12 @@ def main():
     a=p.parse_args()
     manifest=read_plan(a.manifest)
     if not a.apply:
-        print("DRY RUN: %d staged reference actors, dedicated map %s. NO EDITOR WRITES."
-             %(len(manifest["actors"]),manifest["editor_level_name"]))
+        mesh_hints={x["asset_hint"] for x in manifest["actors"]
+                    if static_mesh_asset_path(x.get("asset_hint"))}
+        print("DRY RUN: %d staged references / %d optional static-mesh hints, dedicated map %s. NO EDITOR WRITES."
+             %(len(manifest["actors"]),len(mesh_hints),manifest["editor_level_name"]))
+        print("Mesh folder: %s/<SM_AssetName>.<SM_AssetName>; missing meshes use safe cube proxies."
+             %STATIC_MESH_ROOT)
         for group in ("RealmProductionReference","CinematicShotReference"):
             print(group,sum(x["kind"]==group for x in manifest["actors"]))
         return 0
