@@ -1,3 +1,4 @@
+#include "UI/UnmadePlayerFacingRules.h"
 #include "Combat/UnmadeEncounterPerformanceRules.h"
 #include "UI/UnmadePlayerPreferences.h"
 #include "UI/UnmadeRpgFeedback.h"
@@ -186,10 +187,9 @@ void AUnmadeEnemyCharacter::TryLoadEnemyRig()
 
 void AUnmadeEnemyCharacter::SetMotionCue(FName Motion)
 {
-    if(GetWorld()&&CurrentMotion==FName(TEXT("Death"))&&Combat&&Combat->IsDefeated()&&Motion!=FName(TEXT("Death")))return;
-    if(GetWorld()&&GetWorld()->GetTimeSeconds()<MotionHeldUntil&&(Motion==FName(TEXT("Idle"))||Motion==FName(TEXT("Walk"))))return;
-
-    if(GetWorld()&&GetWorld()->GetTimeSeconds()<HitFlashEndsAt&&Motion!=FName(TEXT("Stagger"))&&Motion!=FName(TEXT("Death")))return;
+    const double now=GetWorld()?GetWorld()->GetTimeSeconds():0;
+    const bool staggerHeld=(CurrentMotion==FName(TEXT("Stagger"))&&now<MotionHeldUntil)||now<HitFlashEndsAt;
+    if(!UnmadeCore::MotionMayReplace(Combat&&Combat->IsDefeated(),CurrentMotion==FName(TEXT("Death")),staggerHeld,now<MotionHeldUntil,Motion==FName(TEXT("Death")),Motion==FName(TEXT("Stagger")),Motion==FName(TEXT("Idle"))||Motion==FName(TEXT("Walk"))))return;
     if(!bSkeletalRigLoaded || Motion==CurrentMotion || !IsValid(GetMesh()))return;
     const FString Root=Style==UnmadeCore::EnemyStyle::Watcher
         ?TEXT("/Game/UnmadeProduction/Characters/Wraith/")
@@ -215,6 +215,7 @@ void AUnmadeEnemyCharacter::NotifyPlayerHit(float Damage)
 {
     if(Damage<=0.f || !GetWorld())return;
     UnmadePresentation::Sound(this,TEXT("injury"));
+    if(!Combat->IsDefeated()&&CurrentMotion==FName(TEXT("Stagger")))CurrentMotion=NAME_None; // A new injury restarts its held response.
     SetMotionCue(FName(Combat->IsDefeated()?TEXT("Death"):TEXT("Stagger")));
     HitFlashEndsAt=GetWorld()->GetTimeSeconds()+.40;
     if(IsValid(CombatSignal))
