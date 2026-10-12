@@ -97,6 +97,7 @@ bool AUnmadePrototypeHub::TryTravelAtlas(AUnmadeCharacter* Player)
                 return false;
             }
             const FVector Arrival=RealmOrigin(Destination)+FVector(0,-1170,135);
+            PrepareRealmGeometry(Arrival,100000);
             if(!Player->SetActorLocation(Arrival,false,nullptr,ETeleportType::TeleportPhysics))
             {
                 LaterRealm.Restore(PreviousLater);

@@ -41,7 +41,7 @@ class FractureSourceContractTests(unittest.TestCase):
         hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         player = read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         for name in ("WorldVariantId", "PlayerStrain", "NpcSnapshots",
-                     "bHasFractureSnapshot", "DoesSaveGameExist"):
+                     "bHasFractureSnapshot", "UnmadeSave::HasRecord"):
             self.assertIn(name, save)
         self.assertIn("UUnmadePrototypeSave::LoadOrCreate()", hub)
         self.assertIn("UUnmadePrototypeSave::LoadOrCreate()", player)

@@ -1,47 +1,48 @@
 {
-  "edition": "Nine Realm Journeys v18",
+  "edition": "Complete RPG Loops v19",
   "date": "2026-10-12",
-  "source_base": "f6170399957e081c2dc3301eb6ed4c17bfbe019a",
+  "source_base": "cb258ad3388ecd1050f59f24944c71d8ca0c887b",
   "engine_compiled": false,
   "engine_playtested": false,
-  "python_tests": 272,
-  "native_cpp_tests": 56,
-  "workflow_validators": 29,
-  "complete_bible_pages": 165,
-  "complete_bible_images": 62,
-  "volume_x_pages": 117,
-  "volume_x_images": 15,
+  "python_tests": 280,
+  "native_cpp_tests": 59,
+  "workflow_validators": 30,
+  "complete_bible_pages": 168,
+  "complete_bible_images": 63,
+  "volume_x_pages": 121,
+  "volume_x_images": 16,
   "animation_clips": 57,
   "new_original_wavs": 0,
-  "wing_room_areas": 27,
-  "wing_guardians": 9,
-  "relationship_scenes": 36,
-  "settlement_service_rooms": 29,
+  "profile_count": 4,
+  "menu_pages": 7,
+  "action_buttons": 27,
+  "field_recipes": 9,
+  "legacy_recipes": 6,
   "files": [
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Realm_Journeys_v18.docx",
-      "bytes": 8156339,
-      "sha256": "f9718ee30ca8d20ac15ba64d910d7af72f951a6e4ef5aa5cbf5c479c1f8c49d9"
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Complete_RPG_Loops_v19.docx",
+      "bytes": 8289160,
+      "sha256": "edf6d187e48f93d2e48ee5e828e71aa0e8b099654b14c0b2c17ed627108ac90a"
     },
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Realm_Journeys_v18.pdf",
-      "bytes": 5638764,
-      "sha256": "51b6ff378499829482de4cd78f0b65441e7d448e08693986f8a7225de090f49d"
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Complete_RPG_Loops_v19.pdf",
+      "bytes": 5775487,
+      "sha256": "61e317802efafda393de3ced55d447a806e6562cdfcadeced2059419ae073846"
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Realm_Journeys_v18.docx",
-      "bytes": 5961987,
-      "sha256": "7618f1444336845995bcbd15293034e0cda867933c016e6bd480a9eebce571ed"
+      "name": "THE_UNMADE_Volume_X_Illustrated_Complete_RPG_Loops_v19.docx",
+      "bytes": 6094817,
+      "sha256": "8f445dda0e0c160c24080db63332caf85114e9a83a07870b242d052fcbd07638"
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Realm_Journeys_v18.pdf",
-      "bytes": 3627151,
-      "sha256": "f19e21755341bd92c852f7eeae9fac0a6312ea9fd87f3f2bbc38f43cddb5a240"
+      "name": "THE_UNMADE_Volume_X_Illustrated_Complete_RPG_Loops_v19.pdf",
+      "bytes": 3765054,
+      "sha256": "5030d82f5e2588571475e19f3f031ad6522685decd4682628ce7a0b4d56c47e2"
     },
     {
-      "name": "THE_UNMADE_v18_Realm_Journeys_Atlas.png",
-      "bytes": 158441,
-      "sha256": "ebfbeed277f415626f063e3c00eac7fde2563e03d703d33b7ca65036e903e772"
+      "name": "THE_UNMADE_v19_Complete_RPG_Loops_Atlas.png",
+      "bytes": 142715,
+      "sha256": "4655faa6d2dbdde708c48ba8fec7ae6cf6d2d1829cf04ced9b5a68b42041d56a"
     }
   ]
 }

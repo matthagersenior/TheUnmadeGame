@@ -51,6 +51,7 @@ public:
     /** A single identified storm/heat pulse, deduplicated by the combat domain. */
     bool ReceiveHazardPulse(uint64 SourceId,uint64 PulseId,double Damage);
     bool ReviveAtCheckpoint();
+    bool RestoreSession(float Health,float Stamina){if(!FMath::IsFinite(Health)||!FMath::IsFinite(Stamina)||Health<0||Health>GetMaxHealth()||Stamina<0||Stamina>100)return false;return State.RestoreHealth(Health)&&Tempo.RestoreEnergy(Stamina); }
     float GetMissingHealth() const { return GetMaxHealth() - GetHealth(); }
     int32 GetGearAttackBonus() const { return GearAttack; }
     int32 GetGearArmorBonus() const { return GearArmor; }

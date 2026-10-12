@@ -42,8 +42,8 @@ class SignatureRiteIntegration(unittest.TestCase):
             self.assertIn(mechanic,player)
         self.assertIn("SetRiteWorldActorState(Tag,true)",world)
         self.assertIn("TemporaryRiteWorldEffects",world)
-        self.assertIn("const int32 Borrowed=",gear)
-        self.assertIn("Player->GetBorrowedCraftLevel()",gear)
+        self.assertIn("int borrowed=",gear)
+        self.assertIn("player->GetBorrowedCraftLevel()",gear)
         self.assertIn("ActiveAttackBonus",read(
             "Source/TheUnmadeGame/Private/World/UnmadeTenfoldComponent.cpp"))
 

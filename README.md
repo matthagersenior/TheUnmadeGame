@@ -56,3 +56,10 @@ Gameplay is deterministic and offline by default. Optional local dialogue uses a
 ## Rights
 
 Copyright © 2026 Matthew Hager. All rights reserved. See [LICENSE](LICENSE). Unreal Engine and third-party dependencies retain their own license terms.
+
+
+## Complete RPG Loops v19 12 October 2026
+
+Source implemented: deed-gated free mastery across nine realms; kits restricted to danger benefit; four independent non-destructive profiles with prior-record backup and safe-settlement health/stamina resume; optional fieldwork profile migration; 27 controller-accessible actual actions on seven menu pages; selected six workshop and nine earned field recipes, five trade goods; mapped prompts and signs; deferred distant primitive blocks, cached actors and distance cadence independent of the clock; distinct boss signatures/warnings and timed service gestures. Existing IDs, supplies, consent, wages, endings and OPEN mysteries remain authoritative.
+
+Second audit fixed isolated fieldwork saves, stale profile confirmation and automatic crafting. Repeat with `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`. Unreal compilation, imports, storage interruption, focus, navigation, timing and complete walkthroughs remain deferred. See Chapter 39 and `docs/design/complete-rpg-loops-v19-acceptance.md`.

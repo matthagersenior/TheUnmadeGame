@@ -53,6 +53,7 @@ public:
         for(int skill:s.craftsmanship)if(skill<0 || skill>30)return false;
         state_=s;return true;
     }
+    void Practice(Profession p){int i=static_cast<int>(p);if(i>=0&&i<3)state_.craftsmanship[i]=std::min(30,state_.craftsmanship[i]+1);}
     int Marks() const noexcept {return state_.marks;}
     int Skill(Profession p) const noexcept {
         const int i=static_cast<int>(p);return i>=0 && i<3?state_.craftsmanship[i]:0;

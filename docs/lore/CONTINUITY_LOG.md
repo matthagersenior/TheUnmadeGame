@@ -330,3 +330,10 @@ Implemented the seven approved source upgrades and both integration corrections:
 ### 2026-10-12 — Nine Realm Journeys v18
 
 Closed journal equipment-owner compile error, early-encounter receipt gap, missing reward/fieldwork tracker transitions and unseen return witnesses. Added directional route signs, transient confirmation for irreversible branch/equipment choices, and Drevlach-specific yield validation. No new canonical answers or wage/consent changes. Full illustrated books extend v17 intact; engine verification remains deferred.
+
+
+## Complete RPG Loops v19 12 October 2026
+
+Source implemented: deed-gated free mastery across nine realms; kits restricted to danger benefit; four independent non-destructive profiles with prior-record backup and safe-settlement health/stamina resume; optional fieldwork profile migration; 27 controller-accessible actual actions on seven menu pages; selected six workshop and nine earned field recipes, five trade goods; mapped prompts and signs; deferred distant primitive blocks, cached actors and distance cadence independent of the clock; distinct boss signatures/warnings and timed service gestures. Existing IDs, supplies, consent, wages, endings and OPEN mysteries remain authoritative.
+
+Second audit fixed isolated fieldwork saves, stale profile confirmation and automatic crafting. Repeat with `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`. Unreal compilation, imports, storage interruption, focus, navigation, timing and complete walkthroughs remain deferred. See Chapter 39 and `docs/design/complete-rpg-loops-v19-acceptance.md`.

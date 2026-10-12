@@ -12,6 +12,7 @@ class THEUNMADEGAME_API UUnmadeEquipmentComponent : public UActorComponent
 {
     GENERATED_BODY()
 public:
+    bool HasRejectedSave()const{return bSaveRejected;}
     UUnmadeEquipmentComponent();
     virtual void BeginPlay() override;
     bool Claim(UnmadeCore::Achievement Reward);
@@ -27,7 +28,9 @@ public:
     bool ForgeWaybreaker();
     bool Buy(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village,int Trust=0);
     bool Sell(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village);
-    bool CraftAt(UnmadeCore::SettlementId Village);
+    bool CraftAt(UnmadeCore::SettlementId Village,int Recipe=0);
+    bool CraftFieldRecipe(int Realm,bool Learned);
+    FString DescribeRecipe(int Recipe)const;
     UnmadeCore::ItemId EquippedWeapon()const{return Inventory.Equipped(UnmadeCore::GearSlot::Weapon);}
     int32 GetMarks() const { return Economy.Marks(); }
     int32 GetAtlasAttunement() const;

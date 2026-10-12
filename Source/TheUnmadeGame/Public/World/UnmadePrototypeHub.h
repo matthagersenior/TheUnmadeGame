@@ -63,6 +63,14 @@ class THEUNMADEGAME_API AUnmadePrototypeHub : public AActor
     GENERATED_BODY()
 
 public:
+    bool TryFieldCraft(AUnmadeCharacter* Player,int Realm);
+    bool KnowsFieldRecipe(int Realm)const{return Experience.Arc(Realm)&&Experience.Arc(Realm)->complete;}
+    void PrepareRealmGeometry(const FVector& At,int Limit=48);
+    const TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>>& CachedEnemies()const{return RuntimeEnemies;}
+    FName ServiceWorkCue(FName Person,const FVector& At)const;
+    bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected;}
+    bool IsWorldReady()const{return bWorldReady;}
+    bool SavePlayerSession(AUnmadeCharacter* Player){return WriteWorldSnapshot(Player);}
     AUnmadePrototypeHub();
     bool TryExperienceInteraction(AUnmadeCharacter* Player,double Competing);
     bool RecordExperienceConversation(FName Id,AUnmadeCharacter* Player);
@@ -299,6 +307,17 @@ public:
     void RefreshExpeditions();
     bool CommitExpeditions(const UnmadeCore::Expeditions& Before,AUnmadeCharacter* Player=nullptr);
 private:
+    struct DeferredBlock {FVector Center,Scale;FName Label;};
+    TArray<DeferredBlock> DeferredBlocks;
+    TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>> RuntimeEnemies;
+    TArray<TWeakObjectPtr<class AUnmadeNpcCharacter>> RuntimePeople;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> RuntimeSigns;
+    TMap<TWeakObjectPtr<class ATextRenderActor>,FString> SignOriginal,SignFormatted;
+    FVector GeometryFocus=FVector::ZeroVector;
+    double NextRuntimeCache=0,NextSimulationBudget=0;
+    bool SpawningDeferred=false;
+    void RefreshSimulationBudget();
+    bool bWorldReady=false;
     UnmadeCore::ExpeditionConfirmation ExpeditionPendingDecision;
     bool ConfirmExpeditionDecision(int Arc,int Kind,int Value);
     UnmadeCore::PlayerExperience Experience;

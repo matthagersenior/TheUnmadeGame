@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Items/UnmadeItemRules.h"
+#include "Items/UnmadeItemRules.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Fracture/UnmadeFractureRules.h"
@@ -8,6 +10,7 @@
 #include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
+class UUnmadePrototypeSave;
 #include "UnmadeCharacter.generated.h"
 
 class UCameraComponent;
@@ -26,6 +29,11 @@ class THEUNMADEGAME_API AUnmadeCharacter : public ACharacter
     GENERATED_BODY()
 
 public:
+    bool HasRejectedSave()const{return bFractureSaveRejected||bConflictSaveRejected|| bCharacterIdentitySaveRejected;}
+    void CaptureSession(UUnmadePrototypeSave* Save)const;
+    bool SaveSessionNow();
+    void CraftRecipeSelection(int Recipe);
+    void TradeSelection(UnmadeCore::ItemId Item,bool Buy);
     AUnmadeCharacter();
     void PlayIdentityMotion(FName Cue);
     void RpgMenuAction(FName Action);
@@ -79,6 +87,11 @@ public:
     void ReportIntegrationEvent(FName Event,FName Subject){ReportLocalEvent(Event,Subject);}
     void RecoverIntegrationStrain(double Amount){FractureModel.Recover(Amount/UnmadeCore::FractureModel::RecoveryPerSecond);}
 private:
+    UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
+    bool bFractureSaveRejected=false,bConflictSaveRejected=false;
+    bool bSessionRestored=false;
+    double NextSessionSave=0;
+    void RestoreSessionWhenReady();
     UPROPERTY(VisibleAnywhere, Category="Camera")
     TObjectPtr<USpringArmComponent> CameraBoom;
 

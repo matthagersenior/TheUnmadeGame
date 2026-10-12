@@ -11,6 +11,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Materials/MaterialInterface.h"
 #include "World/UnmadeFieldSurveySave.h"
+#include "Save/UnmadePrototypeSave.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -55,18 +56,18 @@ bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
         const int32 Previous=FieldSurveyStages[i];
         if(Previous<2)
         {
-            auto* Save=Cast<UUnmadeFieldSurveySave>(UGameplayStatics::CreateSaveGameObject(
-                UUnmadeFieldSurveySave::StaticClass()));
+            auto* Save=UUnmadePrototypeSave::LoadOrCreate();
             if(!Save)return true;
-            Save->Stages=FieldSurveyStages;
-            Save->Stages[i]=Previous+1;
-            if(!UGameplayStatics::SaveGameToSlot(Save,TEXT("UnmadeOptionalFieldSurveys"),0))
+            Save->bHasFieldSurveys=true;
+            Save->FieldSurveyStages=FieldSurveyStages;
+            Save->FieldSurveyStages[i]=Previous+1;
+            if(!UnmadeSave::SaveGameToSlot(Save))
             {
                 if(GEngine)UnmadeRpgFeedback(-1,4.f,FColor::Red,
                     TEXT("Fieldwork could not save. No route or objective changed; try again."));
                 return true;
             }
-            FieldSurveyStages=Save->Stages;
+            FieldSurveyStages=Save->FieldSurveyStages;
             if(FieldSurveyGates.IsValidIndex(i)&&FieldSurveyGates[i].IsValid())
             {
                 FieldSurveyGates[i]->SetActorEnableCollision(false);
@@ -91,16 +92,19 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
 {
     if(!GetWorld())return;
     FieldSurveyStages.Init(0,6);
-    if(UGameplayStatics::DoesSaveGameExist(TEXT("UnmadeOptionalFieldSurveys"),0))
+    auto* Save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());
     {
-        auto* Save=Cast<UUnmadeFieldSurveySave>(UGameplayStatics::LoadGameFromSlot(
-            TEXT("UnmadeOptionalFieldSurveys"),0));
-        bFieldSurveySaveUsable=false;
-        if(Save&&Save->Version==1&&Save->Stages.Num()==6)
-        {
-            bool bValid=true;
-            for(int32 Stage:Save->Stages)if(Stage<0||Stage>2)bValid=false;
-            if(bValid){FieldSurveyStages=Save->Stages;bFieldSurveySaveUsable=true;}
+        if(Save&&Save->bHasFieldSurveys){bFieldSurveySaveUsable=false;
+            if(Save->FieldSurveyStages.Num()==6){bool valid=true;
+                for(int32 stage:Save->FieldSurveyStages)if(stage<0||stage>2)valid=false;
+                if(valid){FieldSurveyStages=Save->FieldSurveyStages;bFieldSurveySaveUsable=true;}}}
+        else if(UnmadeSave::SlotName()==TEXT("UnmadePrototypeNPC")&&UGameplayStatics::DoesSaveGameExist(TEXT("UnmadeOptionalFieldSurveys"),0))
+        { // Read-only migration for the original profile; other profiles start independently.
+            auto* legacy=Cast<UUnmadeFieldSurveySave>(UGameplayStatics::LoadGameFromSlot(TEXT("UnmadeOptionalFieldSurveys"),0));
+            bFieldSurveySaveUsable=false;
+            if(legacy&&legacy->Version==1&&legacy->Stages.Num()==6){bool valid=true;
+                for(int32 stage:legacy->Stages)if(stage<0||stage>2)valid=false;
+                if(valid){FieldSurveyStages=legacy->Stages;bFieldSurveySaveUsable=true;}}
         }
     }
     FieldSurveyGates.SetNum(6);
