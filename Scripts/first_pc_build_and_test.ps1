@@ -122,6 +122,19 @@ try {
     & python (Join-Path $PSScriptRoot "build_world_content.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "content-validation.log")
     if($LASTEXITCODE -ne 0){throw "WORLD_CONTENT_OUT_OF_SYNC: run generator and commit changes"}
+    Write-Host "Checking remaining authored registries before the engine build."
+    & python (Join-Path $PSScriptRoot "build_remembered_roads.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "remembered-roads-validation.log")
+    if($LASTEXITCODE -ne 0){throw "REMEMBERED_ROAD_REGISTRY_INVALID"}
+    & python (Join-Path $PSScriptRoot "build_frontier_adventures.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "frontier-adventures-validation.log")
+    if($LASTEXITCODE -ne 0){throw "FRONTIER_ADVENTURE_REGISTRY_INVALID"}
+    & python (Join-Path $PSScriptRoot "build_world_identity.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "world-identity-validation.log")
+    if($LASTEXITCODE -ne 0){throw "WORLD_IDENTITY_REGISTRY_INVALID"}
+    & python (Join-Path $PSScriptRoot "build_adventure_depth.py") --check 2>&1 |
+        Tee-Object -FilePath (Join-Path $reportDir "adventure-depth-validation.log")
+    if($LASTEXITCODE -ne 0){throw "ADVENTURE_DEPTH_REGISTRY_INVALID"}
     Write-Host "Compiling C++ Editor target; NOT creating content assets."
     & $build "TheUnmadeGameEditor" "Win64" "Development" "-Project=$project" "-WaitMutex" "-NoHotReloadFromIDE" 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "editor-build.log")
@@ -141,16 +154,3 @@ try {
     throw
 }
 
-# World-wide authored registry; engine acceptance remains a separate Windows pass.
-python Scripts/build_remembered_roads.py --check
-if ($LASTEXITCODE -ne 0) { throw "Remembered Road registry validation failed" }
-
-python "$PSScriptRoot/build_frontier_adventures.py" --check
-if ($LASTEXITCODE -ne 0) { throw "Frontier adventure registry failed" }
-
-# v15 portable acceptance before Editor asset imports
-python "$PSScriptRoot/build_world_identity.py" --check
-if ($LASTEXITCODE -ne 0) { throw "World identity registry failed" }
-
-python "$PSScriptRoot/build_adventure_depth.py" --check
-if ($LASTEXITCODE -ne 0) { throw "Adventure depth registry failed" }
