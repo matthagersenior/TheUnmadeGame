@@ -28,7 +28,7 @@ class FirstBuildDiagnosticsTests(unittest.TestCase):
         for gate in gates:
             with self.subTest(gate=gate):
                 self.assertLess(self.build.index(gate), compile_at)
-        catch_at = self.build.index("} catch {")
+        catch_at = self.build.rindex("} catch {")
         self.assertLess(compile_at, catch_at)
         self.assertNotIn("python ", self.build[catch_at:])
 
