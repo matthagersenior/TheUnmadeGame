@@ -54,6 +54,13 @@ class FirstBuildDiagnosticsTests(unittest.TestCase):
         self.assertIn('if(!$DontOpenEditor -and !$BuildOnly)', self.quickstart)
         self.assertIn("BUILT_NOT_TESTED_NOT_STAGED", self.quickstart)
 
+    def test_host_preflight_runs_in_child_process_and_preserves_failure_receipt(self):
+        invocation = '& powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot "check_unreal_host.ps1")'
+        self.assertIn(invocation, self.build)
+        self.assertIn('$preflightExit = $LASTEXITCODE', self.build)
+        self.assertIn('HOST_PREFLIGHT_FAILED: exit $preflightExit', self.build)
+        self.assertNotIn('& (Join-Path $PSScriptRoot "check_unreal_host.ps1")', self.build)
+
     def test_double_click_failure_message_points_to_real_report_folder(self):
         self.assertIn("TestReports/quickstart-*", self.launcher)
         self.assertNotIn("TestReportsquickstart-*", self.launcher)
