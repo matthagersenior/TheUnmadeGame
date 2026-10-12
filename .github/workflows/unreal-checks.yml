@@ -1,0 +1,33 @@
+name: Unreal engine verification
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: unreal-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  editor-build-and-tests:
+    if: github.event_name == 'workflow_dispatch' || vars.UNREAL_CI_ENABLED == 'true'
+    runs-on: [self-hosted, Windows, X64, unreal]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+      - name: Build Editor with UHT and run Unreal automation
+        shell: pwsh
+        env:
+          UNREAL_ROOT: ${{ vars.UNREAL_ROOT }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:UNREAL_ROOT)) { throw "Set repository variable UNREAL_ROOT before dispatch" }
+          ./Scripts/first_pc_build_and_test.ps1 -UnrealRoot $env:UNREAL_ROOT -TestFilter Unmade
+      - name: Retain engine evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unreal-reports-${{ github.sha }}
+          path: TestReports/
+          if-no-files-found: warn

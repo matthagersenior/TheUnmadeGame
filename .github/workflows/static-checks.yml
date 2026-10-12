@@ -90,6 +90,16 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/expedition_test.cpp -o /tmp/expedition_test
           /tmp/expedition_test
+      - name: Validate and build canonical manuscript
+        run: |
+          python Scripts/build_bible.py --check
+          python Scripts/build_bible.py
+      - name: Retain canonical manuscript and hashes
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-manuscript-${{ github.sha }}
+          path: PublicationBuild/
+          if-no-files-found: error
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits

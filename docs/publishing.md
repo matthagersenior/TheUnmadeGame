@@ -1,0 +1,11 @@
+# Canon and illustrated publication
+
+Version-controlled Markdown is authoritative. docs/lore/bible_sources.json orders the literary Volume X and supplemental chapters available in this repository. It does not claim to reconstruct historical illustrated volumes I–IX, whose masters and art are external.
+
+Run `python Scripts/build_bible.py` to generate PublicationBuild/THE_UNMADE_CANON.md and manifest.json using Python 3.11 and no third-party packages. Each source and the output receive a SHA-256 digest; no timestamps or host paths enter the output. `--check` validates sources and deterministic reconstruction. CI builds and uploads this manuscript for every source workflow run.
+
+The existing Scripts/publishing builders preserve and extend previous illustrated DOCX masters. They still require external books, python-docx, matplotlib and a document renderer; they are archival editorial tools, not a fresh-clone illustrated build. Do not substitute a plain manuscript for the complete illustrated books or discard earlier editions.
+
+For an illustrated edition, obtain the exact preceding masters and distributable art, execute its builder, render both full books, inspect layout and inherited content, verify ZIP integrity and hashes, then update LATEST_ILLUSTRATED_RELEASE.md and RELEASE_SHA256_MANIFEST.json together with that publication. Retain older receipts in ILLUSTRATED_RELEASE_HISTORY.md. The latest receipt must name actual artifacts and their source baseline; source changes do not imply a newly issued illustrated edition.
+
+A future fully illustrated fresh-clone publisher requires legally distributable baseline masters/art and pinned rendering dependencies. Until then, repository CI independently reproduces the canonical Markdown only.

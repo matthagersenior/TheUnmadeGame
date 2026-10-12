@@ -1,3 +1,7 @@
+# Current repository publishing clarification
+
+Canonical Markdown is the reproducible repository source; see [publishing workflow](../publishing.md). Historical illustrated editions remain preserved and must be rebuilt and visually checked when a new illustrated edition is issued. Repository hygiene changes do not claim a new illustrated edition. The policies below preserve the historical gameplay/illustrated delivery requirements.
+
 # Canon synchronization rule
 
 **When adding or changing a gameplay mechanic, realm, major quest, NPC, item, faction or consequence:**
