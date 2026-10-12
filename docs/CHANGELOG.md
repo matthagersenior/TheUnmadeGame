@@ -2,6 +2,14 @@
 
 Historical source milestones and publication claims, preserved from the former README. These entries describe their dated baseline; consult the root README for current status.
 
+## Adventure Depth v16 — 11 October 2026
+
+Nine distinct dungeon routes/challenges, nine personal accords, services in 29 settlements, weapon styles and stamina defenses, earned equipment techniques, and native RPG menus. [Acceptance](design/adventure-depth-v16-acceptance.md).
+
+## World Identity v15 — 11 October 2026
+
+Expanded prototype animation/audio, nine boss signatures, nine valve mechanisms and 27 optional local objectives. [Acceptance](design/world-identity-v15-acceptance.md).
+
 # Frontier Adventures v14
 
 Nine realm combat and exploration arcs, eighteen new inhabited settlements, nine six-room dungeons, four enemy roles, nine bosses, rescue/evidence resolutions, permanent equipment choices and learned passive techniques. Deliveries remain supporting quests. See `docs/design/frontier-adventures-v14-acceptance.md`. Unreal build and playtesting deferred.
@@ -488,7 +496,3 @@ The books now have an actively managed literary storyworld: docs/lore/VOLUME_X_T
 ### Playable-source lore link: Witness Echoes (Volume X)
 
 Volume X is beginning to affect the **game's actual world interactions**, not only its books. Three new physically inspectable graybox relics—Hessa's cup, Sevrin's press and Orrel's nail—are wired through the existing player Interact control, saved as optional first-seen/returned clues, and summarized in the debug journal. Each changes meaning only after a legitimate related local story decision; none hands out a secret finale, forces optional content or resolves an OPEN mystery. See [Volume X Witness Echoes gameplay contract](../docs/design/volume-x-witness-echo-gameplay.md). CI tests the portable domain and source integration; Unreal Editor compilation and real level/playtest verification remain unperformed.
-
-Combat presentation and world identity v15: 51 prototype animation clips, 36 original sound sources, nine boss signatures, nine valve mechanisms and 27 optional local objectives. See `docs/design/world-identity-v15-acceptance.md`. Unreal acceptance deferred.
-
-Adventure depth v16 adds nine distinct dungeon routes/challenges, nine personal accords, services in 29 settlements, weapon styles and stamina defenses, earned equipment techniques, and native RPG menus. Source acceptance and deferred Unreal requirements: `docs/design/adventure-depth-v16-acceptance.md`.

@@ -1,0 +1,30 @@
+name: Publish verified source milestone
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Unique source milestone tag (for example source-v16)
+        required: true
+        type: string
+permissions:
+  contents: write
+  actions: read
+jobs:
+  source-prerelease:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify main CI and publish annotated source tag and prerelease
+        uses: actions/github-script@v8
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        with:
+          script: |
+            if (context.ref !== 'refs/heads/main') throw new Error('Dispatch only from main');
+            const tag = process.env.RELEASE_TAG;
+            if (!/^source-v[0-9]+(?:\.[0-9]+)*(?:-[a-z0-9]+)?$/.test(tag)) throw new Error('Invalid source milestone tag');
+            const repo = {...context.repo};
+            const runs = await github.rest.actions.listWorkflowRuns({...repo, workflow_id: 'static-checks.yml', head_sha: context.sha, event: 'push'});
+            if (!runs.data.workflow_runs.some(run => run.status === 'completed' && run.conclusion === 'success')) throw new Error('This main commit has no successful source CI run');
+            const annotated = await github.rest.git.createTag({...repo, tag, message: `Verified source milestone ${tag}; engine acceptance remains separate.`, object: context.sha, type: 'commit'});
+            await github.rest.git.createRef({...repo, ref: `refs/tags/${tag}`, sha: annotated.data.sha});
+            await github.rest.repos.createRelease({...repo, tag_name: tag, name: `The Unmade ${tag} (source prerelease)`, prerelease: true, body: 'Source milestone with passing static and portable-rule CI. No packaged executable or Unreal runtime verification is claimed. See README for current evidence and docs/qa/unreal-ci.md for engine acceptance. Canonical manuscript artifacts are attached to the source CI run; illustrated editions remain separately dated publications.'});
