@@ -28,6 +28,10 @@ def is_engine_cube_placeholder(current_asset,default_mesh):
     return (current_asset is not None and default_mesh is not None and
             current_asset.get_path_name()==default_mesh.get_path_name())
 
+def actor_scale_for_mesh(mesh_path):
+    """Keep imported art at authored scale; use the stretched scale only for cube proxies."""
+    return (1.0,1.0,1.0) if mesh_path else (.6,.6,1.4)
+
 def read_plan(path=MANIFEST):
     m=json.loads(path.read_text(encoding="utf-8"))
     if m.get("schema_version")!=1 or m.get("editor_level_name")!="Unmade_AuthoringStaging":
@@ -71,6 +75,7 @@ def apply_in_editor(m):
                 current=component.get_editor_property("static_mesh")
                 if is_engine_cube_placeholder(current,default_mesh):
                     component.set_static_mesh(mesh)
+                    actor.set_actor_scale3d(unreal.Vector(*actor_scale_for_mesh(mesh_path)))
                     updated+=1
             skipped+=1
             continue
@@ -83,7 +88,7 @@ def apply_in_editor(m):
         if component:
             component.set_static_mesh(mesh)
             component.set_collision_enabled(unreal.CollisionEnabled.NO_COLLISION)
-        a.set_actor_scale3d(unreal.Vector(.6,.6,1.4))
+        a.set_actor_scale3d(unreal.Vector(*actor_scale_for_mesh(mesh_path)))
         # No SaveGame, quest-choice or authoritative actor tags changed.
         created+=1
     if created>0 or updated>0:

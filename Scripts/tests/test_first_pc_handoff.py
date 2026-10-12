@@ -39,6 +39,10 @@ class StagingMeshBindingTests(unittest.TestCase):
             "/Game/UnmadeProduction/Assets/SM_Reach_BellWithoutClapper.SM_Reach_BellWithoutClapper",
             STAGER.static_mesh_asset_path(hint))
 
+    def test_imported_meshes_keep_authored_scale_while_proxies_get_marker_scale(self):
+        self.assertEqual((1.0,1.0,1.0),STAGER.actor_scale_for_mesh("/Game/Assets/SM_Prop.SM_Prop"))
+        self.assertEqual((.6,.6,1.4),STAGER.actor_scale_for_mesh(None))
+
     def test_non_mesh_and_unsafe_hints_never_become_asset_paths(self):
         for hint in ("SFX_Rain_BellNoBuoy","legacy_art_22.jpg","SM_../outside"):
             with self.subTest(hint=hint):
