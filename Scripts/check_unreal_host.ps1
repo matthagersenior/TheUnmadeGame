@@ -56,7 +56,7 @@ if (-not (Test-Path $vswhere -PathType Leaf)) {
     else {
         $vsVersion = & $vswhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationVersion
         $compilerRoot = Join-Path $visualStudio "VC/Tools/MSVC"
-        $compilerDirs = @(Get-ChildItem $compilerRoot -Directory -ErrorAction SilentlyContinue | Sort-Object Name -Descending)
+        $compilerDirs = @(Get-ChildItem $compilerRoot -Directory -ErrorAction SilentlyContinue | Sort-Object { [version]$_.Name } -Descending)
         $cl = $null
         foreach ($dir in $compilerDirs) {
             $candidateCl = Join-Path $dir.FullName "bin/Hostx64/x64/cl.exe"
