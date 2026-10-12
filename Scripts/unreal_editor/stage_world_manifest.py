@@ -24,7 +24,7 @@ def resolve_static_mesh(unreal,asset_hint,fallback):
             return asset,path
     return fallback,None
 def is_engine_cube_placeholder(current_asset,default_mesh):
-    """Only generated cube proxies may be upgraded; artist meshes are preserved."""
+    """Only engine-cube placeholders may be upgraded; custom meshes are preserved."""
     return (current_asset is not None and default_mesh is not None and
             current_asset.get_path_name()==default_mesh.get_path_name())
 
@@ -65,8 +65,8 @@ def apply_in_editor(m):
         if label in existing:
             actor=existing[label]
             component=actor.get_component_by_class(unreal.StaticMeshComponent)
-            # Upgrade only an untouched engine-cube placeholder. Any custom
-            # artist mesh remains intact when the staging plan is re-run.
+            # Upgrade only a marker whose current mesh is still the engine cube.
+            # Any custom artist mesh remains intact when the plan is re-run.
             if mesh_path and component:
                 current=component.get_editor_property("static_mesh")
                 if is_engine_cube_placeholder(current,default_mesh):
@@ -102,7 +102,7 @@ def main():
     if not a.apply:
         mesh_hints={x["asset_hint"] for x in manifest["actors"]
                     if static_mesh_asset_path(x.get("asset_hint"))}
-        print("DRY RUN: %d staged references / %d optional static-mesh bindings, dedicated map %s. NO EDITOR WRITES."
+        print("DRY RUN: %d staged references / %d optional static-mesh hints, dedicated map %s. NO EDITOR WRITES."
              %(len(manifest["actors"]),len(mesh_hints),manifest["editor_level_name"]))
         print("Mesh folder: %s/<SM_AssetName>.<SM_AssetName>; missing meshes use safe cube proxies."
              %STATIC_MESH_ROOT)
