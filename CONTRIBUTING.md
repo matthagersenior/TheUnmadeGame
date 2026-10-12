@@ -7,3 +7,5 @@ The canonical Markdown manuscript is reproducible with Scripts/build_bible.py. I
 Use annotated source milestone tags and GitHub releases only against a passing main commit. Mark source milestones as prereleases and state whether engine verification occurred. A source release must not imply a playable executable. Upload illustrated binaries only when distributable inputs and actual artifact QA are available.
 
 Repository metadata: description “A dark, surreal third-person RPG where reality and memory conflict.” Topics: unreal-engine, rpg, ue5. Prefer squash merging for future changes.
+
+The Publish verified source milestone workflow creates the initial source-v16 prerelease after successful main push CI. Subsequent milestones use manual dispatch with a new tag; an existing published initial milestone is left intact.
