@@ -1,3 +1,4 @@
+#include "UI/UnmadePlayerFacingRules.h"
 #include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Player/UnmadeCharacter.h"
@@ -397,7 +398,7 @@ void AUnmadeCharacter::CrossFrontierGateway()
 
 void AUnmadeCharacter::BuyMarketSupplies()
 {
-    if(!IsValid(Equipment) || !GetWorld())return;
+    if(!IsValid(Equipment) || !GetWorld() || !Combat || Combat->IsDefeated())return;
     const FVector P=GetActorLocation();
     const auto Village=UnmadeCore::SettlementAt(P.X,P.Y);
     if(Village==UnmadeCore::SettlementId::None)return;
@@ -412,6 +413,9 @@ void AUnmadeCharacter::BuyMarketSupplies()
            Resident->role==UnmadeCore::NpcRole::Merchant &&
            It->CanTradeWithPlayer())
         {
+            FCollisionQueryParams sight(SCENE_QUERY_STAT(UnmadeTradeSight),false);sight.AddIgnoredActor(this);sight.AddIgnoredActor(*It);
+            bool clear=!GetWorld()->LineTraceTestByChannel(P+FVector(0,0,55),It->GetActorLocation()+FVector(0,0,55),ECC_Visibility,sight);
+            if(!UnmadeCore::PhysicalTradeAllowed(!Combat->IsDefeated(),true,FVector::DistSquared(P,It->GetActorLocation()),clear))continue;
             bMerchantNearby=true;
             break;
         }
@@ -447,7 +451,7 @@ void AUnmadeCharacter::BuyMarketSupplies()
 
 void AUnmadeCharacter::SellMarketSupplies()
 {
-    if(!IsValid(Equipment) || !GetWorld())return;
+    if(!IsValid(Equipment) || !GetWorld() || !Combat || Combat->IsDefeated())return;
     const FVector P=GetActorLocation();
     const auto Village=UnmadeCore::SettlementAt(P.X,P.Y);
     if(Village==UnmadeCore::SettlementId::None)return;
@@ -462,6 +466,9 @@ void AUnmadeCharacter::SellMarketSupplies()
            Resident->role==UnmadeCore::NpcRole::Merchant &&
            It->CanTradeWithPlayer())
         {
+            FCollisionQueryParams sight(SCENE_QUERY_STAT(UnmadeTradeSight),false);sight.AddIgnoredActor(this);sight.AddIgnoredActor(*It);
+            bool clear=!GetWorld()->LineTraceTestByChannel(P+FVector(0,0,55),It->GetActorLocation()+FVector(0,0,55),ECC_Visibility,sight);
+            if(!UnmadeCore::PhysicalTradeAllowed(!Combat->IsDefeated(),true,FVector::DistSquared(P,It->GetActorLocation()),clear))continue;
             bMerchantNearby=true;
             break;
         }
@@ -1375,8 +1382,7 @@ void AUnmadeCharacter::ShowCharacterProfile()
     if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
         FString::Printf(TEXT("IDENTITY | %s | Frame %d, Face %d, Hair %d, Voice %d, Palette %d, Mark %d, Gait %d, Calling %d | Origin: THE IMPOSSIBLE"),
             *GetCharacterChosenName(),V[0],V[1],V[2],V[3],V[4],V[5],V[6],V[7]));
-    // A full creator UI can call SetCharacterFeature/SetCharacterChosenName
-    // from future UMG widgets; keyboard debug text is not a shipped creator.
+    OpenRpgPage(7);
 }
 
 void AUnmadeCharacter::BeginPlay()
@@ -1653,7 +1659,7 @@ void AUnmadeCharacter::PersonalChoiceA(){if(GetWorld())for(TActorIterator<AUnmad
 void AUnmadeCharacter::PersonalChoiceB(){if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)if(Hub->TryDepthInteraction(this,2))return;}
 void AUnmadeCharacter::UseFieldTechnique(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){if(!Hub->UseDepthPower(this))Hub->NotifyRpg(TEXT("Technique needs an earned mastery lesson, stamina, recovery time and a suitable nearby target."));return;}}
 void AUnmadeCharacter::DodgeStep(){if(!GetWorld()||IsRpgMenuOpen()||!Combat->Dodge(GetWorld()->GetTimeSeconds()))return;FVector Direction=GetLastMovementInputVector().GetSafeNormal2D();if(Direction.IsNearlyZero())Direction=GetActorForwardVector();LaunchCharacter(Direction*650,false,false);PlayIdentityMotion(FName(TEXT("Dodge")));UnmadePresentation::Sound(this,TEXT("guard"));}
-void AUnmadeCharacter::RpgMenuAction(FName Action){if(!Combat||Combat->IsDefeated())return;if(Action==FName(TEXT("Weapon")))EquipNextWeapon();else if(Action==FName(TEXT("Armor")))EquipNextArmor();else if(Action==FName(TEXT("Charm")))EquipNextCharm();else if(Action==FName(TEXT("Heal")))UseHealthPotion();else if(Action==FName(TEXT("ChoiceA")))PersonalChoiceA();else if(Action==FName(TEXT("ChoiceB")))PersonalChoiceB();else if(Action==FName(TEXT("AnomalyPulse"))){DemonstrateAnomaly();}else if(Action==FName(TEXT("FoldReality"))){FoldReality();}else if(Action==FName(TEXT("RewriteOpen"))){RewriteOpen();}else if(Action==FName(TEXT("RewriteSealed"))){RewriteSealed();}else if(Action==FName(TEXT("FrontierTravel"))){CrossFrontierGateway();}else if(Action==FName(TEXT("RiteNext"))){if(Tenfold)Tenfold->NextRite();}else if(Action==FName(TEXT("RitePrevious"))){if(Tenfold)Tenfold->PreviousRite();}else if(Action==FName(TEXT("RiteStudy"))){if(Tenfold)Tenfold->StudyRite();}else if(Action==FName(TEXT("RiteUse"))){if(Tenfold)Tenfold->InvokeRite();}else if(Action==FName(TEXT("RiteChoice1"))){if(Tenfold)Tenfold->DecideSolidarity();}else if(Action==FName(TEXT("RiteChoice2"))){if(Tenfold)Tenfold->DecideTruth();}else if(Action==FName(TEXT("RiteBreak"))){if(Tenfold)Tenfold->BreakChosenOath();}else if(Action==FName(TEXT("RiteLaw"))){if(Tenfold)Tenfold->CycleWorldLaw();}else if(Action==FName(TEXT("ConfluenceCycle"))){if(Tenfold)Tenfold->CycleConfluence();}else if(Action==FName(TEXT("ConfluenceStudy"))){if(Tenfold)Tenfold->StudyConfluence();}else if(Action==FName(TEXT("ConfluenceOption1"))){if(Tenfold)Tenfold->ConfluenceChoice1();}else if(Action==FName(TEXT("ConfluenceOption2"))){if(Tenfold)Tenfold->ConfluenceChoice2();}else if(Action==FName(TEXT("FactionSolidarity"))){CommitSolidarity();}else if(Action==FName(TEXT("FactionTruth"))){CommitTruth();}else if(Action==FName(TEXT("StoryShelter"))){ChooseShelter();}else if(Action==FName(TEXT("StoryResearch"))){ChooseResearch();}else if(Action==FName(TEXT("OfferAid"))){OfferAid();}else if(Action==FName(TEXT("SupplyActivity"))){ProgressSupplyActivity();}else if(Action==FName(TEXT("FieldKit"))){UseFieldKit();}else if(Action==FName(TEXT("FieldTechnique"))){UseFieldTechnique();}else if(Action==FName(TEXT("ItemStrain"))){UseStrainPotion();}else if(Action==FName(TEXT("ItemForge"))){ForgeMythicGear();}}
+void AUnmadeCharacter::RpgMenuAction(FName Action){if(!Combat||Combat->IsDefeated())return;if(Action==FName(TEXT("Weapon")))EquipNextWeapon();else if(Action==FName(TEXT("Armor")))EquipNextArmor();else if(Action==FName(TEXT("Charm")))EquipNextCharm();else if(Action==FName(TEXT("Heal")))UseHealthPotion();else if(Action==FName(TEXT("ChoiceA")))PersonalChoiceA();else if(Action==FName(TEXT("ChoiceB")))PersonalChoiceB();else if(Action==FName(TEXT("AnomalyPulse"))){DemonstrateAnomaly();}else if(Action==FName(TEXT("FoldReality"))){FoldReality();}else if(Action==FName(TEXT("RewriteOpen"))){RewriteOpen();}else if(Action==FName(TEXT("RewriteSealed"))){RewriteSealed();}else if(Action==FName(TEXT("FrontierTravel"))){CrossFrontierGateway();}else if(Action==FName(TEXT("RiteNext"))){if(Tenfold)Tenfold->NextRite();}else if(Action==FName(TEXT("RitePrevious"))){if(Tenfold)Tenfold->PreviousRite();}else if(Action==FName(TEXT("RiteStudy"))){if(Tenfold)Tenfold->StudyRite();}else if(Action==FName(TEXT("RiteUse"))){if(Tenfold)Tenfold->InvokeRite();}else if(Action==FName(TEXT("RiteChoice1"))){if(Tenfold)Tenfold->DecideSolidarity();}else if(Action==FName(TEXT("RiteChoice2"))){if(Tenfold)Tenfold->DecideTruth();}else if(Action==FName(TEXT("RiteBreak"))){if(Tenfold)Tenfold->BreakChosenOath();}else if(Action==FName(TEXT("RiteLaw"))){if(Tenfold)Tenfold->CycleWorldLaw();}else if(Action==FName(TEXT("ConfluenceCycle"))){if(Tenfold)Tenfold->CycleConfluence();}else if(Action==FName(TEXT("ConfluenceStudy"))){if(Tenfold)Tenfold->StudyConfluence();}else if(Action==FName(TEXT("ConfluenceOption1"))){if(Tenfold)Tenfold->ConfluenceChoice1();}else if(Action==FName(TEXT("ConfluenceOption2"))){if(Tenfold)Tenfold->ConfluenceChoice2();}else if(Action==FName(TEXT("FactionSolidarity"))){CommitSolidarity();}else if(Action==FName(TEXT("FactionTruth"))){CommitTruth();}else if(Action==FName(TEXT("StoryShelter"))){ChooseShelter();}else if(Action==FName(TEXT("StoryResearch"))){ChooseResearch();}else if(Action==FName(TEXT("OfferAid"))){OfferAid();}else if(Action==FName(TEXT("SupplyActivity"))){ProgressSupplyActivity();}else if(Action==FName(TEXT("FieldKit"))){UseFieldKit();}else if(Action==FName(TEXT("FieldTechnique"))){UseFieldTechnique();}else if(Action==FName(TEXT("ItemStrain"))){UseStrainPotion();}else if(Action==FName(TEXT("ItemForge"))){ForgeMythicGear();}else if(Action==FName(TEXT("Sneak"))){if(bIsCrouched)StopSneak();else StartSneak();}}
 
 void AUnmadeCharacter::UseFieldKit(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){if(!h->UseDepthFieldKit(this))h->NotifyRpg(TEXT("Use a crafted field kit inside an unresolved dungeon danger chamber. No kit is consumed if there is no benefit."));return;}}
 
@@ -1667,3 +1673,5 @@ void AUnmadeCharacter::CaptureSession(UUnmadePrototypeSave* save)const{
 bool AUnmadeCharacter::SaveSessionNow(){RestoreSessionWhenReady();if(!bSessionRestored||!GetWorld())return false;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h)return h->SavePlayerSession(this);return false;}
 
 void AUnmadeCharacter::TradeSelection(UnmadeCore::ItemId item,bool buy){SelectedTrade=item;if(buy)BuyMarketSupplies();else SellMarketSupplies();SelectedTrade=UnmadeCore::ItemId::Count;}
+
+int AUnmadeCharacter::GetCharacterFeature(int aspect)const{return aspect>=0&&aspect<8?Identity.Snapshot().options[aspect]:-1;}

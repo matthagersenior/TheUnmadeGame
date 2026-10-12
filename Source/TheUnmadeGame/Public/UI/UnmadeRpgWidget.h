@@ -2,8 +2,9 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "InputCoreTypes.h"
+#include "UI/UnmadePlayerFacingRules.h"
 #include "UnmadeRpgWidget.generated.h"
-class UWrapBox;class UButton;class USizeBox;class UTextBlock;class UBorder;class UProgressBar;class UCanvasPanel;
+class UEditableTextBox;class UWrapBox;class UButton;class USizeBox;class UTextBlock;class UBorder;class UProgressBar;class UCanvasPanel;
 UCLASS()
 class THEUNMADEGAME_API UUnmadeRpgWidget : public UUserWidget {
  GENERATED_BODY()
@@ -19,10 +20,19 @@ protected:
  virtual FReply NativeOnMouseButtonDown(const FGeometry& Geometry,const FPointerEvent& Event)override;
  virtual FReply NativeOnKeyDown(const FGeometry& Geometry,const FKeyEvent& Event)override;
 private:
- bool ConfirmUnsavedNew=false,ConfirmUnsavedLoad=false;
+ UnmadeCore::SessionConfirmation SessionConfirm;
+ int SelectedAspect=0;
+ UPROPERTY() TObjectPtr<UEditableTextBox> NameInput;
+ UFUNCTION() void Character();
+ UFUNCTION() void NextAspect();
+ UFUNCTION() void PreviousFeature();
+ UFUNCTION() void NextFeature();
+ UFUNCTION() void SaveName();
+ void ChangeFeature(int Direction);
  int SelectedRecipe=0,SelectedGoods=0,SelectedProfile=0;
  int Page=0,SelectedRealm=0,JournalCategory=0,CaptureBinding=0;float AppliedTextScale=1;bool bOpen=false,bPausedWorld=false;double NextRefresh=0,NoticeUntil=0;
  TMap<TWeakObjectPtr<UTextBlock>,int32> BaseFonts;
+ FString ActionFeedback;
  FString LastNotice;uint64 LastNoticeSerial=0;
  UPROPERTY() TArray<TObjectPtr<UButton>> RealmButtons;
  UPROPERTY() TArray<TObjectPtr<UWrapBox>> ActionGroups;
@@ -84,6 +94,7 @@ private:
  UFUNCTION() void Action24();
  UFUNCTION() void Action25();
  UFUNCTION() void Action26();
+ UFUNCTION() void Action27();
 
  bool CaptureControl(FKey Key);
  void Upgrade(int Option);

@@ -72,9 +72,10 @@ public:
     void ReportRedeemedOathEvent();
     void ReconcileEarnedRewards();
 
-    /** Data-only choices are Blueprint-ready for future on-screen creator widgets. */
+    /** Persistent identity choices used by the native Character page. */
     UFUNCTION(BlueprintCallable, Category="Unmade|Identity")
     bool SetCharacterFeature(int32 Aspect,int32 Choice);
+    int GetCharacterFeature(int Aspect)const;
 
     UFUNCTION(BlueprintCallable, Category="Unmade|Identity")
     bool SetCharacterChosenName(const FString& Name);

@@ -1,48 +1,48 @@
 {
-  "edition": "Complete RPG Loops v19",
+  "edition": "Player Facing Reliability v20",
   "date": "2026-10-12",
-  "source_base": "cb258ad3388ecd1050f59f24944c71d8ca0c887b",
+  "source_base": "f166de49e51888d540975148855b3b32452dbee7",
   "engine_compiled": false,
   "engine_playtested": false,
-  "python_tests": 280,
-  "native_cpp_tests": 59,
+  "python_tests": 285,
+  "native_cpp_tests": 60,
   "workflow_validators": 30,
-  "complete_bible_pages": 168,
-  "complete_bible_images": 63,
-  "volume_x_pages": 121,
-  "volume_x_images": 16,
+  "complete_bible_pages": 170,
+  "complete_bible_images": 64,
+  "volume_x_pages": 124,
+  "volume_x_images": 17,
   "animation_clips": 57,
   "new_original_wavs": 0,
   "profile_count": 4,
-  "menu_pages": 7,
-  "action_buttons": 27,
-  "field_recipes": 9,
-  "legacy_recipes": 6,
+  "menu_pages": 8,
+  "action_buttons": 28,
+  "identity_aspects": 8,
+  "final_identity_assets_verified": false,
   "files": [
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Complete_RPG_Loops_v19.docx",
-      "bytes": 8289160,
-      "sha256": "edf6d187e48f93d2e48ee5e828e71aa0e8b099654b14c0b2c17ed627108ac90a"
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Player_Facing_Reliability_v20.docx",
+      "bytes": 8421317,
+      "sha256": "11eac3325043fd33415f2a5790b410b7c609c80bcd922e1cd4904f6c2c2071ac"
     },
     {
-      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Complete_RPG_Loops_v19.pdf",
-      "bytes": 5775487,
-      "sha256": "61e317802efafda393de3ced55d447a806e6562cdfcadeced2059419ae073846"
+      "name": "THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Player_Facing_Reliability_v20.pdf",
+      "bytes": 5889960,
+      "sha256": "9092a367143e69f5305a92e67c4a3329897e6ee91458108dd8c6916fc13e1274"
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Complete_RPG_Loops_v19.docx",
-      "bytes": 6094817,
-      "sha256": "8f445dda0e0c160c24080db63332caf85114e9a83a07870b242d052fcbd07638"
+      "name": "THE_UNMADE_Volume_X_Illustrated_Player_Facing_Reliability_v20.docx",
+      "bytes": 6226967,
+      "sha256": "2b4063de11dfe28eba813390644fe85946efee5018c112a9604534c04467b36b"
     },
     {
-      "name": "THE_UNMADE_Volume_X_Illustrated_Complete_RPG_Loops_v19.pdf",
-      "bytes": 3765054,
-      "sha256": "5030d82f5e2588571475e19f3f031ad6522685decd4682628ce7a0b4d56c47e2"
+      "name": "THE_UNMADE_Volume_X_Illustrated_Player_Facing_Reliability_v20.pdf",
+      "bytes": 3880407,
+      "sha256": "3053d473900505177349f555e11548a9dfe0f9a005a947bd9f76561323abf084"
     },
     {
-      "name": "THE_UNMADE_v19_Complete_RPG_Loops_Atlas.png",
-      "bytes": 142715,
-      "sha256": "4655faa6d2dbdde708c48ba8fec7ae6cf6d2d1829cf04ced9b5a68b42041d56a"
+      "name": "THE_UNMADE_v20_Player_Facing_Reliability_Atlas.png",
+      "bytes": 140769,
+      "sha256": "0d8be362c6d9ce2437abdcf3c0e6ccd60fa6c7fd817f3975cf3eb4a47ec51a5a"
     }
   ]
 }

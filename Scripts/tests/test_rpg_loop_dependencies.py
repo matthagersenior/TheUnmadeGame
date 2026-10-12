@@ -22,11 +22,11 @@ class CompleteLoopDependencies(unittest.TestCase):
   self.assertLess(part.index('PrepareRealmGeometry'),part.index('SetActorLocation'))
   self.assertIn('Combat->RestoreSession',part)
  def test_all_actions_have_real_handlers_and_controller_buttons(self):
-  registry=source('Public/UI/UnmadePlayerActionRules.h');actions=re.findall(r'\{"(\w+)",',registry);self.assertEqual(len(actions),27)
+  registry=source('Public/UI/UnmadePlayerActionRules.h');actions=re.findall(r'\{"(\w+)",',registry);self.assertEqual(len(actions),28)
   player=source('Private/Player/UnmadeCharacter.cpp').split('RpgMenuAction(FName Action)',1)[1].split('\n',1)[0]
   ui=source('Private/UI/UnmadeRpgWidget.cpp');header=source('Public/UI/UnmadeRpgWidget.h')
   for n,a in enumerate(actions):self.assertIn('TEXT("'+a+'")',player);self.assertIn('TEXT("Action'+str(n)+'")',ui);self.assertIn('void Action'+str(n)+'();',header)
-  self.assertIn('Close();p->RpgMenuAction',ui);self.assertIn('%7',ui)
+  self.assertIn('Close();p->RpgMenuAction',ui);self.assertIn('%8',ui)
  def test_crafting_selects_and_validates_the_real_workshop(self):
   equipment=source('Private/Items/UnmadeEquipmentComponent.cpp');self.assertNotIn('for(const auto& Recipe:UnmadeCore::Recipes)',equipment)
   for token in ['static_cast<UnmadeCore::RecipeId>(recipe)','Inventory.Restore(old)','Economy.Restore(money)','CraftField','DescribeRecipe']:self.assertIn(token,equipment)
@@ -39,6 +39,6 @@ class CompleteLoopDependencies(unittest.TestCase):
   self.assertNotIn('SetActorTickEnabled(false)',s);self.assertIn('Clock.Advance',s)
  def test_prototype_performances_are_distinct_and_stagger_has_priority(self):
   s=source('Public/Combat/UnmadeEncounterPerformanceRules.h');self.assertEqual(len(re.findall(r'\{"',s)),9)
-  e=source('Private/Combat/UnmadeEnemyCharacter.cpp');self.assertIn('MotionHeldUntil',e);self.assertIn('EncounterPerformances[Arc]',e);self.assertIn('CurrentMotion==FName(TEXT("Death"))',e)
+  e=source('Private/Combat/UnmadeEnemyCharacter.cpp');self.assertIn('MotionHeldUntil',e);self.assertIn('MotionMayReplace',e);self.assertIn('EncounterPerformances[Arc]',e);self.assertIn('CurrentMotion==FName(TEXT("Death"))',e)
   n=source('Private/NPC/UnmadeNpcCharacter.cpp');self.assertIn('ServiceWorkCue(NpcId,Current)',n)
 if __name__=='__main__':unittest.main()

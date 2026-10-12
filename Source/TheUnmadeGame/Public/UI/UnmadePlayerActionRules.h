@@ -2,7 +2,7 @@
 #include <array>
 namespace UnmadeCore {
 struct PlayerActionDef {const char* action;const char* title;const char* requirement;};
-inline constexpr std::array<PlayerActionDef,27> PlayerActions={{
+inline constexpr std::array<PlayerActionDef,28> PlayerActions={{
  {"AnomalyPulse","Inspect or Glimpse","Stand beside the real evidence, council or anomaly; existing branch confirmations apply."},
  {"FoldReality","Fold","Earn the power and approach its physical anchor or encounter."},
  {"RewriteOpen","Rewrite open","Approach the real anomaly; review the warning before confirming."},
@@ -29,6 +29,7 @@ inline constexpr std::array<PlayerActionDef,27> PlayerActions={{
  {"FieldKit","Use field kit","Stand in an eligible danger chamber with an owned kit."},
  {"FieldTechnique","Use learned technique","Earn mastery; stamina, target and recovery requirements apply."},
  {"ItemStrain","Use strain vial","Requires an owned vial and strain that it can relieve."},
- {"ItemForge","Forge Waybreaker","Approach the existing forge with the required earned materials."}
+ {"ItemForge","Forge Waybreaker","Approach the existing forge with the required earned materials."},
+ {"Sneak","Toggle sneak","Uses actual crouch movement and stealth checks; it grants no invisibility."}
 }};
 }

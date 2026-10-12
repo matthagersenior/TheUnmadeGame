@@ -1,22 +1,22 @@
-# Current illustrated release — Complete RPG Loops v19
+# Current illustrated release — Player Facing Reliability v20
 
-Date: 12 October 2026 UTC. Source baseline: `cb258ad3388ecd1050f59f24944c71d8ca0c887b`. The source tree and exact changed files are recorded in the dated package manifest.
+Date: 12 October 2026 UTC. Source baseline: `f166de49e51888d540975148855b3b32452dbee7`. Exact source tree and member hashes are recorded in the dated package.
 
-Complete cumulative Bible: **168 pages / 63 illustrations**. Complete standalone Volume X: **121 pages / 16 illustrations**. Both complete PDF/DOCX editions extend intact v18 masters. All 165/117 inherited page texts and rendered images, 62/15 illustrations and inherited paragraphs remain unchanged. New pages rendered and visually inspected; zero blank pages or off-page text. Earlier editions remain preserved.
+Complete cumulative Bible: **170 pages / 64 illustrations**. Complete standalone Volume X: **124 pages / 17 illustrations**. Both complete PDF/DOCX editions extend intact v19 masters. All 168/121 inherited page texts and rendered images, 63/16 illustrations and inherited paragraphs remain unchanged. New pages rendered and visually inspected; zero blank pages or off-page text. Earlier editions remain preserved.
 
-Seven audited source gaps addressed: free deed-gated mastery and useful kit spending; independent protected profiles, previous-record backups and safe resume; 27 actual controller-accessible action buttons across seven pages; explicit six workshop and nine earned regional recipes plus selected trading; binding-aware signs and prompts; deferred distant block construction and cached distance cadence; distinct boss warning/prop identities and service work gestures. The second audit also fixed fixed-slot optional surveys, stale profile confirmations and automatic crafting. Existing IDs, wages, consent, consequences and OPEN mysteries remain authoritative.
+Six follow-up fixes: scoped backup-recovery confirmation without saving over its target; single-pass mapped labels; living/consenting nearby merchant with real visibility for both buying and selling; native chosen-name and eight-aspect Character page; held stagger/death priority; production-rule behavioral regression coverage. Added actual Toggle Sneak access, eight pages and 28 action buttons. Second inspection fixed feedback hidden behind the open menu and verified all 96 widget callbacks have definitions. Existing IDs, wages, consent, protagonist origin, consequences and OPEN mysteries remain authoritative.
 
-Validation: **280 Python tests, 59 portable C++ executables, 30 workflow commands**, plus a repeatable production-rule dependency audit. ZIP CRC and all member hashes verified. Original art/audio and 57 prototype clips retained. No new original audio, final rigs, measured performance gains or commercial-ready game claimed.
+Validation: **285 Python tests, 60 portable C++ executables and 30 workflow commands** passed, including expanded repeatable dependency audit. ZIP CRC and all member hashes verified. Original art/audio and 57 prototype clips retained. No new final face/hair/voice/mark assets, audio recordings, measured performance gains or commercial-ready game claimed.
 
-**Unreal compilation, asset imports, platform storage failures, controller focus, navigation, animation/audio acceptance and complete engine walkthroughs remain deferred at the creator's request.** See `docs/design/complete-rpg-loops-v19-acceptance.md`. Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.json` after future fixes.
+**Unreal compilation, imports, platform storage failure, controller focus/name entry, collision/navigation, animation/audio timing and complete nine-realm engine walkthroughs remain deferred at the creator's request.** See `docs/design/player-facing-reliability-v20-acceptance.md`. Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.json` for the next check.
 
 Files saved individually at the Library root:
-- `/THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Complete_RPG_Loops_v19.docx`
-- `/THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Complete_RPG_Loops_v19.pdf`
-- `/THE_UNMADE_Volume_X_Illustrated_Complete_RPG_Loops_v19.docx`
-- `/THE_UNMADE_Volume_X_Illustrated_Complete_RPG_Loops_v19.pdf`
-- `/THE_UNMADE_v19_Complete_RPG_Loops_Atlas.png`
-- `/THE_UNMADE_v19_Release_Manifest.json`
-- `/THE_UNMADE_Complete_RPG_Loops_v19_Complete_Package.zip`
+- `/THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Player_Facing_Reliability_v20.docx`
+- `/THE_UNMADE_Complete_Illustrated_Lore_Bible_Volume_X_Player_Facing_Reliability_v20.pdf`
+- `/THE_UNMADE_Volume_X_Illustrated_Player_Facing_Reliability_v20.docx`
+- `/THE_UNMADE_Volume_X_Illustrated_Player_Facing_Reliability_v20.pdf`
+- `/THE_UNMADE_v20_Player_Facing_Reliability_Atlas.png`
+- `/THE_UNMADE_v20_Release_Manifest.json`
+- `/THE_UNMADE_Player_Facing_Reliability_v20_Complete_Package.zip`
 
 Earlier receipts: [history](ILLUSTRATED_RELEASE_HISTORY.md).

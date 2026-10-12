@@ -331,3 +331,7 @@ jobs:
           /tmp/unmade-progression-resilience
       - name: Repeat gameplay dependency audit
         run: python Scripts/audit_gameplay_dependencies.py --check
+      - name: Verify scoped recovery, single-pass labels, physical trade and motion priority
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/player/player_facing_resilience_test.cpp -o /tmp/unmade-player-facing
+          /tmp/unmade-player-facing
