@@ -1,5 +1,6 @@
 #include "Save/UnmadeSessionRules.h"
 #include "World/UnmadePrototypeHub.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadePlayerExperienceRegistry.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
@@ -91,9 +92,15 @@ bool AUnmadePrototypeHub::ExperienceAction(int action,AUnmadeCharacter* p){if(!p
  if(action==8){auto* witness=Resident(GetWorld(),a,3);changed=witness&&Near(p,witness->GetActorLocation(),310,witness)&&Experience.Reconcile(a,Depth);line=changed?TEXT("The witness mediated shared access. The original public accord and all remembered disagreements remain intact."):TEXT("Speak beside the real witness on a second distinct day after repairing the work table. Public-witness accord required.");}
  if(action==9){if(!ExperienceServicesOpen(a)){NotifyRpg(ExperienceServiceHours(a));return false;}bool useful=a==1?p->GetRealityStrain()>0:a==5?p->GetCombat()->HasTemporaryStatus():a==7?p->GetCombat()->GetMissingHealth()>0:true;changed=useful&&Experience.Specialty(a,GetGameDay());line=changed?FString(UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].specialty))+TEXT(" provided. One service per game day; two total per realm, shared between settlements."):TEXT("Earn local privilege first. Specialty services have two total uses, one per game day; no use is charged when recovery cannot help.");}
  if(action==11){bool mayRest=Depth.Arc(a)->choice==1||Experience.Arc(a)->privilege||Experience.Arc(a)->reconciled;if(!mayRest){NotifyRpg(TEXT("The reserve beds require a protected accord, privilege or mediated shared access."));return false;}if(GetWorld()->GetTimeSeconds()>ExperienceWaitConfirm){ExperienceWaitConfirm=GetWorld()->GetTimeSeconds()+20;NotifyRpg(TEXT("WAIT SIX GAME HOURS: wages, debts and supplies follow world time. Press Rest again to confirm; story choices remain unchanged."));return false;}ExperienceWaitConfirm=-1;for(int i=0;i<300;++i)Clock.Advance(1);changed=true;line=TEXT("Six game hours passed. Local hours and routines changed; existing obligations remain due.");}
- if(!changed){NotifyRpg(line);return false;}if(!CommitExperience(before,p)){Clock=oldClock;return false;}
+ if(!changed){NotifyRpg(line);return false;}
+ // Capture the finite healing service's benefit in the same record as its use.
+ if(!p->CommitIntegrationRecovery(action==9&&a==1?20:0,[&]{
+  return UnmadeCore::CommitHealing(*p->GetCombat(),action==9&&a==7?25:0,[&]{return CommitExperience(before,p);});
+ })){
+  Experience=before;Clock=oldClock;return false;
+ }
  if(action==7||action==8)p->ReportIntegrationEvent(FName(action==7?TEXT("World.LocalRepair"):TEXT("World.LocalMediation")),FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a)));
- if(action==9){switch(a){case 0:TrackExperienceRealm(a,p);break;case 1:p->RecoverIntegrationStrain(20);break;case 2:p->GetCombat()->GrantPressure(GetWorld()->GetTimeSeconds());break;case 3:p->ReportIntegrationEvent(FName(TEXT("World.LocalMediation")),FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a)));break;case 4:p->GetCombat()->GrantEvasion(GetWorld()->GetTimeSeconds(),1);break;case 5:p->GetCombat()->ClearTemporaryStatus();break;case 6:p->GetCombat()->GrantQuiet(GetWorld()->GetTimeSeconds());break;case 7:p->GetCombat()->Heal(25);break;case 8:p->GetCombat()->GrantWard(GetWorld()->GetTimeSeconds());break;}}
+ if(action==9){switch(a){case 0:TrackExperienceRealm(a,p);break;case 1:break;case 2:p->GetCombat()->GrantPressure(GetWorld()->GetTimeSeconds());break;case 3:p->ReportIntegrationEvent(FName(TEXT("World.LocalMediation")),FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a)));break;case 4:p->GetCombat()->GrantEvasion(GetWorld()->GetTimeSeconds(),1);break;case 5:p->GetCombat()->ClearTemporaryStatus();break;case 6:p->GetCombat()->GrantQuiet(GetWorld()->GetTimeSeconds());break;case 7:break;case 8:p->GetCombat()->GrantWard(GetWorld()->GetTimeSeconds());break;}}
  NotifyRpg(line);return true;
 }
 FString AUnmadePrototypeHub::GetTrackedObjective()const{

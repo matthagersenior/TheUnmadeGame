@@ -1,5 +1,6 @@
 #include "UI/UnmadePlayerFacingRules.h"
 #include "Save/UnmadeSaveSession.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Player/UnmadeCharacter.h"
 #include "UI/UnmadePlayerPreferences.h"
@@ -1308,6 +1309,11 @@ bool AUnmadeCharacter::SaveFractureState()
     Save->PlayerStrain = Snapshot.strain;
     Save->bHasFractureSnapshot = true;
     return UnmadeSave::SaveGameToSlot(Save);
+}
+
+bool AUnmadeCharacter::CommitIntegrationRecovery(double Amount, TFunctionRef<bool()> Write)
+{
+    return UnmadeCore::CommitStrainRecovery(FractureModel, Amount, Write);
 }
 
 

@@ -44,7 +44,7 @@ class GearSourceContract(unittest.TestCase):
                       "if (bSaveRejected) return false"):
             self.assertIn(token,cpp.replace("==2"," == 2"))
         self.assertIn("Save->PlayerStrain = UpdatedStrain",cpp)
-        self.assertIn("Player->GetCombat()->Heal(heal)",cpp)
+        self.assertIn("CommitHealing(*Player->GetCombat(), heal",cpp)
         self.assertNotIn("RequestDialogue(",cpp)
         self.assertNotIn("Ollama",cpp)
 

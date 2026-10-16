@@ -87,6 +87,7 @@ public:
     void NotifyWeaponContact(){TickWeaponContact();}
     void ReportIntegrationEvent(FName Event,FName Subject){ReportLocalEvent(Event,Subject);}
     void RecoverIntegrationStrain(double Amount){FractureModel.Recover(Amount/UnmadeCore::FractureModel::RecoveryPerSecond);}
+    bool CommitIntegrationRecovery(double Amount, TFunctionRef<bool()> Write);
 private:
     UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
     bool bFractureSaveRejected=false,bConflictSaveRejected=false;

@@ -9,7 +9,7 @@ def main():
   checks.append({'name':name,'passed':result.returncode==0,'evidence':(result.stdout+result.stderr)[-2000:]})
   return result.returncode==0
  with tempfile.TemporaryDirectory(prefix='unmade-audit-') as tmp:
-  for name,test in [('progression after spending','Tests/world/progression_resilience_test.cpp'),('atomic field recipes','Tests/items/field_craft_test.cpp'),('save recovery and cadence','Tests/save/session_policy_test.cpp'),('player-facing failure behavior','Tests/player/player_facing_resilience_test.cpp')]:
+  for name,test in [('recovery benefit and cost commit','Tests/save/recovery_commit_test.cpp'),('progression after spending','Tests/world/progression_resilience_test.cpp'),('atomic field recipes','Tests/items/field_craft_test.cpp'),('save recovery and cadence','Tests/save/session_policy_test.cpp'),('player-facing failure behavior','Tests/player/player_facing_resilience_test.cpp')]:
    exe=str(Path(tmp)/Path(test).stem)
    if run(name+' compile',['g++','-std=c++17','-Wall','-Wextra','-pedantic','-I','Source/TheUnmadeGame/Public',test,'-o',exe]):run(name,[exe])
   run('profile UI world dependencies',['python','-m','unittest','discover','-s','Scripts/tests','-p','test_rpg_loop_dependencies.py','-v'])

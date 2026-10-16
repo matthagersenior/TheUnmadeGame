@@ -1,3 +1,12 @@
+## Recovery commit correction — 16 October 2026
+
+Potion healing and finite Eillun healing / Saltwake Strain relief now enter the
+same save as their cost. Failed writes restore staged player recovery and caller
+costs. Portable fault tests cover capture order, reload values and rollback;
+Unreal compilation and storage acceptance remain pending. See
+[the audit and resume record](qa/first-playable-progress.md). Illustrated artifacts
+were not regenerated; the existing publication gate remains blocked.
+
 # Nine Realm Journeys v18
 
 Physical chamber arrival and encounter receipts now agree across nine realms. Added explicit journey objectives, route signs, confirmation previews and composed reload tests. Fixed journal equipment ownership and restricted wing surrender to Drevlach. Full illustrated v18 publication extends v17; engine acceptance is deferred.

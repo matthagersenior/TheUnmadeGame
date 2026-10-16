@@ -344,3 +344,9 @@ Second audit fixed isolated fieldwork saves, stale profile confirmation and auto
 Six follow-up audit fixes: scoped, visibly explained backup recovery without overwriting its target; single-pass binding labels; unobstructed alive/consenting merchant checks in both trade directions; native chosen-name and eight-aspect Character page; held stagger/death priority; production-rule behavioral audit coverage. Added actual Toggle Sneak access, eight menu pages and 28 complete action callbacks. A second inspection fixed feedback hidden behind the open menu. Existing saved IDs, wages, consent, protagonist origin, rewards and OPEN mysteries remain authoritative. Identity art remains prototype; no final face, hair, voice or mark assets claimed.
 
 Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`. Engine compilation, imports, storage interruption, controller focus/platform keyboard, collision, clip/audio timing and complete walkthroughs remain deferred. Chapter 40 and `docs/design/player-facing-reliability-v20-acceptance.md` record the source scope.
+# 16 October 2026 — recovery persistence correction
+
+Engineering-only correction: existing consumable and finite service recovery is
+captured with its cost, with failed-write rollback. No narrative or saved-ID
+changes. Portable tests added; no Unreal verification or illustrated artifact
+regeneration claimed. Historical publication receipt and hashes are unchanged.

@@ -4,6 +4,7 @@
 #include "World/UnmadeWorldAtlas.h"
 #include "World/UnmadeExpeditionRegistry.h"
 #include "Items/UnmadeEquipmentComponent.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeConfluenceRules.h"
 #include "Save/UnmadePrototypeSave.h"
@@ -224,12 +225,13 @@ bool UUnmadeEquipmentComponent::UseConsumable(UnmadeCore::ItemId Id,
     int heal=0,restore=0;
     if(Inventory.Consume(Id,Player->GetCombat()->GetMissingHealth(),
         CurrentStrain,heal,restore)!=UnmadeCore::ConsumeResult::Used) return false;
-    if(!Persist(FMath::Max(0.0,CurrentStrain-static_cast<double>(restore))))
+    if(!UnmadeCore::CommitHealing(*Player->GetCombat(), heal, [&] {
+        return Persist(FMath::Max(0.0,CurrentStrain-static_cast<double>(restore)));
+    }))
     {
         Inventory.Restore(Before);
         return false;
     }
-    if(heal>0) Player->GetCombat()->Heal(heal);
     OutStrain=restore;
     return true;
 }
