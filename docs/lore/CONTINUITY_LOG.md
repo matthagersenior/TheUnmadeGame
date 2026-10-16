@@ -357,3 +357,15 @@ At the creator's request, gameplay changes no longer require illustrated books,
 new images or publication receipts. Canon/ledger synchronization remains in CI.
 Existing briefs, publishing builders and historical artifact records are retained
 for optional use; no new illustration or book publication is claimed.
+
+
+## 16 October 2026 — combined save preservation
+
+Engineering correction only: a saved history must validate across its present
+subsystems before restoration, reward reconciliation, profile selection or
+backup rotation. Recovery retains its source until a primary save succeeds;
+failed potion persistence reports rollback. Stable identities, consent, wages,
+mutually exclusive outcomes and OPEN mysteries are unchanged. Optional fieldwork
+retains its legacy read path without bypassing a rejected history. Portable
+validation is recorded in `docs/qa/first-playable-progress.md`; Unreal storage and
+playthrough acceptance remain pending. Illustrations remain optional on request.

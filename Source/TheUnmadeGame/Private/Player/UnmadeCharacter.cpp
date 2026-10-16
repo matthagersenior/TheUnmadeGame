@@ -189,8 +189,15 @@ void AUnmadeCharacter::UseHealthPotion()
         UnmadeCore::ItemId::HearthSalve, UnmadeCore::ItemId::NightwatchTonic,
         UnmadeCore::ItemId::RootboundPoultice, UnmadeCore::ItemId::AshOfPossibleLives
     };
-    for (const auto Id : Potions)
-        if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored))
+    const auto result=UnmadeCore::UseFirstConsumable(Potions,[&](auto Id){
+        return Equipment->UseConsumable(Id,FractureModel.CurrentStrain(),Restored);
+    });
+    if(result==UnmadeCore::ConsumableCommit::SaveFailed){
+        UnmadeRpgFeedback(-1,8.f,FColor::Red,
+            TEXT("Potion could not be saved. Nothing consumed or restored; retry after checking Save Profiles."));
+        return;
+    }
+    if(result==UnmadeCore::ConsumableCommit::Used)
         {
             if (Restored > 0) FractureModel.Recover(Restored / UnmadeCore::FractureModel::RecoveryPerSecond);
             if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Green,
@@ -208,8 +215,15 @@ void AUnmadeCharacter::UseStrainPotion()
     const UnmadeCore::ItemId Potions[] = {
         UnmadeCore::ItemId::StrainVial, UnmadeCore::ItemId::AshOfPossibleLives
     };
-    for (const auto Id : Potions)
-        if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored))
+    const auto result=UnmadeCore::UseFirstConsumable(Potions,[&](auto Id){
+        return Equipment->UseConsumable(Id,FractureModel.CurrentStrain(),Restored);
+    });
+    if(result==UnmadeCore::ConsumableCommit::SaveFailed){
+        UnmadeRpgFeedback(-1,8.f,FColor::Red,
+            TEXT("Potion could not be saved. Nothing consumed or restored; retry after checking Save Profiles."));
+        return;
+    }
+    if(result==UnmadeCore::ConsumableCommit::Used)
         {
             if (Restored > 0) FractureModel.Recover(Restored / UnmadeCore::FractureModel::RecoveryPerSecond);
             if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Cyan,

@@ -467,3 +467,15 @@ authored effects and limits. The implementation now saves persistent recovery
 with the spent item or service use, rolling back on failure. No canon, consent,
 saved identifier, wage, ending or OPEN mystery changes. Unreal acceptance and
 illustrated publication remain pending; see `docs/qa/first-playable-progress.md`.
+
+
+## 16 October 2026 — combined save preservation
+
+Engineering correction only: a saved history must validate across its present
+subsystems before restoration, reward reconciliation, profile selection or
+backup rotation. Recovery retains its source until a primary save succeeds;
+failed potion persistence reports rollback. Stable identities, consent, wages,
+mutually exclusive outcomes and OPEN mysteries are unchanged. Optional fieldwork
+retains its legacy read path without bypassing a rejected history. Portable
+validation is recorded in `docs/qa/first-playable-progress.md`; Unreal storage and
+playthrough acceptance remain pending. Illustrations remain optional on request.

@@ -93,12 +93,13 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
     if(!GetWorld())return;
     FieldSurveyStages.Init(0,6);
     auto* Save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());
+    if(!Save&&UnmadeSave::HasRecord())bFieldSurveySaveUsable=false;
     {
         if(Save&&Save->bHasFieldSurveys){bFieldSurveySaveUsable=false;
             if(Save->FieldSurveyStages.Num()==6){bool valid=true;
                 for(int32 stage:Save->FieldSurveyStages)if(stage<0||stage>2)valid=false;
                 if(valid){FieldSurveyStages=Save->FieldSurveyStages;bFieldSurveySaveUsable=true;}}}
-        else if(UnmadeSave::SlotName()==TEXT("UnmadePrototypeNPC")&&UGameplayStatics::DoesSaveGameExist(TEXT("UnmadeOptionalFieldSurveys"),0))
+        else if(bFieldSurveySaveUsable&&UnmadeSave::SlotName()==TEXT("UnmadePrototypeNPC")&&UGameplayStatics::DoesSaveGameExist(TEXT("UnmadeOptionalFieldSurveys"),0))
         { // Read-only migration for the original profile; other profiles start independently.
             auto* legacy=Cast<UUnmadeFieldSurveySave>(UGameplayStatics::LoadGameFromSlot(TEXT("UnmadeOptionalFieldSurveys"),0));
             bFieldSurveySaveUsable=false;

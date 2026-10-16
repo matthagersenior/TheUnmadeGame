@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[2] / 'Source/TheUnmadeGame'
 class RecoveryCommitWiring(unittest.TestCase):
     def test_consumable_save_captures_healing_and_rolls_back_inventory(self):
         source = (ROOT / 'Private/Items/UnmadeEquipmentComponent.cpp').read_text()
-        use = source.split('bool UUnmadeEquipmentComponent::UseConsumable(', 1)[1].split('\nbool ', 1)[0]
+        use = source.split('UnmadeCore::ConsumableCommit UUnmadeEquipmentComponent::UseConsumable(', 1)[1].split('\nbool ', 1)[0]
         self.assertIn('CommitHealing', use)
         self.assertIn('Inventory.Restore(Before)', use)
         self.assertIn('Persist(', use)

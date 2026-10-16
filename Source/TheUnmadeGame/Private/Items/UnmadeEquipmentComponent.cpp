@@ -213,27 +213,27 @@ bool UUnmadeEquipmentComponent::EquipNext(UnmadeCore::GearSlot Slot){
 }
 FString UUnmadeEquipmentComponent::DescribeComparison()const{FString t=TEXT("EQUIPMENT COMPARISON / one active weapon and armor\n");int weapon=Loadout.weapon>=0?7+Loadout.weapon*2:0,armor=Loadout.armor>=0?5+Loadout.armor:0;if(Loadout.weapon<0)if(auto* d=UnmadeCore::FindItem(Inventory.Equipped(UnmadeCore::GearSlot::Weapon)))weapon=d->attack;if(Loadout.armor<0)if(auto* d=UnmadeCore::FindItem(Inventory.Equipped(UnmadeCore::GearSlot::Armor)))armor=d->armor;UnmadeCore::Expeditions e;if(!ReadOwnedExpeditions(e))return TEXT("Equipment record invalid; protected.");for(const auto& item:UnmadeCore::ItemCatalog)if(Inventory.Quantity(item.id)>0&&(item.slot==UnmadeCore::GearSlot::Weapon||item.slot==UnmadeCore::GearSlot::Armor)){bool w=item.slot==UnmadeCore::GearSlot::Weapon;t+=FString::Printf(TEXT("%s: %+d %s compared with active slot\n"),UTF8_TO_TCHAR(item.name),w?item.attack-weapon:item.armor-armor,w?TEXT("attack"):TEXT("armor"));}for(int a=0;a<9;++a)if(e.Arc(a)->reward){bool w=e.Arc(a)->reward==1;int value=w?7+a*2:5+a;t+=FString::Printf(TEXT("%s: +%d %s (%+d compared with active slot) %s\n"),UTF8_TO_TCHAR(w?UnmadeCore::ExpeditionSpecs[a].weapon:UnmadeCore::ExpeditionSpecs[a].armor),value,w?TEXT("attack"):TEXT("armor"),value-(w?weapon:armor),(w?Loadout.weapon:Loadout.armor)==a?TEXT("[ACTIVE]"):TEXT("[OWNED]"));}auto benefit=Loadout.Benefit();t+=FString::Printf(TEXT("Technique: +%d attack, +%d armor; Glimpse discount %d, Fold extension %d. Charm and build effects remain additional.\n"),Loadout.technique>=0?benefit.attack-(Loadout.weapon>=0?7+Loadout.weapon*2:0):0,Loadout.technique>=0?benefit.armor-(Loadout.armor>=0?5+Loadout.armor:0):0,benefit.glimpseDiscount,benefit.foldSeconds);return t;}
 
-bool UUnmadeEquipmentComponent::UseConsumable(UnmadeCore::ItemId Id,
+UnmadeCore::ConsumableCommit UUnmadeEquipmentComponent::UseConsumable(UnmadeCore::ItemId Id,
     double CurrentStrain,int32& OutStrain)
 {
     OutStrain=0;
-    if (bSaveRejected) return false;
+    if (bSaveRejected) return UnmadeCore::ConsumableCommit::SaveFailed;
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
     if(!IsValid(Player) || !IsValid(Player->GetCombat()) || Player->GetCombat()->IsDefeated())
-        return false;
+        return UnmadeCore::ConsumableCommit::Unavailable;
     const auto Before=Inventory.Snapshot();
     int heal=0,restore=0;
     if(Inventory.Consume(Id,Player->GetCombat()->GetMissingHealth(),
-        CurrentStrain,heal,restore)!=UnmadeCore::ConsumeResult::Used) return false;
+        CurrentStrain,heal,restore)!=UnmadeCore::ConsumeResult::Used) return UnmadeCore::ConsumableCommit::Unavailable;
     if(!UnmadeCore::CommitHealing(*Player->GetCombat(), heal, [&] {
         return Persist(FMath::Max(0.0,CurrentStrain-static_cast<double>(restore)));
     }))
     {
         Inventory.Restore(Before);
-        return false;
+        return UnmadeCore::ConsumableCommit::SaveFailed;
     }
     OutStrain=restore;
-    return true;
+    return UnmadeCore::ConsumableCommit::Used;
 }
 
 bool UUnmadeEquipmentComponent::ForgeWaybreaker()

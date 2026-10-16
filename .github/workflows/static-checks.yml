@@ -342,6 +342,8 @@ jobs:
 
       - name: Test ordinary spending, profile recovery and regional crafting dependencies
         run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/save/combined_integrity_test.cpp -o /tmp/unmade-combined-integrity
+          /tmp/unmade-combined-integrity
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/save/recovery_commit_test.cpp -o /tmp/unmade-recovery-commit
           /tmp/unmade-recovery-commit
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/save/session_policy_test.cpp -o /tmp/unmade-session-policy

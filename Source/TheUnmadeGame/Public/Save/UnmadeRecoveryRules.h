@@ -2,6 +2,17 @@
 #include <cmath>
 
 namespace UnmadeCore {
+enum class ConsumableCommit { Unavailable, Used, SaveFailed };
+// A failed commit must not fall through to a more valuable potion.
+template<class Items, class Use>
+ConsumableCommit UseFirstConsumable(const Items& items, Use use) {
+    for(const auto item:items){
+        const auto result=use(item);
+        if(result!=ConsumableCommit::Unavailable)return result;
+    }
+    return ConsumableCommit::Unavailable;
+}
+
 // Copying the model also preserves active Fold/Glimpse windows on failure;
 // restoring a persistent-only snapshot would incorrectly cancel those effects.
 template<class Fracture, class Writer>

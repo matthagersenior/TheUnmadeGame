@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Items/UnmadeItemRules.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "Items/UnmadeUnifiedLoadoutRules.h"
 #include "Items/UnmadeCraftEconomyRules.h"
 class UUnmadePrototypeSave;
@@ -24,7 +25,7 @@ public:
     FString DescribeComparison()const;
     void SetBuildBonuses(int Attack,int Armor){BuildAttack=Attack;BuildArmor=Armor;RefreshCombatBonuses();}
     bool EquipNext(UnmadeCore::GearSlot Slot);
-    bool UseConsumable(UnmadeCore::ItemId Item, double CurrentStrain, int32& OutStrain);
+    UnmadeCore::ConsumableCommit UseConsumable(UnmadeCore::ItemId Item, double CurrentStrain, int32& OutStrain);
     bool ForgeWaybreaker();
     bool Buy(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village,int Trust=0);
     bool Sell(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village);

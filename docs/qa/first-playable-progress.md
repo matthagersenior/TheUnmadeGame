@@ -26,9 +26,9 @@ with a focused transaction audit, not an exhaustive proof of every runtime flow.
 | --- | --- |
 | P0 implemented; UE pending | `Private/Items/UnmadeEquipmentComponent.cpp::UseConsumable` saved potion loss before healing, while `Private/Player/UnmadeCharacter.cpp::CaptureSession` captured old health. Shared `Public/Save/UnmadeRecoveryRules.h` now applies healing before synchronous save and restores health/stamina on failure; caller restores inventory. Immediate reload must preserve both cost and benefit. |
 | P0 implemented; UE pending | `Private/World/UnmadePlayerExperience.cpp::ExperienceAction` saved finite specialty use before Eillun healing / Saltwake Strain relief. Both persistent benefits now precede the same world commit; failed writes restore the service ledger and player values. Strain rollback copies the model to retain transient Fold/Glimpse windows. Temporary combat buffs retain existing session-only behavior. |
-| P1 next supported batch | `Private/Save/UnmadeSaveSession.cpp::Read` validates schema/resume only, but `SelectProfile` and `DescribeProfiles` call it as an availability check. Inventory/world validators run later in separate owners. Compose validation before profile switching and backup selection; inject malformed optional subrecords, preserve original bytes, and verify no mixed state or rewards. Do not silently migrate or erase identifiers. |
-| P1 feedback gap | `Private/Player/UnmadeCharacter.cpp::UseHealthPotion` / `UseStrainPotion` report no useful item when the bool adapter also represents failed persistence. Add explicit failure results so storage failure is distinguishable from no benefit; avoid trying subsequent potions after storage failure. |
-| P1 integrated first-playable evidence | `Public/World/UnmadeCampaignSpineRules.h`, `UnmadeRealmJourneyRules.h`, `Private/World/UnmadeCampaignWorld.cpp`, `Tests/integration/offline_slice_scenario.cpp`, `Tests/world/realm_journey_test.cpp`: portable branches/rewards/returns exist. Add a composed fault-injected save boundary across owners; then walk opening, investigation, combat, both civic choices, return feedback, recovery and reload in UE. Source/data checks do not prove reachable actors. |
+| P1 implemented; UE pending | `Public/Save/UnmadeCombinedSaveRules.h` preflights every present combined subrecord with disposable production models before profile availability, selection, restoration or backup rotation. Invalid records never reach reward reconciliation. Automatic recovery stays pinned until primary success. The legacy fieldwork sidecar is checked when needed and cannot bypass a rejected combined record. Portable malformed/failed-write/repeated-reload tests pass; actual platform IO remains unverified. |
+| P1 implemented; UE pending | Potion adapters return unavailable / used / save failed. Storage failure stops the potion search, restores staged costs/benefits and reports the failure. Load/recovery notices and profile availability now explain rejected records. Verify actual widget visibility and IO errors in Unreal. |
+| P1 integrated first-playable evidence | `Public/World/UnmadeCampaignSpineRules.h`, `UnmadeRealmJourneyRules.h`, `Private/World/UnmadeCampaignWorld.cpp`, `Tests/integration/offline_slice_scenario.cpp`, `Tests/world/realm_journey_test.cpp`: portable branches/rewards/returns exist. Next portable batch: extend the opening-to-return scenario through the combined boundary, both civic routes, consent/wage receipts and post-return reward reconciliation under failures. Then walk opening, investigation, combat, both civic choices, return feedback, recovery and reload in UE. Source/data checks do not prove reachable actors. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -52,8 +52,59 @@ repository directory is explicitly named.
   actual SaveGame serialization/reload, rendering, controller, collision,
   performance and packaging have not been verified in Unreal.
 
-Resume with the P1 composed save-validation batch above. Run
+Resume with the P1 opening-to-return integration batch above. Run
 `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`,
 `python -m unittest discover -s Scripts/tests -v`, and compile/run
 `Tests/save/recovery_commit_test.cpp` with the public include directory. Keep the
 optional illustration path available; update artifact receipts only for actual publications.
+
+
+## Combined integrity batch — 16 October 2026
+
+Reverified PR #74 open/draft at `ffdb2e7e98500f610513b5a09cd3d37d6a0911a2`.
+The fresh workspace had no checkout and its configured proxy refused Git
+transport. Retrieved all 483 branch blobs through the connected GitHub API and
+verified every original Git blob SHA. The local transport snapshot is retained on its own branch. Reconstructed the
+exact upstream commit and verified its SHA to use as the shallow parent; review
+changes therefore descend from the real PR head.
+No main merge or paid operation is authorized or performed here.
+
+Trace: schema/resume was the only session-wide check. Equipment, economy,
+loadout, language, identity, fracture/conflict, rites/confluences, NPC memory,
+fieldwork and world ledgers restored separately. Some world failures retained
+unaffected state; equipment could read completion flags before another owner
+rejected them. The previous-record backup candidate used the same incomplete
+session check. A complete schema-1 preflight now restores temporary models only,
+validates array shapes before indexing/narrowing, and rejects before owners or
+writers see the record. Existing identifiers and valid absent-field/28-item
+predecessors remain supported. Present world snapshots require their world
+clock; confluences require the chronicle their owner reads first. Wide rite bit
+fields cannot truncate into plausible values. No narrative consequence changes.
+
+`Tests/save/combined_integrity_test.cpp` runs the exact production preflight,
+selection and commit helpers with a portable record fixture (field parity checked
+by Python). It covers 40 malformed-record cases, bad values in populated late
+arrays, NPC provenance/duplicates, valid fully populated and older records,
+invalid outgoing writes, incompatible schemas, explicit/automatic recovery,
+backup failure, partially damaged primary failure, repeated failed retries,
+repeated reloads and idempotent milestone rewards. Potion search stops on failed
+persistence. This is fault injection in memory, not Unreal serialization or a
+claim of filesystem atomicity. A backup-write failure can damage that backup;
+the untouched primary remains the recovery source. A primary-write failure after
+backup success leaves the preceding complete record. Rejected originals are
+never intentionally rewritten by the validation/selection paths.
+
+Fresh checks: 311 Python tests and 62 portable C++17 executables passed with
+warnings as errors. The combined test also passed AddressSanitizer/UBSan with leak detection disabled
+(the sandbox prevents LeakSanitizer from running under ptrace). Removing
+the late witness check or outgoing preflight causes assertion failures. Repository,
+C++ literal, transmedia, hygiene, six Node release scenarios, gameplay dependency
+audit and canonical manuscript reconstruction checks pass. CI now runs the new
+combined test. No illustrated artifact was produced or required.
+
+Pending Unreal acceptance: UHT/Editor compilation, actual SaveGame read/write and
+partial-write behavior, profile travel failure, BeginPlay ordering, notices inside
+the widget tree, legacy fieldwork import and a full opening-to-return walkthrough.
+Before platform fault testing, copy originals outside the save directory. Exercise
+both civic routes, repeated recovery and reward reloads without overwriting those
+copies. Artwork, book publication and paid services are not prerequisites.

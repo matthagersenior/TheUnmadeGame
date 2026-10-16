@@ -1,3 +1,15 @@
+## Combined save integrity — 16 October 2026
+
+Complete-record preflight now gates loading, profile availability/selection and
+backup rotation. Malformed optional ledgers cannot partially restore or feed
+reward reconciliation. Recovery stays selected until a primary write succeeds;
+legacy fieldwork imports cannot bypass rejection. Potion failures stop fallback
+consumption and explain that recovery/costs were rolled back. Added portable
+combined-record fault injection, reward reload tests and CI wiring. Valid older
+schema-1 records, stable IDs and authored consequences are preserved. Unreal
+compilation, platform IO and playthrough acceptance remain pending; see
+[the compact backlog](qa/first-playable-progress.md).
+
 ## Optional illustrations — 16 October 2026
 
 Removed mandatory illustrated-book publication from the gameplay source gate.
