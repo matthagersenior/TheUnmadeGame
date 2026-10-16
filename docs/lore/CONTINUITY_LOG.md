@@ -608,3 +608,49 @@ readiness, rollback and repeated-award mutations are rejected. Structure, litera
 transmedia, hygiene, six source-release scenarios, manuscript and whitespace checks
 pass. Live main remains `9606fec4`, zero commits behind; PR #74 is mergeable.
 Prior head `96d9702` passed source-checks; this new head requires its own CI.
+
+## 2026-10-16 — World ownership and retryable timed progression
+
+A blocked startup/profile handoff no longer advances the living-world clock,
+rite-day effects or rumor propagation. Every combined writer now supplies its
+source owner; that owner's world must match the registered, restored player's
+accepted world before capture or backup rotation. Late callbacks from an old
+world cannot populate a destination profile after its new owner registers.
+
+Settlement visits now commit independently of arrival captions. A failed visit
+rolls back and retries while the player remains nearby; it no longer requires
+leaving and re-entering the settlement. Material production, named wages,
+foreign support and Bes's household advance as one staged day transaction.
+Failures restore all three models and retry no more than once per five active
+world seconds. Catch-up uses each simulated material day, preserving walkout,
+finite treasury and explicit Mera guarantee rules. Rite-day debt changes retry
+with the same cadence, and bonuses refresh after the attempted transition.
+First-failure notices explain pending visits, world days and rite consequences.
+No identifiers, reward amounts, consent requirements or authored outcomes change.
+
+Rumor failures remain pending for the next eight-second rumor timer even when
+no new conversation occurs. World checkpoints also capture current NPC memories.
+Both world and player memory saves replace rows only for the same stable person,
+preserving histories of unloaded residents. Shared portable replacement rules
+verify stable identity, repeated updates, retained absent witnesses and rumor
+provenance; malformed observations cannot replace a good record or backup.
+
+Portable coverage: 192 timed fault/recovery paths across all four profiles,
+primary/backup failures, recovery pins and malformed outgoing subrecords; 4,800
+reloads; ordinary work, Bes's walkout, Mera's explicit guarantee and actual
+foreign shelter support; blocked clocks and old/new-world identity; lagging-day
+catch-up and legacy initialization without retroactive production. These use
+production rules and in-memory fault storage. Unreal actors, actual timer order,
+serialization and filesystem interruption remain unverified.
+
+Next: audit action-triggered checkpoint writers and active-owner state capture,
+especially component-only saves versus unsaved world/NPC consequences. Keep
+Unreal UHT/build, startup/travel, UI/controller and interrupted IO pending.
+Artwork/books remain optional; no charges or merge into main.
+
+Fresh batch checks: 335 Python tests, 75 warning-clean portable C++17 executables
+and all 40 gameplay dependency checks pass. The final timed scenario passes UBSan.
+Seven mutations removing readiness, visit/rite/day rollback, retry cadence, world
+identity or resident identity are rejected. Structure, literals, transmedia,
+hygiene, six Node release scenarios, manuscript reconstruction and whitespace
+checks pass. Baseline `893c10a` passed GitHub source-checks; new-head CI is separate.

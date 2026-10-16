@@ -61,7 +61,7 @@ bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
             Save->bHasFieldSurveys=true;
             Save->FieldSurveyStages=FieldSurveyStages;
             Save->FieldSurveyStages[i]=Previous+1;
-            if(!UnmadeSave::SaveGameToSlot(Save))
+            if(!UnmadeSave::SaveGameToSlot(Save,this))
             {
                 if(GEngine)UnmadeRpgFeedback(-1,4.f,FColor::Red,
                     TEXT("Fieldwork could not save. No route or objective changed; try again."));

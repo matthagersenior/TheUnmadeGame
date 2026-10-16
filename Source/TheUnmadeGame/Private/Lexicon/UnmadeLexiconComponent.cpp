@@ -50,7 +50,7 @@ bool UUnmadeLexiconComponent::RecordEvidence(FName EvidenceId)
         Save->LexiconEvidence.Add(FName(UTF8_TO_TCHAR(Id.c_str())));
     }
 
-    if (!UnmadeSave::SaveGameToSlot(Save))
+    if (!UnmadeSave::SaveGameToSlot(Save,this))
     {
         Lexicon.Restore(Previous);
         if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,

@@ -9,6 +9,7 @@
 #include "World/UnmadeEvidenceProvenanceRules.h"
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
+#include "NPC/UnmadeMemorySaveRules.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Combat/UnmadeEnemyCharacter.h"
@@ -548,6 +549,7 @@ bool AUnmadePrototypeHub::SavePlayerSession(AUnmadeCharacter* Player)
 
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
+    if(!UnmadeSave::IsWorldWritable(GetWorld()))return false;
     if(!bFieldSurveySaveUsable)return false;
     if(bExpeditionSaveRejected)return false;
     if(bIdentitySaveRejected)return false;
@@ -566,6 +568,11 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bBesHouseholdRejected)return false;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return false;
+    for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc){
+        const FName Id=Npc->GetStableId();if(Id.IsNone())continue;
+        const auto Snapshot=Npc->GetMemory()->WriteSnapshot(Id);
+        if(!UnmadeCore::ReplaceNpcMemory(Save->NpcSnapshots,Snapshot))Save->NpcSnapshots.Add(Snapshot);
+    }
     Save->bHasFieldSurveys=true;Save->FieldSurveyStages=FieldSurveyStages;
     Save->bHasPlayerExperience=true;Save->PlayerExperienceState.Reset();for(int V:Experience.Pack())Save->PlayerExperienceState.Add(V);
     Save->bHasAdventureDepth=true;Save->AdventureDepthState.Reset();for(int V:Depth.Pack())Save->AdventureDepthState.Add(V);
@@ -788,7 +795,7 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
         Save->ResidentEncounterLastDays.Add(RS.lastDay[i]);
         Save->ResidentEncounterAidFlags.Add(RS.aids[i]);
     }
-    return UnmadeSave::SaveGameToSlot(Save);
+    return UnmadeSave::SaveGameToSlot(Save,this);
 }
 
 bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bCompleted)
@@ -1554,6 +1561,7 @@ void AUnmadePrototypeHub::BuildFrontiers()
 
 void AUnmadePrototypeHub::SaveLivingWorld()
 {
+    if(!UnmadeSave::IsWorldWritable(GetWorld()))return;
     if (!WriteWorldSnapshot())
         UE_LOG(LogTemp, Warning, TEXT("Living-world progress could not be saved"));
 }
@@ -1952,7 +1960,8 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     RefreshSimulationBudget();
 
     Super::Tick(DeltaSeconds);
-    if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
+    if(!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    if(!UnmadeCore::AdvanceWorldClock(Clock,true,DeltaSeconds))return;
     AdvanceMaterialDayIfNeeded();
     AnimateBesWorkingCart();
     UpdateBesQuestTracker();
@@ -2008,21 +2017,17 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
 
     const FVector Position = Player->GetActorLocation();
     const UnmadeCore::SettlementId Village = UnmadeCore::SettlementAt(Position.X, Position.Y);
+    const auto VisitResult=UnmadeCore::CommitSettlementVisit(VillagesVisited,Village,true,
+        GetWorld()->GetTimeSeconds(),SettlementVisitRetry,[&]{return WriteWorldSnapshot();});
+    if(VisitResult==UnmadeCore::TimedProgress::Saved)
+        if(auto* P=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))P->ReconcileEarnedRewards();
+    if(VisitResult==UnmadeCore::TimedProgress::FirstFailure)
+        NotifyRpg(TEXT("SETTLEMENT VISIT NOT SAVED: retrying while you remain here. Its reward has not been granted."));
     if (Village != LastVisitedVillage)
     {
         LastVisitedVillage = Village;
         if (const auto* VillageInfo = UnmadeCore::FindSettlement(Village))
         {
-            const int32 PreviouslyVisited = VillagesVisited.Snapshot();
-            const bool bNewVillage = VillagesVisited.Visit(Village);
-            if (bNewVillage)
-            {
-                if (!WriteWorldSnapshot())
-                    VillagesVisited.Restore(PreviouslyVisited);
-                else if (AUnmadeCharacter* UnmadePlayer = Cast<AUnmadeCharacter>(
-                    UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
-                    UnmadePlayer->ReconcileEarnedRewards();
-            }
             if (GEngine)
             {
                 const TCHAR* Line = (Phase == UnmadeCore::DayPhase::Night ||
@@ -2347,45 +2352,12 @@ void AUnmadePrototypeHub::AdvanceMaterialDayIfNeeded()
     for(int i=1;i<9;++i)
         if(const auto* L=OuterReactions.Read(static_cast<UnmadeCore::Realm>(i)))
             Civic[i]=L->PublicResponse();
-    const auto Before=Materials.Snapshot();
-    const auto Cargo=Materials.Cargo();
-    const auto BeforeLiving=LivingTrades.Save();
-    const auto BeforeBes=BesHousehold.Save();
-    if(!Materials.AdvanceAllOneDay(Civic,BesHousehold.OnWalkout()))return;
-    // Payroll follows the day actually simulated by the material ledger,
-    // never a skipped future clock day after reloading a lagging save.
-    if(!LivingTrades.AdvanceOneDay(Materials.Town(
-        UnmadeCore::Realm::ThreefoldReach)->day,BesHousehold.OnWalkout()))
-    {
-        Materials.Restore(Before,Cargo,GetGameDay());
-        return;
-    }
-    if(!BesHousehold.AdvanceOneDay(Materials.Town(
-        UnmadeCore::Realm::ThreefoldReach)->day))
-    {
-        Materials.Restore(Before,Cargo,GetGameDay());
-        LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
-        return;
-    }
-    // Actual receipts create a separate, finite reserve of FOREIGN support
-    // goods: casks never become baskets and baskets never become rainwater.
-    for(int i=0;i<9;++i)
-    {
-        const auto Realm=static_cast<UnmadeCore::Realm>(i);
-        const auto* Town=Materials.Town(Realm);
-        if(Town && Town->shortageDays>Before[i].shortageDays)
-        {
-            const int Support=LivingTrades.ApplyShelterSupport(Realm,*Town);
-            if(Support>0)Materials.ReinforceShelter(Realm,Support);
-        }
-    }
-    if(!WriteWorldSnapshot())
-    {
-        Materials.Restore(Before,Cargo,GetGameDay());
-        LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
-        BesHousehold.Restore(BeforeBes,GetGameDay());
-        return;
-    }
+    const auto Result=UnmadeCore::CommitMaterialDay(Materials,LivingTrades,BesHousehold,Civic,
+        GetGameDay(),UnmadeSave::IsWorldWritable(GetWorld()),GetWorld()->GetTimeSeconds(),MaterialDayRetry,
+        [&]{return WriteWorldSnapshot();});
+    if(Result==UnmadeCore::TimedProgress::FirstFailure)
+        NotifyRpg(TEXT("WORLD DAY NOT SAVED: household supplies and wages were unchanged. Retrying automatically."));
+    if(Result!=UnmadeCore::TimedProgress::Saved)return;
     RefreshMaterialWorld();
     RefreshBesHouseholdWorld();
 }
@@ -3357,7 +3329,7 @@ void AUnmadePrototypeHub::RestoreCitizens()
 void AUnmadePrototypeHub::SpreadLocalRumors()
 {
     UWorld* World = GetWorld();
-    if (!World) return;
+    if (!World||!UnmadeSave::IsWorldWritable(World)) return;
     TArray<AUnmadeNpcCharacter*> Citizens;
     for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
         Citizens.Add(*It);
@@ -3424,22 +3396,10 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
             }
         }
     }
-    if (bNewMemory) SaveCitizens();
+    if(bNewMemory)bNpcMemorySavePending=true;
+    if(bNpcMemorySavePending&&WriteWorldSnapshot())bNpcMemorySavePending=false;
 }
 
-void AUnmadePrototypeHub::SaveCitizens()
-{
-    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
-    if (!Save) return;
-    Save->NpcSnapshots.Reset(); // Avoid duplicates on repeated gossip saves.
-    for (TActorIterator<AUnmadeNpcCharacter> It(GetWorld()); It; ++It)
-    {
-        if (!It->GetStableId().IsNone())
-            Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
-    }
-    if (!UnmadeSave::SaveGameToSlot(Save))
-        UE_LOG(LogTemp, Error, TEXT("Unmade NPC social update save failed"));
-}
 
 void AUnmadePrototypeHub::PrepareRealmGeometry(const FVector& at,int limit){if(!GetWorld()||limit<1)return;int made=0;SpawningDeferred=true;for(int i=DeferredBlocks.Num()-1;i>=0&&made<limit;--i)if(FVector::DistSquared2D(at,DeferredBlocks[i].Center)<FMath::Square(30000.f)){auto b=DeferredBlocks[i];DeferredBlocks.RemoveAtSwap(i);SpawnBlock(b.Center,b.Scale,b.Label);++made;}SpawningDeferred=false;}
 void AUnmadePrototypeHub::RefreshSimulationBudget(){

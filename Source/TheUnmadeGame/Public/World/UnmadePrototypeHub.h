@@ -5,6 +5,7 @@
 #include "NPC/UnmadeNpcDecisionRules.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
 #include "World/UnmadeLivingWorldRules.h"
+#include "World/UnmadeTimedProgressRules.h"
 #include "World/UnmadeWitnessEchoRules.h"
 #include "World/UnmadeWitnessBraidRules.h"
 #include "World/UnmadeWitnessDispatchRules.h"
@@ -350,6 +351,8 @@ private:
     UPROPERTY(Transient)
     TObjectPtr<ADirectionalLight> Sunlight;
     UnmadeCore::LivingWorldClock Clock;
+    UnmadeCore::TimedProgressRetry MaterialDayRetry,SettlementVisitRetry;
+    bool bNpcMemorySavePending=false;
     UnmadeCore::RealityConsequenceLedger RealityLedger; // v1: Reach, do not migrate
     UnmadeCore::OuterRealmReactions OuterReactions; // eight isolated world histories
     UnmadeCore::MaterialWorld Materials;
@@ -490,7 +493,6 @@ private:
     void SpawnLoreSite(UnmadeCore::District District, FName SiteId,
         const TCHAR* Name, const TCHAR* DayLine, const TCHAR* NightLine, FVector Position);
     void SpreadLocalRumors();
-    void SaveCitizens();
     void SpawnBlock(FVector Center, FVector Scale, FName Label);
     void SpawnCitizen(const UnmadeCore::ResidentSpec& Resident);
     void BuildVillages();

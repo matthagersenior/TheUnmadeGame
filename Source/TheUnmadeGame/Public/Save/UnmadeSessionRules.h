@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 namespace UnmadeCore {
+inline bool SameSessionWorld(const void* registeredWorld,const void* sourceWorld){return registeredWorld&&sourceWorld&&registeredWorld==sourceWorld;}
 enum class CheckpointSave { Saved, PendingDefeat, Failed };
 // Session checkpoints must not claim completeness while an encounter receipt
 // awaits its own transaction. That transaction still uses the normal writer.

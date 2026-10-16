@@ -146,9 +146,12 @@ bool IsSessionWritable(const AUnmadeCharacter* Player){
     }
     return found;
 }
-bool SaveGameToSlot(USaveGame* raw){
+bool IsWorldWritable(const UWorld* World){
+ return SessionPlayer.IsValid()&&UnmadeCore::SameSessionWorld(SessionPlayer->GetWorld(),World)&&IsSessionWritable();
+}
+bool SaveGameToSlot(USaveGame* raw,const UObject* Owner){
     if(Handoff.WritesBlocked())return WriteFailed();
-    if(!IsSessionWritable())return WriteFailed();
+    if(!Owner||!IsWorldWritable(Owner->GetWorld()))return WriteFailed();
     const FString slot=SlotName();
     auto* stored=UGameplayStatics::LoadGameFromSlot(slot,0);
     auto* existing=Cast<UUnmadePrototypeSave>(stored);

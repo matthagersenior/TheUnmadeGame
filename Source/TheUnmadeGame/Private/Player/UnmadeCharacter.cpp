@@ -38,6 +38,7 @@
 #include "Dialogue/UnmadeLocalDialogueSubsystem.h"
 #include "Engine/GameInstance.h"
 #include "NPC/UnmadeMemoryComponent.h"
+#include "NPC/UnmadeMemorySaveRules.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/Engine.h"
@@ -644,7 +645,7 @@ bool AUnmadeCharacter::SaveLocalConflict()
     Save->bHasConflictSnapshot = true;
     Save->LocalConflictChoice = Snapshot.choice;
     Save->SupplyActivityStage = Snapshot.supplies;
-    return UnmadeSave::SaveGameToSlot(Save);
+    return UnmadeSave::SaveGameToSlot(Save,this);
 }
 
 void AUnmadeCharacter::ApplyConflictGates()
@@ -1322,7 +1323,7 @@ bool AUnmadeCharacter::SaveFractureState()
         ? NAME_None : FName(UTF8_TO_TCHAR(Snapshot.variant.c_str()));
     Save->PlayerStrain = Snapshot.strain;
     Save->bHasFractureSnapshot = true;
-    return UnmadeSave::SaveGameToSlot(Save);
+    return UnmadeSave::SaveGameToSlot(Save,this);
 }
 
 bool AUnmadeCharacter::CommitIntegrationRecovery(double Amount, TFunctionRef<bool()> Write)
@@ -1364,7 +1365,7 @@ bool AUnmadeCharacter::SaveCharacterIdentity()
     Save->CharacterIdentityChoices.Reset();
     for(const int Choice:State.options)Save->CharacterIdentityChoices.Add(Choice);
     Save->CharacterChosenName=GetCharacterChosenName();
-    return UnmadeSave::SaveGameToSlot(Save);
+    return UnmadeSave::SaveGameToSlot(Save,this);
 }
 
 bool AUnmadeCharacter::SetCharacterFeature(int32 Aspect,int32 Choice)
@@ -1655,16 +1656,16 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
 void AUnmadeCharacter::SaveNearbyNpcMemories()
 {
     UWorld* World = GetWorld();
-    if (!World) return;
+    if (!World||!UnmadeSave::IsWorldWritable(World)) return;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return;
-    Save->NpcSnapshots.Reset(); // Keep one snapshot per stable NPC ID.
     for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
     {
-        if (!It->GetStableId().IsNone())
-            Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
+        const FName Id=It->GetStableId();if(Id.IsNone())continue;
+        const auto Snapshot=It->GetMemory()->WriteSnapshot(Id);
+        if(!UnmadeCore::ReplaceNpcMemory(Save->NpcSnapshots,Snapshot))Save->NpcSnapshots.Add(Snapshot);
     }
-    if (!UnmadeSave::SaveGameToSlot(Save))
+    if (!UnmadeSave::SaveGameToSlot(Save,this))
     {
         UE_LOG(LogTemp, Error, TEXT("Unmade prototype NPC memory save failed"));
         if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,

@@ -46,7 +46,7 @@ class PrototypeSourceContractTests(unittest.TestCase):
         self.assertIn("Event.Evidence == EUnmadeEvidenceKind::Witnessed", p)
         self.assertIn("Listener->GetMemory()->HearRumor(", p)
         self.assertIn("Event.SubjectId", p)
-        self.assertIn("if (bNewMemory) SaveCitizens();", p)
+        self.assertIn("if(bNpcMemorySavePending&&WriteWorldSnapshot())bNpcMemorySavePending=false;", p)
 
     def test_host_preflight_fails_closed_if_missing_requirements(self):
         p = source("Scripts/check_unreal_host.ps1")

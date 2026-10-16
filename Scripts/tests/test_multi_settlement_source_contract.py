@@ -29,7 +29,7 @@ class MultiVillageSourceTests(unittest.TestCase):
         self.assertIn("LocalRumorTarget(HomeSettlement)",npc)
         self.assertIn("LocalInvestigationTarget(HomeSettlement)",npc)
         self.assertIn("FindNearbyCitizen(",player)
-        self.assertIn("Save->NpcSnapshots.Reset()",hub)
+        self.assertIn("ReplaceNpcMemory(Save->NpcSnapshots,Snapshot)",hub)
         self.assertNotIn("UUnmadeLocalDialogueSubsystem",npc)
 
     def test_local_village_tasks_and_save_are_authoritative(self):

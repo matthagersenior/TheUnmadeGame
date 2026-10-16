@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "World/UnmadeTenfoldChronicle.h"
+#include "World/UnmadeTimedProgressRules.h"
 #include "World/UnmadeConfluenceRules.h"
 #include <string>
 #include "UnmadeTenfoldComponent.generated.h"
@@ -65,5 +66,5 @@ private:
     int32 LastAppliedAttack=0;
     int32 LastAppliedArmor=0;
     UnmadeCore::RiteId ActiveRite=UnmadeCore::RiteId::Count;
-    double LastTickDayCheck=0;
+    UnmadeCore::TimedProgressRetry DaySaveRetry;
 };

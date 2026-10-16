@@ -29,6 +29,7 @@ integration need; preserve development momentum and do not merge into main.
 
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
+| P1 timed progression implemented; UE pending | Source owners bind every combined write to the registered world. Blocked worlds stop clock/rite-day/rumor advancement. Visits retry in place; failed day transactions restore production, wages, support and households together. Quiet gossip retries retain absent residents. 192 fault paths and 4,800 reloads pass portable tests; verify real timer/lifecycle ordering in Unreal. |
 | P1 implemented; UE pending | Startup rewards wait for registered player resume and world readiness. Failed starter/milestone/civic writes retry; checkpoints remain incomplete. Central saves require a restored owner and ready, accepted world. Older selected gear and spent starter supplies survive reloads. Verify actual BeginPlay/travel ordering and feedback in Unreal. |
 | P0 implemented; UE pending | `Private/Items/UnmadeEquipmentComponent.cpp::UseConsumable` saved potion loss before healing, while `Private/Player/UnmadeCharacter.cpp::CaptureSession` captured old health. Shared `Public/Save/UnmadeRecoveryRules.h` now applies healing before synchronous save and restores health/stamina on failure; caller restores inventory. Immediate reload must preserve both cost and benefit. |
 | P0 implemented; UE pending | `Private/World/UnmadePlayerExperience.cpp::ExperienceAction` saved finite specialty use before Tharniv healing / Saltwake Strain relief. Both persistent benefits now precede the same world commit; failed writes restore the service ledger and player values. Strain rollback copies the model to retain transient Fold/Glimpse windows. Temporary combat buffs retain existing session-only behavior. |
@@ -42,7 +43,7 @@ integration need; preserve development momentum and do not merge into main.
 | P1 defeat retries implemented; UE pending | Guardian/final-defeat commits attempt immediately, then retry failure every five active-world seconds instead of every actor tick. Success suppresses repeat commits for that phase. Portable tests cover 24 guardian and 72 final-phase fault/retry paths; confirmation expiry, retargeting, cancellation and consumed consent remain safe. |
 | P1 pending checkpoints implemented; UE pending | Session saves refuse to report success while an encounter receipt is pending. Read-only actor queries include hidden receipt owners and distinguish an old final body from the new phase. Load/New preserve unsaved-discard confirmation; explicit recovery never pre-saves. 114 portable fault sessions verify blocked checkpoint writes and normal saves after receipt commit. |
 | P1 handoff ownership implemented; UE pending | Target selection stays staged until a new-world owner registers. Travel failure restores original selection; a missing owner/failed world cannot unlock writes. Reentrant requests are rejected and destination backup pins survive arrival. All 64 profile/recovery combinations pass portable checks; UE delegate/build, startup ordering and real failed travel remain pending. |
-| P1 next realm batch | Inspect pre-registration inventory/reward initialization and fresh-profile/recovery readiness. Recheck drift before publishing; keep actual startup, UI/controller and platform IO pending. |
+| P1 next connected batch | Audit action-triggered and component-only save writers against unsaved world/NPC state. Keep actual startup, travel, UI/controller and platform IO pending; recheck drift before publishing. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -438,3 +439,49 @@ readiness, rollback and repeated-award mutations are rejected. Structure, litera
 transmedia, hygiene, six source-release scenarios, manuscript and whitespace checks
 pass. Live main remains `9606fec4`, zero commits behind; PR #74 is mergeable.
 Prior head `96d9702` passed source-checks; this new head requires its own CI.
+
+## 2026-10-16 — World ownership and retryable timed progression
+
+A blocked startup/profile handoff no longer advances the living-world clock,
+rite-day effects or rumor propagation. Every combined writer now supplies its
+source owner; that owner's world must match the registered, restored player's
+accepted world before capture or backup rotation. Late callbacks from an old
+world cannot populate a destination profile after its new owner registers.
+
+Settlement visits now commit independently of arrival captions. A failed visit
+rolls back and retries while the player remains nearby; it no longer requires
+leaving and re-entering the settlement. Material production, named wages,
+foreign support and Bes's household advance as one staged day transaction.
+Failures restore all three models and retry no more than once per five active
+world seconds. Catch-up uses each simulated material day, preserving walkout,
+finite treasury and explicit Mera guarantee rules. Rite-day debt changes retry
+with the same cadence, and bonuses refresh after the attempted transition.
+First-failure notices explain pending visits, world days and rite consequences.
+No identifiers, reward amounts, consent requirements or authored outcomes change.
+
+Rumor failures remain pending for the next eight-second rumor timer even when
+no new conversation occurs. World checkpoints also capture current NPC memories.
+Both world and player memory saves replace rows only for the same stable person,
+preserving histories of unloaded residents. Shared portable replacement rules
+verify stable identity, repeated updates, retained absent witnesses and rumor
+provenance; malformed observations cannot replace a good record or backup.
+
+Portable coverage: 192 timed fault/recovery paths across all four profiles,
+primary/backup failures, recovery pins and malformed outgoing subrecords; 4,800
+reloads; ordinary work, Bes's walkout, Mera's explicit guarantee and actual
+foreign shelter support; blocked clocks and old/new-world identity; lagging-day
+catch-up and legacy initialization without retroactive production. These use
+production rules and in-memory fault storage. Unreal actors, actual timer order,
+serialization and filesystem interruption remain unverified.
+
+Next: audit action-triggered checkpoint writers and active-owner state capture,
+especially component-only saves versus unsaved world/NPC consequences. Keep
+Unreal UHT/build, startup/travel, UI/controller and interrupted IO pending.
+Artwork/books remain optional; no charges or merge into main.
+
+Fresh batch checks: 335 Python tests, 75 warning-clean portable C++17 executables
+and all 40 gameplay dependency checks pass. The final timed scenario passes UBSan.
+Seven mutations removing readiness, visit/rite/day rollback, retry cadence, world
+identity or resident identity are rejected. Structure, literals, transmedia,
+hygiene, six Node release scenarios, manuscript reconstruction and whitespace
+checks pass. Baseline `893c10a` passed GitHub source-checks; new-head CI is separate.

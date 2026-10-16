@@ -98,7 +98,7 @@ bool UUnmadeEquipmentComponent::Persist(double UpdatedStrain)
         Save->PlayerStrain = UpdatedStrain;
         Save->bHasFractureSnapshot = true;
     }
-    return UnmadeSave::SaveGameToSlot(Save);
+    return UnmadeSave::SaveGameToSlot(Save,this);
 }
 
 FIntPoint UUnmadeEquipmentComponent::NativeGearBonuses()const{int attack=Inventory.AttackBonus(),armor=Inventory.ArmorBonus();for(int slot=0;slot<2;++slot)if((slot==0?Loadout.weapon:Loadout.armor)>=0)if(auto* item=UnmadeCore::FindItem(Inventory.Equipped(static_cast<UnmadeCore::GearSlot>(slot)))){attack-=item->attack;armor-=item->armor;}return FIntPoint(FMath::Max(0,attack+TemporaryAttack+ExpeditionAttack+BuildAttack),FMath::Max(0,armor+TemporaryArmor+ExpeditionArmor+BuildArmor));}

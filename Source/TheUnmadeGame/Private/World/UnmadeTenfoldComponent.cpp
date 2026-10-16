@@ -133,7 +133,7 @@ bool UUnmadeTenfoldComponent::Persist(bool bWriteStrain)
         Save->PlayerStrain=Player->GetRealityStrain();
         Save->bHasFractureSnapshot=true;
     }
-    return UnmadeSave::SaveGameToSlot(Save);
+    return UnmadeSave::SaveGameToSlot(Save,this);
 }
 
 UnmadeCore::RiteContext UUnmadeTenfoldComponent::GatherContext()
@@ -648,7 +648,7 @@ void UUnmadeTenfoldComponent::TickComponent(float DeltaSeconds,ELevelTick TickTy
     FActorComponentTickFunction* ThisTickFunction)
 {
     Super::TickComponent(DeltaSeconds,TickType,ThisTickFunction);
-    if(bSaveRejected || !GetWorld())return;
+    if(bSaveRejected || !GetWorld()||!UnmadeSave::IsWorldWritable(GetWorld()))return;
     double Now=GetWorld()->GetTimeSeconds();
     int Day=1;
     for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
@@ -657,11 +657,9 @@ void UUnmadeTenfoldComponent::TickComponent(float DeltaSeconds,ELevelTick TickTy
         Day=Hub->GetGameDay();
         break;
     }
+    const auto Result=UnmadeCore::CommitRiteDay(Chronicle,Day,true,
+        GetWorld()->GetTimeSeconds(),DaySaveRetry,[&]{return Persist();});
+    if(Result==UnmadeCore::TimedProgress::FirstFailure)
+        UnmadeRpgFeedback(-1,8.f,FColor::Orange,TEXT("RITE DAY NOT SAVED: the debt transition was rolled back. Retrying automatically."));
     RefreshTemporaryPowers(Now,Day);
-    if(Now>LastTickDayCheck+3)
-    {
-        LastTickDayCheck=Now;
-        const auto Before=Chronicle.Snapshot();
-        if(Chronicle.PassDay(Day) && !Persist())Chronicle.Restore(Before);
-    }
 }

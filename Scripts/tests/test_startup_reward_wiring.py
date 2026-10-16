@@ -18,8 +18,8 @@ class StartupRewardWiring(unittest.TestCase):
   for check in ('!SessionPlayer.IsValid()', 'Player!=p', '!p->HasActorBegunPlay()', '!p->IsSessionRestored()', '!h->IsWorldReady()', 'h->HasRejectedWorld()', 'return found;'):
    self.assertIn(check,ready)
   writer=s.split('bool SaveGameToSlot(',1)[1].split('bool SelectProfile(',1)[0]
-  self.assertLess(writer.index('!IsSessionWritable()'),writer.index('CaptureSession(s)'))
-  self.assertLess(writer.index('!IsSessionWritable()'),writer.index('CommitCombinedRecord'))
+  self.assertLess(writer.index('!IsWorldWritable(Owner->GetWorld())'),writer.index('CaptureSession(s)'))
+  self.assertLess(writer.index('!IsWorldWritable(Owner->GetWorld())'),writer.index('CommitCombinedRecord'))
  def test_failed_startup_retries_and_checkpoint_reports_pending(self):
   s=(ROOT/'Private/Player/UnmadeCharacter.cpp').read_text()
   begin=s.split('void AUnmadeCharacter::BeginPlay()',1)[1].split('void AUnmadeCharacter::Tick(',1)[0]
