@@ -126,3 +126,9 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
                    Beat.move==UnmadeCore::FinalMove::Still))
         SetActorRotation(Direction.Rotation());
 }
+
+bool AUnmadeFinalBoss::HasPendingDefeatSave(const AUnmadePrototypeHub& Hub)const
+{
+    return UnmadeCore::PendingFinalDefeat(IsValid(GetCombat())&&GetCombat()->IsDefeated(),
+        ConfiguredAct,Hub.GetFinalAct());
+}

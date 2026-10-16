@@ -501,3 +501,39 @@ Unreal acceptance tasks. Save identifiers, lore and optional artwork are intact.
 Next: audit manual saving and profile switching while a defeat receipt is still
 pending, especially whether success feedback accurately describes the committed
 state. Keep engine checks pending and preserve recovery-source protection.
+
+## 16 October 2026 — Checkpoints with pending encounter receipts
+
+A paused-menu Save Now previously wrote a checkpoint without an encounter's
+pending defeat receipt and reported success. Load/New Profile therefore skipped
+the existing unsaved-discard confirmation and could lose that victory. Session
+checkpoints now return pending before their writer runs. The menu explains that
+Continue lets automatic retries run; Load/New keep their existing explicit
+unsaved-discard confirmation. Backup recovery still never saves the current
+session first. Receipt transactions themselves retain access to the normal
+writer so they can finish and unblock the next checkpoint.
+
+The read-only query includes hidden defeated expedition actors, wing guardians/
+observer, road/Cinderhold elders, realm guardians and the final boss. Ordinary
+foes with no durable receipt do not block saves. Final actors compare configured
+phase with durable phase, so the old defeated body does not imply a defeat of the
+new, unfought health bar. No progression, consent, lore or save identifier changed.
+
+Portable tests cover 114 failed-write sessions: 12 guardian, 12 final-phase and
+90 expedition cases. They check zero checkpoint writes while pending, failed
+receipt rollback/recovery, target-profile isolation, explicit discard/recovery
+confirmation, normal post-commit saves and later ordinary write failures. Actor
+queries and widget routing have supplementary source checks; actual menu/travel
+and serialization are not executed. Removing the checkpoint gate or final-phase
+identity guard fails the composed assertions.
+
+Fresh checks: 325 Python tests, 72 warning-clean portable C++17 executables, all
+34 gameplay dependency checks and the new scenario under UBSan pass. Structure,
+literals, transmedia, hygiene, six Node release cases, manuscript, lore sync and
+whitespace checks pass. Prior head `4b65dc8` passed GitHub source-checks. Unreal
+actor discovery, pause/retry timing, feedback/controller and actual IO remain
+pending. No paid service, artwork or book publication was required.
+
+Next: inspect profile handoff failure/startup and restoration of the original
+profile/settings if travel cannot complete, without redirecting old live state
+into the selected target. Actual travel-failure verification needs Unreal.

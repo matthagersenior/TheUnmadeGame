@@ -69,8 +69,13 @@ Mera's consent; they do not turn every realm's resident into that storyline.
   failure and stop for a successfully committed phase. Portable fault/retry tests
   cover all six guardians and three final combat phases without repeat progression.
   Existing confirmation rules pass interruption, cancellation and retry checks.
-- Next source/portable expansion: manual saving/profile switching while defeat
-  receipts are pending, with accurate save feedback and protected recovery sources.
+- Checkpoints now stop before writing when an encounter receipt is pending;
+  the paused menu explains retry and Load/New retain discard confirmation.
+  Read-only queries include hidden receipt owners and guard final phase identity.
+  Portable fault tests cover 114 sessions and normal post-receipt saves.
+- Next source/portable expansion: failed profile travel/startup and safe original
+  profile/settings restoration. Actor discovery, pause timing, feedback and actual
+  target-world handoff still require Unreal acceptance.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,

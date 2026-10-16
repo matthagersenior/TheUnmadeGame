@@ -527,6 +527,25 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     RegionalTasks = RestoredTasks;
 }
 
+bool AUnmadePrototypeHub::HasPendingDefeatReceipts()const
+{
+    if(!GetWorld())return false;
+    // Defeated expedition actors can already be hidden. Query their durable
+    // owner state, never visibility, collision or whether Tick is enabled.
+    for(TActorIterator<AUnmadeEnemyCharacter> Enemy(GetWorld());Enemy;++Enemy)
+        if(Enemy->HasPendingDefeatSave(*this))return true;
+    return false;
+}
+
+bool AUnmadePrototypeHub::SavePlayerSession(AUnmadeCharacter* Player)
+{
+    const auto Result=UnmadeCore::CommitSessionCheckpoint(HasPendingDefeatReceipts(),
+        [&]{return WriteWorldSnapshot(Player);});
+    if(Result==UnmadeCore::CheckpointSave::PendingDefeat)
+        NotifyRpg(TEXT("An encounter victory still needs to save. Continue the game to allow its automatic retry; this checkpoint was not written."));
+    return Result==UnmadeCore::CheckpointSave::Saved;
+}
+
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
     if(!bFieldSurveySaveUsable)return false;

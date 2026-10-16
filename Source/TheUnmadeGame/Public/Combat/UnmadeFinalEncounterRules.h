@@ -10,6 +10,12 @@
 namespace UnmadeCore {
 enum class FinalAct:int { Veil=0, Unmasked=1, AnswerPending=2,
     OtherMorning=3, EchoAwake=4, EchoSettled=5 };
+// A dead actor for the preceding phase is not a pending defeat of the new
+// durable phase; its next Tick still needs to configure the new health bar.
+inline bool PendingFinalDefeat(bool defeated,int configuredAct,FinalAct durableAct){
+ return defeated&&configuredAct==static_cast<int>(durableAct)&&
+     (durableAct==FinalAct::Veil||durableAct==FinalAct::Unmasked||durableAct==FinalAct::EchoAwake);
+}
 enum class Morning:int { Unchosen=0, Anchor=1, Many=2 };
 enum class FinalResult { Locked, MaskBroken, TrueVictory, NewMorning,
     EchoStarted, EchoDefeated, AlreadyDone, WrongStage, Invalid };

@@ -12,6 +12,7 @@ class THEUNMADEGAME_API AUnmadeRealmGuardian : public AUnmadeEnemyCharacter
 public:
     AUnmadeRealmGuardian();
     virtual void Tick(float DeltaSeconds) override;
+    virtual bool HasPendingDefeatSave(const AUnmadePrototypeHub& Hub) const override;
     void ConfigureGuardian(UnmadeCore::Realm Id);
     UnmadeCore::Realm GetRealm() const {return HomeRealm;}
     void SetGuardianResolved();

@@ -13,6 +13,7 @@ class THEUNMADEGAME_API AUnmadeFinalBoss : public AUnmadeEnemyCharacter
 public:
     AUnmadeFinalBoss();
     virtual void Tick(float DeltaSeconds) override;
+    virtual bool HasPendingDefeatSave(const AUnmadePrototypeHub& Hub) const override;
 private:
     void ConfigureAct(UnmadeCore::FinalAct Act);
     UnmadeCore::FinalBattleRhythm Rhythm;

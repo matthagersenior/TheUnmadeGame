@@ -103,3 +103,10 @@ void AUnmadeRealmGuardian::Tick(float DeltaSeconds)
     }
     if(Distance>50)SetActorRotation(Delta.Rotation());
 }
+
+bool AUnmadeRealmGuardian::HasPendingDefeatSave(const AUnmadePrototypeHub& Hub)const
+{
+    return IsValid(GetCombat())&&GetCombat()->IsDefeated()&&
+        Hub.GetEchoQuestEnding(HomeRealm)!=0&&
+        Hub.GetRealmGuardianOutcome(HomeRealm)==UnmadeCore::GuardianOutcome::Unresolved;
+}
