@@ -133,6 +133,24 @@ public:
     }
 private:FinalSnapshot state_{};
 };
+// Stage the real return position before the synchronous combined save captures
+// the player. The caller owns movement; no quest, item or earlier choice resets.
+enum class FinalMorningCommit { Unavailable, Applied, RelocationFailed, SaveFailed };
+template<class Position,class Move,class Writer>
+FinalMorningCommit CommitFinalMorningAt(FinalJourney& story,Morning choice,
+    const Position beforePosition,const Position destination,Move move,Writer write){
+    const auto before=story.Snapshot();
+    if(story.ChooseWorld(choice)!=FinalResult::NewMorning)return FinalMorningCommit::Unavailable;
+    if(!move(destination)){
+        story.Restore(before);move(beforePosition);
+        return FinalMorningCommit::RelocationFailed;
+    }
+    if(!write()){
+        story.Restore(before);move(beforePosition);
+        return FinalMorningCommit::SaveFailed;
+    }
+    return FinalMorningCommit::Applied;
+}
 struct FinalBeat {
     FinalMove move=FinalMove::Still;
     FinalAttack attack=FinalAttack::Bell;

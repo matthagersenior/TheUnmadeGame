@@ -32,7 +32,8 @@ with a focused transaction audit, not an exhaustive proof of every runtime flow.
 | P1 realm loops implemented; UE pending | `Tests/integration/realm_local_loops_scenario.cpp` composes all nine realm identifiers across 54 branch/accord variants: witnessed return and equipment, mechanisms/surveys, road repairs, personal routes/caches/mastery, resident days/scenes, wings/guardians/upgrades, finite services and field recipes. 3,378 combined reloads, 7,296 failed-write recovery cases and 216 healing-service transactions pass. See [the realm checklist](realm-local-loop-checklist.md); this is model coverage, not a physical playthrough. |
 | P1 field kits implemented; UE pending | Earned kits can suppress any active unresolved realm chamber while preserving the supplying realm's favor/stock ledger. Save failures restore stock and report failure. All 81 supplier/destination pairs pass portable fault/reload checks; caches remain free and suppression session-only. |
 | P1 chapter consistency implemented; UE pending | `Tests/integration/echo_guardian_recovery_test.cpp` composes 96 later-realm first/aftermath/Echo/guardian paths, independent choices, resonance and individual returns. 5,760 reloads and 3,648 failed-write recoveries pass. Combined preflight rejects contradictory present chapter records before availability or writes; missing optional sections stay optional. Generic strangers no longer claim remembered changed mornings. |
-| P1 next realm batch | Trace resonance/final-morning prerequisites and public-versus-personal recognition in real adapters, including targeting, confirmation and save-error feedback. Keep engine reachability, schedules, serialization and presentation pending. |
+| P1 endgame consistency implemented; UE pending | Final-morning commits now save the return position with the chosen world and restore both on failure. Present final/Auvren and resonance/mastery/clock records must agree. Tests cover both mornings, six seeds, optional rematches, 216 reloads and 36 failed moves/writes. Optional side chapters remain optional. |
+| P1 next realm batch | Bound automatic retry of guardian/final-defeat save failures; check interrupted confirmations, repeated retries, idempotent progression and clear feedback. Keep engine traversal, presentation and actual IO pending. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -56,7 +57,7 @@ repository directory is explicitly named.
   actual SaveGame serialization/reload, rendering, controller, collision,
   performance and packaging have not been verified in Unreal.
 
-Resume with the P1 resonance/final-morning and recognition batch above. Run
+Resume with the P1 defeat-retry and confirmation batch above. Run
 `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`,
 `python -m unittest discover -s Scripts/tests -v`, and compile/run
 `Tests/save/recovery_commit_test.cpp` with the public include directory. Keep the
@@ -255,3 +256,40 @@ or removing the acquaintance gate is rejected by regression assertions. Source
 structure/literals, transmedia, hygiene, six Node release cases, manuscript,
 lore synchronization and whitespace checks pass. Prior commit `75a8da0` GitHub
 source-checks also passed; new-head CI is reported separately.
+
+## 16 October 2026 — Final-morning position and resonance prerequisites
+
+The final-morning adapter previously saved the new world before relocating the
+player, so immediate reload retained the old arena position. A shared portable
+transaction now stages the existing return point before synchronous combined
+capture. Failed movement writes nothing; failed writes restore the prior morning
+and position. Success feedback/world refresh follows persistence. The real actor
+movement callback and rollback still require Unreal verification.
+
+Combined preflight checks Auvren first-chapter completion before final progression
+when both optional records exist. Present Tenfold records must show the first
+resonance rite mastered for a pending window, and both rites for an open archive.
+Future-dated resonance windows are rejected against their saved world clock;
+expired windows remain valid and restartable. Missing optional chapter/rite
+sections retain their existing legacy policy. Optional Echo/guardian/observatory
+quests remain unnecessary for the final encounter. No save IDs, authored choices,
+consent, lore outcomes, item amounts or art requirements changed.
+
+Portable tests cover both mornings and six memory seeds (12 paths), 216 full
+reloads, 36 failed writes/moves, inventory/individual-history retention, optional
+rematches, all nine public local records and 24 resonance/mastery combinations.
+Expired windows restart and persist; contradictory records are rejected. A
+save-before-relocation mutation fails the saved-return-position assertion.
+The chapter fixture is shared by the existing 96-path scenario and final tests.
+
+Next: bound automatic retry of failed guardian/final-defeat commits and verify
+interrupted confirmations/repeated retries without duplicated progression or
+misleading feedback. Engine build, world traversal, UI/controller and actual
+platform serialization/interrupted IO remain pending. Artwork remains optional.
+
+Fresh checks: 320 Python tests, 69 portable C++17 executables with warnings as
+errors, all 28 gameplay dependency checks, final recovery and prerequisite cases
+under UBSan, and the saved-position mutation pass. Structure/literals, transmedia,
+hygiene, six Node release cases, manuscript, lore synchronization and whitespace
+checks pass. Prior head `1cc6761` also passed GitHub source-checks. This remains
+portable/static evidence; no Unreal build or playthrough was performed.

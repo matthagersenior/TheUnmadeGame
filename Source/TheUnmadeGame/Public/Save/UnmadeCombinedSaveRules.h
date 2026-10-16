@@ -123,6 +123,7 @@ bool ValidCombinedRecord(const Record& record, Text text)
             for(int j=0;j<i;++j)if(event.EventId==npc.Observations[j].EventId)return false;
         }
     }
+    UnmadeCore::TenfoldChronicle RestoredTenfold;
     if(Save->bHasTenfoldChronicle){
         if(Save->RiteStages.Num()!=10||Save->RiteChoices.Num()!=10||
            Save->RiteReadyAt.Num()!=10||Save->DisciplineMastery.Num()!=6||
@@ -140,7 +141,7 @@ bool ValidCombinedRecord(const Record& record, Text text)
         state.exhaustedUntilDay=Save->TomorrowDebtExhaustedUntil;
         state.brokenOaths=Save->BrokenOathCount;
         state.oathActive=Save->bOathActive;state.oathRedeemed=Save->bOathRedeemed;
-        TenfoldChronicle model;if(!model.Restore(state))return false;
+        if(!RestoredTenfold.Restore(state))return false;
     }
     if(Save->bHasConfluenceSnapshot){
         if(!Save->bHasTenfoldChronicle)return false;
@@ -282,6 +283,18 @@ bool ValidCombinedRecord(const Record& record, Text text)
         }
         if(!RestoredResonance.Restore(S))
         { return false; }
+        // An expired window is valid and restartable. A window whose first
+        // cast lies after its own persisted clock is a contradictory record.
+        for(int i=0;i<6;++i)if(S.stage[i]==1 &&
+            S.deadline[i]>Save->LivingWorldSeconds+UnmadeCore::RealmResonanceJourney::WindowSeconds)return false;
+        if(Save->bHasTenfoldChronicle)for(int i=0;i<6;++i){
+            if(S.stage[i]==0)continue;
+            const auto& spec=UnmadeCore::RealmResonances[i];
+            const auto first=S.firstCast[i]==1?spec.first:spec.second;
+            const auto other=S.firstCast[i]==1?spec.second:spec.first;
+            if(!RestoredTenfold.IsMastered(first) ||
+               (S.stage[i]==2 && !RestoredTenfold.IsMastered(other)))return false;
+        }
     }
     if(Save->bHasGuardianSnapshot)
     {
@@ -312,6 +325,8 @@ bool ValidCombinedRecord(const Record& record, Text text)
         };
         if(!RestoredFinal.Restore(State))
         { return false; }
+        if(Save->bHasLaterRealmSnapshot && State.act>0 &&
+           !RestoredLaterRealm.IsComplete(UnmadeCore::Realm::FirstAbsence))return false;
     }
     if(Save->bHasResidentContinuitySnapshot)
     {
