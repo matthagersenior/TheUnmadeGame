@@ -36,7 +36,7 @@ If the PC has no valid Python interpreter, no UE 5.8, insufficient disk/GPU prer
 - It will create .uasset/.umap authoring files on the local Windows clone, **not** push those binaries to `main`. Review and commit them using Git LFS after visual QA.
 - The Editor importer fails if no valid completion receipt can be written. It does not assert that imported DataTables are consumed at runtime: the source quest code remains authoritative.
 - If an Unreal 5.8 API or plugin differs and the Python commandlet fails, consult `editor-import.log`; this is a **first-PC integration issue**, not permission to bypass or manufacture a success receipt.
-- The version-controlled script does not auto-regenerate the separate illustrated Bible. **Canon changes still require new Volume X/next edition PDF, DOCX, ZIP and publication receipt under `docs/lore/UPDATE_POLICY.md`.** No new lore fact is asserted in this tool-only build.
+- The version-controlled script does not auto-regenerate the separate illustrated Bible. Illustrations and book publication are optional under `docs/lore/UPDATE_POLICY.md`; they do not block development or builds. No new lore fact is asserted in this tool-only build.
 
 ## Smallest useful proof on first PC
 

@@ -1,3 +1,10 @@
+## Optional illustrations — 16 October 2026
+
+Removed mandatory illustrated-book publication from the gameplay source gate.
+Canon and continuity co-updates remain required. Illustrations, authoring briefs,
+historical editions and book builders remain available on request; actual
+publication still requires truthful provenance and verified artifact hashes.
+
 ## Recovery commit correction — 16 October 2026
 
 Potion healing and finite Eillun healing / Saltwake Strain relief now enter the
@@ -5,7 +12,7 @@ same save as their cost. Failed writes restore staged player recovery and caller
 costs. Portable fault tests cover capture order, reload values and rollback;
 Unreal compilation and storage acceptance remain pending. See
 [the audit and resume record](qa/first-playable-progress.md). Illustrated artifacts
-were not regenerated; the existing publication gate remains blocked.
+were not regenerated; illustration publication is now optional.
 
 # Nine Realm Journeys v18
 

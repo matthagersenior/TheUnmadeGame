@@ -29,6 +29,6 @@ These are contracted gameplay designs with deterministic source rules and source
 5. Reward and discovery designed to reward attention and curiosity once, never an endlessly repeating chore.
 6. Atomic save/restore, corrupt data rejection, repeated-load robustness, player-facing journal, controller accessibility and explicit no-LLM dependency.
 7. Offline C++ tests, Python wiring checks, Unreal Editor build, test map launch, manual traversal of two endings and an end-to-end creator playtest on a supported host.
-8. Canon and illustrated package DOCX/PDF/art atlas/source appendix/manifest/ZIP must move together in one dated edition. Drawn concepts must be labeled as speculative.
+8. Keep canon and continuity records aligned with gameplay. Illustrations and illustrated packages are optional under `docs/lore/UPDATE_POLICY.md`. Label drawn concepts as speculative; verify artifacts and hashes when a publication is actually issued.
 
 Only after these eight checks may a later realm move from **atlas contract** to **verified playable destination**. A compiled graybox still is not a production-ready open-world continent.

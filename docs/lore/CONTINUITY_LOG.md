@@ -350,3 +350,10 @@ Engineering-only correction: existing consumable and finite service recovery is
 captured with its cost, with failed-write rollback. No narrative or saved-ID
 changes. Portable tests added; no Unreal verification or illustrated artifact
 regeneration claimed. Historical publication receipt and hashes are unchanged.
+
+## 16 October 2026 — illustrations made optional
+
+At the creator's request, gameplay changes no longer require illustrated books,
+new images or publication receipts. Canon/ledger synchronization remains in CI.
+Existing briefs, publishing builders and historical artifact records are retained
+for optional use; no new illustration or book publication is claimed.

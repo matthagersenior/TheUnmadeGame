@@ -33,14 +33,14 @@ with a focused transaction audit, not an exhaustive proof of every runtime flow.
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
 | P2 asset capability | `Scripts/build_skeletal_performance_kit.py`, audio generators, `Scripts/prepare_unreal_authoring.py`, `Scripts/unreal_editor/install_combat_events.py`: offline generators/import plans exist; no tracked game binaries were present. `game-dev` is unavailable locally. No provider job or paid generation was attempted. Prototype output is not imported/final art. |
-| Review/publication blocker | `Scripts/check_lore_change.py` requires canon, ledger, illustrated receipt and real artifact digest changes for gameplay source. External illustrated masters/recipe are absent. Canon/ledger record this engineering fix; historical release receipt/hashes stay untouched. This draft cannot satisfy the publication gate until actual artifacts are available and rebuilt. |
+| Publication requirement removed | Per the creator's 2026-10-16 instruction, `Scripts/check_lore_change.py` requires canon and ledger only. Illustrations/books remain optional on request; external masters are relevant only when issuing a new book. Historical release receipts/hashes and optional builders are preserved. |
 
 Source paths in this table are relative to `Source/TheUnmadeGame/` unless a
 repository directory is explicitly named.
 
 ## Verification and resume
 
-- Original baseline: 304 Python tests passed. Changed source: 306 passed.
+- Original baseline: 304 Python tests passed. Recovery batch: 306 passed; optional-illustration policy follow-up: 307 passed.
 - 61 portable C++17 test executables compiled with `-Wall -Wextra -Werror` and ran
   successfully; the expanded recovery test also passed after the Strain change.
 - Regression strength: reverting the helper to save-before-heal produced the
@@ -56,4 +56,4 @@ Resume with the P1 composed save-validation batch above. Run
 `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`,
 `python -m unittest discover -s Scripts/tests -v`, and compile/run
 `Tests/save/recovery_commit_test.cpp` with the public include directory. Keep the
-publication gate failure visible; do not fabricate artifact receipts to pass CI.
+optional illustration path available; update artifact receipts only for actual publications.
