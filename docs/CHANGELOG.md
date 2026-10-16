@@ -1,3 +1,14 @@
+## Realm-local loop audit — 16 October 2026
+
+Added combined-record coverage across nine realms for local witnesses, mechanisms,
+returns, repairs, wing progression, equipment, finite services and field recipes.
+Hunt rations, sanctuary rests and local-favor provisions now save healing with
+their spent receipt and roll back together on failure. Corrected the cache's
+phantom kit-cost prompt and the engineering label for Tharniv's existing healing
+specialty. Added the realm-local acceptance checklist; field-kit eligibility is
+an identified open design gap. No lore, IDs, prices, consent or authored quest
+prerequisites changed. Portable/UBSan checks pass; Unreal acceptance is pending.
+
 ## Opening-to-return save scenarios — 16 October 2026
 
 Added composed fault/reload coverage for both civic/frontier/return routes,
@@ -30,7 +41,7 @@ publication still requires truthful provenance and verified artifact hashes.
 
 ## Recovery commit correction — 16 October 2026
 
-Potion healing and finite Eillun healing / Saltwake Strain relief now enter the
+Potion healing and finite Tharniv healing / Saltwake Strain relief now enter the
 same save as their cost. Failed writes restore staged player recovery and caller
 costs. Portable fault tests cover capture order, reload values and rollback;
 Unreal compilation and storage acceptance remain pending. See

@@ -342,6 +342,8 @@ jobs:
 
       - name: Test ordinary spending, profile recovery and regional crafting dependencies
         run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/realm_local_loops_scenario.cpp -o /tmp/unmade-realm-local
+          /tmp/unmade-realm-local
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/living_economy_bounds_test.cpp -o /tmp/unmade-wage-bounds
           /tmp/unmade-wage-bounds
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/combined_slice_scenario.cpp -o /tmp/unmade-combined-slice

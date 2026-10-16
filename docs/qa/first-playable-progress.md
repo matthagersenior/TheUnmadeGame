@@ -25,11 +25,13 @@ with a focused transaction audit, not an exhaustive proof of every runtime flow.
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
 | P0 implemented; UE pending | `Private/Items/UnmadeEquipmentComponent.cpp::UseConsumable` saved potion loss before healing, while `Private/Player/UnmadeCharacter.cpp::CaptureSession` captured old health. Shared `Public/Save/UnmadeRecoveryRules.h` now applies healing before synchronous save and restores health/stamina on failure; caller restores inventory. Immediate reload must preserve both cost and benefit. |
-| P0 implemented; UE pending | `Private/World/UnmadePlayerExperience.cpp::ExperienceAction` saved finite specialty use before Eillun healing / Saltwake Strain relief. Both persistent benefits now precede the same world commit; failed writes restore the service ledger and player values. Strain rollback copies the model to retain transient Fold/Glimpse windows. Temporary combat buffs retain existing session-only behavior. |
+| P0 implemented; UE pending | `Private/World/UnmadePlayerExperience.cpp::ExperienceAction` saved finite specialty use before Tharniv healing / Saltwake Strain relief. Both persistent benefits now precede the same world commit; failed writes restore the service ledger and player values. Strain rollback copies the model to retain transient Fold/Glimpse windows. Temporary combat buffs retain existing session-only behavior. |
 | P1 implemented; UE pending | `Public/Save/UnmadeCombinedSaveRules.h` preflights every present combined subrecord with disposable production models before profile availability, selection, restoration or backup rotation. Invalid records never reach reward reconciliation. Automatic recovery stays pinned until primary success. The legacy fieldwork sidecar is checked when needed and cannot bypass a rejected combined record. Portable malformed/failed-write/repeated-reload tests pass; actual platform IO remains unverified. |
 | P1 implemented; UE pending | Potion adapters return unavailable / used / save failed. Storage failure stops the potion search, restores staged costs/benefits and reports the failure. Load/recovery notices and profile availability now explain rejected records. Verify actual widget visibility and IO errors in Unreal. |
 | P1 implemented; UE pending | `Tests/integration/combined_slice_scenario.cpp` composes the opening, combat health, both civic choices, Saltwake/Cinderhold first chapters, both Bellwold return outcomes and consenting wage guarantees through the combined boundary. 306 successful/faulted world commits and 112 reward/contract write failures converge under reload. This exercises production models and shared predicates, not actors or platform IO. |
-| P1 next portable batch | Extend `Tests/world/realm_journey_test.cpp` paths through the combined record: nine realm rescue/evidence branches, boss resolution, witnessed return, owned weapon/armor selection and wing progress. Include failed claim/selection writes, reload and recovery without losing ownership or reporting uncommitted benefits. |
+| P1 realm loops implemented; UE pending | `Tests/integration/realm_local_loops_scenario.cpp` composes all nine realm identifiers across 54 branch/accord variants: witnessed return and equipment, mechanisms/surveys, road repairs, personal routes/caches/mastery, resident days/scenes, wings/guardians/upgrades, finite services and field recipes. 3,378 combined reloads, 7,296 failed-write recovery cases and 216 healing-service transactions pass. See [the realm checklist](realm-local-loop-checklist.md); this is model coverage, not a physical playthrough. |
+| P1 realm-use gap | Field kits are bought after a local accord that needs boss resolution, but use requires an unresolved local boss/hazard. Existing cache progression is free. Gameplay preference requested: useful kit eligibility across active realms versus earlier local crafting, preserving saved ownership/story prerequisites. No speculative eligibility change has been made. |
+| P1 next realm batch | Compose each realm's existing first-chapter aftermath, Echo/resonance/guardian outcomes and resident return recognition with these local services, recipes, travel and recovery. Audit actual interaction targets/prompts and capacity failures. Keep Unreal reachability, schedules and presentation pending. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -152,3 +154,42 @@ transmedia, hygiene, six Node release scenarios, manuscript reconstruction and
 lore synchronization checks pass. Unreal compilation, actor reachability/order,
 platform interrupted writes, UI and full playthrough remain pending. No paid
 service, artwork or book publication was used.
+
+
+## Realm-local loops — 16 October 2026
+
+Baseline `f209064`. Broadened the audit beyond the dungeon return marker, using
+the [realm-local checklist](realm-local-loop-checklist.md) to track the place's
+existing mechanisms, people, services, crafting and return consequences together.
+No new quest, lore, art requirement or save field was added.
+
+Found and fixed two additional capture-order sites across all nine variants:
+`TryIdentityInteraction` (hunt ration / daily sanctuary) and `TryDepthInteraction`
+(local-favor provisions). Both saved their spent ledger before Heal(35), so an
+immediate reload could lose the benefit. The existing shared healing transaction
+now stages health before the same world write; failure restores health/stamina
+and the caller's identity/depth/challenge state. Eligibility, prices, health cap,
+35-health amount, four-provision limit, hunt uniqueness and daily rules remain.
+Old source-contract assertions that incorrectly required save-before-heal were
+corrected. The cache sign now reflects its already free, route-gated discovery.
+A stale engineering label was corrected: index-7 healing is Tharniv, while Eillun
+(index 6) retains its existing quiet-indexing specialty. No realm ID was renamed.
+
+The portable combined-record scenario covers 54 realm-local variants, 3,378 full
+reload checkpoints, 7,296 failed-write recoveries and 216 successful hunt/rest/
+provision transactions, including full-health refusal, clamped healing, once-only
+and daily limits, ingredient/output/skill accounting and retained equipment
+ownership. Reverting the shared helper to save-before-heal fails the saved-health
+assertion. It executes production models/helpers and captured-record restoration;
+actual actor conditions, rollback and serialization remain engine-dependent.
+
+Fresh checks: 318 Python tests, 65 portable C++17 executables with warnings as
+errors and 20 gameplay dependency checks pass. The expanded realm scenario passes
+UBSan with recovery disabled and runs in CI/audit. Source structure/literals,
+transmedia, hygiene, six Node release cases, manuscript reconstruction, lore sync
+and whitespace checks pass. No paid services or illustrated publication used.
+
+Unresolved gameplay choice: field kits cannot currently reach their intended
+active local hazard under the authored purchase/use prerequisites. The optional
+preference question is pending; existing ledgers and story gates remain intact.
+Engine/UI/playthrough acceptance remains pending for every checklist row.

@@ -1,4 +1,5 @@
 #include "World/UnmadePrototypeHub.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
 #include "Player/UnmadeCharacter.h"
@@ -36,7 +37,7 @@ void AUnmadePrototypeHub::BuildAdventureDepth(){
   SpawnBlock(Evidence(a)+FVector(0,0,-75),FVector(2,1,.5),FName(TEXT("PersonalEvidenceBench")));
   DepthEvidenceActors[a]=Object(Evidence(a)+FVector(0,0,-42),FVector(1,.6,.04),FName(*FString::Printf(TEXT("Depth.Evidence.%d"),a)));
   DepthCacheActors[a]=Object(Secret(a)+FVector(0,0,-60),FVector(1,1,.5),FName(*FString::Printf(TEXT("Depth.Cache.%d"),a)));
-  Sign(Evidence(a),TEXT("E - EXAMINE PERSONAL QUEST EVIDENCE"));Sign(Secret(a),FString(UTF8_TO_TCHAR(s.secret_name))+TEXT(" / E SEARCH WITH ONE FIELD KIT"));
+  Sign(Evidence(a),TEXT("E - EXAMINE PERSONAL QUEST EVIDENCE"));Sign(Secret(a),FString(UTF8_TO_TCHAR(s.secret_name))+TEXT(" / E SEARCH AFTER OPENING ROUTE"));
   SpawnBlock(Room(a,3)+FVector(-450,850,20),FVector(.2,7,2.4),FName(TEXT("SecretAlcoveWall")));
   auto* gate=GetWorld()->SpawnActor<AStaticMeshActor>(Room(a,3)+FVector(-825,500,20),FRotator::ZeroRotator);if(gate){auto* m=gate->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(7.5,.2,2.4));DepthSecretGates[a]=gate;}
   if(a==4){SpawnBlock(Room(a,2)+FVector(-700,650,240),FVector(7,4,.4),FName(TEXT("ChoirUpperWalkway")));auto* ramp=GetWorld()->SpawnActor<AStaticMeshActor>(Room(a,2)+FVector(0,650,90),FRotator(-16,0,0));if(ramp){auto* m=ramp->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(17,4,.35));}}
@@ -70,8 +71,8 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
  if(kind==4){if(Depth.Arc(arc)->route&&!Depth.Arc(arc)->secret){changed=Depth.Secret(arc,(e->rooms&8)!=0);if(!changed)Depth=before;}line=changed?FString(UTF8_TO_TCHAR(spec.secret_name))+TEXT(" found. Two local favor earned; the final mastery lesson is now available."):TEXT("Open the route, register chamber four and inspect the opened cache. Its discovery needs no consumable.");cue=TEXT("reward");}
  if(kind==5&&!ExperienceServicesOpen(arc)){NotifyRpg(ExperienceServiceHours(arc));return true;}
  if(kind==5){changed=Depth.Buy(arc,index,GetGameDay(),index!=0||p->GetCombat()->GetMissingHealth()>0);heal=changed&&index==0;line=changed?index==0?TEXT("Provision purchased. Up to 35 health restored."):index==1?TEXT("Field kit crafted. It suppresses a danger field; progression does not consume it."):TEXT("Earned mastery learned without spending favor. Improved stamina recovery, dodge and parry; F11 invokes your earned technique."):FString::Printf(TEXT("Service costs %d LOCAL FAVOR. Finish the personal quest first. Supplies: four total, once per day, while injured. Kits: capacity three. Training: route for level two, cache for level three."),Depth.Price(arc,index));cue=TEXT("reward");}
- if(changed&&!WriteWorldSnapshot(p)){Depth=before;DepthChallenges=beforeChallenge;NotifyRpg(TEXT("Save failed. Choice, resources and reward rolled back."));return true;}
- if(changed){if(kind==0){DepthPendingArc=-1;DepthPendingChoice=0;}if(heal)p->GetCombat()->Heal(35);UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==5&&index==1?TEXT("Repair"):TEXT("Inspect")));}
+ if(changed&&!UnmadeCore::CommitHealing(*p->GetCombat(),heal?35:0,[&]{return WriteWorldSnapshot(p);})){Depth=before;DepthChallenges=beforeChallenge;NotifyRpg(TEXT("Save failed. Choice, resources and reward rolled back."));return true;}
+ if(changed){if(kind==0){DepthPendingArc=-1;DepthPendingChoice=0;}UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==5&&index==1?TEXT("Repair"):TEXT("Inspect")));}
  if(kind==0||kind==1)RecordExperienceConversation(FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),arc,kind==0?0:3)),p);
  if(changed&&kind==0&&Depth.Arc(arc)->choice)LearnExperienceTutorial(4,p);
  if(changed&&kind==0&&Depth.Arc(arc)->choice)p->ReportIntegrationEvent(FName(Depth.Arc(arc)->choice==1?TEXT("World.PersonalReserve"):TEXT("World.PersonalWitness")),FName(*FString::Printf(TEXT("npc.expedition.%d.0"),arc)));

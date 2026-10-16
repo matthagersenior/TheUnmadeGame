@@ -382,3 +382,16 @@ No new lore, identifiers, consent rule, wage rate, reward or ending is introduce
 Portable scenarios and static adapter evidence are recorded in
 `docs/qa/first-playable-progress.md`; Unreal playthrough/storage checks remain
 pending. Illustrations remain optional on request.
+
+
+## 16 October 2026 — local recovery and realm-loop audit
+
+Engineering correction: existing hunt rations, sanctuary rests and purchased
+provisions retain their authored limits and 35-health effect. Successful saves
+now retain the benefit with the spent use/favor; failed writes restore both.
+Cache discovery remains free after its route is opened. Tharniv's existing
+index-7 healing specialty and Eillun's index-6 quiet indexing are unchanged;
+a prior engineering label was corrected. No story, stable ID, currency, consent,
+ending or OPEN mystery changed. See `docs/qa/realm-local-loop-checklist.md` for
+source/portable coverage and remaining Unreal acceptance. Field-kit progression
+eligibility remains an identified gap; illustrations remain optional.
