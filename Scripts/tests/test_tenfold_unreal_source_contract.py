@@ -74,8 +74,10 @@ class SignatureRiteIntegration(unittest.TestCase):
         for token in ("Chronicle.Restore(Previous)","Confluence.Restore(PriorConfluence)",
                       "Player->RefundRealityStrain(Power.cost)", "if(!Persist(true))"):
             self.assertIn(token,component)
-        self.assertIn("Achievement::RiteCartography",gear)
-        self.assertIn("Achievement::ConfluenceFirstAbsence",gear)
+        self.assertIn("ForEachEarnedMilestone(*Save",gear)
+        predicates=read("Source/TheUnmadeGame/Public/Items/UnmadeMilestoneRules.h")
+        self.assertIn("Achievement::RiteCartography",predicates)
+        self.assertIn("Achievement::ConfluenceFirstAbsence",predicates)
 
     def test_native_domain_suites_are_in_ci(self):
         wf=read(".github/workflows/static-checks.yml")

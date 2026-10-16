@@ -1,3 +1,14 @@
+## Opening-to-return save scenarios — 16 October 2026
+
+Added composed fault/reload coverage for both civic/frontier/return routes,
+once-only rewards/contracts, conserved named wages and Mera's persisted consent.
+Moved existing reward eligibility into shared production rules for these tests.
+Fixed untrusted wage-record arithmetic occurring before range checks. Realm
+reward selection now preserves prior active slots on failure and reports saved
+ownership plus a retry path instead of claiming the item was equipped. Existing
+IDs, rewards, outcomes and financial rules remain unchanged. UBSan regressions
+are in CI; Unreal/platform storage and playthrough checks remain pending.
+
 ## Combined save integrity — 16 October 2026
 
 Complete-record preflight now gates loading, profile availability/selection and

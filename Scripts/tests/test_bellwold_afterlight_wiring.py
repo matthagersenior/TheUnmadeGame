@@ -40,8 +40,10 @@ class BellwoldAfterlightWiring(unittest.TestCase):
         self.assertIn("if(bAfterlightSaveRejected || bRealmAftermathSaveRejected ||",world)
         self.assertIn("bLaterRealmSaveRejected || bEchoSaveRejected ||",world)
         self.assertIn("bResonanceSaveRejected || bGuardianSaveRejected ||",world)
-        self.assertIn("Achievement::AfterlightShelter",equipment)
-        self.assertIn("Achievement::AfterlightNames",equipment)
+        self.assertIn("ForEachEarnedMilestone(*Save",equipment)
+        predicates=read("Source/TheUnmadeGame/Public/Items/UnmadeMilestoneRules.h")
+        self.assertIn("Achievement::AfterlightShelter",predicates)
+        self.assertIn("Achievement::AfterlightNames",predicates)
     def test_npc_firsthand_testimony_and_offline_scenario(self):
         npc=read("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")
         memory=read("Source/TheUnmadeGame/Private/NPC/UnmadeMemoryComponent.cpp")

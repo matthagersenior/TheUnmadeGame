@@ -5,6 +5,7 @@
 #include "World/UnmadeExpeditionRegistry.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "Save/UnmadeRecoveryRules.h"
+#include "Items/UnmadeMilestoneRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeConfluenceRules.h"
 #include "Save/UnmadePrototypeSave.h"
@@ -125,85 +126,14 @@ void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
     const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
         UnmadeSave::LoadGameFromSlot());
     if (bSaveRejected || !Save || Save->SchemaVersion!=1) return;
-    const int32 Sites=Save->DiscoveredLoreMask;
-    struct Entry { UnmadeCore::Achievement Id; bool Earned; };
-    const Entry Earned[]={
-        {UnmadeCore::Achievement::BellwoldLanterns,Save->BellwoldTaskStage==2},
-        {UnmadeCore::Achievement::PaperhavenTestimony,Save->PaperhavenTaskStage==2},
-        {UnmadeCore::Achievement::ThreeVillages,(Save->VisitedSettlementsMask&7)==7},
-        {UnmadeCore::Achievement::EchoWell,(Sites&1)!=0},
-        {UnmadeCore::Achievement::PaperOrchard,(Sites&2)!=0},
-        {UnmadeCore::Achievement::SilentMile,(Sites&4)!=0},
-        {UnmadeCore::Achievement::BellGrave,(Sites&8)!=0},
-        {UnmadeCore::Achievement::DebtMarket,(Sites&16)!=0},
-        {UnmadeCore::Achievement::AllLandmarks,(Sites&63)==63},
-        {UnmadeCore::Achievement::ShelterSupplies,Save->bHasConflictSnapshot&&Save->SupplyActivityStage==2},
-        {UnmadeCore::Achievement::ShelterChoice,Save->bHasConflictSnapshot&&Save->LocalConflictChoice==1},
-        {UnmadeCore::Achievement::ResearchChoice,Save->bHasConflictSnapshot&&Save->LocalConflictChoice==2},
-        {UnmadeCore::Achievement::LanguageVeyl,
-            Save->LexiconEvidence.Contains(FName("evidence.glimpse")) &&
-            Save->LexiconEvidence.Contains(FName("evidence.archivist"))},
-        {UnmadeCore::Achievement::SaltwakeStory,
-            Save->bHasFrontierSnapshot && Save->FrontierEndings.Num()==2 &&
-            Save->FrontierEndings[0]!=0},
-        {UnmadeCore::Achievement::CinderholdStory,
-            Save->bHasFrontierSnapshot && Save->FrontierEndings.Num()==2 &&
-            Save->FrontierEndings[1]!=0},
-        {UnmadeCore::Achievement::RefugeCovenant,
-            Save->bHasFactionChronicle && Save->FactionEndings.Num()==3 &&
-            Save->FactionEndings[0]!=0},
-        {UnmadeCore::Achievement::ArchiveCovenant,
-            Save->bHasFactionChronicle && Save->FactionEndings.Num()==3 &&
-            Save->FactionEndings[1]!=0},
-        {UnmadeCore::Achievement::RoadboundCovenant,
-            Save->bHasFactionChronicle && Save->FactionEndings.Num()==3 &&
-            Save->FactionEndings[2]!=0},
-        {UnmadeCore::Achievement::RiteUnwriteLaw,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[0]==5},
-        {UnmadeCore::Achievement::RiteWitnesscraft,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[1]==5},
-        {UnmadeCore::Achievement::RiteBorrowedLives,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[2]==5},
-        {UnmadeCore::Achievement::RiteLegacyForging,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[3]==5},
-        {UnmadeCore::Achievement::RiteLivingRoads,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[4]==5},
-        {UnmadeCore::Achievement::RiteTomorrowDebt,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[5]==5},
-        {UnmadeCore::Achievement::RiteUnderstandingBosses,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[6]==5},
-        {UnmadeCore::Achievement::RiteParadoxConvergence,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[7]==5},
-        {UnmadeCore::Achievement::RiteOathbinding,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[8]==5},
-        {UnmadeCore::Achievement::RiteCartography,
-            Save->bHasTenfoldChronicle && Save->RiteStages.Num()==10 && Save->RiteStages[9]==5},
-        {UnmadeCore::Achievement::ConfluenceSilentAlarm,
-            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[0]==2},
-        {UnmadeCore::Achievement::ConfluenceTwoNames,
-            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[1]==2},
-        {UnmadeCore::Achievement::ConfluenceUnmappedWay,
-            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[2]==2},
-        {UnmadeCore::Achievement::ConfluenceTomorrowPromise,
-            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[3]==2},
-        {UnmadeCore::Achievement::ConfluenceTwoKeepers,
-            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[4]==2},
-        {UnmadeCore::Achievement::ConfluenceFirstAbsence,
-            Save->bHasConfluenceSnapshot && Save->ConfluenceStages.Num()==6 && Save->ConfluenceStages[5]==2},
-        {UnmadeCore::Achievement::AfterlightShelter,
-            Save->bHasAfterlightSnapshot && Save->BellwoldAfterlightStage==4 &&
-            Save->BellwoldAfterlightOutcome==1},
-        {UnmadeCore::Achievement::AfterlightNames,
-            Save->bHasAfterlightSnapshot && Save->BellwoldAfterlightStage==4 &&
-            Save->BellwoldAfterlightOutcome==2}
-    };
-    for(const Entry& Reward: Earned)
-        if(Reward.Earned) Claim(Reward.Id); // idempotent; never trusts model text
+    UnmadeCore::ForEachEarnedMilestone(*Save,
+        [&](const char* evidence){return Save->LexiconEvidence.Contains(FName(UTF8_TO_TCHAR(evidence)));},
+        [&](UnmadeCore::Achievement reward){Claim(reward);});
     ReconcileCivicContracts(Save);
 }
 
 bool UUnmadeEquipmentComponent::ReadOwnedExpeditions(UnmadeCore::Expeditions& Out)const{const auto* Save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());if(!Save)return true;if(Save->SchemaVersion!=1)return false;if(!Save->bHasExpeditions)return true;std::vector<int> p;for(int v:Save->ExpeditionState)p.push_back(v);return Out.Restore(p);}
-bool UUnmadeEquipmentComponent::SelectRealmReward(int Arc){if(bSaveRejected||Arc<0||Arc>=9)return false;UnmadeCore::Expeditions Earned;if(!ReadOwnedExpeditions(Earned)||!Earned.Arc(Arc)->reward)return false;auto old=Loadout;if(Earned.Arc(Arc)->reward==1)Loadout.weapon=Arc;else Loadout.armor=Arc;Loadout.technique=Arc;if(!Persist()){Loadout=old;return false;}auto b=Loadout.Benefit();SetExpeditionBonuses(b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);return true;}
+bool UUnmadeEquipmentComponent::SelectRealmReward(int Arc){if(bSaveRejected||Arc<0||Arc>=9)return false;UnmadeCore::Expeditions Earned;if(!ReadOwnedExpeditions(Earned)||!Earned.Arc(Arc)->reward)return false;if(!UnmadeCore::CommitRealmSelection(Loadout,Earned,Arc,[&]{return Persist();}))return false;auto b=Loadout.Benefit();SetExpeditionBonuses(b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);return true;}
 bool UUnmadeEquipmentComponent::EquipNext(UnmadeCore::GearSlot Slot){
  if(bSaveRejected)return false;UnmadeCore::Expeditions Earned;if(!ReadOwnedExpeditions(Earned))return false;const auto Before=Inventory.Snapshot();auto Old=Loadout;
  int count=static_cast<int>(UnmadeCore::ItemId::Count),current=static_cast<int>(Inventory.Equipped(Slot));int selected=Slot==UnmadeCore::GearSlot::Weapon?Loadout.weapon:Slot==UnmadeCore::GearSlot::Armor?Loadout.armor:-1;if(selected>=0)current=count+selected;int total=count+(Slot==UnmadeCore::GearSlot::Charm?0:9);
@@ -250,20 +180,11 @@ bool UUnmadeEquipmentComponent::ForgeWaybreaker()
 void UUnmadeEquipmentComponent::ReconcileCivicContracts(const UUnmadePrototypeSave* Save)
 {
     if(bSaveRejected || !Save || Save->SchemaVersion!=1)return;
-    struct Contract { UnmadeCore::SettlementId Town; int Stage; };
-    const Contract Contracts[]={
-        {UnmadeCore::SettlementId::Crossings,
-            Save->bHasConflictSnapshot&&Save->LocalConflictChoice!=0?2:0},
-        {UnmadeCore::SettlementId::Bellwold,Save->BellwoldTaskStage},
-        {UnmadeCore::SettlementId::Paperhaven,Save->PaperhavenTaskStage}
-    };
-    for(const Contract& Contract:Contracts)
-    {
+    UnmadeCore::ForEachCivicContract(*Save,[&](UnmadeCore::SettlementId town,int stage){
         const auto Before=Economy.Snapshot();
-        if(Economy.PayContract(Contract.Town,Contract.Stage)!=UnmadeCore::EconomyResult::Completed)
-            continue;
+        if(Economy.PayContract(town,stage)!=UnmadeCore::EconomyResult::Completed)return;
         if(!Persist())Economy.Restore(Before);
-    }
+    });
 }
 
 bool UUnmadeEquipmentComponent::Buy(UnmadeCore::ItemId Id,

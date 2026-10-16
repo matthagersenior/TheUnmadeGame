@@ -34,6 +34,9 @@ class GearSourceContract(unittest.TestCase):
     def test_earned_rewards_only_from_canonical_saved_state(self):
         cpp=read("Source/TheUnmadeGame/Private/Items/UnmadeEquipmentComponent.cpp")
         save=read("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
+        predicates=read("Source/TheUnmadeGame/Public/Items/UnmadeMilestoneRules.h")
+        self.assertIn("ForEachEarnedMilestone(*Save",cpp)
+        self.assertIn("ForEachCivicContract(*Save",cpp)
         for token in ("ItemQuantities","EquippedItems","AwardedMilestoneBits",
                       "bHasInventorySnapshot"):
             self.assertIn(token,save)
@@ -42,7 +45,7 @@ class GearSourceContract(unittest.TestCase):
                       "Save->VisitedSettlementsMask", "Save->DiscoveredLoreMask",
                       "Save->SupplyActivityStage == 2", "Inventory.Restore(Before)",
                       "if (bSaveRejected) return false"):
-            self.assertIn(token,cpp.replace("==2"," == 2"))
+            self.assertIn(token,(cpp+predicates).replace("==2"," == 2"))
         self.assertIn("Save->PlayerStrain = UpdatedStrain",cpp)
         self.assertIn("CommitHealing(*Player->GetCombat(), heal",cpp)
         self.assertNotIn("RequestDialogue(",cpp)

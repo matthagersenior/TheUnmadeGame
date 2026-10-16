@@ -479,3 +479,16 @@ mutually exclusive outcomes and OPEN mysteries are unchanged. Optional fieldwork
 retains its legacy read path without bypassing a rejected history. Portable
 validation is recorded in `docs/qa/first-playable-progress.md`; Unreal storage and
 playthrough acceptance remain pending. Illustrations remain optional on request.
+
+
+## 16 October 2026 — opening and return save evidence
+
+Engineering-only changes preserve both Crossings choices and both Bellwold
+return outcomes. Shared reward eligibility retains the existing authored grants;
+named wages and Mera's explicit consent remain distinct from player income.
+Malformed financial records are bounded before arithmetic. A saved realm reward
+remains owned when equipment selection fails, with truthful retry feedback.
+No new lore, identifiers, consent rule, wage rate, reward or ending is introduced.
+Portable scenarios and static adapter evidence are recorded in
+`docs/qa/first-playable-progress.md`; Unreal playthrough/storage checks remain
+pending. Illustrations remain optional on request.
