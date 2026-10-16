@@ -56,10 +56,13 @@ Mera's consent; they do not turn every realm's resident into that storyline.
 - Aftermath coverage now composes both endings in all nine realms with individual
   resident return ledgers through combined-record reloads. This does not establish
   NPC witness knowledge or actor interaction coverage.
-- Next source/portable expansion: compose first-chapter aftermath/Echo/guardian
-  consequences and their resident return recognition with these local loops;
-  inspect targeting, feedback and empty/full-capacity behavior in each real
-  adapter. Existing unit coverage is not proof of a composed realm visit.
+- Echo/guardian composition now covers 96 paths through first chapter, aftermath,
+  Echo, guardian, resonance and individual return ledgers, including independent
+  authored answers, confirmation and failed writes. Present chapter records must
+  agree on their existing prerequisites; omitted optional sections stay optional.
+- Next source/portable expansion: trace resonance/final-morning prerequisites and
+  public-versus-personal recognition in their real adapters. Guardian targeting,
+  NPC witness knowledge and control feedback still need actual engine acceptance.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,

@@ -80,7 +80,7 @@ private:ResidentContinuitySnapshot state_{};
 inline const char* ResidentContinuityLine(Familiarity level,bool aided,
                                            bool localStoryKnown,
                                            bool newMorning)noexcept {
-    if(newMorning&&localStoryKnown)
+    if(newMorning&&localStoryKnown&&level>=Familiarity::Acquainted)
         return "The sky has changed, and I remember the road you helped us keep. Ask me what is different now.";
     if(aided)return "You've come back. I remember the help you gave me; there is room for you beside our fire.";
     if(localStoryKnown&&level>=Familiarity::Acquainted)

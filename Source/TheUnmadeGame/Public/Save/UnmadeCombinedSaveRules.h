@@ -292,6 +292,19 @@ bool ValidCombinedRecord(const Record& record, Text text)
         if(!RestoredGuardians.Restore(S))
         { return false; }
     }
+    // Optional older records may omit a chapter. When both sections are
+    // present, independently valid snapshots must agree on authored gates.
+    for(const auto& chapter:UnmadeCore::LaterRealms){
+        const auto realm=chapter.realm;
+        if(Save->bHasLaterRealmSnapshot && !RestoredLaterRealm.IsComplete(realm) &&
+           ((Save->bHasRealmAftermathSnapshot && RestoredRealmAftermath.Stage(realm)>0) ||
+            (Save->bHasEchoQuestSnapshot && RestoredEcho.Stage(realm)>0)))return false;
+        if(Save->bHasRealmAftermathSnapshot && RestoredRealmAftermath.Stage(realm)!=4 &&
+           Save->bHasEchoQuestSnapshot && RestoredEcho.Stage(realm)>0)return false;
+        if(Save->bHasEchoQuestSnapshot && RestoredEcho.Ending(realm)==0 &&
+           ((Save->bHasGuardianSnapshot && RestoredGuardians.Outcome(realm)!=UnmadeCore::GuardianOutcome::Unresolved) ||
+            (Save->bHasRealmResonanceSnapshot && RestoredResonance.Stage(realm)>0)))return false;
+    }
     if(Save->bHasFinalEncounterSnapshot)
     {
         const UnmadeCore::FinalSnapshot State{

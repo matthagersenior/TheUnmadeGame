@@ -342,6 +342,8 @@ jobs:
 
       - name: Test ordinary spending, profile recovery and regional crafting dependencies
         run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/echo_guardian_recovery_test.cpp -o /tmp/unmade-echo-guardian
+          /tmp/unmade-echo-guardian
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/realm_return_recovery_test.cpp -o /tmp/unmade-realm-return
           /tmp/unmade-realm-return
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/realm_local_loops_scenario.cpp -o /tmp/unmade-realm-local
