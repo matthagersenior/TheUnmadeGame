@@ -33,7 +33,8 @@ with a focused transaction audit, not an exhaustive proof of every runtime flow.
 | P1 field kits implemented; UE pending | Earned kits can suppress any active unresolved realm chamber while preserving the supplying realm's favor/stock ledger. Save failures restore stock and report failure. All 81 supplier/destination pairs pass portable fault/reload checks; caches remain free and suppression session-only. |
 | P1 chapter consistency implemented; UE pending | `Tests/integration/echo_guardian_recovery_test.cpp` composes 96 later-realm first/aftermath/Echo/guardian paths, independent choices, resonance and individual returns. 5,760 reloads and 3,648 failed-write recoveries pass. Combined preflight rejects contradictory present chapter records before availability or writes; missing optional sections stay optional. Generic strangers no longer claim remembered changed mornings. |
 | P1 endgame consistency implemented; UE pending | Final-morning commits now save the return position with the chosen world and restore both on failure. Present final/Auvren and resonance/mastery/clock records must agree. Tests cover both mornings, six seeds, optional rematches, 216 reloads and 36 failed moves/writes. Optional side chapters remain optional. |
-| P1 next realm batch | Bound automatic retry of guardian/final-defeat save failures; check interrupted confirmations, repeated retries, idempotent progression and clear feedback. Keep engine traversal, presentation and actual IO pending. |
+| P1 defeat retries implemented; UE pending | Guardian/final-defeat commits attempt immediately, then retry failure every five active-world seconds instead of every actor tick. Success suppresses repeat commits for that phase. Portable tests cover 24 guardian and 72 final-phase fault/retry paths; confirmation expiry, retargeting, cancellation and consumed consent remain safe. |
+| P1 next realm batch | Audit manual-save and profile-switch behavior while defeat receipts are pending, including accurate success feedback, retained current progress and recovery-source protection. Keep actual timing, actor/controller flow and platform IO pending. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -57,7 +58,7 @@ repository directory is explicitly named.
   actual SaveGame serialization/reload, rendering, controller, collision,
   performance and packaging have not been verified in Unreal.
 
-Resume with the P1 defeat-retry and confirmation batch above. Run
+Resume with the P1 pending-receipt/manual-save/profile-switch batch above. Run
 `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`,
 `python -m unittest discover -s Scripts/tests -v`, and compile/run
 `Tests/save/recovery_commit_test.cpp` with the public include directory. Keep the
@@ -293,3 +294,32 @@ under UBSan, and the saved-position mutation pass. Structure/literals, transmedi
 hygiene, six Node release cases, manuscript, lore synchronization and whitespace
 checks pass. Prior head `1cc6761` also passed GitHub source-checks. This remains
 portable/static evidence; no Unreal build or playthrough was performed.
+
+## 16 October 2026 — Bounded defeat-save retries
+
+Guardian and final-boss defeat branches retried failed persistence on every
+0.1-second actor tick. Both now use a shared session-only scheduler: attempt
+immediately, retry failures after five active-world seconds, and stop after a
+successful commit for that realm/phase. Actor/phase configuration resets the
+scheduler. Existing defeated state and transaction rollback remain authoritative;
+no victory, reward, health reset or next phase is invented on a failed save.
+The first failure explains automatic retry and loss of unsaved progress on reload.
+Other enemy receipt paths already have bounded delays and remain unchanged.
+
+Portable coverage adds 24 guardian and 72 final-phase failed-write/retry paths,
+including damaged backup/primary writes, recovery selection and suppression of
+repeated commits. A minute-long outage produces 13 callback attempts rather than
+601. Invalid clocks and new phases/resets are covered. Expired, changed-control,
+cancelled, consumed and reloaded confirmations cannot replay prior consent; no
+consent rule changed. Removing the delay or settled guard fails regression tests.
+
+Fresh checks: 322 Python tests, 71 warning-clean portable C++17 executables and
+all 32 gameplay dependency checks pass. New tests pass UBSan. Structure/literals,
+transmedia, hygiene, six Node release cases, manuscript, lore synchronization and
+whitespace checks pass. Prior head `ad96172` passed GitHub source-checks. Actor
+execution, real IO, actual retry timing and feedback/controller flow remain
+Unreal acceptance tasks. Save identifiers, lore and optional artwork are intact.
+
+Next: audit manual saving and profile switching while a defeat receipt is still
+pending, especially whether success feedback accurately describes the committed
+state. Keep engine checks pending and preserve recovery-source protection.

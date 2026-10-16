@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Combat/UnmadeRealmGuardianRules.h"
+#include "Save/UnmadeDefeatSaveRetryRules.h"
 #include "UnmadeRealmGuardian.generated.h"
 
 UCLASS()
@@ -17,5 +18,6 @@ public:
 private:
     UnmadeCore::Realm HomeRealm=UnmadeCore::Realm::Count;
     UnmadeCore::GuardianBeat Encounter{UnmadeCore::Realm::Count};
+    UnmadeCore::DefeatSaveRetry DefeatSave;
     bool bWarningShown=false;
 };

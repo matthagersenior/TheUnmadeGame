@@ -15,6 +15,7 @@ AUnmadeFinalBoss::AUnmadeFinalBoss()
 void AUnmadeFinalBoss::ConfigureAct(UnmadeCore::FinalAct Act)
 {
     Rhythm.Reset();
+    DefeatSave.Reset();
     ConfiguredAct=static_cast<int32>(Act);
     bWarningShown=false;
     ConfigureStyle(UnmadeCore::EnemyStyle::Watcher);
@@ -46,12 +47,15 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
     if(ConfiguredAct!=static_cast<int>(Act))ConfigureAct(Act);
     if(GetCombat()->IsDefeated())
     {
-        if(Act==UnmadeCore::FinalAct::Veil)
-            Hub->BreakFinalMask(); // False victory: the second bar is ACTUALLY different.
-        else if(Act==UnmadeCore::FinalAct::Unmasked)
-            Hub->BreakFinalCore();
-        else if(Act==UnmadeCore::FinalAct::EchoAwake)
-            Hub->SettleFinalEcho();
+        const auto Saved=DefeatSave.Attempt(static_cast<int>(Act),World->GetTimeSeconds(),[&]{
+            if(Act==UnmadeCore::FinalAct::Veil)return Hub->BreakFinalMask();
+            if(Act==UnmadeCore::FinalAct::Unmasked)return Hub->BreakFinalCore();
+            if(Act==UnmadeCore::FinalAct::EchoAwake)return Hub->SettleFinalEcho();
+            return false;
+        });
+        if(Saved==UnmadeCore::DefeatSaveResult::FirstFailure)
+            UnmadeRpgFeedback(-1,10.f,FColor::Red,
+                TEXT("This phase victory is not saved. Retrying every five seconds; reloading returns to the previous save."));
         return; // failed persistence never invents a victory or instant heal
     }
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(

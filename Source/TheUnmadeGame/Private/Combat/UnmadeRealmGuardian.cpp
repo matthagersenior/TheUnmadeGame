@@ -17,6 +17,7 @@ void AUnmadeRealmGuardian::ConfigureGuardian(UnmadeCore::Realm Id)
 {
     const int idx=UnmadeCore::LaterIndex(Id);
     if(idx<0)return;
+    DefeatSave.Reset();
     HomeRealm=Id;
     Encounter=UnmadeCore::GuardianBeat(Id);
     const auto& Profile=UnmadeCore::RealmGuardians[idx];
@@ -51,7 +52,11 @@ void AUnmadeRealmGuardian::Tick(float DeltaSeconds)
     {
         // Keep defeated actor available for retry if persistence fails. Never
         // falsely report an ending or discard an old save on a failed write.
-        Hub->ResolveRealmGuardian(HomeRealm,false);
+        const auto Saved=DefeatSave.Attempt(static_cast<int>(HomeRealm),World->GetTimeSeconds(),
+            [&]{return Hub->ResolveRealmGuardian(HomeRealm,false);});
+        if(Saved==UnmadeCore::DefeatSaveResult::FirstFailure)
+            UnmadeRpgFeedback(-1,10.f,FColor::Red,
+                TEXT("Guardian victory is not saved. Retrying every five seconds; reloading returns to the previous save."));
         return;
     }
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(

@@ -65,9 +65,12 @@ Mera's consent; they do not turn every realm's resident into that storyline.
   across both mornings, six memory seeds, write/move failures and optional rematch.
   Present final/Auvren and resonance/mastery/clock records must agree; optional
   side quests remain optional and expired resonance windows remain restartable.
-- Next source/portable expansion: bound defeat-save retry cadence and check
-  interrupted confirmations, repeated commits and player feedback. Actual NPC
-  witness knowledge, movement and controller presentation need engine acceptance.
+- Guardian/final-defeat retries now attempt immediately, wait five seconds after
+  failure and stop for a successfully committed phase. Portable fault/retry tests
+  cover all six guardians and three final combat phases without repeat progression.
+  Existing confirmation rules pass interruption, cancellation and retry checks.
+- Next source/portable expansion: manual saving/profile switching while defeat
+  receipts are pending, with accurate save feedback and protected recovery sources.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,

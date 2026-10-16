@@ -342,6 +342,10 @@ jobs:
 
       - name: Test ordinary spending, profile recovery and regional crafting dependencies
         run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/defeat_retry_recovery_test.cpp -o /tmp/unmade-defeat-recovery
+          /tmp/unmade-defeat-recovery
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/defeat_save_retry_test.cpp -o /tmp/unmade-defeat-retry
+          /tmp/unmade-defeat-retry
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/final_morning_recovery_test.cpp -o /tmp/unmade-final-recovery
           /tmp/unmade-final-recovery
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/endgame_links_test.cpp -o /tmp/unmade-endgame-links
