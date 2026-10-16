@@ -31,13 +31,13 @@ class TimedProgressWiring(unittest.TestCase):
   hub=read('Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp')
   self.assertIn('if(bNewMemory)bNpcMemorySavePending=true;',hub)
   self.assertIn('if(bNpcMemorySavePending&&WriteWorldSnapshot())bNpcMemorySavePending=false;',hub)
-  snapshot=hub.split('bool AUnmadePrototypeHub::WriteWorldSnapshot(',1)[1].split('\nbool ',1)[0]
+  snapshot=hub.split('bool AUnmadePrototypeHub::CaptureWorldSnapshot(',1)[1].split('\nbool ',1)[0]
   self.assertIn('ReplaceNpcMemory(Save->NpcSnapshots,Snapshot)',snapshot)
 
  def test_both_memory_capture_paths_preserve_absent_residents(self):
   hub=read('Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp')
   player=read('Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp')
-  world=hub.split('bool AUnmadePrototypeHub::WriteWorldSnapshot(',1)[1].split('Save->bHasFieldSurveys',1)[0]
+  world=hub.split('bool AUnmadePrototypeHub::CaptureWorldSnapshot(',1)[1].split('Save->bHasFieldSurveys',1)[0]
   nearby=player.split('void AUnmadeCharacter::SaveNearbyNpcMemories()',1)[1].split('void AUnmadeCharacter::RestoreSessionWhenReady()',1)[0]
   for capture in (world,nearby):
    self.assertNotIn('NpcSnapshots.Reset()',capture)

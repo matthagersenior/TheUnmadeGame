@@ -12,6 +12,7 @@
 #include "Materials/MaterialInterface.h"
 #include "World/UnmadeFieldSurveySave.h"
 #include "Save/UnmadePrototypeSave.h"
+#include "Save/UnmadeCaptureRules.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -56,18 +57,12 @@ bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
         const int32 Previous=FieldSurveyStages[i];
         if(Previous<2)
         {
-            auto* Save=UUnmadePrototypeSave::LoadOrCreate();
-            if(!Save)return true;
-            Save->bHasFieldSurveys=true;
-            Save->FieldSurveyStages=FieldSurveyStages;
-            Save->FieldSurveyStages[i]=Previous+1;
-            if(!UnmadeSave::SaveGameToSlot(Save,this))
+            if(!UnmadeCore::CommitFieldSurveyStage(FieldSurveyStages,i,[&]{return WriteWorldSnapshot();}))
             {
                 if(GEngine)UnmadeRpgFeedback(-1,4.f,FColor::Red,
                     TEXT("Fieldwork could not save. No route or objective changed; try again."));
                 return true;
             }
-            FieldSurveyStages=Save->FieldSurveyStages;
             if(FieldSurveyGates.IsValidIndex(i)&&FieldSurveyGates[i].IsValid())
             {
                 FieldSurveyGates[i]->SetActorEnableCollision(false);

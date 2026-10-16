@@ -77,9 +77,17 @@ Mera's consent; they do not turn every realm's resident into that storyline.
   restore original selection and keep partially initialized worlds write-locked.
   All 64 profile/recovery combinations pass portable ownership/isolation tests.
   Actual delegate behavior, travel and startup ordering require Unreal acceptance.
-- Next source/portable expansion: pre-registration inventory/reward initialization
-  and fresh-profile/recovery readiness. Keep branch divergence visible without
-  pausing development for unnecessary synchronization.
+- Startup rewards now wait for registered player resume/world readiness and retry
+  failed commits. Timed day/visit/rite progression freezes during blocked ownership;
+  failed material days restore wages, households and finite support together.
+- Component saves now capture the accepted live world as well as current resume
+  values. Portable coverage adds 216 paths across all nine realm identifiers and
+  both aftermath endings, 1,080 reloads and 48 field-survey fault paths. Caller-owned
+  gear/language/rite/Strain patches, resident days and absent histories survive.
+  Static ownership parity covers 126 fields; native capture is not engine-tested.
+- Next source/portable expansion: follow realm rite costs, physical/civic effects,
+  local mastery/resonance and witness records across their separate commits.
+  Keep branch divergence visible without unnecessary synchronization.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,

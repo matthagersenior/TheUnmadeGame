@@ -12,6 +12,7 @@
 #include "Engine/EngineBaseTypes.h"
 #include "Engine/GameInstance.h"
 #include "Save/UnmadeCombinedSaveRules.h"
+#include "Save/UnmadeCaptureRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "UI/UnmadePlayerPreferences.h"
 #include "Kismet/GameplayStatics.h"
@@ -151,15 +152,21 @@ bool IsWorldWritable(const UWorld* World){
 }
 bool SaveGameToSlot(USaveGame* raw,const UObject* Owner){
     if(Handoff.WritesBlocked())return WriteFailed();
-    if(!Owner||!IsWorldWritable(Owner->GetWorld()))return WriteFailed();
+    if(!IsValid(Owner)||!IsWorldWritable(Owner->GetWorld()))return WriteFailed();
     const FString slot=SlotName();
     auto* stored=UGameplayStatics::LoadGameFromSlot(slot,0);
     auto* existing=Cast<UUnmadePrototypeSave>(stored);
     if(stored&&(!existing||existing->SchemaVersion!=1))return WriteFailed();
     auto* s=Cast<UUnmadePrototypeSave>(raw);
     if(!s)return WriteFailed();
-    if(SessionPlayer.IsValid())SessionPlayer->CaptureSession(s);
-    if(!ValidStored(*s,slot))return WriteFailed();
+    if(!UnmadeCore::PrepareCombinedCapture(*s,
+        [&](const auto& record){return ValidStored(record,slot);},
+        [&](auto&){
+            SessionPlayer->CaptureSession(s);
+            for(TActorIterator<AUnmadePrototypeHub> h(Owner->GetWorld());h;++h)
+                return h->CaptureWorldSnapshot(s);
+            return false;
+        }))return WriteFailed();
     if(existing&&!ValidStored(*existing,slot))existing=nullptr;
     auto* settings=GetMutableDefault<UUnmadePlayerPreferences>();
     auto* backup=Read(slot+TEXT("_Backup"));

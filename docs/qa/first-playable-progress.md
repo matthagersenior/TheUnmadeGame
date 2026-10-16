@@ -29,6 +29,7 @@ integration need; preserve development momentum and do not merge into main.
 
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
+| P1 complete capture implemented; UE pending | Every combined writer preflights its staged fields, captures the accepted live world/player, then revalidates before storage. World capture preserves caller-owned patches. Field surveys stage/rollback live progress before capture. 216 nine-realm component paths, 1,080 reloads and 48 survey fault paths pass; verify actual actor capture ordering in Unreal. |
 | P1 timed progression implemented; UE pending | Source owners bind every combined write to the registered world. Blocked worlds stop clock/rite-day/rumor advancement. Visits retry in place; failed day transactions restore production, wages, support and households together. Quiet gossip retries retain absent residents. 192 fault paths and 4,800 reloads pass portable tests; verify real timer/lifecycle ordering in Unreal. |
 | P1 implemented; UE pending | Startup rewards wait for registered player resume and world readiness. Failed starter/milestone/civic writes retry; checkpoints remain incomplete. Central saves require a restored owner and ready, accepted world. Older selected gear and spent starter supplies survive reloads. Verify actual BeginPlay/travel ordering and feedback in Unreal. |
 | P0 implemented; UE pending | `Private/Items/UnmadeEquipmentComponent.cpp::UseConsumable` saved potion loss before healing, while `Private/Player/UnmadeCharacter.cpp::CaptureSession` captured old health. Shared `Public/Save/UnmadeRecoveryRules.h` now applies healing before synchronous save and restores health/stamina on failure; caller restores inventory. Immediate reload must preserve both cost and benefit. |
@@ -43,7 +44,7 @@ integration need; preserve development momentum and do not merge into main.
 | P1 defeat retries implemented; UE pending | Guardian/final-defeat commits attempt immediately, then retry failure every five active-world seconds instead of every actor tick. Success suppresses repeat commits for that phase. Portable tests cover 24 guardian and 72 final-phase fault/retry paths; confirmation expiry, retargeting, cancellation and consumed consent remain safe. |
 | P1 pending checkpoints implemented; UE pending | Session saves refuse to report success while an encounter receipt is pending. Read-only actor queries include hidden receipt owners and distinguish an old final body from the new phase. Load/New preserve unsaved-discard confirmation; explicit recovery never pre-saves. 114 portable fault sessions verify blocked checkpoint writes and normal saves after receipt commit. |
 | P1 handoff ownership implemented; UE pending | Target selection stays staged until a new-world owner registers. Travel failure restores original selection; a missing owner/failed world cannot unlock writes. Reentrant requests are rejected and destination backup pins survive arrival. All 64 profile/recovery combinations pass portable checks; UE delegate/build, startup ordering and real failed travel remain pending. |
-| P1 next connected batch | Audit action-triggered and component-only save writers against unsaved world/NPC state. Keep actual startup, travel, UI/controller and platform IO pending; recheck drift before publishing. |
+| P1 next connected batch | Trace realm rite costs, physical effects, civic records, mastery/resonance and witness consequences across their separate commits. Keep actual nine-realm walkthrough, startup/travel, UI and platform IO pending; recheck drift before publishing. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -485,3 +486,41 @@ Seven mutations removing readiness, visit/rite/day rollback, retry cadence, worl
 identity or resident identity are rejected. Structure, literals, transmedia,
 hygiene, six Node release scenarios, manuscript reconstruction and whitespace
 checks pass. Baseline `893c10a` passed GitHub source-checks; new-head CI is separate.
+
+## 2026-10-16 — Complete world capture for component saves
+
+Equipment, language and rite saves previously captured current player resume
+values while retaining an older living-world section. Every combined write now
+preflights the caller's staged record, captures the accepted live world and player,
+and validates the result before any backup or primary write. The existing full
+world serializer is shared by world and component writers; it captures without
+loading another record or writing recursively. Its 126 world-owned fields retain
+caller-owned inventory, language, Tenfold, identity, conflict and explicit Strain
+patches. Existing stable IDs and valid optional legacy sections are unchanged.
+
+Field surveys previously changed only serialized stages before saving. They now
+stage their live owner before the shared capture, restore it on any failure and
+open routes/update signs only after success. Completed or malformed stages do
+not enter the writer. Their existing distance, sight, custody, Varda dialogue
+and six survey identifiers are retained. Failed fieldwork keeps clear retry
+feedback; authored routes and consequences are unchanged.
+
+Portable evidence: 216 component/world fault-recovery paths across all nine realms,
+both aftermath endings, equipment/language/rite patches, recovery pins and both
+write targets; 1,080 reloads; 48 field-survey fault paths across all six identifiers
+and both progress stages. Checks retain caller fields, clock/resume pairing,
+resident days, absent NPC histories and exclusive authored endings. Malformed
+caller or captured sections and rejected capture owners write nothing. Five
+validation/capture/staging/rollback mutations fail assertions. The field fixture
+tracks native capture ownership, but does not run Unreal serialization or actors.
+
+Fresh checks: 339 Python tests, 76 warning-clean portable C++17 executables and all
+42 gameplay dependency checks pass; the final composed scenario passes UBSan.
+Repository, literal, hygiene, six Node release scenarios and whitespace checks
+pass. Actual UHT/Editor build, capture ordering, travel, UI and platform IO remain
+pending. Artwork/books remain optional; no charges or merge into main.
+
+Next: trace realm rite casts through spell cost, physical effects, civic records,
+local mastery/resonance and witness consequences, particularly their separately
+committed portions. Preserve authored mechanics and distinguish model evidence
+from actual nine-realm walkthrough acceptance.

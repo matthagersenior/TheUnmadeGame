@@ -8,7 +8,7 @@ class CompleteLoopDependencies(unittest.TestCase):
    if p.name=='UnmadeSaveSession.cpp':continue
    self.assertNotIn('UGameplayStatics::SaveGameToSlot(',p.read_text(),str(p))
    if p.name!='UnmadePlayableEncounters.cpp':self.assertNotIn('TEXT("UnmadePrototypeNPC")',p.read_text(),str(p))
-  survey=source('Private/World/UnmadePlayableEncounters.cpp');self.assertIn('SlotName()==TEXT("UnmadePrototypeNPC")',survey);self.assertIn('FieldSurveyStages=Save->FieldSurveyStages',survey);self.assertIn('UnmadeSave::SaveGameToSlot(Save,this)',survey)
+  survey=source('Private/World/UnmadePlayableEncounters.cpp');self.assertIn('SlotName()==TEXT("UnmadePrototypeNPC")',survey);self.assertIn('FieldSurveyStages=Save->FieldSurveyStages',survey);self.assertIn('CommitFieldSurveyStage(FieldSurveyStages,i',survey)
   self.assertIn('Save->FieldSurveyStages=FieldSurveyStages',source('Private/World/UnmadePrototypeHub.cpp'))
   s=source('Private/Save/UnmadeSaveSession.cpp')
   for v in ['CommitWithPrevious','Handoff.WritesBlocked()','existing->SchemaVersion!=1','HasRejectedWorld','HasRejectedSave','_Backup']:self.assertIn(v,s)

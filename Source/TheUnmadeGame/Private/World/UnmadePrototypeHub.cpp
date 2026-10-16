@@ -550,6 +550,30 @@ bool AUnmadePrototypeHub::SavePlayerSession(AUnmadeCharacter* Player)
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
     if(!UnmadeSave::IsWorldWritable(GetWorld()))return false;
+    if(StrainOwner&&(!IsValid(StrainOwner)||StrainOwner->GetWorld()!=GetWorld()))return false;
+    UUnmadePrototypeSave* Save=UUnmadePrototypeSave::LoadOrCreate();
+    if(!Save)return false;
+    if(IsValid(StrainOwner))
+    {
+        // Preserve a malformed pre-existing fracture record instead of replacing
+        // it with the pawn's fallback when a local paid decision is attempted.
+        if(Save->bHasFractureSnapshot)
+        {
+            UnmadeCore::FractureModel Check("region.prototype.hub",{"variant.open","variant.sealed"});
+            const std::string PreviousVariant=Save->WorldVariantId.IsNone()?std::string():std::string(TCHAR_TO_UTF8(*Save->WorldVariantId.ToString()));
+            if(!Check.Restore({PreviousVariant,Save->PlayerStrain}))return false;
+        }
+        const auto Reality=StrainOwner->GetRealitySnapshot();
+        Save->bHasFractureSnapshot=true;
+        Save->PlayerStrain=Reality.strain;
+        Save->WorldVariantId=Reality.variant.empty()?NAME_None:FName(UTF8_TO_TCHAR(Reality.variant.c_str()));
+    }
+    return UnmadeSave::SaveGameToSlot(Save,this);
+}
+
+bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
+{
+    if(!Save||!UnmadeSave::IsWorldWritable(GetWorld()))return false;
     if(!bFieldSurveySaveUsable)return false;
     if(bExpeditionSaveRejected)return false;
     if(bIdentitySaveRejected)return false;
@@ -566,8 +590,6 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bRealityConsequenceRejected || bOuterReactionsRejected ||
        bMaterialSaveRejected || bLivingEconomyRejected ||
        bBesHouseholdRejected)return false;
-    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
-    if (!Save) return false;
     for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc){
         const FName Id=Npc->GetStableId();if(Id.IsNone())continue;
         const auto Snapshot=Npc->GetMemory()->WriteSnapshot(Id);
@@ -756,21 +778,6 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
     Save->CinderholdAdventureState={Adventure.version,Adventure.memories,Adventure.clues,
         Adventure.resolution,Adventure.route,Adventure.firstDay,Adventure.returnDay,
         Adventure.returnedHeat,Adventure.returnedColdDays,Adventure.returnedOwed};
-    if(IsValid(StrainOwner))
-    {
-        // Preserve a malformed pre-existing fracture record instead of replacing
-        // it with the pawn's fallback when a local paid decision is attempted.
-        if(Save->bHasFractureSnapshot)
-        {
-            UnmadeCore::FractureModel Check("region.prototype.hub",{"variant.open","variant.sealed"});
-            const std::string PreviousVariant=Save->WorldVariantId.IsNone()?std::string():std::string(TCHAR_TO_UTF8(*Save->WorldVariantId.ToString()));
-            if(!Check.Restore({PreviousVariant,Save->PlayerStrain}))return false;
-        }
-        const auto Reality=StrainOwner->GetRealitySnapshot();
-        Save->bHasFractureSnapshot=true;
-        Save->PlayerStrain=Reality.strain;
-        Save->WorldVariantId=Reality.variant.empty()?NAME_None:FName(UTF8_TO_TCHAR(Reality.variant.c_str()));
-    }
     Save->bHasBesHousehold=true;
     Save->BesQuestPhase=BesRecord.phase;
     Save->BesHouseholdDay=BesRecord.day;
@@ -788,14 +795,14 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
     Save->ResidentEncounterAidFlags.Reset();
+    const auto RS=ResidentRelationships.Snapshot();
     for(int i=0;i<UnmadeCore::ResidentContinuityCount;++i)
     {
-        const auto RS=ResidentRelationships.Snapshot();
         Save->ResidentEncounterVisits.Add(RS.visits[i]);
         Save->ResidentEncounterLastDays.Add(RS.lastDay[i]);
         Save->ResidentEncounterAidFlags.Add(RS.aids[i]);
     }
-    return UnmadeSave::SaveGameToSlot(Save,this);
+    return true;
 }
 
 bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bCompleted)

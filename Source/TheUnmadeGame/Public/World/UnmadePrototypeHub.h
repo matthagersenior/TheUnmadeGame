@@ -72,6 +72,7 @@ public:
     bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected;}
     bool IsWorldReady()const{return bWorldReady;}
     bool SavePlayerSession(AUnmadeCharacter* Player);
+    bool CaptureWorldSnapshot(class UUnmadePrototypeSave* Save);
     bool HasPendingDefeatReceipts()const;
     AUnmadePrototypeHub();
     bool TryExperienceInteraction(AUnmadeCharacter* Player,double Competing);
