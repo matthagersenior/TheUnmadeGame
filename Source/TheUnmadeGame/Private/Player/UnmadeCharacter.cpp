@@ -1463,7 +1463,6 @@ void AUnmadeCharacter::BeginPlay()
     }
     ApplyFractureVisuals();
     ApplyConflictGates();
-    ReconcileEarnedRewards();
 }
 
 
@@ -1514,6 +1513,7 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     RestoreSessionWhenReady();
+    if(!bStartupRewardsReady&&GetWorld()&&GetWorld()->GetTimeSeconds()>=NextStartupRewardsAttempt){NextStartupRewardsAttempt=GetWorld()->GetTimeSeconds()+5;InitializeStartupRewards();}
     if(bSessionRestored&&GetWorld()&&GetWorld()->GetTimeSeconds()>=NextSessionSave){NextSessionSave=GetWorld()->GetTimeSeconds()+20;SaveSessionNow();}
     TickWeaponContact();
     if(!RpgWidget)if(auto* PC=Cast<APlayerController>(GetController())){RpgWidget=CreateWidget<UUnmadeRpgWidget>(PC,UUnmadeRpgWidget::StaticClass());if(RpgWidget)RpgWidget->AddToViewport(30);}
@@ -1690,7 +1690,14 @@ void AUnmadeCharacter::RestoreSessionWhenReady(){
 void AUnmadeCharacter::CaptureSession(UUnmadePrototypeSave* save)const{
  if(!save||!bSessionRestored||!GetWorld()||!Combat)return;FVector safe(0,0,135);for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){h->ExperienceCheckpoint(GetActorLocation(),safe);break;}save->bHasPlayerResume=true;save->ResumePosition=safe;save->ResumeHealth=Combat->GetHealth();save->ResumeStamina=Combat->GetStamina();
 }
-bool AUnmadeCharacter::SaveSessionNow(){RestoreSessionWhenReady();if(!bSessionRestored||!GetWorld())return false;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h)return h->SavePlayerSession(this);return false;}
+bool AUnmadeCharacter::InitializeStartupRewards(){
+ if(bStartupRewardsReady)return true;
+ if(!IsValid(Equipment)||!UnmadeSave::IsSessionWritable(this))return false;
+ bStartupRewardsReady=Equipment->ReconcileEarnedMilestones();
+ if(!bStartupRewardsReady&&!bStartupNoticeShown){bStartupNoticeShown=true;UnmadeRpgFeedback(-1,10.f,FColor::Orange,TEXT("STARTUP REWARDS PENDING: save failed or inventory full. Retrying; make room in Items if needed."));}
+ return bStartupRewardsReady;
+}
+bool AUnmadeCharacter::SaveSessionNow(){RestoreSessionWhenReady();if(!bSessionRestored||!GetWorld()||!InitializeStartupRewards())return false;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h)return h->SavePlayerSession(this);return false;}
 
 void AUnmadeCharacter::TradeSelection(UnmadeCore::ItemId item,bool buy){SelectedTrade=item;if(buy)BuyMarketSupplies();else SellMarketSupplies();SelectedTrade=UnmadeCore::ItemId::Count;}
 

@@ -133,16 +133,22 @@ USaveGame* LoadGameFromSlot(){
     // Never expose even a partially valid serialized record to a subsystem.
     return nullptr;
 }
+bool IsSessionWritable(const AUnmadeCharacter* Player){
+    if(Handoff.WritesBlocked()||!SessionPlayer.IsValid())return false;
+    auto* p=SessionPlayer.Get();
+    if((Player&&Player!=p)||!p->HasActorBegunPlay()||!p->IsSessionRestored()||!p->GetWorld())return false;
+    if(p->HasRejectedSave()||!p->GetEquipment()||p->GetEquipment()->HasRejectedSave())return false;
+    if(auto* rite=p->FindComponentByClass<UUnmadeTenfoldComponent>())if(rite->HasRejectedSave())return false;
+    if(auto* lex=p->FindComponentByClass<UUnmadeLexiconComponent>())if(lex->HasRejectedSave())return false;
+    bool found=false;
+    for(TActorIterator<AUnmadePrototypeHub> h(p->GetWorld());h;++h){
+        found=true;if(!h->IsWorldReady()||h->HasRejectedWorld())return false;
+    }
+    return found;
+}
 bool SaveGameToSlot(USaveGame* raw){
     if(Handoff.WritesBlocked())return WriteFailed();
-    if(SessionPlayer.IsValid()){
-        auto* p=SessionPlayer.Get();
-        if(p->HasRejectedSave()||(p->GetEquipment()&&p->GetEquipment()->HasRejectedSave()))return WriteFailed();
-        if(auto* rite=p->FindComponentByClass<UUnmadeTenfoldComponent>())if(rite->HasRejectedSave())return WriteFailed();
-        if(auto* lex=p->FindComponentByClass<UUnmadeLexiconComponent>())if(lex->HasRejectedSave())return WriteFailed();
-        for(TActorIterator<AUnmadePrototypeHub> h(p->GetWorld());h;++h)
-            if(!h->IsWorldReady()||h->HasRejectedWorld())return WriteFailed();
-    }
+    if(!IsSessionWritable())return WriteFailed();
     const FString slot=SlotName();
     auto* stored=UGameplayStatics::LoadGameFromSlot(slot,0);
     auto* existing=Cast<UUnmadePrototypeSave>(stored);

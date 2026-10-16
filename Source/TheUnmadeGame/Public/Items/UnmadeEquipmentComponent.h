@@ -17,7 +17,7 @@ public:
     UUnmadeEquipmentComponent();
     virtual void BeginPlay() override;
     bool Claim(UnmadeCore::Achievement Reward);
-    void ReconcileEarnedMilestones();
+    bool ReconcileEarnedMilestones();
     bool SelectRealmReward(int Arc);
     int RealmWeapon()const{return Loadout.weapon;}
     int RealmArmor()const{return Loadout.armor;}
@@ -58,5 +58,5 @@ private:
     int32 TemporaryArmor=0;
     UnmadeCore::InventoryModel Inventory;
     UnmadeCore::RegionalEconomy Economy;
-    void ReconcileCivicContracts(const UUnmadePrototypeSave* Save);
+    bool ReconcileCivicContracts(const UUnmadePrototypeSave* Save);
 };

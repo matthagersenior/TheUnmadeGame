@@ -734,3 +734,36 @@ The books now have an actively managed literary storyworld: docs/lore/VOLUME_X_T
 ### Playable-source lore link: Witness Echoes (Volume X)
 
 Volume X is beginning to affect the **game's actual world interactions**, not only its books. Three new physically inspectable graybox relics—Hessa's cup, Sevrin's press and Orrel's nail—are wired through the existing player Interact control, saved as optional first-seen/returned clues, and summarized in the debug journal. Each changes meaning only after a legitimate related local story decision; none hands out a secret finale, forces optional content or resolves an OPEN mystery. See [Volume X Witness Echoes gameplay contract](../docs/design/volume-x-witness-echo-gameplay.md). CI tests the portable domain and source integration; Unreal Editor compilation and real level/playtest verification remain unperformed.
+
+## 2026-10-16 — Deferred startup rewards and complete save readiness
+
+Equipment BeginPlay now restores without awarding or writing. Starter gear and
+committed milestone/civic rewards reconcile after the registered player restores
+its resume state and the world is ready. Failed commits remain pending and retry
+at five-second intervals; a manual checkpoint reports failure until startup
+reconciliation succeeds. The player receives a pending reward/save/capacity notice.
+The shared writer refuses unregistered, unrestored, wrong-owner, rejected or
+unready worlds before capturing or rotating records. Explicit unused-profile
+creation still only creates a new slot. Existing IDs, reward amounts, authored
+choices, consent and optional older save sections are unchanged. A starter kit
+fills empty equipment slots only, preserving selected older equipment; its marker
+prevents spent supplies being refilled on repeated reloads.
+
+Portable evidence: startup tests combine the production kit transaction and
+combined-record store with primary/backup write damage, recovery selection,
+rollback, 400 reloads of spent supplies, retained legacy equipment and full-stack
+rejection. Removing readiness, rollback or repeat suppression fails assertions.
+Adapter checks verify startup deferral, retry and checkpoint gating. These are
+portable rules and static wiring checks, not Unreal lifecycle or filesystem tests.
+
+Next: audit world simulation and timed progression writes during initialization
+and profile travel, then verify late-owner failures cannot advance durable time
+or rewards. Unreal build/UHT, actual startup/travel, UI visibility and interrupted
+platform IO remain pending. Artwork/books stay optional; no charges or main merge.
+
+Fresh batch verification: 331 Python tests, 74 warning-clean portable C++17
+executables and 38 gameplay dependency checks pass. Startup rules pass UBSan;
+readiness, rollback and repeated-award mutations are rejected. Structure, literal,
+transmedia, hygiene, six source-release scenarios, manuscript and whitespace checks
+pass. Live main remains `9606fec4`, zero commits behind; PR #74 is mergeable.
+Prior head `96d9702` passed source-checks; this new head requires its own CI.

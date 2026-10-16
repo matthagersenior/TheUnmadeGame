@@ -6,6 +6,7 @@
 #include "Items/UnmadeEquipmentComponent.h"
 #include "Save/UnmadeRecoveryRules.h"
 #include "Items/UnmadeMilestoneRules.h"
+#include "Items/UnmadeStarterRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
 #include "World/UnmadeConfluenceRules.h"
 #include "Save/UnmadePrototypeSave.h"
@@ -69,13 +70,6 @@ void UUnmadeEquipmentComponent::BeginPlay()
     if(!ReadOwnedExpeditions(Earned)){bSaveRejected=true;return;}
     if(Save&&Save->bHasUnifiedLoadout){if(Save->UnifiedRealmLoadout.Num()!=3){bSaveRejected=true;return;}Loadout={Save->UnifiedRealmLoadout[0],Save->UnifiedRealmLoadout[1],Save->UnifiedRealmLoadout[2]};if(!Loadout.Valid(Earned)){bSaveRejected=true;return;}}
     else Loadout=UnmadeCore::UnifiedLoadout::Migrate(Earned);
-    const auto Previous=Inventory.Snapshot();
-    if (Inventory.Claim(UnmadeCore::Achievement::Starter)==UnmadeCore::RewardResult::Awarded)
-    {
-        Inventory.Equip(UnmadeCore::ItemId::SalvagerBlade);
-        Inventory.Equip(UnmadeCore::ItemId::TravelerMantle);
-        if (!Persist()) Inventory.Restore(Previous);
-    }
     RefreshCombatBonuses();
 }
 
@@ -121,15 +115,18 @@ bool UUnmadeEquipmentComponent::Claim(UnmadeCore::Achievement Reward)
     return true;
 }
 
-void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
+bool UUnmadeEquipmentComponent::ReconcileEarnedMilestones()
 {
+    if(bSaveRejected||!UnmadeSave::IsSessionWritable(Cast<AUnmadeCharacter>(GetOwner())))return false;
+    bool complete=UnmadeCore::CommitStarterKit(Inventory,true,[&]{return Persist();});
+    RefreshCombatBonuses();
     const UUnmadePrototypeSave* Save=Cast<UUnmadePrototypeSave>(
         UnmadeSave::LoadGameFromSlot());
-    if (bSaveRejected || !Save || Save->SchemaVersion!=1) return;
+    if (bSaveRejected || !Save || Save->SchemaVersion!=1) return false;
     UnmadeCore::ForEachEarnedMilestone(*Save,
         [&](const char* evidence){return Save->LexiconEvidence.Contains(FName(UTF8_TO_TCHAR(evidence)));},
-        [&](UnmadeCore::Achievement reward){Claim(reward);});
-    ReconcileCivicContracts(Save);
+        [&](UnmadeCore::Achievement reward){if(!Inventory.HasClaimed(reward)&&!Claim(reward))complete=false;});
+    return ReconcileCivicContracts(Save)&&complete;
 }
 
 bool UUnmadeEquipmentComponent::ReadOwnedExpeditions(UnmadeCore::Expeditions& Out)const{const auto* Save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());if(!Save)return true;if(Save->SchemaVersion!=1)return false;if(!Save->bHasExpeditions)return true;std::vector<int> p;for(int v:Save->ExpeditionState)p.push_back(v);return Out.Restore(p);}
@@ -177,14 +174,16 @@ bool UUnmadeEquipmentComponent::ForgeWaybreaker()
     return true;
 }
 
-void UUnmadeEquipmentComponent::ReconcileCivicContracts(const UUnmadePrototypeSave* Save)
+bool UUnmadeEquipmentComponent::ReconcileCivicContracts(const UUnmadePrototypeSave* Save)
 {
-    if(bSaveRejected || !Save || Save->SchemaVersion!=1)return;
+    if(bSaveRejected || !Save || Save->SchemaVersion!=1)return false;
+    bool complete=true;
     UnmadeCore::ForEachCivicContract(*Save,[&](UnmadeCore::SettlementId town,int stage){
         const auto Before=Economy.Snapshot();
         if(Economy.PayContract(town,stage)!=UnmadeCore::EconomyResult::Completed)return;
-        if(!Persist())Economy.Restore(Before);
+        if(!Persist()){Economy.Restore(Before);complete=false;}
     });
+    return complete;
 }
 
 bool UUnmadeEquipmentComponent::Buy(UnmadeCore::ItemId Id,

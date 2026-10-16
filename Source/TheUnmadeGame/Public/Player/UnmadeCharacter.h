@@ -70,6 +70,7 @@ public:
     void ReportRiteChoiceEvent(int32 Choice);
     void ReportBrokenOathEvent();
     void ReportRedeemedOathEvent();
+    bool IsSessionRestored() const { return bSessionRestored; }
     void ReconcileEarnedRewards();
 
     /** Persistent identity choices used by the native Character page. */
@@ -91,6 +92,10 @@ public:
 private:
     UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
     bool bFractureSaveRejected=false,bConflictSaveRejected=false;
+    bool bStartupRewardsReady=false;
+    bool bStartupNoticeShown=false;
+    double NextStartupRewardsAttempt=0;
+    bool InitializeStartupRewards();
     bool bSessionRestored=false;
     double NextSessionSave=0;
     void RestoreSessionWhenReady();

@@ -6,14 +6,14 @@ def read(path):return (ROOT/path).read_text()
 class CombinedSliceWiring(unittest.TestCase):
     def test_rewards_read_committed_state_and_keep_transaction_rollback(self):
         source=read('Source/TheUnmadeGame/Private/Items/UnmadeEquipmentComponent.cpp')
-        reconcile=source.split('void UUnmadeEquipmentComponent::ReconcileEarnedMilestones()',1)[1].split('\nbool ',1)[0]
+        reconcile=source.split('bool UUnmadeEquipmentComponent::ReconcileEarnedMilestones()',1)[1].split('\nbool ',1)[0]
         self.assertLess(reconcile.index('UnmadeSave::LoadGameFromSlot()'),reconcile.index('ForEachEarnedMilestone'))
         self.assertLess(reconcile.index('if (bSaveRejected || !Save'),reconcile.index('ForEachEarnedMilestone'))
         self.assertIn('Claim(reward)',reconcile)
-        contract=source.split('void UUnmadeEquipmentComponent::ReconcileCivicContracts(',1)[1].split('\nbool ',1)[0]
+        contract=source.split('bool UUnmadeEquipmentComponent::ReconcileCivicContracts(',1)[1].split('\nbool ',1)[0]
         self.assertIn('ForEachCivicContract(*Save',contract)
         self.assertIn('Economy.PayContract(town,stage)',contract)
-        self.assertIn('if(!Persist())Economy.Restore(Before)',contract)
+        self.assertIn('if(!Persist()){Economy.Restore(Before);complete=false;}',contract)
 
     def test_sanitized_regressions_are_in_both_repeatable_gates(self):
         workflow=read('.github/workflows/static-checks.yml')
