@@ -50,11 +50,12 @@ Mera's consent; they do not turn every realm's resident into that storyline.
 - Source-label correction: the existing healing specialty is Tharniv (index 7).
   Eillun (index 6) provides quiet indexing. Earlier engineering notes calling the
   healing specialty Eillun were inaccurate; authored lore and IDs are unchanged.
-- Remaining supported gap: field kits can only be purchased after the local boss,
-  while their current use condition requires that boss to remain unresolved.
-  Cache discovery deliberately consumes no kit and must stay independent. Resolve
-  useful kit eligibility without erasing a saved accord, inventing free stock or
-  silently moving another realm's ledger. Gameplay preference has been requested.
+- Field-kit gap addressed: earned kits work across active unresolved chambers,
+  retaining the supplying realm's ledger. Purchase gates and free caches remain.
+  Portable tests cover all 81 supplier/destination pairs and failed writes.
+- Aftermath coverage now composes both endings in all nine realms with individual
+  resident return ledgers through combined-record reloads. This does not establish
+  NPC witness knowledge or actor interaction coverage.
 - Next source/portable expansion: compose first-chapter aftermath/Echo/guardian
   consequences and their resident return recognition with these local loops;
   inspect targeting, feedback and empty/full-capacity behavior in each real

@@ -271,7 +271,7 @@ public:
     void BuildAdventureDepth();
     void RefreshAdventureDepth();
     bool TryDepthInteraction(AUnmadeCharacter* Player,int Action,double Competing=1000000.);
-    bool UseDepthFieldKit(AUnmadeCharacter* Player);
+    UnmadeCore::FieldKitResult UseDepthFieldKit(AUnmadeCharacter* Player);
     bool UseDepthPower(AUnmadeCharacter* Player);
     bool SelectDepthTechnique(int Arc,AUnmadeCharacter* Player);
     FString GetDepthJournal()const;

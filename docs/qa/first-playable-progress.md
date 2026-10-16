@@ -193,3 +193,26 @@ Unresolved gameplay choice: field kits cannot currently reach their intended
 active local hazard under the authored purchase/use prerequisites. The optional
 preference question is pending; existing ledgers and story gates remain intact.
 Engine/UI/playthrough acceptance remains pending for every checklist row.
+
+## 16 October 2026 — Portable field kits and realm returns
+
+Earned field kits can suppress another realm's active, unresolved danger chamber.
+The supplying realm retains its favor and kit ledger; local stock takes priority,
+then the first stocked realm in stable order. Existing purchase prerequisites,
+20/30-second local binding duration, chart/boss exclusions and free caches remain.
+A failed world write restores the kit and applies no suppression; its specific
+save-error feedback survives the player action. Suppression remains session-only.
+No save fields, IDs, consent rules or authored consequences changed.
+
+Portable coverage adds 81 supplier/destination transactions with failed backup
+and primary writes, recovery and repeated reloads, plus both authored aftermath
+endings across all nine realms combined with individual resident return ledgers.
+This proves model/record composition, not actor reachability or witness knowledge.
+Echo/guardian consequence composition and actual Unreal interaction/serialization
+remain the next batch and engine acceptance respectively. Artwork stays optional.
+
+Verification: 318 Python tests, 66 portable C++17 executables with warnings as
+errors, and all 22 gameplay dependency checks pass. The new scenario passes UBSan;
+removing failed-write kit rollback causes its retained-stock assertion to fail.
+Structure, literal, transmedia, hygiene, six Node release cases, manuscript and
+whitespace checks pass. Actual Unreal compilation and runtime remain pending.

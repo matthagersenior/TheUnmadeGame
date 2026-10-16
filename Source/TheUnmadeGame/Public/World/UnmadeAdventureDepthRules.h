@@ -32,6 +32,21 @@ public:
  if(p[1]>=0&&!n[p[1]].choice)return false;
  arcs=n;active=p[1];return true;}
 };
+// Kits remain charged to their supplying realm; no save identifiers change.
+enum class FieldKitResult { Unavailable, Used, SaveFailed };
+template<class Writer>
+FieldKitResult CommitFieldKit(AdventureDepth& depth,int target,bool benefit,
+                             Writer write,int& supplier){
+ supplier=-1;
+ if(!depth.Arc(target)||!benefit)return FieldKitResult::Unavailable;
+ if(depth.Arc(target)->kits>0)supplier=target;
+ else for(int a=0;a<9;++a)if(depth.Arc(a)->kits>0){supplier=a;break;}
+ if(supplier<0)return FieldKitResult::Unavailable;
+ const auto before=depth;
+ if(!depth.SpendKit(supplier))return FieldKitResult::Unavailable;
+ if(!write()){depth=before;supplier=-1;return FieldKitResult::SaveFailed;}
+ return FieldKitResult::Used;
+}
 // Distinct challenge state is transient until a physical completion is committed.
 class RealmChallenge {
  int progress=0,mask=0;double until=-1;
