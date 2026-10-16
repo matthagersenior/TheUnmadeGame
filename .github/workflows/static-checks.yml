@@ -342,6 +342,8 @@ jobs:
 
       - name: Test ordinary spending, profile recovery and regional crafting dependencies
         run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/profile_handoff_test.cpp -o /tmp/unmade-profile-handoff
+          /tmp/unmade-profile-handoff
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/pending_receipt_session_test.cpp -o /tmp/unmade-pending-session
           /tmp/unmade-pending-session
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/defeat_retry_recovery_test.cpp -o /tmp/unmade-defeat-recovery

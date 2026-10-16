@@ -647,3 +647,41 @@ pending. No paid service, artwork or book publication was required.
 Next: inspect profile handoff failure/startup and restoration of the original
 profile/settings if travel cannot complete, without redirecting old live state
 into the selected target. Actual travel-failure verification needs Unreal.
+
+## 16 October 2026 — Profile handoff ownership and integration watch
+
+Rechecked PR #74 against live main: base `9606fec4`, starting head `5a4575d`,
+10 commits ahead and zero behind; GitHub reported clean mergeability. No sync,
+merge into main, rebase or force push was needed. Keep focused commits and check
+base divergence/overlapping files before publishing batches. If main moves,
+inspect and verify an isolated integration before updating this feature branch;
+branch housekeeping must not stop useful development without a concrete issue.
+
+Profile selection previously persisted the target before travel and relied on
+any later player registration to clear the write lock. Handoff now stages its
+destination in memory, gates writes and accepts a different world in the same
+game instance before persisting the selection. Destination backup recovery is
+pinned in that staged selection. Travel failure restores the original profile/
+recovery preference and resumes the original live owner only if it is still the
+active one. Otherwise, the failed/partially initialized world stays write-locked;
+an explicit fresh profile load remains available. Reentrant Load/New requests do
+not redirect the pending target or allocate extra profiles. Delegate hooks are
+removed on acceptance/failure, and destination notices wait for its arriving
+player. No save IDs, valid older saves, consent, authored outcomes or lore change.
+
+All 64 profile/recovery combinations pass portable ownership, failed-arrival,
+source/target isolation, reentrancy, fresh-owner and backup-pinning checks. Removing
+the write barrier, old-world arrival check, missing-owner lock or failed-world
+guard fails regression assertions. Source checks cover the UE event/delegate and
+routing; actual travel failures, delegate signature/build and BeginPlay ordering
+remain Unreal acceptance tasks. Registration does not prove every actor restored.
+
+Fresh checks: 328 Python tests, 73 warning-clean portable C++17 executables, all
+36 gameplay dependency checks and the new handoff test under UBSan pass. Structure,
+literals, transmedia, hygiene, six Node release cases, manuscript, lore sync and
+whitespace checks pass. Prior head `5a4575d` passed GitHub source-checks. Artwork
+and book builds remain optional; no paid services or main merge were used.
+
+Next: inspect initialization/readiness of inventory and reward writes before the
+player registers, particularly fresh-profile startup and recovery. Keep actual
+Unreal startup, UI/controller and interrupted platform IO pending.

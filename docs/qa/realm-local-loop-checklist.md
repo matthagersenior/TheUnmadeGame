@@ -73,9 +73,13 @@ Mera's consent; they do not turn every realm's resident into that storyline.
   the paused menu explains retry and Load/New retain discard confirmation.
   Read-only queries include hidden receipt owners and guard final phase identity.
   Portable fault tests cover 114 sessions and normal post-receipt saves.
-- Next source/portable expansion: failed profile travel/startup and safe original
-  profile/settings restoration. Actor discovery, pause timing, feedback and actual
-  target-world handoff still require Unreal acceptance.
+- Profile handoffs now stage the target until new-world registration; failures
+  restore original selection and keep partially initialized worlds write-locked.
+  All 64 profile/recovery combinations pass portable ownership/isolation tests.
+  Actual delegate behavior, travel and startup ordering require Unreal acceptance.
+- Next source/portable expansion: pre-registration inventory/reward initialization
+  and fresh-profile/recovery readiness. Keep branch divergence visible without
+  pausing development for unnecessary synchronization.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,
