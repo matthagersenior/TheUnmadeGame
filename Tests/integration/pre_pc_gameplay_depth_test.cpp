@@ -38,8 +38,8 @@ int main() {
  assert(std::string(NextInvestigationLead(1,expedition,personal))!=std::string(NextInvestigationLead(7,expedition,personal)));
  auto missing=DescribeConfluenceNeed(0,0,0,0,0.0,0,false);
  assert(missing && missing[0]);
- assert(std::string(DescribeConfluenceNeed(0,1,1,1,10.0,2,true))!=
-        std::string(DescribeConfluenceNeed(0,1,3,1,10.0,2,true)));
+ assert(std::string(DescribeConfluenceNeed(0,1,1,0,10.0,2,true))!=
+        std::string(DescribeConfluenceNeed(0,1,3,0,10.0,2,true)));
  BesHouseholdSnapshot home;
  assert(CommunityPressure(home,3)==HouseholdPressure::Unreported);
  home.phase=static_cast<int>(BesPhase::Walkout);home.firstReportDay=1;
