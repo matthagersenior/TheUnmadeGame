@@ -97,6 +97,12 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 {
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
         UnmadeSave::LoadGameFromSlot());
+    if(Save&&Save->SchemaVersion==1&&Save->bHasHearthPetition&&!Save->bHasLivingWorldSnapshot)
+    {
+        bHearthPetitionRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Petition found without its living world: original save protected"));
+        return;
+    }
     if(Save&&Save->SchemaVersion==1&&Save->bHasCinderholdAdventure&&!Save->bHasLivingWorldSnapshot)
     {
         bCinderholdSaveRejected=true;
