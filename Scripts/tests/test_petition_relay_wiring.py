@@ -7,7 +7,7 @@ class PetitionRelayWiring(unittest.TestCase):
  def test_world_save_protects_orphan_or_malformed_relay(self):
   s=read('Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h')
   h=read('Source/TheUnmadeGame/Public/World/UnmadePrototypeHub.h')
-  c=read('Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp')
+  c=read('Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp')+read('Source/TheUnmadeGame/Private/World/UnmadePetitionRelay.cpp')
   pre=read('Source/TheUnmadeGame/Public/Save/UnmadeCombinedSaveRules.h')
   for token in ('bHasPetitionRelay','PetitionRelayState'):self.assertIn(token,s)
   for token in ('UnmadeCore::PetitionRelay PetitionRelay;','bPetitionRelayRejected'):self.assertIn(token,h)
@@ -16,7 +16,7 @@ class PetitionRelayWiring(unittest.TestCase):
   for token in ('Save->bHasPetitionRelay','RestoredRelay.Restore('):self.assertIn(token,pre)
  def test_real_physical_quest_and_conversations(self):
   p=read('Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp')
-  c=read('Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp')
+  c=read('Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp')+read('Source/TheUnmadeGame/Private/World/UnmadePetitionRelay.cpp')
   npc=read('Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp')
   self.assertIn('Hub->TryPetitionRelayInteraction(this,ResidentDistSq)',p)
   self.assertIn('Hub->RecordPetitionRelayConversation(Target->GetStableId())',p)
