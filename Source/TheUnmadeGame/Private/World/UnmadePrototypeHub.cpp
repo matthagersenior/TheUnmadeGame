@@ -2534,9 +2534,9 @@ FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
     const auto B=BesHousehold.Save();
     const auto Pressure=UnmadeCore::CommunityPressure(B,GetGameDay());
     if(B.phase==static_cast<int>(UnmadeCore::BesPhase::Unheard))
-        return TEXT("BES: No personal wage or household investigation has been heard; speak to the actual Cinderhold courier.");
+        return FString(TEXT("BES: No personal wage or household investigation has been heard; speak to the actual Cinderhold courier.\n"))+GetHearthPetitionJournal();
     if(!B.wardenInterviewed)
-        return TEXT("BES: The courier personally reported unpaid wages. Inspect his real hearth before requesting Rheva's public record.");
+        return FString(TEXT("BES: The courier personally reported unpaid wages. Inspect his real hearth before requesting Rheva's public record.\n"))+GetHearthPetitionJournal();
     const auto* Wage=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
     return FString::Printf(
         TEXT("BES / CINDERHOLD: phase %d | hearth baskets %d | cold days %d | walkout days %d | relief receipts %d | Mera guarantee still owed %d marks | employer %d marks | unpaid %d marks | home inspected %s | Rheva's evidence %s | %s"),
@@ -2547,7 +2547,8 @@ FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
         UTF8_TO_TCHAR(UnmadeCore::BesLine(BesHousehold.Phase(),
             Wage?Wage->owedMarks:0,B.heatBaskets,B.daysCold)))+
         TEXT("\nNEIGHBORHOOD: ")+
-        UTF8_TO_TCHAR(UnmadeCore::HouseholdPressureLine(Pressure));
+        UTF8_TO_TCHAR(UnmadeCore::HouseholdPressureLine(Pressure))+
+        TEXT("\n")+GetHearthPetitionJournal();
 }
 
 FString AUnmadePrototypeHub::GetBesHouseholdResidentLine(FName StableId) const
