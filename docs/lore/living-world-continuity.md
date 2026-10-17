@@ -1027,3 +1027,5 @@ their physical altars. Bes, Rheva, Ovenna and Mera react to actual wage,
 cold-household, work-stoppage and personal-loan states only where their
 existing local knowledge warrants it. No player-origin, save schema,
 quest identity, wages, lore mystery or irreversible choice has changed.
+
+The paired-rite UI also distinguishes an expired cast window from a valid witnessed combination. Restarting casts never changes an accepted choice, adds a reward or creates fictitious witnesses. First-journey shot/sound cues remain authoring directions only.

@@ -976,3 +976,5 @@ with Unreal perception and actual stealth routes still pending.
   heat, walkout and Mera's real guarantee. No fabricated reputation/loans.
 - Added source handoff for 11 opening-to-first-return cinematic/subtitle
   beats. Real scenes, audio imports, actors and Unreal tests remain open.
+
+Follow-up pre-PC check: existing attack windups keep ownership across species feint cycles, and expired paired-rite intervals prompt fresh casting. The first-return cue manifest is validated against the eleven real source-guidance titles. Audio/animation imports remain unverified.

@@ -1,5 +1,5 @@
 #pragma once
-// Readable status for six established dual-rite chambers. This never commits,
+// Readable status for six established dual-rite chambers, including expired windows. This never commits,
 // awards, or fabricates witnessed testimony.
 #include "World/UnmadeConfluenceRules.h"
 #include <cmath>

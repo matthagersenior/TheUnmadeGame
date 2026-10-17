@@ -36,6 +36,7 @@ int main() {
  }
  personal.offered=1;personal.witness=1;personal.evidence=1;
  assert(std::string(NextInvestigationLead(1,expedition,personal))!=std::string(NextInvestigationLead(7,expedition,personal)));
+ assert(std::string(DescribeConfluenceNeed(0,1,3,0,125.0,2,true,120.0)).find("expired")!=std::string::npos);
  auto missing=DescribeConfluenceNeed(0,0,0,0,0.0,0,false);
  assert(missing && missing[0]);
  assert(std::string(DescribeConfluenceNeed(0,1,1,0,10.0,2,true))!=
