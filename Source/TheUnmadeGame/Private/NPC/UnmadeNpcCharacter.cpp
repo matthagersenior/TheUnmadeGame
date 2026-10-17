@@ -422,6 +422,9 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             CharacterLine+=TEXT(" ");
             CharacterLine+=BesHomeLine;
         }
+        const FString PetitionLine=CachedHub->GetHearthPetitionResidentLine(NpcId);
+        if(!PetitionLine.IsEmpty())
+            CharacterLine+=TEXT(" ")+PetitionLine;
         const FString Livelihood=CachedHub->GetLivingEconomyResidentLine(NpcId);
         if(!Livelihood.IsEmpty())
         {
