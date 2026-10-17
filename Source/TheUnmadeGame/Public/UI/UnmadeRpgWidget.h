@@ -19,6 +19,7 @@ protected:
  virtual void NativeTick(const FGeometry& Geometry,float Delta)override;
  virtual FReply NativeOnMouseButtonDown(const FGeometry& Geometry,const FPointerEvent& Event)override;
  virtual FReply NativeOnKeyDown(const FGeometry& Geometry,const FKeyEvent& Event)override;
+ virtual FReply NativeOnAnalogValueChanged(const FGeometry& Geometry,const FAnalogInputEvent& Event)override;
 private:
  UnmadeCore::SessionConfirmation SessionConfirm;
  int SelectedAspect=0;
