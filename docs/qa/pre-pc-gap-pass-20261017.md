@@ -52,3 +52,18 @@ and routes a high-value left/right trigger press to the existing control-capture
 logic only while rebinding is armed. Portable threshold tests reject low press,
 inactive capture and non-trigger axes. This is statically wired; platform input
 routing and real controller feel remain an Unreal acceptance task.
+
+## Living encounter ecology implementation — 17 October
+
+A focused gameplay audit found authored creature routines that did not reach
+navigation when the player was absent. The idle route now enters the normal
+navmesh-backed approach/return path, preserving collision and obstructed
+movement safety. Ordinary non-boss enemies also respect one active nearby
+attack warning and circle toward a lateral opening instead of presenting
+overlapping strikes; authored boss/elder patterns remain exempt.
+
+This adds gameplay behavior in native C++ rather than another simulated
+checklist entry. Portable behavior tests and source wiring checks are included
+in CI, but UE actor ticking, actual world navigation, player perception and
+performance remain first-PC acceptance work. Follow-up should test crowded
+species mixes, LOS cancellation, Fold interruption and both equipped builds.

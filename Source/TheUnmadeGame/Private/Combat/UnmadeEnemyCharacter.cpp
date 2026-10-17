@@ -333,19 +333,46 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     const FVector RoutineTarget=TerritoryHome+FVector(Routine.offsetX,Routine.offsetY,0);
     const bool bLocalRoutine=!bNearby&&!bReturnHome&&FVector::DistSquared2D(GetActorLocation(),RoutineTarget)>FMath::Square(80.f);
     if(bReturnHome||bLocalRoutine)Intent=UnmadeCore::EnemyIntent::Approach;
+    // Only ordinary creatures participate in the local pressure budget.
+    // Bosses, guardians and authored elder timings keep their own rules.
+    int ActiveOrdinaryWarnings=0;
+    if(!bCinderholdElder&&bNearby&&bClearSight&&WindupEndsAt<0.0 &&
+       Intent==UnmadeCore::EnemyIntent::Attack)
+    {
+        for(TActorIterator<AUnmadeEnemyCharacter> other(World);other;++other)
+        {
+            if(*other==this||other->ExpeditionArc>=0||other->bCinderholdElder||
+               other->bWingObserver||!other->CanBeTargeted()||
+               other->WindupEndsAt<Now)continue;
+            if(FVector::DistSquared2D(other->GetActorLocation(),
+               Player->GetActorLocation())>FMath::Square(1050.f))continue;
+            ++ActiveOrdinaryWarnings;
+            break; // One nearby active warning is enough to yield.
+        }
+    }
+    const bool bCircleForOpening=UnmadeCore::ShouldCircleForOpening(
+        Intent==UnmadeCore::EnemyIntent::Attack&&bClearSight,
+        WindupEndsAt>=0.0,ActiveOrdinaryWarnings);
+    if(bCircleForOpening)Intent=UnmadeCore::EnemyIntent::Approach;
     if(Combat->IsStaggered(Now)){Intent=UnmadeCore::EnemyIntent::Hold;WindupEndsAt=-1;}
     if(WindupEndsAt>=0.0 && (Intent!=UnmadeCore::EnemyIntent::Attack||!bClearSight))
         WindupEndsAt=-1.0; // The player can step behind real cover to cancel.
 
     // Navigation must be grounded in a real Unreal navigation path.
     // Never treat a direct root sweep through a pillar as pathfinding.
-    if((bNearby||bReturnHome) && (Intent==UnmadeCore::EnemyIntent::Approach||
+    if(UnmadeCore::WantsCreatureNavigation(bNearby,bReturnHome,bLocalRoutine) &&
+       (Intent==UnmadeCore::EnemyIntent::Approach||
        Intent==UnmadeCore::EnemyIntent::Retreat))
     {
         const float BaseSpeed=bSpeciesConfigured?static_cast<float>(Profile.speed):(Style==UnmadeCore::EnemyStyle::Stalker?130.f:95.f);
         const float Speed=BaseSpeed*(bElderSecondPhase?1.25f:1.f)*static_cast<float>(Consequence.enemySpeedPercent)/100.f;
         GetCharacterMovement()->MaxWalkSpeed=FMath::Max(25.f,Speed)*Combat->MoveMultiplier(Now);
-        const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:Intent==UnmadeCore::EnemyIntent::Retreat
+        // While another nearby creature telegraphs, move sideways to make
+        // the formation tactical instead of launching overlapping strikes.
+        const FVector Side(-Delta.Y,Delta.X,0);
+        const FVector Flank=Player->GetActorLocation()+Side.GetSafeNormal2D()*
+            ((GetUniqueID()&1u)?260.f:-260.f);
+        const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:bCircleForOpening?Flank:Intent==UnmadeCore::EnemyIntent::Retreat
             ?GetActorLocation()-Delta.GetSafeNormal()*480.f
             :Player->GetActorLocation();
         if(Now>=NextPathRefreshAt)
@@ -366,7 +393,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
                 }
             }
         }
-        const bool bLocalPathClear=(bReturnHome||bLocalRoutine)?!World->LineTraceTestByChannel(
+        const bool bLocalPathClear=(bReturnHome||bLocalRoutine||bCircleForOpening)?!World->LineTraceTestByChannel(
             GetActorLocation()+FVector(0,0,55),Destination+FVector(0,0,55),ECC_Visibility,Params):bClearSight;
         FVector Walk=bHasNavWaypoint ? NextNavWaypoint-GetActorLocation()
             :((bLocalPathClear)?Destination-GetActorLocation():FVector::ZeroVector);
@@ -444,7 +471,8 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
             }
         }
     }
-    if(Intent==UnmadeCore::EnemyIntent::Attack && bClearSight &&
+    if(Intent==UnmadeCore::EnemyIntent::Attack &&
+       UnmadeCore::MayBeginOrdinaryWindup(bClearSight,ActiveOrdinaryWarnings) &&
        WindupEndsAt<0.0 && Now>=NextWindupAllowedAt && Now>=RecoveryEndsAt)
     {
         NormalLockedAim=Player->GetActorLocation();

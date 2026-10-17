@@ -986,3 +986,17 @@ may set an action key; low-value jitter and stick axes do not select a binding.
 This remains a non-narrative input correction and does not affect authored
 sequences, resident testimony, rites or rewards. Verify with physical controller
 input in Unreal when the Editor is available.
+
+## 17 October 2026 — Lived-in creatures and readable ordinary combat
+
+Outside an immediate threat, ordinary wild creatures should travel their
+authored forage and patrol routes, returning toward their territory when
+displaced instead of freezing until a traveler is nearby. Movement remains
+subject to actual navigation, terrain and collision. At close range ordinary
+creatures coordinate attack warnings: one threatening windup occupies the
+immediate local pressure window, while nearby peers circle for an opening.
+Their damage, timing, identity, territorial defense and exposure to Fold are
+unchanged. Named bosses, elders and authored guardians retain independent
+attack phases. No witnesses, quests, reward quantities, saved outcomes,
+resident knowledge or world canon have been altered. The engine must still
+verify physical pathfinding, spatial fairness and combat feel.
