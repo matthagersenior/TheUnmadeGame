@@ -1012,3 +1012,20 @@ no public witness, quest event, reputation, new item, loot, choice, save field o
 memory is generated. Named elders, champions and bosses keep their authored
 encounter rhythm. Unreal sight, physical crouching, creature navigation and
 controller accessibility still require real engine verification.
+
+## 17 October 2026 — Player discovery and living-world depth
+
+The twelve established ordinary creature species express different transient
+tactical postures (feints, retreats, orbiting and held strikes) within their
+authored attack ranges and warning windows; bosses keep their own rhythms.
+Crossings' opening-to-first-return beat follows existing saved quests and
+never advances via the journal. All nine realms' investigation leads point
+toward actual routes, finite caches, witnesses and local accords without
+revealing inaccessible areas or creating rewards. The six paired-rite
+chambers explain mastery, casts and witness requirements without bypassing
+their physical altars. Bes, Rheva, Ovenna and Mera react to actual wage,
+cold-household, work-stoppage and personal-loan states only where their
+existing local knowledge warrants it. No player-origin, save schema,
+quest identity, wages, lore mystery or irreversible choice has changed.
+
+The paired-rite UI also distinguishes an expired cast window from a valid witnessed combination. Restarting casts never changes an accepted choice, adds a reward or creates fictitious witnesses. First-journey shot/sound cues remain authoring directions only.

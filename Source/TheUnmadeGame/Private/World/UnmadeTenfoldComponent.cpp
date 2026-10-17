@@ -3,6 +3,7 @@
 #include "Save/UnmadeRealityTravelRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadeTenfoldComponent.h"
+#include "World/UnmadeConfluenceGuidanceRules.h"
 #include "Player/UnmadeCharacter.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Save/UnmadePrototypeSave.h"
@@ -312,11 +313,21 @@ void UUnmadeTenfoldComponent::StudyConfluence()
     if(bSaveRejected || !GetWorld())return;
     const auto Id=static_cast<UnmadeCore::ConfluenceId>(SelectedConfluence);
     const int Site=FindNearbyConfluence();
+    const auto& Trial=UnmadeCore::Confluences[SelectedConfluence];
+    const bool BothMastered=Chronicle.IsMastered(Trial.first)&&
+       Chronicle.IsMastered(Trial.second);
+    const auto& Progress=Confluence.Snapshot();
+    const FString Guidance=FString(UTF8_TO_TCHAR(
+       UnmadeCore::DescribeConfluenceNeed(SelectedConfluence,
+         Confluence.Stage(Id),Progress.casts[SelectedConfluence],
+         Site,GetWorld()->GetTimeSeconds(),GatherContext().verifiedWitnesses,
+         BothMastered,Progress.windowEnds[SelectedConfluence])));
     if(Confluence.Stage(Id)!=0)
     {
-        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Cyan,
-            FString(UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence]
-                .chapters[FMath::Min(Confluence.Stage(Id),2)])));
+        if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
+            FString(UTF8_TO_TCHAR(Trial.chapters[
+               FMath::Min(Confluence.Stage(Id),2)]))+
+            TEXT("\n")+Guidance);
         return;
     }
     std::uint16_t Mastered=0;
@@ -328,7 +339,8 @@ void UUnmadeTenfoldComponent::StudyConfluence()
     if(Result!=UnmadeCore::ConfluenceResult::Advanced)
     {
         if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
-            TEXT("Chamber sealed: master both listed disciplines, find its physical altar, and finish earlier trials."));
+            TEXT("CHAMBER SEALED: ")+Guidance+
+            TEXT(" Follow the established rites; earlier trials may still be required."));
         return;
     }
     if(!Persist())

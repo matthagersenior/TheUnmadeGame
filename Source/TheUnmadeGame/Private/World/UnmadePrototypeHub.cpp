@@ -2513,6 +2513,7 @@ FString AUnmadePrototypeHub::GetLocalMaterialJournal() const
 FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
 {
     const auto B=BesHousehold.Save();
+    const auto Pressure=UnmadeCore::CommunityPressure(B,GetGameDay());
     if(B.phase==static_cast<int>(UnmadeCore::BesPhase::Unheard))
         return TEXT("BES: No personal wage or household investigation has been heard; speak to the actual Cinderhold courier.");
     if(!B.wardenInterviewed)
@@ -2525,13 +2526,27 @@ FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
         B.homeVisited?TEXT("yes"):TEXT("no"),
         B.wardenInterviewed?TEXT("yes"):TEXT("no"),
         UTF8_TO_TCHAR(UnmadeCore::BesLine(BesHousehold.Phase(),
-            Wage?Wage->owedMarks:0,B.heatBaskets,B.daysCold)));
+            Wage?Wage->owedMarks:0,B.heatBaskets,B.daysCold)))+
+        TEXT("\nNEIGHBORHOOD: ")+
+        UTF8_TO_TCHAR(UnmadeCore::HouseholdPressureLine(Pressure));
 }
 
 FString AUnmadePrototypeHub::GetBesHouseholdResidentLine(FName StableId) const
 {
     const auto State=BesHousehold.Save();
     const auto* Wage=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
+    const auto Pressure=UnmadeCore::CommunityPressure(State,GetGameDay());
+    // Known named people discuss only local circumstances they can actually
+    // inspect; none inherits omniscient quest knowledge or free resources.
+    if(StableId==FName(TEXT("npc.cinderhold.emberwarden.001")) &&
+       Pressure==UnmadeCore::HouseholdPressure::Stoppage && State.wardenInterviewed)
+        return TEXT("Rheva: The courier's stoppage has reached the common route. I verified what the books owe him; we must fund restitution, not demand another unpaid shift.");
+    if(StableId==FName(TEXT("npc.cinderhold.healer.001")) &&
+       Pressure==UnmadeCore::HouseholdPressure::ColdHousehold)
+        return TEXT("Ovenna: His hearth is cold. I saw the household need, not the payroll entries. Carry relief to his actual door; heat will not repay the wages.");
+    if(StableId==FName(TEXT("npc.saltwake.courier.001")) &&
+       Pressure==UnmadeCore::HouseholdPressure::Guarantee && State.guaranteeOwed>0)
+        return FString::Printf(TEXT("Mera: I personally underwrote %d marks. A warm hearth matters, but this is still money my household earned and Cinderhold owes."),State.guaranteeOwed);
     if(StableId==FName(TEXT("npc.cinderhold.courier.001")))
         return FString::Printf(TEXT("Bes: %s I have %d warm baskets in my home, %d days without enough heat, and %d marks still owed. My work stoppage has lasted %d recorded days."),
             UTF8_TO_TCHAR(UnmadeCore::BesLine(BesHousehold.Phase(),

@@ -36,6 +36,10 @@ jobs:
           /tmp/unmade-style
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/defense_receipt_test.cpp -o /tmp/unmade-defense-receipts
           /tmp/unmade-defense-receipts
+      - name: Test twelve tactics, first journey, confluences and household states
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/integration/pre_pc_gameplay_depth_test.cpp -o /tmp/unmade-gameplay-depth
+          /tmp/unmade-gameplay-depth
       - name: Test crouched creature detection and lasting alertness
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/creature_awareness_test.cpp -o /tmp/unmade-creature-awareness
