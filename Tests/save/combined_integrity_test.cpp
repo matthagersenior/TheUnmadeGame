@@ -95,6 +95,22 @@ static void CaptureItems(Record& record,const InventoryModel& model){
 
 int main(){
     Record legacy;assert(Valid(legacy));
+    // Optional petition is entirely absent from older schema-1 profiles.
+    auto unchosen=Earned();
+    unchosen.bHasHearthPetition=true;
+    unchosen.HearthPetitionState={0,0,0,0,0,0};
+    assert(Valid(unchosen));
+    auto incomplete=unchosen;
+    incomplete.HearthPetitionState={3,1,1,1,1};
+    assert(!Valid(incomplete)); // missing serialized field
+    incomplete=unchosen;
+    incomplete.HearthPetitionState={3,1,1,1,1,0};
+    assert(!Valid(incomplete)); // no Bes/home/warden verified
+    auto orphan=legacy;
+    orphan.bHasHearthPetition=true;
+    orphan.HearthPetitionState={0,0,0,0,0,0};
+    assert(!Valid(orphan)); // no parent living world
+
     // Original inventory length remains readable; appended quantities default to zero.
     auto old=Earned();old.ItemQuantities.resize(28);assert(Valid(old));
     const auto good=Earned();

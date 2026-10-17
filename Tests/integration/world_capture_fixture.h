@@ -12,6 +12,7 @@ inline void CaptureWorldFields(SaveFixture::Record& out,const SaveFixture::Recor
  out.BesFirstReportDay=world.BesFirstReportDay;
  out.BesHeatBaskets=world.BesHeatBaskets;
  out.BesHouseholdDay=world.BesHouseholdDay;
+ out.HearthPetitionState=world.HearthPetitionState;
  out.BesMeraGuaranteeOwed=world.BesMeraGuaranteeOwed;
  out.BesQuestPhase=world.BesQuestPhase;
  out.BesReliefPacks=world.BesReliefPacks;
@@ -105,6 +106,7 @@ inline void CaptureWorldFields(SaveFixture::Record& out,const SaveFixture::Recor
  out.bHasAdventureDepth=world.bHasAdventureDepth;
  out.bHasAfterlightSnapshot=world.bHasAfterlightSnapshot;
  out.bHasBesHousehold=world.bHasBesHousehold;
+ out.bHasHearthPetition=world.bHasHearthPetition;
  out.bHasCinderholdAdventure=world.bHasCinderholdAdventure;
  out.bHasEchoQuestSnapshot=world.bHasEchoQuestSnapshot;
  out.bHasExpeditions=world.bHasExpeditions;

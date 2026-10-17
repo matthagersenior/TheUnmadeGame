@@ -72,6 +72,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshOuterReactionWorld();
     RefreshMaterialWorld();
     RefreshBesHouseholdWorld();
+    RefreshHearthPetitionWorld();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
@@ -96,6 +97,12 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 {
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
         UnmadeSave::LoadGameFromSlot());
+    if(Save&&Save->SchemaVersion==1&&Save->bHasHearthPetition&&!Save->bHasLivingWorldSnapshot)
+    {
+        bHearthPetitionRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Petition found without its living world: original save protected"));
+        return;
+    }
     if(Save&&Save->SchemaVersion==1&&Save->bHasCinderholdAdventure&&!Save->bHasLivingWorldSnapshot)
     {
         bCinderholdSaveRejected=true;
@@ -128,6 +135,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::MaterialWorld RestoredMaterials;
     UnmadeCore::LivingEconomy RestoredLiving;
     UnmadeCore::BesHousehold RestoredBes;
+    UnmadeCore::HearthPetition RestoredPetition;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -486,6 +494,17 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         }
     }
     else RestoredBes.InitializeAtDay(RestoredClock.DayIndex()+1);
+    if(Save->bHasHearthPetition)
+    {
+        const auto& Data=Save->HearthPetitionState;
+        if(Data.Num()!=6 || !RestoredPetition.Restore(
+              {Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]},
+              RestoredBes.Save(),RestoredClock.DayIndex()+1))
+        {
+            bHearthPetitionRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid Hearth Petition record: all world writes protected"));
+        }
+    }
     if(Save->bHasCinderholdAdventure)
     {
         const auto& S=Save->CinderholdAdventureState;
@@ -509,6 +528,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         {bRoadSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Remembered roads corrupt: original save protected"));}
     }
     BesHousehold=RestoredBes;
+    HearthPetition=RestoredPetition;
     LivingTrades=RestoredLiving;
     Materials=RestoredMaterials;
     OuterReactions=RestoredOuter;
@@ -629,6 +649,7 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
        bRealityConsequenceRejected || bOuterReactionsRejected ||
        bMaterialSaveRejected || bLivingEconomyRejected ||
        bBesHouseholdRejected)return false;
+    if(bHearthPetitionRejected)return false;
     for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc){
         const FName Id=Npc->GetStableId();if(Id.IsNone())continue;
         const auto Snapshot=Npc->GetMemory()->WriteSnapshot(Id);
@@ -830,6 +851,11 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
     Save->BesMeraGuaranteeOwed=BesRecord.guaranteeOwed;
     Save->bBesMeraConsented=BesRecord.meraConsented;
     Save->bBesMeraGuaranteeUsed=BesRecord.meraGuaranteeUsed;
+    // Additive v1-compatible optional branch; never reuse the wage fields.
+    const auto Petition=HearthPetition.Save();
+    Save->bHasHearthPetition=true;
+    Save->HearthPetitionState={Petition.stage,Petition.ending,
+        Petition.bookDay,Petition.ledgerDay,Petition.choiceDay,Petition.returnDay};
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -2515,9 +2541,9 @@ FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
     const auto B=BesHousehold.Save();
     const auto Pressure=UnmadeCore::CommunityPressure(B,GetGameDay());
     if(B.phase==static_cast<int>(UnmadeCore::BesPhase::Unheard))
-        return TEXT("BES: No personal wage or household investigation has been heard; speak to the actual Cinderhold courier.");
+        return FString(TEXT("BES: No personal wage or household investigation has been heard; speak to the actual Cinderhold courier.\n"))+GetHearthPetitionJournal();
     if(!B.wardenInterviewed)
-        return TEXT("BES: The courier personally reported unpaid wages. Inspect his real hearth before requesting Rheva's public record.");
+        return FString(TEXT("BES: The courier personally reported unpaid wages. Inspect his real hearth before requesting Rheva's public record.\n"))+GetHearthPetitionJournal();
     const auto* Wage=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
     return FString::Printf(
         TEXT("BES / CINDERHOLD: phase %d | hearth baskets %d | cold days %d | walkout days %d | relief receipts %d | Mera guarantee still owed %d marks | employer %d marks | unpaid %d marks | home inspected %s | Rheva's evidence %s | %s"),
@@ -2528,7 +2554,8 @@ FString AUnmadePrototypeHub::GetBesHouseholdJournal() const
         UTF8_TO_TCHAR(UnmadeCore::BesLine(BesHousehold.Phase(),
             Wage?Wage->owedMarks:0,B.heatBaskets,B.daysCold)))+
         TEXT("\nNEIGHBORHOOD: ")+
-        UTF8_TO_TCHAR(UnmadeCore::HouseholdPressureLine(Pressure));
+        UTF8_TO_TCHAR(UnmadeCore::HouseholdPressureLine(Pressure))+
+        TEXT("\n")+GetHearthPetitionJournal();
 }
 
 FString AUnmadePrototypeHub::GetBesHouseholdResidentLine(FName StableId) const
@@ -2575,7 +2602,26 @@ FString AUnmadePrototypeHub::GetBesHouseholdResidentLine(FName StableId) const
 
 bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
 {
-    if(bBesHouseholdRejected||bLivingEconomyRejected||bMaterialSaveRejected)return false;
+    if(bBesHouseholdRejected||bLivingEconomyRejected||bMaterialSaveRejected||
+       bHearthPetitionRejected)return false;
+    if(StableId==FName(TEXT("npc.cinderhold.courier.001")) &&
+       HearthPetition.Stage()==3)
+    {
+        const auto Acknowledged=UnmadeCore::CommitHearthPetition(HearthPetition,[&]{
+            return HearthPetition.ReturnWitness(GetGameDay());
+        },[&]{return WriteWorldSnapshot();});
+        if(Acknowledged==UnmadeCore::PetitionCommitResult::SaveFailed)
+        {
+            NotifyRpg(TEXT("Bes heard your petition, but the return could not be saved. No permanent acknowledgement was recorded."));
+            return true;
+        }
+        if(Acknowledged==UnmadeCore::PetitionCommitResult::Committed)
+        {
+            RefreshHearthPetitionWorld();
+            NotifyRpg(GetHearthPetitionResidentLine(StableId));
+            return true;
+        }
+    }
     const auto Old=BesHousehold.Save();
     UnmadeCore::BesOutcome Result=UnmadeCore::BesOutcome::Blocked;
     if(StableId==FName(TEXT("npc.cinderhold.courier.001")))
@@ -2606,6 +2652,134 @@ bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
                 ?TEXT("MERA CONSENTS: Her bounded loan is available at the real Saltwake guarantee marker. It will shift the debt, not erase it.")
                 :TEXT("RHEVA: The home and municipal pay record agree. Carry real warmth, walk out, repay the debt, or ask Mera's consent."));
     return true;
+}
+
+void AUnmadePrototypeHub::RefreshHearthPetitionWorld()
+{
+    // Only the actually chosen public/private result becomes visible.
+    // The station signs remain independently reachable before the decision.
+    SetRiteWorldActorState(FName(TEXT("Petition.PrivateMarker")),
+        HearthPetition.Ending()==1);
+    SetRiteWorldActorState(FName(TEXT("Petition.PublicMarker")),
+        HearthPetition.Ending()==2);
+}
+
+FString AUnmadePrototypeHub::GetHearthPetitionJournal()const
+{
+    return FString(TEXT("THE HEARTH PETITION / CINDERHOLD\n"))+
+        UTF8_TO_TCHAR(HearthPetition.Journal())+
+        TEXT("\nFind the wage book in Bes's actual home; Rheva's civic ledger and the two petition tables stand on the road outside. Return the next morning to speak to Bes personally.\n");
+}
+
+FString AUnmadePrototypeHub::GetHearthPetitionResidentLine(FName StableId)const
+{
+    // A document choice does not give remote people omniscient knowledge.
+    // Bes is told in person on the next-day return before he reacts.
+    if(HearthPetition.Stage()!=4)return FString();
+    if(StableId==FName(TEXT("npc.cinderhold.courier.001")))
+        return HearthPetition.Ending()==1
+            ?TEXT("Bes: You brought the confidential petition back to me. Our neighbors' names are protected, but the employer still owes the wages shown in Rheva's ledger.")
+            :TEXT("Bes: You brought the redacted public petition back. Let the city answer its books without turning my household into a spectacle. No hearing has paid my wages.");
+    if(StableId==FName(TEXT("npc.cinderhold.emberwarden.001")))
+        return HearthPetition.Ending()==1
+            ?TEXT("Rheva: I will keep the confidential household record separate from public testimony; unpaid marks remain in the municipal books.")
+            :TEXT("Rheva: A redacted public question now stands outside the office. It requests an accounting, not a verdict, and does not erase the existing debt.");
+    return FString();
+}
+
+bool AUnmadePrototypeHub::TryHearthPetitionInteraction(
+    AUnmadeCharacter* Player,double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player)||!GetWorld()||!bWorldReady||
+       bHearthPetitionRejected||bBesHouseholdRejected||
+       !UnmadeSave::IsSessionWritable(Player))return false;
+    const FVector At=Player->GetActorLocation();
+    const auto* Region=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!Region||Region->realm!=UnmadeCore::Realm::HearthBeneath)return false;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        const bool Book=It->ActorHasTag(FName(TEXT("Bes.MissedWageBook")));
+        const bool Ledger=It->ActorHasTag(FName(TEXT("Petition.CivicLedger")));
+        const bool Private=It->ActorHasTag(FName(TEXT("Petition.PrivateChoice")));
+        const bool Public=It->ActorHasTag(FName(TEXT("Petition.PublicChoice")));
+        const bool Return=It->ActorHasTag(FName(TEXT("Petition.ReturnWitness")));
+        const bool PrivateRecord=It->ActorHasTag(FName(TEXT("Petition.PrivateMarker")));
+        const bool PublicRecord=It->ActorHasTag(FName(TEXT("Petition.PublicMarker")));
+        if(!Book&&!Ledger&&!Private&&!Public&&!Return&&!PrivateRecord&&!PublicRecord)continue;
+        // Completed sites must not steal another nearby quest action.
+        if(Book&&HearthPetition.Stage()!=0)continue;
+        if(Ledger&&HearthPetition.Stage()!=1)continue;
+        if((Private||Public)&&HearthPetition.Stage()!=2)continue;
+        if(Return&&HearthPetition.Stage()!=3)continue;
+        if(PrivateRecord&&HearthPetition.Ending()!=1)continue;
+        if(PublicRecord&&HearthPetition.Ending()!=2)continue;
+        const double Distance=FVector::DistSquared(At,It->GetActorLocation());
+        if(Distance>FMath::Square(235.f)||
+           Distance>=CompetingNpcDistanceSq)continue;
+        FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeHearthPetition),false);
+        Sight.AddIgnoredActor(Player);Sight.AddIgnoredActor(*It);
+        if(GetWorld()->LineTraceTestByChannel(
+              At+FVector(0,0,70),It->GetActorLocation()+FVector(0,0,65),
+              ECC_Visibility,Sight))continue;
+        if(PrivateRecord||PublicRecord)
+        {
+            // Distinct physically discoverable consequences, never a reward
+            // or an auto-paid wage. Only the chosen document exists.
+            NotifyRpg(PrivateRecord
+                ?TEXT("SEALED HOUSEHOLD PETITION: The confidential record is protected here. The employer still owes Bes. Neither Mera nor refuge guests have been named publicly.")
+                :TEXT("REDACTED PUBLIC DOCKET: The street may read the unresolved wage claim without seeing the refuge guests' names. An open hearing is not a ruling or repayment."));
+            return true;
+        }
+        if(Return)
+        {
+            // The paper marker directs the player to Bes; it does not
+            // impersonate a conversation or create a remote witness.
+            NotifyRpg(GetHearthPetitionJournal());
+            return true;
+        }
+        const FName Site=Private?FName(TEXT("Petition.PrivateChoice")):
+             Public?FName(TEXT("Petition.PublicChoice")):NAME_None;
+        if(!Site.IsNone())
+        {
+            if(HearthPetition.Stage()!=2)
+            {
+                NotifyRpg(GetHearthPetitionJournal());
+                return true;
+            }
+            const double Now=GetWorld()->GetTimeSeconds();
+            if(HearthPetitionPendingTag!=Site||Now>HearthPetitionConfirmUntil)
+            {
+                HearthPetitionPendingTag=Site;
+                HearthPetitionConfirmUntil=Now+12.0;
+                NotifyRpg(Private
+                  ?TEXT("CONFIDENTIAL PETITION: shelter identities are protected. The wages remain unpaid. Press E again here within 12 seconds to make this permanent.")
+                  :TEXT("REDACTED PUBLIC HEARING: file a public request without refuge names. A hearing is not repayment or conviction. Press E again here within 12 seconds to make this permanent."));
+                return true;
+            }
+        }
+        HearthPetitionPendingTag=NAME_None;
+        HearthPetitionConfirmUntil=-1;
+        const auto Outcome=UnmadeCore::CommitHearthPetition(HearthPetition,[&]{
+            const int Day=GetGameDay();
+            return Book?HearthPetition.ReadBook(Day,BesHousehold.Save()):
+                   Ledger?HearthPetition.WitnessLedger(Day,BesHousehold.Save()):
+                   HearthPetition.Decide(Private?1:2,Day);
+        },[&]{return WriteWorldSnapshot();});
+        if(Outcome==UnmadeCore::PetitionCommitResult::SaveFailed)
+        {
+            NotifyRpg(TEXT("The petition could not be saved. The original record was restored; your choice has NOT been committed."));
+            return true;
+        }
+        if(Outcome==UnmadeCore::PetitionCommitResult::Committed)
+        {
+            RefreshHearthPetitionWorld();
+            NotifyRpg(GetHearthPetitionJournal());
+            return true;
+        }
+        NotifyRpg(GetHearthPetitionJournal());
+        return true;
+    }
+    return false;
 }
 
 void AUnmadePrototypeHub::RefreshBesHouseholdWorld()
@@ -3169,10 +3343,24 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Bes.Bed")));
     SpawnBlock(BesTown+FVector(1020,455,65),FVector(1.0,.65,1.3),
         FName(TEXT("Bes.WarmthStorage")));
-    SpawnBlock(BesTown+FVector(1400,730,60),FVector(1.05,.65,1.2),
+    SpawnBlock(BesTown+FVector(1040,730,60),FVector(1.05,.65,1.2),
         FName(TEXT("Bes.PayDesk")));
-    SpawnBlock(BesTown+FVector(1400,735,125),FVector(.55,.35,.2),
+    SpawnBlock(BesTown+FVector(1040,735,125),FVector(.55,.35,.2),
         FName(TEXT("Bes.MissedWageBook")));
+    // Optional two-branch petition. Every step is physically inspected.
+    // The notice and return markers have no loot or automatic debt effects.
+    SpawnBlock(BesTown+FVector(600,1150,105),FVector(.6,.45,1.5),
+        FName(TEXT("Petition.CivicLedger")));
+    SpawnBlock(BesTown+FVector(-80,1120,100),FVector(.6,.45,1.45),
+        FName(TEXT("Petition.PrivateChoice")));
+    SpawnBlock(BesTown+FVector(310,1120,100),FVector(.6,.45,1.45),
+        FName(TEXT("Petition.PublicChoice")));
+    SpawnBlock(BesTown+FVector(740,1590,100),FVector(.65,.5,1.4),
+        FName(TEXT("Petition.ReturnWitness")));
+    SpawnBlock(BesTown+FVector(-80,1420,150),FVector(1.3,.35,2.8),
+        FName(TEXT("Petition.PrivateMarker")));
+    SpawnBlock(BesTown+FVector(310,1420,170),FVector(.75,.5,3.2),
+        FName(TEXT("Petition.PublicMarker")));
     SpawnBlock(BesTown+FVector(1090,760,30),FVector(.6,.5,.6),
         FName(TEXT("Bes.ChildHeightStool")));
     SpawnBlock(BesTown+FVector(1240,845,180),FVector(2.0,.2,.2),
@@ -3197,6 +3385,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnBlock(Saltwake+FVector(1230,360,225),FVector(.7,.25,1.0),
         FName(TEXT("Bes.GuarantorRecord")));
     RefreshBesHouseholdWorld();
+    RefreshHearthPetitionWorld();
     // Nine visible work sites, one finite stockroom and household delivery
     // target per region. Actor tags are stable, save fields contain the truth.
     for(int i=0;i<9;++i)

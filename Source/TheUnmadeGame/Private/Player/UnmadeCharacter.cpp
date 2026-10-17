@@ -984,6 +984,7 @@ void AUnmadeCharacter::Interact()
             if(Hub->TryRoadInteraction(this,ResidentDistSq))return;
             if(Hub->TryCinderholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryFieldSurveyInteraction(this,ResidentDistSq))return;
+            if(Hub->TryHearthPetitionInteraction(this,ResidentDistSq))return;
             if(Hub->TryBesHouseholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryLivingTradeInteraction(this,ResidentDistSq))return;
             if(Hub->TryMaterialInteraction(this,ResidentDistSq))return;

@@ -1,3 +1,12 @@
+## 2026-10-17 — Permanent Cinderhold Hearth Petition
+
+Implemented an optional, physically inspected wage-record petition with two
+confirmed exclusive outcomes, permanent world markers, a later conversation
+with the original resident, rollback-safe optional save state and replay/
+corruption tests. No invented restitution, AI testimony, materials or rewards.
+See Chapter 41, Authoring/hearth_petition_v1.json and QA handoff. Unreal
+import, UHT, movement and physical playthrough remain unverified.
+
 ## 2026-10-17 — Interrupted encounters, attributed defeats and recovery
 
 Failed healing and revival writes now restore complete runtime combat participants,
