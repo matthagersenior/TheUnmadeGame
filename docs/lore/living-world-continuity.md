@@ -1029,3 +1029,28 @@ existing local knowledge warrants it. No player-origin, save schema,
 quest identity, wages, lore mystery or irreversible choice has changed.
 
 The paired-rite UI also distinguishes an expired cast window from a valid witnessed combination. Restarting casts never changes an accepted choice, adds a reward or creates fictitious witnesses. First-journey shot/sound cues remain authoring directions only.
+
+## 17 October 2026 — The Hearth Petition (optional, branch-exclusive)
+
+A new local Cinderhold investigation can begin only after Bes personally
+reports unpaid wages and his actual home is visited. The traveler reads his
+physical missed-wage book and hears Rheva corroborate the debt before
+inspecting the exterior civic ledger. Both pieces of evidence are required
+before an irreversible petition can be lodged. Two *physically distinct*
+petition stations permit confidentiality or a redacted public request, with
+two deliberate E interactions at the same station.
+
+A confidential household record or a redacted public docket becomes a
+permanent, exclusive physical world fact. Neither pays wages, produces new
+currency/resources, forces testimony or treats the employer as absolved.
+A separate following-day conversation with Bes records his personal
+acknowledgment; simply inspecting a distant return marker does not teach
+an NPC something they have not witnessed. Rheva's comments respect the
+accepted return state; uninvolved residents retain their own knowledge.
+
+The optional state is additive to schema-1 saves and cannot overwrite old
+wages, clock, inventory, rite history or first-run identity. Malformed records
+block world writes instead of resetting to a fabricated fresh quest.
+A rejected save reverts the attempted petition step. The original Unpaid
+Shift, Mera's independent consent, the wider saga and unresolved mysteries
+remain canonical.

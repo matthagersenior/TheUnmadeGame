@@ -978,3 +978,20 @@ with Unreal perception and actual stealth routes still pending.
   beats. Real scenes, audio imports, actors and Unreal tests remain open.
 
 Follow-up pre-PC check: existing attack windups keep ownership across species feint cycles, and expired paired-rite intervals prompt fresh casting. The first-return cue manifest is validated against the eleven real source-guidance titles. Audio/animation imports remain unverified.
+
+## 2026-10-17 — Chapter 41: physical Cinderhold petition branches
+
+- The actual Bes home book, Rheva civic ledger, separate private/public
+  petition stations and next-day Bes conversation form an optional source
+  gameplay loop. Each physical station requires reachability and clear sight.
+- Permanent outcomes are confidential household protection or a redacted
+  public hearing; both leave wage arrears, Mera's own marks, supplies and
+  original quest outcomes unchanged. Two-step confirmation prevents
+  accidental exclusivity.
+- The records are expressed as mutually exclusive world markers and distinct
+  personally attributable reactions only after actual conversation.
+- New optional schema-1 fields restore existing saves to the unstarted
+  petition, strictly validate chronology and testimony, and refuse writes
+  if the stored branch is corrupt. Save rejection rolls back the attempt.
+- Portable state and source wiring tests are CI-backed; actors/animations,
+  sight, next-day visit and physical platform IO remain engine-unverified.
