@@ -2594,7 +2594,26 @@ FString AUnmadePrototypeHub::GetBesHouseholdResidentLine(FName StableId) const
 
 bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
 {
-    if(bBesHouseholdRejected||bLivingEconomyRejected||bMaterialSaveRejected)return false;
+    if(bBesHouseholdRejected||bLivingEconomyRejected||bMaterialSaveRejected||
+       bHearthPetitionRejected)return false;
+    if(StableId==FName(TEXT("npc.cinderhold.courier.001")) &&
+       HearthPetition.Stage()==3)
+    {
+        const auto Acknowledged=UnmadeCore::CommitHearthPetition(HearthPetition,[&]{
+            return HearthPetition.ReturnWitness(GetGameDay());
+        },[&]{return WriteWorldSnapshot();});
+        if(Acknowledged==UnmadeCore::PetitionCommitResult::SaveFailed)
+        {
+            NotifyRpg(TEXT("Bes heard your petition, but the return could not be saved. No permanent acknowledgement was recorded."));
+            return true;
+        }
+        if(Acknowledged==UnmadeCore::PetitionCommitResult::Committed)
+        {
+            RefreshHearthPetitionWorld();
+            NotifyRpg(GetHearthPetitionResidentLine(StableId));
+            return true;
+        }
+    }
     const auto Old=BesHousehold.Save();
     UnmadeCore::BesOutcome Result=UnmadeCore::BesOutcome::Blocked;
     if(StableId==FName(TEXT("npc.cinderhold.courier.001")))
@@ -2625,6 +2644,116 @@ bool AUnmadePrototypeHub::RecordBesHouseholdConversation(FName StableId)
                 ?TEXT("MERA CONSENTS: Her bounded loan is available at the real Saltwake guarantee marker. It will shift the debt, not erase it.")
                 :TEXT("RHEVA: The home and municipal pay record agree. Carry real warmth, walk out, repay the debt, or ask Mera's consent."));
     return true;
+}
+
+void AUnmadePrototypeHub::RefreshHearthPetitionWorld()
+{
+    // Only the actually chosen public/private result becomes visible.
+    // The station signs remain independently reachable before the decision.
+    SetRiteWorldActorState(FName(TEXT("Petition.PrivateMarker")),
+        HearthPetition.Ending()==1);
+    SetRiteWorldActorState(FName(TEXT("Petition.PublicMarker")),
+        HearthPetition.Ending()==2);
+}
+
+FString AUnmadePrototypeHub::GetHearthPetitionJournal()const
+{
+    return FString(TEXT("THE HEARTH PETITION / CINDERHOLD\n"))+
+        UTF8_TO_TCHAR(HearthPetition.Journal())+
+        TEXT("\nFind the wage book in Bes's actual home; Rheva's civic ledger and the two petition tables stand on the road outside. Return the next morning to speak to Bes personally.\n");
+}
+
+FString AUnmadePrototypeHub::GetHearthPetitionResidentLine(FName StableId)const
+{
+    // A document choice does not give remote people omniscient knowledge.
+    // Bes is told in person on the next-day return before he reacts.
+    if(HearthPetition.Stage()!=4)return FString();
+    if(StableId==FName(TEXT("npc.cinderhold.courier.001")))
+        return HearthPetition.Ending()==1
+            ?TEXT("Bes: You brought the confidential petition back to me. Our neighbors' names are protected, but the employer still owes the wages shown in Rheva's ledger.")
+            :TEXT("Bes: You brought the redacted public petition back. Let the city answer its books without turning my household into a spectacle. No hearing has paid my wages.");
+    if(StableId==FName(TEXT("npc.cinderhold.emberwarden.001")))
+        return HearthPetition.Ending()==1
+            ?TEXT("Rheva: I will keep the confidential household record separate from public testimony; unpaid marks remain in the municipal books.")
+            :TEXT("Rheva: A redacted public question now stands outside the office. It requests an accounting, not a verdict, and does not erase the existing debt.");
+    return FString();
+}
+
+bool AUnmadePrototypeHub::TryHearthPetitionInteraction(
+    AUnmadeCharacter* Player,double CompetingNpcDistanceSq)
+{
+    if(!IsValid(Player)||!GetWorld()||!bWorldReady||
+       bHearthPetitionRejected||bBesHouseholdRejected||
+       !UnmadeSave::IsSessionWritable(Player))return false;
+    const FVector At=Player->GetActorLocation();
+    const auto* Region=UnmadeCore::RealmReactionAt(At.X,At.Y);
+    if(!Region||Region->realm!=UnmadeCore::Realm::HearthBeneath)return false;
+    for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
+    {
+        const bool Book=It->ActorHasTag(FName(TEXT("Bes.MissedWageBook")));
+        const bool Ledger=It->ActorHasTag(FName(TEXT("Petition.CivicLedger")));
+        const bool Private=It->ActorHasTag(FName(TEXT("Petition.PrivateChoice")));
+        const bool Public=It->ActorHasTag(FName(TEXT("Petition.PublicChoice")));
+        const bool Return=It->ActorHasTag(FName(TEXT("Petition.ReturnWitness")));
+        if(!Book&&!Ledger&&!Private&&!Public&&!Return)continue;
+        const double Distance=FVector::DistSquared(At,It->GetActorLocation());
+        if(Distance>FMath::Square(235.f)||
+           Distance>=CompetingNpcDistanceSq)continue;
+        FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeHearthPetition),false);
+        Sight.AddIgnoredActor(Player);Sight.AddIgnoredActor(*It);
+        if(GetWorld()->LineTraceTestByChannel(
+              At+FVector(0,0,70),It->GetActorLocation()+FVector(0,0,65),
+              ECC_Visibility,Sight))continue;
+        if(Return)
+        {
+            // The paper marker directs the player to Bes; it does not
+            // impersonate a conversation or create a remote witness.
+            NotifyRpg(GetHearthPetitionJournal());
+            return true;
+        }
+        const FName Site=Private?FName(TEXT("Petition.PrivateChoice")):
+             Public?FName(TEXT("Petition.PublicChoice")):NAME_None;
+        if(!Site.IsNone())
+        {
+            if(HearthPetition.Stage()!=2)
+            {
+                NotifyRpg(GetHearthPetitionJournal());
+                return true;
+            }
+            const double Now=GetWorld()->GetTimeSeconds();
+            if(HearthPetitionPendingTag!=Site||Now>HearthPetitionConfirmUntil)
+            {
+                HearthPetitionPendingTag=Site;
+                HearthPetitionConfirmUntil=Now+12.0;
+                NotifyRpg(Private
+                  ?TEXT("CONFIDENTIAL PETITION: shelter identities are protected. The wages remain unpaid. Press E again here within 12 seconds to make this permanent.")
+                  :TEXT("REDACTED PUBLIC HEARING: file a public request without refuge names. A hearing is not repayment or conviction. Press E again here within 12 seconds to make this permanent."));
+                return true;
+            }
+        }
+        HearthPetitionPendingTag=NAME_None;
+        HearthPetitionConfirmUntil=-1;
+        const auto Outcome=UnmadeCore::CommitHearthPetition(HearthPetition,[&]{
+            const int Day=GetGameDay();
+            return Book?HearthPetition.ReadBook(Day,BesHousehold.Save()):
+                   Ledger?HearthPetition.WitnessLedger(Day,BesHousehold.Save()):
+                   HearthPetition.Decide(Private?1:2,Day);
+        },[&]{return WriteWorldSnapshot();});
+        if(Outcome==UnmadeCore::PetitionCommitResult::SaveFailed)
+        {
+            NotifyRpg(TEXT("The petition could not be saved. The original record was restored; your choice has NOT been committed."));
+            return true;
+        }
+        if(Outcome==UnmadeCore::PetitionCommitResult::Committed)
+        {
+            RefreshHearthPetitionWorld();
+            NotifyRpg(GetHearthPetitionJournal());
+            return true;
+        }
+        NotifyRpg(GetHearthPetitionJournal());
+        return true;
+    }
+    return false;
 }
 
 void AUnmadePrototypeHub::RefreshBesHouseholdWorld()
