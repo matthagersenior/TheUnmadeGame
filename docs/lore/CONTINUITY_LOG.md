@@ -935,3 +935,10 @@ interrupted platform IO remain pending. No Unreal playthrough or paid service.
   potentially stale hint. Portable tests and source wiring cover the behavior.
 - No new in-world story facts, optional quests, item quantities, rewards or
   permanent choice semantics; native UHT/UI/controller playtesting remains open.
+
+### Pre-PC input continuation (17 October 2026)
+
+Rebinding additionally captures high-value gamepad trigger analog events and
+ignores unarmed/low-value/other-axis events. Authored outcomes, local consent,
+reward IDs, lore and save schema remain unchanged. Portable press/noise tests
+pass once the source gate completes; rendered controls still need Unreal testing.

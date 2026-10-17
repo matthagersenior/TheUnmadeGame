@@ -43,3 +43,12 @@ assets, controller usability, measured performance and a packaged demo.
 matrix, with explicit failure tests before changing more gameplay. Avoid new
 systems or narrative sprawl until existing mechanics are understandable,
 composable and independently testable.
+
+## Input follow-up: actual analog-event capture
+
+The initial trigger policy did not guarantee that an analog event reached the
+rebinding menu. Source now overrides the Unreal UUserWidget analog input handler
+and routes a high-value left/right trigger press to the existing control-capture
+logic only while rebinding is armed. Portable threshold tests reject low press,
+inactive capture and non-trigger axes. This is statically wired; platform input
+routing and real controller feel remain an Unreal acceptance task.

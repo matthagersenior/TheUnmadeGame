@@ -8,6 +8,7 @@ namespace UnmadeCore {
 // The same controller buttons may serve different actions in gameplay and menus.
 inline bool CanBindPlayerControl(bool valid,bool analog,bool supportedTrigger){return valid&&(!analog||supportedTrigger);}
 // Only an intentional trigger press during rebinding can become an action key.
+// A 65% threshold avoids ambient trigger noise and stick-axis menu drift.
 inline bool ShouldCaptureTriggerAnalog(bool rebinding,bool trigger,float value){return rebinding&&trigger&&std::isfinite(value)&&value>=0.65f;}
 struct ControlLabel {std::string key,display;};
 inline bool LabelWord(unsigned char c){return c>=128||(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='_';}
