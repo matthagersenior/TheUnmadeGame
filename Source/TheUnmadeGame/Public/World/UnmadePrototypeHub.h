@@ -24,6 +24,7 @@
 #include "World/UnmadeLivingEconomyRules.h"
 #include "World/UnmadeBesHouseholdRules.h"
 #include "World/UnmadeHearthPetitionRules.h"
+#include "World/UnmadePetitionRelayRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
 #include "World/UnmadeCommunityConsequences.h"
@@ -147,6 +148,10 @@ public:
     void MaybePlayBesReturnScene(FName StableId);
     bool TryBesHouseholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryHearthPetitionInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryPetitionRelayInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool RecordPetitionRelayConversation(FName StableId);
+    FString GetPetitionRelayResidentLine(FName StableId)const;
+    FString GetPetitionRelayJournal()const;
     FString GetHearthPetitionJournal()const;
     FString GetHearthPetitionResidentLine(FName StableId)const;
     /** Authored timed subtitle/shot/foley events; binds to UMG and Sequencer.
@@ -367,6 +372,9 @@ private:
     UnmadeCore::LivingEconomy LivingTrades;
     UnmadeCore::BesHousehold BesHousehold;
     UnmadeCore::HearthPetition HearthPetition;
+    UnmadeCore::PetitionRelay PetitionRelay;
+    bool bPetitionRelayRejected=false;
+    void RefreshPetitionRelayWorld();
     bool bHearthPetitionRejected=false;
     FName HearthPetitionPendingTag;
     double HearthPetitionConfirmUntil=-1.0;
