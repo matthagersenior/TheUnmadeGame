@@ -73,6 +73,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshMaterialWorld();
     RefreshBesHouseholdWorld();
     RefreshHearthPetitionWorld();
+    RefreshPetitionRelayWorld();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
@@ -97,6 +98,13 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 {
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
         UnmadeSave::LoadGameFromSlot());
+    if(Save&&Save->SchemaVersion==1&&Save->bHasPetitionRelay&&
+       (!Save->bHasLivingWorldSnapshot||!Save->bHasHearthPetition))
+    {
+        bPetitionRelayRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Orphan petition relay: original world save protected"));
+        return;
+    }
     if(Save&&Save->SchemaVersion==1&&Save->bHasHearthPetition&&!Save->bHasLivingWorldSnapshot)
     {
         bHearthPetitionRejected=true;
@@ -136,6 +144,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::LivingEconomy RestoredLiving;
     UnmadeCore::BesHousehold RestoredBes;
     UnmadeCore::HearthPetition RestoredPetition;
+    UnmadeCore::PetitionRelay RestoredRelay;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -505,6 +514,17 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
             UE_LOG(LogTemp,Error,TEXT("Invalid Hearth Petition record: all world writes protected"));
         }
     }
+    if(Save->bHasPetitionRelay)
+    {
+        const auto& Data=Save->PetitionRelayState;
+        if(Data.Num()!=6||!RestoredRelay.Restore(
+            {Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]},
+            RestoredPetition,RestoredClock.DayIndex()+1))
+        {
+            bPetitionRelayRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid relay custody: original save protected"));
+        }
+    }
     if(Save->bHasCinderholdAdventure)
     {
         const auto& S=Save->CinderholdAdventureState;
@@ -529,6 +549,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     }
     BesHousehold=RestoredBes;
     HearthPetition=RestoredPetition;
+    PetitionRelay=RestoredRelay;
     LivingTrades=RestoredLiving;
     Materials=RestoredMaterials;
     OuterReactions=RestoredOuter;
@@ -650,6 +671,7 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
        bMaterialSaveRejected || bLivingEconomyRejected ||
        bBesHouseholdRejected)return false;
     if(bHearthPetitionRejected)return false;
+    if(bPetitionRelayRejected)return false;
     for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc){
         const FName Id=Npc->GetStableId();if(Id.IsNone())continue;
         const auto Snapshot=Npc->GetMemory()->WriteSnapshot(Id);
@@ -856,6 +878,10 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
     Save->bHasHearthPetition=true;
     Save->HearthPetitionState={Petition.stage,Petition.ending,
         Petition.bookDay,Petition.ledgerDay,Petition.choiceDay,Petition.returnDay};
+    const auto Relay=PetitionRelay.Save();
+    Save->bHasPetitionRelay=true;
+    Save->PetitionRelayState={Relay.stage,Relay.route,
+        Relay.collectionDay,Relay.meraDay,Relay.replyDay,Relay.orrelDay};
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
@@ -2668,7 +2694,8 @@ FString AUnmadePrototypeHub::GetHearthPetitionJournal()const
 {
     return FString(TEXT("THE HEARTH PETITION / CINDERHOLD\n"))+
         UTF8_TO_TCHAR(HearthPetition.Journal())+
-        TEXT("\nFind the wage book in Bes's actual home; Rheva's civic ledger and the two petition tables stand on the road outside. Return the next morning to speak to Bes personally.\n");
+        TEXT("\nFind the wage book in Bes's actual home; Rheva's civic ledger and the two petition tables stand on the road outside. Return the next morning to speak to Bes personally.\n")+
+        GetPetitionRelayJournal();
 }
 
 FString AUnmadePrototypeHub::GetHearthPetitionResidentLine(FName StableId)const
@@ -3361,6 +3388,10 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Petition.PrivateMarker")));
     SpawnBlock(BesTown+FVector(310,1420,170),FVector(.75,.5,3.2),
         FName(TEXT("Petition.PublicMarker")));
+    // The copy may be taken only after Bes has PERSONALLY acknowledged
+    // the petition. A physical 3-realm chain, never a remote notification.
+    SpawnBlock(BesTown+FVector(740,2080,110),FVector(.65,.42,1.5),
+        FName(TEXT("Relay.CinderholdCopy")));
     SpawnBlock(BesTown+FVector(1090,760,30),FVector(.6,.5,.6),
         FName(TEXT("Bes.ChildHeightStool")));
     SpawnBlock(BesTown+FVector(1240,845,180),FVector(2.0,.2,.2),
@@ -3384,8 +3415,18 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Bes.MeraGuarantee")));
     SpawnBlock(Saltwake+FVector(1230,360,225),FVector(.7,.25,1.0),
         FName(TEXT("Bes.GuarantorRecord")));
+    SpawnBlock(Saltwake+FVector(1720,600,155),FVector(.7,.35,2.1),
+        FName(TEXT("Relay.SaltwakePrivate")));
+    SpawnBlock(Saltwake+FVector(2050,600,155),FVector(.7,.35,2.1),
+        FName(TEXT("Relay.SaltwakePublic")));
+    // Crossings archive. Orrel himself must receive the actual reply first.
+    SpawnBlock(FVector(-1590,450,145),FVector(.8,.5,2.3),
+        FName(TEXT("Relay.CrossingsPrivate")));
+    SpawnBlock(FVector(-1910,450,145),FVector(.8,.5,2.3),
+        FName(TEXT("Relay.CrossingsPublic")));
     RefreshBesHouseholdWorld();
     RefreshHearthPetitionWorld();
+    RefreshPetitionRelayWorld();
     // Nine visible work sites, one finite stockroom and household delivery
     // target per region. Actor tags are stable, save fields contain the truth.
     for(int i=0;i<9;++i)

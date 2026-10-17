@@ -422,6 +422,8 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             CharacterLine+=TEXT(" ");
             CharacterLine+=BesHomeLine;
         }
+        const FString RelayLine=CachedHub->GetPetitionRelayResidentLine(NpcId);
+        if(!RelayLine.IsEmpty())CharacterLine+=TEXT(" ")+RelayLine;
         const FString PetitionLine=CachedHub->GetHearthPetitionResidentLine(NpcId);
         if(!PetitionLine.IsEmpty())
             CharacterLine+=TEXT(" ")+PetitionLine;

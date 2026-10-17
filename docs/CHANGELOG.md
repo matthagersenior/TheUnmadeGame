@@ -1,3 +1,15 @@
+## 2026-10-17 — Cross-realm Petition Relay
+
+Implemented a physical Cinderhold–Saltwake–Crossings optional
+custody chain. The traveler must take an actual petition copy, hand it
+to Mera, return on another day for her considered answer, and carry it
+personally to Orrel. Private and public petition endings create distinct,
+exclusive Saltwake and Crossings world records without new debts, forced
+loans, rewards, or automatic NPC knowledge. Additive schema-1 storage,
+combined-record validation and rollback tests accompany the chapter and
+import manifest. This is native source and portable test work; actual UE
+compilation and playthrough are not yet verified.
+
 ## 2026-10-17 — Permanent Cinderhold Hearth Petition
 
 Implemented an optional, physically inspected wage-record petition with two

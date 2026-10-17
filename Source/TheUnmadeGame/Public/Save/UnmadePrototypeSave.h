@@ -300,6 +300,11 @@ public:
     UPROPERTY(SaveGame) bool bHasHearthPetition=false;
     UPROPERTY(SaveGame) TArray<int32> HearthPetitionState;
 
+    /** Optional hand-carried Cinderhold -> Saltwake -> Crossings document.
+        Older schema-1 saves begin with no physical custody. */
+    UPROPERTY(SaveGame) bool bHasPetitionRelay=false;
+    UPROPERTY(SaveGame) TArray<int32> PetitionRelayState;
+
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)
     bool bHasResidentContinuitySnapshot=false;

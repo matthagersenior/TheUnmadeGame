@@ -36,6 +36,10 @@ jobs:
           /tmp/unmade-style
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/defense_receipt_test.cpp -o /tmp/unmade-defense-receipts
           /tmp/unmade-defense-receipts
+      - name: Test cross-realm physical petition and guarded reply custody
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/petition_relay_test.cpp -o /tmp/unmade-petition-relay
+          /tmp/unmade-petition-relay
       - name: Test permanent Hearth Petition choices and next-day returns
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/hearth_petition_test.cpp -o /tmp/unmade-hearth-petition

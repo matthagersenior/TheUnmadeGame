@@ -984,6 +984,7 @@ void AUnmadeCharacter::Interact()
             if(Hub->TryRoadInteraction(this,ResidentDistSq))return;
             if(Hub->TryCinderholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryFieldSurveyInteraction(this,ResidentDistSq))return;
+            if(Hub->TryPetitionRelayInteraction(this,ResidentDistSq))return;
             if(Hub->TryHearthPetitionInteraction(this,ResidentDistSq))return;
             if(Hub->TryBesHouseholdInteraction(this,ResidentDistSq))return;
             if(Hub->TryLivingTradeInteraction(this,ResidentDistSq))return;
@@ -1048,9 +1049,10 @@ void AUnmadeCharacter::Interact()
             Hub->RecordRoadConversation(Target->GetStableId());
             if(!Hub->RecordExperienceConversation(Target->GetStableId(),this))
                 Hub->LearnExperienceTutorial(0,this);
+            const bool bRelayChanged=Hub->RecordPetitionRelayConversation(Target->GetStableId());
             const bool bHouseChanged=Hub->RecordBesHouseholdConversation(Target->GetStableId());
             const bool bAdventureChanged=Hub->RecordCinderholdConversation(Target->GetStableId());
-            if(!bHouseChanged&&!bAdventureChanged)
+            if(!bRelayChanged&&!bHouseChanged&&!bAdventureChanged)
                 Hub->MaybePlayBesReturnScene(Target->GetStableId());
             if(IsValid(Tenfold)) Tenfold->TryWitnessConversation(Target->GetStableId());
             break;
