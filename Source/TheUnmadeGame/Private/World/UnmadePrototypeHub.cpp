@@ -548,6 +548,13 @@ bool AUnmadePrototypeHub::HasPendingDefeatReceipts()const
     return false;
 }
 
+bool AUnmadePrototypeHub::SaveRecoveryState(AUnmadeCharacter* Player)
+{
+    // Recovery must remain possible with full inventory/pending rewards. This
+    // saves health/position, never asserts that encounter receipts are complete.
+    return IsValid(Player)&&WriteWorldSnapshot(Player);
+}
+
 bool AUnmadePrototypeHub::SavePlayerSession(AUnmadeCharacter* Player)
 {
     const auto Result=UnmadeCore::CommitSessionCheckpoint(HasPendingDefeatReceipts(),
@@ -1059,7 +1066,8 @@ FString AUnmadePrototypeHub::GetCurrentRealmName(FVector Position) const
 
 bool AUnmadePrototypeHub::TryTravelFrontier(AUnmadeCharacter* Player)
 {
-    if(!IsValid(Player) || !GetWorld())return false;
+    if(!IsValid(Player) || !GetWorld() || Player->GetWorld()!=GetWorld())return false;
+    if(!Player->CanCommitCheckpoint())return false;
     const FVector P=Player->GetActorLocation();
     for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
     {
@@ -1083,18 +1091,11 @@ bool AUnmadePrototypeHub::TryTravelFrontier(AUnmadeCharacter* Player)
         else continue;
 
         const auto Before=Frontier.Snapshot();
-        const bool bNew=Frontier.Visit(Next)==UnmadeCore::FrontierEvent::Advanced;
-        if(bNew && !WriteWorldSnapshot())
-        {
-            Frontier.Restore(Before);
-            return false;
-        }
+        Frontier.Visit(Next);
         PrepareRealmGeometry(Destination,100000);
-        if(!Player->SetActorLocation(Destination,false,nullptr,ETeleportType::TeleportPhysics))
-        {
-            Frontier.Restore(Before);
-            if(bNew)WriteWorldSnapshot();
-            return false;
+        const int32 Route=Next==UnmadeCore::Realm::WidowedRain?0:Next==UnmadeCore::Realm::HearthBeneath?1:-1;
+        if(!Player->CommitCheckpointMove(Destination,Route,[&]{return WriteWorldSnapshot();})){
+            Frontier.Restore(Before);return false;
         }
         if(GEngine)UnmadeRpgFeedback(-1,10.f,FColor::Cyan,
             FString::Printf(TEXT("CROSSING OPEN: %s. Speak to local witnesses and examine the clue."),

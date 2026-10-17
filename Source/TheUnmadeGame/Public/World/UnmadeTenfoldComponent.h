@@ -43,6 +43,7 @@ public:
     bool HasPendingHistory()const{return History.Pending();}
     void RecordThreatenedOath();
     void RecordLegacyDeed(UnmadeCore::Deed Deed);
+    bool CommitExploredFrontier(int32 RealmIndex,TFunctionRef<bool()> Write);
     void VerifyExploredFrontier(int32 RealmIndex);
     int32 RiteStage(UnmadeCore::RiteId Rite) const {return Chronicle.Stage(Rite);}
     bool IsMastered(UnmadeCore::RiteId Rite) const {return Chronicle.IsMastered(Rite);}

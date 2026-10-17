@@ -912,3 +912,19 @@ aid already happened. Finite rewards remain earned by committed world facts,
 retry failed writes and never refill spent supplies through repeated reloads.
 No new realm, resident identity, lore answer or consent rule is introduced.
 These are source/portable guarantees; engine verification remains pending.
+
+## 17 October 2026 — The cost, the crossing and the return remain together
+
+Direct Glimpse, Fold and Rewrite retain their existing costs, modifiers, clue
+identities and local witness rules. Their effects follow a successful combined
+save; failure restores prior reality state and temporary windows. The authored
+VEYL discovery and its meaning are unchanged. Temporary windows remain unsaved.
+
+Crossings save the actual safe arrival, earned visit and eligible verified road
+together. A remembered city in another realm must not replace a new realm's safe
+return. Death recovery saves stabilized wounds and position without erasing
+choices or witnesses. Pending rewards cannot strand a dead player with a full
+inventory, and recovery never claims those receipts are complete. Failed saves
+restore the prior action; failed return movement protects saving until restored.
+No realm, resident, mystery, consent gate, reward identifier or lore outcome is
+added. These are portable/source guarantees; physical Unreal acceptance is pending.

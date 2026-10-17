@@ -1,5 +1,6 @@
 #include "Save/UnmadeSaveSession.h"
 #include "Save/UnmadeActionCommitRules.h"
+#include "Save/UnmadeRealityTravelRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadeTenfoldComponent.h"
 #include "Player/UnmadeCharacter.h"
@@ -612,6 +613,17 @@ void UUnmadeTenfoldComponent::RetryHistorySave()
     if(Result==UnmadeCore::TimedProgress::FirstFailure)
         UnmadeRpgFeedback(-1,10.f,FColor::Orange,TEXT("HISTORY NOT SAVED: earned deeds, verified roads and oath consequences are retained for five-second retries. A complete checkpoint waits for them."));
 }
+bool UUnmadeTenfoldComponent::CommitExploredFrontier(int32 RealmIndex,TFunctionRef<bool()> Write)
+{
+    if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return false;
+    const auto Before=Chronicle.Snapshot().verifiedRoutes;
+    if(!UnmadeCore::CommitExploredRoute(Chronicle,RealmIndex,Write))return false;
+    if(Chronicle.Snapshot().verifiedRoutes!=Before)
+        if(auto* Hub=Cast<AUnmadePrototypeHub>(UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass())))
+            Hub->ApplyRiteEnvironment(UnmadeCore::RiteId::Cartography,40,true);
+    return true;
+}
+
 void UUnmadeTenfoldComponent::VerifyExploredFrontier(int32 RealmIndex)
 {
     if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return;

@@ -29,6 +29,7 @@ integration need; preserve development momentum and do not merge into main.
 
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
+| P1 reality/travel/recovery batch implemented; UE pending | Checked Glimpse/Fold/Rewrite combine Strain, clue and witnesses; full-model rollback preserves prior windows. Crossings save actual arrivals/visits/road credit together. Realm-safe resume and saved revival cover all nine realms; failed movement rollback protects writes, while recovery remains possible with pending/full-inventory rewards. 218 fault paths, 1,744 reloads, 356 Python / 82 portable C++ / 54 dependency checks and eight mutations pass. |
 | P1 coordinated action batch implemented; UE pending | Shared reversible witness/deed commits cover resolution families, tasks, discovery, aid, conflict/supplies, rites/oaths/casts and six Confluences. Exact confirmation scope prevents save-failure fallthrough. Older split aid repairs without new testimony; earned rewards retry after startup. 128 fault paths, 1,536 reloads, 352 Python / 81 portable C++ / 52 dependency checks and eight mutations pass. Native memory rollback test is unrun. |
 | P1 chronicle consequences implemented; UE pending | Threats break but never redeem; explicit restitution keeps its authored gates and scar. Deeds/verified roads/oath consequences retain five-second retries; every combined writer captures live Chronicle/Confluence. Both oath bonuses clear on break, other buffs remain. 270 fault paths, 3,240 reloads and seven mutation regressions pass; actual actors/IO remain pending. |
 | P1 rite/victory commits implemented; UE pending | Cast cost/trial/cooldown and staged civic/resonance changes share one write, with complete rollback before runtime effects. All three named bosses retain retryable milestone receipts; Hollow Keeper mercy no longer loses failed rewards. 1,080 cast cases, 24 resonance paths and 12 named receipt faults pass portable checks. Verify actual targeting, projectile defeats, mercy, timing and UI in Unreal. |
@@ -48,7 +49,7 @@ integration need; preserve development momentum and do not merge into main.
 | P1 defeat retries implemented; UE pending | Guardian/final-defeat commits attempt immediately, then retry failure every five active-world seconds instead of every actor tick. Success suppresses repeat commits for that phase. Portable tests cover 24 guardian and 72 final-phase fault/retry paths; confirmation expiry, retargeting, cancellation and consumed consent remain safe. |
 | P1 pending checkpoints implemented; UE pending | Session saves refuse to report success while an encounter receipt is pending. Read-only actor queries include hidden receipt owners and distinguish an old final body from the new phase. Load/New preserve unsaved-discard confirmation; explicit recovery never pre-saves. 114 portable fault sessions verify blocked checkpoint writes and normal saves after receipt commit. |
 | P1 handoff ownership implemented; UE pending | Target selection stays staged until a new-world owner registers. Travel failure restores original selection; a missing owner/failed world cannot unlock writes. Reentrant requests are rejected and destination backup pins survive arrival. All 64 profile/recovery combinations pass portable checks; UE delegate/build, startup ordering and real failed travel remain pending. |
-| P1 next coordinated batch | Trace remaining direct anomaly/reality actions and travel/death checkpoints together: cost, effect, memory, reward and recovery order. Preserve authored gates and consent; keep actual nine-realm reachability, equipment/UI, travel and platform IO pending. Recheck drift before publishing. |
+| P1 next coordinated batch | Audit scoped expedition/road/Cinderhold ability dispatch and related finite service/mastery transactions together. Distinguish unavailable actions from rejected commits before fallback; retain authored gates, consent and receipts. Actual nine-realm reachability, UI, travel/physics and platform IO remain pending. Recheck drift before publishing. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -687,3 +688,50 @@ Next coordinated batch: remaining direct anomaly/reality actions and travel/deat
 checkpoint boundaries, including cost/effect/event/reward ordering. Keep a whole
 realm-local opening-to-return walkthrough queued for the first Unreal host. Do
 not claim this batch makes every combat, service or movement event atomic.
+
+## 2026-10-17 — Reality actions, crossing arrivals and saved recovery
+
+Direct Glimpse, Fold and Rewrite now stage Strain, the existing Glimpse language
+clue and local anomaly witnesses behind one checked save. Effects, enemy Fold
+exposure, presentation and reward reconciliation follow success. Failure restores
+the full Fracture model, including previously active temporary windows; those
+windows remain session-only on reload. Every accepted combined writer captures
+the live lexicon before final validation. Existing clue IDs, term meaning,
+modifiers, choices and Rewrite confirmation remain unchanged. Environmental
+Strain failure likewise retains the prior transient windows.
+
+Frontier and atlas travel move before the original writer. Arrival position,
+visit progress and an eligible directly verified frontier road share that save,
+including repeat visits and return journeys. Failed moves never write the crossing; failed
+saves restore position, visits and road state without compensating disk writes.
+Startup reward/receipt readiness is checked before visit staging, so its own
+reconciliation cannot accidentally persist an uncompleted crossing. Failed return
+movement locks saving and retries movement every five seconds, preparing geometry
+on both sides. Realm fallback checkpoints cover all nine authored realm origins;
+a known city elsewhere cannot redirect a new realm's checkpoint. Startup retains
+the validated saved arrival instead of projecting it to a different city.
+
+Death recovery stages movement and revival before saving health/position, restores
+both on failure and retries after five active seconds following the existing
+four-second defeat wait. Recovery remains available with full inventory or pending
+rewards; it saves recovery state without declaring a complete encounter checkpoint.
+Pending receipts still retry and retain manual checkpoint/profile-switch rules.
+This avoids trapping a dead player who needs to make inventory room. Choices,
+inventory, witnesses and authored reward ownership are not reset by recovery.
+
+Portable evidence: 96 reality faults, 104 passage faults (both directions of all
+13 authored atlas edges, first/repeat visits), 18 revival faults and 1,744 reloads.
+All nine checkpoint realms, language completion, prior Fold/Glimpse endpoints,
+invalid movement, failed rollback, road credit, malformed later records and
+full-inventory revival are covered. Eight compiled mutation regressions fail as
+expected. All 356 Python tests, 82 strict C++17 executables and 54 dependency checks
+pass; the new scenario passes UBSan. Structure/literal/hygiene, six Node release
+scenarios, transmedia, manuscript, lore and whitespace checks pass. These execute
+production portable rules/in-memory storage, not actors or platform serialization.
+
+Actual UHT/Editor, geometry/collision, movement/rollback, timed revival, UI/controller
+feedback, profile travel and interrupted platform IO remain pending. No Unreal
+playthrough, charges, artwork/book requirements or merge into main. Next combined
+audit: scoped expedition/road/Cinderhold ability dispatch and related finite
+services/mastery transactions; distinguish unavailable actions from rejected
+commits before considering fallback. Keep whole realm-local walkthroughs pending.

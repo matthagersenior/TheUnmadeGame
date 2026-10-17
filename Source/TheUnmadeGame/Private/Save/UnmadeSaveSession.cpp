@@ -163,6 +163,8 @@ bool SaveGameToSlot(USaveGame* raw,const UObject* Owner){
         [&](const auto& record){return ValidStored(record,slot);},
         [&](auto&){
             SessionPlayer->CaptureSession(s);
+            if(auto* lex=SessionPlayer->FindComponentByClass<UUnmadeLexiconComponent>())
+                if(!lex->CaptureLexicon(s))return false;
             if(auto* rite=SessionPlayer->FindComponentByClass<UUnmadeTenfoldComponent>())
                 if(!rite->CaptureChronicle(s))return false;
             for(TActorIterator<AUnmadePrototypeHub> h(Owner->GetWorld());h;++h)

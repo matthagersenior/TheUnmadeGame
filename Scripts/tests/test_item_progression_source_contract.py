@@ -62,8 +62,8 @@ class GearSourceContract(unittest.TestCase):
         self.assertIn("FoldBonusSeconds()", equipment)
         self.assertIn("GlimpseDiscount()", equipment)
         self.assertIn("StrainRecoveryMultiplier()", equipment)
-        self.assertIn("FractureModel.Glimpse(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Discount)", player)
-        self.assertIn("FractureModel.Fold(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Extension)", player)
+        self.assertIn("FractureModel.Glimpse(IsValid(Anchor),GetWorld()->GetTimeSeconds(),Discount)", player)
+        self.assertIn("FractureModel.Fold(IsValid(Anchor),GetWorld()->GetTimeSeconds(),Extension)", player)
 
     def test_atlas_is_explicitly_future_data_not_silent_unreal_claims(self):
         atlas=read("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")

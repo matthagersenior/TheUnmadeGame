@@ -29,7 +29,7 @@ class THEUNMADEGAME_API AUnmadeCharacter : public ACharacter
     GENERATED_BODY()
 
 public:
-    bool HasRejectedSave()const{return bFractureSaveRejected||bConflictSaveRejected|| bCharacterIdentitySaveRejected;}
+    bool HasRejectedSave()const{return bCheckpointRollbackPending||bFractureSaveRejected||bConflictSaveRejected|| bCharacterIdentitySaveRejected;}
     void CaptureSession(UUnmadePrototypeSave* Save)const;
     bool SaveSessionNow();
     void CraftRecipeSelection(int Recipe);
@@ -92,6 +92,9 @@ public:
     bool CommitLocalEvent(FName Event,FName Subject,TFunctionRef<bool()> Write);
     bool CommitLocalEvents(const TArray<TPair<FName,FName>>& Events,TFunctionRef<bool()> Write);
     bool CommitRiteEvents(UnmadeCore::RiteId Id,bool CivicApplied,TFunctionRef<bool()> Write);
+    bool CanCommitCheckpoint();
+    bool CommitCheckpointMove(const FVector& Destination,int32 FrontierRoute,TFunctionRef<bool()> Write,bool Recovery=false);
+    FVector ResolveSafeCheckpoint(const FVector& Current)const;
     bool CommitIntegrationRecovery(double Amount, TFunctionRef<bool()> Write);
 private:
     UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
@@ -179,6 +182,12 @@ private:
     void StopGuard();
     bool bPlayerDefeatHandled = false;
     double DefeatRecordedAt=-1.0;
+    UnmadeCore::DefeatSaveRetry DeathRecoveryRetry;
+    bool bCaptureCheckpointPosition=false,bCheckpointRollbackPending=false;
+    FVector CheckpointRollbackPosition=FVector::ZeroVector;
+    uint8 CheckpointRollbackMode=0;
+    double NextCheckpointRollback=0;
+    void RetryCheckpointRollback();
     uint64 LastHazardWarningPulse[2]={0,0};
     uint64 LastHazardImpactPulse[2]={0,0};
     uint64 LastLaterHazardWarningPulse[6]={0,0,0,0,0,0};

@@ -1,3 +1,50 @@
+## 2026-10-17 — Reality actions, crossing arrivals and saved recovery
+
+Direct Glimpse, Fold and Rewrite now stage Strain, the existing Glimpse language
+clue and local anomaly witnesses behind one checked save. Effects, enemy Fold
+exposure, presentation and reward reconciliation follow success. Failure restores
+the full Fracture model, including previously active temporary windows; those
+windows remain session-only on reload. Every accepted combined writer captures
+the live lexicon before final validation. Existing clue IDs, term meaning,
+modifiers, choices and Rewrite confirmation remain unchanged. Environmental
+Strain failure likewise retains the prior transient windows.
+
+Frontier and atlas travel move before the original writer. Arrival position,
+visit progress and an eligible directly verified frontier road share that save,
+including repeat visits and return journeys. Failed moves never write the crossing; failed
+saves restore position, visits and road state without compensating disk writes.
+Startup reward/receipt readiness is checked before visit staging, so its own
+reconciliation cannot accidentally persist an uncompleted crossing. Failed return
+movement locks saving and retries movement every five seconds, preparing geometry
+on both sides. Realm fallback checkpoints cover all nine authored realm origins;
+a known city elsewhere cannot redirect a new realm's checkpoint. Startup retains
+the validated saved arrival instead of projecting it to a different city.
+
+Death recovery stages movement and revival before saving health/position, restores
+both on failure and retries after five active seconds following the existing
+four-second defeat wait. Recovery remains available with full inventory or pending
+rewards; it saves recovery state without declaring a complete encounter checkpoint.
+Pending receipts still retry and retain manual checkpoint/profile-switch rules.
+This avoids trapping a dead player who needs to make inventory room. Choices,
+inventory, witnesses and authored reward ownership are not reset by recovery.
+
+Portable evidence: 96 reality faults, 104 passage faults (both directions of all
+13 authored atlas edges, first/repeat visits), 18 revival faults and 1,744 reloads.
+All nine checkpoint realms, language completion, prior Fold/Glimpse endpoints,
+invalid movement, failed rollback, road credit, malformed later records and
+full-inventory revival are covered. Eight compiled mutation regressions fail as
+expected. All 356 Python tests, 82 strict C++17 executables and 54 dependency checks
+pass; the new scenario passes UBSan. Structure/literal/hygiene, six Node release
+scenarios, transmedia, manuscript, lore and whitespace checks pass. These execute
+production portable rules/in-memory storage, not actors or platform serialization.
+
+Actual UHT/Editor, geometry/collision, movement/rollback, timed revival, UI/controller
+feedback, profile travel and interrupted platform IO remain pending. No Unreal
+playthrough, charges, artwork/book requirements or merge into main. Next combined
+audit: scoped expedition/road/Cinderhold ability dispatch and related finite
+services/mastery transactions; distinguish unavailable actions from rejected
+commits before considering fallback. Keep whole realm-local walkthroughs pending.
+
 ## 2026-10-17 — Coordinated action, witness, deed and reward batch
 
 Moved the related fixes into one reviewed boundary instead of publishing each

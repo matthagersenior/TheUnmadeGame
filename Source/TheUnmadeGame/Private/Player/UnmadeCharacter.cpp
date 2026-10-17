@@ -1,6 +1,7 @@
 #include "UI/UnmadePlayerFacingRules.h"
 #include "Save/UnmadeSaveSession.h"
 #include "Save/UnmadeActionCommitRules.h"
+#include "Save/UnmadeRealityTravelRules.h"
 #include "Save/UnmadeRecoveryRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Player/UnmadeCharacter.h"
@@ -403,12 +404,6 @@ void AUnmadeCharacter::CrossFrontierGateway()
         }
         else
         {
-            if(IsValid(Tenfold))
-            {
-                const FVector Destination=GetActorLocation();
-                if(Destination.Y < -46000) Tenfold->VerifyExploredFrontier(0);
-                else if(Destination.Y > 46000) Tenfold->VerifyExploredFrontier(1);
-            }
             ReconcileEarnedRewards();
         }
         break;
@@ -1092,6 +1087,7 @@ void AUnmadeCharacter::OfferAid()
 
 void AUnmadeCharacter::DemonstrateAnomaly()
 {
+    if(!UnmadeSave::IsSessionWritable(this))return;
     if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
         if(Hub->TryExpeditionAbility(this,0))return;
@@ -1101,27 +1097,29 @@ void AUnmadeCharacter::DemonstrateAnomaly()
     AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
     if (!GetWorld()) return;
     const int32 Discount = IsValid(Equipment) ? Equipment->GlimpseDiscount() : 0;
-    const auto Result = FractureModel.Glimpse(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Discount);
-    if (Result != UnmadeCore::Result::Applied)
-    {
-        if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
+    const auto Result=UnmadeCore::CommitFractureAction(FractureModel,
+        [&]{return FractureModel.Glimpse(IsValid(Anchor),GetWorld()->GetTimeSeconds(),Discount);},[&]{
+            auto Save=[&]{return CommitLocalEvent(FName("Reality.Anomaly"),FName("region.prototype.hub"),[&]{return SaveFractureState();});};
+            return IsValid(Lexicon)?Lexicon->CommitEvidence(FName("evidence.glimpse"),Save):Save();
+        });
+    if(Result!=UnmadeCore::FractureCommit::Applied){
+        UnmadeRpgFeedback(-1,7.f,FColor::Yellow,Result==UnmadeCore::FractureCommit::SaveFailed?
+            TEXT("GLIMPSE NOT SAVED: Strain, clue and witness memories were restored. Try again when saving is available."):
             TEXT("Glimpse unavailable. Get closer to the fracture or recover Strain."));
         return;
     }
     ApplyFractureVisuals();
-    if (Lexicon) Lexicon->RecordEvidence(FName("evidence.glimpse"));
     ReconcileEarnedRewards();
     if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Cyan,
         FString::Printf(TEXT("GLIMPSE: another possible version flickers into view (+%d Strain)."),
             8 - Discount));
     UnmadePresentation::Sound(this,TEXT("cast"));
     PlayIdentityMotion(FName(TEXT("Cast")));
-    ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
-    SaveFractureState();
 }
 
 void AUnmadeCharacter::FoldReality()
 {
+    if(!UnmadeSave::IsSessionWritable(this))return;
     if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
         if(Hub->TryExpeditionAbility(this,1))return;
@@ -1131,10 +1129,12 @@ void AUnmadeCharacter::FoldReality()
     AUnmadeFractureAnchor* Anchor = FindNearbyFractureAnchor();
     if (!GetWorld()) return;
     const int32 Extension = IsValid(Equipment) ? Equipment->FoldBonusSeconds() : 0;
-    const auto Result = FractureModel.Fold(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Extension);
-    if (Result != UnmadeCore::Result::Applied)
-    {
-        if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
+    const auto Result=UnmadeCore::CommitFractureAction(FractureModel,
+        [&]{return FractureModel.Fold(IsValid(Anchor),GetWorld()->GetTimeSeconds(),Extension);},
+        [&]{return CommitLocalEvent(FName("Reality.Anomaly"),FName("region.prototype.hub"),[&]{return SaveFractureState();});});
+    if(Result!=UnmadeCore::FractureCommit::Applied){
+        UnmadeRpgFeedback(-1,7.f,FColor::Yellow,Result==UnmadeCore::FractureCommit::SaveFailed?
+            TEXT("FOLD NOT SAVED: Strain and witness memories were restored; no barrier or enemy effect applied."):
             TEXT("Fold unavailable: already active, out of range, or Strain too high."));
         return;
     }
@@ -1150,8 +1150,6 @@ void AUnmadeCharacter::FoldReality()
             6 + Extension));
     UnmadePresentation::Sound(this,TEXT("cast"));
     PlayIdentityMotion(FName(TEXT("Cast")));
-    ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
-    SaveFractureState();
 }
 
 void AUnmadeCharacter::RewriteOpen()
@@ -1166,6 +1164,7 @@ void AUnmadeCharacter::RewriteSealed()
 
 void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
 {
+    if(!UnmadeSave::IsSessionWritable(this))return;
     if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
         if(Hub->TryRoadAbility(this,2,ChoiceId==FName(TEXT("variant.open"))?2:3))return;
@@ -1199,28 +1198,20 @@ void AUnmadeCharacter::RewriteChoice(FName ChoiceId)
         return;
     }
     PendingRewriteChoice = NAME_None;
-    const UnmadeCore::FractureSnapshot Previous = FractureModel.TakeSnapshot();
-    const auto Result = FractureModel.Rewrite("region.prototype.hub", Choice, true);
-    if (Result != UnmadeCore::Result::Applied)
-    {
-        if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
+    const auto Result=UnmadeCore::CommitFractureAction(FractureModel,
+        [&]{return FractureModel.Rewrite("region.prototype.hub",Choice,true);},
+        [&]{return CommitLocalEvent(FName("Reality.Anomaly"),FName("region.prototype.hub"),[&]{return SaveFractureState();});});
+    if(Result!=UnmadeCore::FractureCommit::Applied){
+        UnmadeRpgFeedback(-1,7.f,FColor::Red,Result==UnmadeCore::FractureCommit::SaveFailed?
+            TEXT("REWRITE NOT SAVED: world, Strain and witnesses restored. Preview and confirm again."):
             TEXT("Rewrite refused. Strain may be too high."));
         return;
     }
     ApplyFractureVisuals();
-    if (!SaveFractureState())
-    {
-        FractureModel.Restore(Previous);
-        ApplyFractureVisuals();
-        if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
-            TEXT("Rewrite failed to save: world and Strain restored."));
-        return;
-    }
     if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Yellow,
         FString::Printf(TEXT("REWRITE COMMITTED: %s. This outcome persists across sessions."), *ChoiceString));
     UnmadePresentation::Sound(this,TEXT("cast"));
     PlayIdentityMotion(FName(TEXT("Cast")));
-    ReportLocalEvent(FName("Reality.Anomaly"), FName("region.prototype.hub"));
 }
 
 AUnmadeFractureAnchor* AUnmadeCharacter::FindNearbyFractureAnchor() const
@@ -1400,33 +1391,78 @@ void AUnmadeCharacter::BeginPlay()
 }
 
 
-void AUnmadeCharacter::RecoverAtSafeCheckpoint()
+FVector AUnmadeCharacter::ResolveSafeCheckpoint(const FVector& Current)const
 {
-    if(!GetWorld() || !Combat->IsDefeated() ||
-       GetWorld()->GetTimeSeconds()<DefeatRecordedAt+4.0)return;
-    // Safe start platforms exist in the Threefold Reach and each real frontier.
-    // No Story/Inventory/Memory snapshot is reset or rewritten on death.
-    const FVector Current=GetActorLocation();
-    const double Y=Current.Y;
-    FVector Safe=(Y<-45000.0)?FVector(0,-50000,135)
-        :(Y>45000.0)?FVector(0,50000,135):FVector(0,0,135);
-    for(const auto& Realm:UnmadeCore::LaterRealms)
-    {
-        if(FVector::DistSquared2D(Current,
-             FVector(Realm.centerX,Realm.centerY,Current.Z))>FMath::Square(3600.f))
-            continue;
-        Safe=FVector(Realm.centerX,Realm.centerY-1170,135);
+    const auto Entry=UnmadeCore::SafeRealmEntry(Current.X,Current.Y);
+    FVector Safe(Entry.X,Entry.Y,Entry.Z),Candidate=Safe;
+    if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){
+        if(Hub->ExperienceCheckpoint(Current,Candidate)&&UnmadeCore::SameCheckpointRealm(Current.X,Current.Y,Candidate.X,Candidate.Y))Safe=Candidate;
         break;
     }
-    for(TActorIterator<AUnmadePrototypeHub> H(GetWorld());H;++H){H->ExperienceCheckpoint(Current,Safe);break;}
-    if(!SetActorLocation(Safe,false,nullptr,ETeleportType::TeleportPhysics))
-        return;
-    if(!Combat->ReviveAtCheckpoint())return;
-    GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-    bPlayerDefeatHandled=false;
-    DefeatRecordedAt=-1.0;
-    if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Green,
-        TEXT("RETURNED TO SAFETY: wounds stabilized, but your choices and witnesses remain."));
+    return Safe;
+}
+
+bool AUnmadeCharacter::CanCommitCheckpoint()
+{
+    if(!UnmadeSave::IsSessionWritable(this)||!InitializeStartupRewards())return false;
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
+        if(Hub->HasPendingDefeatReceipts()){
+            UnmadeRpgFeedback(-1,8.f,FColor::Orange,TEXT("CHECKPOINT WAITING: victory or history receipts still need to save. Continue the game for automatic retries."));return false;
+        }
+    return true;
+}
+bool AUnmadeCharacter::CommitCheckpointMove(const FVector& Destination,int32 FrontierRoute,TFunctionRef<bool()> Write,bool Recovery)
+{
+    if(!UnmadeSave::IsSessionWritable(this))return false;
+    if(!Recovery&&!CanCommitCheckpoint())return false;
+    const FVector Origin=GetActorLocation();
+    const uint8 Mode=GetCharacterMovement()->MovementMode;
+    const auto Result=UnmadeCore::CommitCheckpointRelocation(Origin,Destination,
+        [&](const FVector& At){
+            for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){Hub->PrepareRealmGeometry(At,100000);break;}
+            return SetActorLocation(At,false,nullptr,ETeleportType::TeleportPhysics);
+        },[&]{
+            bCaptureCheckpointPosition=true;
+            const bool Saved=IsValid(Tenfold)?Tenfold->CommitExploredFrontier(FrontierRoute,Write):Write();
+            bCaptureCheckpointPosition=false;return Saved;
+        });
+    if(Result==UnmadeCore::RelocationCommit::Applied)return true;
+    if(Result==UnmadeCore::RelocationCommit::RollbackFailed){
+        bCheckpointRollbackPending=true;CheckpointRollbackPosition=Origin;CheckpointRollbackMode=Mode;
+        NextCheckpointRollback=GetWorld()->GetTimeSeconds()+5;GetCharacterMovement()->DisableMovement();
+        UnmadeRpgFeedback(-1,10.f,FColor::Red,TEXT("RETURN MOVEMENT FAILED: saving is protected while automatic movement recovery retries. Reload remains available."));
+    }else UnmadeRpgFeedback(-1,8.f,FColor::Red,TEXT("CHECKPOINT NOT SAVED: movement and progress were restored. Try again when saving is available."));
+    return false;
+}
+void AUnmadeCharacter::RetryCheckpointRollback()
+{
+    if(!bCheckpointRollbackPending||!GetWorld()||GetWorld()->GetTimeSeconds()<NextCheckpointRollback)return;
+    NextCheckpointRollback=GetWorld()->GetTimeSeconds()+5;
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){Hub->PrepareRealmGeometry(CheckpointRollbackPosition,100000);break;}
+    if(!SetActorLocation(CheckpointRollbackPosition,false,nullptr,ETeleportType::TeleportPhysics))return;
+    bCheckpointRollbackPending=false;
+    GetCharacterMovement()->SetMovementMode(static_cast<EMovementMode>(CheckpointRollbackMode));
+    UnmadeRpgFeedback(-1,7.f,FColor::Green,TEXT("Movement restored. Saving is available once this profile is ready."));
+}
+void AUnmadeCharacter::RecoverAtSafeCheckpoint()
+{
+    if(!GetWorld()||!Combat->IsDefeated()||GetWorld()->GetTimeSeconds()<DefeatRecordedAt+4.0)return;
+    const FVector Safe=ResolveSafeCheckpoint(GetActorLocation());
+    const auto Result=DeathRecoveryRetry.Attempt(0,GetWorld()->GetTimeSeconds(),[&]{
+        const float Health=Combat->GetHealth(),Stamina=Combat->GetStamina();
+        const bool Saved=CommitCheckpointMove(Safe,-1,[&]{
+            if(!Combat->ReviveAtCheckpoint())return false;
+            for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)return Hub->SaveRecoveryState(this);
+            return false;
+        },true);
+        if(!Saved)Combat->RestoreSession(Health,Stamina);
+        return Saved;
+    });
+    if(Result==UnmadeCore::DefeatSaveResult::FirstFailure)
+        UnmadeRpgFeedback(-1,9.f,FColor::Orange,TEXT("RECOVERY NOT SAVED: revival was restored to its prior state. Retrying every five active seconds."));
+    if(Result!=UnmadeCore::DefeatSaveResult::Saved)return;
+    GetCharacterMovement()->SetMovementMode(MOVE_Walking);bPlayerDefeatHandled=false;DefeatRecordedAt=-1;
+    UnmadeRpgFeedback(-1,9.f,FColor::Green,TEXT("RETURNED TO SAFETY: wounds and position saved; choices and witnesses remain. Any pending rewards still need to settle before a complete checkpoint."));
 }
 
 void AUnmadeCharacter::PlayIdentityMotion(FName Cue){PlayerMotion=NAME_None;AnimatePlayer(Cue);if(GetWorld())PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+1;}
@@ -1446,6 +1482,7 @@ void AUnmadeCharacter::AnimatePlayer(FName Cue)
 void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
+    RetryCheckpointRollback();
     RestoreSessionWhenReady();
     RetryCombatRewards();
     if(!bStartupRewardsReady&&GetWorld()&&GetWorld()->GetTimeSeconds()>=NextStartupRewardsAttempt){NextStartupRewardsAttempt=GetWorld()->GetTimeSeconds()+5;InitializeStartupRewards();}
@@ -1457,11 +1494,11 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
             ?FName(TEXT("Walk")):FName(TEXT("Idle")));
     if(GetWorld()&&Combat){if(!Combat->IsDefeated())for(TActorIterator<AUnmadePrototypeHub> H(GetWorld());H;++H){Combat->SetWeaponStyle(H->PlayerWeaponStyle(Equipment?Equipment->EquippedWeapon():UnmadeCore::ItemId::Count),H->GetActiveMastery());{auto b=H->ActiveBuild();PlayerBuildSpeed=b.speed;if(Equipment)Equipment->SetBuildBonuses(b.attack,b.armor);}break;}if(!Combat->IsDefeated())GetCharacterMovement()->MaxWalkSpeed=(bIsCrouched?260:600)*PlayerBuildSpeed*Combat->MoveMultiplier(GetWorld()->GetTimeSeconds());float health=Combat->GetHealth();if(LastPresentationHealth>=0&&health<LastPresentationHealth){AnimatePlayer(FName(Combat->IsDefeated()?TEXT("Death"):TEXT("Stagger")));PlayerAttackMotionUntil=GetWorld()->GetTimeSeconds()+(Combat->IsDefeated()?1.5:.6);UnmadePresentation::Sound(this,Combat->IsDefeated()?TEXT("death"):TEXT("injury"));}LastPresentationHealth=health;
       if(!Combat->IsDefeated()&&GetCharacterMovement()->IsMovingOnGround()&&GetVelocity().SizeSquared2D()>FMath::Square(20.f)&&GetWorld()->GetTimeSeconds()>=NextFootstepAt){NextFootstepAt=GetWorld()->GetTimeSeconds()+.45;UnmadePresentation::Sound(this,TEXT("footstep_stone"));}}
-    FractureModel.Recover(static_cast<double>(DeltaSeconds) *
+    if(UnmadeSave::IsSessionWritable(this))FractureModel.Recover(static_cast<double>(DeltaSeconds) *
         (IsValid(Equipment) ? Equipment->StrainRecoveryMultiplier() : 1.0));
     // The world's clock drives a readable three-stage pulse. A guard reduces
     // damage through the combat rules; moving out of the marked lane avoids it.
-    if(GetWorld() && !Combat->IsDefeated())
+    if(GetWorld() && !Combat->IsDefeated()&&UnmadeSave::IsSessionWritable(this))
     {
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
@@ -1492,7 +1529,7 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
 
     // Six land-specific warnings share the source world clock, not a random
     // per-frame roll. One pulse can affect a player at most once.
-    if(GetWorld() && !Combat->IsDefeated())
+    if(GetWorld() && !Combat->IsDefeated()&&UnmadeSave::IsSessionWritable(this))
     {
         for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
         {
@@ -1520,11 +1557,11 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
                         Hazard.sourceId,Hazard.pulseId,AdjustedSeverity);
                 else if(Hazard.effect==UnmadeCore::LaterHazardEffect::Strain)
                 {
-                    const auto Before=FractureModel.TakeSnapshot();
+                    const auto Before=FractureModel;
                     bApplied=FractureModel.ApplyEnvironmentalStrain(AdjustedSeverity);
                     if(bApplied && !SaveFractureState())
                     {
-                        FractureModel.Restore(Before);
+                        FractureModel=Before;
                         bApplied=false;
                         if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Red,
                            TEXT("Unmade could not persist reality strain; the exposure was undone."));
@@ -1541,7 +1578,7 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
     }
     if (Combat->IsDefeated() && !bPlayerDefeatHandled)
     {
-        bPlayerDefeatHandled=true;
+        bPlayerDefeatHandled=true;DeathRecoveryRetry.Reset();
         DefeatRecordedAt=GetWorld()?GetWorld()->GetTimeSeconds():0.0;
         GetCharacterMovement()->DisableMovement();
         if (GEngine) UnmadeRpgFeedback(-1,5.f,FColor::Red,
@@ -1674,11 +1711,22 @@ void AUnmadeCharacter::RpgMenuAction(FName Action){if(!Combat||Combat->IsDefeate
 void AUnmadeCharacter::UseFieldKit(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){if(h->UseDepthFieldKit(this)==UnmadeCore::FieldKitResult::Unavailable)h->NotifyRpg(TEXT("Use an earned field kit from any realm inside an unresolved dungeon danger chamber. No kit is consumed without a benefit."));return;}}
 
 void AUnmadeCharacter::RestoreSessionWhenReady(){
- if(bSessionRestored||!GetWorld())return;AUnmadePrototypeHub* hub=nullptr;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){hub=*h;break;}if(!hub||!hub->IsWorldReady())return;
- auto* save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());if(save&&save->bHasPlayerResume){FVector safe(0,0,135);hub->ExperienceCheckpoint(save->ResumePosition,safe);hub->PrepareRealmGeometry(safe,100000);if(!SetActorLocation(safe,false,nullptr,ETeleportType::TeleportPhysics))return;Combat->RestoreSession(save->ResumeHealth,save->ResumeStamina);}bSessionRestored=true;NextSessionSave=GetWorld()->GetTimeSeconds()+20;
+ if(bSessionRestored||!GetWorld())return;
+ AUnmadePrototypeHub* Hub=nullptr;for(TActorIterator<AUnmadePrototypeHub> H(GetWorld());H;++H){Hub=*H;break;}
+ if(!Hub||!Hub->IsWorldReady())return;
+ auto* Save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());
+ if(Save&&Save->bHasPlayerResume){
+  Hub->PrepareRealmGeometry(Save->ResumePosition,100000);
+  if(!SetActorLocation(Save->ResumePosition,false,nullptr,ETeleportType::TeleportPhysics))return;
+  if(!Combat->RestoreSession(Save->ResumeHealth,Save->ResumeStamina))return;
+ }
+ bSessionRestored=true;NextSessionSave=GetWorld()->GetTimeSeconds()+20;
 }
-void AUnmadeCharacter::CaptureSession(UUnmadePrototypeSave* save)const{
- if(!save||!bSessionRestored||!GetWorld()||!Combat)return;FVector safe(0,0,135);for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){h->ExperienceCheckpoint(GetActorLocation(),safe);break;}save->bHasPlayerResume=true;save->ResumePosition=safe;save->ResumeHealth=Combat->GetHealth();save->ResumeStamina=Combat->GetStamina();
+void AUnmadeCharacter::CaptureSession(UUnmadePrototypeSave* Save)const{
+ if(!Save||!bSessionRestored||!GetWorld()||!Combat)return;
+ Save->bHasPlayerResume=true;
+ Save->ResumePosition=bCaptureCheckpointPosition?GetActorLocation():ResolveSafeCheckpoint(GetActorLocation());
+ Save->ResumeHealth=Combat->GetHealth();Save->ResumeStamina=Combat->GetStamina();
 }
 bool AUnmadeCharacter::InitializeStartupRewards(){
  if(bStartupRewardsReady)return true;

@@ -25,7 +25,8 @@ class FractureSourceContractTests(unittest.TestCase):
         self.assertIn("FractureModel.Fold(", player)
         self.assertIn("FractureModel.Rewrite(", player)
         self.assertIn("PendingRewriteExpiresAt = Now + 6.0", player)
-        self.assertIn("FractureModel.Restore(Previous);", player)
+        self.assertIn("CommitFractureAction(FractureModel",player)
+        self.assertIn("model=before;return FractureCommit::SaveFailed",read("Source/TheUnmadeGame/Public/Save/UnmadeRealityTravelRules.h"))
         for name in ("AnomalyPulse", "FoldReality", "RewriteOpen", "RewriteSealed"):
             self.assertIn("ActionName=\"" + name + "\"", keys)
             self.assertIn('BindAction("' + name + '"', player)

@@ -92,9 +92,9 @@ Mera's consent; they do not turn every realm's resident into that storyline.
   milestone receipts and retry before stopping actor ticks. Checkpoints include
   hidden pending actors. Twelve receipt fault cases and 300 reloads pass portable
   checks; actual ranged impacts, mercy sight gates and actor timing remain pending.
-- Next source/portable expansion: remaining anomaly/reality actions and travel/
-  death checkpoint boundaries. Keep authored gates, per-realm receipts and
-  consent; monitor branch divergence without unnecessary synchronization.
+- Next source/portable expansion: scoped expedition/road/Cinderhold ability
+  dispatch and finite service/mastery commits. Keep authored gates, per-realm
+  receipts and consent; monitor branch divergence without unnecessary sync.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,
@@ -144,3 +144,21 @@ Portable evidence adds 32 action cases, 128 faults and 1,536 reloads. The native
 `Unmade.Npc.ActionConsequenceRollback` buffer/reaction test is pending, along with
 UHT/Editor, physical sight/reachability, controller feedback, platform IO and the
 full realm walkthrough. Do not count these fixtures as an Unreal playthrough.
+
+## 17 October: reality, crossing and revival acceptance
+
+For each realm, take every reachable outgoing passage and return, including an
+already-known destination. Interrupt movement and either write; confirm the
+arrival, visit and eligible road survive together only after success. Reload
+immediately and remain at the saved arrival. A known city in another realm must
+not redirect a new realm's safe entry. Exercise failed movement rollback and
+confirm saving stays protected until return movement succeeds or a fresh load.
+
+Check direct Glimpse/Fold/both Rewrite choices with prior temporary windows,
+partial/understood language and storage failure: no free clue, witness, barrier or
+enemy exposure; failed writes preserve the old window endpoints. Die in all nine
+realms, fail recovery writes, wait five seconds and reload. Recovery saves wounds
+and position, retains world histories and permits full-inventory/pending-reward
+recovery while keeping complete-checkpoint guards. Portable coverage: 96 reality,
+104 passage and 18 revival faults with 1,744 reloads. Actor geometry, collision,
+physics, controller/UI, exact timing and actual platform IO remain unverified.

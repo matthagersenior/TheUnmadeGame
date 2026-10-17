@@ -1,3 +1,16 @@
+## 2026-10-17 — Checked reality costs, crossing arrivals and revival
+
+- Combined direct reality-action Strain, existing language clue and local
+  witnesses before effects. Preserved prior transient windows on failed writes.
+- Combined arrival/visits/directly verified roads, retained saved resume points,
+  and kept realm fallbacks local across all nine realm identities.
+- Saved movement/revival with bounded retries, protected failed movement rollback,
+  and kept recovery available with pending/full-inventory rewards without
+  declaring their encounter receipts complete. No authored choices reset.
+- Evidence: 218 portable fault paths, 1,744 reloads, UBSan and eight compiled
+  mutations. Native movement, collision, UI, serialization and full realm loops
+  are unverified; no charges, new art/book requirement or merge into main.
+
 ## 2026-10-17 — Combined action consequences across related systems
 
 - Combined the originating saves with existing witness/deed effects across the
