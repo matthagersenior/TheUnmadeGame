@@ -2706,6 +2706,11 @@ bool AUnmadePrototypeHub::TryHearthPetitionInteraction(
         const bool PrivateRecord=It->ActorHasTag(FName(TEXT("Petition.PrivateMarker")));
         const bool PublicRecord=It->ActorHasTag(FName(TEXT("Petition.PublicMarker")));
         if(!Book&&!Ledger&&!Private&&!Public&&!Return&&!PrivateRecord&&!PublicRecord)continue;
+        // Completed sites must not steal another nearby quest action.
+        if(Book&&HearthPetition.Stage()!=0)continue;
+        if(Ledger&&HearthPetition.Stage()!=1)continue;
+        if((Private||Public)&&HearthPetition.Stage()!=2)continue;
+        if(Return&&HearthPetition.Stage()!=3)continue;
         if(PrivateRecord&&HearthPetition.Ending()!=1)continue;
         if(PublicRecord&&HearthPetition.Ending()!=2)continue;
         const double Distance=FVector::DistSquared(At,It->GetActorLocation());
@@ -3338,9 +3343,9 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Bes.Bed")));
     SpawnBlock(BesTown+FVector(1020,455,65),FVector(1.0,.65,1.3),
         FName(TEXT("Bes.WarmthStorage")));
-    SpawnBlock(BesTown+FVector(1400,730,60),FVector(1.05,.65,1.2),
+    SpawnBlock(BesTown+FVector(1040,730,60),FVector(1.05,.65,1.2),
         FName(TEXT("Bes.PayDesk")));
-    SpawnBlock(BesTown+FVector(1400,735,125),FVector(.55,.35,.2),
+    SpawnBlock(BesTown+FVector(1040,735,125),FVector(.55,.35,.2),
         FName(TEXT("Bes.MissedWageBook")));
     // Optional two-branch petition. Every step is physically inspected.
     // The notice and return markers have no loot or automatic debt effects.
