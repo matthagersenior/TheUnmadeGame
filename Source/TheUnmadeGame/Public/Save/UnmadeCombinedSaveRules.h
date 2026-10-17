@@ -16,6 +16,7 @@
 #include "World/UnmadeMaterialConsequencesRules.h"
 #include "World/UnmadeLivingEconomyRules.h"
 #include "World/UnmadeBesHouseholdRules.h"
+#include "World/UnmadeHearthPetitionRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
@@ -72,7 +73,8 @@ bool ValidCombinedRecord(const Record& record, Text text)
         Save->bHasWitnessEchoSnapshot||Save->bHasWitnessBraidSnapshot||
         Save->bHasWitnessDispatchSnapshot||Save->bHasWitnessReturnSnapshot||
         Save->bHasRealityConsequenceSnapshot||Save->bHasOuterRealmReactions||
-        Save->bHasMaterialWorld||Save->bHasLivingEconomy||Save->bHasBesHousehold)&&
+        Save->bHasMaterialWorld||Save->bHasLivingEconomy||Save->bHasBesHousehold||
+        Save->bHasHearthPetition)&&
         !Save->bHasLivingWorldSnapshot)return false;
     if(Save->bHasFractureSnapshot){
         FractureModel model("region.prototype.hub",{"variant.open","variant.sealed"});
@@ -185,6 +187,7 @@ bool ValidCombinedRecord(const Record& record, Text text)
     UnmadeCore::MaterialWorld RestoredMaterials;
     UnmadeCore::LivingEconomy RestoredLiving;
     UnmadeCore::BesHousehold RestoredBes;
+    UnmadeCore::HearthPetition RestoredPetition;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -464,6 +467,13 @@ bool ValidCombinedRecord(const Record& record, Text text)
         { return false; }
     }
     else RestoredBes.InitializeAtDay(RestoredClock.DayIndex()+1);
+    if(Save->bHasHearthPetition)
+    {
+        const auto& Data=Save->HearthPetitionState;
+        if(Data.Num()!=6 || !RestoredPetition.Restore(
+             {Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]},
+             RestoredBes.Save(),RestoredClock.DayIndex()+1))return false;
+    }
     if(Save->bHasCinderholdAdventure)
     {
         const auto& S=Save->CinderholdAdventureState;
