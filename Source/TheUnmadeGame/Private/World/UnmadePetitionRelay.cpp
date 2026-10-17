@@ -1,4 +1,5 @@
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeCivicReverberationRules.h"
 #include "Player/UnmadeCharacter.h"
 #include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
@@ -11,6 +12,16 @@ void AUnmadePrototypeHub::RefreshPetitionRelayWorld()
     // Distinct graybox evidence in all three realms; not a remote conversation.
     const int Stage=PetitionRelay.Stage();
     const int Route=PetitionRelay.Route();
+    const auto Effects=UnmadeCore::EvaluateCivicReverberation(
+        PetitionRelay.Save(),BesHousehold.Save());
+    // The optional screened crossing vs public evidence platform is a
+    // physical, collision-enabled alternate route. Neither is a main gate.
+    SetRiteWorldActorState(FName(TEXT("Civic.PrivateShelterPassage")),
+        Effects.protectedPassage);
+    SetRiteWorldActorState(FName(TEXT("Civic.PublicEvidencePlatform")),
+        Effects.publicAudit);
+    SetRiteWorldActorState(FName(TEXT("Civic.SaltwakeQuestion")),
+        Effects.saltwakeControversy);
     SetRiteWorldActorState(FName(TEXT("Relay.CinderholdCopy")),
         HearthPetition.Stage()==4&&Stage==0);
     SetRiteWorldActorState(FName(TEXT("Relay.SaltwakePrivate")),Stage>=2&&Route==1);
@@ -23,16 +34,25 @@ FString AUnmadePrototypeHub::GetPetitionRelayJournal()const
 {
     // This is the player's carried-document record, not a declaration of
     // what unvisited residents in another city somehow already know.
+    const auto Effects=UnmadeCore::EvaluateCivicReverberation(
+        PetitionRelay.Save(),BesHousehold.Save());
     return FString(TEXT("\nTHE THREE-REALM PETITION RELAY\n"))+
-        UTF8_TO_TCHAR(PetitionRelay.Journal())+TEXT("\n");
+        UTF8_TO_TCHAR(PetitionRelay.Journal())+TEXT("\n")+
+        UTF8_TO_TCHAR(Effects.saltwakeLine)+TEXT("\n")+
+        UTF8_TO_TCHAR(Effects.crossingLine)+TEXT("\n")+
+        UTF8_TO_TCHAR(Effects.wageLine)+TEXT("\n");
 }
 
 FString AUnmadePrototypeHub::GetPetitionRelayResidentLine(FName StableId)const
 {
+    const auto Effects=UnmadeCore::EvaluateCivicReverberation(
+        PetitionRelay.Save(),BesHousehold.Save());
     if(StableId==FName(TEXT("npc.saltwake.courier.001"))&&PetitionRelay.Stage()>=2)
-        return FString(UTF8_TO_TCHAR(PetitionRelay.MeraLine()));
+        return FString(UTF8_TO_TCHAR(PetitionRelay.MeraLine()))+
+               TEXT(" ")+UTF8_TO_TCHAR(Effects.wageLine);
     if(StableId==FName(TEXT("npc.bridgekeeper.001"))&&PetitionRelay.Stage()==4)
-        return FString(UTF8_TO_TCHAR(PetitionRelay.OrrelLine()));
+        return FString(UTF8_TO_TCHAR(PetitionRelay.OrrelLine()))+
+               TEXT(" ")+UTF8_TO_TCHAR(Effects.wageLine);
     return FString();
 }
 
