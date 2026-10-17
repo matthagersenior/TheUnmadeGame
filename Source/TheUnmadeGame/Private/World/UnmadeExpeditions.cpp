@@ -1,6 +1,8 @@
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeRealmJourneyRules.h"
+#include "World/UnmadeEncounterHazardRules.h"
+#include "Save/UnmadeSaveSession.h"
 #include "Combat/UnmadePresentation.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeEnemyCharacter.h"
@@ -84,13 +86,16 @@ void AUnmadePrototypeHub::BuildExpeditions(){
 bool AUnmadePrototypeHub::CommitExpeditions(const UnmadeCore::Expeditions& before,AUnmadeCharacter* player){if(WriteWorldSnapshot(player)){RefreshExpeditions();return true;}Expeditions=before;NotifyRpg(TEXT("Adventure could not save. The choice and reward remain uncommitted; retry."));return false;}
 void AUnmadePrototypeHub::RefreshExpeditions(){
  if(!GetWorld()||GetWorld()->GetTimeSeconds()<NextExpeditionRefresh)return;NextExpeditionRefresh=GetWorld()->GetTimeSeconds()+.5;
- auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));if(Alive(p)&&p->GetEquipment()){auto b=p->GetEquipment()->SelectedBenefit();p->GetEquipment()->SetExpeditionBonuses(b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);}
+ auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+ const bool playerReady=Alive(p)&&p->GetWorld()==GetWorld()&&UnmadeSave::IsSessionWritable(p);
+ if(playerReady&&p->GetEquipment()){auto b=p->GetEquipment()->SelectedBenefit();p->GetEquipment()->SetExpeditionBonuses(b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);}
  // Register actual chamber arrival before its actors can accept combat receipts.
- if(Alive(p)&&!bExpeditionSaveRejected){auto before=Expeditions;bool changed=false;for(int a=0;a<9;++a)for(int r=0;r<6;++r){auto& spec=UnmadeCore::ExpeditionSpecs[a];FVector at=p->GetActorLocation()-FVector(spec.x,spec.y+15000,95);if(UnmadeCore::InsideRegisteredChamber(a,r,at.X,at.Y,at.Z))changed=Expeditions.Enter(a,r)||changed;}if(changed)CommitExpeditions(before,p);}
+ if(playerReady&&!bExpeditionSaveRejected){auto before=Expeditions;bool changed=false;for(int a=0;a<9;++a)for(int r=0;r<6;++r){auto& spec=UnmadeCore::ExpeditionSpecs[a];FVector at=p->GetActorLocation()-FVector(spec.x,spec.y+15000,95);if(UnmadeCore::InsideRegisteredChamber(a,r,at.X,at.Y,at.Z))changed=Expeditions.Enter(a,r)||changed;}if(changed)CommitExpeditions(before,p);}
  for(int a=0;a<9;++a){auto t=Expeditions.Arc(a);
   auto hazard=UnmadeCore::SampleDungeonHazard(GetWorld()->GetTimeSeconds()+a,GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a]||t->boss!=0||bExpeditionSaveRejected||Identity.Arc(a)->chart!=0);
   if(ExpeditionHazardSigns[a].IsValid())ExpeditionHazardSigns[a]->GetTextRender()->SetText(FText::FromString(hazard.warning?TEXT("FLOOR WARNING - STEP OUT OF THE FIELD"):hazard.danger?TEXT("DANGER PULSE - SAFE EDGES / FREE VENT"):TEXT("FLOOR QUIET - NEXT WARNING BEFORE DAMAGE")));
-  if(Alive(p)&&hazard.danger&&FVector::DistSquared2D(p->GetActorLocation(),Room(a,3)+FVector(650,500,0))<FMath::Square(280.f)&&FMath::Abs(p->GetActorLocation().Z-95)<150)p->GetCombat()->ReceiveHazardPulse(static_cast<uint64>(GetUniqueID())*32+a+1,hazard.pulse,12+a);
+  const FVector hazardOffset=p?p->GetActorLocation()-(Room(a,3)+FVector(650,500,0)):FVector::ZeroVector;
+  if(UnmadeCore::EncounterHazardInCylinder(playerReady,Alive(p),hazard,hazardOffset.X,hazardOffset.Y,hazardOffset.Z,280,150))p->GetCombat()->ReceiveHazardPulse(static_cast<uint64>(GetUniqueID())*32+a+1,hazard.pulse,12+a);
   const auto Set=[](TWeakObjectPtr<AStaticMeshActor> g,bool open){if(g.IsValid()){g->SetActorHiddenInGame(open);g->SetActorEnableCollision(!open);}};Set(ExpeditionBossGates[a],!bExpeditionSaveRejected&&t->branch!=0);Set(ExpeditionReturnGates[a],!bExpeditionSaveRejected&&t->boss!=0);
   if(t->returned)for(TActorIterator<AUnmadeNpcCharacter> npc(GetWorld());npc;++npc)for(int person=1;person<=2;++person)if(npc->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,person))&&(t->rescued&(1<<(person-1)))&&FVector::DistSquared2D(npc->GetActorLocation(),Site(a,0))>FMath::Square(2000.f)){FVector At=Site(a,0)+FVector((person-1)*850,-560,0);npc->SetActorLocation(At,false);npc->SetExpeditionHome(At);}
   if(ExpeditionSigns[a].IsValid())ExpeditionSigns[a]->GetTextRender()->SetText(FText::FromString(t->returned?FString(UTF8_TO_TCHAR(t->boss==1?UnmadeCore::ExpeditionSpecs[a].kill_return:UnmadeCore::ExpeditionSpecs[a].mercy_return))+FString::Printf(TEXT("\nE %s (+%d attack) / F %s (+%d defense). ONE PERMANENT CHOICE; repeat to confirm.\nTechnique: %s. E re-equips an owned kit."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].weapon),7+a*2,UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].armor),5+a,UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].technique)):TEXT("Return from the dungeon to earn equipment and a technique. E weapon / F armor.")));

@@ -17,6 +17,8 @@ struct LocalPlayer {
  double GetStamina()const{return stamina;}
  bool Heal(double n){return body.Heal(n);}
  bool RestoreSession(double health,double energy){stamina=energy;return body.RestoreHealth(health);}
+ auto CaptureRecoveryState()const{return std::make_pair(body,stamina);}
+ void RestoreRecoveryState(const std::pair<Combatant,double>& before){body=before.first;stamina=before.second;}
 };
 int main(){
  ExpeditionConfirmation confirmation;

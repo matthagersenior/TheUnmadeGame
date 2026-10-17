@@ -1,7 +1,10 @@
 #include "UI/UnmadeRpgFeedback.h"
+#include "Combat/UnmadeEncounterInterruptionRules.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Combat/UnmadeRealmGuardian.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
+#include "Save/UnmadeSaveSession.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
@@ -42,7 +45,11 @@ void AUnmadeRealmGuardian::Tick(float DeltaSeconds)
     if(!World || idx<0)return;
     AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
         UGameplayStatics::GetActorOfClass(World,AUnmadePrototypeHub::StaticClass()));
-    if(!IsValid(Hub))return;
+    const auto Interrupt=[&]{
+        UnmadeCore::InterruptEncounter(Encounter);bWarningShown=false;
+        GetCharacterMovement()->StopMovementImmediately();
+    };
+    if(!IsValid(Hub)){Interrupt();return;}
     if(Hub->GetRealmGuardianOutcome(HomeRealm)!=UnmadeCore::GuardianOutcome::Unresolved)
     {
         SetGuardianResolved();
@@ -61,8 +68,8 @@ void AUnmadeRealmGuardian::Tick(float DeltaSeconds)
     }
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
         UGameplayStatics::GetPlayerCharacter(World,0));
-    if(!IsValid(Player)||!IsValid(Player->GetCombat())||
-       Player->GetCombat()->IsDefeated())return;
+    if(!UnmadeCore::RequireEncounterPlayer(IsValid(Player)&&IsValid(Player->GetCombat())&&
+       !Player->GetCombat()->IsDefeated()&&Player->GetWorld()==World&&UnmadeSave::IsSessionWritable(Player),Interrupt))return;
     FVector Delta=Player->GetActorLocation()-GetActorLocation();
     Delta.Z=0;
     const double Distance=Delta.Size();

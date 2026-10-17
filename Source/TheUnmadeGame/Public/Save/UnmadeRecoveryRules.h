@@ -25,17 +25,22 @@ bool CommitStrainRecovery(Fracture& fracture, double amount, Writer write) {
     return false;
 }
 
+// A failed in-session recovery must not use profile restoration: that resets
+// combat windows and can erase a cooldown or an already acknowledged hit.
+template<class Combat, class Stage, class Writer>
+bool CommitCombatRecovery(Combat& combat, Stage stage, Writer write) {
+    const auto before = combat.CaptureRecoveryState();
+    if (stage() && write()) return true;
+    combat.RestoreRecoveryState(before);
+    return false;
+}
+
 // The synchronous writer captures live health. Apply recovery before capturing
 // the record, and undo it if the write fails. The caller owns cost rollback.
-// Combat exposes GetHealth/GetStamina/Heal/RestoreSession in the UE adapter.
 template<class Combat, class Writer>
 bool CommitHealing(Combat& combat, double amount, Writer write) {
     if (!std::isfinite(amount) || amount < 0) return false;
-    const auto health = combat.GetHealth();
-    const auto stamina = combat.GetStamina();
-    if (amount > 0 && !combat.Heal(amount)) return false;
-    if (write()) return true;
-    combat.RestoreSession(health, stamina);
-    return false;
+    return CommitCombatRecovery(combat,
+        [&] { return amount == 0 || combat.Heal(amount); }, write);
 }
 }

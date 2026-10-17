@@ -9,6 +9,7 @@
 #include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
+#include "Save/UnmadeCounterThreatRules.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
@@ -540,6 +541,11 @@ bool AUnmadePrototypeHub::HasPendingDefeatReceipts()const
         if(Player->HasPendingCombatRewards())return true;
         if(const auto* Rite=Player->FindComponentByClass<UUnmadeTenfoldComponent>())
             if(Rite->HasPendingHistory())return true;
+    }
+    // These authored return-road actors are not expedition defeat slots. Their
+    // hub-owned favor receipt must also settle before a complete checkpoint.
+    for(int a=0;a<9;++a){const auto* Threat=DepthRetaliators.IsValidIndex(a)?DepthRetaliators[a].Get():nullptr;
+        if(UnmadeCore::PendingCounterThreat(Depth,a,IsValid(Threat)&&IsValid(Threat->GetCombat())&&Threat->GetCombat()->IsDefeated()))return true;
     }
     // Defeated expedition actors can already be hidden. Query their durable
     // owner state, never visibility, collision or whether Tick is enabled.

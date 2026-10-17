@@ -342,6 +342,18 @@ jobs:
 
       - name: Test ordinary spending, profile recovery and regional crafting dependencies
         run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/combat_recovery_rollback_test.cpp -o /tmp/unmade-combat-recovery
+          /tmp/unmade-combat-recovery
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/counter_threat_recovery_test.cpp -o /tmp/unmade-counter-threat
+          /tmp/unmade-counter-threat
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/status_defeat_reward_test.cpp -o /tmp/unmade-status-defeat
+          /tmp/unmade-status-defeat
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/encounter_interruption_test.cpp -o /tmp/unmade-interruption
+          /tmp/unmade-interruption
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/provision_chronology_test.cpp -o /tmp/unmade-provision-chronology
+          /tmp/unmade-provision-chronology
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/world/encounter_hazard_readiness_test.cpp -o /tmp/unmade-hazard-ready
+          /tmp/unmade-hazard-ready
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/combat/mastery_power_test.cpp -o /tmp/unmade-mastery
           /tmp/unmade-mastery
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/experience_chronology_test.cpp -o /tmp/unmade-experience-chronology

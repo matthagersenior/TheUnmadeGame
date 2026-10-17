@@ -29,6 +29,7 @@ integration need; preserve development momentum and do not merge into main.
 
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
+| P1 encounter/recovery batch implemented; UE pending | Failed healing/revival preserves full runtime combat state; attributed burn retains first-style rewards. Interrupted enemies warn afresh, final phases use authored damage once, and hazards/kits wait for restored ownership. Daily provision chronology and pending return-road favor receipts are protected. 10,128 new reloads, 1,230 resumed warning paths and 384 damage checks pass portable scenarios. |
 | P1 relationship/mastery batch implemented; UE pending | Whole-record preflight rejects impossible visit/service chronology and unexplained insight depletion. Conversations commit actual speaker visit/tutorial/scene once, with rollback and preserved refusal. Mastery uses 3D reach, readiness and stagger gates; selection reports failures and skips unchanged writes. 72 malformed records, 135 conversation paths, 5,964 reloads and 19 mutations pass. |
 | P1 local service/consent batch implemented; UE pending | Personal choice + tutorial + witnesses commit together; confirmations consume before writes. Rest is bound to its bed. Repair/mediation testimony and finite guide tracking share their original save. 92 write faults, 2,304 reloads and seven mutations pass; physical services/UI/platform IO remain pending. |
 | P1 reality/travel/recovery batch implemented; UE pending | Checked Glimpse/Fold/Rewrite combine Strain, clue and witnesses; full-model rollback preserves prior windows. Crossings save actual arrivals/visits/road credit together. Realm-safe resume and saved revival cover all nine realms; failed movement rollback protects writes, while recovery remains possible with pending/full-inventory rewards. 218 fault paths, 1,744 reloads, 356 Python / 82 portable C++ / 54 dependency checks and eight mutations pass. |
@@ -51,7 +52,7 @@ integration need; preserve development momentum and do not merge into main.
 | P1 defeat retries implemented; UE pending | Guardian/final-defeat commits attempt immediately, then retry failure every five active-world seconds instead of every actor tick. Success suppresses repeat commits for that phase. Portable tests cover 24 guardian and 72 final-phase fault/retry paths; confirmation expiry, retargeting, cancellation and consumed consent remain safe. |
 | P1 pending checkpoints implemented; UE pending | Session saves refuse to report success while an encounter receipt is pending. Read-only actor queries include hidden receipt owners and distinguish an old final body from the new phase. Load/New preserve unsaved-discard confirmation; explicit recovery never pre-saves. 114 portable fault sessions verify blocked checkpoint writes and normal saves after receipt commit. |
 | P1 handoff ownership implemented; UE pending | Target selection stays staged until a new-world owner registers. Travel failure restores original selection; a missing owner/failed world cannot unlock writes. Reentrant requests are rejected and destination backup pins survive arrival. All 64 profile/recovery combinations pass portable checks; UE delegate/build, startup ordering and real failed travel remain pending. |
-| P1 next coordinated batch | Audit encounter interruption and hazard recovery together: ranged/status defeats, field-kit suppression, guard/dodge timing and resumed realm encounters. Trace effect ownership, persistent receipts and retry paths before changing authored behavior. Keep physical nine-realm reachability/UI/travel/platform IO pending, and recheck drift before publishing. |
+| P1 next coordinated batch | Audit combat/equipment input through menus and load/travel: controller/action parity, paused/modal availability and confirmation lifecycle. Follow supported reward/consent defects without adding speculative features. Keep actual nine-realm movement/UI/timing/platform IO pending and recheck drift before publishing. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -812,3 +813,52 @@ geometry, UI and interrupted platform IO remain pending. No Unreal playthrough,
 paid service, mandatory artwork/book work or main merge is claimed.
 
 Next coordinated batch: encounter interruption and hazard recovery, including ranged/status defeats, field-kit suppression, guard/dodge timing and resumed realm encounters. Retain actual physical acceptance for an Unreal host.
+
+## 2026-10-17 — Interrupted encounters, attributed defeats and recovery
+
+Failed healing and revival writes now restore complete runtime combat participants,
+not profile-load values. Body receipts and outgoing swing IDs, stamina/attack/
+combo/power/parry/dodge windows, contact claims, status/stagger expiry and original
+status ownership survive rollback. Actual profile loads retain their existing
+fresh-session policy. Costs and benefits still share their original synchronous
+save; no combat cooldown is added to the save format.
+
+Burn retains its original weak source from player melee, projectile or mastery
+status application. Only an actual attributed lethal pulse queues the existing
+first-style reward; unknown sources never invent a player reward. The player-owned
+retry queue survives stopped defeated actors, capacity/write failure and repeated
+reloads. Delayed remote injury does not fabricate a new local fight witness.
+Named encounter defeat receipts keep their existing owners and retry policies.
+
+Absent, defeated or unrestored players cancel transient armed enemy warnings,
+patterns and locked aim. Ordinary/elder/expedition/observer/named/guardian/final
+encounters must warn again on resumption; health, story outcomes, swing receipts
+and failed victory retries remain. Durable defeat processing precedes the active
+player guard. Final attacks use the authored rhythm damage directly, fixing
+Unmasked/Echo phase bases being added twice; guard, armor and status modifiers
+still apply normally. No authored pattern or balance value is changed.
+
+Chamber/wing hazards and automatic arrivals/discoveries wait for an accepted,
+restored same-world player. Construction still initializes gates, signs and lifts.
+Original pulse timing, physical reach, sight, edge routes and free vents remain;
+field kits require the same owner before spending and retain visit-only suppression.
+Provision history cannot claim more once-per-day purchases than its last purchase
+day. Reachable older and absent optional records remain accepted. Defeated
+public-accord return-road threats now block complete checkpoints until their
+hub-owned favor/defeat receipt saves; failed writes restore favor, explain pending
+retry and grant it once. Explicit unsaved-discard and independent revival remain.
+
+Portable evidence: recovery covers 432 write faults, 108 malformed subrecords,
+216 successful recoveries and 5,184 reloads; provisions cover 108 malformed histories,
+252 write faults and 3,744 reloads; attributed status covers six write faults and
+768 reloads; return-road threats cover 18 faults and 432 reloads. Interruption
+coverage adds 1,230 resumed warning paths, 384 authored damage/guard/armor checks
+and 18 retained failed-receipt retries. Hazards cover 10,800 timing/readiness samples
+and nine resumed pulses. All 380 Python tests, 93 strict portable C++17
+executables and 76 dependency checks pass; 32 compiled mutations are caught.
+Hygiene, six release scenarios, structure/literals, transmedia, manuscript and
+whitespace checks pass. Actor adapters are statically reviewed; actual UHT/Editor,
+component/actor tick order, projectiles, physical movement/rollback, warning UI and
+interrupted platform IO remain pending. No Unreal playthrough or paid service.
+
+Next coordinated batch: combat/equipment input through menus and load/travel, including controller/action parity, paused/modal availability and confirmation lifecycle. First-PC physical acceptance remains pending.

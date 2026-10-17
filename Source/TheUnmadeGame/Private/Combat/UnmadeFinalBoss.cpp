@@ -1,7 +1,10 @@
 #include "UI/UnmadeRpgFeedback.h"
+#include "Combat/UnmadeEncounterInterruptionRules.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Combat/UnmadeFinalBoss.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
+#include "Save/UnmadeSaveSession.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
@@ -34,7 +37,11 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
     if(!World)return;
     AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
         UGameplayStatics::GetActorOfClass(World,AUnmadePrototypeHub::StaticClass()));
-    if(!IsValid(Hub))return;
+    const auto Interrupt=[&]{
+        UnmadeCore::InterruptEncounter(Rhythm);bWarningShown=false;
+        GetCharacterMovement()->StopMovementImmediately();
+    };
+    if(!IsValid(Hub)){Interrupt();return;}
     const auto Act=Hub->GetFinalAct();
     const bool bFight=(Act==UnmadeCore::FinalAct::Veil &&
                        Hub->GetLaterRealmStage(UnmadeCore::Realm::FirstAbsence)==3 &&
@@ -43,7 +50,7 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
                       Act==UnmadeCore::FinalAct::EchoAwake;
     SetActorHiddenInGame(!bFight);
     SetActorEnableCollision(bFight);
-    if(!bFight)return;
+    if(!bFight){Interrupt();return;}
     if(ConfiguredAct!=static_cast<int>(Act))ConfigureAct(Act);
     if(GetCombat()->IsDefeated())
     {
@@ -60,8 +67,8 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
     }
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
         UGameplayStatics::GetPlayerCharacter(World,0));
-    if(!IsValid(Player)||!IsValid(Player->GetCombat())||
-       Player->GetCombat()->IsDefeated())return;
+    if(!UnmadeCore::RequireEncounterPlayer(IsValid(Player)&&IsValid(Player->GetCombat())&&
+       !Player->GetCombat()->IsDefeated()&&Player->GetWorld()==World&&UnmadeSave::IsSessionWritable(Player),Interrupt))return;
     FVector Direction=Player->GetActorLocation()-GetActorLocation();
     Direction.Z=0;
     const double Dist=Direction.Size();
@@ -112,9 +119,8 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
             // Apply damage only after the previous warning, through the same
             // authoritative guard/armor/dedup combat component as all foes.
             const float Before=Player->GetCombat()->GetHealth();
-            GetCombat()->SetGearBonuses(
-                FMath::Max(0,FMath::RoundToInt(Beat.damage-17)),0);
-            GetCombat()->TryStrikeTarget(Player->GetCombat(),Now,true,false);
+            if(UnmadeCore::ConfigureAuthoredFinalStrike(*GetCombat(),Beat))
+                GetCombat()->TryStrikeTarget(Player->GetCombat(),Now,true,false);
             if(GEngine)UnmadeRpgFeedback(-1,3.f,FColor::Red,
                 FString::Printf(TEXT("A remembered attack lands: %.0f injury."),
                     Before-Player->GetCombat()->GetHealth()));

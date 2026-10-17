@@ -1,4 +1,6 @@
 #include "UI/UnmadeRpgFeedback.h"
+#include "Combat/UnmadeEncounterInterruptionRules.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Combat/UnmadeBossCharacter.h"
 #include "Items/UnmadeEquipmentComponent.h"
 #include "Save/UnmadeSaveSession.h"
@@ -43,8 +45,11 @@ void AUnmadeBossCharacter::Tick(float DeltaSeconds)
     }
     const AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
         UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
-    if(!IsValid(Player) || !IsValid(Player->GetCombat()) || Player->GetCombat()->IsDefeated())
-        return;
+    if(!UnmadeCore::RequireEncounterPlayer(IsValid(Player)&&IsValid(Player->GetCombat())&&
+       !Player->GetCombat()->IsDefeated()&&Player->GetWorld()==GetWorld()&&UnmadeSave::IsSessionWritable(Player),[&]{
+        UnmadeCore::InterruptEncounter(Encounter);bTelegraphShown=false;
+        GetCharacterMovement()->StopMovementImmediately();
+    }))return;
     FVector Direction=Player->GetActorLocation()-GetActorLocation();
     Direction.Z=0;
     const double Distance=Direction.Size();

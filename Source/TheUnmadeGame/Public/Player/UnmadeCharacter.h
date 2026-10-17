@@ -86,6 +86,7 @@ public:
     FString GetCharacterChosenName() const;
 
     void NotifyProjectileImpact(class AUnmadeEnemyCharacter* Target,float Before){HandleMeleeImpact(Target,Before);}
+    void NotifyStatusDefeat(class AUnmadeEnemyCharacter* Target);
     void NotifyWeaponContact(){TickWeaponContact();}
     void ReportIntegrationEvent(FName Event,FName Subject){ReportLocalEvent(Event,Subject);}
     void RecoverIntegrationStrain(double Amount){FractureModel.Recover(Amount/UnmadeCore::FractureModel::RecoveryPerSecond);}

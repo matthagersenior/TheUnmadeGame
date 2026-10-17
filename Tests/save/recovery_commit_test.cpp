@@ -9,6 +9,7 @@ using namespace UnmadeCore;
 struct Player {
     Combatant body;
     double stamina = 19;
+    struct RecoveryState {Combatant body;double stamina;};
     double GetHealth() const { return body.Health(); }
     double GetStamina() const { return stamina; }
     bool Heal(double amount) { return body.Heal(amount); }
@@ -16,6 +17,8 @@ struct Player {
         stamina = energy;
         return body.RestoreHealth(health);
     }
+    RecoveryState CaptureRecoveryState()const{return {body,stamina};}
+    void RestoreRecoveryState(const RecoveryState& before){body=before.body;stamina=before.stamina;}
 };
 int main() {
     Player player;

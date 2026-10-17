@@ -954,3 +954,19 @@ Mastery keeps its authored costs and effects while respecting full spatial reach
 accepted-world readiness and stagger. Existing accords, saved names, rewards,
 consent, individual histories, world mysteries and all nine realms are unchanged.
 These are portable/source guarantees; physical Unreal acceptance remains pending.
+
+### 2026-10-17 — Recovery and witnessed combat ownership
+
+An interrupted encounter must warn the living, restored player again. Defeat and
+recovery do not discard a pending named victory or alter its story outcome.
+Failed recovery preserves the previous combat state, including active windows,
+receipts and original status ownership; a true reload keeps session-only effects
+transient. A lethal player-owned burn can earn its existing first-style receipt,
+while unknown or remote damage creates no new nearby fight testimony. The final
+rhythm deals its authored phase damage once, with normal guard and armor.
+Hazards wait for restoration, and field-kit suppression keeps its visit-only
+scope and original supplier cost. Daily provisions must fit recorded world days.
+A defeated public-accord return-road claimant's favor and history must settle
+before a complete checkpoint; retries neither erase nor duplicate that consequence.
+All realm identities, accords, wages, rewards, consent and mysteries remain.
+Physical Unreal acceptance is pending; no new artwork/book requirement is added.

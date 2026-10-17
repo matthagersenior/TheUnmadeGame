@@ -4,6 +4,7 @@
 #include "World/UnmadePrototypeHub.h"
 #include "Save/UnmadeRecoveryRules.h"
 #include "World/UnmadeRealmJourneyRules.h"
+#include "World/UnmadeEncounterHazardRules.h"
 #include "World/UnmadePlayerExperienceRegistry.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
 #include "World/UnmadeTenfoldComponent.h"
@@ -63,9 +64,10 @@ void AUnmadePrototypeHub::LearnExperienceTutorial(int bit,AUnmadeCharacter* p){i
 bool AUnmadePrototypeHub::ExperienceServicesOpen(int a)const{return UnmadeCore::ServiceOpen(a,Clock.MinuteOfDay()/60);}
 FString AUnmadePrototypeHub::ExperienceServiceHours(int a)const{return FString::Printf(TEXT("%s: %s. Current local hour %02d. The refuge bed can wait six game hours; obligations remain due."),UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].interior),a==2?TEXT("continuous furnace shifts"):a==6?TEXT("open 18:00–06:00"):TEXT("open 06:00–22:00"),Clock.MinuteOfDay()/60);}
 void AUnmadePrototypeHub::RefreshPlayerExperience(){if(!GetWorld()||WingGuardians.Num()!=9||GetWorld()->GetTimeSeconds()<NextExperienceRefresh)return;NextExperienceRefresh=GetWorld()->GetTimeSeconds()+.2;int town=0;auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+ const bool playerReady=IsValid(p)&&p->GetCombat()&&!p->GetCombat()->IsDefeated()&&p->GetWorld()==GetWorld()&&UnmadeSave::IsSessionWritable(p);
  for(int a=0;a<9;++a){auto* x=Experience.Arc(a);auto* d=Depth.Arc(a);bool safe=!bExperienceRejected&&!bDepthSaveRejected;if(WingExitGates[a].IsValid()){WingExitGates[a]->SetActorHiddenInGame(safe&&x->tool);WingExitGates[a]->SetActorEnableCollision(!safe||!x->tool);}if(WingRootGates[a].IsValid()){auto* rite=p?p->FindComponentByClass<UUnmadeTenfoldComponent>():nullptr;bool open=safe&&rite&&rite->RiteStage(UnmadeCore::RiteId::LivingRoads)>=2;WingRootGates[a]->SetActorHiddenInGame(open);WingRootGates[a]->SetActorEnableCollision(!open);}if(WingLift[a].IsValid()){FVector at=Station(a,2)+FVector(0,0,-100);double lift=FMath::Sin(GetWorld()->GetTimeSeconds()*.35)*45;WingLift[a]->SetActorLocation(at+FVector(0,0,lift),false);}
-  if(p&&a==1&&x->offered&&!x->complete){double phase=FMath::Fmod(GetWorld()->GetTimeSeconds(),12.);if(phase>=9&&Near(p,Wing(a,1),750)){p->GetCombat()->ReceiveHazardPulse(GetUniqueID()*128ULL+a,static_cast<uint64>(GetWorld()->GetTimeSeconds()/12)+1,10);}}
-  if(p&&!bExperienceRejected&&FVector::DistSquared2D(p->GetActorLocation(),City(a))<FMath::Square(2500.f)){auto old=Experience;if(Experience.DiscoverCity(a,true)&&!WriteWorldSnapshot(p))Experience=old;}
+  if(p&&a==1){const auto flood=UnmadeCore::SampleWingFlood(GetWorld()->GetTimeSeconds(),!x->offered||x->complete);const FVector offset=p->GetActorLocation()-Wing(a,1);if(UnmadeCore::EncounterHazardInSphere(playerReady,p->GetCombat()&&!p->GetCombat()->IsDefeated(),flood,offset.X,offset.Y,offset.Z,750)&&Near(p,Wing(a,1),750))p->GetCombat()->ReceiveHazardPulse(GetUniqueID()*128ULL+a,flood.pulse,10);}
+  if(playerReady&&!bExperienceRejected&&FVector::DistSquared2D(p->GetActorLocation(),City(a))<FMath::Square(2500.f)){auto old=Experience;if(Experience.DiscoverCity(a,true)&&!WriteWorldSnapshot(p))Experience=old;}
   for(int site=0;site<(a==0?5:3);++site,++town){bool room=safe&&(d->choice==1||x->privilege||x->reconciled);if(SettlementRoomGates[town].IsValid()){SettlementRoomGates[town]->SetActorHiddenInGame(room);SettlementRoomGates[town]->SetActorEnableCollision(!room);}if(SettlementRepairs[town].IsValid()){SettlementRepairs[town]->SetActorHiddenInGame(safe&&x->repair);SettlementRepairs[town]->SetActorEnableCollision(!safe||!x->repair);}if(ExperienceSigns[town].IsValid())ExperienceSigns[town]->GetTextRender()->SetText(FText::FromString(FString(UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].interior))+TEXT("\n")+ExperienceServiceHours(a)+FString::Printf(TEXT("\n%s / %s / %s"),d->choice==1?TEXT("RESERVE BEDS OPEN"):d->choice==2?TEXT("PUBLIC HEARING OPEN"):TEXT("ACCORD PENDING"),x->repair?TEXT("WORK TABLE REPAIRED"):TEXT("REPAIR SHIFT AVAILABLE"),x->reconciled?TEXT("SHARED ACCESS RESTORED"):TEXT("MEDIATION AT WITNESS"))));}
  }
 }

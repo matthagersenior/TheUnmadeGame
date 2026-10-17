@@ -859,6 +859,14 @@ void AUnmadeCharacter::HandleMeleeImpact(AUnmadeEnemyCharacter* Target,float Bef
     ReportLocalEvent(FName("Player.Fought"),FName("combat.prototype.enemy"));
 }
 
+void AUnmadeCharacter::NotifyStatusDefeat(AUnmadeEnemyCharacter* Target)
+{
+    if(!IsValid(Target)||Target->GetWorld()!=GetWorld()||!IsValid(Target->GetCombat())||!Target->GetCombat()->IsDefeated())return;
+    if(auto* Boss=Cast<AUnmadeBossCharacter>(Target))Boss->CommitDefeatReceipt();
+    else {CombatRewards.Queue(Target->GetEnemyStyle());RetryCombatRewards();}
+    // Delayed remote damage does not invent a fresh nearby fight witness.
+}
+
 void AUnmadeCharacter::StartGuard()
 {
     if(IsRpgMenuOpen())return;
@@ -1449,14 +1457,13 @@ void AUnmadeCharacter::RecoverAtSafeCheckpoint()
     if(!GetWorld()||!Combat->IsDefeated()||GetWorld()->GetTimeSeconds()<DefeatRecordedAt+4.0)return;
     const FVector Safe=ResolveSafeCheckpoint(GetActorLocation());
     const auto Result=DeathRecoveryRetry.Attempt(0,GetWorld()->GetTimeSeconds(),[&]{
-        const float Health=Combat->GetHealth(),Stamina=Combat->GetStamina();
-        const bool Saved=CommitCheckpointMove(Safe,-1,[&]{
-            if(!Combat->ReviveAtCheckpoint())return false;
-            for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)return Hub->SaveRecoveryState(this);
-            return false;
-        },true);
-        if(!Saved)Combat->RestoreSession(Health,Stamina);
-        return Saved;
+        return UnmadeCore::CommitCombatRecovery(*Combat,[]{return true;},[&]{
+            return CommitCheckpointMove(Safe,-1,[&]{
+                if(!Combat->ReviveAtCheckpoint())return false;
+                for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)return Hub->SaveRecoveryState(this);
+                return false;
+            },true);
+        });
     });
     if(Result==UnmadeCore::DefeatSaveResult::FirstFailure)
         UnmadeRpgFeedback(-1,9.f,FColor::Orange,TEXT("RECOVERY NOT SAVED: revival was restored to its prior state. Retrying every five active seconds."));

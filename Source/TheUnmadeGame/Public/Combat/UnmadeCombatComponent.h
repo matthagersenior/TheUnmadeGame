@@ -3,10 +3,19 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Combat/UnmadeCombatRules.h"
+#include "Combat/UnmadeCombatRecoveryRules.h"
 #include "Combat/UnmadeCombatStyleRules.h"
 #include "Combat/UnmadeMasteryRules.h"
 #include "Combat/UnmadeContactRules.h"
+#include "Combat/UnmadeStatusDamageRules.h"
 #include "UnmadeCombatComponent.generated.h"
+
+// The weak original status owner is runtime-only, alongside the portable model
+// copy. Profile load deliberately uses RestoreSession instead of this rollback.
+struct FUnmadeCombatRecoveryState {
+    UnmadeCore::CombatRecoveryState Combat;
+    TWeakObjectPtr<AActor> StatusSource;
+};
 
 /** Authoritative native combat state. No LLM or paid service involved. */
 UCLASS(ClassGroup=(Unmade), meta=(BlueprintSpawnableComponent))
@@ -25,10 +34,10 @@ public:
     void GrantQuiet(double Now){QuietUntil=Now+60;}
     bool HasQuietLens(double Now)const{return Now<QuietUntil;}
     bool HasTemporaryStatus()const;
-    void ClearTemporaryStatus(){Status=UnmadeCore::CombatStatus::None;StatusUntil=0;}
+    void ClearTemporaryStatus(){Status=UnmadeCore::CombatStatus::None;StatusUntil=0;StatusSource.Reset();}
     void GrantWard(double Now){WardUntil=Now+6;}
     bool UsePower(double Now){return UnmadeCore::TryMasteryPower(Tempo,Now,!IsDefeated(),bPlayerTempo,IsStaggered(Now));}
-    void ApplyStatus(UnmadeCore::CombatStatus Type,double Seconds);
+    void ApplyStatus(UnmadeCore::CombatStatus Type,double Seconds,AActor* Source=nullptr);
     bool IsStaggered(double Now)const{return Now<StaggerUntil;}
     float MoveMultiplier(double Now)const{return Now<StatusUntil&&Status==UnmadeCore::CombatStatus::Slow?.55f:1.f;}
     void Stagger(double Now,double Seconds){if(Resistance.Take(Now,Seconds,bHeavyResistance)){StaggerUntil=FMath::Max(StaggerUntil,Now+Seconds);Contact.Cancel();}}
@@ -52,6 +61,8 @@ public:
     /** A single identified storm/heat pulse, deduplicated by the combat domain. */
     bool ReceiveHazardPulse(uint64 SourceId,uint64 PulseId,double Damage);
     bool ReviveAtCheckpoint();
+    FUnmadeCombatRecoveryState CaptureRecoveryState()const{return {{State,Tempo,Contact,Status,StaggerUntil,StatusUntil},StatusSource};}
+    void RestoreRecoveryState(const FUnmadeCombatRecoveryState& Before){State=Before.Combat.body;Tempo=Before.Combat.tempo;Contact=Before.Combat.contact;Status=Before.Combat.status;StaggerUntil=Before.Combat.staggerUntil;StatusUntil=Before.Combat.statusUntil;StatusSource=Before.StatusSource;}
     bool RestoreSession(float Health,float Stamina){if(!FMath::IsFinite(Health)||!FMath::IsFinite(Stamina)||Health<0||Health>GetMaxHealth()||Stamina<0||Stamina>100)return false;return State.RestoreHealth(Health)&&Tempo.RestoreEnergy(Stamina); }
     float GetMissingHealth() const { return GetMaxHealth() - GetHealth(); }
     int32 GetGearAttackBonus() const { return GearAttack; }
@@ -79,6 +90,7 @@ private:
     UnmadeCore::CombatTempo Tempo;
     UnmadeCore::WeaponStyle Style;
     UnmadeCore::CombatStatus Status=UnmadeCore::CombatStatus::None;
+    TWeakObjectPtr<AActor> StatusSource;
     double PressureUntil=0,QuietUntil=0;
     double StatusUntil=0,NextBurn=0,StaggerUntil=0,WardUntil=0;
     uint64 BurnPulse=0;

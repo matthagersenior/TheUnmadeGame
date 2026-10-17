@@ -880,3 +880,50 @@ literal validation, transmedia, manuscript reconstruction and whitespace checks.
 Actual UHT/Editor, NPC/guardian actors, physical timing/targeting, service
 geometry, UI and interrupted platform IO remain pending. No Unreal playthrough,
 paid service, mandatory artwork/book work or main merge is claimed.
+
+## 2026-10-17 — Interrupted encounters, attributed defeats and recovery
+
+Failed healing and revival writes now restore complete runtime combat participants,
+not profile-load values. Body receipts and outgoing swing IDs, stamina/attack/
+combo/power/parry/dodge windows, contact claims, status/stagger expiry and original
+status ownership survive rollback. Actual profile loads retain their existing
+fresh-session policy. Costs and benefits still share their original synchronous
+save; no combat cooldown is added to the save format.
+
+Burn retains its original weak source from player melee, projectile or mastery
+status application. Only an actual attributed lethal pulse queues the existing
+first-style reward; unknown sources never invent a player reward. The player-owned
+retry queue survives stopped defeated actors, capacity/write failure and repeated
+reloads. Delayed remote injury does not fabricate a new local fight witness.
+Named encounter defeat receipts keep their existing owners and retry policies.
+
+Absent, defeated or unrestored players cancel transient armed enemy warnings,
+patterns and locked aim. Ordinary/elder/expedition/observer/named/guardian/final
+encounters must warn again on resumption; health, story outcomes, swing receipts
+and failed victory retries remain. Durable defeat processing precedes the active
+player guard. Final attacks use the authored rhythm damage directly, fixing
+Unmasked/Echo phase bases being added twice; guard, armor and status modifiers
+still apply normally. No authored pattern or balance value is changed.
+
+Chamber/wing hazards and automatic arrivals/discoveries wait for an accepted,
+restored same-world player. Construction still initializes gates, signs and lifts.
+Original pulse timing, physical reach, sight, edge routes and free vents remain;
+field kits require the same owner before spending and retain visit-only suppression.
+Provision history cannot claim more once-per-day purchases than its last purchase
+day. Reachable older and absent optional records remain accepted. Defeated
+public-accord return-road threats now block complete checkpoints until their
+hub-owned favor/defeat receipt saves; failed writes restore favor, explain pending
+retry and grant it once. Explicit unsaved-discard and independent revival remain.
+
+Portable evidence: recovery covers 432 write faults, 108 malformed subrecords,
+216 successful recoveries and 5,184 reloads; provisions cover 108 malformed histories,
+252 write faults and 3,744 reloads; attributed status covers six write faults and
+768 reloads; return-road threats cover 18 faults and 432 reloads. Interruption
+coverage adds 1,230 resumed warning paths, 384 authored damage/guard/armor checks
+and 18 retained failed-receipt retries. Hazards cover 10,800 timing/readiness samples
+and nine resumed pulses. All 380 Python tests, 93 strict portable C++17
+executables and 76 dependency checks pass; 32 compiled mutations are caught.
+Hygiene, six release scenarios, structure/literals, transmedia, manuscript and
+whitespace checks pass. Actor adapters are statically reviewed; actual UHT/Editor,
+component/actor tick order, projectiles, physical movement/rollback, warning UI and
+interrupted platform IO remain pending. No Unreal playthrough or paid service.

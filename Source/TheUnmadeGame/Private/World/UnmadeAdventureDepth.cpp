@@ -1,5 +1,6 @@
 #include "World/UnmadePrototypeHub.h"
 #include "Save/UnmadeRecoveryRules.h"
+#include "Save/UnmadeCounterThreatRules.h"
 #include "Save/UnmadeSaveSession.h"
 #include "Combat/UnmadeMasteryRules.h"
 #include "World/UnmadeAdventureLayout.h"
@@ -52,7 +53,7 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
  if(!GetWorld()||DepthSecretGates.Num()!=9)return;
  for(int a=0;a<9;++a){auto* s=Depth.Arc(a);
   if(!bDepthSaveRejected&&s->choice==2&&!s->counterThreat){if(!DepthRetaliators[a].IsValid()){auto* enemy=GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(Base(a)+FVector(4500,10500,0),FRotator::ZeroRotator);if(enemy){enemy->ConfigureStyle(a%2?UnmadeCore::EnemyStyle::Watcher:UnmadeCore::EnemyStyle::Stalker);enemy->ConfigureEncounter(FName(*FString::Printf(TEXT("Depth.CounterThreat.%d"),a)),UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].counterparty),FLinearColor(.8,.35,.15));DepthRetaliators[a]=enemy;}}
-    auto* enemy=DepthRetaliators[a].Get();if(IsValid(enemy)&&enemy->GetCombat()->IsDefeated()&&GetWorld()->GetTimeSeconds()>=NextDepthThreatSave[a]){NextDepthThreatSave[a]=GetWorld()->GetTimeSeconds()+2;auto before=Depth;if(Depth.CounterThreat(a)){if(!WriteWorldSnapshot()){Depth=before;}else NotifyRpg(TEXT("The named return-road threat is defeated and remembered. Two local favor earned; it will not respawn."));}}}
+    auto* enemy=DepthRetaliators[a].Get();if(IsValid(enemy)&&enemy->GetCombat()->IsDefeated()&&GetWorld()->GetTimeSeconds()>=NextDepthThreatSave[a]){NextDepthThreatSave[a]=GetWorld()->GetTimeSeconds()+2;const auto result=UnmadeCore::CommitCounterThreatReceipt(Depth,a,true,[&]{return WriteWorldSnapshot();});if(result==UnmadeCore::CounterThreatCommit::Recorded)NotifyRpg(TEXT("The named return-road threat is defeated and remembered. Two local favor earned; it will not respawn."));else if(result==UnmadeCore::CounterThreatCommit::SaveFailed)NotifyRpg(TEXT("Return-road victory could not save. Favor restored; automatic retries continue and complete checkpoints wait."));}}
   if(DepthCacheActors[a].IsValid())DepthCacheActors[a]->SetActorScale3D(s->secret?FVector(1,1,.15):FVector(1,1,.5));if(DepthSecretGates[a].IsValid()){DepthSecretGates[a]->SetActorHiddenInGame(s->route!=0);DepthSecretGates[a]->SetActorEnableCollision(!s->route);}
   if(DepthChallengeSigns[a].IsValid())DepthChallengeSigns[a]->GetTextRender()->SetText(FText::FromString(FString(UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].challenge))+FString::Printf(TEXT("\n%s / PROGRESS %d / SWITCH MASK %d"),s->route?TEXT("SIDE PASSAGE OPEN"):TEXT("OPTIONAL ROUTE CHALLENGE"),DepthChallenges[a].Progress(),DepthChallenges[a].Mask())));
  }
@@ -96,12 +97,12 @@ bool AUnmadePrototypeHub::SelectDepthTechnique(int a,AUnmadeCharacter* p){
 }
 bool AUnmadePrototypeHub::UseDepthPower(AUnmadeCharacter* p){if(!Alive(p)||bDepthSaveRejected||!GetWorld()||p->GetWorld()!=GetWorld()||!UnmadeSave::IsSessionWritable(p)||GetActiveMastery()<1)return false;int a=Depth.Active();double now=GetWorld()->GetTimeSeconds();AUnmadeEnemyCharacter* target=nullptr;double best=FMath::Square(800.f);for(TActorIterator<AUnmadeEnemyCharacter> e(GetWorld());e;++e){const FVector delta=e->GetActorLocation()-p->GetActorLocation();double d=delta.SizeSquared();if(!UnmadeCore::MasteryTargetInRange(delta.X,delta.Y,delta.Z,e->CanBeTargeted())||d>=best)continue;FCollisionQueryParams q(SCENE_QUERY_STAT(TechniqueSight),false);q.AddIgnoredActor(p);q.AddIgnoredActor(*e);if(!GetWorld()->LineTraceTestByChannel(p->GetActorLocation()+FVector(0,0,55),e->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q)){best=d;target=*e;}}
  if(a!=6&&a!=7&&a!=8&&!target)return false;if(a==7&&(!p->GetCombat()->IsGuarding()||p->GetCombat()->GetMissingHealth()<=0))return false;if(!p->GetCombat()->UsePower(now))return false;
- if(a==6){p->GetCombat()->GrantEvasion(now,.5+GetActiveMastery()*.1);p->LaunchCharacter(p->GetActorForwardVector()*550,false,false);}else if(a==7)p->GetCombat()->Heal(20);else if(a==8)p->GetCombat()->GrantWard(now);else if(target){if(a==4)target->ExposeToFold(now,1.5+GetActiveMastery());else if(a==0||a==5){target->GetCombat()->ApplyStatus(UnmadeCore::CombatStatus::Expose,3+GetActiveMastery());if(a==5)target->GetCombat()->Stagger(now,.8);}else target->GetCombat()->ApplyStatus(a==1?UnmadeCore::CombatStatus::Slow:a==2?UnmadeCore::CombatStatus::Burn:UnmadeCore::CombatStatus::Weaken,4+GetActiveMastery());}
+ if(a==6){p->GetCombat()->GrantEvasion(now,.5+GetActiveMastery()*.1);p->LaunchCharacter(p->GetActorForwardVector()*550,false,false);}else if(a==7)p->GetCombat()->Heal(20);else if(a==8)p->GetCombat()->GrantWard(now);else if(target){if(a==4)target->ExposeToFold(now,1.5+GetActiveMastery());else if(a==0||a==5){target->GetCombat()->ApplyStatus(UnmadeCore::CombatStatus::Expose,3+GetActiveMastery(),p);if(a==5)target->GetCombat()->Stagger(now,.8);}else target->GetCombat()->ApplyStatus(a==1?UnmadeCore::CombatStatus::Slow:a==2?UnmadeCore::CombatStatus::Burn:UnmadeCore::CombatStatus::Weaken,4+GetActiveMastery(),p);}
  p->PlayIdentityMotion(FName(TEXT("Cast")));UnmadePresentation::Sound(p,TEXT("cast"));NotifyRpg(FString(UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].power))+TEXT(" used. Thirty stamina; twelve-second recovery."));return true;}
 
 UnmadeCore::FieldKitResult AUnmadePrototypeHub::UseDepthFieldKit(AUnmadeCharacter* p){
  using UnmadeCore::FieldKitResult;
- if(!Alive(p)||!GetWorld()||bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected)return FieldKitResult::Unavailable;
+ if(!Alive(p)||!GetWorld()||p->GetWorld()!=GetWorld()||!UnmadeSave::IsSessionWritable(p)||bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected)return FieldKitResult::Unavailable;
  for(int a=0;a<9;++a){
   if(FVector::DistSquared2D(p->GetActorLocation(),Room(a,3))>FMath::Square(1100.f)||FMath::Abs(p->GetActorLocation().Z-Room(a,3).Z)>180||Identity.Arc(a)->chart||Expeditions.Arc(a)->boss||GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a])continue;
   int supplier=-1;
