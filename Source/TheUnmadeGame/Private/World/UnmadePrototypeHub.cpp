@@ -647,8 +647,8 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
        bWitnessEchoRejected || bWitnessBraidRejected ||
        bWitnessDispatchRejected || bWitnessReturnRejected ||
        bRealityConsequenceRejected || bOuterReactionsRejected ||
-       bMaterialSaveRejected || bLivingEconomyRejected)return false;
-    if(bBesHouseholdRejected)return false;
+       bMaterialSaveRejected || bLivingEconomyRejected ||
+       bBesHouseholdRejected)return false;
     if(bHearthPetitionRejected)return false;
     for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc){
         const FName Id=Npc->GetStableId();if(Id.IsNone())continue;
