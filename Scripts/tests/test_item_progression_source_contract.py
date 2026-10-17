@@ -25,7 +25,7 @@ class GearSourceContract(unittest.TestCase):
             self.assertIn('ActionName="'+action+'"',config)
         for token in ("CreateDefaultSubobject<UUnmadeEquipmentComponent>",
                       "ForgeWaybreaker()", "ReconcileEarnedRewards()",
-                      "Target->GetCombat()->IsDefeated()", "Achievement::FirstWatcher"):
+                      "Target->GetCombat()->IsDefeated()", "CombatRewards.Queue(Target->GetEnemyStyle())"):
             self.assertIn(token,player)
         combat=read("Source/TheUnmadeGame/Private/Combat/UnmadeCombatComponent.cpp")
         self.assertIn("Swing.baseDamage+GearAttack",combat)

@@ -3,6 +3,7 @@
 #include "Items/UnmadeItemRules.h"
 #include "Items/UnmadeItemRules.h"
 #include "CoreMinimal.h"
+#include "Combat/UnmadeCombatRewardRules.h"
 #include "GameFramework/Character.h"
 #include "Fracture/UnmadeFractureRules.h"
 #include "Player/UnmadeCharacterIdentityRules.h"
@@ -70,6 +71,7 @@ public:
     void ReportRiteChoiceEvent(int32 Choice);
     void ReportBrokenOathEvent();
     void ReportRedeemedOathEvent();
+    bool HasPendingCombatRewards()const{return CombatRewards.Pending();}
     bool IsSessionRestored() const { return bSessionRestored; }
     void ReconcileEarnedRewards();
 
@@ -92,6 +94,8 @@ public:
 private:
     UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
     bool bFractureSaveRejected=false,bConflictSaveRejected=false;
+    UnmadeCore::PendingCombatRewards CombatRewards;
+    void RetryCombatRewards();
     bool bStartupRewardsReady=false;
     bool bStartupNoticeShown=false;
     double NextStartupRewardsAttempt=0;

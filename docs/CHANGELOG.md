@@ -1,3 +1,32 @@
+## 2026-10-17 — Combat reward and witness-memory retries
+
+Melee and projectile impacts already share the same reward hook. Failed ordinary
+first-Stalker/first-Watcher rewards now stay in a player-owned session queue,
+retrying every five active-world seconds after the first attempt. Dead enemy
+actors can stop ticking without losing the retry owner. Existing achievement
+bits remain the durable receipts; no per-kill grants or new save identifiers.
+Complete checkpoint/profile-save guards include this queue, while explicit
+unsaved-discard confirmation remains available. Partial successes stay claimed;
+capacity failures report the pending reward. Special realm/boss receipts retain
+their existing owners and authored outcomes.
+
+Direct witness saves now share the hub's dirty-memory flag and eight-second
+quiet gossip retry. Failed writes keep observations in memory without replaying
+events or generating replacement evidence IDs. Unnamed actors are excluded from
+persistent witnesses; range, line of sight and firsthand/rumor provenance remain
+unchanged. This does not make later legacy-deed/oath callbacks atomic with the
+original action; trace those callbacks next.
+
+Portable evidence: 345 Python tests, 79 strict C++17 executables, the new scenario
+under UBSan, 48 dependency checks and four compiled mutation regressions pass. Coverage includes write
+faults, recovery selection, repeated reloads, duplicate kills, partial rewards,
+full inventories, checkpoint blocking, readiness and malformed NPC subrecords
+without backup rotation. Static structure/literal/hygiene, six release scenarios,
+transmedia, manuscript and whitespace checks pass. Actual Unreal/UHT, hit/LOS,
+travel, UI feedback and interrupted platform IO remain pending. No charges,
+artwork requirements or merge into main. Live main comparison before this batch:
+15 commits ahead, zero behind; focused changes continue on PR #74.
+
 ## 16 October 2026 — Profile handoff ownership and integration watch
 
 Rechecked PR #74 against live main: base `9606fec4`, starting head `5a4575d`,

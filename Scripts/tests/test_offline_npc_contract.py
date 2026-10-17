@@ -33,7 +33,7 @@ class OfflineNpcContract(unittest.TestCase):
         hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         player = read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         self.assertIn("ReplaceNpcMemory(Save->NpcSnapshots,Snapshot)", hub)
-        self.assertIn("ReplaceNpcMemory(Save->NpcSnapshots,Snapshot)", player)
+        self.assertIn("Hub->SaveNpcMemories()", player)
 
     def test_native_cpp_policy_runs_in_ci(self):
         workflow = read(".github/workflows/static-checks.yml")

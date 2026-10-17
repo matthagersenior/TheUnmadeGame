@@ -30,7 +30,7 @@ class TimedProgressWiring(unittest.TestCase):
   self.assertLess(tick.index('CommitRiteDay('),tick.index('RefreshTemporaryPowers(Now,Day)'))
   hub=read('Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp')
   self.assertIn('if(bNewMemory)bNpcMemorySavePending=true;',hub)
-  self.assertIn('if(bNpcMemorySavePending&&WriteWorldSnapshot())bNpcMemorySavePending=false;',hub)
+  self.assertIn('UnmadeCore::CommitPendingMemory(bNpcMemorySavePending,true,[&]{return WriteWorldSnapshot();});',hub)
   snapshot=hub.split('bool AUnmadePrototypeHub::CaptureWorldSnapshot(',1)[1].split('\nbool ',1)[0]
   self.assertIn('ReplaceNpcMemory(Save->NpcSnapshots,Snapshot)',snapshot)
 
@@ -39,6 +39,7 @@ class TimedProgressWiring(unittest.TestCase):
   player=read('Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp')
   world=hub.split('bool AUnmadePrototypeHub::CaptureWorldSnapshot(',1)[1].split('Save->bHasFieldSurveys',1)[0]
   nearby=player.split('void AUnmadeCharacter::SaveNearbyNpcMemories()',1)[1].split('void AUnmadeCharacter::RestoreSessionWhenReady()',1)[0]
-  for capture in (world,nearby):
+  self.assertIn('Hub->SaveNpcMemories()',nearby)
+  for capture in (world,):
    self.assertNotIn('NpcSnapshots.Reset()',capture)
    self.assertIn('if(!UnmadeCore::ReplaceNpcMemory(Save->NpcSnapshots,Snapshot))Save->NpcSnapshots.Add(Snapshot);',capture)

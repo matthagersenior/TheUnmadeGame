@@ -533,6 +533,8 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 bool AUnmadePrototypeHub::HasPendingDefeatReceipts()const
 {
     if(!GetWorld())return false;
+    if(const auto* Player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))
+        if(Player->HasPendingCombatRewards())return true;
     // Defeated expedition actors can already be hidden. Query their durable
     // owner state, never visibility, collision or whether Tick is enabled.
     for(TActorIterator<AUnmadeEnemyCharacter> Enemy(GetWorld());Enemy;++Enemy)
@@ -3328,6 +3330,13 @@ void AUnmadePrototypeHub::RestoreCitizens()
     }
 }
 
+bool AUnmadePrototypeHub::SaveNpcMemories()
+{
+    bNpcMemorySavePending=true;
+    return UnmadeCore::CommitPendingMemory(bNpcMemorySavePending,UnmadeSave::IsWorldWritable(GetWorld()),
+        [&]{return WriteWorldSnapshot();});
+}
+
 void AUnmadePrototypeHub::SpreadLocalRumors()
 {
     UWorld* World = GetWorld();
@@ -3399,7 +3408,7 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
         }
     }
     if(bNewMemory)bNpcMemorySavePending=true;
-    if(bNpcMemorySavePending&&WriteWorldSnapshot())bNpcMemorySavePending=false;
+    UnmadeCore::CommitPendingMemory(bNpcMemorySavePending,true,[&]{return WriteWorldSnapshot();});
 }
 
 

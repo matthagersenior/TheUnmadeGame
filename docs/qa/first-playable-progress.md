@@ -33,6 +33,7 @@ integration need; preserve development momentum and do not merge into main.
 | P1 complete capture implemented; UE pending | Every combined writer preflights its staged fields, captures the accepted live world/player, then revalidates before storage. World capture preserves caller-owned patches. Field surveys stage/rollback live progress before capture. 216 nine-realm component paths, 1,080 reloads and 48 survey fault paths pass; verify actual actor capture ordering in Unreal. |
 | P1 timed progression implemented; UE pending | Source owners bind every combined write to the registered world. Blocked worlds stop clock/rite-day/rumor advancement. Visits retry in place; failed day transactions restore production, wages, support and households together. Quiet gossip retries retain absent residents. 192 fault paths and 4,800 reloads pass portable tests; verify real timer/lifecycle ordering in Unreal. |
 | P1 implemented; UE pending | Startup rewards wait for registered player resume and world readiness. Failed starter/milestone/civic writes retry; checkpoints remain incomplete. Central saves require a restored owner and ready, accepted world. Older selected gear and spent starter supplies survive reloads. Verify actual BeginPlay/travel ordering and feedback in Unreal. |
+| P1 combat/memory retries implemented; UE pending | Player-owned first-style reward queue retains failed Stalker/Watcher grants after enemies stop; pending rewards block complete checkpoints. Direct witness writes share the quiet eight-second memory retry. 345 Python tests, 79 strict portable executables, 48 dependency checks, UBSan and four mutation regressions pass. Next: legacy deed/oath callback persistence; Unreal remains pending. |
 | P0 implemented; UE pending | `Private/Items/UnmadeEquipmentComponent.cpp::UseConsumable` saved potion loss before healing, while `Private/Player/UnmadeCharacter.cpp::CaptureSession` captured old health. Shared `Public/Save/UnmadeRecoveryRules.h` now applies healing before synchronous save and restores health/stamina on failure; caller restores inventory. Immediate reload must preserve both cost and benefit. |
 | P0 implemented; UE pending | `Private/World/UnmadePlayerExperience.cpp::ExperienceAction` saved finite specialty use before Tharniv healing / Saltwake Strain relief. Both persistent benefits now precede the same world commit; failed writes restore the service ledger and player values. Strain rollback copies the model to retain transient Fold/Glimpse windows. Temporary combat buffs retain existing session-only behavior. |
 | P1 implemented; UE pending | `Public/Save/UnmadeCombinedSaveRules.h` preflights every present combined subrecord with disposable production models before profile availability, selection, restoration or backup rotation. Invalid records never reach reward reconciliation. Automatic recovery stays pinned until primary success. The legacy fieldwork sidecar is checked when needed and cannot bypass a rejected combined record. Portable malformed/failed-write/repeated-reload tests pass; actual platform IO remains unverified. |
@@ -572,3 +573,32 @@ Next: trace ordinary enemy reward delivery for melee/ranged kills and post-cast
 NPC witness persistence, preserving per-realm receipts and authored consequences.
 Keep UHT/Editor build, actual nine-realm walkthroughs, travel, controller/UI and
 interrupted platform IO pending until an Unreal-capable host is available.
+
+## 2026-10-17 — Combat reward and witness-memory retries
+
+Melee and projectile impacts already share the same reward hook. Failed ordinary
+first-Stalker/first-Watcher rewards now stay in a player-owned session queue,
+retrying every five active-world seconds after the first attempt. Dead enemy
+actors can stop ticking without losing the retry owner. Existing achievement
+bits remain the durable receipts; no per-kill grants or new save identifiers.
+Complete checkpoint/profile-save guards include this queue, while explicit
+unsaved-discard confirmation remains available. Partial successes stay claimed;
+capacity failures report the pending reward. Special realm/boss receipts retain
+their existing owners and authored outcomes.
+
+Direct witness saves now share the hub's dirty-memory flag and eight-second
+quiet gossip retry. Failed writes keep observations in memory without replaying
+events or generating replacement evidence IDs. Unnamed actors are excluded from
+persistent witnesses; range, line of sight and firsthand/rumor provenance remain
+unchanged. This does not make later legacy-deed/oath callbacks atomic with the
+original action; trace those callbacks next.
+
+Portable evidence: 345 Python tests, 79 strict C++17 executables, the new scenario
+under UBSan, and four compiled mutation regressions pass. Coverage includes write
+faults, recovery selection, repeated reloads, duplicate kills, partial rewards,
+full inventories, checkpoint blocking, readiness and malformed NPC subrecords
+without backup rotation. Static structure/literal/hygiene, six release scenarios,
+transmedia, manuscript and whitespace checks pass. Actual Unreal/UHT, hit/LOS,
+travel, UI feedback and interrupted platform IO remain pending. No charges,
+artwork requirements or merge into main. Live main comparison before this batch:
+15 commits ahead, zero behind; focused changes continue on PR #74.

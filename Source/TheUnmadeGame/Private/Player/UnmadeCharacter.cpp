@@ -906,8 +906,10 @@ void AUnmadeCharacter::HandleMeleeImpact(AUnmadeEnemyCharacter* Target,float Bef
         {
             AUnmadeBossCharacter* Boss=Cast<AUnmadeBossCharacter>(Target);
             if(Boss)Boss->CommitDefeatReceipt();
-            else Equipment->Claim(Target->GetEnemyStyle()==UnmadeCore::EnemyStyle::Stalker
-                ? UnmadeCore::Achievement::FirstStalker:UnmadeCore::Achievement::FirstWatcher);
+            else {
+                CombatRewards.Queue(Target->GetEnemyStyle());
+                RetryCombatRewards();
+            }
         }
     ReportLocalEvent(FName("Player.Fought"),FName("combat.prototype.enemy"));
 }
@@ -1502,6 +1504,7 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     RestoreSessionWhenReady();
+    RetryCombatRewards();
     if(!bStartupRewardsReady&&GetWorld()&&GetWorld()->GetTimeSeconds()>=NextStartupRewardsAttempt){NextStartupRewardsAttempt=GetWorld()->GetTimeSeconds()+5;InitializeStartupRewards();}
     if(bSessionRestored&&GetWorld()&&GetWorld()->GetTimeSeconds()>=NextSessionSave){NextSessionSave=GetWorld()->GetTimeSeconds()+20;SaveSessionNow();}
     TickWeaponContact();
@@ -1608,11 +1611,12 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
 void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
 {
     UWorld* World = GetWorld();
-    if (!World) return;
+    if (!World||!UnmadeSave::IsWorldWritable(World)) return;
     const FGuid EventId = FGuid::NewGuid();
     int32 Witnesses = 0;
     for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
     {
+        if(It->GetStableId().IsNone())continue;
         if (FVector::DistSquared(GetActorLocation(), It->GetActorLocation()) > FMath::Square(720.f))
             continue;
 
@@ -1626,7 +1630,7 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
             continue;
         if (It->GetMemory()->Witness(EventId, EventKind, SubjectId)) ++Witnesses;
     }
-    SaveNearbyNpcMemories();
+    if(Witnesses>0)SaveNearbyNpcMemories();
     if(IsValid(Tenfold))
     {
         if(EventKind==FName("Player.Helped") || EventKind==FName("Player.HelpedVillage"))
@@ -1643,22 +1647,22 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
 
 void AUnmadeCharacter::SaveNearbyNpcMemories()
 {
-    UWorld* World = GetWorld();
-    if (!World||!UnmadeSave::IsWorldWritable(World)) return;
-    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
-    if (!Save) return;
-    for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
-    {
-        const FName Id=It->GetStableId();if(Id.IsNone())continue;
-        const auto Snapshot=It->GetMemory()->WriteSnapshot(Id);
-        if(!UnmadeCore::ReplaceNpcMemory(Save->NpcSnapshots,Snapshot))Save->NpcSnapshots.Add(Snapshot);
+    if(!GetWorld()||!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){
+        if(!Hub->SaveNpcMemories())UnmadeRpgFeedback(-1,8.f,FColor::Red,
+            TEXT("NPC MEMORIES NOT SAVED: retained for automatic retry while the game continues."));
+        return;
     }
-    if (!UnmadeSave::SaveGameToSlot(Save,this))
-    {
-        UE_LOG(LogTemp, Error, TEXT("Unmade prototype NPC memory save failed"));
-        if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
-            TEXT("Could not save NPC memories."));
-    }
+}
+
+void AUnmadeCharacter::RetryCombatRewards()
+{
+    if(!GetWorld()||!IsValid(Equipment)||!CombatRewards.Pending())return;
+    const auto Result=CombatRewards.Attempt(UnmadeSave::IsSessionWritable(this),GetWorld()->GetTimeSeconds(),
+        [&](auto reward){return Equipment->HasClaimed(reward);},
+        [&](auto reward){return Equipment->Claim(reward);});
+    if(Result==UnmadeCore::DefeatSaveResult::FirstFailure)
+        UnmadeRpgFeedback(-1,10.f,FColor::Orange,TEXT("COMBAT REWARD NOT SAVED: retained for five-second retries. Make inventory room if needed; a complete checkpoint waits for this reward."));
 }
 
 bool AUnmadeCharacter::IsRpgMenuOpen()const{return RpgWidget&&RpgWidget->IsOpen();}

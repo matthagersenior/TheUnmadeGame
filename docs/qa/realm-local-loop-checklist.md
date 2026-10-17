@@ -102,3 +102,14 @@ Mera's consent; they do not turn every realm's resident into that storyline.
 
 Artwork and illustrated books remain optional. The next engine visit should test
 one complete realm-local loop with these criteria before expanding visual polish.
+
+## 17 October: shared combat and witness failure checks
+
+Across every realm, kill ordinary Stalkers/Watchers with melee and projectiles;
+interrupt reward saves, fill inventory, wait five active seconds and reload.
+The first-style milestone must grant once, retain failed receipts and block a
+complete checkpoint until settled. Special guardian, expedition and boss receipts
+keep their existing independent gates. Interrupt a direct NPC witness write,
+then allow a quiet eight-second rumor tick: persist the original observation
+without replaying the event. Portable rules pass; actual actors, line of sight,
+controller feedback, travel and platform storage still require Unreal.

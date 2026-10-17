@@ -346,6 +346,8 @@ jobs:
           /tmp/unmade-rite-cast
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/named_boss_receipt_test.cpp -o /tmp/unmade-named-boss
           /tmp/unmade-named-boss
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/combat_memory_retry_test.cpp -o /tmp/unmade-combat-memory
+          /tmp/unmade-combat-memory
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/component_world_capture_test.cpp -o /tmp/unmade-component-capture
           /tmp/unmade-component-capture
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/timed_progress_recovery_test.cpp -o /tmp/unmade-timed-progress

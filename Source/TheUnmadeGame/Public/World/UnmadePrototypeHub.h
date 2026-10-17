@@ -75,6 +75,7 @@ public:
     bool SavePlayerSession(AUnmadeCharacter* Player);
     bool CaptureWorldSnapshot(class UUnmadePrototypeSave* Save);
     bool HasPendingDefeatReceipts()const;
+    bool SaveNpcMemories();
     AUnmadePrototypeHub();
     bool TryExperienceInteraction(AUnmadeCharacter* Player,double Competing);
     bool RecordExperienceConversation(FName Id,AUnmadeCharacter* Player);
