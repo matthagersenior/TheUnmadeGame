@@ -67,3 +67,15 @@ checklist entry. Portable behavior tests and source wiring checks are included
 in CI, but UE actor ticking, actual world navigation, player perception and
 performance remain first-PC acceptance work. Follow-up should test crowded
 species mixes, LOS cancellation, Fold interruption and both equipped builds.
+
+## Gameplay expansion — stealth and creature attention
+
+Ordinary creature intent previously used proximity/line-of-sight even if the
+player pressed Sneak. A deterministic detection policy now distinguishes a
+crouched approach from behind, a visible front-cone approach, dangerously close
+range, blocked world sight, and a sighted creature's four-second alert memory.
+Actual enemy movement/turning/foraging uses that engagement result. Bosses
+and authored champions are exempt; no new save data or lore facts are required.
+Compiled tests cover detection, invalid geometry, expiry and reset; static
+integration tests assert the native actor uses the policy. Actual crouch,
+sightline, cover, navigation and enemy fairness remain UE first-PC checks.

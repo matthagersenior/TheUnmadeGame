@@ -953,3 +953,13 @@ pass once the source gate completes; rendered controls still need Unreal testing
 - Strict portable rules and actor wiring contracts are in CI. No save schema,
   dialogue, authority, reward, world identity or player choice changes.
   Real Unreal pathfinding, performance, sight and combat feel remain untested.
+
+## 2026-10-17 — Ordinary creature stealth awareness
+
+The existing Sneak control now feeds ordinary enemy detection: 6.5-metre front
+cone and 2.5-metre near reach when crouched, four-second temporary attention
+after a confirmed sighting, and solid-geometry line-of-sight requirements.
+Alertness resets on invalid/unready player world. Elder, champion and boss
+rules are isolated; narrative identity, rewards, testimony provenance,
+consequence ledger and saves remain unchanged. Portable tests are source-only,
+with Unreal perception and actual stealth routes still pending.

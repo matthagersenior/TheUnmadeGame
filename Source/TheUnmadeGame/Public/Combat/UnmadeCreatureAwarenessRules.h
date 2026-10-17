@@ -10,6 +10,7 @@ inline bool CreatureCanSpot(bool clearSight,bool crouched,double distanceMeters,
  return distanceMeters<=2.5||(distanceMeters<=6.5&&facingDot>=0.35);
 }
 // Transient alertness, never saved or used as public testimony.
+// Time is in active-world seconds, so pause and story UI do not decay it.
 class CreatureAwareness {
  double awareUntil=0;
 public:
