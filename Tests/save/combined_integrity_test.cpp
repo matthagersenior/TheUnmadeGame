@@ -100,6 +100,20 @@ int main(){
     unchosen.bHasHearthPetition=true;
     unchosen.HearthPetitionState={0,0,0,0,0,0};
     assert(Valid(unchosen));
+    auto relayUnstarted=unchosen;
+    relayUnstarted.bHasPetitionRelay=true;
+    relayUnstarted.PetitionRelayState={0,0,0,0,0,0};
+    assert(Valid(relayUnstarted)); // no journey required for legacy saves
+    auto relayOrphan=Earned();
+    relayOrphan.bHasPetitionRelay=true;
+    relayOrphan.PetitionRelayState={0,0,0,0,0,0};
+    assert(!Valid(relayOrphan)); // the relay cannot exist without its petition
+    auto relayMalformed=relayUnstarted;
+    relayMalformed.PetitionRelayState={4,1,2,3,4,5};
+    assert(!Valid(relayMalformed)); // cannot deliver without a chosen petition
+    relayMalformed=relayUnstarted;
+    relayMalformed.PetitionRelayState={1,1,2,0,0};
+    assert(!Valid(relayMalformed)); // every stage needs all six fields
     auto incomplete=unchosen;
     incomplete.HearthPetitionState={3,1,1,1,1};
     assert(!Valid(incomplete)); // missing serialized field
