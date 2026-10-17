@@ -131,6 +131,8 @@ struct Record {
     int BesMeraGuaranteeOwed=0;
     bool bBesMeraConsented=false;
     bool bBesMeraGuaranteeUsed=false;
+    bool bHasHearthPetition=false;
+    Array<int> HearthPetitionState;
     bool bHasResidentContinuitySnapshot=false;
     Array<int> ResidentEncounterVisits;
     Array<int> ResidentEncounterLastDays;
