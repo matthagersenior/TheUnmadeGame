@@ -101,6 +101,7 @@ void AUnmadeEnemyCharacter::ConfigureCinderholdElder()
 void AUnmadeEnemyCharacter::ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion)
 {
     bElderEncounter=bChampion;
+    Species=Kind;
     Profile=UnmadeCore::CreatureStats(Kind,bChampion);
     ConfigureStyle(Profile.style);
     Combat->Configure(Profile.health,Profile.damage,Profile.cooldown);
@@ -325,8 +326,12 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     const bool bEngaged=bOrdinaryStealth
         ?bNearby&&Alertness.Update(Now,bSpotted):bNearby;
     auto Intent=bEngaged
-        ?(bSpeciesConfigured?UnmadeCore::CreatureIntent(Profile,DistanceCm/100.0,
-            bClearSight,Now<RecoveryEndsAt):UnmadeCore::ChooseEnemyIntent(Style,DistanceCm/100.0,bClearSight))
+        ?(bSpeciesConfigured
+            ?(bElderEncounter?UnmadeCore::CreatureIntent(Profile,DistanceCm/100.0,bClearSight,Now<RecoveryEndsAt)
+            :UnmadeCore::TacticalCreatureIntent(Species,Profile,DistanceCm/100.0,
+                 bClearSight,Now<RecoveryEndsAt,Now,
+                 Combat->GetHealth()/FMath::Max(1.f,Combat->GetMaxHealth())))
+            :UnmadeCore::ChooseEnemyIntent(Style,DistanceCm/100.0,bClearSight))
         :UnmadeCore::EnemyIntent::Hold;
     UnmadeCore::SlagElderStep ElderStep;
     if(bCinderholdElder)
@@ -362,6 +367,12 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
             break; // One nearby active warning is enough to yield.
         }
     }
+    const auto Tactic=UnmadeCore::CreatureTactic(Species);
+    const bool bTacticalFlank=bSpeciesConfigured&&!bElderEncounter&&
+        Tactic.flankSide!=0&&Intent==UnmadeCore::EnemyIntent::Approach&&
+        bEngaged&&bClearSight&&
+        UnmadeCore::CreatureIntent(Profile,DistanceCm/100.0,
+            bClearSight,Now<RecoveryEndsAt)==UnmadeCore::EnemyIntent::Attack;
     const bool bCircleForOpening=UnmadeCore::ShouldCircleForOpening(
         Intent==UnmadeCore::EnemyIntent::Attack&&bClearSight,
         WindupEndsAt>=0.0,ActiveOrdinaryWarnings);
@@ -384,7 +395,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         const FVector Side(-Delta.Y,Delta.X,0);
         const FVector Flank=Player->GetActorLocation()+Side.GetSafeNormal2D()*
             ((GetUniqueID()&1u)?260.f:-260.f);
-        const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:bCircleForOpening?Flank:Intent==UnmadeCore::EnemyIntent::Retreat
+        const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:(bCircleForOpening||bTacticalFlank)?Flank:Intent==UnmadeCore::EnemyIntent::Retreat
             ?GetActorLocation()-Delta.GetSafeNormal()*480.f
             :Player->GetActorLocation();
         if(Now>=NextPathRefreshAt)
@@ -405,7 +416,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
                 }
             }
         }
-        const bool bLocalPathClear=(bReturnHome||bLocalRoutine||bCircleForOpening)?!World->LineTraceTestByChannel(
+        const bool bLocalPathClear=(bReturnHome||bLocalRoutine||bCircleForOpening||bTacticalFlank)?!World->LineTraceTestByChannel(
             GetActorLocation()+FVector(0,0,55),Destination+FVector(0,0,55),ECC_Visibility,Params):bClearSight;
         FVector Walk=bHasNavWaypoint ? NextNavWaypoint-GetActorLocation()
             :((bLocalPathClear)?Destination-GetActorLocation():FVector::ZeroVector);
