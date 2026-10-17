@@ -29,6 +29,16 @@ class HearthPetitionWiring(unittest.TestCase):
   self.assertIn('HearthPetition.WitnessLedger(',s)
   self.assertIn('HearthPetition.Decide(',s)
   self.assertIn('HearthPetition.ReturnWitness(',s)
+ def test_petition_does_not_block_existing_home_and_walkout_actions(self):
+  hub=(R/"Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp").read_text()
+  for token in ("if(Book&&HearthPetition.Stage()!=0)continue;",
+      "if(Ledger&&HearthPetition.Stage()!=1)continue;",
+      "if((Private||Public)&&HearthPetition.Stage()!=2)continue;",
+      "if(Return&&HearthPetition.Stage()!=3)continue;"):
+   self.assertIn(token,hub)
+  self.assertIn("FVector(1040,730,60)",hub)
+  self.assertIn("FVector(1040,735,125)",hub)
+
  def test_named_witnesses_and_journal_reflect_alternative_outcomes(self):
   h=(R/"Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp").read_text()
   npc=(R/"Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp").read_text()
