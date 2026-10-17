@@ -942,3 +942,14 @@ Rebinding additionally captures high-value gamepad trigger analog events and
 ignores unarmed/low-value/other-axis events. Authored outcomes, local consent,
 reward IDs, lore and save schema remain unchanged. Portable press/noise tests
 pass once the source gate completes; rendered controls still need Unreal testing.
+
+## 2026-10-17 — Living encounter ecology, pre-PC source pass
+
+- Ordinary wild enemies can navigate existing, threat-free forage/patrol
+  destinations as well as return home; this corrects a movement condition
+  that excluded idle behavior despite authored routines.
+- Spatially nearby ordinary enemies coordinate visible warning windows;
+  peers circle for openings, with boss/elder/expedition mechanics unchanged.
+- Strict portable rules and actor wiring contracts are in CI. No save schema,
+  dialogue, authority, reward, world identity or player choice changes.
+  Real Unreal pathfinding, performance, sight and combat feel remain untested.
