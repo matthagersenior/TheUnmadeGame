@@ -3388,6 +3388,10 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Petition.PrivateMarker")));
     SpawnBlock(BesTown+FVector(310,1420,170),FVector(.75,.5,3.2),
         FName(TEXT("Petition.PublicMarker")));
+    // The copy may be taken only after Bes has PERSONALLY acknowledged
+    // the petition. A physical 3-realm chain, never a remote notification.
+    SpawnBlock(BesTown+FVector(740,2080,110),FVector(.65,.42,1.5),
+        FName(TEXT("Relay.CinderholdCopy")));
     SpawnBlock(BesTown+FVector(1090,760,30),FVector(.6,.5,.6),
         FName(TEXT("Bes.ChildHeightStool")));
     SpawnBlock(BesTown+FVector(1240,845,180),FVector(2.0,.2,.2),
@@ -3411,6 +3415,15 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Bes.MeraGuarantee")));
     SpawnBlock(Saltwake+FVector(1230,360,225),FVector(.7,.25,1.0),
         FName(TEXT("Bes.GuarantorRecord")));
+    SpawnBlock(Saltwake+FVector(1720,600,155),FVector(.7,.35,2.1),
+        FName(TEXT("Relay.SaltwakePrivate")));
+    SpawnBlock(Saltwake+FVector(2050,600,155),FVector(.7,.35,2.1),
+        FName(TEXT("Relay.SaltwakePublic")));
+    // Crossings archive. Orrel himself must receive the actual reply first.
+    SpawnBlock(FVector(-1590,450,145),FVector(.8,.5,2.3),
+        FName(TEXT("Relay.CrossingsPrivate")));
+    SpawnBlock(FVector(-1910,450,145),FVector(.8,.5,2.3),
+        FName(TEXT("Relay.CrossingsPublic")));
     RefreshBesHouseholdWorld();
     RefreshHearthPetitionWorld();
     RefreshPetitionRelayWorld();
