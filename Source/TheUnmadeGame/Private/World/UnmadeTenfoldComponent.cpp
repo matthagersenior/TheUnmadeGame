@@ -321,7 +321,7 @@ void UUnmadeTenfoldComponent::StudyConfluence()
        UnmadeCore::DescribeConfluenceNeed(SelectedConfluence,
          Confluence.Stage(Id),Progress.casts[SelectedConfluence],
          Site,GetWorld()->GetTimeSeconds(),GatherContext().verifiedWitnesses,
-         BothMastered)));
+         BothMastered,Progress.windowEnds[SelectedConfluence])));
     if(Confluence.Stage(Id)!=0)
     {
         if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
