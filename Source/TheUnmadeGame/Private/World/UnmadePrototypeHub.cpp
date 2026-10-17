@@ -72,6 +72,7 @@ void AUnmadePrototypeHub::BeginPlay()
     RefreshOuterReactionWorld();
     RefreshMaterialWorld();
     RefreshBesHouseholdWorld();
+    RefreshHearthPetitionWorld();
     RefreshWitnessBraidWorld();
     RefreshWitnessDispatchWorld();
     RefreshWitnessReturnWorld();
@@ -3191,6 +3192,20 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Bes.PayDesk")));
     SpawnBlock(BesTown+FVector(1400,735,125),FVector(.55,.35,.2),
         FName(TEXT("Bes.MissedWageBook")));
+    // Optional two-branch petition. Every step is physically inspected.
+    // The notice and return markers have no loot or automatic debt effects.
+    SpawnBlock(BesTown+FVector(600,1150,105),FVector(.6,.45,1.5),
+        FName(TEXT("Petition.CivicLedger")));
+    SpawnBlock(BesTown+FVector(-80,1120,100),FVector(.6,.45,1.45),
+        FName(TEXT("Petition.PrivateChoice")));
+    SpawnBlock(BesTown+FVector(310,1120,100),FVector(.6,.45,1.45),
+        FName(TEXT("Petition.PublicChoice")));
+    SpawnBlock(BesTown+FVector(740,1590,100),FVector(.65,.5,1.4),
+        FName(TEXT("Petition.ReturnWitness")));
+    SpawnBlock(BesTown+FVector(-80,1420,150),FVector(1.3,.35,2.8),
+        FName(TEXT("Petition.PrivateMarker")));
+    SpawnBlock(BesTown+FVector(310,1420,170),FVector(.75,.5,3.2),
+        FName(TEXT("Petition.PublicMarker")));
     SpawnBlock(BesTown+FVector(1090,760,30),FVector(.6,.5,.6),
         FName(TEXT("Bes.ChildHeightStool")));
     SpawnBlock(BesTown+FVector(1240,845,180),FVector(2.0,.2,.2),
@@ -3215,6 +3230,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
     SpawnBlock(Saltwake+FVector(1230,360,225),FVector(.7,.25,1.0),
         FName(TEXT("Bes.GuarantorRecord")));
     RefreshBesHouseholdWorld();
+    RefreshHearthPetitionWorld();
     // Nine visible work sites, one finite stockroom and household delivery
     // target per region. Actor tags are stable, save fields contain the truth.
     for(int i=0;i<9;++i)
