@@ -294,6 +294,12 @@ public:
 
 
 
+    /** Additive Hearth Petition: physical household evidence, competing
+        confidential/public petition and next-day return, no replacement
+        of existing wage or character save data. Missing on old schema-1 saves. */
+    UPROPERTY(SaveGame) bool bHasHearthPetition=false;
+    UPROPERTY(SaveGame) TArray<int32> HearthPetitionState;
+
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)
     bool bHasResidentContinuitySnapshot=false;
