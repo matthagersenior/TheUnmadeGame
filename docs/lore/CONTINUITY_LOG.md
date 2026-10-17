@@ -809,3 +809,33 @@ Next: trace ordinary enemy reward delivery for melee/ranged kills and post-cast
 NPC witness persistence, preserving per-realm receipts and authored consequences.
 Keep UHT/Editor build, actual nine-realm walkthroughs, travel, controller/UI and
 interrupted platform IO pending until an Unreal-capable host is available.
+
+## 2026-10-17 — Scoped consent and complete local service commits
+
+Personal accords consume their twenty-second confirmation before attempting a
+commit, stage the consequences tutorial with the choice, and include local
+witnesses in the same save. Failure restores choice, favor, lesson and witnesses;
+retry requires a fresh preview. Rest confirmation belongs to the exact realm and
+bed, not any eligible bed, and failed rest restores world time with clear feedback.
+Neither confirmation is serialized. Existing permanent accords remain unchanged.
+
+Repair, shared-access mediation and the Cinderhold mediation specialty now stage
+local testimony before their service save rather than leaving a second receipt.
+The Reach guide saves the tracked objective with its finite use and does not spend
+a use when that objective is already tracked. Experience refresh is deferred to
+the next tick so automatic city discovery cannot create a nested follow-up write
+inside the service transaction. Temporary service buffs keep their session-only
+behavior. Hours, insight/favor prices, two-use limits, recovery benefits, physical
+witness gates, consent and authored personal outcomes are preserved.
+
+Reviewed road/Cinderhold/expedition ability dispatch: matched failed commits
+already consume input and restore their owned costs, so no speculative dispatcher
+rewrite was made. Portable scenarios cover all nine realm accords, repairs,
+mediation and rest, plus guide tracking, malformed later mastery, both write
+failure positions, backup selection and repeated reloads. 92 injected write
+faults and 2,304 reloads pass under UBSan; seven compiled mutations are caught.
+All 360 Python tests, 84 strict portable C++17 executables and 58 dependency
+checks pass, alongside hygiene, six release scenarios, structure/literals,
+transmedia, manuscript and whitespace checks.
+Actual UHT/Editor, actors, service geometry, UI, profile travel and interrupted
+platform IO remain pending; no Unreal playthrough or new art/book requirement.

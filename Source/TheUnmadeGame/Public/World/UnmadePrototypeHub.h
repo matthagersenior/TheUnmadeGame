@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Save/UnmadeServiceCommitRules.h"
 #include "Templates/Function.h"
 #include "GameFramework/Actor.h"
 #include "NPC/UnmadeNpcDecisionRules.h"
@@ -290,8 +291,7 @@ public:
     FString RpgNotice;
     uint64 RpgNoticeSerial=0;
     void NotifyRpg(const FString& Text){RpgNotice=Text;++RpgNoticeSerial;if(RpgHistory.IsEmpty()||RpgHistory.Last()!=Text){RpgHistory.Add(Text);if(RpgHistory.Num()>100)RpgHistory.RemoveAt(0);}}
-    int DepthPendingArc=-1,DepthPendingChoice=0;
-    double DepthConfirmUntil=0;
+    UnmadeCore::ScopedServiceConfirmation DepthConfirmation;
     bool bDepthSaveRejected=false;
     UnmadeCore::AdventureDepth Depth;
     std::array<UnmadeCore::RealmChallenge,9> DepthChallenges;
@@ -328,7 +328,8 @@ private:
     bool ConfirmExpeditionDecision(int Arc,int Kind,int Value);
     UnmadeCore::PlayerExperience Experience;
     bool bExperienceRejected=false;
-    double NextExperienceRefresh=0,ExperienceWaitConfirm=-1;
+    double NextExperienceRefresh=0;
+    UnmadeCore::ScopedServiceConfirmation ExperienceRestConfirmation;
     std::array<double,9> WingRelayDeadline{};
     mutable TArray<FVector> EscortTrail;
     TWeakObjectPtr<class AUnmadeEnemyCharacter> WingObserver;

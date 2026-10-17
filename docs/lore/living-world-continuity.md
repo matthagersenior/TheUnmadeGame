@@ -928,3 +928,15 @@ inventory, and recovery never claims those receipts are complete. Failed saves
 restore the prior action; failed return movement protects saving until restored.
 No realm, resident, mystery, consent gate, reward identifier or lore outcome is
 added. These are portable/source guarantees; physical Unreal acceptance is pending.
+
+### 2026-10-17 — Local consent and service continuity
+
+A personal accord, its consequences lesson and nearby testimony belong to one
+remembered act. Failed saves restore them together and require a fresh preview.
+Rest consent belongs to the bed where the player confirms; moving to another bed
+requires another preview. Repairs and mediation preserve the original accord and
+remembered disagreements, while testimony commits with restored access. The Reach
+guide's finite use includes the objective it tracks and is not consumed for an
+already tracked objective. Prices, hours, insight, favor, explicit consent, all
+nine realm stories and existing save identifiers are unchanged. Temporary service
+buffs retain their authored session-only scope. Unreal acceptance remains pending.

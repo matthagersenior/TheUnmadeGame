@@ -29,6 +29,7 @@ integration need; preserve development momentum and do not merge into main.
 
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
+| P1 local service/consent batch implemented; UE pending | Personal choice + tutorial + witnesses commit together; confirmations consume before writes. Rest is bound to its bed. Repair/mediation testimony and finite guide tracking share their original save. 92 write faults, 2,304 reloads and seven mutations pass; physical services/UI/platform IO remain pending. |
 | P1 reality/travel/recovery batch implemented; UE pending | Checked Glimpse/Fold/Rewrite combine Strain, clue and witnesses; full-model rollback preserves prior windows. Crossings save actual arrivals/visits/road credit together. Realm-safe resume and saved revival cover all nine realms; failed movement rollback protects writes, while recovery remains possible with pending/full-inventory rewards. 218 fault paths, 1,744 reloads, 356 Python / 82 portable C++ / 54 dependency checks and eight mutations pass. |
 | P1 coordinated action batch implemented; UE pending | Shared reversible witness/deed commits cover resolution families, tasks, discovery, aid, conflict/supplies, rites/oaths/casts and six Confluences. Exact confirmation scope prevents save-failure fallthrough. Older split aid repairs without new testimony; earned rewards retry after startup. 128 fault paths, 1,536 reloads, 352 Python / 81 portable C++ / 52 dependency checks and eight mutations pass. Native memory rollback test is unrun. |
 | P1 chronicle consequences implemented; UE pending | Threats break but never redeem; explicit restitution keeps its authored gates and scar. Deeds/verified roads/oath consequences retain five-second retries; every combined writer captures live Chronicle/Confluence. Both oath bonuses clear on break, other buffs remain. 270 fault paths, 3,240 reloads and seven mutation regressions pass; actual actors/IO remain pending. |
@@ -735,3 +736,35 @@ playthrough, charges, artwork/book requirements or merge into main. Next combine
 audit: scoped expedition/road/Cinderhold ability dispatch and related finite
 services/mastery transactions; distinguish unavailable actions from rejected
 commits before considering fallback. Keep whole realm-local walkthroughs pending.
+
+## 2026-10-17 — Scoped consent and complete local service commits
+
+Personal accords consume their twenty-second confirmation before attempting a
+commit, stage the consequences tutorial with the choice, and include local
+witnesses in the same save. Failure restores choice, favor, lesson and witnesses;
+retry requires a fresh preview. Rest confirmation belongs to the exact realm and
+bed, not any eligible bed, and failed rest restores world time with clear feedback.
+Neither confirmation is serialized. Existing permanent accords remain unchanged.
+
+Repair, shared-access mediation and the Cinderhold mediation specialty now stage
+local testimony before their service save rather than leaving a second receipt.
+The Reach guide saves the tracked objective with its finite use and does not spend
+a use when that objective is already tracked. Experience refresh is deferred to
+the next tick so automatic city discovery cannot create a nested follow-up write
+inside the service transaction. Temporary service buffs keep their session-only
+behavior. Hours, insight/favor prices, two-use limits, recovery benefits, physical
+witness gates, consent and authored personal outcomes are preserved.
+
+Reviewed road/Cinderhold/expedition ability dispatch: matched failed commits
+already consume input and restore their owned costs, so no speculative dispatcher
+rewrite was made. Portable scenarios cover all nine realm accords, repairs,
+mediation and rest, plus guide tracking, malformed later mastery, both write
+failure positions, backup selection and repeated reloads. 92 injected write
+faults and 2,304 reloads pass under UBSan; seven compiled mutations are caught.
+All 360 Python tests, 84 strict portable C++17 executables and 58 dependency
+checks pass, alongside hygiene, six release scenarios, structure/literals,
+transmedia, manuscript and whitespace checks.
+Actual UHT/Editor, actors, service geometry, UI, profile travel and interrupted
+platform IO remain pending; no Unreal playthrough or new art/book requirement.
+
+Next highest-value batch: inspect optional wing progress/guardian rewards, resident relationship scene receipts and earned mastery runtime use together. Trace costs, persisted completion and retry ownership before effects; retain whole-realm physical walkthroughs as Unreal work.

@@ -33,7 +33,7 @@ class RecoveryCommitWiring(unittest.TestCase):
         action=source.split('bool AUnmadePrototypeHub::TryDepthInteraction(',1)[1].split('FString AUnmadePrototypeHub::GetDepthReaction',1)[0]
         self.assertIn('CommitHealing(*p->GetCombat(),heal?35:0',action)
         self.assertNotIn('if(heal)p->GetCombat()->Heal(35)',action)
-        self.assertIn('Depth=before;DepthChallenges=beforeChallenge',action)
+        self.assertIn('Depth=before;Experience=beforeExperience;DepthChallenges=beforeChallenge',action)
 
     def test_route_cache_prompt_has_no_phantom_kit_requirement(self):
         source=(ROOT / 'Private/World/UnmadeAdventureDepth.cpp').read_text()

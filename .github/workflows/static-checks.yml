@@ -342,6 +342,10 @@ jobs:
 
       - name: Test ordinary spending, profile recovery and regional crafting dependencies
         run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/service_confirmation_test.cpp -o /tmp/unmade-service-consent
+          /tmp/unmade-service-consent
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/service_mastery_recovery_test.cpp -o /tmp/unmade-services
+          /tmp/unmade-services
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/rite_cast_recovery_test.cpp -o /tmp/unmade-rite-cast
           /tmp/unmade-rite-cast
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/named_boss_receipt_test.cpp -o /tmp/unmade-named-boss
