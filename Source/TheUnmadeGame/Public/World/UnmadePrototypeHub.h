@@ -23,6 +23,7 @@
 #include "World/UnmadeMaterialConsequencesRules.h"
 #include "World/UnmadeLivingEconomyRules.h"
 #include "World/UnmadeBesHouseholdRules.h"
+#include "World/UnmadeHearthPetitionRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
 #include "World/UnmadeCommunityConsequences.h"
@@ -71,7 +72,7 @@ public:
     void PrepareRealmGeometry(const FVector& At,int Limit=48);
     const TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>>& CachedEnemies()const{return RuntimeEnemies;}
     FName ServiceWorkCue(FName Person,const FVector& At)const;
-    bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected;}
+    bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected||bHearthPetitionRejected;}
     bool IsWorldReady()const{return bWorldReady;}
     bool SaveRecoveryState(AUnmadeCharacter* Player);
     bool SavePlayerSession(AUnmadeCharacter* Player);
@@ -145,6 +146,9 @@ public:
     bool RecordBesHouseholdConversation(FName StableId);
     void MaybePlayBesReturnScene(FName StableId);
     bool TryBesHouseholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryHearthPetitionInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    FString GetHearthPetitionJournal()const;
+    FString GetHearthPetitionResidentLine(FName StableId)const;
     /** Authored timed subtitle/shot/foley events; binds to UMG and Sequencer.
         Without production sound assets the captions still work offline. */
     UPROPERTY(BlueprintAssignable,Category="Unmade|Unpaid Shift")
@@ -362,6 +366,11 @@ private:
     UnmadeCore::MaterialWorld Materials;
     UnmadeCore::LivingEconomy LivingTrades;
     UnmadeCore::BesHousehold BesHousehold;
+    UnmadeCore::HearthPetition HearthPetition;
+    bool bHearthPetitionRejected=false;
+    FName HearthPetitionPendingTag;
+    double HearthPetitionConfirmUntil=-1.0;
+    void RefreshHearthPetitionWorld();
     UnmadeCore::CinderholdAdventure Cinderhold;
     bool bCinderholdSaveRejected=false;
     int32 CinderholdMaintenanceTurns=0;
