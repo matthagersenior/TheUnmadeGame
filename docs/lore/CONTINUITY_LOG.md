@@ -995,3 +995,26 @@ Follow-up pre-PC check: existing attack windups keep ownership across species fe
   if the stored branch is corrupt. Save rejection rolls back the attempt.
 - Portable state and source wiring tests are CI-backed; actors/animations,
   sight, next-day visit and physical platform IO remain engine-unverified.
+
+## 2026-10-17 — Three-realm, physically delivered Hearth Petition reply
+
+The optional Cinderhold petition now offers a genuinely hand-carried
+extension after Bes has heard the original outcome. A player must take
+the copy from Cinderhold, personally deliver it to Mera in Saltwake,
+return to Mera after a full following in-world day for her answer,
+and personally deliver her reply to Orrel at the Crossings.
+
+Local physical records differ for protected/private and redacted/public
+branches. Mera explicitly questions both courses according to their
+risks and grants **no second loan**. Orrel does not know the answer
+before receiving it and does not declare a verdict. Bes's wages,
+existing relief, named guests, Mera's consent, inventory and history
+remain unchanged. The player's document journal may show custody,
+but no unknown resident has universal or instantaneous information.
+
+Saved history is additive, refuses impossible chronology or a different
+ending from the original petition, and rolls back failed writes. There
+are no new global testimony/deed flags, automatic couriers, permanent
+power combinations or main-campaign gates. Real Unreal actor placement,
+collision, voice, navigation, pacing and platform persistence remain
+unverified.
