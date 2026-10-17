@@ -5,6 +5,7 @@
 namespace UnmadeCore {
 // Unreal gamepad triggers report as analog keys, but can still act as buttons.
 // Movement/look axes remain ineligible for action rebinding.
+// The same controller buttons may serve different actions in gameplay and menus.
 inline bool CanBindPlayerControl(bool valid,bool analog,bool supportedTrigger){return valid&&(!analog||supportedTrigger);}
 struct ControlLabel {std::string key,display;};
 inline bool LabelWord(unsigned char c){return c>=128||(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='_';}

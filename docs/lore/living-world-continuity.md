@@ -970,3 +970,12 @@ A defeated public-accord return-road claimant's favor and history must settle
 before a complete checkpoint; retries neither erase nor duplicate that consequence.
 All realm identities, accords, wages, rewards, consent and mysteries remain.
 Physical Unreal acceptance is pending; no new artwork/book requirement is added.
+
+## 17 October 2026 — Player-facing controls (no change to story canon)
+
+Menu navigation and prompt text must follow the current keyboard/controller binding,
+not a stale default key hint. The two default gamepad triggers are valid discrete
+action buttons despite reporting analog; movement/look stick axes are not eligible
+for action rebinding. This corrects accessibility and feedback, with no change
+to rites, lore, characters, events, rewards, saved IDs or consequences. Controller
+focus and actual input dispatch remain pending Unreal acceptance.

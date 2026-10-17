@@ -927,3 +927,11 @@ Hygiene, six release scenarios, structure/literals, transmedia, manuscript and
 whitespace checks pass. Actor adapters are statically reviewed; actual UHT/Editor,
 component/actor tick order, projectiles, physical movement/rollback, warning UI and
 interrupted platform IO remain pending. No Unreal playthrough or paid service.
+
+## 2026-10-17 — Pre-PC controller binding and contextual prompts
+
+- Preserve default controller trigger rebinding without accepting analog stick axes.
+- Present the computed contextual interaction prompt rather than recomputing a
+  potentially stale hint. Portable tests and source wiring cover the behavior.
+- No new in-world story facts, optional quests, item quantities, rewards or
+  permanent choice semantics; native UHT/UI/controller playtesting remains open.
