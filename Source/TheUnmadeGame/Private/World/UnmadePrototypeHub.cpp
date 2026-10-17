@@ -2702,7 +2702,11 @@ bool AUnmadePrototypeHub::TryHearthPetitionInteraction(
         const bool Private=It->ActorHasTag(FName(TEXT("Petition.PrivateChoice")));
         const bool Public=It->ActorHasTag(FName(TEXT("Petition.PublicChoice")));
         const bool Return=It->ActorHasTag(FName(TEXT("Petition.ReturnWitness")));
-        if(!Book&&!Ledger&&!Private&&!Public&&!Return)continue;
+        const bool PrivateRecord=It->ActorHasTag(FName(TEXT("Petition.PrivateMarker")));
+        const bool PublicRecord=It->ActorHasTag(FName(TEXT("Petition.PublicMarker")));
+        if(!Book&&!Ledger&&!Private&&!Public&&!Return&&!PrivateRecord&&!PublicRecord)continue;
+        if(PrivateRecord&&HearthPetition.Ending()!=1)continue;
+        if(PublicRecord&&HearthPetition.Ending()!=2)continue;
         const double Distance=FVector::DistSquared(At,It->GetActorLocation());
         if(Distance>FMath::Square(235.f)||
            Distance>=CompetingNpcDistanceSq)continue;
@@ -2711,6 +2715,15 @@ bool AUnmadePrototypeHub::TryHearthPetitionInteraction(
         if(GetWorld()->LineTraceTestByChannel(
               At+FVector(0,0,70),It->GetActorLocation()+FVector(0,0,65),
               ECC_Visibility,Sight))continue;
+        if(PrivateRecord||PublicRecord)
+        {
+            // Distinct physically discoverable consequences, never a reward
+            // or an auto-paid wage. Only the chosen document exists.
+            NotifyRpg(PrivateRecord
+                ?TEXT("SEALED HOUSEHOLD PETITION: The confidential record is protected here. The employer still owes Bes. Neither Mera nor refuge guests have been named publicly.")
+                :TEXT("REDACTED PUBLIC DOCKET: The street may read the unresolved wage claim without seeing the refuge guests' names. An open hearing is not a ruling or repayment."));
+            return true;
+        }
         if(Return)
         {
             // The paper marker directs the player to Bes; it does not
