@@ -69,8 +69,8 @@ public:
    case 1:return "The home book is read. Ask Rheva to corroborate the claim, then inspect the civic ledger outside Bes's house.";
    case 2:return "The two records agree. At the Cinderhold petition tables choose CONFIDENTIAL protection or a REDACTED PUBLIC hearing; E twice confirms one permanent route. Neither repays wages.";
    case 3:return record_.ending==1
-     ? "The confidential petition is carried privately. Return to the shelter witness marker after the NEXT in-world morning."
-     : "The redacted public hearing is recorded. Return to its witness marker after the NEXT in-world morning.";
+     ? "The confidential petition is recorded. Inspect the return marker and SPEAK TO BES on a later in-world day to record his actual acknowledgement."
+     : "The redacted public hearing is recorded. Inspect the return marker and SPEAK TO BES on a later in-world day to record his actual acknowledgement.";
    case 4:return record_.ending==1
      ? "The private petition has been personally acknowledged. Household identities remain protected; the wage debt continues until genuinely paid."
      : "The public redacted petition has been acknowledged. A hearing is requested, not a verdict; the wage debt continues until genuinely paid.";
