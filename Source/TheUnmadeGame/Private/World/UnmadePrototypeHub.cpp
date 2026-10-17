@@ -128,6 +128,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::MaterialWorld RestoredMaterials;
     UnmadeCore::LivingEconomy RestoredLiving;
     UnmadeCore::BesHousehold RestoredBes;
+    UnmadeCore::HearthPetition RestoredPetition;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -486,6 +487,17 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         }
     }
     else RestoredBes.InitializeAtDay(RestoredClock.DayIndex()+1);
+    if(Save->bHasHearthPetition)
+    {
+        const auto& Data=Save->HearthPetitionState;
+        if(Data.Num()!=6 || !RestoredPetition.Restore(
+              {Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]},
+              RestoredBes.Save(),RestoredClock.DayIndex()+1))
+        {
+            bHearthPetitionRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Invalid Hearth Petition record: all world writes protected"));
+        }
+    }
     if(Save->bHasCinderholdAdventure)
     {
         const auto& S=Save->CinderholdAdventureState;
@@ -509,6 +521,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         {bRoadSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Remembered roads corrupt: original save protected"));}
     }
     BesHousehold=RestoredBes;
+    HearthPetition=RestoredPetition;
     LivingTrades=RestoredLiving;
     Materials=RestoredMaterials;
     OuterReactions=RestoredOuter;
@@ -628,7 +641,7 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
        bWitnessDispatchRejected || bWitnessReturnRejected ||
        bRealityConsequenceRejected || bOuterReactionsRejected ||
        bMaterialSaveRejected || bLivingEconomyRejected ||
-       bBesHouseholdRejected)return false;
+       bBesHouseholdRejected||bHearthPetitionRejected)return false;
     for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc){
         const FName Id=Npc->GetStableId();if(Id.IsNone())continue;
         const auto Snapshot=Npc->GetMemory()->WriteSnapshot(Id);
@@ -830,6 +843,11 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
     Save->BesMeraGuaranteeOwed=BesRecord.guaranteeOwed;
     Save->bBesMeraConsented=BesRecord.meraConsented;
     Save->bBesMeraGuaranteeUsed=BesRecord.meraGuaranteeUsed;
+    // Additive v1-compatible optional branch; never reuse the wage fields.
+    const auto Petition=HearthPetition.Save();
+    Save->bHasHearthPetition=true;
+    Save->HearthPetitionState={Petition.stage,Petition.ending,
+        Petition.bookDay,Petition.ledgerDay,Petition.choiceDay,Petition.returnDay};
     Save->bHasResidentContinuitySnapshot=true;
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
