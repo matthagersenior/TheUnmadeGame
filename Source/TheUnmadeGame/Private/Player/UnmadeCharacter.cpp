@@ -1,5 +1,6 @@
 #include "UI/UnmadePlayerFacingRules.h"
 #include "Save/UnmadeSaveSession.h"
+#include "Save/UnmadeActionCommitRules.h"
 #include "Save/UnmadeRecoveryRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Player/UnmadeCharacter.h"
@@ -153,7 +154,10 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void AUnmadeCharacter::ReconcileEarnedRewards()
 {
-    if (IsValid(Equipment)) Equipment->ReconcileEarnedMilestones();
+    bStartupRewardsReady=false;
+    bStartupNoticeShown=false;
+    InitializeStartupRewards();
+    if(GetWorld())NextStartupRewardsAttempt=GetWorld()->GetTimeSeconds()+5;
 }
 
 void AUnmadeCharacter::ShowInventory()
@@ -564,63 +568,10 @@ void AUnmadeCharacter::CommitFaction(UnmadeCore::FactionEnding Ending)
                     *Consequence));
             break;
         }
-        const bool bResolvedFaction=Hub->ResolveNearbyFaction(Ending);
-        const bool bResolvedFrontier=!bResolvedFaction &&
-            Hub->ResolveNearbyFrontier(static_cast<int32>(Ending));
-        const bool bResolvedAfterlight=!bResolvedFaction && !bResolvedFrontier &&
-            Hub->ResolveNearbyAfterlight(static_cast<int32>(Ending));
-        const bool bResolvedRealmAftermath=!bResolvedFaction && !bResolvedFrontier &&
-            !bResolvedAfterlight && Hub->ResolveNearbyRealmAftermath(static_cast<int32>(Ending));
-        const bool bResolvedBraid=!bResolvedFaction && !bResolvedFrontier &&
-            !bResolvedAfterlight && !bResolvedRealmAftermath &&
-            Hub->ResolveNearbyWitnessBraid(static_cast<int32>(Ending));
-        const bool bResolvedReturn=!bResolvedFaction && !bResolvedFrontier &&
-            !bResolvedAfterlight && !bResolvedRealmAftermath && !bResolvedBraid &&
-            Hub->ResolveNearbyWitnessReturn(static_cast<int32>(Ending));
-        if(bResolvedFaction || bResolvedFrontier || bResolvedAfterlight ||
-           bResolvedRealmAftermath || bResolvedBraid || bResolvedReturn)
-        {
+        if(Hub->ResolvePreviewedCommit(Scope,static_cast<int32>(Ending)))
             ReconcileEarnedRewards();
-            if(bResolvedAfterlight)
-                ReportLocalEvent(Ending==UnmadeCore::FactionEnding::Solidarity?
-                    FName("World.AfterlightShelter"):FName("World.AfterlightNames"),
-                    FName("region.bellwold.refuge"));
-            else if(bResolvedRealmAftermath)
-            {
-                bool bLater=false;
-                for(const auto& Region:UnmadeCore::LaterRealms)
-                {
-                    if(FVector::DistSquared2D(GetActorLocation(),
-                        FVector(Region.centerX,Region.centerY,GetActorLocation().Z))>
-                        FMath::Square(3200.f))continue;
-                    bLater=true;
-                    ReportLocalEvent(FName("World.LaterRealmResolved"),
-                        FName(UTF8_TO_TCHAR(Region.name)));
-                    break;
-                }
-                if(!bLater)
-                {
-                const bool bRain=GetActorLocation().Y < -46000.f;
-                ReportLocalEvent(FName(bRain
-                    ?(Ending==UnmadeCore::FactionEnding::Solidarity
-                      ?TEXT("World.SaltwakeCistern"):TEXT("World.SaltwakeLedger"))
-                    :(Ending==UnmadeCore::FactionEnding::Solidarity
-                      ?TEXT("World.CinderholdKiln"):TEXT("World.CinderholdDeed"))),
-                    FName(bRain?TEXT("region.saltwake.port"):TEXT("region.cinderhold.hearth")));
-                }
-            }
-            else if(bResolvedBraid)
-                ReportLocalEvent(FName(Ending==UnmadeCore::FactionEnding::Solidarity
-                    ?TEXT("World.WitnessBraidShelter"):TEXT("World.WitnessBraidDocket")),
-                    FName("region.crossings.bridge"));
-            else if(bResolvedReturn)
-                ReportLocalEvent(FName(Ending==UnmadeCore::FactionEnding::Solidarity
-                    ?TEXT("World.HessaPrivateCounsel"):TEXT("World.HessaPublicHearing")),
-                    FName("region.bellwold.refuge"));
-            else ReportLocalEvent(FName("World.FactionResolved"),FName("region.prototype.hub"));
-        }
         else if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,
-            TEXT("Find your local final witness, or assemble all three echo relics and return to Orrel's nail."));
+            TEXT("The confirmed decision was not applied. Check its witness and saving status, then preview and confirm again."));
         break;
     }
 }
@@ -695,7 +646,8 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
     const UnmadeCore::ConflictSnapshot Previous = LocalConflict.Snapshot();
     if (LocalConflict.Commit(Choice, true) != UnmadeCore::ConflictResult::Committed)
         return;
-    if (!SaveLocalConflict())
+    if (!CommitLocalEvent(Choice==UnmadeCore::ConflictChoice::Shelter?FName("World.ConflictShelter"):FName("World.ConflictResearch"),
+        FName("region.prototype.hub"),[&]{return SaveLocalConflict();}))
     {
         LocalConflict.Restore(Previous);
         if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
@@ -714,8 +666,6 @@ void AUnmadeCharacter::ChooseLocalConflict(UnmadeCore::ConflictChoice Choice)
     if (GEngine) UnmadeRpgFeedback(-1, 8.f, FColor::Yellow,
         bShelter ? TEXT("COMMUNITY ROUTE OPEN; archive closed. This decision persists.")
                  : TEXT("ARCHIVE ROUTE OPEN; community shelter closed. This decision persists."));
-    ReportLocalEvent(bShelter ? FName("World.ConflictShelter") : FName("World.ConflictResearch"),
-        FName("region.prototype.hub"));
 }
 
 void AUnmadeCharacter::ProgressSupplyActivity()
@@ -744,7 +694,8 @@ void AUnmadeCharacter::ProgressSupplyActivity()
         return;
     }
 
-    if (!SaveLocalConflict())
+    if (!(bCompletedDelivery?CommitLocalEvent(FName("Player.DeliveredSupplies"),FName("Hub.Shelter"),
+        [&]{return SaveLocalConflict();}):SaveLocalConflict()))
     {
         LocalConflict.Restore(Previous);
         if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Red,
@@ -757,7 +708,6 @@ void AUnmadeCharacter::ProgressSupplyActivity()
     if (bCompletedDelivery)
     {
         ReconcileEarnedRewards();
-        ReportLocalEvent(FName("Player.DeliveredSupplies"), FName("Hub.Shelter"));
     }
 }
 
@@ -1012,8 +962,6 @@ void AUnmadeCharacter::Interact()
             {
                 if (Hub->InspectSite(NearestSite))
             {
-                if(IsValid(Tenfold))
-                    Tenfold->RecordLegacyDeed(UnmadeCore::Deed::Discovered);
                 ReconcileEarnedRewards();
                 return;
             }
@@ -1085,7 +1033,6 @@ void AUnmadeCharacter::Interact()
                 bCompletedVillageTask)
             {
                 ReconcileEarnedRewards();
-                ReportLocalEvent(FName("Player.HelpedVillage"), Target->GetStableId());
             }
             Hub->TryFactionConversation(Target->GetStableId());
             Hub->TryFrontierConversation(Target->GetStableId());
@@ -1127,24 +1074,20 @@ void AUnmadeCharacter::Interact()
 void AUnmadeCharacter::OfferAid()
 {
     AUnmadeNpcCharacter* Target = FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f);
-    if (!Target)
+    if (!Target||Target->GetStableId().IsNone())
     {
         if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
             TEXT("Approach a resident before offering aid."));
         return;
     }
-    for (const FUnmadeNpcObservation& Observation : Target->GetMemory()->GetObservations())
-    {
-        if (Observation.EventKind == FName("Player.Helped") && Observation.SubjectId == Target->GetStableId())
-        {
-            if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Yellow,
-                TEXT("You have already helped this resident."));
-            return;
-        }
+    bool AlreadyWitnessed=false;
+    for(const auto& Observation:Target->GetMemory()->GetObservations())
+        if(Observation.Evidence==EUnmadeEvidenceKind::Witnessed&&Observation.EventKind==FName("Player.Helped")&&
+           Observation.SubjectId==Target->GetStableId()){AlreadyWitnessed=true;break;}
+    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){
+        Hub->RecordResidentAid(Target->GetStableId(),AlreadyWitnessed);
+        return;
     }
-    ReportLocalEvent(FName("Player.Helped"), Target->GetStableId());
-    for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
-        Hub->RecordResidentAid(Target->GetStableId());
 }
 
 void AUnmadeCharacter::DemonstrateAnomaly()
@@ -1608,10 +1551,10 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
     ApplyFractureVisuals();
 }
 
-void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
+int32 AUnmadeCharacter::StageLocalWitnesses(FName EventKind,FName SubjectId)
 {
     UWorld* World = GetWorld();
-    if (!World||!UnmadeSave::IsWorldWritable(World)) return;
+    if (!World||!UnmadeSave::IsWorldWritable(World)) return 0;
     const FGuid EventId = FGuid::NewGuid();
     int32 Witnesses = 0;
     for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
@@ -1630,6 +1573,13 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
             continue;
         if (It->GetMemory()->Witness(EventId, EventKind, SubjectId)) ++Witnesses;
     }
+    return Witnesses;
+}
+
+void AUnmadeCharacter::ReportLocalEvent(FName EventKind,FName SubjectId)
+{
+    if(!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    const int32 Witnesses=StageLocalWitnesses(EventKind,SubjectId);
     if(IsValid(Tenfold))
     {
         if(EventKind==FName("Player.Helped") || EventKind==FName("Player.HelpedVillage"))
@@ -1643,6 +1593,53 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
     const FString Line = FString::Printf(TEXT("%s witnessed by %d nearby resident(s)."),
         *EventKind.ToString(), Witnesses);
     if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Yellow, Line);
+}
+
+bool AUnmadeCharacter::CommitLocalEvent(FName Event,FName Subject,TFunctionRef<bool()> Write)
+{
+    TArray<TPair<FName,FName>> Events;Events.Emplace(Event,Subject);
+    return CommitLocalEvents(Events,Write);
+}
+
+bool AUnmadeCharacter::CommitLocalEvents(const TArray<TPair<FName,FName>>& Events,TFunctionRef<bool()> Write)
+{
+    if(!UnmadeSave::IsSessionWritable(this))return false;
+    for(const auto& Event:Events)if(Event.Key.IsNone())return false;
+    struct FObserverBefore {TWeakObjectPtr<UUnmadeMemoryComponent> Memory;FUnmadeNpcSnapshot State;};
+    int32 Witnesses=0;unsigned Deeds=0;
+    for(const auto& Event:Events){const FTCHARToUTF8 Kind(*Event.Key.ToString());Deeds|=UnmadeCore::ActionDeedMask(Kind.Get());}
+    const bool Saved=UnmadeCore::CommitActionConsequences([&]{
+        TArray<FObserverBefore> Before;
+        for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc)
+            if(!Npc->GetStableId().IsNone()&&IsValid(Npc->GetMemory()))
+                Before.Add(FObserverBefore{Npc->GetMemory(),Npc->GetMemory()->WriteSnapshot(Npc->GetStableId())});
+        return Before;
+    },[&]{for(const auto& Event:Events)Witnesses+=StageLocalWitnesses(Event.Key,Event.Value);},[&]{
+        return IsValid(Tenfold)?Tenfold->CommitActionDeeds(Deeds,Write):Write();
+    },[&](const auto& Before){
+        for(const auto& Observer:Before)if(Observer.Memory.IsValid())
+            Observer.Memory->ReadSnapshot(Observer.State,Observer.State.NpcId);
+    });
+    if(!Saved){
+        UnmadeRpgFeedback(-1,8.f,FColor::Red,TEXT("ACTION NOT SAVED: its witness memories and deed credit were rolled back with the action. Retry when saving is available."));
+        return false;
+    }
+    if(Witnesses>0)UnmadeRpgFeedback(-1,6.f,FColor::Yellow,TEXT("The action and its local witness memories were saved together."));
+    return true;
+}
+
+bool AUnmadeCharacter::CommitRiteEvents(UnmadeCore::RiteId Id,bool CivicApplied,TFunctionRef<bool()> Write)
+{
+    TArray<TPair<FName,FName>> Events;
+    if(CivicApplied){
+        const int Index=static_cast<int>(Id);
+        const auto* Policy=UnmadeCore::RealmReactionAt(GetActorLocation().X,GetActorLocation().Y);
+        if(Policy&&Index>=0&&Index<static_cast<int>(UnmadeCore::RealityProfiles.size()))
+            Events.Emplace(FName(UnmadeCore::RealityProfiles[Index].care?TEXT("Reality.CareWitnessed"):TEXT("Reality.InquiryWitnessed")),
+                FName(*FString::Printf(TEXT("Reality.Realm.%d"),static_cast<int32>(Policy->realm))));
+    }
+    Events.Emplace(FName("Reality.Rite"),FName("TheUnmade.Tenfold"));
+    return CommitLocalEvents(Events,Write);
 }
 
 void AUnmadeCharacter::SaveNearbyNpcMemories()
@@ -1687,7 +1684,7 @@ bool AUnmadeCharacter::InitializeStartupRewards(){
  if(bStartupRewardsReady)return true;
  if(!IsValid(Equipment)||!UnmadeSave::IsSessionWritable(this))return false;
  bStartupRewardsReady=Equipment->ReconcileEarnedMilestones();
- if(!bStartupRewardsReady&&!bStartupNoticeShown){bStartupNoticeShown=true;UnmadeRpgFeedback(-1,10.f,FColor::Orange,TEXT("STARTUP REWARDS PENDING: save failed or inventory full. Retrying; make room in Items if needed."));}
+ if(!bStartupRewardsReady&&!bStartupNoticeShown){bStartupNoticeShown=true;UnmadeRpgFeedback(-1,10.f,FColor::Orange,TEXT("EARNED REWARDS PENDING: save failed or inventory full. Retrying; make room in Items if needed."));}
  return bStartupRewardsReady;
 }
 bool AUnmadeCharacter::SaveSessionNow(){RestoreSessionWhenReady();if(!bSessionRestored||!GetWorld()||!InitializeStartupRewards())return false;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h)return h->SavePlayerSession(this);return false;}

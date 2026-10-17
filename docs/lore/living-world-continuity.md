@@ -895,3 +895,20 @@ writes retry without replaying the originating event. Explicit oath choices
 still require a successful save and roll back on failure. These are source and
 portable-rule guarantees; native sight, equipment, travel and platform IO remain
 unverified. No new realm, identity, quest, consent rule or mystery resolution.
+
+## 17 October 2026 — Decisions and their local recollection commit together
+
+An accepted civic, return or rite decision now saves its existing local witness
+account and earned deed with the originating action. Failure restores those
+participants together; it cannot accept another nearby decision using the first
+choice's confirmation. The original scope, evidence, independent endings and
+six-second consent gate remain. Cast and Confluence witnesses retain firsthand
+range/sight gates, attributed rumors and existing event/subject identifiers.
+
+Aid can no longer leave a saved memory but lose its relationship recognition.
+Existing direct testimony or a prior aid receipt can repair an older incomplete
+record without inventing a second act of help. Rumor alone is not evidence that
+aid already happened. Finite rewards remain earned by committed world facts,
+retry failed writes and never refill spent supplies through repeated reloads.
+No new realm, resident identity, lore answer or consent rule is introduced.
+These are source/portable guarantees; engine verification remains pending.

@@ -17,9 +17,11 @@ class CombatMemoryRetryWiring(unittest.TestCase):
   self.assertIn('HasPendingCombatRewards()',pending)
  def test_direct_memories_share_quiet_timer_retry(self):
   player=read('Private/Player/UnmadeCharacter.cpp')
-  report=player.split('void AUnmadeCharacter::ReportLocalEvent(',1)[1].split('void AUnmadeCharacter::SaveNearbyNpcMemories()',1)[0]
-  self.assertLess(report.index('IsWorldWritable(World)'),report.index('FGuid::NewGuid()'))
-  self.assertIn('It->GetStableId().IsNone()',report)
+  stage=player.split('int32 AUnmadeCharacter::StageLocalWitnesses(',1)[1].split('void AUnmadeCharacter::ReportLocalEvent(',1)[0]
+  self.assertLess(stage.index('IsWorldWritable(World)'),stage.index('FGuid::NewGuid()'))
+  self.assertIn('It->GetStableId().IsNone()',stage)
+  report=player.split('void AUnmadeCharacter::ReportLocalEvent(',1)[1].split('bool AUnmadeCharacter::CommitLocalEvent(',1)[0]
+  self.assertIn('StageLocalWitnesses(EventKind,SubjectId)',report)
   self.assertIn('if(Witnesses>0)SaveNearbyNpcMemories()',report)
   save=player.split('void AUnmadeCharacter::SaveNearbyNpcMemories()',1)[1].split('bool AUnmadeCharacter::IsRpgMenuOpen()',1)[0]
   self.assertIn('Hub->SaveNpcMemories()',save)

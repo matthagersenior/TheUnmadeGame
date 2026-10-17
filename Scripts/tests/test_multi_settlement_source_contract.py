@@ -43,7 +43,7 @@ class MultiVillageSourceTests(unittest.TestCase):
         self.assertIn("RegionalTasks.Restore(Previous)",hub)
         self.assertIn("RegionalTasks.Converse(",hub)
         self.assertIn("TryResidentVillageTask(Target->GetStableId()",player)
-        self.assertIn('ReportLocalEvent(FName("Player.HelpedVillage")',player)
+        self.assertIn('CommitWorldEvent(FName("Player.HelpedVillage")',hub)
         self.assertIn("Hub->GetVisitedVillageCount()",player)
 
     def test_native_rules_are_tested_in_ci(self):

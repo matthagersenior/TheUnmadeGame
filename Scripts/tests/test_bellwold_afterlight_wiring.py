@@ -20,7 +20,10 @@ class BellwoldAfterlightWiring(unittest.TestCase):
         world=read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         for fn in ("TryAfterlightConversation","InspectAfterlightClue","ResolveNearbyAfterlight"):
-            self.assertIn("Hub->"+fn+"(",player)
+            if fn=="ResolveNearbyAfterlight":
+                self.assertIn("ResolvePreviewedCommit(Scope,",player)
+                self.assertIn("return ResolveNearbyAfterlight(",world)
+            else:self.assertIn("Hub->"+fn+"(",player)
         self.assertIn("static_cast<int>(Chronicle.Ending(UnmadeCore::Faction::Refuge))",world)
         self.assertIn("static_cast<int>(RegionalTasks.Progress(UnmadeCore::SettlementId::Bellwold))",world)
         self.assertIn("if(!WriteWorldSnapshot())",world)
@@ -52,7 +55,7 @@ class BellwoldAfterlightWiring(unittest.TestCase):
         for event in ("World.AfterlightShelter","World.AfterlightNames"):
             self.assertIn(event,npc)
             self.assertIn(event,memory)
-            self.assertIn(event,player)
+            self.assertIn(event,read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp"))
         self.assertIn("BellwoldAfterlight secondNight;",scenario)
         self.assertIn("BellwoldAfterlight alternateSecondNight;",scenario)
 if __name__=="__main__":unittest.main()

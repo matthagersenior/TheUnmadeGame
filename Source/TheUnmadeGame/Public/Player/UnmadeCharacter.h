@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Items/UnmadeItemRules.h"
-#include "Items/UnmadeItemRules.h"
 #include "CoreMinimal.h"
 #include "Combat/UnmadeCombatRewardRules.h"
 #include "GameFramework/Character.h"
@@ -90,6 +89,9 @@ public:
     void NotifyWeaponContact(){TickWeaponContact();}
     void ReportIntegrationEvent(FName Event,FName Subject){ReportLocalEvent(Event,Subject);}
     void RecoverIntegrationStrain(double Amount){FractureModel.Recover(Amount/UnmadeCore::FractureModel::RecoveryPerSecond);}
+    bool CommitLocalEvent(FName Event,FName Subject,TFunctionRef<bool()> Write);
+    bool CommitLocalEvents(const TArray<TPair<FName,FName>>& Events,TFunctionRef<bool()> Write);
+    bool CommitRiteEvents(UnmadeCore::RiteId Id,bool CivicApplied,TFunctionRef<bool()> Write);
     bool CommitIntegrationRecovery(double Amount, TFunctionRef<bool()> Write);
 private:
     UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
@@ -191,6 +193,7 @@ private:
     void SkipDirectedScene();
     void OfferAid();
     void DemonstrateAnomaly();
+    int32 StageLocalWitnesses(FName EventKind,FName SubjectId);
     void ReportLocalEvent(FName EventKind, FName SubjectId = NAME_None);
     void SaveNearbyNpcMemories();
     void FoldReality();

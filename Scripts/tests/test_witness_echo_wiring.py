@@ -29,7 +29,8 @@ class WitnessEchoWiring(unittest.TestCase):
         self.assertIn("AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)",hub)
         self.assertIn("WitnessEchoes.Read(PhysicalUtf8.Get(),LocalOutcome)",hub)
         self.assertIn("WitnessEchoes.Restore(OldEcho)",hub)
-        self.assertIn("(bNew || bEchoChanged) && !WriteWorldSnapshot()",hub)
+        self.assertIn("(bNew || bEchoChanged || MissingDeed)",hub)
+        self.assertIn("Rites->CommitActionDeeds(",hub)
         self.assertIn("WitnessEchoSummary=Hub->GetWitnessEchoJournal();",player)
         self.assertIn("WitnessEchoSummary",player)
         # New clues don't increase original ordinary landmark count or claim a

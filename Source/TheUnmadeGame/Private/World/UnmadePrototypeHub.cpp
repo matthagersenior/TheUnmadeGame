@@ -1,4 +1,5 @@
 #include "Save/UnmadeSessionRules.h"
+#include "Save/UnmadeActionCommitRules.h"
 #include "Save/UnmadeRiteCommitRules.h"
 #include "World/UnmadeTenfoldComponent.h"
 #include "UI/UnmadePlayerPreferences.h"
@@ -556,6 +557,22 @@ bool AUnmadePrototypeHub::SavePlayerSession(AUnmadeCharacter* Player)
     return Result==UnmadeCore::CheckpointSave::Saved;
 }
 
+bool AUnmadePrototypeHub::CommitWorldEvent(FName Event,FName Subject)
+{
+    if(!GetWorld())return false;
+    auto* Player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+    return IsValid(Player)&&Player->CommitLocalEvent(Event,Subject,[&]{return WriteWorldSnapshot();});
+}
+bool AUnmadePrototypeHub::CommitRealmAftermathEvent(UnmadeCore::Realm Realm,int32 Choice)
+{
+    for(const auto& Region:UnmadeCore::LaterRealms)if(Region.realm==Realm)
+        return CommitWorldEvent(FName("World.LaterRealmResolved"),FName(UTF8_TO_TCHAR(Region.name)));
+    const bool Rain=Realm==UnmadeCore::Realm::WidowedRain;
+    return CommitWorldEvent(FName(Rain?(Choice==1?TEXT("World.SaltwakeCistern"):TEXT("World.SaltwakeLedger")):
+        (Choice==1?TEXT("World.CinderholdKiln"):TEXT("World.CinderholdDeed"))),
+        FName(Rain?TEXT("region.saltwake.port"):TEXT("region.cinderhold.hearth")));
+}
+
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
     if(!UnmadeSave::IsWorldWritable(GetWorld()))return false;
@@ -825,7 +842,8 @@ bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bComple
     const auto Outcome = RegionalTasks.Converse(Resident->home, ResidentUtf8.Get());
     if (Outcome == UnmadeCore::TaskResult::NoChange) return false;
 
-    if (!WriteWorldSnapshot())
+    if (!(Outcome==UnmadeCore::TaskResult::Completed?
+        CommitWorldEvent(FName("Player.HelpedVillage"),ResidentId):WriteWorldSnapshot()))
     {
         RegionalTasks.Restore(Previous);
         if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
@@ -975,6 +993,24 @@ bool AUnmadePrototypeHub::GetNearbyCommitPreview(
     return false;
 }
 
+bool AUnmadePrototypeHub::ResolvePreviewedCommit(FName Scope,int32 Choice)
+{
+    FName Current;FString Warning;
+    if(!GetNearbyCommitPreview(Choice,Current,Warning))return false;
+    const FTCHARToUTF8 ConfirmedId(*Scope.ToString()),CurrentId(*Current.ToString());
+    return UnmadeCore::ResolveConfirmedAction(ConfirmedId.Get(),CurrentId.Get(),[&](auto Family){
+        switch(Family){
+        case UnmadeCore::ConfirmedAction::Faction:return ResolveNearbyFaction(static_cast<UnmadeCore::FactionEnding>(Choice));
+        case UnmadeCore::ConfirmedAction::Frontier:return ResolveNearbyFrontier(Choice);
+        case UnmadeCore::ConfirmedAction::Afterlight:return ResolveNearbyAfterlight(Choice);
+        case UnmadeCore::ConfirmedAction::RealmAftermath:return ResolveNearbyRealmAftermath(Choice);
+        case UnmadeCore::ConfirmedAction::WitnessBraid:return ResolveNearbyWitnessBraid(Choice);
+        case UnmadeCore::ConfirmedAction::WitnessReturn:return ResolveNearbyWitnessReturn(Choice);
+        default:return false;
+        }
+    });
+}
+
 bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome)
 {
     if(!GetWorld() || Outcome==UnmadeCore::FactionEnding::Unresolved)return false;
@@ -993,7 +1029,7 @@ bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome
             const auto Before=Chronicle.Snapshot();
             if(Chronicle.Decide(Arc.faction,Outcome)!=UnmadeCore::FactionResult::Resolved)
                 return false;
-            if(!WriteWorldSnapshot())
+            if(!CommitWorldEvent(FName("World.FactionResolved"),FName("region.prototype.hub")))
             {
                 Chronicle.Restore(Before);
                 return false;
@@ -1145,7 +1181,7 @@ bool AUnmadePrototypeHub::ResolveNearbyFrontier(int32 Ending)
             const auto Before=Frontier.Snapshot();
             if(Frontier.Resolve(Outpost.realm,Ending)!=UnmadeCore::FrontierEvent::Resolved)
                 return false;
-            if(!WriteWorldSnapshot())
+            if(!CommitWorldEvent(FName("World.FactionResolved"),FName("region.prototype.hub")))
             {
                 Frontier.Restore(Before);
                 return false;
@@ -1293,7 +1329,7 @@ bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
                 return false;
             }
             if(Result!=UnmadeCore::RealmAftermathResult::Resolved)return false;
-            if(!WriteWorldSnapshot())
+            if(!CommitRealmAftermathEvent(Spec.realm,Choice))
             {
                 RealmAftermath.Restore(Before);
                 return false;
@@ -1521,7 +1557,7 @@ bool AUnmadePrototypeHub::ResolveNearbyAfterlight(int32 Choice)
             return false;
         }
         if(Result!=UnmadeCore::AfterlightResult::Resolved)return false;
-        if(!WriteWorldSnapshot())
+        if(!CommitWorldEvent(FName(Choice==1?TEXT("World.AfterlightShelter"):TEXT("World.AfterlightNames")),FName("region.bellwold.refuge")))
         {
             Afterlight.Restore(Before);
             return false;
@@ -1617,7 +1653,7 @@ void AUnmadePrototypeHub::RefreshDistrictMood()
 bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
 {
     if (!IsValid(Site) || Site->GetWorld() != GetWorld() || !GetWorld()) return false;
-    const ACharacter* Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+    const auto* Player = Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
     if (!IsValid(Player) ||
         FVector::DistSquared(Player->GetActorLocation(), Site->GetActorLocation()) > FMath::Square(295.f))
         return false;
@@ -1635,7 +1671,10 @@ bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
     const bool bEchoChanged=EchoEvent==UnmadeCore::WitnessEchoEvent::FirstReading ||
         EchoEvent==UnmadeCore::WitnessEchoEvent::LaterMeaning;
     const bool bNew = Discoveries.Discover(Site->GetDistrict());
-    if ((bNew || bEchoChanged) && !WriteWorldSnapshot())
+    auto* Rites=Player->FindComponentByClass<UUnmadeTenfoldComponent>();
+    const bool MissingDeed=Rites&&!Rites->HasLegacyDeed(UnmadeCore::Deed::Discovered);
+    if ((bNew || bEchoChanged || MissingDeed) && !(Rites?
+        Rites->CommitActionDeeds(1u<<static_cast<int>(UnmadeCore::Deed::Discovered),[&]{return WriteWorldSnapshot();}):WriteWorldSnapshot()))
     {
         Discoveries.Restore(OldMask);
         WitnessEchoes.Restore(OldEcho);
@@ -1697,7 +1736,7 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
     const auto Before=WitnessBraid.Snapshot();
     if(WitnessBraid.Commit(Choice,WitnessEchoes)!=UnmadeCore::WitnessBraidEvent::Committed)
         return false;
-    if(!WriteWorldSnapshot())
+    if(!CommitWorldEvent(FName(Choice==1?TEXT("World.WitnessBraidShelter"):TEXT("World.WitnessBraidDocket")),FName("region.crossings.bridge")))
     {
         WitnessBraid.Restore(Before,WitnessEchoes);
         if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Red,
@@ -1729,7 +1768,7 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessReturn(int32 Choice)
     const auto Before=ReturnWitness.Snapshot();
     if(ReturnWitness.Choose(Choice,GetGameDay(),Dispatch,WitnessBraid.Outcome())!=
        UnmadeCore::WitnessReturnEvent::Chosen)return false;
-    if(!WriteWorldSnapshot())
+    if(!CommitWorldEvent(FName(Choice==1?TEXT("World.HessaPrivateCounsel"):TEXT("World.HessaPublicHearing")),FName("region.bellwold.refuge")))
     {
         ReturnWitness.Restore(Before,Dispatch,WitnessBraid.Outcome(),GetGameDay());
         return false;
@@ -2896,7 +2935,7 @@ bool AUnmadePrototypeHub::CommitRiteCast(AUnmadeCharacter* Player,UnmadeCore::Ri
             ?RealityLedger.Cast(Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness,true)
             :OuterReactions.Cast(Policy->realm,Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness);
         if(Mastered)StageNearbyRealmRite(Player,Id,ResonanceIndex,ResonanceResult);
-    },SaveCast);
+    },[&]{return Player->CommitRiteEvents(Id,CivicApplied,SaveCast);});
     if(!Saved){
         CivicApplied=false;
         NotifyRpg(TEXT("RITE NOT SAVED: cost, cooldown and realm progress were rolled back. No effect applied; retry the cast."));

@@ -1,3 +1,17 @@
+## 2026-10-17 — Combined action consequences across related systems
+
+- Combined the originating saves with existing witness/deed effects across the
+  six resolution families, village completion, aid, discovery, conflict/supplies,
+  rite/oath choices, cast witnesses and six Confluence conclusions.
+- Bound resolution to its exact revalidated preview; failed saving cannot use
+  the confirmation to attempt another family. Authored gates remain unchanged.
+- Repair old split aid from direct history/receipts without new testimony;
+  distinguish rumor and reopen earned-reward retries after startup.
+- Evidence: 128 action fault paths, 1,536 reloads, eight compiled mutations,
+  UBSan and portable/static checks. Added native memory-buffer rollback automation
+  is unrun; all Unreal acceptance remains pending. No new save IDs, authored
+  story content, paid services, artwork requirements or merge into main.
+
 ## 2026-10-17 — Chronicle consequence retention and oath intent
 
 - Separated threats from deliberate restitution; kept the existing scar and

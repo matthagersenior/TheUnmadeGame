@@ -13,7 +13,7 @@ class RealityConsequenceIntegration(unittest.TestCase):
                      "ParadoxConvergence","Oathbinding","Cartography"):
             self.assertIn("RiteId::"+rite,rules)
         self.assertIn("Hub->CommitRiteCast(Player,Id,Power.duration,",component)
-        self.assertIn("Player->ReportRealityConsequenceEvent(Id);",component)
+        self.assertIn("Player->CommitRiteEvents(Id,CivicApplied,SaveCast)",read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp"))
         self.assertIn("return Persist(true);",component)
         self.assertIn("bool mastered,bool physicallyWitnessed,bool insideFocus",rules)
         self.assertIn("if(mastered && physicallyWitnessed)",rules)

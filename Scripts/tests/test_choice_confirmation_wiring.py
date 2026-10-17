@@ -13,8 +13,10 @@ class ChoiceConfirmationSource(unittest.TestCase):
         self.assertIn("CommitmentGate.Attempt(",player)
         self.assertIn("CommitmentGate.Cancel()",player)
         self.assertIn("CommitmentAttempt::Confirmed",player)
-        self.assertIn("ResolveNearbyFaction(",player)
-        self.assertIn("ResolveNearbyRealmAftermath(",player)
+        self.assertIn("ResolvePreviewedCommit(Scope,",player)
+        self.assertLess(player.index("CommitmentGate.Attempt("),player.index("ResolvePreviewedCommit(Scope,"))
+        self.assertIn("ResolveNearbyFaction(",hub)
+        self.assertIn("ResolveNearbyRealmAftermath(",hub)
     def test_confirmation_in_github_native_suite(self):
         workflow=load(".github/workflows/static-checks.yml")
         self.assertIn("Tests/story/commitment_rules_test.cpp",workflow)

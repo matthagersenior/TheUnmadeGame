@@ -71,7 +71,7 @@ class QuestAndSceneHandoff(unittest.TestCase):
         self.assertIn("ResidentRelationships=RestoredResidentContinuity",hub)
         self.assertIn("bResidentContinuityRejected",hub)
         self.assertIn("RecordResidentConversation(Target->GetStableId())",char)
-        self.assertIn("RecordResidentAid(Target->GetStableId())",char)
+        self.assertIn("RecordResidentAid(Target->GetStableId(),AlreadyWitnessed)",char)
         self.assertIn("FindReturnDialogue(ID.Get())",ret)
     def test_ci_and_first_pc(self):
         ci=(ROOT/".github/workflows/static-checks.yml").read_text()

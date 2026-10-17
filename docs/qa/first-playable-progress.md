@@ -29,6 +29,7 @@ integration need; preserve development momentum and do not merge into main.
 
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
+| P1 coordinated action batch implemented; UE pending | Shared reversible witness/deed commits cover resolution families, tasks, discovery, aid, conflict/supplies, rites/oaths/casts and six Confluences. Exact confirmation scope prevents save-failure fallthrough. Older split aid repairs without new testimony; earned rewards retry after startup. 128 fault paths, 1,536 reloads, 352 Python / 81 portable C++ / 52 dependency checks and eight mutations pass. Native memory rollback test is unrun. |
 | P1 chronicle consequences implemented; UE pending | Threats break but never redeem; explicit restitution keeps its authored gates and scar. Deeds/verified roads/oath consequences retain five-second retries; every combined writer captures live Chronicle/Confluence. Both oath bonuses clear on break, other buffs remain. 270 fault paths, 3,240 reloads and seven mutation regressions pass; actual actors/IO remain pending. |
 | P1 rite/victory commits implemented; UE pending | Cast cost/trial/cooldown and staged civic/resonance changes share one write, with complete rollback before runtime effects. All three named bosses retain retryable milestone receipts; Hollow Keeper mercy no longer loses failed rewards. 1,080 cast cases, 24 resonance paths and 12 named receipt faults pass portable checks. Verify actual targeting, projectile defeats, mercy, timing and UI in Unreal. |
 | P1 complete capture implemented; UE pending | Every combined writer preflights its staged fields, captures the accepted live world/player, then revalidates before storage. World capture preserves caller-owned patches. Field surveys stage/rollback live progress before capture. 216 nine-realm component paths, 1,080 reloads and 48 survey fault paths pass; verify actual actor capture ordering in Unreal. |
@@ -47,7 +48,7 @@ integration need; preserve development momentum and do not merge into main.
 | P1 defeat retries implemented; UE pending | Guardian/final-defeat commits attempt immediately, then retry failure every five active-world seconds instead of every actor tick. Success suppresses repeat commits for that phase. Portable tests cover 24 guardian and 72 final-phase fault/retry paths; confirmation expiry, retargeting, cancellation and consumed consent remain safe. |
 | P1 pending checkpoints implemented; UE pending | Session saves refuse to report success while an encounter receipt is pending. Read-only actor queries include hidden receipt owners and distinguish an old final body from the new phase. Load/New preserve unsaved-discard confirmation; explicit recovery never pre-saves. 114 portable fault sessions verify blocked checkpoint writes and normal saves after receipt commit. |
 | P1 handoff ownership implemented; UE pending | Target selection stays staged until a new-world owner registers. Travel failure restores original selection; a missing owner/failed world cannot unlock writes. Reentrant requests are rejected and destination backup pins survive arrival. All 64 profile/recovery combinations pass portable checks; UE delegate/build, startup ordering and real failed travel remain pending. |
-| P1 next connected batch | Trace originating aid/faction/discovery commits before their later consequence callbacks for interrupted-save/reload gaps. Preserve authored gates and consent; keep the nine-realm Unreal walkthrough, equipment/UI, travel and platform IO pending. Recheck drift before publishing. |
+| P1 next coordinated batch | Trace remaining direct anomaly/reality actions and travel/death checkpoints together: cost, effect, memory, reward and recovery order. Preserve authored gates and consent; keep actual nine-realm reachability, equipment/UI, travel and platform IO pending. Recheck drift before publishing. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -641,3 +642,48 @@ actual witness/LOS, equipment refresh, travel, controller feedback and interrupt
 platform IO remain pending. No Unreal playthrough, art/book requirement, charge
 or merge into main. Before publication the branch was 16 commits ahead and zero behind main
 `9606fec4`; the existing draft PR remains the integration point.
+
+## 2026-10-17 — Coordinated action, witness, deed and reward batch
+
+Moved the related fixes into one reviewed boundary instead of publishing each
+small defect separately. Six resolution families now stage their existing local
+witness events and deed credit before the original world writer. Village-task
+completion, discovery/deed credit, aid/relationship recognition, player conflict
+choices, supply delivery, rite choices, both explicit oath actions, cast witnesses
+and all six Confluence conclusions use the same reversible participant helper.
+The original world/cost owner retains its rollback; observers and deeds unwind
+before it. Presentation and earned-reward reconciliation follow success. Valid
+older records retain their identifiers, optional sections and authored outcomes.
+
+Confirmed faction/frontier/aftermath/braid/return choices now dispatch only to the
+exact revalidated preview scope. Failure cannot fall through to another nearby
+resolution family. Existing six-second, same-target/same-choice confirmation is
+preserved, and a failed attempt requires a fresh preview/confirmation.
+
+Aid recognition, direct local memories and Protected credit now share one save.
+A rumor cannot block actual aid as if the player had already provided it. Older
+split aid records can repair their missing relationship/deed from real direct
+history or an existing aid receipt without appending testimony or farming trust.
+Failed repair remains retryable. Earned milestone/civic reconciliation after
+startup now reopens the existing five-second retry/checkpoint guard on failure;
+feedback describes earned rewards rather than incorrectly saying startup only.
+
+Fresh evidence: 352 Python tests, 81 strict C++17 executables, all 52 dependency
+checks, the new scenario under UBSan and eight compiled mutation regressions pass.
+The scenario covers 128 fault/recovery paths across 32 action cases and 1,536
+reloads, plus confirmation dispatch, legacy aid repair, reward write/capacity
+failures, spent-supply idempotence, full observer history rollback and malformed
+late records that cannot replace good backups. Native ownership checks supplement
+these portable rules; source-contract assertions follow the moved commit owners.
+Structure, literals, hygiene, six Node release scenarios, transmedia, manuscript,
+lore and whitespace checks pass. No charges, paid providers or merge into main.
+
+Added `Unmade.Npc.ActionConsequenceRollback` for actual memory-component bounded
+history/reaction rollback. It is written but UNRUN. UHT/Editor compilation, real
+actors/LOS, equipment, menus/controllers, profile travel and interrupted platform
+IO remain pending. Portable storage does not establish filesystem atomicity.
+
+Next coordinated batch: remaining direct anomaly/reality actions and travel/death
+checkpoint boundaries, including cost/effect/event/reward ordering. Keep a whole
+realm-local opening-to-return walkthrough queued for the first Unreal host. Do
+not claim this batch makes every combat, service or movement event atomic.

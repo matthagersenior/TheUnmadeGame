@@ -1,3 +1,48 @@
+## 2026-10-17 — Coordinated action, witness, deed and reward batch
+
+Moved the related fixes into one reviewed boundary instead of publishing each
+small defect separately. Six resolution families now stage their existing local
+witness events and deed credit before the original world writer. Village-task
+completion, discovery/deed credit, aid/relationship recognition, player conflict
+choices, supply delivery, rite choices, both explicit oath actions, cast witnesses
+and all six Confluence conclusions use the same reversible participant helper.
+The original world/cost owner retains its rollback; observers and deeds unwind
+before it. Presentation and earned-reward reconciliation follow success. Valid
+older records retain their identifiers, optional sections and authored outcomes.
+
+Confirmed faction/frontier/aftermath/braid/return choices now dispatch only to the
+exact revalidated preview scope. Failure cannot fall through to another nearby
+resolution family. Existing six-second, same-target/same-choice confirmation is
+preserved, and a failed attempt requires a fresh preview/confirmation.
+
+Aid recognition, direct local memories and Protected credit now share one save.
+A rumor cannot block actual aid as if the player had already provided it. Older
+split aid records can repair their missing relationship/deed from real direct
+history or an existing aid receipt without appending testimony or farming trust.
+Failed repair remains retryable. Earned milestone/civic reconciliation after
+startup now reopens the existing five-second retry/checkpoint guard on failure;
+feedback describes earned rewards rather than incorrectly saying startup only.
+
+Fresh evidence: 352 Python tests, 81 strict C++17 executables, all 52 dependency
+checks, the new scenario under UBSan and eight compiled mutation regressions pass.
+The scenario covers 128 fault/recovery paths across 32 action cases and 1,536
+reloads, plus confirmation dispatch, legacy aid repair, reward write/capacity
+failures, spent-supply idempotence, full observer history rollback and malformed
+late records that cannot replace good backups. Native ownership checks supplement
+these portable rules; source-contract assertions follow the moved commit owners.
+Structure, literals, hygiene, six Node release scenarios, transmedia, manuscript,
+lore and whitespace checks pass. No charges, paid providers or merge into main.
+
+Added `Unmade.Npc.ActionConsequenceRollback` for actual memory-component bounded
+history/reaction rollback. It is written but UNRUN. UHT/Editor compilation, real
+actors/LOS, equipment, menus/controllers, profile travel and interrupted platform
+IO remain pending. Portable storage does not establish filesystem atomicity.
+
+Next coordinated batch: remaining direct anomaly/reality actions and travel/death
+checkpoint boundaries, including cost/effect/event/reward ordering. Keep a whole
+realm-local opening-to-return walkthrough queued for the first Unreal host. Do
+not claim this batch makes every combat, service or movement event atomic.
+
 ## 2026-10-17 — Retained chronicle consequences and explicit oath intent
 
 Threat events no longer call the combined break/redeem player control. A threat

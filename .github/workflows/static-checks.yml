@@ -350,6 +350,8 @@ jobs:
           /tmp/unmade-combat-memory
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/chronicle_history_recovery_test.cpp -o /tmp/unmade-history
           /tmp/unmade-history
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/action_consequence_batch_test.cpp -o /tmp/unmade-actions
+          /tmp/unmade-actions
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/component_world_capture_test.cpp -o /tmp/unmade-component-capture
           /tmp/unmade-component-capture
           g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/timed_progress_recovery_test.cpp -o /tmp/unmade-timed-progress

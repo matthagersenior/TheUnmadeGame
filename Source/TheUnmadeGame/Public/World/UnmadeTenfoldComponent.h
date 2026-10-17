@@ -34,6 +34,11 @@ public:
     void StudyConfluence();
     void ConfluenceChoice1();
     void ConfluenceChoice2();
+    bool HasLegacyDeed(UnmadeCore::Deed Deed)const {
+        const int Index=static_cast<int>(Deed);
+        return Index>=0&&Index<3&&(Chronicle.Snapshot().deeds&(1u<<Index))!=0;
+    }
+    bool CommitActionDeeds(unsigned Mask,TFunctionRef<bool()> Write);
     bool CaptureChronicle(class UUnmadePrototypeSave* Save)const;
     bool HasPendingHistory()const{return History.Pending();}
     void RecordThreatenedOath();

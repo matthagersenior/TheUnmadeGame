@@ -191,6 +191,7 @@ public:
     /** True only when a real interaction advanced a quest; completion flag is output. */
     bool TryResidentVillageTask(FName ResidentId, bool& bCompleted);
     void TryFactionConversation(FName ResidentId);
+    bool ResolvePreviewedCommit(FName Scope,int32 Choice);
     bool ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome);
     bool GetNearbyCommitPreview(int32 Choice,FName& Scope,FString& Warning) const;
     bool TryTravelFrontier(AUnmadeCharacter* Player);
@@ -231,7 +232,7 @@ public:
     FString DescribeUnansweredRoad(AUnmadeCharacter* Player) const;
     bool InspectUnansweredRoad(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool RecordResidentConversation(FName ResidentId);
-    bool RecordResidentAid(FName ResidentId);
+    bool RecordResidentAid(FName ResidentId,bool AlreadyWitnessed=false);
     FString GetResidentReturnLine(FName ResidentId,UnmadeCore::Realm Home) const;
     bool CommitFinalMorning(AUnmadeCharacter* Player,UnmadeCore::Morning Choice);
     bool WakeFinalEcho();
@@ -493,6 +494,8 @@ private:
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;
     void RestoreLivingWorld();
     void SaveLivingWorld();
+    bool CommitWorldEvent(FName Event,FName Subject);
+    bool CommitRealmAftermathEvent(UnmadeCore::Realm Realm,int32 Choice);
     bool WriteWorldSnapshot(AUnmadeCharacter* StrainOwner=nullptr);
     int32 ReadStoryChoice() const;
     void SpawnLoreSite(UnmadeCore::District District, FName SiteId,

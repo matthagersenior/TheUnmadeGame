@@ -1,4 +1,5 @@
 #include "Save/UnmadeSaveSession.h"
+#include "Save/UnmadeActionCommitRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadeTenfoldComponent.h"
 #include "Player/UnmadeCharacter.h"
@@ -85,6 +86,12 @@ void UUnmadeTenfoldComponent::BeginPlay()
             UE_LOG(LogTemp,Error,TEXT("Invalid confluence state rejected"));
         }
     }
+}
+
+bool UUnmadeTenfoldComponent::CommitActionDeeds(unsigned Mask,TFunctionRef<bool()> Write)
+{
+    if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return false;
+    return UnmadeCore::CommitActionDeeds(Chronicle,Mask,Write);
 }
 
 bool UUnmadeTenfoldComponent::CaptureChronicle(UUnmadePrototypeSave* Save)const
@@ -348,16 +355,13 @@ void UUnmadeTenfoldComponent::ChooseConfluence(int32 Outcome)
             TEXT("Combine both mastered abilities at this chamber within two minutes, with two real witnesses."));
         return;
     }
-    if(!Persist())
+    auto* Player=Cast<AUnmadeCharacter>(GetOwner());
+    if(!IsValid(Player)||!Player->CommitLocalEvent(FName("Reality.Rite"),FName("TheUnmade.Tenfold"),[&]{return Persist();}))
     {
         Confluence.Restore(Before);
         return;
     }
-    if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
-    {
-        Player->ReconcileEarnedRewards();
-        Player->ReportRiteWitnessEvent();
-    }
+    Player->ReconcileEarnedRewards();
     if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Cyan,
         FString::Printf(TEXT("CONFLUENCE COMPLETE: %s. The outcome is saved."),
             UTF8_TO_TCHAR(UnmadeCore::Confluences[SelectedConfluence].name)));
@@ -451,9 +455,9 @@ void UUnmadeTenfoldComponent::DecideRite(int32 Choice)
     const auto Result=Chronicle.Advance(Id,UnmadeCore::RiteAction::Decide,
         GatherContext(),Choice);
     if(Result!=UnmadeCore::RiteResult::Advanced){ExplainResult(Result);return;}
-    if(!Persist()){Chronicle.Restore(Before);return;}
-    if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
-        Player->ReportRiteChoiceEvent(Choice);
+    auto* Player=Cast<AUnmadeCharacter>(GetOwner());
+    if(!IsValid(Player)||!Player->CommitLocalEvent(FName(Choice==1?TEXT("World.RiteProtect"):TEXT("World.RiteReveal")),
+        FName("TheUnmade.Tenfold"),[&]{return Persist();})){Chronicle.Restore(Before);return;}
     ShowRite();
 }
 void UUnmadeTenfoldComponent::DecideSolidarity(){DecideRite(1);}
@@ -539,15 +543,18 @@ void UUnmadeTenfoldComponent::InvokeRite()
     }
     Player->ApplyRiteAbility(Id,Power,SelectedLaw);
     Hub->ApplyRiteEnvironment(Id,Power.duration,Chronicle.IsMastered(Id));
-    if(CivicApplied)Player->ReportRealityConsequenceEvent(Id);
-    Player->ReportRiteWitnessEvent();
     ShowRite();
 }
 
 void UUnmadeTenfoldComponent::BreakChosenOath()
 {
     if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return;
-    const auto Result=UnmadeCore::CommitOathChoice(Chronicle,GatherContext(),[&]{return Persist();});
+    auto* Player=Cast<AUnmadeCharacter>(GetOwner());if(!IsValid(Player))return;
+    const bool Redeeming=Chronicle.Snapshot().brokenOaths==1&&!Chronicle.Snapshot().oathRedeemed;
+    const auto Result=UnmadeCore::CommitOathChoice(Chronicle,GatherContext(),[&]{
+        return Player->CommitLocalEvent(FName(Redeeming?TEXT("World.RedeemedOath"):TEXT("World.BrokenOath")),
+            FName("Bellwold.Refuge"),[&]{return Persist();});
+    });
     if(Result==UnmadeCore::OathChoice::SaveFailed){
         UnmadeRpgFeedback(-1,8.f,FColor::Red,TEXT("OATH CHANGE NOT SAVED: the choice was rolled back. Try again when saving is available."));
         return;
@@ -558,12 +565,10 @@ void UUnmadeTenfoldComponent::BreakChosenOath()
     }
     if(Result==UnmadeCore::OathChoice::Unavailable){ExplainResult(UnmadeCore::RiteResult::BrokenOath);return;}
     if(Result==UnmadeCore::OathChoice::Redeemed){
-        if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))Player->ReportRedeemedOathEvent();
         UnmadeRpgFeedback(-1,9.f,FColor::Green,TEXT("OATH RESTORED: the betrayal is still remembered, but witnesses accept your costly restitution."));
         return;
     }
     RemoveOathPowers();
-    if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))Player->ReportBrokenOathEvent();
     UnmadeRpgFeedback(-1,8.f,FColor::Red,TEXT("OATH BROKEN: the choice persists. Its power is lost until witnessed restitution."));
 }
 

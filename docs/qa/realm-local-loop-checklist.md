@@ -92,9 +92,9 @@ Mera's consent; they do not turn every realm's resident into that storyline.
   milestone receipts and retry before stopping actor ticks. Checkpoints include
   hidden pending actors. Twelve receipt fault cases and 300 reloads pass portable
   checks; actual ranged impacts, mercy sight gates and actor timing remain pending.
-- Next source/portable expansion: originating aid/faction/discovery saves before
-  consequence callbacks. Keep authored gates, per-realm receipts and consent;
-  monitor branch divergence without unnecessary synchronization.
+- Next source/portable expansion: remaining anomaly/reality actions and travel/
+  death checkpoint boundaries. Keep authored gates, per-realm receipts and
+  consent; monitor branch divergence without unnecessary synchronization.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,
@@ -126,3 +126,21 @@ witnessed redemption. Pending history must explain incomplete checkpoints and
 retain explicit unsaved-discard confirmation. Portable fixtures cover all nine
 realm IDs and isolated profile stores; actual input, visibility, observers,
 equipment, timers, travel and filesystem failures remain Unreal acceptance work.
+
+## 17 October: coordinated action acceptance
+
+Across the nine realm identifiers, interrupt each local resolution, village
+completion, aid, discovery, conflict/supply outcome, rite/oath choice, cast and
+Confluence conclusion at either write. Check that neither the decision nor new
+witness/deed effects survives rejection, and that a retry needs the original
+consent gate. Move to another final witness after a failed save: the old preview
+must not authorize that decision. On success, reload immediately and retain the
+chosen consequence with its original local accounts; absent residents and rumor
+sources remain intact. Repair older split aid once, with no extra trust event.
+Fill inventory or fail a milestone write after startup, make room/re-enable
+saving, wait five active seconds and reload without duplicate grants/refills.
+
+Portable evidence adds 32 action cases, 128 faults and 1,536 reloads. The native
+`Unmade.Npc.ActionConsequenceRollback` buffer/reaction test is pending, along with
+UHT/Editor, physical sight/reachability, controller feedback, platform IO and the
+full realm walkthrough. Do not count these fixtures as an Unreal playthrough.

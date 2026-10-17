@@ -29,7 +29,8 @@ class SixLaterRealmSource(unittest.TestCase):
         self.assertIn("LaterRealm.Restore(Before)",world)
         self.assertIn("InspectLaterRealmSite(",player)
         self.assertIn("TryLaterRealmConversation(",player)
-        self.assertIn("ResolveNearbyRealmAftermath(",player)
+        self.assertIn("ResolvePreviewedCommit(Scope,",player)
+        self.assertIn("return ResolveNearbyRealmAftermath(",world)
         self.assertIn("Realm.centerY-1170",player)
         self.assertIn("GetAtlasAttunement()",world)
         self.assertNotIn("UPROPERTY(SaveGame)\n    UPROPERTY(SaveGame)",

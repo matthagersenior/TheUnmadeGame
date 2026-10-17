@@ -29,4 +29,4 @@ class StartupRewardWiring(unittest.TestCase):
   self.assertIn('NextStartupRewardsAttempt=GetWorld()->GetTimeSeconds()+5',tick)
   save=s.split('bool AUnmadeCharacter::SaveSessionNow()',1)[1]
   self.assertLess(save.index('!InitializeStartupRewards()'),save.index('SavePlayerSession(this)'))
-  self.assertIn('STARTUP REWARDS PENDING',s)
+  self.assertIn('EARNED REWARDS PENDING',s)
