@@ -32,6 +32,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Input/Reply.h"
 #include "InputCoreTypes.h"
+#include "Input/Events.h"
 #include "Kismet/GameplayStatics.h"
 namespace {
 constexpr UnmadeCore::ItemId TradeGoods[]={UnmadeCore::ItemId::IronScrap,UnmadeCore::ItemId::WildHerbs,UnmadeCore::ItemId::BlankParchment,UnmadeCore::ItemId::HearthSalve,UnmadeCore::ItemId::StrainVial};
