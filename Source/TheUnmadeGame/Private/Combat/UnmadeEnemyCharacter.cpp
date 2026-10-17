@@ -394,7 +394,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         // the formation tactical instead of launching overlapping strikes.
         const FVector Side(-Delta.Y,Delta.X,0);
         const FVector Flank=Player->GetActorLocation()+Side.GetSafeNormal2D()*
-            ((GetUniqueID()&1u)?260.f:-260.f);
+            (bTacticalFlank?Tactic.flankSide*260.f:((GetUniqueID()&1u)?260.f:-260.f));
         const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:(bCircleForOpening||bTacticalFlank)?Flank:Intent==UnmadeCore::EnemyIntent::Retreat
             ?GetActorLocation()-Delta.GetSafeNormal()*480.f
             :Player->GetActorLocation();
@@ -524,7 +524,8 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         }
         else
         {
-            CombatSignal->SetText(FText::GetEmpty());
+            CombatSignal->SetText(FText::FromString(bTacticalFlank
+                ?FString(UTF8_TO_TCHAR(Tactic.cue)):FString()));
             TelegraphLight->SetIntensity(0.f);
         }
     }

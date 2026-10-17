@@ -6,9 +6,12 @@
 namespace UnmadeCore {
 struct OpeningBeat {int stage;const char* title;const char* objective;const char* cinematicCue;};
 inline OpeningBeat NextOpeningBeat(const ExpeditionState& e,const DepthArc& personal,bool hometownKnown) noexcept {
- if(!e.brief)return {0,"The Bell That Had No Last Note",
+ if(!e.brief&&!hometownKnown)return {0,"The Bell That Had No Last Note",
    "Begin in the Crossings. Listen to Bellwold or Paperhaven, or examine a landmark before taking a side.",
    "A bell is heard where the road has no matching witness. No narrator tells you which account is true."};
+ if(!e.brief)return {0,"A First Recorded Question",
+   "Open Character if you want to set your identity, then hear a living person or inspect a real landmark before choosing.",
+   "A face, a road and an unanswered bell. The player controls the pace and may decline the first invitation."};
  if(!(e.visited&1))return {1,"The First Wrong Road",
    "Follow the frontier directions from the recorded adventure board. Do not abandon the settlement's unanswered question.",
    "The original witness leaves. The road's silhouette contradicts the town record."};
@@ -36,7 +39,6 @@ inline OpeningBeat NextOpeningBeat(const ExpeditionState& e,const DepthArc& pers
  if(!personal.choice)return {9,"An Accord That Remains",
    "Preview the protected reserve or public witness and deliberately confirm the choice. Both have later costs.",
    "The choice returns to a local person's face and the road they must live with."};
- (void)hometownKnown;
  return {10,"The Road Is Not Finished",
    "Return on another day, inspect how people and services changed, or pursue the next main-story road.",
    "The same people remember the choice; the camera does not call the matter solved."};

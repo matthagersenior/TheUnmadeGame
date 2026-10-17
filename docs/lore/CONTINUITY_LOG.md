@@ -963,3 +963,16 @@ Alertness resets on invalid/unready player world. Elder, champion and boss
 rules are isolated; narrative identity, rewards, testimony provenance,
 consequence ledger and saves remain unchanged. Portable tests are source-only,
 with Unreal perception and actual stealth routes still pending.
+
+## 2026-10-17 — Combat, first-return and community feedback
+
+- Twelve ordinary creature kinds gain deterministic species-level combat
+  decisions and lateral cues; elite and named encounters stay independent.
+- First-journey beats and nine investigation leads derive only from actual
+  expedition/Depth flags. No journal-generated quest progress.
+- Dual-rite challenges show next requirements for the established two real
+  casts, altar and truthful witnesses.
+- Household/community journal and named dialogue respond to recorded wages,
+  heat, walkout and Mera's real guarantee. No fabricated reputation/loans.
+- Added source handoff for 11 opening-to-first-return cinematic/subtitle
+  beats. Real scenes, audio imports, actors and Unreal tests remain open.

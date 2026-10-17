@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "source": "UnmadeCore::NextOpeningBeat",
+  "status": "authoring-only—not rendered or recorded",
+  "beats": [
+    {
+      "stage": 0,
+      "title": "The Bell That Had No Last Note",
+      "shot_instruction": "unanswered Crossings bell and visibly contradictory street record",
+      "sound_cue": "bell without visible tower",
+      "subtitle_prompt": "The Bell That Had No Last Note",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 1,
+      "title": "A First Recorded Question",
+      "shot_instruction": "player-controlled identity and first witness",
+      "sound_cue": "footfalls on stone",
+      "subtitle_prompt": "A First Recorded Question",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 2,
+      "title": "The First Wrong Road",
+      "shot_instruction": "walk to frontier; no teleport",
+      "sound_cue": "wind over abandoned sign",
+      "subtitle_prompt": "The First Wrong Road",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 3,
+      "title": "What the Door Remembers",
+      "shot_instruction": "physical threshold responds to actual entrance",
+      "sound_cue": "distant chamber knocks",
+      "subtitle_prompt": "What the Door Remembers",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 4,
+      "title": "The Cost of Evidence",
+      "shot_instruction": "human and documentary evidence before choice",
+      "sound_cue": "paper and tense breathing",
+      "subtitle_prompt": "The Cost of Evidence",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 5,
+      "title": "An Answer That Can Be Refused",
+      "shot_instruction": "full visible enemy tell and nonviolent option",
+      "sound_cue": "enemy warning then guarded impact",
+      "subtitle_prompt": "An Answer That Can Be Refused",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 6,
+      "title": "The Return Has Witnesses",
+      "shot_instruction": "same street and actual return witness",
+      "sound_cue": "altered settlement ambient loop",
+      "subtitle_prompt": "The Return Has Witnesses",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 7,
+      "title": "The Earned Tool",
+      "shot_instruction": "earned weapon and armor comparison in hands",
+      "sound_cue": "gear meeting workbench",
+      "subtitle_prompt": "The Earned Tool",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 8,
+      "title": "The Person Beyond the Quest",
+      "shot_instruction": "named resident at their working home",
+      "sound_cue": "household work and warmth",
+      "subtitle_prompt": "The Person Beyond the Quest",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 9,
+      "title": "Someone Disagrees",
+      "shot_instruction": "two different eyewitness perspectives",
+      "sound_cue": "contrasting testimony ambience",
+      "subtitle_prompt": "Someone Disagrees",
+      "skippable": true,
+      "requires_saved_story_state": true
+    },
+    {
+      "stage": 10,
+      "title": "An Accord That Remains",
+      "shot_instruction": "public consequence and the next lived day",
+      "sound_cue": "familiar road sound changed",
+      "subtitle_prompt": "An Accord That Remains",
+      "skippable": true,
+      "requires_saved_story_state": true
+    }
+  ]
+}
