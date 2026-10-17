@@ -57,8 +57,7 @@ bool AUnmadePrototypeHub::RecordPetitionRelayConversation(FName StableId)
         return true;
     }
     RefreshPetitionRelayWorld();
-    NotifyRpg(GetPetitionRelayJournal()+
-        (Mera?GetPetitionRelayResidentLine(StableId):GetPetitionRelayResidentLine(StableId)));
+    NotifyRpg(GetPetitionRelayJournal()+GetPetitionRelayResidentLine(StableId));
     return true;
 }
 
@@ -86,7 +85,7 @@ bool AUnmadePrototypeHub::TryPetitionRelayInteraction(
            PetitionRelay.Stage()<2||
            PetitionRelay.Route()!=(SaltPrivate?1:2)))continue;
         if((CrossPrivate||CrossPublic)&&
-          (Region->realm!=UnmadeCore::Realm::TheReach|| // Crossings city
+          (Region->realm!=UnmadeCore::Realm::ThreefoldReach|| // Crossings city
            PetitionRelay.Stage()!=4||
            PetitionRelay.Route()!=(CrossPrivate?1:2)))continue;
         const double Distance=FVector::DistSquared(At,It->GetActorLocation());
