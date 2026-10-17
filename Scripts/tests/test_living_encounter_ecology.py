@@ -20,7 +20,7 @@ class LivingEncounterEcology(unittest.TestCase):
         self.assertIn('TActorIterator<AUnmadeEnemyCharacter>',tick)
         self.assertIn('UnmadeCore::MayBeginOrdinaryWindup',tick)
         self.assertIn('UnmadeCore::ShouldCircleForOpening',tick)
-        self.assertIn('other->ExpeditionArc<0',tick)
+        self.assertIn('other->ExpeditionArc>=0',tick)
         self.assertIn('other->WindupEndsAt',tick)
         self.assertIn('bCircleForOpening?',tick)
         self.assertIn('NextWindupAllowedAt',tick)
