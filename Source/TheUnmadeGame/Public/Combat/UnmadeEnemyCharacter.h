@@ -22,6 +22,7 @@ public:
     AUnmadeEnemyCharacter();
     virtual void Tick(float DeltaSeconds) override;
     virtual void BeginPlay() override;
+    virtual bool HasPendingDefeatSave(const AUnmadePrototypeHub& Hub) const;
     void ConfigureCinderholdElder();
     void ConfigureExpedition(int32 Arc,int32 Slot,UnmadeCore::ExpeditionRole Role);
     void ConfigureWingGuardian(int Arc);

@@ -1,46 +1,47 @@
-# Current repository publishing clarification
+# Canon updates and optional illustrations
 
-Canonical Markdown is the reproducible repository source; see [publishing workflow](../publishing.md). Historical illustrated editions remain preserved and must be rebuilt and visually checked when a new illustrated edition is issued. Repository hygiene changes do not claim a new illustrated edition. The policies below preserve the historical gameplay/illustrated delivery requirements.
+Current policy: 16 October 2026, per the creator's instruction. This replaces
+prior requirements to regenerate illustrated books with each gameplay update.
+Earlier requirements quoted in dated logs, editions and receipts are historical;
+they do not impose current development or release gates.
 
-# Canon synchronization rule
+## Required source continuity
 
-**When adding or changing a gameplay mechanic, realm, major quest, NPC, item, faction or consequence:**
-1. Update `docs/lore/living-world-continuity.md` and log the change in `docs/lore/CONTINUITY_LOG.md`.
-2. Edit the **complete** illustrated master (DOCX/PDF), the visual atlas if scenery changes, and ZIP with source, art and manifest. Do not deliver a partial addendum as a replacement for the master.
-3. Explicitly mark source-implemented, engine-verified and future proposals. All ten signature abilities must remain grounded in player-visible interactions. All additions should be evaluated against the four RPG pillars.
-4. Run the domain and source-contract CI. For file artifacts, render and inspect PDFs/DOCX, verify exact paths and ZIP integrity before linking.
-5. Do not claim automatic artifact regeneration in ChatGPT without an actual repeatable, accessible build path. `Scripts/tests/test_lore_continuity.py` is a guard that catches missing canon coverage and stale item totals; it does not regenerate images or PDFs.
+Canonical Markdown is the repository authority. Keep gameplay changes aligned
+with `living-world-continuity.md` and `CONTINUITY_LOG.md` in the same commit;
+`Scripts/check_lore_change.py` enforces these two source co-updates only.
+Record engineering changes in `docs/CHANGELOG.md`. Preserve stable actor/city IDs,
+consent, saved consequences, mutually exclusive endings and OPEN mysteries.
 
-The source guide is version-controlled; the downloadable package is a dated release snapshot that must be rebuilt when canon changes.
+Volume X (`VOLUME_X_THE_UNANSWERED_ATLAS.md`) and the machine-readable
+`Authoring/transmedia_storyworld_v1.json` remain primary editorial references.
+Distinguish authored facts from narrator/witness claims, preserve knowledge
+boundaries and evidence provenance, and do not canonize a player's chosen ending
+or reveal an OPEN mystery without a creative decision. Run
+`python Scripts/validate_transmedia_storyworld.py --check` when relevant.
 
-## Transmedia canon and primary storyworld volumes
+## Illustrations available when needed
 
-The historical illustrated editions I–IX are dated literary snapshots and must not be silently rewritten or referred to as self-updating. **Volume X — The Unanswered Atlas** (`docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md`) is a new primary editorial source, not merely a companion: future novels, television, films, episodes, and game expansions must cite its existing stable actor/city and mystery/callback IDs. Its machine-readable register is `Authoring/transmedia_storyworld_v1.json` and the regression gate is `python Scripts/validate_transmedia_storyworld.py --check`.
+Illustrations, illustrated books and their PDF/DOCX/ZIP packages are optional.
+They are not prerequisites for gameplay development, pull requests, passing CI,
+source releases or declaring an engineering task delivered. There is no required
+illustration count, cadence, automatic generation or book-rebuild obligation.
 
-When issuing a new narrative work, record (a) canonical supporting sources, (b) authored facts versus in-world claims, (c) narrator/witness knowledge boundaries, (d) callbacks with physical provenance and real change in significance, (e) the OPEN mysteries deliberately left unanswered, and (f) whether its chronology assumes Held Morning, Many Mornings, or neither. Do not overwrite the player's chosen protagonist or canonize one mutually exclusive game ending. A secret revealed without revising the evidence trail and obtaining an explicit canon decision is a continuity error. Screen staging can change framing but not the causal core of an already established event.
+Keep existing art/scene briefs, historical edition references and
+`Scripts/publishing/` builders available for on-demand illustration or publishing.
+A requested standalone concept image can be produced independently of a book.
+See [publishing workflow](../publishing.md) for inputs and provenance. Paid image
+providers, commissions or infrastructure require approval before spending.
 
-The new literary visual motifs and performances are editorial production contracts only; they do not create engine actors, dialogue, recorded performances or save values. Refresh and render the full complete illustrated edition separately if distributing an updated binary book/PDF. Existing source CI does not rebuild books automatically.
+When an illustrated edition is actually issued, preserve earlier editions,
+obtain the required masters/art, render and inspect the actual output, verify
+archive integrity and hashes, then update `LATEST_ILLUSTRATED_RELEASE.md` and
+`RELEASE_SHA256_MANIFEST.json`. Never invent receipts or refresh artifact hashes
+without producing the corresponding files. Missing external masters block only
+that requested book publication, not ongoing game development.
 
-**CI enforcement added:** `Scripts/check_lore_change.py` requires both `docs/lore/living-world-continuity.md` and `docs/lore/CONTINUITY_LOG.md` in the same commit as any changed Unreal source file. The illustrated PDF, Word book, art atlas and ZIP still require separate artifact regeneration and visual QA; this source guard does not create or update those downloads automatically.
+## Evidence remains explicit
 
-
-## Volume X publication receipt and non-negotiable delivery gate (2026-10-10)
-
-The complete illustrated Volume X edition was rendered on 2026-10-10 from the cumulative 84-page Volume IX illustrated Word source, the complete `docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md` literary manuscript, and `docs/design/volume-x-witness-echo-gameplay.md`. Outputs were inspected as a **104-page cumulative illustrated Bible PDF/DOCX** and a **29-page standalone Volume X PDF/DOCX**. The deliverable ZIP includes both editions, Markdown sources, selected original art, a release manifest, and an executable Python build recipe. This dated edition was delivered as conversation download attachments, not committed to GitHub or published as a GitHub Release; historical standalone illustrated editions remain unchanged.
-
-**Every subsequent canon/gameplay update must close its publishing loop.** Update source canon, rebuild the cumulative illustrated Bible and current standalone volume, render/QA the PDF/DOCX, verify full content and archive integrity, and return direct download links in the same task completion reply. If a build/runtime limitation prevents regeneration, do not call the task fully delivered or claim the Bible is current: explicitly report the unissued book as an outstanding blocker. Passing CI is not a substitute for publication. New revisions should update `docs/lore/LATEST_ILLUSTRATED_RELEASE.md` with the date, source commit, included changes, artifacts actually produced, QA results, and any known gap. Version these edition receipts, never imply prior download links update in place.
-
-The Volume X edition's portable publisher recipe is included in the previously issued ZIP, together with the base-source hashes and complete editable volumes. To make this fully automatic in GitHub CI in future, the repo still needs a legally distributable baseline illustrated asset and an artifact-upload workflow. This policy records the requirement honestly; a fully automated publisher is **not yet installed**.
-
-
-## No-green-CI-without-release-receipt rule (11 October 2026)
-
-As a direct consequence of the v8/v9 missed book publication, the source-change gate now requires a **dated, actual illustrated-release receipt** at `docs/lore/LATEST_ILLUSTRATED_RELEASE.md` and the updated `docs/lore/RELEASE_SHA256_MANIFEST.json` **in the same commit** as any Unreal gameplay source change, along with the canonical continuity files. The accompanying real deliverables must include both complete editable illustrated Word books, both rendered PDFs, the atlas and the manifest/ZIP. Their downloads must be delivered in the task, and the release receipt must specify the exact available file-library locations and code baseline.
-
-This check is intentionally stricter about missing documentation, but **cannot technically verify off-repository binary files**. The release manifest holds their hashes and page/image checks; the human publishing step must render/inspect and upload the actual books before signaling completion. The v9 edition is saved to `/The Unmade/Illustrated Bible Editions/2026-10-11 Playable World v9`. GitHub can hold text and hashes but currently cannot retrieve or independently validate the private ChatGPT Library binaries in CI; it would be dishonest to claim otherwise.
-
-
-
-## Performance kit acceptance gate (2026-10-11)
-
-A portable glTF containing joint weights, clips and PBR properties is neither an Unreal `.uasset` nor a playable actor until actually imported in an editor. The source may attempt `LoadObject` for stable skeletal mesh/material/clip paths, but release receipts must expressly state whether the engine imports, bone transforms, movement, combat hits and camera interaction have been tested. A fallback is not evidence that the imported rig worked. The first-PC test must verify navigation bounds and dynamic rebuild over the six generated sites, user-visible strikes with counterplay and restored camera/actor pose after cinematic skip. Preserve old saves and consent/wage witnesses. The dated complete Bible must still be rebuilt **from the preceding full illustrated master**, not an addendum. Use latest release digest file for byte-specific provenance; do not claim GitHub CI can read private Library assets.
+Concept illustrations are not engine screenshots. A glTF, animation clip or
+import plan is not an imported Unreal asset. Report source tests, actual asset
+imports, Unreal compilation, rendering and playtest evidence separately.

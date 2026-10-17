@@ -1,7 +1,10 @@
 #include "UI/UnmadeRpgFeedback.h"
+#include "Combat/UnmadeEncounterInterruptionRules.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Combat/UnmadeRealmGuardian.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
+#include "Save/UnmadeSaveSession.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
@@ -17,6 +20,7 @@ void AUnmadeRealmGuardian::ConfigureGuardian(UnmadeCore::Realm Id)
 {
     const int idx=UnmadeCore::LaterIndex(Id);
     if(idx<0)return;
+    DefeatSave.Reset();
     HomeRealm=Id;
     Encounter=UnmadeCore::GuardianBeat(Id);
     const auto& Profile=UnmadeCore::RealmGuardians[idx];
@@ -41,7 +45,11 @@ void AUnmadeRealmGuardian::Tick(float DeltaSeconds)
     if(!World || idx<0)return;
     AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
         UGameplayStatics::GetActorOfClass(World,AUnmadePrototypeHub::StaticClass()));
-    if(!IsValid(Hub))return;
+    const auto Interrupt=[&]{
+        UnmadeCore::InterruptEncounter(Encounter);bWarningShown=false;
+        GetCharacterMovement()->StopMovementImmediately();
+    };
+    if(!IsValid(Hub)){Interrupt();return;}
     if(Hub->GetRealmGuardianOutcome(HomeRealm)!=UnmadeCore::GuardianOutcome::Unresolved)
     {
         SetGuardianResolved();
@@ -51,13 +59,17 @@ void AUnmadeRealmGuardian::Tick(float DeltaSeconds)
     {
         // Keep defeated actor available for retry if persistence fails. Never
         // falsely report an ending or discard an old save on a failed write.
-        Hub->ResolveRealmGuardian(HomeRealm,false);
+        const auto Saved=DefeatSave.Attempt(static_cast<int>(HomeRealm),World->GetTimeSeconds(),
+            [&]{return Hub->ResolveRealmGuardian(HomeRealm,false);});
+        if(Saved==UnmadeCore::DefeatSaveResult::FirstFailure)
+            UnmadeRpgFeedback(-1,10.f,FColor::Red,
+                TEXT("Guardian victory is not saved. Retrying every five seconds; reloading returns to the previous save."));
         return;
     }
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
         UGameplayStatics::GetPlayerCharacter(World,0));
-    if(!IsValid(Player)||!IsValid(Player->GetCombat())||
-       Player->GetCombat()->IsDefeated())return;
+    if(!UnmadeCore::RequireEncounterPlayer(IsValid(Player)&&IsValid(Player->GetCombat())&&
+       !Player->GetCombat()->IsDefeated()&&Player->GetWorld()==World&&UnmadeSave::IsSessionWritable(Player),Interrupt))return;
     FVector Delta=Player->GetActorLocation()-GetActorLocation();
     Delta.Z=0;
     const double Distance=Delta.Size();
@@ -97,4 +109,11 @@ void AUnmadeRealmGuardian::Tick(float DeltaSeconds)
         bWarningShown=false;
     }
     if(Distance>50)SetActorRotation(Delta.Rotation());
+}
+
+bool AUnmadeRealmGuardian::HasPendingDefeatSave(const AUnmadePrototypeHub& Hub)const
+{
+    return IsValid(GetCombat())&&GetCombat()->IsDefeated()&&
+        Hub.GetEchoQuestEnding(HomeRealm)!=0&&
+        Hub.GetRealmGuardianOutcome(HomeRealm)==UnmadeCore::GuardianOutcome::Unresolved;
 }

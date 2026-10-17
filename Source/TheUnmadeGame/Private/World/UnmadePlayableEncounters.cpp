@@ -12,6 +12,7 @@
 #include "Materials/MaterialInterface.h"
 #include "World/UnmadeFieldSurveySave.h"
 #include "Save/UnmadePrototypeSave.h"
+#include "Save/UnmadeCaptureRules.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -56,18 +57,12 @@ bool AUnmadePrototypeHub::TryFieldSurveyInteraction(AUnmadeCharacter* Player,
         const int32 Previous=FieldSurveyStages[i];
         if(Previous<2)
         {
-            auto* Save=UUnmadePrototypeSave::LoadOrCreate();
-            if(!Save)return true;
-            Save->bHasFieldSurveys=true;
-            Save->FieldSurveyStages=FieldSurveyStages;
-            Save->FieldSurveyStages[i]=Previous+1;
-            if(!UnmadeSave::SaveGameToSlot(Save))
+            if(!UnmadeCore::CommitFieldSurveyStage(FieldSurveyStages,i,[&]{return WriteWorldSnapshot();}))
             {
                 if(GEngine)UnmadeRpgFeedback(-1,4.f,FColor::Red,
                     TEXT("Fieldwork could not save. No route or objective changed; try again."));
                 return true;
             }
-            FieldSurveyStages=Save->FieldSurveyStages;
             if(FieldSurveyGates.IsValidIndex(i)&&FieldSurveyGates[i].IsValid())
             {
                 FieldSurveyGates[i]->SetActorEnableCollision(false);
@@ -93,12 +88,13 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
     if(!GetWorld())return;
     FieldSurveyStages.Init(0,6);
     auto* Save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());
+    if(!Save&&UnmadeSave::HasRecord())bFieldSurveySaveUsable=false;
     {
         if(Save&&Save->bHasFieldSurveys){bFieldSurveySaveUsable=false;
             if(Save->FieldSurveyStages.Num()==6){bool valid=true;
                 for(int32 stage:Save->FieldSurveyStages)if(stage<0||stage>2)valid=false;
                 if(valid){FieldSurveyStages=Save->FieldSurveyStages;bFieldSurveySaveUsable=true;}}}
-        else if(UnmadeSave::SlotName()==TEXT("UnmadePrototypeNPC")&&UGameplayStatics::DoesSaveGameExist(TEXT("UnmadeOptionalFieldSurveys"),0))
+        else if(bFieldSurveySaveUsable&&UnmadeSave::SlotName()==TEXT("UnmadePrototypeNPC")&&UGameplayStatics::DoesSaveGameExist(TEXT("UnmadeOptionalFieldSurveys"),0))
         { // Read-only migration for the original profile; other profiles start independently.
             auto* legacy=Cast<UUnmadeFieldSurveySave>(UGameplayStatics::LoadGameFromSlot(TEXT("UnmadeOptionalFieldSurveys"),0));
             bFieldSurveySaveUsable=false;

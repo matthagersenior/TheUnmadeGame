@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Combat/UnmadeRealmGuardianRules.h"
+#include "Save/UnmadeDefeatSaveRetryRules.h"
 #include "UnmadeRealmGuardian.generated.h"
 
 UCLASS()
@@ -11,11 +12,13 @@ class THEUNMADEGAME_API AUnmadeRealmGuardian : public AUnmadeEnemyCharacter
 public:
     AUnmadeRealmGuardian();
     virtual void Tick(float DeltaSeconds) override;
+    virtual bool HasPendingDefeatSave(const AUnmadePrototypeHub& Hub) const override;
     void ConfigureGuardian(UnmadeCore::Realm Id);
     UnmadeCore::Realm GetRealm() const {return HomeRealm;}
     void SetGuardianResolved();
 private:
     UnmadeCore::Realm HomeRealm=UnmadeCore::Realm::Count;
     UnmadeCore::GuardianBeat Encounter{UnmadeCore::Realm::Count};
+    UnmadeCore::DefeatSaveRetry DefeatSave;
     bool bWarningShown=false;
 };

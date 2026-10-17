@@ -1,3 +1,73 @@
+## 2026-10-17 — Checked reality costs, crossing arrivals and revival
+
+- Combined direct reality-action Strain, existing language clue and local
+  witnesses before effects. Preserved prior transient windows on failed writes.
+- Combined arrival/visits/directly verified roads, retained saved resume points,
+  and kept realm fallbacks local across all nine realm identities.
+- Saved movement/revival with bounded retries, protected failed movement rollback,
+  and kept recovery available with pending/full-inventory rewards without
+  declaring their encounter receipts complete. No authored choices reset.
+- Evidence: 218 portable fault paths, 1,744 reloads, UBSan and eight compiled
+  mutations. Native movement, collision, UI, serialization and full realm loops
+  are unverified; no charges, new art/book requirement or merge into main.
+
+## 2026-10-17 — Combined action consequences across related systems
+
+- Combined the originating saves with existing witness/deed effects across the
+  six resolution families, village completion, aid, discovery, conflict/supplies,
+  rite/oath choices, cast witnesses and six Confluence conclusions.
+- Bound resolution to its exact revalidated preview; failed saving cannot use
+  the confirmation to attempt another family. Authored gates remain unchanged.
+- Repair old split aid from direct history/receipts without new testimony;
+  distinguish rumor and reopen earned-reward retries after startup.
+- Evidence: 128 action fault paths, 1,536 reloads, eight compiled mutations,
+  UBSan and portable/static checks. Added native memory-buffer rollback automation
+  is unrun; all Unreal acceptance remains pending. No new save IDs, authored
+  story content, paid services, artwork requirements or merge into main.
+
+## 2026-10-17 — Chronicle consequence retention and oath intent
+
+- Separated threats from deliberate restitution; kept the existing scar and
+  Bellwold/faction/deed/firsthand-witness gates.
+- Retained failed deed, verified-road and involuntary oath writes for retry.
+  Every accepted combined save captures live Chronicle/Confluence alongside
+  world memories. Both oath-choice bonuses clear on break; other buffs persist.
+- Explicit oath choices roll back on failed writes with feedback. Portable
+  evidence: 270 history fault paths, 3,240 reloads, four chosen-oath write faults,
+  UBSan and seven compiled mutation regressions. Unreal verification is pending.
+- Original world-action-to-consequence callback windows remain the next audit;
+  no claim of atomicity across that earlier boundary. No authored content,
+  stable save IDs, lore mystery, consent or optional illustration policy changed.
+
+## 2026-10-17 — Combat reward and witness-memory retries
+
+Melee and projectile impacts already share the same reward hook. Failed ordinary
+first-Stalker/first-Watcher rewards now stay in a player-owned session queue,
+retrying every five active-world seconds after the first attempt. Dead enemy
+actors can stop ticking without losing the retry owner. Existing achievement
+bits remain the durable receipts; no per-kill grants or new save identifiers.
+Complete checkpoint/profile-save guards include this queue, while explicit
+unsaved-discard confirmation remains available. Partial successes stay claimed;
+capacity failures report the pending reward. Special realm/boss receipts retain
+their existing owners and authored outcomes.
+
+Direct witness saves now share the hub's dirty-memory flag and eight-second
+quiet gossip retry. Failed writes keep observations in memory without replaying
+events or generating replacement evidence IDs. Unnamed actors are excluded from
+persistent witnesses; range, line of sight and firsthand/rumor provenance remain
+unchanged. This does not make later legacy-deed/oath callbacks atomic with the
+original action; trace those callbacks next.
+
+Portable evidence: 345 Python tests, 79 strict C++17 executables, the new scenario
+under UBSan, 48 dependency checks and four compiled mutation regressions pass. Coverage includes write
+faults, recovery selection, repeated reloads, duplicate kills, partial rewards,
+full inventories, checkpoint blocking, readiness and malformed NPC subrecords
+without backup rotation. Static structure/literal/hygiene, six release scenarios,
+transmedia, manuscript and whitespace checks pass. Actual Unreal/UHT, hit/LOS,
+travel, UI feedback and interrupted platform IO remain pending. No charges,
+artwork requirements or merge into main. Live main comparison before this batch:
+15 commits ahead, zero behind; focused changes continue on PR #74.
+
 # THE UNMADE — Illustrated Lore Continuity Log
 
 Every substantial gameplay addition needs a companion canon update and a regenerated illustrated package edition. This history describes what was actually updated; it is not a claim that engine content was playtested.
@@ -344,3 +414,531 @@ Second audit fixed isolated fieldwork saves, stale profile confirmation and auto
 Six follow-up audit fixes: scoped, visibly explained backup recovery without overwriting its target; single-pass binding labels; unobstructed alive/consenting merchant checks in both trade directions; native chosen-name and eight-aspect Character page; held stagger/death priority; production-rule behavioral audit coverage. Added actual Toggle Sneak access, eight menu pages and 28 complete action callbacks. A second inspection fixed feedback hidden behind the open menu. Existing saved IDs, wages, consent, protagonist origin, rewards and OPEN mysteries remain authoritative. Identity art remains prototype; no final face, hair, voice or mark assets claimed.
 
 Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`. Engine compilation, imports, storage interruption, controller focus/platform keyboard, collision, clip/audio timing and complete walkthroughs remain deferred. Chapter 40 and `docs/design/player-facing-reliability-v20-acceptance.md` record the source scope.
+# 16 October 2026 — recovery persistence correction
+
+Engineering-only correction: existing consumable and finite service recovery is
+captured with its cost, with failed-write rollback. No narrative or saved-ID
+changes. Portable tests added; no Unreal verification or illustrated artifact
+regeneration claimed. Historical publication receipt and hashes are unchanged.
+
+## 16 October 2026 — illustrations made optional
+
+At the creator's request, gameplay changes no longer require illustrated books,
+new images or publication receipts. Canon/ledger synchronization remains in CI.
+Existing briefs, publishing builders and historical artifact records are retained
+for optional use; no new illustration or book publication is claimed.
+
+
+## 16 October 2026 — combined save preservation
+
+Engineering correction only: a saved history must validate across its present
+subsystems before restoration, reward reconciliation, profile selection or
+backup rotation. Recovery retains its source until a primary save succeeds;
+failed potion persistence reports rollback. Stable identities, consent, wages,
+mutually exclusive outcomes and OPEN mysteries are unchanged. Optional fieldwork
+retains its legacy read path without bypassing a rejected history. Portable
+validation is recorded in `docs/qa/first-playable-progress.md`; Unreal storage and
+playthrough acceptance remain pending. Illustrations remain optional on request.
+
+
+## 16 October 2026 — opening and return save evidence
+
+Engineering-only changes preserve both Crossings choices and both Bellwold
+return outcomes. Shared reward eligibility retains the existing authored grants;
+named wages and Mera's explicit consent remain distinct from player income.
+Malformed financial records are bounded before arithmetic. A saved realm reward
+remains owned when equipment selection fails, with truthful retry feedback.
+No new lore, identifiers, consent rule, wage rate, reward or ending is introduced.
+Portable scenarios and static adapter evidence are recorded in
+`docs/qa/first-playable-progress.md`; Unreal playthrough/storage checks remain
+pending. Illustrations remain optional on request.
+
+
+## 16 October 2026 — local recovery and realm-loop audit
+
+Engineering correction: existing hunt rations, sanctuary rests and purchased
+provisions retain their authored limits and 35-health effect. Successful saves
+now retain the benefit with the spent use/favor; failed writes restore both.
+Cache discovery remains free after its route is opened. Tharniv's existing
+index-7 healing specialty and Eillun's index-6 quiet indexing are unchanged;
+a prior engineering label was corrected. No story, stable ID, currency, consent,
+ending or OPEN mystery changed. See `docs/qa/realm-local-loop-checklist.md` for
+source/portable coverage and remaining Unreal acceptance. Field-kit progression
+eligibility remains an identified gap; illustrations remain optional.
+
+## 16 October 2026 — Portable field kits and realm returns
+
+Earned field kits can suppress another realm's active, unresolved danger chamber.
+The supplying realm retains its favor and kit ledger; local stock takes priority,
+then the first stocked realm in stable order. Existing purchase prerequisites,
+20/30-second local binding duration, chart/boss exclusions and free caches remain.
+A failed world write restores the kit and applies no suppression; its specific
+save-error feedback survives the player action. Suppression remains session-only.
+No save fields, IDs, consent rules or authored consequences changed.
+
+Portable coverage adds 81 supplier/destination transactions with failed backup
+and primary writes, recovery and repeated reloads, plus both authored aftermath
+endings across all nine realms combined with individual resident return ledgers.
+This proves model/record composition, not actor reachability or witness knowledge.
+Echo/guardian consequence composition and actual Unreal interaction/serialization
+remain the next batch and engine acceptance respectively. Artwork stays optional.
+
+## 16 October 2026 — Echo, guardian and return consistency
+
+Combined-save preflight now checks the existing later-realm chapter gates when
+both related optional sections are present: first-chapter completion before
+later-realm aftermath/Echo progress, resolved aftermath before Echo progress,
+and completed Echo before guardian resolution or resonance progress. Individually
+well-formed but contradictory subrecords no longer appear available or reach
+backup rotation. Missing optional sections retain the existing legacy policy;
+there are no new save fields, identities or synthesized story outcomes.
+
+Generic return dialogue no longer claims shared memories of a changed morning
+for strangers or first-day acquaintances. Existing individual aid, consent and
+public records remain separate. Echo conversation save failures now explain that
+progress is unchanged and can be retried. A mismatched Echo control points to the
+matching control rather than promising testimony changes the rules do not allow.
+
+New portable composition covers 96 six-realm initial/aftermath/Echo/guardian paths,
+5,760 full reloads and 3,648 failed backup/primary-write recoveries. It preserves
+independent authored choices, both guardian outcomes, two-clue testimony, explicit
+confirmation, resonance, individual distinct-day returns and non-farmable endings.
+Contradictory outgoing records are refused before writes; invalid primaries select
+the good backup. All sixteen optional chapter-presence combinations retain load
+compatibility in the final valid record. This is source/model/record evidence,
+not a claim of Unreal actor execution or actual filesystem crash safety.
+
+Next batch: trace resonance/final-morning prerequisites and public-versus-personal
+NPC recognition through their adapters. Engine compilation, actor reachability,
+confirmation/controller presentation and actual interrupted IO remain pending.
+Illustrations remain optional; no paid services or main merge are required.
+
+## 16 October 2026 — Final-morning position and resonance prerequisites
+
+The final-morning adapter previously saved the new world before relocating the
+player, so immediate reload retained the old arena position. A shared portable
+transaction now stages the existing return point before synchronous combined
+capture. Failed movement writes nothing; failed writes restore the prior morning
+and position. Success feedback/world refresh follows persistence. The real actor
+movement callback and rollback still require Unreal verification.
+
+Combined preflight checks Auvren first-chapter completion before final progression
+when both optional records exist. Present Tenfold records must show the first
+resonance rite mastered for a pending window, and both rites for an open archive.
+Future-dated resonance windows are rejected against their saved world clock;
+expired windows remain valid and restartable. Missing optional chapter/rite
+sections retain their existing legacy policy. Optional Echo/guardian/observatory
+quests remain unnecessary for the final encounter. No save IDs, authored choices,
+consent, lore outcomes, item amounts or art requirements changed.
+
+Portable tests cover both mornings and six memory seeds (12 paths), 216 full
+reloads, 36 failed writes/moves, inventory/individual-history retention, optional
+rematches, all nine public local records and 24 resonance/mastery combinations.
+Expired windows restart and persist; contradictory records are rejected. A
+save-before-relocation mutation fails the saved-return-position assertion.
+The chapter fixture is shared by the existing 96-path scenario and final tests.
+
+Next: bound automatic retry of failed guardian/final-defeat commits and verify
+interrupted confirmations/repeated retries without duplicated progression or
+misleading feedback. Engine build, world traversal, UI/controller and actual
+platform serialization/interrupted IO remain pending. Artwork remains optional.
+
+## 16 October 2026 — Bounded defeat-save retries
+
+Guardian and final-boss defeat branches retried failed persistence on every
+0.1-second actor tick. Both now use a shared session-only scheduler: attempt
+immediately, retry failures after five active-world seconds, and stop after a
+successful commit for that realm/phase. Actor/phase configuration resets the
+scheduler. Existing defeated state and transaction rollback remain authoritative;
+no victory, reward, health reset or next phase is invented on a failed save.
+The first failure explains automatic retry and loss of unsaved progress on reload.
+Other enemy receipt paths already have bounded delays and remain unchanged.
+
+Portable coverage adds 24 guardian and 72 final-phase failed-write/retry paths,
+including damaged backup/primary writes, recovery selection and suppression of
+repeated commits. A minute-long outage produces 13 callback attempts rather than
+601. Invalid clocks and new phases/resets are covered. Expired, changed-control,
+cancelled, consumed and reloaded confirmations cannot replay prior consent; no
+consent rule changed. Removing the delay or settled guard fails regression tests.
+
+Fresh checks: 322 Python tests, 71 warning-clean portable C++17 executables and
+all 32 gameplay dependency checks pass. New tests pass UBSan. Structure/literals,
+transmedia, hygiene, six Node release cases, manuscript, lore synchronization and
+whitespace checks pass. Prior head `ad96172` passed GitHub source-checks. Actor
+execution, real IO, actual retry timing and feedback/controller flow remain
+Unreal acceptance tasks. Save identifiers, lore and optional artwork are intact.
+
+Next: audit manual saving and profile switching while a defeat receipt is still
+pending, especially whether success feedback accurately describes the committed
+state. Keep engine checks pending and preserve recovery-source protection.
+
+## 16 October 2026 — Checkpoints with pending encounter receipts
+
+A paused-menu Save Now previously wrote a checkpoint without an encounter's
+pending defeat receipt and reported success. Load/New Profile therefore skipped
+the existing unsaved-discard confirmation and could lose that victory. Session
+checkpoints now return pending before their writer runs. The menu explains that
+Continue lets automatic retries run; Load/New keep their existing explicit
+unsaved-discard confirmation. Backup recovery still never saves the current
+session first. Receipt transactions themselves retain access to the normal
+writer so they can finish and unblock the next checkpoint.
+
+The read-only query includes hidden defeated expedition actors, wing guardians/
+observer, road/Cinderhold elders, realm guardians and the final boss. Ordinary
+foes with no durable receipt do not block saves. Final actors compare configured
+phase with durable phase, so the old defeated body does not imply a defeat of the
+new, unfought health bar. No progression, consent, lore or save identifier changed.
+
+Portable tests cover 114 failed-write sessions: 12 guardian, 12 final-phase and
+90 expedition cases. They check zero checkpoint writes while pending, failed
+receipt rollback/recovery, target-profile isolation, explicit discard/recovery
+confirmation, normal post-commit saves and later ordinary write failures. Actor
+queries and widget routing have supplementary source checks; actual menu/travel
+and serialization are not executed. Removing the checkpoint gate or final-phase
+identity guard fails the composed assertions.
+
+Fresh checks: 325 Python tests, 72 warning-clean portable C++17 executables, all
+34 gameplay dependency checks and the new scenario under UBSan pass. Structure,
+literals, transmedia, hygiene, six Node release cases, manuscript, lore sync and
+whitespace checks pass. Prior head `4b65dc8` passed GitHub source-checks. Unreal
+actor discovery, pause/retry timing, feedback/controller and actual IO remain
+pending. No paid service, artwork or book publication was required.
+
+Next: inspect profile handoff failure/startup and restoration of the original
+profile/settings if travel cannot complete, without redirecting old live state
+into the selected target. Actual travel-failure verification needs Unreal.
+
+## 16 October 2026 — Profile handoff ownership and integration watch
+
+Rechecked PR #74 against live main: base `9606fec4`, starting head `5a4575d`,
+10 commits ahead and zero behind; GitHub reported clean mergeability. No sync,
+merge into main, rebase or force push was needed. Keep focused commits and check
+base divergence/overlapping files before publishing batches. If main moves,
+inspect and verify an isolated integration before updating this feature branch;
+branch housekeeping must not stop useful development without a concrete issue.
+
+Profile selection previously persisted the target before travel and relied on
+any later player registration to clear the write lock. Handoff now stages its
+destination in memory, gates writes and accepts a different world in the same
+game instance before persisting the selection. Destination backup recovery is
+pinned in that staged selection. Travel failure restores the original profile/
+recovery preference and resumes the original live owner only if it is still the
+active one. Otherwise, the failed/partially initialized world stays write-locked;
+an explicit fresh profile load remains available. Reentrant Load/New requests do
+not redirect the pending target or allocate extra profiles. Delegate hooks are
+removed on acceptance/failure, and destination notices wait for its arriving
+player. No save IDs, valid older saves, consent, authored outcomes or lore change.
+
+All 64 profile/recovery combinations pass portable ownership, failed-arrival,
+source/target isolation, reentrancy, fresh-owner and backup-pinning checks. Removing
+the write barrier, old-world arrival check, missing-owner lock or failed-world
+guard fails regression assertions. Source checks cover the UE event/delegate and
+routing; actual travel failures, delegate signature/build and BeginPlay ordering
+remain Unreal acceptance tasks. Registration does not prove every actor restored.
+
+Fresh checks: 328 Python tests, 73 warning-clean portable C++17 executables, all
+36 gameplay dependency checks and the new handoff test under UBSan pass. Structure,
+literals, transmedia, hygiene, six Node release cases, manuscript, lore sync and
+whitespace checks pass. Prior head `5a4575d` passed GitHub source-checks. Artwork
+and book builds remain optional; no paid services or main merge were used.
+
+Next: inspect initialization/readiness of inventory and reward writes before the
+player registers, particularly fresh-profile startup and recovery. Keep actual
+Unreal startup, UI/controller and interrupted platform IO pending.
+
+## 2026-10-16 — Deferred startup rewards and complete save readiness
+
+Equipment BeginPlay now restores without awarding or writing. Starter gear and
+committed milestone/civic rewards reconcile after the registered player restores
+its resume state and the world is ready. Failed commits remain pending and retry
+at five-second intervals; a manual checkpoint reports failure until startup
+reconciliation succeeds. The player receives a pending reward/save/capacity notice.
+The shared writer refuses unregistered, unrestored, wrong-owner, rejected or
+unready worlds before capturing or rotating records. Explicit unused-profile
+creation still only creates a new slot. Existing IDs, reward amounts, authored
+choices, consent and optional older save sections are unchanged. A starter kit
+fills empty equipment slots only, preserving selected older equipment; its marker
+prevents spent supplies being refilled on repeated reloads.
+
+Portable evidence: startup tests combine the production kit transaction and
+combined-record store with primary/backup write damage, recovery selection,
+rollback, 400 reloads of spent supplies, retained legacy equipment and full-stack
+rejection. Removing readiness, rollback or repeat suppression fails assertions.
+Adapter checks verify startup deferral, retry and checkpoint gating. These are
+portable rules and static wiring checks, not Unreal lifecycle or filesystem tests.
+
+Next: audit world simulation and timed progression writes during initialization
+and profile travel, then verify late-owner failures cannot advance durable time
+or rewards. Unreal build/UHT, actual startup/travel, UI visibility and interrupted
+platform IO remain pending. Artwork/books stay optional; no charges or main merge.
+
+Fresh batch verification: 331 Python tests, 74 warning-clean portable C++17
+executables and 38 gameplay dependency checks pass. Startup rules pass UBSan;
+readiness, rollback and repeated-award mutations are rejected. Structure, literal,
+transmedia, hygiene, six source-release scenarios, manuscript and whitespace checks
+pass. Live main remains `9606fec4`, zero commits behind; PR #74 is mergeable.
+Prior head `96d9702` passed source-checks; this new head requires its own CI.
+
+## 2026-10-16 — World ownership and retryable timed progression
+
+A blocked startup/profile handoff no longer advances the living-world clock,
+rite-day effects or rumor propagation. Every combined writer now supplies its
+source owner; that owner's world must match the registered, restored player's
+accepted world before capture or backup rotation. Late callbacks from an old
+world cannot populate a destination profile after its new owner registers.
+
+Settlement visits now commit independently of arrival captions. A failed visit
+rolls back and retries while the player remains nearby; it no longer requires
+leaving and re-entering the settlement. Material production, named wages,
+foreign support and Bes's household advance as one staged day transaction.
+Failures restore all three models and retry no more than once per five active
+world seconds. Catch-up uses each simulated material day, preserving walkout,
+finite treasury and explicit Mera guarantee rules. Rite-day debt changes retry
+with the same cadence, and bonuses refresh after the attempted transition.
+First-failure notices explain pending visits, world days and rite consequences.
+No identifiers, reward amounts, consent requirements or authored outcomes change.
+
+Rumor failures remain pending for the next eight-second rumor timer even when
+no new conversation occurs. World checkpoints also capture current NPC memories.
+Both world and player memory saves replace rows only for the same stable person,
+preserving histories of unloaded residents. Shared portable replacement rules
+verify stable identity, repeated updates, retained absent witnesses and rumor
+provenance; malformed observations cannot replace a good record or backup.
+
+Portable coverage: 192 timed fault/recovery paths across all four profiles,
+primary/backup failures, recovery pins and malformed outgoing subrecords; 4,800
+reloads; ordinary work, Bes's walkout, Mera's explicit guarantee and actual
+foreign shelter support; blocked clocks and old/new-world identity; lagging-day
+catch-up and legacy initialization without retroactive production. These use
+production rules and in-memory fault storage. Unreal actors, actual timer order,
+serialization and filesystem interruption remain unverified.
+
+Next: audit action-triggered checkpoint writers and active-owner state capture,
+especially component-only saves versus unsaved world/NPC consequences. Keep
+Unreal UHT/build, startup/travel, UI/controller and interrupted IO pending.
+Artwork/books remain optional; no charges or merge into main.
+
+Fresh batch checks: 335 Python tests, 75 warning-clean portable C++17 executables
+and all 40 gameplay dependency checks pass. The final timed scenario passes UBSan.
+Seven mutations removing readiness, visit/rite/day rollback, retry cadence, world
+identity or resident identity are rejected. Structure, literals, transmedia,
+hygiene, six Node release scenarios, manuscript reconstruction and whitespace
+checks pass. Baseline `893c10a` passed GitHub source-checks; new-head CI is separate.
+
+## 2026-10-16 — Complete world capture for component saves
+
+Equipment, language and rite saves previously captured current player resume
+values while retaining an older living-world section. Every combined write now
+preflights the caller's staged record, captures the accepted live world and player,
+and validates the result before any backup or primary write. The existing full
+world serializer is shared by world and component writers; it captures without
+loading another record or writing recursively. Its 126 world-owned fields retain
+caller-owned inventory, language, Tenfold, identity, conflict and explicit Strain
+patches. Existing stable IDs and valid optional legacy sections are unchanged.
+
+Field surveys previously changed only serialized stages before saving. They now
+stage their live owner before the shared capture, restore it on any failure and
+open routes/update signs only after success. Completed or malformed stages do
+not enter the writer. Their existing distance, sight, custody, Varda dialogue
+and six survey identifiers are retained. Failed fieldwork keeps clear retry
+feedback; authored routes and consequences are unchanged.
+
+Portable evidence: 216 component/world fault-recovery paths across all nine realms,
+both aftermath endings, equipment/language/rite patches, recovery pins and both
+write targets; 1,080 reloads; 48 field-survey fault paths across all six identifiers
+and both progress stages. Checks retain caller fields, clock/resume pairing,
+resident days, absent NPC histories and exclusive authored endings. Malformed
+caller or captured sections and rejected capture owners write nothing. Five
+validation/capture/staging/rollback mutations fail assertions. The field fixture
+tracks native capture ownership, but does not run Unreal serialization or actors.
+
+Fresh checks: 339 Python tests, 76 warning-clean portable C++17 executables and all
+42 gameplay dependency checks pass; the final composed scenario passes UBSan.
+Repository, literal, hygiene, six Node release scenarios and whitespace checks
+pass. Actual UHT/Editor build, capture ordering, travel, UI and platform IO remain
+pending. Artwork/books remain optional; no charges or merge into main.
+
+Next: trace realm rite casts through spell cost, physical effects, civic records,
+local mastery/resonance and witness consequences, particularly their separately
+committed portions. Preserve authored mechanics and distinguish model evidence
+from actual nine-realm walkthrough acceptance.
+
+## 2026-10-17 — Atomic rite consequences and durable named victories
+
+A rite previously saved cost/cooldown, applied runtime effects, then separately
+saved civic and resonance progress. The original-order portable replay persisted
+16 Strain and a cooldown after a failed civic write, without its realm effect.
+Invocation now stages civic/outer/resonance models before the same callback that
+persists Tenfold, Confluence and explicit Strain. Failed storage restores all
+world ledgers; the component restores its rite/trial state and refunds the cost.
+Runtime abilities, civic architecture and resonance bridges publish after success.
+Blocked startup/profile ownership rejects the cast before cost or trial changes.
+
+Spatial focus, local sight/witness, distinct mastered rites, named dual-discipline
+plinths, Echo prerequisites, expiry/restart and debt/cooldown rules are retained.
+A valid cast outside civic focus still works locally; unrelated or unmastered
+rites do not open resonance sites. Existing observer/witness events remain after
+the cast commit, using the previously improved NPC capture and retry paths; this
+batch does not claim an atomic NPC-event transaction with the cast itself.
+
+The connected Hollow Keeper mercy path hid and stopped its actor before checking
+its reward save. All three named bosses now own their existing milestone receipt:
+melee, ranged defeat and mercy wait for durable reward completion, retry failed
+writes no sooner than five world seconds, and stop their actor tick only after
+success. Hidden pending actors participate in checkpoint refusal and existing
+unsaved-discard confirmation. Full inventory remains retryable with clear advice.
+Mercy checks an active visible target and line of sight. The authored nonlethal
+option, reward amounts and all three saved achievement identifiers are unchanged;
+no new persistent death/mercy schema or automatic inventory space is introduced.
+
+Portable evidence: 1,080 cast fault cases across all nine realm identifiers and
+ten rites, mastery/witness gates, both storage targets and recovery; 3,240 reloads;
+24 paired/expired resonance paths; 12 named death/mercy receipt faults and 300
+reloads; full inventory and settled-receipt suppression. Nine mutations removing
+world rollback, staging/order, the single writer, mercy/settled pending detection,
+already-claimed suppression or stable boss mapping fail assertions. Actual target
+reachability, line traces, actor timers and projectile behavior need Unreal.
+
+Fresh checks: 343 Python tests, 78 warning-clean portable C++17 executables and all
+46 gameplay dependency checks pass. Both new scenarios pass UBSan. Structure,
+literals, hygiene, six source-release scenarios, transmedia, manuscript and
+whitespace checks pass. Baseline `d8b565e` passed GitHub source-checks; new-head CI
+is separate. No charges, new art/book requirements or merge into main.
+
+Next: trace ordinary enemy reward delivery for melee/ranged kills and post-cast
+NPC witness persistence, preserving per-realm receipts and authored consequences.
+Keep UHT/Editor build, actual nine-realm walkthroughs, travel, controller/UI and
+interrupted platform IO pending until an Unreal-capable host is available.
+
+## 2026-10-17 — Scoped consent and complete local service commits
+
+Personal accords consume their twenty-second confirmation before attempting a
+commit, stage the consequences tutorial with the choice, and include local
+witnesses in the same save. Failure restores choice, favor, lesson and witnesses;
+retry requires a fresh preview. Rest confirmation belongs to the exact realm and
+bed, not any eligible bed, and failed rest restores world time with clear feedback.
+Neither confirmation is serialized. Existing permanent accords remain unchanged.
+
+Repair, shared-access mediation and the Cinderhold mediation specialty now stage
+local testimony before their service save rather than leaving a second receipt.
+The Reach guide saves the tracked objective with its finite use and does not spend
+a use when that objective is already tracked. Experience refresh is deferred to
+the next tick so automatic city discovery cannot create a nested follow-up write
+inside the service transaction. Temporary service buffs keep their session-only
+behavior. Hours, insight/favor prices, two-use limits, recovery benefits, physical
+witness gates, consent and authored personal outcomes are preserved.
+
+Reviewed road/Cinderhold/expedition ability dispatch: matched failed commits
+already consume input and restore their owned costs, so no speculative dispatcher
+rewrite was made. Portable scenarios cover all nine realm accords, repairs,
+mediation and rest, plus guide tracking, malformed later mastery, both write
+failure positions, backup selection and repeated reloads. 92 injected write
+faults and 2,304 reloads pass under UBSan; seven compiled mutations are caught.
+All 360 Python tests, 84 strict portable C++17 executables and 58 dependency
+checks pass, alongside hygiene, six release scenarios, structure/literals,
+transmedia, manuscript and whitespace checks.
+Actual UHT/Editor, actors, service geometry, UI, profile travel and interrupted
+platform IO remain pending; no Unreal playthrough or new art/book requirement.
+
+## 2026-10-17 — Relationship receipts and mastery integrity
+
+Experience preflight now rejects distinct-day visit counts greater than their last
+visit day, daily specialty counts greater than their last use day, and unexplained
+insight spending when no build exists. Only build changes can repeatably consume
+insight; permanent purchases must otherwise explain every spent point. These
+checks run before availability, restore, outgoing writes or backup rotation.
+Reachable older histories, capped/gapped visits, build changes and absent optional
+schema-1 sections remain valid. No saved identifier or reward amount changes.
+
+A local conversation stages its visit, first-step tutorial and only the spoken
+resident's eligible relationship scene behind one writer. Failure restores all
+three and is handled without trying another nearby speaker or a separate tutorial
+write. Same-day conversations can still earn a newly eligible scene. Guide refusal
+preserves actual contact while granting no guidance insight; the existing refusal
+and scene prerequisites remain. Blocking/captions follow success and scene receipt
+replay never grants more insight. Caption interruption remains presentation-only.
+
+Mastery targeting now uses the full eight-metre 3D distance and rejects invalid
+coordinates. Powers require the accepted player/world and reject active stagger
+before spending thirty stamina or starting the twelve-second cooldown. Technique
+selection restores the previous choice on failure, explains unavailable/failed
+saves, and skips writes for an unchanged selection. Older untrained earned accords
+remain selectable. Combat stamina, cooldowns and temporary effects keep their
+existing session scope; no per-power disk write is introduced.
+
+Wing guardian/observer retries, mercy rollback, checkpoint pending queries and
+build modifiers were traced and already enforce their intended ownership. No
+speculative replacement was made. New portable coverage: 72 malformed experience
+records, 72 recovery write faults and 4,344 reloads; 135 scoped conversation/fault
+paths and 1,620 reloads; 18 failed, 18 successful and 18 unchanged selections.
+Extra checks cover later same-day eligibility, captive speaker order, refused
+conversation write failure, finite target coordinates and stagger/cost boundaries.
+Nineteen compiled mutations are caught across chronology, conversations and
+mastery. All 366 Python tests, 87 strict portable C++17 executables and 64
+dependency checks pass, alongside hygiene, six release scenarios, structure and
+literal validation, transmedia, manuscript reconstruction and whitespace checks.
+Actual UHT/Editor, NPC/guardian actors, physical timing/targeting, service
+geometry, UI and interrupted platform IO remain pending. No Unreal playthrough,
+paid service, mandatory artwork/book work or main merge is claimed.
+
+## 2026-10-17 — Interrupted encounters, attributed defeats and recovery
+
+Failed healing and revival writes now restore complete runtime combat participants,
+not profile-load values. Body receipts and outgoing swing IDs, stamina/attack/
+combo/power/parry/dodge windows, contact claims, status/stagger expiry and original
+status ownership survive rollback. Actual profile loads retain their existing
+fresh-session policy. Costs and benefits still share their original synchronous
+save; no combat cooldown is added to the save format.
+
+Burn retains its original weak source from player melee, projectile or mastery
+status application. Only an actual attributed lethal pulse queues the existing
+first-style reward; unknown sources never invent a player reward. The player-owned
+retry queue survives stopped defeated actors, capacity/write failure and repeated
+reloads. Delayed remote injury does not fabricate a new local fight witness.
+Named encounter defeat receipts keep their existing owners and retry policies.
+
+Absent, defeated or unrestored players cancel transient armed enemy warnings,
+patterns and locked aim. Ordinary/elder/expedition/observer/named/guardian/final
+encounters must warn again on resumption; health, story outcomes, swing receipts
+and failed victory retries remain. Durable defeat processing precedes the active
+player guard. Final attacks use the authored rhythm damage directly, fixing
+Unmasked/Echo phase bases being added twice; guard, armor and status modifiers
+still apply normally. No authored pattern or balance value is changed.
+
+Chamber/wing hazards and automatic arrivals/discoveries wait for an accepted,
+restored same-world player. Construction still initializes gates, signs and lifts.
+Original pulse timing, physical reach, sight, edge routes and free vents remain;
+field kits require the same owner before spending and retain visit-only suppression.
+Provision history cannot claim more once-per-day purchases than its last purchase
+day. Reachable older and absent optional records remain accepted. Defeated
+public-accord return-road threats now block complete checkpoints until their
+hub-owned favor/defeat receipt saves; failed writes restore favor, explain pending
+retry and grant it once. Explicit unsaved-discard and independent revival remain.
+
+Portable evidence: recovery covers 432 write faults, 108 malformed subrecords,
+216 successful recoveries and 5,184 reloads; provisions cover 108 malformed histories,
+252 write faults and 3,744 reloads; attributed status covers six write faults and
+768 reloads; return-road threats cover 18 faults and 432 reloads. Interruption
+coverage adds 1,230 resumed warning paths, 384 authored damage/guard/armor checks
+and 18 retained failed-receipt retries. Hazards cover 10,800 timing/readiness samples
+and nine resumed pulses. All 380 Python tests, 93 strict portable C++17
+executables and 76 dependency checks pass; 32 compiled mutations are caught.
+Hygiene, six release scenarios, structure/literals, transmedia, manuscript and
+whitespace checks pass. Actor adapters are statically reviewed; actual UHT/Editor,
+component/actor tick order, projectiles, physical movement/rollback, warning UI and
+interrupted platform IO remain pending. No Unreal playthrough or paid service.
+
+## 2026-10-17 — Pre-PC controller binding and contextual prompts
+
+- Preserve default controller trigger rebinding without accepting analog stick axes.
+- Present the computed contextual interaction prompt rather than recomputing a
+  potentially stale hint. Portable tests and source wiring cover the behavior.
+- No new in-world story facts, optional quests, item quantities, rewards or
+  permanent choice semantics; native UHT/UI/controller playtesting remains open.
+
+### Pre-PC input continuation (17 October 2026)
+
+Rebinding additionally captures high-value gamepad trigger analog events and
+ignores unarmed/low-value/other-axis events. Authored outcomes, local consent,
+reward IDs, lore and save schema remain unchanged. Portable press/noise tests
+pass once the source gate completes; rendered controls still need Unreal testing.

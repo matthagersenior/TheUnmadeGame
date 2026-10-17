@@ -1,5 +1,24 @@
 # Canon and illustrated publication
 
+Illustrations are optional. Gameplay development, pull requests, CI and source
+releases do not require a new illustration, illustrated book, PDF/DOCX/ZIP, release
+receipt or artifact hash update. Canon and continuity updates remain required for
+gameplay-source changes. This policy supersedes earlier mandatory illustrated
+delivery language in dated design documents and historical logs.
+
+For an illustration when needed, start from the existing realm, character and
+scene briefs in `Authoring/world_content_pack.json` and
+`Authoring/cinematic_realm_playbook.json`. Request or commission only the needed
+image; a standalone illustration does not require rebuilding the books. Label
+concept art as concept art and record its source/provenance when admitted to the
+repository. Paid generation or commissioning requires approval.
+
+Existing illustrated-edition references remain in
+[the latest historical receipt](lore/LATEST_ILLUSTRATED_RELEASE.md) and
+[edition history](lore/ILLUSTRATED_RELEASE_HISTORY.md). Their external Library
+paths are historical references, not verified downloads from a fresh checkout.
+The optional book builders remain under `Scripts/publishing/`.
+
 Version-controlled Markdown is authoritative. docs/lore/bible_sources.json orders the literary Volume X and supplemental chapters available in this repository. It does not claim to reconstruct historical illustrated volumes I–IX, whose masters and art are external.
 
 Run `python Scripts/build_bible.py` to generate PublicationBuild/THE_UNMADE_CANON.md and manifest.json using Python 3.11 and no third-party packages. Each source and the output receive a SHA-256 digest; no timestamps or host paths enter the output. `--check` validates sources and deterministic reconstruction. CI builds and uploads this manuscript for every source workflow run.

@@ -31,7 +31,10 @@ class FrontierAftermathWiring(unittest.TestCase):
                      "ResolveNearbyRealmAftermath","GetRealmAftermathStage",
                      "GetRealmAftermathEnding"):
             self.assertIn(name,hub)
-            self.assertIn(name,player)
+            if name=="ResolveNearbyRealmAftermath":
+                self.assertIn("ResolvePreviewedCommit(Scope,",player)
+                self.assertIn("return ResolveNearbyRealmAftermath(",source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp"))
+            else:self.assertIn(name,player)
         self.assertIn("ReportLocalEvent(",player)
 
     def test_atomic_save_and_restore_guards(self):

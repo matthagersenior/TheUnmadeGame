@@ -26,12 +26,13 @@ class WitnessBraidWiring(unittest.TestCase):
             '"WitnessBraid.RefugeCord"', '"WitnessBraid.PublicDocket"',
             "bWitnessBraidRejected=true", "bWitnessEchoRejected || bWitnessBraidRejected",
             "Save->WitnessBraidOutcome=WitnessBraid.Snapshot().outcome"))
-        self.assertIn("Hub->ResolveNearbyWitnessBraid",player)
+        self.assertIn("ResolvePreviewedCommit(Scope,",player)
+        self.assertIn("return ResolveNearbyWitnessBraid(",hub)
         self.assertIn("CommitmentGate.Attempt(",player)
         self.assertIn("bHasWitnessBraidSnapshot=false",save)
         self.assertIn("WitnessBraidOutcome=0",save)
-        self.assertIn("World.WitnessBraidShelter",player)
-        self.assertIn("World.WitnessBraidDocket",player)
+        self.assertIn("World.WitnessBraidShelter",hub)
+        self.assertIn("World.WitnessBraidDocket",hub)
 
     def test_canon_and_tests_follow_source(self):
         for path in ("docs/lore/VOLUME_X_THE_UNANSWERED_ATLAS.md",

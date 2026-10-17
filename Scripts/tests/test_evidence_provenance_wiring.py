@@ -23,8 +23,8 @@ class ProvenanceWiring(unittest.TestCase):
         self.assertIn('ActionName="EvidenceNotebook",Key=F9',config)
         self.assertIn('BindAction("EvidenceNotebook"',player)
         self.assertIn("Hub->GetEvidenceNotebook();",player)
-        self.assertIn('World.WitnessBraidShelter',player)
-        self.assertIn('World.WitnessBraidDocket',player)
+        self.assertIn('World.WitnessBraidShelter',source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp"))
+        self.assertIn('World.WitnessBraidDocket',source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp"))
         self.assertNotIn('World.WitnessBraidResolved',player)
     def test_knowledge_cannot_teleport(self):
         npc=source("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")

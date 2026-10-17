@@ -26,7 +26,7 @@ class PlayerExperienceContract(unittest.TestCase):
   style=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp').read_text();self.assertNotIn('Expeditions.Save().gear%2==1',style);self.assertIn('RealmWeapon()',style)
  def test_real_optional_guardian_and_rollbacks(self):
   s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp').read_text()
-  for token in ['e->GetCombat()->IsDefeated()','WingGuardians[a].Get()!=e','Experience=before','Clock=oldClock','WingRelayDeadline=deadlines','Near(p,speaker','WriteWorldSnapshot(p)','ExperienceRoutineTarget','Experience.Reconcile']:self.assertIn(token,s)
+  for token in ['e->GetCombat()->IsDefeated()','WingGuardians[a].Get()!=e','Experience=before','Clock=oldClock','WingRelayDeadline=deadlines','Near(p,real','WriteWorldSnapshot(p)','ExperienceRoutineTarget','Experience.Reconcile']:self.assertIn(token,s)
  def test_discovery_gate_and_settings(self):
   s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp').read_text()
   for token in ['MapKnowsRoom','MapKnowsChoice','if(!IsRealmKnown(a))','Experience.DiscoverCity']:self.assertIn(token,s)

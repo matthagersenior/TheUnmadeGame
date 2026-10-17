@@ -1,5 +1,7 @@
 #include "UI/UnmadePlayerFacingRules.h"
 #include "Combat/UnmadeEncounterPerformanceRules.h"
+#include "Combat/UnmadeEncounterInterruptionRules.h"
+#include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadePlayerPreferences.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Combat/UnmadeEnemyCharacter.h"
@@ -281,8 +283,15 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         Combat->GetHealth()<=Combat->GetMaxHealth()*.5f;
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
         UGameplayStatics::GetPlayerCharacter(World,0));
-    if(!IsValid(Player)||!IsValid(Player->GetCombat())||
-       Player->GetCombat()->IsDefeated())return;
+    if(!UnmadeCore::RequireEncounterPlayer(IsValid(Player)&&IsValid(Player->GetCombat())&&
+       !Player->GetCombat()->IsDefeated()&&Player->GetWorld()==World&&UnmadeSave::IsSessionWritable(Player),[&]{
+        UnmadeCore::InterruptAttackWindup(WindupEndsAt,NextWindupAllowedAt,RecoveryEndsAt);
+        UnmadeCore::InterruptEncounter(ElderPattern);ElderLastWarning=UnmadeCore::SlagAttack::None;
+        NormalLockedAim=ElderLockedAim=FVector::ZeroVector;bHasNavWaypoint=false;
+        GetCharacterMovement()->StopMovementImmediately();
+        ElderAimMarker->SetVisibility(false);TelegraphLight->SetIntensity(0);
+        CombatSignal->SetText(FText::GetEmpty());
+    }))return;
 
     if(!CachedRealityHub.IsValid())
         CachedRealityHub=Cast<AUnmadePrototypeHub>(
@@ -482,14 +491,22 @@ void AUnmadeEnemyCharacter::ConfigureExpedition(int32 Arc,int32 Slot,UnmadeCore:
 }
 void AUnmadeEnemyCharacter::ConfigureWingGuardian(int Arc){bWingGuardian=true;ConfigureExpedition(Arc,9,UnmadeCore::ExpeditionRole::Boss);Combat->Configure(150+Arc*12,18+Arc*2,.6);}
 void AUnmadeEnemyCharacter::TickExpedition(float DeltaSeconds){
- UWorld* World=GetWorld();if(!World||!CachedRealityHub.IsValid())return;double Now=World->GetTimeSeconds();
+ UWorld* World=GetWorld();
+ const auto Interrupt=[&]{
+  UnmadeCore::InterruptEncounter(ExpeditionPattern);bExpeditionWarning=false;ExpeditionAim=FVector::ZeroVector;
+  Combat->SetGuarding(false);GetCharacterMovement()->StopMovementImmediately();bHasNavWaypoint=false;
+  ElderAimMarker->SetVisibility(false);TelegraphLight->SetIntensity(0);CombatSignal->SetText(FText::GetEmpty());
+  for(const auto& tile:SignatureTiles)if(IsValid(tile))tile->SetVisibility(false);
+ };
+ if(!World||!CachedRealityHub.IsValid()){Interrupt();return;}double Now=World->GetTimeSeconds();
  for(const auto& tile:SignatureTiles)if(IsValid(tile))tile->SetVisibility(false);
  bool Inactive=bWingGuardian?CachedRealityHub->WingGuardianInactive(ExpeditionArc):CachedRealityHub->ExpeditionEnemyInactive(ExpeditionArc,ExpeditionSlot);
  bool Yielded=bWingGuardian?CachedRealityHub->WingGuardianYielded(ExpeditionArc):ExpeditionSlot==8&&CachedRealityHub->ExpeditionBossYielded(ExpeditionArc);
  SetActorHiddenInGame((Inactive&&!Yielded)||Combat->IsDefeated());SetActorEnableCollision(!Inactive&&!Combat->IsDefeated());
- if(Inactive){if(Yielded){SetMotionCue(FName(TEXT("Yield")));CombatSignal->SetText(FText::FromString((bWingGuardian?TEXT("YIELDED ALIVE - OATH HEARD"):TEXT("YIELDED ALIVE - EVIDENCE REMEMBERED"))));}GetCharacterMovement()->StopMovementImmediately();ElderAimMarker->SetVisibility(false);TelegraphLight->SetIntensity(0);return;}
+ if(Inactive){Interrupt();if(Yielded){SetMotionCue(FName(TEXT("Yield")));CombatSignal->SetText(FText::FromString((bWingGuardian?TEXT("YIELDED ALIVE - OATH HEARD"):TEXT("YIELDED ALIVE - EVIDENCE REMEMBERED"))));}GetCharacterMovement()->StopMovementImmediately();ElderAimMarker->SetVisibility(false);TelegraphLight->SetIntensity(0);return;}
  if(Combat->IsDefeated()){if(Now>=NextElderSaveAttemptAt){NextElderSaveAttemptAt=Now+2;if(bWingGuardian)CachedRealityHub->RecordWingGuardian(this,ExpeditionArc);else CachedRealityHub->RecordExpeditionDefeat(this,ExpeditionArc,ExpeditionSlot);}return;}
- auto* P=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(World,0));if(!IsValid(P)||!P->GetCombat()||P->GetCombat()->IsDefeated())return;
+ auto* P=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(World,0));
+ if(!UnmadeCore::RequireEncounterPlayer(IsValid(P)&&IsValid(P->GetCombat())&&!P->GetCombat()->IsDefeated()&&P->GetWorld()==World&&UnmadeSave::IsSessionWritable(P),Interrupt))return;
  double Distance=FVector::Dist2D(P->GetActorLocation(),GetActorLocation());
  bool Territory=FVector::DistSquared2D(P->GetActorLocation(),TerritoryHome)<=FMath::Square(1450.f);
  FCollisionQueryParams Params(SCENE_QUERY_STAT(ExpeditionAttackSight),false);Params.AddIgnoredActor(this);Params.AddIgnoredActor(P);
@@ -523,6 +540,25 @@ FString AUnmadeEnemyCharacter::GetCombatName()const{return EncounterLabel?Encoun
 FString AUnmadeEnemyCharacter::GetCombatWarning()const{return CombatSignal?CombatSignal->Text.ToString():FString();}
 
 void AUnmadeEnemyCharacter::ConfigureWingObserver(){ExpeditionArc=6;ExpeditionSlot=10;bWingObserver=true;TerritoryHome=GetActorLocation();ConfigureStyle(UnmadeCore::EnemyStyle::Watcher);Combat->Configure(80,12,.6);}
-void AUnmadeEnemyCharacter::TickWingObserver(float Delta){if(!GetWorld()||!CachedRealityHub.IsValid())return;double now=GetWorld()->GetTimeSeconds();bool inactive=CachedRealityHub->WingObserverInactive();SetActorHiddenInGame(inactive||Combat->IsDefeated());SetActorEnableCollision(!inactive&&!Combat->IsDefeated());if(inactive)return;if(Combat->IsDefeated()){if(now>=NextElderSaveAttemptAt){NextElderSaveAttemptAt=now+2;CachedRealityHub->RecordWingObserver(this);}return;}auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));if(!p||p->GetCombat()->IsDefeated())return;FVector toward=p->GetActorLocation()-GetActorLocation();FCollisionQueryParams q(SCENE_QUERY_STAT(WingObserverSight),false);q.AddIgnoredActor(this);q.AddIgnoredActor(p);double range=p->bIsCrouched||p->GetCombat()->HasQuietLens(now)?350:700;bool seen=toward.Size2D()<range&&FVector::DotProduct(GetActorForwardVector(),toward.GetSafeNormal2D())>.35&&!GetWorld()->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,55),p->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q);
+void AUnmadeEnemyCharacter::TickWingObserver(float Delta){
+ const auto Interrupt=[&]{
+  UnmadeCore::InterruptAttackWindup(WindupEndsAt,NextWindupAllowedAt,RecoveryEndsAt);NormalLockedAim=FVector::ZeroVector;
+  GetCharacterMovement()->StopMovementImmediately();bHasNavWaypoint=false;
+  ElderAimMarker->SetVisibility(false);TelegraphLight->SetIntensity(0);CombatSignal->SetText(FText::GetEmpty());
+ };
+ if(!GetWorld()||!CachedRealityHub.IsValid()){Interrupt();return;}double now=GetWorld()->GetTimeSeconds();bool inactive=CachedRealityHub->WingObserverInactive();SetActorHiddenInGame(inactive||Combat->IsDefeated());SetActorEnableCollision(!inactive&&!Combat->IsDefeated());if(inactive){Interrupt();return;}if(Combat->IsDefeated()){if(now>=NextElderSaveAttemptAt){NextElderSaveAttemptAt=now+2;CachedRealityHub->RecordWingObserver(this);}return;}auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+ if(!UnmadeCore::RequireEncounterPlayer(IsValid(p)&&IsValid(p->GetCombat())&&!p->GetCombat()->IsDefeated()&&p->GetWorld()==GetWorld()&&UnmadeSave::IsSessionWritable(p),Interrupt))return;
+ FVector toward=p->GetActorLocation()-GetActorLocation();FCollisionQueryParams q(SCENE_QUERY_STAT(WingObserverSight),false);q.AddIgnoredActor(this);q.AddIgnoredActor(p);double range=p->bIsCrouched||p->GetCombat()->HasQuietLens(now)?350:700;bool seen=toward.Size2D()<range&&FVector::DotProduct(GetActorForwardVector(),toward.GetSafeNormal2D())>.35&&!GetWorld()->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,55),p->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q);
  if(Combat->IsStaggered(now)||IsFractureExposed(now)){WindupEndsAt=-1;return;}if(seen&&WindupEndsAt<0&&now>=NextWindupAllowedAt){NormalLockedAim=p->GetActorLocation();WindupEndsAt=now+1.5;UnmadePresentation::Sound(this,TEXT("warning"));}if(WindupEndsAt>=0){CombatSignal->SetText(FText::FromString(TEXT("INDEX SENTRY AIM - BREAK SIGHT OR MOVE")));SetMotionCue(FName(TEXT("Ranged")));if(now>=WindupEndsAt){uint64 id=0;double damage=0;if(Combat->ReserveProjectile(now,id,damage)){FVector muzzle=GetActorLocation()+FVector(0,0,55)+GetActorForwardVector()*80;if(auto* shot=GetWorld()->SpawnActor<AUnmadeTravelingProjectile>(muzzle,FRotator::ZeroRotator))shot->Fire(this,NormalLockedAim+FVector(0,0,55),damage,id);}WindupEndsAt=-1;NextWindupAllowedAt=now+2;}return;}
  CombatSignal->SetText(FText::FromString(TEXT("INDEX SENTRY - PATROL CONE")));FVector goal=TerritoryHome+FVector(FMath::Cos(now*.35),FMath::Sin(now*.35),0)*280;FVector move=goal-GetActorLocation();if(move.SizeSquared2D()>2500){AddMovementInput(move.GetSafeNormal2D());SetActorRotation(move.Rotation());GetCharacterMovement()->MaxWalkSpeed=90*Combat->MoveMultiplier(now);SetMotionCue(FName(TEXT("Walk")));}}
+
+bool AUnmadeEnemyCharacter::HasPendingDefeatSave(const AUnmadePrototypeHub& Hub)const
+{
+    if(!IsValid(Combat)||!Combat->IsDefeated())return false;
+    if(bWingObserver)return !Hub.WingObserverInactive();
+    if(bWingGuardian)return !Hub.WingGuardianInactive(ExpeditionArc);
+    if(ExpeditionArc>=0)return !Hub.ExpeditionEnemyInactive(ExpeditionArc,ExpeditionSlot);
+    if(bCinderholdElder)return (RoadElderCity>=0?
+        Hub.GetRoadElderResolution(RoadElderCity):Hub.GetCinderholdElderResolution())==0;
+    return false; // Ordinary foes have no durable defeat receipt.
+}

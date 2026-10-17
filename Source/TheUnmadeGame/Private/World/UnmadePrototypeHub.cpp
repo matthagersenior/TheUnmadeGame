@@ -1,4 +1,7 @@
 #include "Save/UnmadeSessionRules.h"
+#include "Save/UnmadeActionCommitRules.h"
+#include "Save/UnmadeRiteCommitRules.h"
+#include "World/UnmadeTenfoldComponent.h"
 #include "UI/UnmadePlayerPreferences.h"
 #include "Components/TextRenderComponent.h"
 #include "Engine/TextRenderActor.h"
@@ -6,13 +9,16 @@
 #include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
+#include "Save/UnmadeCounterThreatRules.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
+#include "NPC/UnmadeMemorySaveRules.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Combat/UnmadeBossCharacter.h"
+#include "Combat/UnmadeNamedBossRewardRules.h"
 #include "Story/UnmadeConflictGate.h"
 #include "Story/UnmadeConflictRules.h"
 #include "World/UnmadeLoreSite.h"
@@ -527,8 +533,86 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     RegionalTasks = RestoredTasks;
 }
 
+bool AUnmadePrototypeHub::HasPendingDefeatReceipts()const
+{
+    if(!GetWorld())return false;
+    if(const auto* Player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))
+    {
+        if(Player->HasPendingCombatRewards())return true;
+        if(const auto* Rite=Player->FindComponentByClass<UUnmadeTenfoldComponent>())
+            if(Rite->HasPendingHistory())return true;
+    }
+    // These authored return-road actors are not expedition defeat slots. Their
+    // hub-owned favor receipt must also settle before a complete checkpoint.
+    for(int a=0;a<9;++a){const auto* Threat=DepthRetaliators.IsValidIndex(a)?DepthRetaliators[a].Get():nullptr;
+        if(UnmadeCore::PendingCounterThreat(Depth,a,IsValid(Threat)&&IsValid(Threat->GetCombat())&&Threat->GetCombat()->IsDefeated()))return true;
+    }
+    // Defeated expedition actors can already be hidden. Query their durable
+    // owner state, never visibility, collision or whether Tick is enabled.
+    for(TActorIterator<AUnmadeEnemyCharacter> Enemy(GetWorld());Enemy;++Enemy)
+        if(Enemy->HasPendingDefeatSave(*this))return true;
+    return false;
+}
+
+bool AUnmadePrototypeHub::SaveRecoveryState(AUnmadeCharacter* Player)
+{
+    // Recovery must remain possible with full inventory/pending rewards. This
+    // saves health/position, never asserts that encounter receipts are complete.
+    return IsValid(Player)&&WriteWorldSnapshot(Player);
+}
+
+bool AUnmadePrototypeHub::SavePlayerSession(AUnmadeCharacter* Player)
+{
+    const auto Result=UnmadeCore::CommitSessionCheckpoint(HasPendingDefeatReceipts(),
+        [&]{return WriteWorldSnapshot(Player);});
+    if(Result==UnmadeCore::CheckpointSave::PendingDefeat)
+        NotifyRpg(TEXT("A victory or earned history still needs to save. Continue the game to allow its automatic retry; this checkpoint was not written."));
+    return Result==UnmadeCore::CheckpointSave::Saved;
+}
+
+bool AUnmadePrototypeHub::CommitWorldEvent(FName Event,FName Subject)
+{
+    if(!GetWorld())return false;
+    auto* Player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+    return IsValid(Player)&&Player->CommitLocalEvent(Event,Subject,[&]{return WriteWorldSnapshot();});
+}
+bool AUnmadePrototypeHub::CommitRealmAftermathEvent(UnmadeCore::Realm Realm,int32 Choice)
+{
+    for(const auto& Region:UnmadeCore::LaterRealms)if(Region.realm==Realm)
+        return CommitWorldEvent(FName("World.LaterRealmResolved"),FName(UTF8_TO_TCHAR(Region.name)));
+    const bool Rain=Realm==UnmadeCore::Realm::WidowedRain;
+    return CommitWorldEvent(FName(Rain?(Choice==1?TEXT("World.SaltwakeCistern"):TEXT("World.SaltwakeLedger")):
+        (Choice==1?TEXT("World.CinderholdKiln"):TEXT("World.CinderholdDeed"))),
+        FName(Rain?TEXT("region.saltwake.port"):TEXT("region.cinderhold.hearth")));
+}
+
 bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
 {
+    if(!UnmadeSave::IsWorldWritable(GetWorld()))return false;
+    if(StrainOwner&&(!IsValid(StrainOwner)||StrainOwner->GetWorld()!=GetWorld()))return false;
+    UUnmadePrototypeSave* Save=UUnmadePrototypeSave::LoadOrCreate();
+    if(!Save)return false;
+    if(IsValid(StrainOwner))
+    {
+        // Preserve a malformed pre-existing fracture record instead of replacing
+        // it with the pawn's fallback when a local paid decision is attempted.
+        if(Save->bHasFractureSnapshot)
+        {
+            UnmadeCore::FractureModel Check("region.prototype.hub",{"variant.open","variant.sealed"});
+            const std::string PreviousVariant=Save->WorldVariantId.IsNone()?std::string():std::string(TCHAR_TO_UTF8(*Save->WorldVariantId.ToString()));
+            if(!Check.Restore({PreviousVariant,Save->PlayerStrain}))return false;
+        }
+        const auto Reality=StrainOwner->GetRealitySnapshot();
+        Save->bHasFractureSnapshot=true;
+        Save->PlayerStrain=Reality.strain;
+        Save->WorldVariantId=Reality.variant.empty()?NAME_None:FName(UTF8_TO_TCHAR(Reality.variant.c_str()));
+    }
+    return UnmadeSave::SaveGameToSlot(Save,this);
+}
+
+bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
+{
+    if(!Save||!UnmadeSave::IsWorldWritable(GetWorld()))return false;
     if(!bFieldSurveySaveUsable)return false;
     if(bExpeditionSaveRejected)return false;
     if(bIdentitySaveRejected)return false;
@@ -545,8 +629,11 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
        bRealityConsequenceRejected || bOuterReactionsRejected ||
        bMaterialSaveRejected || bLivingEconomyRejected ||
        bBesHouseholdRejected)return false;
-    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
-    if (!Save) return false;
+    for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc){
+        const FName Id=Npc->GetStableId();if(Id.IsNone())continue;
+        const auto Snapshot=Npc->GetMemory()->WriteSnapshot(Id);
+        if(!UnmadeCore::ReplaceNpcMemory(Save->NpcSnapshots,Snapshot))Save->NpcSnapshots.Add(Snapshot);
+    }
     Save->bHasFieldSurveys=true;Save->FieldSurveyStages=FieldSurveyStages;
     Save->bHasPlayerExperience=true;Save->PlayerExperienceState.Reset();for(int V:Experience.Pack())Save->PlayerExperienceState.Add(V);
     Save->bHasAdventureDepth=true;Save->AdventureDepthState.Reset();for(int V:Depth.Pack())Save->AdventureDepthState.Add(V);
@@ -730,21 +817,6 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
     Save->CinderholdAdventureState={Adventure.version,Adventure.memories,Adventure.clues,
         Adventure.resolution,Adventure.route,Adventure.firstDay,Adventure.returnDay,
         Adventure.returnedHeat,Adventure.returnedColdDays,Adventure.returnedOwed};
-    if(IsValid(StrainOwner))
-    {
-        // Preserve a malformed pre-existing fracture record instead of replacing
-        // it with the pawn's fallback when a local paid decision is attempted.
-        if(Save->bHasFractureSnapshot)
-        {
-            UnmadeCore::FractureModel Check("region.prototype.hub",{"variant.open","variant.sealed"});
-            const std::string PreviousVariant=Save->WorldVariantId.IsNone()?std::string():std::string(TCHAR_TO_UTF8(*Save->WorldVariantId.ToString()));
-            if(!Check.Restore({PreviousVariant,Save->PlayerStrain}))return false;
-        }
-        const auto Reality=StrainOwner->GetRealitySnapshot();
-        Save->bHasFractureSnapshot=true;
-        Save->PlayerStrain=Reality.strain;
-        Save->WorldVariantId=Reality.variant.empty()?NAME_None:FName(UTF8_TO_TCHAR(Reality.variant.c_str()));
-    }
     Save->bHasBesHousehold=true;
     Save->BesQuestPhase=BesRecord.phase;
     Save->BesHouseholdDay=BesRecord.day;
@@ -762,14 +834,14 @@ bool AUnmadePrototypeHub::WriteWorldSnapshot(AUnmadeCharacter* StrainOwner)
     Save->ResidentEncounterVisits.Reset();
     Save->ResidentEncounterLastDays.Reset();
     Save->ResidentEncounterAidFlags.Reset();
+    const auto RS=ResidentRelationships.Snapshot();
     for(int i=0;i<UnmadeCore::ResidentContinuityCount;++i)
     {
-        const auto RS=ResidentRelationships.Snapshot();
         Save->ResidentEncounterVisits.Add(RS.visits[i]);
         Save->ResidentEncounterLastDays.Add(RS.lastDay[i]);
         Save->ResidentEncounterAidFlags.Add(RS.aids[i]);
     }
-    return UnmadeSave::SaveGameToSlot(Save);
+    return true;
 }
 
 bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bCompleted)
@@ -783,7 +855,8 @@ bool AUnmadePrototypeHub::TryResidentVillageTask(FName ResidentId, bool& bComple
     const auto Outcome = RegionalTasks.Converse(Resident->home, ResidentUtf8.Get());
     if (Outcome == UnmadeCore::TaskResult::NoChange) return false;
 
-    if (!WriteWorldSnapshot())
+    if (!(Outcome==UnmadeCore::TaskResult::Completed?
+        CommitWorldEvent(FName("Player.HelpedVillage"),ResidentId):WriteWorldSnapshot()))
     {
         RegionalTasks.Restore(Previous);
         if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,
@@ -933,6 +1006,24 @@ bool AUnmadePrototypeHub::GetNearbyCommitPreview(
     return false;
 }
 
+bool AUnmadePrototypeHub::ResolvePreviewedCommit(FName Scope,int32 Choice)
+{
+    FName Current;FString Warning;
+    if(!GetNearbyCommitPreview(Choice,Current,Warning))return false;
+    const FTCHARToUTF8 ConfirmedId(*Scope.ToString()),CurrentId(*Current.ToString());
+    return UnmadeCore::ResolveConfirmedAction(ConfirmedId.Get(),CurrentId.Get(),[&](auto Family){
+        switch(Family){
+        case UnmadeCore::ConfirmedAction::Faction:return ResolveNearbyFaction(static_cast<UnmadeCore::FactionEnding>(Choice));
+        case UnmadeCore::ConfirmedAction::Frontier:return ResolveNearbyFrontier(Choice);
+        case UnmadeCore::ConfirmedAction::Afterlight:return ResolveNearbyAfterlight(Choice);
+        case UnmadeCore::ConfirmedAction::RealmAftermath:return ResolveNearbyRealmAftermath(Choice);
+        case UnmadeCore::ConfirmedAction::WitnessBraid:return ResolveNearbyWitnessBraid(Choice);
+        case UnmadeCore::ConfirmedAction::WitnessReturn:return ResolveNearbyWitnessReturn(Choice);
+        default:return false;
+        }
+    });
+}
+
 bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome)
 {
     if(!GetWorld() || Outcome==UnmadeCore::FactionEnding::Unresolved)return false;
@@ -951,7 +1042,7 @@ bool AUnmadePrototypeHub::ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome
             const auto Before=Chronicle.Snapshot();
             if(Chronicle.Decide(Arc.faction,Outcome)!=UnmadeCore::FactionResult::Resolved)
                 return false;
-            if(!WriteWorldSnapshot())
+            if(!CommitWorldEvent(FName("World.FactionResolved"),FName("region.prototype.hub")))
             {
                 Chronicle.Restore(Before);
                 return false;
@@ -981,7 +1072,8 @@ FString AUnmadePrototypeHub::GetCurrentRealmName(FVector Position) const
 
 bool AUnmadePrototypeHub::TryTravelFrontier(AUnmadeCharacter* Player)
 {
-    if(!IsValid(Player) || !GetWorld())return false;
+    if(!IsValid(Player) || !GetWorld() || Player->GetWorld()!=GetWorld())return false;
+    if(!Player->CanCommitCheckpoint())return false;
     const FVector P=Player->GetActorLocation();
     for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
     {
@@ -1005,18 +1097,11 @@ bool AUnmadePrototypeHub::TryTravelFrontier(AUnmadeCharacter* Player)
         else continue;
 
         const auto Before=Frontier.Snapshot();
-        const bool bNew=Frontier.Visit(Next)==UnmadeCore::FrontierEvent::Advanced;
-        if(bNew && !WriteWorldSnapshot())
-        {
-            Frontier.Restore(Before);
-            return false;
-        }
+        Frontier.Visit(Next);
         PrepareRealmGeometry(Destination,100000);
-        if(!Player->SetActorLocation(Destination,false,nullptr,ETeleportType::TeleportPhysics))
-        {
-            Frontier.Restore(Before);
-            if(bNew)WriteWorldSnapshot();
-            return false;
+        const int32 Route=Next==UnmadeCore::Realm::WidowedRain?0:Next==UnmadeCore::Realm::HearthBeneath?1:-1;
+        if(!Player->CommitCheckpointMove(Destination,Route,[&]{return WriteWorldSnapshot();})){
+            Frontier.Restore(Before);return false;
         }
         if(GEngine)UnmadeRpgFeedback(-1,10.f,FColor::Cyan,
             FString::Printf(TEXT("CROSSING OPEN: %s. Speak to local witnesses and examine the clue."),
@@ -1103,7 +1188,7 @@ bool AUnmadePrototypeHub::ResolveNearbyFrontier(int32 Ending)
             const auto Before=Frontier.Snapshot();
             if(Frontier.Resolve(Outpost.realm,Ending)!=UnmadeCore::FrontierEvent::Resolved)
                 return false;
-            if(!WriteWorldSnapshot())
+            if(!CommitWorldEvent(FName("World.FactionResolved"),FName("region.prototype.hub")))
             {
                 Frontier.Restore(Before);
                 return false;
@@ -1251,7 +1336,7 @@ bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
                 return false;
             }
             if(Result!=UnmadeCore::RealmAftermathResult::Resolved)return false;
-            if(!WriteWorldSnapshot())
+            if(!CommitRealmAftermathEvent(Spec.realm,Choice))
             {
                 RealmAftermath.Restore(Before);
                 return false;
@@ -1479,7 +1564,7 @@ bool AUnmadePrototypeHub::ResolveNearbyAfterlight(int32 Choice)
             return false;
         }
         if(Result!=UnmadeCore::AfterlightResult::Resolved)return false;
-        if(!WriteWorldSnapshot())
+        if(!CommitWorldEvent(FName(Choice==1?TEXT("World.AfterlightShelter"):TEXT("World.AfterlightNames")),FName("region.bellwold.refuge")))
         {
             Afterlight.Restore(Before);
             return false;
@@ -1535,6 +1620,7 @@ void AUnmadePrototypeHub::BuildFrontiers()
 
 void AUnmadePrototypeHub::SaveLivingWorld()
 {
+    if(!UnmadeSave::IsWorldWritable(GetWorld()))return;
     if (!WriteWorldSnapshot())
         UE_LOG(LogTemp, Warning, TEXT("Living-world progress could not be saved"));
 }
@@ -1574,7 +1660,7 @@ void AUnmadePrototypeHub::RefreshDistrictMood()
 bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
 {
     if (!IsValid(Site) || Site->GetWorld() != GetWorld() || !GetWorld()) return false;
-    const ACharacter* Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+    const auto* Player = Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
     if (!IsValid(Player) ||
         FVector::DistSquared(Player->GetActorLocation(), Site->GetActorLocation()) > FMath::Square(295.f))
         return false;
@@ -1592,7 +1678,10 @@ bool AUnmadePrototypeHub::InspectSite(AUnmadeLoreSite* Site)
     const bool bEchoChanged=EchoEvent==UnmadeCore::WitnessEchoEvent::FirstReading ||
         EchoEvent==UnmadeCore::WitnessEchoEvent::LaterMeaning;
     const bool bNew = Discoveries.Discover(Site->GetDistrict());
-    if ((bNew || bEchoChanged) && !WriteWorldSnapshot())
+    auto* Rites=Player->FindComponentByClass<UUnmadeTenfoldComponent>();
+    const bool MissingDeed=Rites&&!Rites->HasLegacyDeed(UnmadeCore::Deed::Discovered);
+    if ((bNew || bEchoChanged || MissingDeed) && !(Rites?
+        Rites->CommitActionDeeds(1u<<static_cast<int>(UnmadeCore::Deed::Discovered),[&]{return WriteWorldSnapshot();}):WriteWorldSnapshot()))
     {
         Discoveries.Restore(OldMask);
         WitnessEchoes.Restore(OldEcho);
@@ -1654,7 +1743,7 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessBraid(int32 Choice)
     const auto Before=WitnessBraid.Snapshot();
     if(WitnessBraid.Commit(Choice,WitnessEchoes)!=UnmadeCore::WitnessBraidEvent::Committed)
         return false;
-    if(!WriteWorldSnapshot())
+    if(!CommitWorldEvent(FName(Choice==1?TEXT("World.WitnessBraidShelter"):TEXT("World.WitnessBraidDocket")),FName("region.crossings.bridge")))
     {
         WitnessBraid.Restore(Before,WitnessEchoes);
         if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Red,
@@ -1686,7 +1775,7 @@ bool AUnmadePrototypeHub::ResolveNearbyWitnessReturn(int32 Choice)
     const auto Before=ReturnWitness.Snapshot();
     if(ReturnWitness.Choose(Choice,GetGameDay(),Dispatch,WitnessBraid.Outcome())!=
        UnmadeCore::WitnessReturnEvent::Chosen)return false;
-    if(!WriteWorldSnapshot())
+    if(!CommitWorldEvent(FName(Choice==1?TEXT("World.HessaPrivateCounsel"):TEXT("World.HessaPublicHearing")),FName("region.bellwold.refuge")))
     {
         ReturnWitness.Restore(Before,Dispatch,WitnessBraid.Outcome(),GetGameDay());
         return false;
@@ -1933,7 +2022,8 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     RefreshSimulationBudget();
 
     Super::Tick(DeltaSeconds);
-    if (!Clock.Advance(DeltaSeconds) || !GetWorld()) return;
+    if(!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    if(!UnmadeCore::AdvanceWorldClock(Clock,true,DeltaSeconds))return;
     AdvanceMaterialDayIfNeeded();
     AnimateBesWorkingCart();
     UpdateBesQuestTracker();
@@ -1989,21 +2079,17 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
 
     const FVector Position = Player->GetActorLocation();
     const UnmadeCore::SettlementId Village = UnmadeCore::SettlementAt(Position.X, Position.Y);
+    const auto VisitResult=UnmadeCore::CommitSettlementVisit(VillagesVisited,Village,true,
+        GetWorld()->GetTimeSeconds(),SettlementVisitRetry,[&]{return WriteWorldSnapshot();});
+    if(VisitResult==UnmadeCore::TimedProgress::Saved)
+        if(auto* P=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))P->ReconcileEarnedRewards();
+    if(VisitResult==UnmadeCore::TimedProgress::FirstFailure)
+        NotifyRpg(TEXT("SETTLEMENT VISIT NOT SAVED: retrying while you remain here. Its reward has not been granted."));
     if (Village != LastVisitedVillage)
     {
         LastVisitedVillage = Village;
         if (const auto* VillageInfo = UnmadeCore::FindSettlement(Village))
         {
-            const int32 PreviouslyVisited = VillagesVisited.Snapshot();
-            const bool bNewVillage = VillagesVisited.Visit(Village);
-            if (bNewVillage)
-            {
-                if (!WriteWorldSnapshot())
-                    VillagesVisited.Restore(PreviouslyVisited);
-                else if (AUnmadeCharacter* UnmadePlayer = Cast<AUnmadeCharacter>(
-                    UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)))
-                    UnmadePlayer->ReconcileEarnedRewards();
-            }
             if (GEngine)
             {
                 const TCHAR* Line = (Phase == UnmadeCore::DayPhase::Night ||
@@ -2328,45 +2414,12 @@ void AUnmadePrototypeHub::AdvanceMaterialDayIfNeeded()
     for(int i=1;i<9;++i)
         if(const auto* L=OuterReactions.Read(static_cast<UnmadeCore::Realm>(i)))
             Civic[i]=L->PublicResponse();
-    const auto Before=Materials.Snapshot();
-    const auto Cargo=Materials.Cargo();
-    const auto BeforeLiving=LivingTrades.Save();
-    const auto BeforeBes=BesHousehold.Save();
-    if(!Materials.AdvanceAllOneDay(Civic,BesHousehold.OnWalkout()))return;
-    // Payroll follows the day actually simulated by the material ledger,
-    // never a skipped future clock day after reloading a lagging save.
-    if(!LivingTrades.AdvanceOneDay(Materials.Town(
-        UnmadeCore::Realm::ThreefoldReach)->day,BesHousehold.OnWalkout()))
-    {
-        Materials.Restore(Before,Cargo,GetGameDay());
-        return;
-    }
-    if(!BesHousehold.AdvanceOneDay(Materials.Town(
-        UnmadeCore::Realm::ThreefoldReach)->day))
-    {
-        Materials.Restore(Before,Cargo,GetGameDay());
-        LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
-        return;
-    }
-    // Actual receipts create a separate, finite reserve of FOREIGN support
-    // goods: casks never become baskets and baskets never become rainwater.
-    for(int i=0;i<9;++i)
-    {
-        const auto Realm=static_cast<UnmadeCore::Realm>(i);
-        const auto* Town=Materials.Town(Realm);
-        if(Town && Town->shortageDays>Before[i].shortageDays)
-        {
-            const int Support=LivingTrades.ApplyShelterSupport(Realm,*Town);
-            if(Support>0)Materials.ReinforceShelter(Realm,Support);
-        }
-    }
-    if(!WriteWorldSnapshot())
-    {
-        Materials.Restore(Before,Cargo,GetGameDay());
-        LivingTrades.Restore(BeforeLiving,Materials,GetGameDay());
-        BesHousehold.Restore(BeforeBes,GetGameDay());
-        return;
-    }
+    const auto Result=UnmadeCore::CommitMaterialDay(Materials,LivingTrades,BesHousehold,Civic,
+        GetGameDay(),UnmadeSave::IsWorldWritable(GetWorld()),GetWorld()->GetTimeSeconds(),MaterialDayRetry,
+        [&]{return WriteWorldSnapshot();});
+    if(Result==UnmadeCore::TimedProgress::FirstFailure)
+        NotifyRpg(TEXT("WORLD DAY NOT SAVED: household supplies and wages were unchanged. Retrying automatically."));
+    if(Result!=UnmadeCore::TimedProgress::Saved)return;
     RefreshMaterialWorld();
     RefreshBesHouseholdWorld();
 }
@@ -2858,14 +2911,13 @@ void AUnmadePrototypeHub::RefreshOuterReactionWorld()
     bOuterReactionVisualActive=OuterActiveMask!=0;
 }
 
-bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
-    double Duration,bool Mastered,const FVector& CastPosition)
+bool AUnmadePrototypeHub::CommitRiteCast(AUnmadeCharacter* Player,UnmadeCore::RiteId Id,
+    double Duration,bool Mastered,TFunctionRef<bool()> SaveCast,bool& CivicApplied)
 {
-    if(!GetWorld())return false;
+    CivicApplied=false;
+    if(!IsValid(Player)||Player->GetWorld()!=GetWorld()||!UnmadeSave::IsWorldWritable(GetWorld()))return false;
+    const FVector CastPosition=Player->GetActorLocation();
     const auto* Policy=UnmadeCore::RealmReactionAt(CastPosition.X,CastPosition.Y);
-    if(!Policy)return false; // no unsupported in-between-world projections
-    ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
-    if(!IsValid(Player))return false;
     bool bWitness=false;
     for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
     {
@@ -2880,24 +2932,24 @@ bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
             It->GetActorLocation()+FVector(0,0,70),ECC_Visibility,Sight))continue;
         bWitness=true;break;
     }
-    const auto Before=RealityLedger.Snapshot();
-    const auto BeforeOuter=OuterReactions.Save();
-    const auto* Prior=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+    const auto* Prior=!Policy?nullptr:Policy->realm==UnmadeCore::Realm::ThreefoldReach
         ?&RealityLedger:OuterReactions.Read(Policy->realm);
-    if(!Prior)return false;
-    const auto PreviousResponse=Prior->PublicResponse();
-    const bool Applied=Policy->realm==UnmadeCore::Realm::ThreefoldReach
-        ?RealityLedger.Cast(Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness,true)
-        :OuterReactions.Cast(Policy->realm,Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness);
-    if(!Applied)return false;
-    if(!WriteWorldSnapshot())
-    {
-        RealityLedger.Restore(Before,Clock.ElapsedSeconds());
-        OuterReactions.Restore(BeforeOuter,Clock.ElapsedSeconds());
-        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Red,
-            TEXT("Realm consequence not saved: no civic monument granted."));
+    const auto PreviousResponse=Prior?Prior->PublicResponse():UnmadeCore::RealityPublicResponse::None;
+    int32 ResonanceIndex=-1;
+    auto ResonanceResult=UnmadeCore::ResonanceResult::Locked;
+    const bool Saved=UnmadeCore::CommitRiteWorld(RealityLedger,OuterReactions,Resonance,[&]{
+        if(Policy)CivicApplied=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+            ?RealityLedger.Cast(Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness,true)
+            :OuterReactions.Cast(Policy->realm,Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness);
+        if(Mastered)StageNearbyRealmRite(Player,Id,ResonanceIndex,ResonanceResult);
+    },[&]{return Player->CommitRiteEvents(Id,CivicApplied,SaveCast);});
+    if(!Saved){
+        CivicApplied=false;
+        NotifyRpg(TEXT("RITE NOT SAVED: cost, cooldown and realm progress were rolled back. No effect applied; retry the cast."));
         return false;
     }
+    if(ResonanceIndex>=0)PublishRealmResonance(ResonanceIndex,ResonanceResult);
+    if(!CivicApplied)return true; // A valid cast outside civic focus still works locally.
     if(Policy->realm==UnmadeCore::Realm::ThreefoldReach)
         RefreshRealityConsequenceWorld();
     else RefreshOuterReactionWorld();
@@ -3292,13 +3344,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
         UnmadeSave::LoadGameFromSlot());
     for(const BossPlacement& Location:Encounters)
     {
-        UnmadeCore::Achievement BossReward=UnmadeCore::Achievement::Count;
-        if(Location.Id==UnmadeCore::BossId::HollowBell)
-            BossReward=UnmadeCore::Achievement::HollowBell;
-        else if(Location.Id==UnmadeCore::BossId::RedactedCurator)
-            BossReward=UnmadeCore::Achievement::RedactedCurator;
-        else if(Location.Id==UnmadeCore::BossId::UnfinishedPilgrim)
-            BossReward=UnmadeCore::Achievement::UnfinishedPilgrim;
+        const auto BossReward=UnmadeCore::NamedBossReward(Location.Id);
         const bool bPreviouslyDefeated=EncounterSave && EncounterSave->SchemaVersion==1 &&
             EncounterSave->bHasInventorySnapshot && BossReward!=UnmadeCore::Achievement::Count &&
             (static_cast<uint64>(EncounterSave->AwardedMilestoneBits) &
@@ -3335,10 +3381,17 @@ void AUnmadePrototypeHub::RestoreCitizens()
     }
 }
 
+bool AUnmadePrototypeHub::SaveNpcMemories()
+{
+    bNpcMemorySavePending=true;
+    return UnmadeCore::CommitPendingMemory(bNpcMemorySavePending,UnmadeSave::IsWorldWritable(GetWorld()),
+        [&]{return WriteWorldSnapshot();});
+}
+
 void AUnmadePrototypeHub::SpreadLocalRumors()
 {
     UWorld* World = GetWorld();
-    if (!World) return;
+    if (!World||!UnmadeSave::IsWorldWritable(World)) return;
     TArray<AUnmadeNpcCharacter*> Citizens;
     for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
         Citizens.Add(*It);
@@ -3405,22 +3458,10 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
             }
         }
     }
-    if (bNewMemory) SaveCitizens();
+    if(bNewMemory)bNpcMemorySavePending=true;
+    UnmadeCore::CommitPendingMemory(bNpcMemorySavePending,true,[&]{return WriteWorldSnapshot();});
 }
 
-void AUnmadePrototypeHub::SaveCitizens()
-{
-    UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
-    if (!Save) return;
-    Save->NpcSnapshots.Reset(); // Avoid duplicates on repeated gossip saves.
-    for (TActorIterator<AUnmadeNpcCharacter> It(GetWorld()); It; ++It)
-    {
-        if (!It->GetStableId().IsNone())
-            Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
-    }
-    if (!UnmadeSave::SaveGameToSlot(Save))
-        UE_LOG(LogTemp, Error, TEXT("Unmade NPC social update save failed"));
-}
 
 void AUnmadePrototypeHub::PrepareRealmGeometry(const FVector& at,int limit){if(!GetWorld()||limit<1)return;int made=0;SpawningDeferred=true;for(int i=DeferredBlocks.Num()-1;i>=0&&made<limit;--i)if(FVector::DistSquared2D(at,DeferredBlocks[i].Center)<FMath::Square(30000.f)){auto b=DeferredBlocks[i];DeferredBlocks.RemoveAtSwap(i);SpawnBlock(b.Center,b.Scale,b.Label);++made;}SpawningDeferred=false;}
 void AUnmadePrototypeHub::RefreshSimulationBudget(){

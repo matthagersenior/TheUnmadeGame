@@ -25,7 +25,7 @@ class GearSourceContract(unittest.TestCase):
             self.assertIn('ActionName="'+action+'"',config)
         for token in ("CreateDefaultSubobject<UUnmadeEquipmentComponent>",
                       "ForgeWaybreaker()", "ReconcileEarnedRewards()",
-                      "Target->GetCombat()->IsDefeated()", "Achievement::FirstWatcher"):
+                      "Target->GetCombat()->IsDefeated()", "CombatRewards.Queue(Target->GetEnemyStyle())"):
             self.assertIn(token,player)
         combat=read("Source/TheUnmadeGame/Private/Combat/UnmadeCombatComponent.cpp")
         self.assertIn("Swing.baseDamage+GearAttack",combat)
@@ -34,6 +34,9 @@ class GearSourceContract(unittest.TestCase):
     def test_earned_rewards_only_from_canonical_saved_state(self):
         cpp=read("Source/TheUnmadeGame/Private/Items/UnmadeEquipmentComponent.cpp")
         save=read("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
+        predicates=read("Source/TheUnmadeGame/Public/Items/UnmadeMilestoneRules.h")
+        self.assertIn("ForEachEarnedMilestone(*Save",cpp)
+        self.assertIn("ForEachCivicContract(*Save",cpp)
         for token in ("ItemQuantities","EquippedItems","AwardedMilestoneBits",
                       "bHasInventorySnapshot"):
             self.assertIn(token,save)
@@ -42,9 +45,9 @@ class GearSourceContract(unittest.TestCase):
                       "Save->VisitedSettlementsMask", "Save->DiscoveredLoreMask",
                       "Save->SupplyActivityStage == 2", "Inventory.Restore(Before)",
                       "if (bSaveRejected) return false"):
-            self.assertIn(token,cpp.replace("==2"," == 2"))
+            self.assertIn(token,(cpp+predicates).replace("==2"," == 2"))
         self.assertIn("Save->PlayerStrain = UpdatedStrain",cpp)
-        self.assertIn("Player->GetCombat()->Heal(heal)",cpp)
+        self.assertIn("CommitHealing(*Player->GetCombat(), heal",cpp)
         self.assertNotIn("RequestDialogue(",cpp)
         self.assertNotIn("Ollama",cpp)
 
@@ -59,8 +62,8 @@ class GearSourceContract(unittest.TestCase):
         self.assertIn("FoldBonusSeconds()", equipment)
         self.assertIn("GlimpseDiscount()", equipment)
         self.assertIn("StrainRecoveryMultiplier()", equipment)
-        self.assertIn("FractureModel.Glimpse(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Discount)", player)
-        self.assertIn("FractureModel.Fold(IsValid(Anchor), GetWorld()->GetTimeSeconds(), Extension)", player)
+        self.assertIn("FractureModel.Glimpse(IsValid(Anchor),GetWorld()->GetTimeSeconds(),Discount)", player)
+        self.assertIn("FractureModel.Fold(IsValid(Anchor),GetWorld()->GetTimeSeconds(),Extension)", player)
 
     def test_atlas_is_explicitly_future_data_not_silent_unreal_claims(self):
         atlas=read("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")

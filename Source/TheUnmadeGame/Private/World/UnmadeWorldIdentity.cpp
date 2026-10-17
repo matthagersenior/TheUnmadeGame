@@ -1,4 +1,5 @@
 #include "World/UnmadePrototypeHub.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "World/UnmadeIdentityRegistry.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "Player/UnmadeCharacter.h"
@@ -61,7 +62,7 @@ bool AUnmadePrototypeHub::TryIdentityInteraction(AUnmadeCharacter* p,double comp
   else if(!Identity.Arc(arc)->hunt&&kills>=4){if(p->GetCombat()->GetMissingHealth()>0){changed=Identity.Hunt(arc,kills);heal=changed;}line=TEXT("Hunt: defeat four actual dungeon guards. One recovery ration restores up to 35 health; claim while injured.");cue=TEXT("reward");}
   else{if(p->GetCombat()->GetMissingHealth()>0){changed=Identity.Rest(arc,GetGameDay(),e->returned!=0);heal=changed;}line=TEXT("Sanctuary: all three roadposts repaired after return. Up to 35 health once per game day; no reward consumed at full health.");cue=TEXT("release");}
  }
- if(changed&&!WriteWorldSnapshot(p)){Identity=before;NotifyRpg(TEXT("Save failed. Quest, service and reward rolled back; retry."));return true;}
- if(changed){if(heal)p->GetCombat()->Heal(35);UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==1?TEXT("Repair"):TEXT("Inspect")));RefreshIdentity();RefreshExpeditions();}
+ if(changed&&!UnmadeCore::CommitHealing(*p->GetCombat(),heal?35:0,[&]{return WriteWorldSnapshot(p);})){Identity=before;NotifyRpg(TEXT("Save failed. Quest, service and reward rolled back; retry."));return true;}
+ if(changed){UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==1?TEXT("Repair"):TEXT("Inspect")));RefreshIdentity();RefreshExpeditions();}
  NotifyRpg(line);return true;
 }

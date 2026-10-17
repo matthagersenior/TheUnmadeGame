@@ -12,9 +12,9 @@ class RealityConsequenceIntegration(unittest.TestCase):
                      "LivingRoads","TomorrowDebt","UnderstandingBosses",
                      "ParadoxConvergence","Oathbinding","Cartography"):
             self.assertIn("RiteId::"+rite,rules)
-        self.assertIn("Hub->RecordRealityConsequence(Id,Power.duration,",component)
-        self.assertIn("Player->ReportRealityConsequenceEvent(Id);",component)
-        self.assertIn("if(!Persist(true))",component)
+        self.assertIn("Hub->CommitRiteCast(Player,Id,Power.duration,",component)
+        self.assertIn("Player->CommitRiteEvents(Id,CivicApplied,SaveCast)",read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp"))
+        self.assertIn("return Persist(true);",component)
         self.assertIn("bool mastered,bool physicallyWitnessed,bool insideFocus",rules)
         self.assertIn("if(mastered && physicallyWitnessed)",rules)
         self.assertIn("mask|=static_cast<std::uint16_t>(1u<<index)",rules)
@@ -64,7 +64,7 @@ class RealityConsequenceIntegration(unittest.TestCase):
         self.assertIn("bRealityConsequenceRejected || bOuterReactionsRejected ||",hub)
         self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected ||",hub)
         self.assertIn("bBesHouseholdRejected)return false;",hub)
-        self.assertIn("RealityLedger.Restore(Before,Clock.ElapsedSeconds());",hub)
+        self.assertIn("civic=beforeCivic",read("Source/TheUnmadeGame/Public/Save/UnmadeRiteCommitRules.h"))
         self.assertIn("if(!WriteWorldSnapshot())",hub)
         self.assertIn("Tests/world/reality_consequence_test.cpp",
                       read(".github/workflows/static-checks.yml"))

@@ -1,7 +1,10 @@
 #include "UI/UnmadeRpgFeedback.h"
+#include "Combat/UnmadeEncounterInterruptionRules.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Combat/UnmadeFinalBoss.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
+#include "Save/UnmadeSaveSession.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
@@ -15,6 +18,7 @@ AUnmadeFinalBoss::AUnmadeFinalBoss()
 void AUnmadeFinalBoss::ConfigureAct(UnmadeCore::FinalAct Act)
 {
     Rhythm.Reset();
+    DefeatSave.Reset();
     ConfiguredAct=static_cast<int32>(Act);
     bWarningShown=false;
     ConfigureStyle(UnmadeCore::EnemyStyle::Watcher);
@@ -33,7 +37,11 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
     if(!World)return;
     AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
         UGameplayStatics::GetActorOfClass(World,AUnmadePrototypeHub::StaticClass()));
-    if(!IsValid(Hub))return;
+    const auto Interrupt=[&]{
+        UnmadeCore::InterruptEncounter(Rhythm);bWarningShown=false;
+        GetCharacterMovement()->StopMovementImmediately();
+    };
+    if(!IsValid(Hub)){Interrupt();return;}
     const auto Act=Hub->GetFinalAct();
     const bool bFight=(Act==UnmadeCore::FinalAct::Veil &&
                        Hub->GetLaterRealmStage(UnmadeCore::Realm::FirstAbsence)==3 &&
@@ -42,22 +50,25 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
                       Act==UnmadeCore::FinalAct::EchoAwake;
     SetActorHiddenInGame(!bFight);
     SetActorEnableCollision(bFight);
-    if(!bFight)return;
+    if(!bFight){Interrupt();return;}
     if(ConfiguredAct!=static_cast<int>(Act))ConfigureAct(Act);
     if(GetCombat()->IsDefeated())
     {
-        if(Act==UnmadeCore::FinalAct::Veil)
-            Hub->BreakFinalMask(); // False victory: the second bar is ACTUALLY different.
-        else if(Act==UnmadeCore::FinalAct::Unmasked)
-            Hub->BreakFinalCore();
-        else if(Act==UnmadeCore::FinalAct::EchoAwake)
-            Hub->SettleFinalEcho();
+        const auto Saved=DefeatSave.Attempt(static_cast<int>(Act),World->GetTimeSeconds(),[&]{
+            if(Act==UnmadeCore::FinalAct::Veil)return Hub->BreakFinalMask();
+            if(Act==UnmadeCore::FinalAct::Unmasked)return Hub->BreakFinalCore();
+            if(Act==UnmadeCore::FinalAct::EchoAwake)return Hub->SettleFinalEcho();
+            return false;
+        });
+        if(Saved==UnmadeCore::DefeatSaveResult::FirstFailure)
+            UnmadeRpgFeedback(-1,10.f,FColor::Red,
+                TEXT("This phase victory is not saved. Retrying every five seconds; reloading returns to the previous save."));
         return; // failed persistence never invents a victory or instant heal
     }
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
         UGameplayStatics::GetPlayerCharacter(World,0));
-    if(!IsValid(Player)||!IsValid(Player->GetCombat())||
-       Player->GetCombat()->IsDefeated())return;
+    if(!UnmadeCore::RequireEncounterPlayer(IsValid(Player)&&IsValid(Player->GetCombat())&&
+       !Player->GetCombat()->IsDefeated()&&Player->GetWorld()==World&&UnmadeSave::IsSessionWritable(Player),Interrupt))return;
     FVector Direction=Player->GetActorLocation()-GetActorLocation();
     Direction.Z=0;
     const double Dist=Direction.Size();
@@ -108,9 +119,8 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
             // Apply damage only after the previous warning, through the same
             // authoritative guard/armor/dedup combat component as all foes.
             const float Before=Player->GetCombat()->GetHealth();
-            GetCombat()->SetGearBonuses(
-                FMath::Max(0,FMath::RoundToInt(Beat.damage-17)),0);
-            GetCombat()->TryStrikeTarget(Player->GetCombat(),Now,true,false);
+            if(UnmadeCore::ConfigureAuthoredFinalStrike(*GetCombat(),Beat))
+                GetCombat()->TryStrikeTarget(Player->GetCombat(),Now,true,false);
             if(GEngine)UnmadeRpgFeedback(-1,3.f,FColor::Red,
                 FString::Printf(TEXT("A remembered attack lands: %.0f injury."),
                     Before-Player->GetCombat()->GetHealth()));
@@ -121,4 +131,10 @@ void AUnmadeFinalBoss::Tick(float DeltaSeconds)
     if(Dist>50 && (Beat.move==UnmadeCore::FinalMove::Approach ||
                    Beat.move==UnmadeCore::FinalMove::Still))
         SetActorRotation(Direction.Rotation());
+}
+
+bool AUnmadeFinalBoss::HasPendingDefeatSave(const AUnmadePrototypeHub& Hub)const
+{
+    return UnmadeCore::PendingFinalDefeat(IsValid(GetCombat())&&GetCombat()->IsDefeated(),
+        ConfiguredAct,Hub.GetFinalAct());
 }

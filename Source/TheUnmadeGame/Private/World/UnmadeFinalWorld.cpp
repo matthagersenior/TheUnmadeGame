@@ -141,21 +141,24 @@ bool AUnmadePrototypeHub::CommitFinalMorning(
     AUnmadeCharacter* Player,UnmadeCore::Morning Choice)
 {
     if(!IsValid(Player)||bFinalSaveRejected)return false;
-    const auto Before=FinalStory.Snapshot();
-    if(FinalStory.ChooseWorld(Choice)!=UnmadeCore::FinalResult::NewMorning)
+    const auto Result=UnmadeCore::CommitFinalMorningAt(FinalStory,Choice,
+        Player->GetActorLocation(),FVector(0,220,155),
+        [&](const FVector& At){
+            const bool Moved=Player->SetActorLocation(At,false,nullptr,ETeleportType::TeleportPhysics);
+            if(!Moved)UE_LOG(LogTemp,Warning,TEXT("Final-morning relocation or rollback failed."));
+            return Moved;
+        },[&]{return WriteWorldSnapshot(Player);});
+    if(Result!=UnmadeCore::FinalMorningCommit::Applied){
+        if(Result==UnmadeCore::FinalMorningCommit::RelocationFailed)
+            NotifyRpg(TEXT("The return point could not be reached; no new morning was saved. Try again."));
         return false;
-    if(!WriteWorldSnapshot()){FinalStory.Restore(Before);return false;}
+    }
     RefreshFinalWorld();
     const int idx=static_cast<int>(Choice);
     if(GEngine)UnmadeRpgFeedback(-1,23.f,FColor::Cyan,
         FString::Printf(TEXT("THE SAME WORLD, ANOTHER MORNING: %s. %s Your gear, quests, and decisions remain."),
             UTF8_TO_TCHAR(UnmadeCore::FinalWorlds[idx].name),
             UTF8_TO_TCHAR(UnmadeCore::FinalWorlds[idx].changedWorld)));
-    // The cinematic cut would fade out/in; this is a deterministic safe
-    // pre-PC relocation in the existing level, NOT a second save slot.
-    if(!Player->SetActorLocation(FVector(0,220,155),false,nullptr,
-                                 ETeleportType::TeleportPhysics))
-        UE_LOG(LogTemp,Warning,TEXT("Final-world saved; relocation failed, use a normal gate."));
     return true;
 }
 bool AUnmadePrototypeHub::WakeFinalEcho()

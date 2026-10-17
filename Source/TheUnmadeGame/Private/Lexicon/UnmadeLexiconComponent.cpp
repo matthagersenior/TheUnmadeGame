@@ -1,4 +1,5 @@
 #include "Save/UnmadeSaveSession.h"
+#include "Save/UnmadeRealityTravelRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Lexicon/UnmadeLexiconComponent.h"
 #include "Save/UnmadePrototypeSave.h"
@@ -29,9 +30,29 @@ void UUnmadeLexiconComponent::BeginPlay()
     }
 }
 
+bool UUnmadeLexiconComponent::CaptureLexicon(UUnmadePrototypeSave* Save)const
+{
+    if(bSaveRejected||!Save)return false;
+    Save->LexiconEvidence.Reset();
+    for(const auto& Id:Lexicon.Snapshot())Save->LexiconEvidence.Add(FName(UTF8_TO_TCHAR(Id.c_str())));
+    return true;
+}
+bool UUnmadeLexiconComponent::CommitEvidence(FName EvidenceId,TFunctionRef<bool()> Write)
+{
+    if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return false;
+    const FString Id=EvidenceId.ToString();
+    const auto Count=Lexicon.Snapshot().size();
+    const bool Saved=UnmadeCore::CommitLexiconEvidence(Lexicon,std::string(TCHAR_TO_UTF8(*Id)),Write);
+    if(Saved&&Lexicon.Snapshot().size()>Count)
+        UnmadeRpgFeedback(-1,7.f,FColor::Cyan,UnderstandsVeyl()?
+            TEXT("VEYL UNDERSTOOD: 'the way that remains.' You can read the fracture inscription."):
+            TEXT("VEYL: first of two clues recorded. An archivist might recognize this mark."));
+    return Saved;
+}
+
 bool UUnmadeLexiconComponent::RecordEvidence(FName EvidenceId)
 {
-    if(bSaveRejected)return false;
+    if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return false;
     const auto Previous = Lexicon.Snapshot();
     const FString Text = EvidenceId.ToString();
     if (!Lexicon.RecordEvidence("term.veyl", std::string(TCHAR_TO_UTF8(*Text))))
@@ -50,7 +71,7 @@ bool UUnmadeLexiconComponent::RecordEvidence(FName EvidenceId)
         Save->LexiconEvidence.Add(FName(UTF8_TO_TCHAR(Id.c_str())));
     }
 
-    if (!UnmadeSave::SaveGameToSlot(Save))
+    if (!UnmadeSave::SaveGameToSlot(Save,this))
     {
         Lexicon.Restore(Previous);
         if (GEngine) UnmadeRpgFeedback(-1, 7.f, FColor::Red,

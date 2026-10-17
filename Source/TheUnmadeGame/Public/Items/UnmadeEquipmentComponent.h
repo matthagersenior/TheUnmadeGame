@@ -2,6 +2,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Items/UnmadeItemRules.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "Items/UnmadeUnifiedLoadoutRules.h"
 #include "Items/UnmadeCraftEconomyRules.h"
 class UUnmadePrototypeSave;
@@ -16,7 +17,8 @@ public:
     UUnmadeEquipmentComponent();
     virtual void BeginPlay() override;
     bool Claim(UnmadeCore::Achievement Reward);
-    void ReconcileEarnedMilestones();
+    bool HasClaimed(UnmadeCore::Achievement Reward)const{return Inventory.HasClaimed(Reward);}
+    bool ReconcileEarnedMilestones();
     bool SelectRealmReward(int Arc);
     int RealmWeapon()const{return Loadout.weapon;}
     int RealmArmor()const{return Loadout.armor;}
@@ -24,7 +26,7 @@ public:
     FString DescribeComparison()const;
     void SetBuildBonuses(int Attack,int Armor){BuildAttack=Attack;BuildArmor=Armor;RefreshCombatBonuses();}
     bool EquipNext(UnmadeCore::GearSlot Slot);
-    bool UseConsumable(UnmadeCore::ItemId Item, double CurrentStrain, int32& OutStrain);
+    UnmadeCore::ConsumableCommit UseConsumable(UnmadeCore::ItemId Item, double CurrentStrain, int32& OutStrain);
     bool ForgeWaybreaker();
     bool Buy(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village,int Trust=0);
     bool Sell(UnmadeCore::ItemId Id,UnmadeCore::SettlementId Village);
@@ -57,5 +59,5 @@ private:
     int32 TemporaryArmor=0;
     UnmadeCore::InventoryModel Inventory;
     UnmadeCore::RegionalEconomy Economy;
-    void ReconcileCivicContracts(const UUnmadePrototypeSave* Save);
+    bool ReconcileCivicContracts(const UUnmadePrototypeSave* Save);
 };

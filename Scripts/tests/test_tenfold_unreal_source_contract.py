@@ -38,7 +38,7 @@ class SignatureRiteIntegration(unittest.TestCase):
         world=read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         gear=read("Source/TheUnmadeGame/Private/Items/UnmadeEquipmentComponent.cpp")
         for mechanic in ("LaunchCharacter(", "ExposeToFold(", "AddActorWorldOffset(",
-                         "SetActorEnableCollision(false)","SetActorHiddenInGame(true)"):
+                         "ResolveByMercy()"):
             self.assertIn(mechanic,player)
         self.assertIn("SetRiteWorldActorState(Tag,true)",world)
         self.assertIn("TemporaryRiteWorldEffects",world)
@@ -72,10 +72,12 @@ class SignatureRiteIntegration(unittest.TestCase):
             self.assertIn(field,save)
             self.assertIn(field,component)
         for token in ("Chronicle.Restore(Previous)","Confluence.Restore(PriorConfluence)",
-                      "Player->RefundRealityStrain(Power.cost)", "if(!Persist(true))"):
+                      "Player->RefundRealityStrain(Power.cost)", "return Persist(true);"):
             self.assertIn(token,component)
-        self.assertIn("Achievement::RiteCartography",gear)
-        self.assertIn("Achievement::ConfluenceFirstAbsence",gear)
+        self.assertIn("ForEachEarnedMilestone(*Save",gear)
+        predicates=read("Source/TheUnmadeGame/Public/Items/UnmadeMilestoneRules.h")
+        self.assertIn("Achievement::RiteCartography",predicates)
+        self.assertIn("Achievement::ConfluenceFirstAbsence",predicates)
 
     def test_native_domain_suites_are_in_ci(self):
         wf=read(".github/workflows/static-checks.yml")

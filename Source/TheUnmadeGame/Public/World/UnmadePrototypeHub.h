@@ -1,10 +1,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Save/UnmadeServiceCommitRules.h"
+#include "Templates/Function.h"
 #include "GameFramework/Actor.h"
 #include "NPC/UnmadeNpcDecisionRules.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
 #include "World/UnmadeLivingWorldRules.h"
+#include "World/UnmadeTimedProgressRules.h"
 #include "World/UnmadeWitnessEchoRules.h"
 #include "World/UnmadeWitnessBraidRules.h"
 #include "World/UnmadeWitnessDispatchRules.h"
@@ -70,7 +73,11 @@ public:
     FName ServiceWorkCue(FName Person,const FVector& At)const;
     bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected;}
     bool IsWorldReady()const{return bWorldReady;}
-    bool SavePlayerSession(AUnmadeCharacter* Player){return WriteWorldSnapshot(Player);}
+    bool SaveRecoveryState(AUnmadeCharacter* Player);
+    bool SavePlayerSession(AUnmadeCharacter* Player);
+    bool CaptureWorldSnapshot(class UUnmadePrototypeSave* Save);
+    bool HasPendingDefeatReceipts()const;
+    bool SaveNpcMemories();
     AUnmadePrototypeHub();
     bool TryExperienceInteraction(AUnmadeCharacter* Player,double Competing);
     bool RecordExperienceConversation(FName Id,AUnmadeCharacter* Player);
@@ -101,8 +108,8 @@ public:
     double GetWorldClockSeconds() const { return Clock.ElapsedSeconds(); }
     void ApplyRiteEnvironment(UnmadeCore::RiteId Id,double Duration,bool Mastered);
     /** One witnessed, local Tenfold cast updates architecture, combat and civic memory. */
-    bool RecordRealityConsequence(UnmadeCore::RiteId Id,double Duration,bool Mastered,
-                                  const FVector& CastPosition);
+    bool CommitRiteCast(AUnmadeCharacter* Player,UnmadeCore::RiteId Id,double Duration,bool Mastered,
+                        TFunctionRef<bool()> SaveCast,bool& CivicApplied);
     UnmadeCore::RealityConsequenceView RealityConsequenceAt(FVector Position) const;
     int32 GetRealmHazardPercent(FVector Position) const;
     int32 GetRealmTradeTrustBonus(FVector Position) const;
@@ -186,6 +193,7 @@ public:
     /** True only when a real interaction advanced a quest; completion flag is output. */
     bool TryResidentVillageTask(FName ResidentId, bool& bCompleted);
     void TryFactionConversation(FName ResidentId);
+    bool ResolvePreviewedCommit(FName Scope,int32 Choice);
     bool ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome);
     bool GetNearbyCommitPreview(int32 Choice,FName& Scope,FString& Warning) const;
     bool TryTravelFrontier(AUnmadeCharacter* Player);
@@ -208,7 +216,6 @@ public:
     int32 GetEchoQuestEnding(UnmadeCore::Realm Realm) const {return EchoQuest.Ending(Realm);}
     int32 GetEchoQuestEvidence(UnmadeCore::Realm Realm) const {return EchoQuest.Evidence(Realm);}
     int32 GetRealmResonanceStage(UnmadeCore::Realm Realm) const {return Resonance.Stage(Realm);}
-    bool RecordNearbyRealmRite(AUnmadeCharacter* Player,UnmadeCore::RiteId Id);
     bool InspectResonanceArchive(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     UnmadeCore::GuardianOutcome GetRealmGuardianOutcome(UnmadeCore::Realm Realm) const {
         return Guardians.Outcome(Realm);
@@ -227,7 +234,7 @@ public:
     FString DescribeUnansweredRoad(AUnmadeCharacter* Player) const;
     bool InspectUnansweredRoad(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool RecordResidentConversation(FName ResidentId);
-    bool RecordResidentAid(FName ResidentId);
+    bool RecordResidentAid(FName ResidentId,bool AlreadyWitnessed=false);
     FString GetResidentReturnLine(FName ResidentId,UnmadeCore::Realm Home) const;
     bool CommitFinalMorning(AUnmadeCharacter* Player,UnmadeCore::Morning Choice);
     bool WakeFinalEcho();
@@ -271,7 +278,7 @@ public:
     void BuildAdventureDepth();
     void RefreshAdventureDepth();
     bool TryDepthInteraction(AUnmadeCharacter* Player,int Action,double Competing=1000000.);
-    bool UseDepthFieldKit(AUnmadeCharacter* Player);
+    UnmadeCore::FieldKitResult UseDepthFieldKit(AUnmadeCharacter* Player);
     bool UseDepthPower(AUnmadeCharacter* Player);
     bool SelectDepthTechnique(int Arc,AUnmadeCharacter* Player);
     FString GetDepthJournal()const;
@@ -284,8 +291,7 @@ public:
     FString RpgNotice;
     uint64 RpgNoticeSerial=0;
     void NotifyRpg(const FString& Text){RpgNotice=Text;++RpgNoticeSerial;if(RpgHistory.IsEmpty()||RpgHistory.Last()!=Text){RpgHistory.Add(Text);if(RpgHistory.Num()>100)RpgHistory.RemoveAt(0);}}
-    int DepthPendingArc=-1,DepthPendingChoice=0;
-    double DepthConfirmUntil=0;
+    UnmadeCore::ScopedServiceConfirmation DepthConfirmation;
     bool bDepthSaveRejected=false;
     UnmadeCore::AdventureDepth Depth;
     std::array<UnmadeCore::RealmChallenge,9> DepthChallenges;
@@ -322,7 +328,8 @@ private:
     bool ConfirmExpeditionDecision(int Arc,int Kind,int Value);
     UnmadeCore::PlayerExperience Experience;
     bool bExperienceRejected=false;
-    double NextExperienceRefresh=0,ExperienceWaitConfirm=-1;
+    double NextExperienceRefresh=0;
+    UnmadeCore::ScopedServiceConfirmation ExperienceRestConfirmation;
     std::array<double,9> WingRelayDeadline{};
     mutable TArray<FVector> EscortTrail;
     TWeakObjectPtr<class AUnmadeEnemyCharacter> WingObserver;
@@ -332,7 +339,6 @@ private:
     void BuildPlayerExperience();
     void RefreshPlayerExperience();
     bool CommitExperience(const UnmadeCore::PlayerExperience& Before,AUnmadeCharacter* Player);
-    bool ExperienceScene(int Realm,int Scene,AUnmadeCharacter* Player);
     bool bBuilt = false;
     bool bExpeditionSaveRejected=false;
     UnmadeCore::Expeditions Expeditions;
@@ -349,6 +355,8 @@ private:
     UPROPERTY(Transient)
     TObjectPtr<ADirectionalLight> Sunlight;
     UnmadeCore::LivingWorldClock Clock;
+    UnmadeCore::TimedProgressRetry MaterialDayRetry,SettlementVisitRetry;
+    bool bNpcMemorySavePending=false;
     UnmadeCore::RealityConsequenceLedger RealityLedger; // v1: Reach, do not migrate
     UnmadeCore::OuterRealmReactions OuterReactions; // eight isolated world histories
     UnmadeCore::MaterialWorld Materials;
@@ -454,6 +462,9 @@ private:
     UnmadeCore::RealmResonanceJourney Resonance;
     bool bResonanceSaveRejected=false;
     void BuildRealmResonance();
+    bool StageNearbyRealmRite(AUnmadeCharacter* Player,UnmadeCore::RiteId Id,
+                             int32& Index,UnmadeCore::ResonanceResult& Result);
+    void PublishRealmResonance(int32 Index,UnmadeCore::ResonanceResult Result);
     void RefreshRealmResonanceWorld();
     UnmadeCore::GuardianChronicle Guardians;
     UnmadeCore::CommitmentGate GuardianCommitGate;
@@ -484,12 +495,13 @@ private:
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;
     void RestoreLivingWorld();
     void SaveLivingWorld();
+    bool CommitWorldEvent(FName Event,FName Subject);
+    bool CommitRealmAftermathEvent(UnmadeCore::Realm Realm,int32 Choice);
     bool WriteWorldSnapshot(AUnmadeCharacter* StrainOwner=nullptr);
     int32 ReadStoryChoice() const;
     void SpawnLoreSite(UnmadeCore::District District, FName SiteId,
         const TCHAR* Name, const TCHAR* DayLine, const TCHAR* NightLine, FVector Position);
     void SpreadLocalRumors();
-    void SaveCitizens();
     void SpawnBlock(FVector Center, FVector Scale, FName Label);
     void SpawnCitizen(const UnmadeCore::ResidentSpec& Resident);
     void BuildVillages();

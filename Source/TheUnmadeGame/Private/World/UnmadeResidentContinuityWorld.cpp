@@ -1,4 +1,7 @@
 #include "UI/UnmadeRpgFeedback.h"
+#include "Player/UnmadeCharacter.h"
+#include "World/UnmadeTenfoldComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "World/UnmadePrototypeHub.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
 #include "Authoring/UnmadeResidentReturnData.h"
@@ -25,22 +28,31 @@ bool AUnmadePrototypeHub::RecordResidentConversation(FName ResidentId)
     return true;
 }
 
-bool AUnmadePrototypeHub::RecordResidentAid(FName ResidentId)
+bool AUnmadePrototypeHub::RecordResidentAid(FName ResidentId,bool AlreadyWitnessed)
 {
-    if(bResidentContinuityRejected)return false;
+    if(bResidentContinuityRejected||ResidentId.IsNone()||!GetWorld())return false;
     const FTCHARToUTF8 ID(*ResidentId.ToString());
-    if(UnmadeCore::ResidentContinuityIndex(ID.Get())<0)return false;
+    const bool Known=UnmadeCore::ResidentContinuityIndex(ID.Get())>=0;
+    const bool Aided=Known&&ResidentRelationships.Aided(ID.Get());
     const auto Old=ResidentRelationships.Snapshot();
-    if(ResidentRelationships.Aid(ID.Get())!=UnmadeCore::EncounterEvent::Aided)
-        return false;
-    if(!WriteWorldSnapshot())
-    {
+    if(Known&&!Aided&&ResidentRelationships.Aid(ID.Get())!=UnmadeCore::EncounterEvent::Aided)return false;
+    bool Saved=false;
+    if(AlreadyWitnessed||Aided){
+        auto* Player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+        auto* Rites=IsValid(Player)?Player->FindComponentByClass<UUnmadeTenfoldComponent>():nullptr;
+        const bool MissingDeed=Rites&&!Rites->HasLegacyDeed(UnmadeCore::Deed::Protected);
+        // Repair older split commits from real direct testimony or an existing
+        // aid receipt, without inventing another event or farming trust.
+        Saved=(!Known||Aided)&&!MissingDeed;
+        if(!Saved)Saved=Rites?Rites->CommitActionDeeds(1u<<static_cast<int>(UnmadeCore::Deed::Protected),
+            [&]{return WriteWorldSnapshot();}):WriteWorldSnapshot();
+        if(Saved)NotifyRpg(TEXT("This resident's existing aid is already recorded; no repeat reward or testimony was added."));
+    }else Saved=CommitWorldEvent(FName("Player.Helped"),ResidentId);
+    if(!Saved){
         ResidentRelationships.Restore(Old);
-        if(GEngine)UnmadeRpgFeedback(-1,6,FColor::Red,
-            TEXT("Aid recognition was not saved; the previous history is unchanged."));
-        return false;
+        NotifyRpg(TEXT("Aid was not saved; witness, deed and relationship progress were restored. You can retry."));
     }
-    return true;
+    return Saved;
 }
 
 FString AUnmadePrototypeHub::GetResidentReturnLine(
