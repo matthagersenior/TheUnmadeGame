@@ -1,3 +1,17 @@
+## 2026-10-17 — Chronicle consequence retention and oath intent
+
+- Separated threats from deliberate restitution; kept the existing scar and
+  Bellwold/faction/deed/firsthand-witness gates.
+- Retained failed deed, verified-road and involuntary oath writes for retry.
+  Every accepted combined save captures live Chronicle/Confluence alongside
+  world memories. Both oath-choice bonuses clear on break; other buffs persist.
+- Explicit oath choices roll back on failed writes with feedback. Portable
+  evidence: 270 history fault paths, 3,240 reloads, four chosen-oath write faults,
+  UBSan and seven compiled mutation regressions. Unreal verification is pending.
+- Original world-action-to-consequence callback windows remain the next audit;
+  no claim of atomicity across that earlier boundary. No authored content,
+  stable save IDs, lore mystery, consent or optional illustration policy changed.
+
 ## 2026-10-17 — Combat reward and witness-memory retries
 
 Melee and projectile impacts already share the same reward hook. Failed ordinary

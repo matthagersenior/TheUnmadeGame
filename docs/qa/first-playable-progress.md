@@ -29,11 +29,12 @@ integration need; preserve development momentum and do not merge into main.
 
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
+| P1 chronicle consequences implemented; UE pending | Threats break but never redeem; explicit restitution keeps its authored gates and scar. Deeds/verified roads/oath consequences retain five-second retries; every combined writer captures live Chronicle/Confluence. Both oath bonuses clear on break, other buffs remain. 270 fault paths, 3,240 reloads and seven mutation regressions pass; actual actors/IO remain pending. |
 | P1 rite/victory commits implemented; UE pending | Cast cost/trial/cooldown and staged civic/resonance changes share one write, with complete rollback before runtime effects. All three named bosses retain retryable milestone receipts; Hollow Keeper mercy no longer loses failed rewards. 1,080 cast cases, 24 resonance paths and 12 named receipt faults pass portable checks. Verify actual targeting, projectile defeats, mercy, timing and UI in Unreal. |
 | P1 complete capture implemented; UE pending | Every combined writer preflights its staged fields, captures the accepted live world/player, then revalidates before storage. World capture preserves caller-owned patches. Field surveys stage/rollback live progress before capture. 216 nine-realm component paths, 1,080 reloads and 48 survey fault paths pass; verify actual actor capture ordering in Unreal. |
 | P1 timed progression implemented; UE pending | Source owners bind every combined write to the registered world. Blocked worlds stop clock/rite-day/rumor advancement. Visits retry in place; failed day transactions restore production, wages, support and households together. Quiet gossip retries retain absent residents. 192 fault paths and 4,800 reloads pass portable tests; verify real timer/lifecycle ordering in Unreal. |
 | P1 implemented; UE pending | Startup rewards wait for registered player resume and world readiness. Failed starter/milestone/civic writes retry; checkpoints remain incomplete. Central saves require a restored owner and ready, accepted world. Older selected gear and spent starter supplies survive reloads. Verify actual BeginPlay/travel ordering and feedback in Unreal. |
-| P1 combat/memory retries implemented; UE pending | Player-owned first-style reward queue retains failed Stalker/Watcher grants after enemies stop; pending rewards block complete checkpoints. Direct witness writes share the quiet eight-second memory retry. 345 Python tests, 79 strict portable executables, 48 dependency checks, UBSan and four mutation regressions pass. Next: legacy deed/oath callback persistence; Unreal remains pending. |
+| P1 combat/memory retries implemented; UE pending | Player-owned first-style reward queue retains failed Stalker/Watcher grants after enemies stop; pending rewards block complete checkpoints. Direct witness writes share the quiet eight-second memory retry. 345 Python tests, 79 strict portable executables, 48 dependency checks, UBSan and four mutation regressions pass. Deed/oath follow-up is recorded below; Unreal remains pending. |
 | P0 implemented; UE pending | `Private/Items/UnmadeEquipmentComponent.cpp::UseConsumable` saved potion loss before healing, while `Private/Player/UnmadeCharacter.cpp::CaptureSession` captured old health. Shared `Public/Save/UnmadeRecoveryRules.h` now applies healing before synchronous save and restores health/stamina on failure; caller restores inventory. Immediate reload must preserve both cost and benefit. |
 | P0 implemented; UE pending | `Private/World/UnmadePlayerExperience.cpp::ExperienceAction` saved finite specialty use before Tharniv healing / Saltwake Strain relief. Both persistent benefits now precede the same world commit; failed writes restore the service ledger and player values. Strain rollback copies the model to retain transient Fold/Glimpse windows. Temporary combat buffs retain existing session-only behavior. |
 | P1 implemented; UE pending | `Public/Save/UnmadeCombinedSaveRules.h` preflights every present combined subrecord with disposable production models before profile availability, selection, restoration or backup rotation. Invalid records never reach reward reconciliation. Automatic recovery stays pinned until primary success. The legacy fieldwork sidecar is checked when needed and cannot bypass a rejected combined record. Portable malformed/failed-write/repeated-reload tests pass; actual platform IO remains unverified. |
@@ -46,7 +47,7 @@ integration need; preserve development momentum and do not merge into main.
 | P1 defeat retries implemented; UE pending | Guardian/final-defeat commits attempt immediately, then retry failure every five active-world seconds instead of every actor tick. Success suppresses repeat commits for that phase. Portable tests cover 24 guardian and 72 final-phase fault/retry paths; confirmation expiry, retargeting, cancellation and consumed consent remain safe. |
 | P1 pending checkpoints implemented; UE pending | Session saves refuse to report success while an encounter receipt is pending. Read-only actor queries include hidden receipt owners and distinguish an old final body from the new phase. Load/New preserve unsaved-discard confirmation; explicit recovery never pre-saves. 114 portable fault sessions verify blocked checkpoint writes and normal saves after receipt commit. |
 | P1 handoff ownership implemented; UE pending | Target selection stays staged until a new-world owner registers. Travel failure restores original selection; a missing owner/failed world cannot unlock writes. Reentrant requests are rejected and destination backup pins survive arrival. All 64 profile/recovery combinations pass portable checks; UE delegate/build, startup ordering and real failed travel remain pending. |
-| P1 next connected batch | Trace ordinary enemy rewards for melee/ranged kills and post-cast NPC witness persistence. Preserve realm receipt ownership; keep actual nine-realm walkthrough, startup/travel, UI and IO pending, and recheck drift before publishing. |
+| P1 next connected batch | Trace originating aid/faction/discovery commits before their later consequence callbacks for interrupted-save/reload gaps. Preserve authored gates and consent; keep the nine-realm Unreal walkthrough, equipment/UI, travel and platform IO pending. Recheck drift before publishing. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -602,3 +603,41 @@ transmedia, manuscript and whitespace checks pass. Actual Unreal/UHT, hit/LOS,
 travel, UI feedback and interrupted platform IO remain pending. No charges,
 artwork requirements or merge into main. Live main comparison before this batch:
 15 commits ahead, zero behind; focused changes continue on PR #74.
+
+## 2026-10-17 — Retained chronicle consequences and explicit oath intent
+
+Threat events no longer call the combined break/redeem player control. A threat
+can break an active oath but never authorize restitution, even when all evidence
+requirements are satisfied. Deliberate redemption retains Bellwold relief,
+faction, three distinct deeds and three firsthand witnesses; the betrayal scar
+remains. Breaking either oath choice removes its attack/armor power immediately,
+including before the equipment refresh cache catches up, while retaining other
+rite buffs and debt penalties. Explicit oath choices roll back on write failure
+and explain that the choice was not accepted.
+
+Earned deeds, directly verified frontier roads and involuntary oath consequences
+now remain in the live chronicle after write failure and retry every five active
+seconds. Duplicate events cannot reset the delay or multiply credit. Pending
+history blocks a complete checkpoint; explicit Load/New unsaved-discard rules
+remain. Every accepted combined writer captures Chronicle/Confluence through the
+same production serializer before full revalidation and backup rotation. Local
+witness history is staged before its save, so a different subsystem's writer
+cannot store current memories with an older live oath/deed ledger. Road geometry
+is presented only after a successful retry; reload reads the existing road bits.
+
+Portable evidence: 270 history fault paths across nine realm fixtures and three
+isolated profile stores, 3,240 reloads, four explicit oath-choice write faults,
+malformed raw/captured history, unrelated-field preservation and combined witness
+capture. Seven compiled mutations covering intent, dirty retention, capture,
+readiness, rollback, truth-oath power and unlearned roads fail regressions. All
+348 Python tests and 80 strict portable C++17 executables pass. The new scenario
+passes UBSan. Static structure/literal/hygiene, six release scenarios, transmedia,
+manuscript and whitespace checks pass. All 50 gameplay dependency checks pass.
+
+This does not make the original aid/faction/discovery action and its later
+ReportLocalEvent callback one transaction. Next: trace those originating action
+commits for interrupted-save/reload gaps before consequence callbacks. UHT/Editor,
+actual witness/LOS, equipment refresh, travel, controller feedback and interrupted
+platform IO remain pending. No Unreal playthrough, art/book requirement, charge
+or merge into main. Before publication the branch was 16 commits ahead and zero behind main
+`9606fec4`; the existing draft PR remains the integration point.

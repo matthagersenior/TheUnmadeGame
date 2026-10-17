@@ -1,5 +1,6 @@
 #include "Save/UnmadeSessionRules.h"
 #include "Save/UnmadeRiteCommitRules.h"
+#include "World/UnmadeTenfoldComponent.h"
 #include "UI/UnmadePlayerPreferences.h"
 #include "Components/TextRenderComponent.h"
 #include "Engine/TextRenderActor.h"
@@ -534,7 +535,11 @@ bool AUnmadePrototypeHub::HasPendingDefeatReceipts()const
 {
     if(!GetWorld())return false;
     if(const auto* Player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))
+    {
         if(Player->HasPendingCombatRewards())return true;
+        if(const auto* Rite=Player->FindComponentByClass<UUnmadeTenfoldComponent>())
+            if(Rite->HasPendingHistory())return true;
+    }
     // Defeated expedition actors can already be hidden. Query their durable
     // owner state, never visibility, collision or whether Tick is enabled.
     for(TActorIterator<AUnmadeEnemyCharacter> Enemy(GetWorld());Enemy;++Enemy)
@@ -547,7 +552,7 @@ bool AUnmadePrototypeHub::SavePlayerSession(AUnmadeCharacter* Player)
     const auto Result=UnmadeCore::CommitSessionCheckpoint(HasPendingDefeatReceipts(),
         [&]{return WriteWorldSnapshot(Player);});
     if(Result==UnmadeCore::CheckpointSave::PendingDefeat)
-        NotifyRpg(TEXT("An encounter victory still needs to save. Continue the game to allow its automatic retry; this checkpoint was not written."));
+        NotifyRpg(TEXT("A victory or earned history still needs to save. Continue the game to allow its automatic retry; this checkpoint was not written."));
     return Result==UnmadeCore::CheckpointSave::Saved;
 }
 

@@ -92,9 +92,9 @@ Mera's consent; they do not turn every realm's resident into that storyline.
   milestone receipts and retry before stopping actor ticks. Checkpoints include
   hidden pending actors. Twelve receipt fault cases and 300 reloads pass portable
   checks; actual ranged impacts, mercy sight gates and actor timing remain pending.
-- Next source/portable expansion: ordinary enemy melee/ranged reward delivery and
-  post-cast NPC witness persistence. Keep authored per-realm receipts and choices,
-  and monitor branch divergence without unnecessary synchronization.
+- Next source/portable expansion: originating aid/faction/discovery saves before
+  consequence callbacks. Keep authored gates, per-realm receipts and consent;
+  monitor branch divergence without unnecessary synchronization.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,
@@ -113,3 +113,16 @@ keep their existing independent gates. Interrupt a direct NPC witness write,
 then allow a quiet eight-second rumor tick: persist the original observation
 without replaying the event. Portable rules pass; actual actors, line of sight,
 controller feedback, travel and platform storage still require Unreal.
+
+## 17 October: oath/deed/road persistence acceptance
+
+For each realm, interrupt a deed or verified-frontier-road save, then permit five
+active seconds and reload: retain earned facts exactly once. Threats must never
+redeem a broken oath, even with sufficient restitution evidence. Explicit chosen
+break/redemption must roll back if either storage write fails. Check both oath
+choices immediately after casting and after the half-second refresh: remove the
+oath bonus on betrayal, retain other rite bonuses/debt, and keep the scar after
+witnessed redemption. Pending history must explain incomplete checkpoints and
+retain explicit unsaved-discard confirmation. Portable fixtures cover all nine
+realm IDs and isolated profile stores; actual input, visibility, observers,
+equipment, timers, travel and filesystem failures remain Unreal acceptance work.

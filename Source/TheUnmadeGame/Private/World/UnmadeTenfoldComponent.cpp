@@ -87,45 +87,20 @@ void UUnmadeTenfoldComponent::BeginPlay()
     }
 }
 
+bool UUnmadeTenfoldComponent::CaptureChronicle(UUnmadePrototypeSave* Save)const
+{
+    if(bSaveRejected||!Save)return false;
+    UnmadeCore::CaptureChronicleRecord(Chronicle,Confluence,*Save,[](auto& target,const auto& source){
+        target.Reset();for(const auto value:source)target.Add(value);
+    });
+    return true;
+}
+
 bool UUnmadeTenfoldComponent::Persist(bool bWriteStrain)
 {
     if(bSaveRejected)return false;
     UUnmadePrototypeSave* Save=UUnmadePrototypeSave::LoadOrCreate();
-    if(!Save)return false;
-    const auto& State=Chronicle.Snapshot();
-    Save->RiteStages.Reset();
-    Save->RiteChoices.Reset();
-    Save->RiteReadyAt.Reset();
-    Save->DisciplineMastery.Reset();
-    for(int32 i=0;i<10;++i)
-    {
-        Save->RiteStages.Add(State.stage[i]);
-        Save->RiteChoices.Add(State.choice[i]);
-        Save->RiteReadyAt.Add(State.readyAt[i]);
-    }
-    for(int32 i=0;i<6;++i)Save->DisciplineMastery.Add(State.disciplineMastery[i]);
-    Save->RiteTrialBits=State.trialUsed;
-    Save->LegacyDeedBits=State.deeds;
-    Save->VerifiedRoadBits=State.verifiedRoutes;
-    Save->TomorrowDebtDueDay=State.debtDueDay;
-    Save->TomorrowDebtExhaustedUntil=State.exhaustedUntilDay;
-    Save->BrokenOathCount=State.brokenOaths;
-    Save->bOathActive=State.oathActive;
-    Save->bOathRedeemed=State.oathRedeemed;
-    Save->bHasTenfoldChronicle=true;
-    const auto& Trials=Confluence.Snapshot();
-    Save->ConfluenceStages.Reset();
-    Save->ConfluenceDecisions.Reset();
-    Save->ConfluenceCastMasks.Reset();
-    Save->ConfluenceWindowEnds.Reset();
-    for(int32 i=0;i<6;++i)
-    {
-        Save->ConfluenceStages.Add(Trials.stage[i]);
-        Save->ConfluenceDecisions.Add(Trials.decisions[i]);
-        Save->ConfluenceCastMasks.Add(Trials.casts[i]);
-        Save->ConfluenceWindowEnds.Add(Trials.windowEnds[i]);
-    }
-    Save->bHasConfluenceSnapshot=true;
+    if(!CaptureChronicle(Save))return false;
     if(bWriteStrain)
     {
         const AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
@@ -571,54 +546,72 @@ void UUnmadeTenfoldComponent::InvokeRite()
 
 void UUnmadeTenfoldComponent::BreakChosenOath()
 {
-    if(bSaveRejected)return;
-    const auto Before=Chronicle.Snapshot();
-    if(Chronicle.Snapshot().brokenOaths==1 &&
-       !Chronicle.Snapshot().oathRedeemed)
-    {
-        if(!Chronicle.RedeemOath(GatherContext()))
-        {
-            if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
-                TEXT("REDEMPTION: complete Bellwold's relief and faction, earn three distinct deeds and bring three firsthand witnesses."));
-            return;
-        }
-        if(!Persist()){Chronicle.Restore(Before);return;}
-        if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
-            Player->ReportRedeemedOathEvent();
-        if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Green,
-            TEXT("OATH RESTORED: the betrayal is still remembered, but witnesses accept your costly restitution."));
+    if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    const auto Result=UnmadeCore::CommitOathChoice(Chronicle,GatherContext(),[&]{return Persist();});
+    if(Result==UnmadeCore::OathChoice::SaveFailed){
+        UnmadeRpgFeedback(-1,8.f,FColor::Red,TEXT("OATH CHANGE NOT SAVED: the choice was rolled back. Try again when saving is available."));
         return;
     }
-    if(!Chronicle.BreakOath()){ExplainResult(UnmadeCore::RiteResult::BrokenOath);return;}
-    if(!Persist()){Chronicle.Restore(Before);return;}
-    ActiveArmorBonus=0;
-    if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
-    {
-        if(IsValid(Player->GetEquipment()))
-            Player->GetEquipment()->SetTemporaryBonuses(ActiveAttackBonus,0);
-        Player->ReportBrokenOathEvent();
+    if(Result==UnmadeCore::OathChoice::NeedsRestitution){
+        UnmadeRpgFeedback(-1,9.f,FColor::Yellow,TEXT("REDEMPTION: complete Bellwold's relief and faction, earn three distinct deeds and bring three firsthand witnesses."));
+        return;
     }
-    if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Red,
-        TEXT("OATH BROKEN: the choice persists, and the oath's power is permanently lost."));
+    if(Result==UnmadeCore::OathChoice::Unavailable){ExplainResult(UnmadeCore::RiteResult::BrokenOath);return;}
+    if(Result==UnmadeCore::OathChoice::Redeemed){
+        if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))Player->ReportRedeemedOathEvent();
+        UnmadeRpgFeedback(-1,9.f,FColor::Green,TEXT("OATH RESTORED: the betrayal is still remembered, but witnesses accept your costly restitution."));
+        return;
+    }
+    RemoveOathPowers();
+    if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))Player->ReportBrokenOathEvent();
+    UnmadeRpgFeedback(-1,8.f,FColor::Red,TEXT("OATH BROKEN: the choice persists. Its power is lost until witnessed restitution."));
 }
 
 void UUnmadeTenfoldComponent::RecordLegacyDeed(UnmadeCore::Deed Deed)
 {
-    if(bSaveRejected)return;
-    const auto Before=Chronicle.Snapshot();
-    if(Chronicle.RecordDeed(Deed) && !Persist())Chronicle.Restore(Before);
+    if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    History.RecordDeed(Chronicle,Deed);
+    RetryHistorySave();
 }
-void UUnmadeTenfoldComponent::VerifyExploredFrontier(int32 RealmIndex)
+void UUnmadeTenfoldComponent::RemoveOathPowers()
 {
-    if(bSaveRejected || Chronicle.Stage(UnmadeCore::RiteId::Cartography)<2)return;
-    const auto Before=Chronicle.Snapshot();
-    if(Chronicle.VerifyRoute(RealmIndex,2,true))
-    {
-        if(!Persist())Chronicle.Restore(Before);
-        else if(AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
+    if(!UnmadeCore::ClearBrokenOathPower(ActiveRite,ActiveAttackBonus,ActiveArmorBonus,BonusExpiresAt))return;
+    const auto Context=GatherContext();
+    RefreshTemporaryPowers(Context.now,Context.day);
+    // Invoke can set equipment before the half-second refresh updates its cache.
+    // Always clear the oath now, even when the cached bonuses were already zero.
+    if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))
+        if(IsValid(Player->GetEquipment()))
+            Player->GetEquipment()->SetTemporaryBonuses(LastAppliedAttack,LastAppliedArmor);
+}
+void UUnmadeTenfoldComponent::RecordThreatenedOath()
+{
+    if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    if(History.Threaten(Chronicle)){
+        RemoveOathPowers();
+        UnmadeRpgFeedback(-1,8.f,FColor::Red,TEXT("OATH BROKEN: the threat broke your active promise. Restitution requires a deliberate choice and firsthand witnesses."));
+        if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner()))Player->ReportBrokenOathEvent();
+    }
+    RetryHistorySave();
+}
+void UUnmadeTenfoldComponent::RetryHistorySave()
+{
+    if(bSaveRejected||!GetWorld())return;
+    const auto Result=History.Attempt(UnmadeSave::IsWorldWritable(GetWorld()),GetWorld()->GetTimeSeconds(),[&]{return Persist();});
+    if(Result==UnmadeCore::TimedProgress::Saved&&bRoutePresentationPending){
+        bRoutePresentationPending=false;
+        if(AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
             UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass())))
             Hub->ApplyRiteEnvironment(UnmadeCore::RiteId::Cartography,40.0,true);
     }
+    if(Result==UnmadeCore::TimedProgress::FirstFailure)
+        UnmadeRpgFeedback(-1,10.f,FColor::Orange,TEXT("HISTORY NOT SAVED: earned deeds, verified roads and oath consequences are retained for five-second retries. A complete checkpoint waits for them."));
+}
+void UUnmadeTenfoldComponent::VerifyExploredFrontier(int32 RealmIndex)
+{
+    if(bSaveRejected||!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    if(History.VerifyRoute(Chronicle,RealmIndex))bRoutePresentationPending=true;
+    RetryHistorySave();
 }
 void UUnmadeTenfoldComponent::RefreshTemporaryPowers(double CurrentTime,int32 Day)
 {
@@ -645,6 +638,7 @@ void UUnmadeTenfoldComponent::TickComponent(float DeltaSeconds,ELevelTick TickTy
 {
     Super::TickComponent(DeltaSeconds,TickType,ThisTickFunction);
     if(bSaveRejected || !GetWorld()||!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    RetryHistorySave();
     double Now=GetWorld()->GetTimeSeconds();
     int Day=1;
     for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)

@@ -5,6 +5,7 @@
 #include "World/UnmadeTimedProgressRules.h"
 #include "World/UnmadeConfluenceRules.h"
 #include <string>
+#include "World/UnmadeChronicleHistoryRules.h"
 #include "UnmadeTenfoldComponent.generated.h"
 
 /** Story-authoritative ten-rite quest and power component. AI entirely optional. */
@@ -33,6 +34,9 @@ public:
     void StudyConfluence();
     void ConfluenceChoice1();
     void ConfluenceChoice2();
+    bool CaptureChronicle(class UUnmadePrototypeSave* Save)const;
+    bool HasPendingHistory()const{return History.Pending();}
+    void RecordThreatenedOath();
     void RecordLegacyDeed(UnmadeCore::Deed Deed);
     void VerifyExploredFrontier(int32 RealmIndex);
     int32 RiteStage(UnmadeCore::RiteId Rite) const {return Chronicle.Stage(Rite);}
@@ -67,4 +71,8 @@ private:
     int32 LastAppliedArmor=0;
     UnmadeCore::RiteId ActiveRite=UnmadeCore::RiteId::Count;
     UnmadeCore::TimedProgressRetry DaySaveRetry;
+    UnmadeCore::ChronicleHistory History;
+    bool bRoutePresentationPending=false;
+    void RetryHistorySave();
+    void RemoveOathPowers();
 };

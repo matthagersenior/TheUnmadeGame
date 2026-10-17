@@ -878,3 +878,20 @@ transmedia, manuscript and whitespace checks pass. Actual Unreal/UHT, hit/LOS,
 travel, UI feedback and interrupted platform IO remain pending. No charges,
 artwork requirements or merge into main. Live main comparison before this batch:
 15 commits ahead, zero behind; focused changes continue on PR #74.
+
+## 17 October 2026 — A threat is not restitution
+
+The Lantern You Promised keeps the existing distinction between a betrayal and
+costly witnessed restitution. A threat may break an active promise; it never
+chooses redemption for the player. Redemption still requires Bellwold's relief,
+the faction outcome, three distinct deeds and three firsthand witnesses, and
+never erases the recorded betrayal. Breaking either oath removes its associated
+attack or armor power without removing a different rite's power or debt burden.
+
+Earned deeds and directly verified roads are facts retained for saving, rather
+than rewards lost on a storage error. Chronicle/Confluence and current local
+witness memories share every accepted combined save. Failed automatic history
+writes retry without replaying the originating event. Explicit oath choices
+still require a successful save and roll back on failure. These are source and
+portable-rule guarantees; native sight, equipment, travel and platform IO remain
+unverified. No new realm, identity, quest, consent rule or mystery resolution.

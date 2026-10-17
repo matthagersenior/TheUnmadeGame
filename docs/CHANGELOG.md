@@ -1,3 +1,41 @@
+## 2026-10-17 — Retained chronicle consequences and explicit oath intent
+
+Threat events no longer call the combined break/redeem player control. A threat
+can break an active oath but never authorize restitution, even when all evidence
+requirements are satisfied. Deliberate redemption retains Bellwold relief,
+faction, three distinct deeds and three firsthand witnesses; the betrayal scar
+remains. Breaking either oath choice removes its attack/armor power immediately,
+including before the equipment refresh cache catches up, while retaining other
+rite buffs and debt penalties. Explicit oath choices roll back on write failure
+and explain that the choice was not accepted.
+
+Earned deeds, directly verified frontier roads and involuntary oath consequences
+now remain in the live chronicle after write failure and retry every five active
+seconds. Duplicate events cannot reset the delay or multiply credit. Pending
+history blocks a complete checkpoint; explicit Load/New unsaved-discard rules
+remain. Every accepted combined writer captures Chronicle/Confluence through the
+same production serializer before full revalidation and backup rotation. Local
+witness history is staged before its save, so a different subsystem's writer
+cannot store current memories with an older live oath/deed ledger. Road geometry
+is presented only after a successful retry; reload reads the existing road bits.
+
+Portable evidence: 270 history fault paths across nine realm fixtures and three
+isolated profile stores, 3,240 reloads, four explicit oath-choice write faults,
+malformed raw/captured history, unrelated-field preservation and combined witness
+capture. Seven compiled mutations covering intent, dirty retention, capture,
+readiness, rollback, truth-oath power and unlearned roads fail regressions. All
+348 Python tests and 80 strict portable C++17 executables pass. The new scenario
+passes UBSan. Static structure/literal/hygiene, six release scenarios, transmedia,
+manuscript and whitespace checks pass. All 50 gameplay dependency checks pass.
+
+This does not make the original aid/faction/discovery action and its later
+ReportLocalEvent callback one transaction. Next: trace those originating action
+commits for interrupted-save/reload gaps before consequence callbacks. UHT/Editor,
+actual witness/LOS, equipment refresh, travel, controller feedback and interrupted
+platform IO remain pending. No Unreal playthrough, art/book requirement, charge
+or merge into main. Before publication the branch was 16 commits ahead and zero behind main
+`9606fec4`; the existing draft PR remains the integration point.
+
 ## 2026-10-17 — Combat reward and witness-memory retries
 
 Melee and projectile impacts already share the same reward hook. Failed ordinary

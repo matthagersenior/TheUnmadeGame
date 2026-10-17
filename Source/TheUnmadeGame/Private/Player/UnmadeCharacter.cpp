@@ -1630,7 +1630,6 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
             continue;
         if (It->GetMemory()->Witness(EventId, EventKind, SubjectId)) ++Witnesses;
     }
-    if(Witnesses>0)SaveNearbyNpcMemories();
     if(IsValid(Tenfold))
     {
         if(EventKind==FName("Player.Helped") || EventKind==FName("Player.HelpedVillage"))
@@ -1638,8 +1637,9 @@ void AUnmadeCharacter::ReportLocalEvent(FName EventKind, FName SubjectId)
         else if(EventKind==FName("World.FactionResolved"))
             Tenfold->RecordLegacyDeed(UnmadeCore::Deed::Reconciled);
         else if(EventKind==FName("Player.Threatened"))
-            Tenfold->BreakChosenOath();
+            Tenfold->RecordThreatenedOath();
     }
+    if(Witnesses>0)SaveNearbyNpcMemories();
     const FString Line = FString::Printf(TEXT("%s witnessed by %d nearby resident(s)."),
         *EventKind.ToString(), Witnesses);
     if (GEngine) UnmadeRpgFeedback(-1, 6.f, FColor::Yellow, Line);
