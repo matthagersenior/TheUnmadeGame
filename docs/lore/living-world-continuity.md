@@ -1000,3 +1000,15 @@ unchanged. Named bosses, elders and authored guardians retain independent
 attack phases. No witnesses, quests, reward quantities, saved outcomes,
 resident knowledge or world canon have been altered. The engine must still
 verify physical pathfinding, spatial fairness and combat feel.
+
+## 17 October 2026 — Wild creatures notice cautious approaches
+
+Ordinary wildlife can lose an unseen, crouched traveler beyond its near reach
+or outside its forward sight cone. A clearly visible standing traveler still
+draws attention. A confirmed sighting remains in the creature's transient
+awareness for four active-world seconds, even if the player briefly breaks
+sight. This changes immediate combat engagement rather than permanent history:
+no public witness, quest event, reputation, new item, loot, choice, save field or
+memory is generated. Named elders, champions and bosses keep their authored
+encounter rhythm. Unreal sight, physical crouching, creature navigation and
+controller accessibility still require real engine verification.

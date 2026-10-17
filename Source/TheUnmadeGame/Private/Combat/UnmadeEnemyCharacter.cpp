@@ -287,6 +287,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
        !Player->GetCombat()->IsDefeated()&&Player->GetWorld()==World&&UnmadeSave::IsSessionWritable(Player),[&]{
         UnmadeCore::InterruptAttackWindup(WindupEndsAt,NextWindupAllowedAt,RecoveryEndsAt);
         UnmadeCore::InterruptEncounter(ElderPattern);ElderLastWarning=UnmadeCore::SlagAttack::None;
+        Alertness.Reset();
         NormalLockedAim=ElderLockedAim=FVector::ZeroVector;bHasNavWaypoint=false;
         GetCharacterMovement()->StopMovementImmediately();
         ElderAimMarker->SetVisibility(false);TelegraphLight->SetIntensity(0);
@@ -313,7 +314,17 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     const bool bClearSight=bNearby && !World->LineTraceTestByChannel(
         GetActorLocation()+FVector(0,0,55),
         Player->GetActorLocation()+FVector(0,0,55),ECC_Visibility,Params);
-    auto Intent=bNearby
+    // Wildlife may ignore a crouching traveler outside its forward sight cone,
+    // but it remains wary briefly after a confirmed sighting.
+    const bool bOrdinaryStealth=!bCinderholdElder&&!bElderEncounter;
+    const bool bCrouched=IsValid(Player->GetCharacterMovement())&&
+        Player->GetCharacterMovement()->IsCrouching();
+    const double Facing=FVector::DotProduct(GetActorForwardVector(),Delta.GetSafeNormal2D());
+    const bool bSpotted=UnmadeCore::CreatureCanSpot(
+        bClearSight,bCrouched,DistanceCm/100.0,Facing);
+    const bool bEngaged=bOrdinaryStealth
+        ?bNearby&&Alertness.Update(Now,bSpotted):bNearby;
+    auto Intent=bEngaged
         ?(bSpeciesConfigured?UnmadeCore::CreatureIntent(Profile,DistanceCm/100.0,
             bClearSight,Now<RecoveryEndsAt):UnmadeCore::ChooseEnemyIntent(Style,DistanceCm/100.0,bClearSight))
         :UnmadeCore::EnemyIntent::Hold;
@@ -329,19 +340,20 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
             ?UnmadeCore::EnemyIntent::Hold:UnmadeCore::EnemyIntent::Approach;
     }
     const auto Routine=UnmadeCore::CreatureRoutine(Style,Now,
-        CachedRealityHub.IsValid()&&CachedRealityHub->GetCurrentPhase()==UnmadeCore::DayPhase::Night,bNearby);
+        CachedRealityHub.IsValid()&&CachedRealityHub->GetCurrentPhase()==UnmadeCore::DayPhase::Night,bEngaged);
     const FVector RoutineTarget=TerritoryHome+FVector(Routine.offsetX,Routine.offsetY,0);
-    const bool bLocalRoutine=!bNearby&&!bReturnHome&&FVector::DistSquared2D(GetActorLocation(),RoutineTarget)>FMath::Square(80.f);
+    const bool bLocalRoutine=!bEngaged&&!bReturnHome&&FVector::DistSquared2D(GetActorLocation(),RoutineTarget)>FMath::Square(80.f);
     if(bReturnHome||bLocalRoutine)Intent=UnmadeCore::EnemyIntent::Approach;
     // Only ordinary creatures participate in the local pressure budget.
     // Bosses, guardians and authored elder timings keep their own rules.
     int ActiveOrdinaryWarnings=0;
-    if(!bCinderholdElder&&bNearby&&bClearSight&&WindupEndsAt<0.0 &&
+    if(!bCinderholdElder&&!bElderEncounter&&bNearby&&bClearSight&&WindupEndsAt<0.0 &&
        Intent==UnmadeCore::EnemyIntent::Attack)
     {
         for(TActorIterator<AUnmadeEnemyCharacter> other(World);other;++other)
         {
             if(*other==this||other->ExpeditionArc>=0||other->bCinderholdElder||
+               other->bElderEncounter||
                other->bWingObserver||!other->CanBeTargeted()||
                other->WindupEndsAt<Now)continue;
             if(FVector::DistSquared2D(other->GetActorLocation(),
@@ -410,7 +422,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
     else
     {
         SetMotionCue(FName(TEXT("Idle")));
-        if(bNearby)SetActorRotation(Delta.GetSafeNormal2D().Rotation());
+        if(bEngaged)SetActorRotation(Delta.GetSafeNormal2D().Rotation());
     }
 
     if(bCinderholdElder)

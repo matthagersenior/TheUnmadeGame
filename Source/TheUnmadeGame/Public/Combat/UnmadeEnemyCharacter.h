@@ -5,6 +5,7 @@
 #include "Combat/UnmadeCombatRules.h"
 #include "Combat/UnmadeBossRules.h"
 #include "Combat/UnmadeCreatureRules.h"
+#include "Combat/UnmadeCreatureAwarenessRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeExpeditionRules.h"
 #include "UnmadeEnemyCharacter.generated.h"
@@ -77,6 +78,7 @@ private:
     double NextPathRefreshAt=0.0;
     FVector NextNavWaypoint=FVector::ZeroVector;
     bool bHasNavWaypoint=false;
+    UnmadeCore::CreatureAwareness Alertness;
     double WindupEndsAt=-1.0;
     double NextWindupAllowedAt=0.0;
     double HitFlashEndsAt=-1.0;
