@@ -979,3 +979,10 @@ action buttons despite reporting analog; movement/look stick axes are not eligib
 for action rebinding. This corrects accessibility and feedback, with no change
 to rites, lore, characters, events, rewards, saved IDs or consequences. Controller
 focus and actual input dispatch remain pending Unreal acceptance.
+
+The gamepad menu's rebinding mode must also observe analog input events for
+left/right triggers. Only a sufficiently pressed trigger while capture is armed
+may set an action key; low-value jitter and stick axes do not select a binding.
+This remains a non-narrative input correction and does not affect authored
+sequences, resident testimony, rites or rewards. Verify with physical controller
+input in Unreal when the Editor is available.

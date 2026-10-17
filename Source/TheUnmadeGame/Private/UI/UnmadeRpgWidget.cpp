@@ -32,6 +32,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Input/Reply.h"
 #include "InputCoreTypes.h"
+#include "Input/Events.h"
 #include "Kismet/GameplayStatics.h"
 namespace {
 constexpr UnmadeCore::ItemId TradeGoods[]={UnmadeCore::ItemId::IronScrap,UnmadeCore::ItemId::WildHerbs,UnmadeCore::ItemId::BlankParchment,UnmadeCore::ItemId::HearthSalve,UnmadeCore::ItemId::StrainVial};
@@ -83,6 +84,15 @@ void UUnmadeRpgWidget::Open(int value){if(bOpen&&Page==value){Close();return;}if
 void UUnmadeRpgWidget::Close(){if(!bOpen)return;SessionConfirm.Clear();ActionFeedback.Reset();bOpen=false;CaptureBinding=0;if(bPausedWorld){UGameplayStatics::SetGamePaused(this,false);bPausedWorld=false;}if(Panel)Panel->SetVisibility(ESlateVisibility::Collapsed);if(auto* pc=GetOwningPlayer()){pc->bShowMouseCursor=false;pc->SetIgnoreMoveInput(false);pc->SetIgnoreLookInput(false);pc->SetInputMode(FInputModeGameOnly());}}
 bool UUnmadeRpgWidget::CaptureControl(FKey key){if(!CaptureBinding)return false;if(key==EKeys::Escape){CaptureBinding=0;Refresh();return true;}FString reason;if(GetMutableDefault<UUnmadePlayerPreferences>()->Bind(CaptureBinding,key,reason))CaptureBinding=0;if(auto* h=Hub(GetWorld()))h->NotifyRpg(reason);Refresh();return true;}
 FReply UUnmadeRpgWidget::NativeOnMouseButtonDown(const FGeometry& g,const FPointerEvent& e){if(CaptureControl(e.GetEffectingButton()))return FReply::Handled();return Super::NativeOnMouseButtonDown(g,e);}
+FReply UUnmadeRpgWidget::NativeOnAnalogValueChanged(const FGeometry& g,const FAnalogInputEvent& e){
+ const FKey key=e.GetKey();
+ const bool trigger=key==EKeys::Gamepad_LeftTrigger||key==EKeys::Gamepad_RightTrigger;
+ if(UnmadeCore::ShouldCaptureTriggerAnalog(CaptureBinding!=0,trigger,e.GetAnalogValue())){
+  CaptureControl(e.GetKey());
+  return FReply::Handled();
+ }
+ return Super::NativeOnAnalogValueChanged(g,e);
+}
 FReply UUnmadeRpgWidget::NativeOnKeyDown(const FGeometry& g,const FKeyEvent& e){auto k=e.GetKey();if(CaptureControl(k))return FReply::Handled();if(k==EKeys::Escape||k==EKeys::Gamepad_FaceButton_Right){Close();return FReply::Handled();}if(k==EKeys::J){Open(0);return FReply::Handled();}if(k==EKeys::I){Open(1);return FReply::Handled();}if(k==EKeys::Gamepad_LeftShoulder||k==EKeys::Gamepad_RightShoulder){Open((Page+(k==EKeys::Gamepad_RightShoulder?1:7))%8);return FReply::Handled();}if(k==EKeys::Six){ChoiceA();return FReply::Handled();}if(k==EKeys::Seven){ChoiceB();return FReply::Handled();}bool navigation=k==EKeys::Tab||k==EKeys::Up||k==EKeys::Down||k==EKeys::Left||k==EKeys::Right||k==EKeys::Enter||k==EKeys::SpaceBar||k==EKeys::Gamepad_DPad_Up||k==EKeys::Gamepad_DPad_Down||k==EKeys::Gamepad_DPad_Left||k==EKeys::Gamepad_DPad_Right||k==EKeys::Gamepad_FaceButton_Bottom;if(bOpen&&!navigation)return FReply::Handled();return Super::NativeOnKeyDown(g,e);}
 
 void UUnmadeRpgWidget::NativeTick(const FGeometry& g,float dt){Super::NativeTick(g,dt);if(GetWorld()&&GetWorld()->GetTimeSeconds()>=NextRefresh){NextRefresh=GetWorld()->GetTimeSeconds()+.2;Refresh();}}

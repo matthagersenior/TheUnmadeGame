@@ -19,6 +19,10 @@ int main() {
  assert(CanBindPlayerControl(true, true, true));    // gameplay left/right triggers
  assert(!CanBindPlayerControl(true, true, false));  // analog movement sticks
  assert(!CanBindPlayerControl(false, false, true)); // invalid key
+ assert(UnmadeCore::ShouldCaptureTriggerAnalog(true, true, 0.75f));
+ assert(!UnmadeCore::ShouldCaptureTriggerAnalog(true, true, 0.12f));
+ assert(!UnmadeCore::ShouldCaptureTriggerAnalog(false, true, 1.0f));
+ assert(!UnmadeCore::ShouldCaptureTriggerAnalog(true, false, 1.0f));
 }
 """
         with tempfile.TemporaryDirectory() as tmp:
@@ -40,6 +44,14 @@ int main() {
         self.assertIn("UnmadeCore::CanBindPlayerControl", src)
         self.assertIn("key==EKeys::Gamepad_LeftTrigger", src)
         self.assertIn("key==EKeys::Gamepad_RightTrigger", src)
+
+    def test_analog_trigger_capture_is_connected_to_ui_input(self):
+        header = (ROOT / "Source/TheUnmadeGame/Public/UI/UnmadeRpgWidget.h").read_text()
+        widget = (ROOT / "Source/TheUnmadeGame/Private/UI/UnmadeRpgWidget.cpp").read_text()
+        self.assertIn("NativeOnAnalogValueChanged", header)
+        self.assertIn("FReply UUnmadeRpgWidget::NativeOnAnalogValueChanged", widget)
+        self.assertIn("UnmadeCore::ShouldCaptureTriggerAnalog", widget)
+        self.assertIn("CaptureControl(e.GetKey())", widget)
 
     def test_contextual_prompt_is_the_one_displayed(self):
         src = (ROOT / "Source/TheUnmadeGame/Private/UI/UnmadeRpgWidget.cpp").read_text()
