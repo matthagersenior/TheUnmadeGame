@@ -20,6 +20,12 @@ class CivicReverberationWiring(unittest.TestCase):
   self.assertIn("EvaluateCivicReverberation(",s)
   self.assertIn("GetPetitionRelayResidentLine(",s)
   self.assertIn("BesHousehold.Save()",s)
+  resident=s.split("FString AUnmadePrototypeHub::GetPetitionRelayResidentLine(",1)[1].split("bool AUnmadePrototypeHub::RecordPetitionRelayConversation",1)[0]
+  self.assertNotIn("Effects.wageLine",resident)  # residents cannot magically see late Cinderhold payroll
+  self.assertIn("Effects.wageLine",s.split("FString AUnmadePrototypeHub::GetPetitionRelayJournal(",1)[1].split("FString AUnmadePrototypeHub::GetPetitionRelayResidentLine(",1)[0])
+  for actor in ("SaltDebate","ProtectedRoute","PublicPlatform"):
+   self.assertIn(actor,s)
+  self.assertIn("ECC_Visibility",s)
   self.assertIn("EvaluateCivicReverberation(",campaign)
   self.assertIn("DescribeUnansweredRoad",campaign)
   self.assertIn("The contradiction is witnessed, not a free victory",campaign)
