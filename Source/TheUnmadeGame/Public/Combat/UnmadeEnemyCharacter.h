@@ -5,6 +5,7 @@
 #include "Combat/UnmadeCombatRules.h"
 #include "Combat/UnmadeBossRules.h"
 #include "Combat/UnmadeCreatureRules.h"
+#include "Combat/UnmadeCreatureTacticsRules.h"
 #include "Combat/UnmadeCreatureAwarenessRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeExpeditionRules.h"
@@ -87,6 +88,7 @@ private:
     UnmadeCore::EnemyStyle Style = UnmadeCore::EnemyStyle::Stalker;
     bool bSpeciesConfigured=false;
     bool bElderEncounter=false;
+    UnmadeCore::CreatureKind Species=UnmadeCore::CreatureKind::Cinderjaw;
     UnmadeCore::CreatureProfile Profile=UnmadeCore::CreatureStats(UnmadeCore::CreatureKind::Cinderjaw);
     double RecoveryEndsAt=0.0;
     double FoldExposedUntil = -1.0;
