@@ -53,9 +53,10 @@ void AUnmadePrototypeHub::RefreshRealmResonanceWorld()
     }
 }
 
-bool AUnmadePrototypeHub::RecordNearbyRealmRite(
-    AUnmadeCharacter* Player,UnmadeCore::RiteId Id)
+bool AUnmadePrototypeHub::StageNearbyRealmRite(
+    AUnmadeCharacter* Player,UnmadeCore::RiteId Id,int32& Index,UnmadeCore::ResonanceResult& Result)
 {
+    Index=-1;
     if(!IsValid(Player)||!GetWorld() || bResonanceSaveRejected ||
        bEchoSaveRejected || bLaterRealmSaveRejected || bRealmAftermathSaveRejected)
         return false;
@@ -76,46 +77,39 @@ bool AUnmadePrototypeHub::RecordNearbyRealmRite(
                 It->GetActorLocation()+FVector(0,0,50),
                 ECC_Visibility,Sight))continue;
             const auto& Spec=UnmadeCore::RealmResonances[i];
-            const auto Before=Resonance.Snapshot();
-            const auto Result=Resonance.Record(
-                Spec.realm,Id,Clock.ElapsedSeconds(),
+            Index=i;
+            Result=Resonance.Record(Spec.realm,Id,Clock.ElapsedSeconds(),
                 EchoQuest.Ending(Spec.realm)!=0,true);
-            if(Result==UnmadeCore::ResonanceResult::Started ||
-               Result==UnmadeCore::ResonanceResult::ExpiredRestarted ||
-               Result==UnmadeCore::ResonanceResult::Opened)
-            {
-                if(!WriteWorldSnapshot())
-                {
-                    Resonance.Restore(Before);
-                    if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Red,
-                        TEXT("Your rite succeeded, but its resonance did not save; try again."));
-                    return true;
-                }
-                RefreshRealmResonanceWorld();
-            }
-            if(GEngine)
-            {
-                FString Notice;
-                if(Result==UnmadeCore::ResonanceResult::Started ||
-                   Result==UnmadeCore::ResonanceResult::ExpiredRestarted)
-                    Notice=FString::Printf(TEXT("OBSERVATORY: %s. Cast the OTHER mastered rite here within two world-minutes."),
-                                           UTF8_TO_TCHAR(Spec.question));
-                else if(Result==UnmadeCore::ResonanceResult::Opened)
-                    Notice=FString::Printf(TEXT("OBSERVATORY OPEN: %s. A bridge now reaches the archive."),
-                                           UTF8_TO_TCHAR(Spec.title));
-                else if(Result==UnmadeCore::ResonanceResult::WrongAbility)
-                    Notice=TEXT("The plinth responds only to its two named disciplines.");
-                else if(Result==UnmadeCore::ResonanceResult::AlreadyRecorded)
-                    Notice=TEXT("That discipline has been witnessed. Cast the other named power.");
-                else if(Result==UnmadeCore::ResonanceResult::AlreadyOpened)
-                    Notice=TEXT("The observatory remains permanently open. Cross to inspect its records.");
-                else Notice=TEXT("The observatory remains sealed until its earlier story is resolved.");
-                UnmadeRpgFeedback(-1,10.f,FColor::Cyan,Notice);
-            }
             return true;
         }
     }
     return false;
+}
+
+void AUnmadePrototypeHub::PublishRealmResonance(int32 Index,UnmadeCore::ResonanceResult Result)
+{
+    if(Index<0||Index>=static_cast<int32>(UnmadeCore::RealmResonances.size()))return;
+    const auto& Spec=UnmadeCore::RealmResonances[Index];
+    RefreshRealmResonanceWorld();
+    if(GEngine)
+    {
+        FString Notice;
+        if(Result==UnmadeCore::ResonanceResult::Started ||
+           Result==UnmadeCore::ResonanceResult::ExpiredRestarted)
+            Notice=FString::Printf(TEXT("OBSERVATORY: %s. Cast the OTHER mastered rite here within two world-minutes."),
+                                   UTF8_TO_TCHAR(Spec.question));
+        else if(Result==UnmadeCore::ResonanceResult::Opened)
+            Notice=FString::Printf(TEXT("OBSERVATORY OPEN: %s. A bridge now reaches the archive."),
+                                   UTF8_TO_TCHAR(Spec.title));
+        else if(Result==UnmadeCore::ResonanceResult::WrongAbility)
+            Notice=TEXT("The plinth responds only to its two named disciplines.");
+        else if(Result==UnmadeCore::ResonanceResult::AlreadyRecorded)
+            Notice=TEXT("That discipline has been witnessed. Cast the other named power.");
+        else if(Result==UnmadeCore::ResonanceResult::AlreadyOpened)
+            Notice=TEXT("The observatory remains permanently open. Cross to inspect its records.");
+        else Notice=TEXT("The observatory remains sealed until its earlier story is resolved.");
+        UnmadeRpgFeedback(-1,10.f,FColor::Cyan,Notice);
+    }
 }
 
 bool AUnmadePrototypeHub::InspectResonanceArchive(

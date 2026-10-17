@@ -1,4 +1,5 @@
 #include "Save/UnmadeSessionRules.h"
+#include "Save/UnmadeRiteCommitRules.h"
 #include "UI/UnmadePlayerPreferences.h"
 #include "Components/TextRenderComponent.h"
 #include "Engine/TextRenderActor.h"
@@ -14,6 +15,7 @@
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Combat/UnmadeEnemyCharacter.h"
 #include "Combat/UnmadeBossCharacter.h"
+#include "Combat/UnmadeNamedBossRewardRules.h"
 #include "Story/UnmadeConflictGate.h"
 #include "Story/UnmadeConflictRules.h"
 #include "World/UnmadeLoreSite.h"
@@ -2856,14 +2858,13 @@ void AUnmadePrototypeHub::RefreshOuterReactionWorld()
     bOuterReactionVisualActive=OuterActiveMask!=0;
 }
 
-bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
-    double Duration,bool Mastered,const FVector& CastPosition)
+bool AUnmadePrototypeHub::CommitRiteCast(AUnmadeCharacter* Player,UnmadeCore::RiteId Id,
+    double Duration,bool Mastered,TFunctionRef<bool()> SaveCast,bool& CivicApplied)
 {
-    if(!GetWorld())return false;
+    CivicApplied=false;
+    if(!IsValid(Player)||Player->GetWorld()!=GetWorld()||!UnmadeSave::IsWorldWritable(GetWorld()))return false;
+    const FVector CastPosition=Player->GetActorLocation();
     const auto* Policy=UnmadeCore::RealmReactionAt(CastPosition.X,CastPosition.Y);
-    if(!Policy)return false; // no unsupported in-between-world projections
-    ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
-    if(!IsValid(Player))return false;
     bool bWitness=false;
     for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
     {
@@ -2878,24 +2879,24 @@ bool AUnmadePrototypeHub::RecordRealityConsequence(UnmadeCore::RiteId Id,
             It->GetActorLocation()+FVector(0,0,70),ECC_Visibility,Sight))continue;
         bWitness=true;break;
     }
-    const auto Before=RealityLedger.Snapshot();
-    const auto BeforeOuter=OuterReactions.Save();
-    const auto* Prior=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+    const auto* Prior=!Policy?nullptr:Policy->realm==UnmadeCore::Realm::ThreefoldReach
         ?&RealityLedger:OuterReactions.Read(Policy->realm);
-    if(!Prior)return false;
-    const auto PreviousResponse=Prior->PublicResponse();
-    const bool Applied=Policy->realm==UnmadeCore::Realm::ThreefoldReach
-        ?RealityLedger.Cast(Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness,true)
-        :OuterReactions.Cast(Policy->realm,Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness);
-    if(!Applied)return false;
-    if(!WriteWorldSnapshot())
-    {
-        RealityLedger.Restore(Before,Clock.ElapsedSeconds());
-        OuterReactions.Restore(BeforeOuter,Clock.ElapsedSeconds());
-        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Red,
-            TEXT("Realm consequence not saved: no civic monument granted."));
+    const auto PreviousResponse=Prior?Prior->PublicResponse():UnmadeCore::RealityPublicResponse::None;
+    int32 ResonanceIndex=-1;
+    auto ResonanceResult=UnmadeCore::ResonanceResult::Locked;
+    const bool Saved=UnmadeCore::CommitRiteWorld(RealityLedger,OuterReactions,Resonance,[&]{
+        if(Policy)CivicApplied=Policy->realm==UnmadeCore::Realm::ThreefoldReach
+            ?RealityLedger.Cast(Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness,true)
+            :OuterReactions.Cast(Policy->realm,Id,Clock.ElapsedSeconds(),Duration,Mastered,bWitness);
+        if(Mastered)StageNearbyRealmRite(Player,Id,ResonanceIndex,ResonanceResult);
+    },SaveCast);
+    if(!Saved){
+        CivicApplied=false;
+        NotifyRpg(TEXT("RITE NOT SAVED: cost, cooldown and realm progress were rolled back. No effect applied; retry the cast."));
         return false;
     }
+    if(ResonanceIndex>=0)PublishRealmResonance(ResonanceIndex,ResonanceResult);
+    if(!CivicApplied)return true; // A valid cast outside civic focus still works locally.
     if(Policy->realm==UnmadeCore::Realm::ThreefoldReach)
         RefreshRealityConsequenceWorld();
     else RefreshOuterReactionWorld();
@@ -3290,13 +3291,7 @@ void AUnmadePrototypeHub::BuildForPrototype()
         UnmadeSave::LoadGameFromSlot());
     for(const BossPlacement& Location:Encounters)
     {
-        UnmadeCore::Achievement BossReward=UnmadeCore::Achievement::Count;
-        if(Location.Id==UnmadeCore::BossId::HollowBell)
-            BossReward=UnmadeCore::Achievement::HollowBell;
-        else if(Location.Id==UnmadeCore::BossId::RedactedCurator)
-            BossReward=UnmadeCore::Achievement::RedactedCurator;
-        else if(Location.Id==UnmadeCore::BossId::UnfinishedPilgrim)
-            BossReward=UnmadeCore::Achievement::UnfinishedPilgrim;
+        const auto BossReward=UnmadeCore::NamedBossReward(Location.Id);
         const bool bPreviouslyDefeated=EncounterSave && EncounterSave->SchemaVersion==1 &&
             EncounterSave->bHasInventorySnapshot && BossReward!=UnmadeCore::Achievement::Count &&
             (static_cast<uint64>(EncounterSave->AwardedMilestoneBits) &

@@ -1,5 +1,8 @@
 #include "UI/UnmadeRpgFeedback.h"
 #include "Combat/UnmadeBossCharacter.h"
+#include "Items/UnmadeEquipmentComponent.h"
+#include "Save/UnmadeSaveSession.h"
+#include "World/UnmadePrototypeHub.h"
 #include "Combat/UnmadeCombatComponent.h"
 #include "Player/UnmadeCharacter.h"
 #include "Kismet/GameplayStatics.h"
@@ -15,6 +18,8 @@ void AUnmadeBossCharacter::ConfigureBoss(UnmadeCore::BossId Boss)
 {
     const auto* Profile=UnmadeCore::FindBoss(Boss);
     if(!Profile) return;
+    DefeatSave.Reset();bDefeatedHandled=false;bMercyPending=false;bTelegraphShown=false;
+    SetActorTickEnabled(true);SetActorHiddenInGame(false);SetActorEnableCollision(true);
     BossId=Boss;
     Encounter=UnmadeCore::BossEncounter(Boss);
     ConfigureStyle(UnmadeCore::EnemyStyle::Stalker);
@@ -31,15 +36,9 @@ void AUnmadeBossCharacter::Tick(float DeltaSeconds)
     // Intentionally bypass generic Stalker attacks; boss actions must be telegraphed.
     ACharacter::Tick(DeltaSeconds);
     if(BossId==UnmadeCore::BossId::None || !GetWorld())return;
-    if(GetCombat()->IsDefeated())
+    if(GetCombat()->IsDefeated()||bMercyPending)
     {
-        if(!bDefeatedHandled)
-        {
-            bDefeatedHandled=true;
-            SetActorEnableCollision(false);
-            SetActorHiddenInGame(true);
-            SetActorTickEnabled(false);
-        }
+        CommitDefeatReceipt();
         return;
     }
     const AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(
@@ -107,4 +106,46 @@ void AUnmadeBossCharacter::Tick(float DeltaSeconds)
         }
     }
     if(Distance>50)SetActorRotation(Direction.Rotation());
+}
+
+bool AUnmadeBossCharacter::ResolveByMercy()
+{
+    if(BossId!=UnmadeCore::BossId::HollowBell||bDefeatedHandled||!IsValid(GetCombat())||GetCombat()->IsDefeated())return false;
+    bMercyPending=true;
+    CommitDefeatReceipt();
+    return true;
+}
+
+void AUnmadeBossCharacter::CommitDefeatReceipt()
+{
+    if(bDefeatedHandled||!GetWorld()||!IsValid(GetCombat())||(!bMercyPending&&!GetCombat()->IsDefeated()))return;
+    SetActorEnableCollision(false);
+    SetActorHiddenInGame(true);
+    // Keep ticking a settled combat encounter until its existing milestone receipt saves.
+    if(!UnmadeSave::IsWorldWritable(GetWorld()))return;
+    auto* Player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+    if(!IsValid(Player)||!IsValid(Player->GetEquipment()))return;
+    auto* Equipment=Player->GetEquipment();
+    const auto Result=DefeatSave.Attempt(static_cast<int>(BossId),GetWorld()->GetTimeSeconds(),[&]{
+        return UnmadeCore::CommitNamedBossReward(BossId,
+            [&](auto reward){return Equipment->HasClaimed(reward);},
+            [&](auto reward){return Equipment->Claim(reward);});
+    });
+    if(Result==UnmadeCore::DefeatSaveResult::FirstFailure)
+        UnmadeRpgFeedback(-1,10.f,FColor::Orange,TEXT("BOSS VICTORY NOT SAVED: retrying every five seconds. Make inventory room if needed; reloading returns to the previous save."));
+    if(Result==UnmadeCore::DefeatSaveResult::Saved){
+        bDefeatedHandled=true;
+        SetActorTickEnabled(false);
+        if(bMercyPending)UnmadeRpgFeedback(-1,9.f,FColor::Green,
+            TEXT("HOLLOW KEEPER SPARED: testimony ended the battle without a killing blow."));
+    }
+}
+
+bool AUnmadeBossCharacter::HasPendingDefeatSave(const AUnmadePrototypeHub& Hub)const
+{
+    if(Hub.GetWorld()!=GetWorld()||!IsValid(GetCombat()))return false;
+    const auto* Player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
+    const auto* Equipment=IsValid(Player)?Player->GetEquipment():nullptr;
+    const bool Claimed=IsValid(Equipment)&&Equipment->HasClaimed(UnmadeCore::NamedBossReward(BossId));
+    return UnmadeCore::NamedBossPending(BossId,GetCombat()->IsDefeated(),bMercyPending,Claimed);
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Templates/Function.h"
 #include "GameFramework/Actor.h"
 #include "NPC/UnmadeNpcDecisionRules.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
@@ -104,8 +105,8 @@ public:
     double GetWorldClockSeconds() const { return Clock.ElapsedSeconds(); }
     void ApplyRiteEnvironment(UnmadeCore::RiteId Id,double Duration,bool Mastered);
     /** One witnessed, local Tenfold cast updates architecture, combat and civic memory. */
-    bool RecordRealityConsequence(UnmadeCore::RiteId Id,double Duration,bool Mastered,
-                                  const FVector& CastPosition);
+    bool CommitRiteCast(AUnmadeCharacter* Player,UnmadeCore::RiteId Id,double Duration,bool Mastered,
+                        TFunctionRef<bool()> SaveCast,bool& CivicApplied);
     UnmadeCore::RealityConsequenceView RealityConsequenceAt(FVector Position) const;
     int32 GetRealmHazardPercent(FVector Position) const;
     int32 GetRealmTradeTrustBonus(FVector Position) const;
@@ -211,7 +212,6 @@ public:
     int32 GetEchoQuestEnding(UnmadeCore::Realm Realm) const {return EchoQuest.Ending(Realm);}
     int32 GetEchoQuestEvidence(UnmadeCore::Realm Realm) const {return EchoQuest.Evidence(Realm);}
     int32 GetRealmResonanceStage(UnmadeCore::Realm Realm) const {return Resonance.Stage(Realm);}
-    bool RecordNearbyRealmRite(AUnmadeCharacter* Player,UnmadeCore::RiteId Id);
     bool InspectResonanceArchive(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     UnmadeCore::GuardianOutcome GetRealmGuardianOutcome(UnmadeCore::Realm Realm) const {
         return Guardians.Outcome(Realm);
@@ -459,6 +459,9 @@ private:
     UnmadeCore::RealmResonanceJourney Resonance;
     bool bResonanceSaveRejected=false;
     void BuildRealmResonance();
+    bool StageNearbyRealmRite(AUnmadeCharacter* Player,UnmadeCore::RiteId Id,
+                             int32& Index,UnmadeCore::ResonanceResult& Result);
+    void PublishRealmResonance(int32 Index,UnmadeCore::ResonanceResult Result);
     void RefreshRealmResonanceWorld();
     UnmadeCore::GuardianChronicle Guardians;
     UnmadeCore::CommitmentGate GuardianCommitGate;

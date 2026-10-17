@@ -802,3 +802,50 @@ Next: trace realm rite casts through spell cost, physical effects, civic records
 local mastery/resonance and witness consequences, particularly their separately
 committed portions. Preserve authored mechanics and distinguish model evidence
 from actual nine-realm walkthrough acceptance.
+
+## 2026-10-17 — Atomic rite consequences and durable named victories
+
+A rite previously saved cost/cooldown, applied runtime effects, then separately
+saved civic and resonance progress. The original-order portable replay persisted
+16 Strain and a cooldown after a failed civic write, without its realm effect.
+Invocation now stages civic/outer/resonance models before the same callback that
+persists Tenfold, Confluence and explicit Strain. Failed storage restores all
+world ledgers; the component restores its rite/trial state and refunds the cost.
+Runtime abilities, civic architecture and resonance bridges publish after success.
+Blocked startup/profile ownership rejects the cast before cost or trial changes.
+
+Spatial focus, local sight/witness, distinct mastered rites, named dual-discipline
+plinths, Echo prerequisites, expiry/restart and debt/cooldown rules are retained.
+A valid cast outside civic focus still works locally; unrelated or unmastered
+rites do not open resonance sites. Existing observer/witness events remain after
+the cast commit, using the previously improved NPC capture and retry paths; this
+batch does not claim an atomic NPC-event transaction with the cast itself.
+
+The connected Hollow Keeper mercy path hid and stopped its actor before checking
+its reward save. All three named bosses now own their existing milestone receipt:
+melee, ranged defeat and mercy wait for durable reward completion, retry failed
+writes no sooner than five world seconds, and stop their actor tick only after
+success. Hidden pending actors participate in checkpoint refusal and existing
+unsaved-discard confirmation. Full inventory remains retryable with clear advice.
+Mercy checks an active visible target and line of sight. The authored nonlethal
+option, reward amounts and all three saved achievement identifiers are unchanged;
+no new persistent death/mercy schema or automatic inventory space is introduced.
+
+Portable evidence: 1,080 cast fault cases across all nine realm identifiers and
+ten rites, mastery/witness gates, both storage targets and recovery; 3,240 reloads;
+24 paired/expired resonance paths; 12 named death/mercy receipt faults and 300
+reloads; full inventory and settled-receipt suppression. Nine mutations removing
+world rollback, staging/order, the single writer, mercy/settled pending detection,
+already-claimed suppression or stable boss mapping fail assertions. Actual target
+reachability, line traces, actor timers and projectile behavior need Unreal.
+
+Fresh checks: 343 Python tests, 78 warning-clean portable C++17 executables and all
+46 gameplay dependency checks pass. Both new scenarios pass UBSan. Structure,
+literals, hygiene, six source-release scenarios, transmedia, manuscript and
+whitespace checks pass. Baseline `d8b565e` passed GitHub source-checks; new-head CI
+is separate. No charges, new art/book requirements or merge into main.
+
+Next: trace ordinary enemy reward delivery for melee/ranged kills and post-cast
+NPC witness persistence, preserving per-realm receipts and authored consequences.
+Keep UHT/Editor build, actual nine-realm walkthroughs, travel, controller/UI and
+interrupted platform IO pending until an Unreal-capable host is available.

@@ -487,7 +487,11 @@ void UUnmadeTenfoldComponent::DecideTruth(){DecideRite(2);}
 void UUnmadeTenfoldComponent::InvokeRite()
 {
     AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(GetOwner());
-    if(bSaveRejected || !IsValid(Player) || !GetWorld() || Player->GetCombat()->IsDefeated())return;
+    if(bSaveRejected || !IsValid(Player) || !GetWorld() || !IsValid(Player->GetCombat()) || Player->GetCombat()->IsDefeated())return;
+    if(!UnmadeSave::IsSessionWritable(Player)){
+        UnmadeRpgFeedback(-1,8.f,FColor::Orange,TEXT("RITE UNAVAILABLE: this profile is still loading or its save state is protected."));
+        return;
+    }
     const auto Id=static_cast<UnmadeCore::RiteId>(SelectedRite);
     const auto Context=GatherContext();
     if(Id==UnmadeCore::RiteId::UnderstandingBosses &&
@@ -526,7 +530,10 @@ void UUnmadeTenfoldComponent::InvokeRite()
         if(Confluence.Stage(TrialId)==1)
             Confluence.RecordCast(TrialId,Id,Context.now,ChamberSite);
     }
-    if(!Persist(true))
+    auto* Hub=Cast<AUnmadePrototypeHub>(UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass()));
+    bool CivicApplied=false;
+    if(!IsValid(Hub)||!Hub->CommitRiteCast(Player,Id,Power.duration,Chronicle.IsMastered(Id),
+        [&]{return Persist(true);},CivicApplied))
     {
         Confluence.Restore(PriorConfluence);
         Chronicle.Restore(Previous);
@@ -556,19 +563,8 @@ void UUnmadeTenfoldComponent::InvokeRite()
             Player->GetEquipment()->SetTemporaryBonuses(ActiveAttackBonus,ActiveArmorBonus);
     }
     Player->ApplyRiteAbility(Id,Power,SelectedLaw);
-    if(AUnmadePrototypeHub* Hub=Cast<AUnmadePrototypeHub>(
-        UGameplayStatics::GetActorOfClass(GetWorld(),AUnmadePrototypeHub::StaticClass())))
-    {
-        Hub->ApplyRiteEnvironment(Id,Power.duration,Chronicle.IsMastered(Id));
-        // One cast changes the physical realm and its observed human record.
-        // A failed secondary civic save never invents a world consequence;
-        // the independently persisted Tenfold spell still takes effect.
-        if(Hub->RecordRealityConsequence(Id,Power.duration,
-             Chronicle.IsMastered(Id),Player->GetActorLocation()))
-            Player->ReportRealityConsequenceEvent(Id);
-        if(Chronicle.IsMastered(Id))
-            Hub->RecordNearbyRealmRite(Player,Id);
-    }
+    Hub->ApplyRiteEnvironment(Id,Power.duration,Chronicle.IsMastered(Id));
+    if(CivicApplied)Player->ReportRealityConsequenceEvent(Id);
     Player->ReportRiteWitnessEvent();
     ShowRite();
 }

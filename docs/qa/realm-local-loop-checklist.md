@@ -85,9 +85,16 @@ Mera's consent; they do not turn every realm's resident into that storyline.
   both aftermath endings, 1,080 reloads and 48 field-survey fault paths. Caller-owned
   gear/language/rite/Strain patches, resident days and absent histories survive.
   Static ownership parity covers 126 fields; native capture is not engine-tested.
-- Next source/portable expansion: follow realm rite costs, physical/civic effects,
-  local mastery/resonance and witness records across their separate commits.
-  Keep branch divergence visible without unnecessary synchronization.
+- Rite cost/trial/cooldown and civic/resonance progress now stage before one
+  writer; runtime effects follow success. Portable coverage adds 1,080 nine-realm,
+  ten-rite fault cases, 3,240 reloads and 24 paired/expired resonance paths.
+- The three named boss victories, including Hollow Keeper mercy, retain pending
+  milestone receipts and retry before stopping actor ticks. Checkpoints include
+  hidden pending actors. Twelve receipt fault cases and 300 reloads pass portable
+  checks; actual ranged impacts, mercy sight gates and actor timing remain pending.
+- Next source/portable expansion: ordinary enemy melee/ranged reward delivery and
+  post-cast NPC witness persistence. Keep authored per-realm receipts and choices,
+  and monitor branch divergence without unnecessary synchronization.
 - Unreal pending for every row: actor/marker reachability, actual witness/refusal
   and line-of-sight conditions, schedules and service rooms, guide/stealth/height/
   platform challenges, collisions, combat and hazards, feedback/controller flow,

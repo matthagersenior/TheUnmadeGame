@@ -17,6 +17,7 @@ public:
     UUnmadeEquipmentComponent();
     virtual void BeginPlay() override;
     bool Claim(UnmadeCore::Achievement Reward);
+    bool HasClaimed(UnmadeCore::Achievement Reward)const{return Inventory.HasClaimed(Reward);}
     bool ReconcileEarnedMilestones();
     bool SelectRealmReward(int Arc);
     int RealmWeapon()const{return Loadout.weapon;}

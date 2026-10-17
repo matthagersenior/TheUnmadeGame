@@ -12,7 +12,7 @@ class EpicWorldContract(unittest.TestCase):
         assert "BossEncounter" in read("Source/TheUnmadeGame/Public/Combat/UnmadeBossCharacter.h")
         for tag in ("HollowBell","RedactedCurator","UnfinishedPilgrim"):
             self.assertIn("BossId::"+tag,hub)
-            self.assertIn("BossId::"+tag,player)
+            self.assertIn("BossId::"+tag,read("Source/TheUnmadeGame/Public/Combat/UnmadeNamedBossRewardRules.h"))
         self.assertIn("Encounter.Advance(",boss)
         self.assertIn("GetCombat()->TryStrikeTarget",boss)
         self.assertIn("GetCombat()->SetGearBonuses(",boss)

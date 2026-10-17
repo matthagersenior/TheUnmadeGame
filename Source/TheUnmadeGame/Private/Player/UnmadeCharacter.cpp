@@ -321,15 +321,14 @@ void AUnmadeCharacter::ApplyRiteAbility(UnmadeCore::RiteId Rite,
     case UnmadeCore::RiteId::UnderstandingBosses:
         for(TActorIterator<AUnmadeBossCharacter> It(World);It;++It)
         {
-            if(It->GetBossId()!=UnmadeCore::BossId::HollowBell ||
+            if(It->GetBossId()!=UnmadeCore::BossId::HollowBell || !It->CanBeTargeted() ||
                FVector::DistSquared(GetActorLocation(),It->GetActorLocation())>FMath::Square(1400.f))
                 continue;
-            It->SetActorEnableCollision(false);
-            It->SetActorHiddenInGame(true);
-            It->SetActorTickEnabled(false);
-            if(IsValid(Equipment))Equipment->Claim(UnmadeCore::Achievement::HollowBell);
-            if(GEngine)UnmadeRpgFeedback(-1,9.f,FColor::Green,
-                TEXT("HOLLOW KEEPER SPARED: testimony ended the battle without a killing blow."));
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeMercySight),false);
+            Sight.AddIgnoredActor(this);Sight.AddIgnoredActor(*It);
+            if(World->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,70),
+                It->GetActorLocation()+FVector(0,0,70),ECC_Visibility,Sight))continue;
+            It->ResolveByMercy();
             break;
         }
         for(TActorIterator<AUnmadeRealmGuardian> Guardian(World);Guardian;++Guardian)
@@ -905,19 +904,8 @@ void AUnmadeCharacter::TickWeaponContact(){
 void AUnmadeCharacter::HandleMeleeImpact(AUnmadeEnemyCharacter* Target,float Before){if(!Target)return;Target->NotifyPlayerHit(Before-Target->GetCombat()->GetHealth());
         if (Target->GetCombat()->IsDefeated() && IsValid(Equipment))
         {
-            const AUnmadeBossCharacter* Boss=Cast<AUnmadeBossCharacter>(Target);
-            if(Boss)
-            {
-                UnmadeCore::Achievement Reward=UnmadeCore::Achievement::Count;
-                switch(Boss->GetBossId())
-                {
-                case UnmadeCore::BossId::HollowBell: Reward=UnmadeCore::Achievement::HollowBell; break;
-                case UnmadeCore::BossId::RedactedCurator: Reward=UnmadeCore::Achievement::RedactedCurator; break;
-                case UnmadeCore::BossId::UnfinishedPilgrim: Reward=UnmadeCore::Achievement::UnfinishedPilgrim; break;
-                default: break;
-                }
-                if(Reward!=UnmadeCore::Achievement::Count) Equipment->Claim(Reward);
-            }
+            AUnmadeBossCharacter* Boss=Cast<AUnmadeBossCharacter>(Target);
+            if(Boss)Boss->CommitDefeatReceipt();
             else Equipment->Claim(Target->GetEnemyStyle()==UnmadeCore::EnemyStyle::Stalker
                 ? UnmadeCore::Achievement::FirstStalker:UnmadeCore::Achievement::FirstWatcher);
         }
