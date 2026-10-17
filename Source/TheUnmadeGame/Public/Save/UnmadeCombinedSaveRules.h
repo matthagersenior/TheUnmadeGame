@@ -478,6 +478,7 @@ bool ValidCombinedRecord(const Record& record, Text text)
     }
     if(Save->bHasPetitionRelay)
     {
+        if(!Save->bHasHearthPetition)return false;
         const auto& Data=Save->PetitionRelayState;
         if(Data.Num()!=6 || !RestoredRelay.Restore(
              {Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]},
