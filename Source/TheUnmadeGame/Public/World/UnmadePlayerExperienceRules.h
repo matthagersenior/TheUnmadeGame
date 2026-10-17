@@ -48,11 +48,12 @@ public:
  bool Restore(const std::vector<int>& p,const Expeditions& e,const AdventureDepth& d,int day){if(p.size()!=231||p[0]!=1||p[1]<-1||p[1]>8||p[2]<0||p[2]>63||p[3]<0||p[3]>511||p[4]<-1||p[4]>8||p[5]<0||p[5]>1||day<1||day>1000000)return false;PlayerExperience n;n.tracked=p[1];n.tutorial=p[2];n.cityMask=p[3];n.activeBuild=p[4];n.observerDefeated=p[5];int j=6;
   for(int a=0;a<9;++a){auto& s=n.arcs[a];int* fields[]={&s.offered,&s.steps,&s.guardian,&s.complete,&s.build,&s.tool,&s.recipe,&s.privilege,&s.insight,&s.spent,&s.repair,&s.reconciled,&s.scenes,&s.serviceDay,&s.serviceUses};for(auto f:fields)*f=p[j++];for(auto& v:s.visits)v=p[j++];for(auto& v:s.days)v=p[j++];
    if(s.offered<0||s.offered>1||(s.steps!=0&&s.steps!=1&&s.steps!=3&&s.steps!=7)||s.guardian<0||s.guardian>2||s.complete<0||s.complete>1||s.build<0||s.build>3||s.tool<0||s.tool>1||s.recipe<0||s.recipe>1||s.privilege<0||s.privilege>1||s.insight<0||s.insight>9||s.spent<0||s.spent>1000||s.repair<0||s.repair>1||s.reconciled<0||s.reconciled>1||s.scenes<0||s.scenes>15)return false;
-   if(s.serviceDay<0||s.serviceDay>day||s.serviceUses<0||s.serviceUses>2||((s.serviceUses==0)!=(s.serviceDay==0))||(s.serviceUses&&!s.privilege))return false;
-   for(int k=0;k<5;++k)if(s.visits[k]<0||s.visits[k]>5||s.days[k]<0||s.days[k]>day||((s.visits[k]==0)!=(s.days[k]==0)))return false;
+   // Distinct-day counters cannot exceed the last day on which they advanced.
+   if(s.serviceDay<0||s.serviceDay>day||s.serviceUses<0||s.serviceUses>2||s.serviceUses>s.serviceDay||((s.serviceUses==0)!=(s.serviceDay==0))||(s.serviceUses&&!s.privilege))return false;
+   for(int k=0;k<5;++k)if(s.visits[k]<0||s.visits[k]>5||s.days[k]<0||s.days[k]>day||s.visits[k]>s.days[k]||((s.visits[k]==0)!=(s.days[k]==0)))return false;
    if((s.offered&&!e.Arc(a)->rooms)||(s.steps&&!s.offered)||(s.guardian&&s.steps!=7)||(s.guardian==2&&a!=3)||(s.complete&&!s.guardian)||((s.build||s.tool||s.recipe||s.privilege||s.repair)&&!s.complete)||(s.repair&&!d.Arc(a)->choice)||(s.reconciled&&(!s.repair||d.Arc(a)->choice!=2||s.visits[3]<2)))return false;
    int count=0;for(int k=0;k<4;++k)if(s.scenes&(1<<k))count++;int earned=(s.guardian?2:0)+s.complete*3+count;
-   int minimum=(s.build?2:0)+s.tool+s.recipe+s.privilege+s.repair;if(s.spent<minimum||s.insight+s.spent!=earned)return false;
+   int minimum=(s.build?2:0)+s.tool+s.recipe+s.privilege+s.repair;if(s.spent<minimum||s.insight+s.spent!=earned||(!s.build&&s.spent!=minimum))return false;
    if((s.scenes&1)&&(!s.offered||s.visits[4]<1))return false;
    if((s.scenes&2)&&(!s.guardian||s.visits[3]<2))return false;
    if((s.scenes&4)&&(!s.complete||!d.Arc(a)->choice||s.visits[0]<2))return false;

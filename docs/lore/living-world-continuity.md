@@ -940,3 +940,17 @@ guide's finite use includes the objective it tracks and is not consumed for an
 already tracked objective. Prices, hours, insight, favor, explicit consent, all
 nine realm stories and existing save identifiers are unchanged. Temporary service
 buffs retain their authored session-only scope. Unreal acceptance remains pending.
+
+### 2026-10-17 — Individual conversations and earned mastery
+
+A relationship scene belongs to the resident actually addressed. Their visit,
+first-step lesson and eligible insight are remembered together; failed saves
+restore all three before any scene blocking begins. Another nearby resident
+cannot claim the failed conversation, and existing guidance refusal remains
+respected. A later same-day talk may earn a newly eligible scene, but a remembered
+scene grants insight once. Distinct-day visits and daily specialties must fit the
+recorded day; finite insight without a build must match permanent purchases.
+Mastery keeps its authored costs and effects while respecting full spatial reach,
+accepted-world readiness and stagger. Existing accords, saved names, rewards,
+consent, individual histories, world mysteries and all nine realms are unchanged.
+These are portable/source guarantees; physical Unreal acceptance remains pending.

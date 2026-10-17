@@ -4,6 +4,7 @@
 #include "Components/ActorComponent.h"
 #include "Combat/UnmadeCombatRules.h"
 #include "Combat/UnmadeCombatStyleRules.h"
+#include "Combat/UnmadeMasteryRules.h"
 #include "Combat/UnmadeContactRules.h"
 #include "UnmadeCombatComponent.generated.h"
 
@@ -26,7 +27,7 @@ public:
     bool HasTemporaryStatus()const;
     void ClearTemporaryStatus(){Status=UnmadeCore::CombatStatus::None;StatusUntil=0;}
     void GrantWard(double Now){WardUntil=Now+6;}
-    bool UsePower(double Now){return !IsDefeated()&&bPlayerTempo&&Tempo.Power(Now);}
+    bool UsePower(double Now){return UnmadeCore::TryMasteryPower(Tempo,Now,!IsDefeated(),bPlayerTempo,IsStaggered(Now));}
     void ApplyStatus(UnmadeCore::CombatStatus Type,double Seconds);
     bool IsStaggered(double Now)const{return Now<StaggerUntil;}
     float MoveMultiplier(double Now)const{return Now<StatusUntil&&Status==UnmadeCore::CombatStatus::Slow?.55f:1.f;}

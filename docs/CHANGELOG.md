@@ -1,3 +1,44 @@
+## 2026-10-17 — Relationship receipts and mastery integrity
+
+Experience preflight now rejects distinct-day visit counts greater than their last
+visit day, daily specialty counts greater than their last use day, and unexplained
+insight spending when no build exists. Only build changes can repeatably consume
+insight; permanent purchases must otherwise explain every spent point. These
+checks run before availability, restore, outgoing writes or backup rotation.
+Reachable older histories, capped/gapped visits, build changes and absent optional
+schema-1 sections remain valid. No saved identifier or reward amount changes.
+
+A local conversation stages its visit, first-step tutorial and only the spoken
+resident's eligible relationship scene behind one writer. Failure restores all
+three and is handled without trying another nearby speaker or a separate tutorial
+write. Same-day conversations can still earn a newly eligible scene. Guide refusal
+preserves actual contact while granting no guidance insight; the existing refusal
+and scene prerequisites remain. Blocking/captions follow success and scene receipt
+replay never grants more insight. Caption interruption remains presentation-only.
+
+Mastery targeting now uses the full eight-metre 3D distance and rejects invalid
+coordinates. Powers require the accepted player/world and reject active stagger
+before spending thirty stamina or starting the twelve-second cooldown. Technique
+selection restores the previous choice on failure, explains unavailable/failed
+saves, and skips writes for an unchanged selection. Older untrained earned accords
+remain selectable. Combat stamina, cooldowns and temporary effects keep their
+existing session scope; no per-power disk write is introduced.
+
+Wing guardian/observer retries, mercy rollback, checkpoint pending queries and
+build modifiers were traced and already enforce their intended ownership. No
+speculative replacement was made. New portable coverage: 72 malformed experience
+records, 72 recovery write faults and 4,344 reloads; 135 scoped conversation/fault
+paths and 1,620 reloads; 18 failed, 18 successful and 18 unchanged selections.
+Extra checks cover later same-day eligibility, captive speaker order, refused
+conversation write failure, finite target coordinates and stagger/cost boundaries.
+Nineteen compiled mutations are caught across chronology, conversations and
+mastery. All 366 Python tests, 87 strict portable C++17 executables and 64
+dependency checks pass, alongside hygiene, six release scenarios, structure and
+literal validation, transmedia, manuscript reconstruction and whitespace checks.
+Actual UHT/Editor, NPC/guardian actors, physical timing/targeting, service
+geometry, UI and interrupted platform IO remain pending. No Unreal playthrough,
+paid service, mandatory artwork/book work or main merge is claimed.
+
 ## 2026-10-17 — Scoped consent and complete local service commits
 
 Personal accords consume their twenty-second confirmation before attempting a

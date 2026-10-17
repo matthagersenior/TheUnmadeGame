@@ -339,7 +339,6 @@ private:
     void BuildPlayerExperience();
     void RefreshPlayerExperience();
     bool CommitExperience(const UnmadeCore::PlayerExperience& Before,AUnmadeCharacter* Player);
-    bool ExperienceScene(int Realm,int Scene,AUnmadeCharacter* Player);
     bool bBuilt = false;
     bool bExpeditionSaveRejected=false;
     UnmadeCore::Expeditions Expeditions;

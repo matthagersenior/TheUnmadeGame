@@ -29,6 +29,7 @@ integration need; preserve development momentum and do not merge into main.
 
 | Priority / state | Evidence and next acceptance criterion |
 | --- | --- |
+| P1 relationship/mastery batch implemented; UE pending | Whole-record preflight rejects impossible visit/service chronology and unexplained insight depletion. Conversations commit actual speaker visit/tutorial/scene once, with rollback and preserved refusal. Mastery uses 3D reach, readiness and stagger gates; selection reports failures and skips unchanged writes. 72 malformed records, 135 conversation paths, 5,964 reloads and 19 mutations pass. |
 | P1 local service/consent batch implemented; UE pending | Personal choice + tutorial + witnesses commit together; confirmations consume before writes. Rest is bound to its bed. Repair/mediation testimony and finite guide tracking share their original save. 92 write faults, 2,304 reloads and seven mutations pass; physical services/UI/platform IO remain pending. |
 | P1 reality/travel/recovery batch implemented; UE pending | Checked Glimpse/Fold/Rewrite combine Strain, clue and witnesses; full-model rollback preserves prior windows. Crossings save actual arrivals/visits/road credit together. Realm-safe resume and saved revival cover all nine realms; failed movement rollback protects writes, while recovery remains possible with pending/full-inventory rewards. 218 fault paths, 1,744 reloads, 356 Python / 82 portable C++ / 54 dependency checks and eight mutations pass. |
 | P1 coordinated action batch implemented; UE pending | Shared reversible witness/deed commits cover resolution families, tasks, discovery, aid, conflict/supplies, rites/oaths/casts and six Confluences. Exact confirmation scope prevents save-failure fallthrough. Older split aid repairs without new testimony; earned rewards retry after startup. 128 fault paths, 1,536 reloads, 352 Python / 81 portable C++ / 52 dependency checks and eight mutations pass. Native memory rollback test is unrun. |
@@ -50,7 +51,7 @@ integration need; preserve development momentum and do not merge into main.
 | P1 defeat retries implemented; UE pending | Guardian/final-defeat commits attempt immediately, then retry failure every five active-world seconds instead of every actor tick. Success suppresses repeat commits for that phase. Portable tests cover 24 guardian and 72 final-phase fault/retry paths; confirmation expiry, retargeting, cancellation and consumed consent remain safe. |
 | P1 pending checkpoints implemented; UE pending | Session saves refuse to report success while an encounter receipt is pending. Read-only actor queries include hidden receipt owners and distinguish an old final body from the new phase. Load/New preserve unsaved-discard confirmation; explicit recovery never pre-saves. 114 portable fault sessions verify blocked checkpoint writes and normal saves after receipt commit. |
 | P1 handoff ownership implemented; UE pending | Target selection stays staged until a new-world owner registers. Travel failure restores original selection; a missing owner/failed world cannot unlock writes. Reentrant requests are rejected and destination backup pins survive arrival. All 64 profile/recovery combinations pass portable checks; UE delegate/build, startup ordering and real failed travel remain pending. |
-| P1 next coordinated batch | Audit scoped expedition/road/Cinderhold ability dispatch and related finite service/mastery transactions together. Distinguish unavailable actions from rejected commits before fallback; retain authored gates, consent and receipts. Actual nine-realm reachability, UI, travel/physics and platform IO remain pending. Recheck drift before publishing. |
+| P1 next coordinated batch | Audit encounter interruption and hazard recovery together: ranged/status defeats, field-kit suppression, guard/dodge timing and resumed realm encounters. Trace effect ownership, persistent receipts and retry paths before changing authored behavior. Keep physical nine-realm reachability/UI/travel/platform IO pending, and recheck drift before publishing. |
 | P1 UE/UI acceptance | `Private/UI/UnmadeRpgWidget.cpp::Open/NativeOnKeyDown`, `Private/UI/UnmadePlayerPreferences.cpp`, `Config/DefaultInput.ini`: native pages, actions and mappings exist. Verify actual focus/scroll, all controller actions, name entry, rebound prompts, text scale, contrast and paused-menu feedback with a real widget tree. |
 | P1 production work | `Authoring/main_quest_interaction_contracts.json`, `resident_return_encounters.json`, `generated/scene_build_manifest.json`: contracts and import references exist; they are not staged full dialogue/production levels. Replace the opening slice's proxies by stable actor/asset ID, with interruption and return variants tested before expanding. |
 | P1 engine/build gate | `TheUnmadeGame.uproject`, `Config/DefaultEngine.ini`, `Scripts/first_pc_build_and_test.ps1`: provisional UE 5.8, built-in Entry map and runtime graybox. UHT/Editor build, automation, collision/navigation, animation contact, audiovisual cues, performance, cooking and packaging remain pending. |
@@ -768,3 +769,46 @@ Actual UHT/Editor, actors, service geometry, UI, profile travel and interrupted
 platform IO remain pending; no Unreal playthrough or new art/book requirement.
 
 Next highest-value batch: inspect optional wing progress/guardian rewards, resident relationship scene receipts and earned mastery runtime use together. Trace costs, persisted completion and retry ownership before effects; retain whole-realm physical walkthroughs as Unreal work.
+
+## 2026-10-17 — Relationship receipts and mastery integrity
+
+Experience preflight now rejects distinct-day visit counts greater than their last
+visit day, daily specialty counts greater than their last use day, and unexplained
+insight spending when no build exists. Only build changes can repeatably consume
+insight; permanent purchases must otherwise explain every spent point. These
+checks run before availability, restore, outgoing writes or backup rotation.
+Reachable older histories, capped/gapped visits, build changes and absent optional
+schema-1 sections remain valid. No saved identifier or reward amount changes.
+
+A local conversation stages its visit, first-step tutorial and only the spoken
+resident's eligible relationship scene behind one writer. Failure restores all
+three and is handled without trying another nearby speaker or a separate tutorial
+write. Same-day conversations can still earn a newly eligible scene. Guide refusal
+preserves actual contact while granting no guidance insight; the existing refusal
+and scene prerequisites remain. Blocking/captions follow success and scene receipt
+replay never grants more insight. Caption interruption remains presentation-only.
+
+Mastery targeting now uses the full eight-metre 3D distance and rejects invalid
+coordinates. Powers require the accepted player/world and reject active stagger
+before spending thirty stamina or starting the twelve-second cooldown. Technique
+selection restores the previous choice on failure, explains unavailable/failed
+saves, and skips writes for an unchanged selection. Older untrained earned accords
+remain selectable. Combat stamina, cooldowns and temporary effects keep their
+existing session scope; no per-power disk write is introduced.
+
+Wing guardian/observer retries, mercy rollback, checkpoint pending queries and
+build modifiers were traced and already enforce their intended ownership. No
+speculative replacement was made. New portable coverage: 72 malformed experience
+records, 72 recovery write faults and 4,344 reloads; 135 scoped conversation/fault
+paths and 1,620 reloads; 18 failed, 18 successful and 18 unchanged selections.
+Extra checks cover later same-day eligibility, captive speaker order, refused
+conversation write failure, finite target coordinates and stagger/cost boundaries.
+Nineteen compiled mutations are caught across chronology, conversations and
+mastery. All 366 Python tests, 87 strict portable C++17 executables and 64
+dependency checks pass, alongside hygiene, six release scenarios, structure and
+literal validation, transmedia, manuscript reconstruction and whitespace checks.
+Actual UHT/Editor, NPC/guardian actors, physical timing/targeting, service
+geometry, UI and interrupted platform IO remain pending. No Unreal playthrough,
+paid service, mandatory artwork/book work or main merge is claimed.
+
+Next coordinated batch: encounter interruption and hazard recovery, including ranged/status defeats, field-kit suppression, guard/dodge timing and resumed realm encounters. Retain actual physical acceptance for an Unreal host.

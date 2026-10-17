@@ -1,4 +1,6 @@
 #include "Save/UnmadeSessionRules.h"
+#include "Save/UnmadeSaveSession.h"
+#include "Save/UnmadeRelationshipCommitRules.h"
 #include "World/UnmadePrototypeHub.h"
 #include "Save/UnmadeRecoveryRules.h"
 #include "World/UnmadeRealmJourneyRules.h"
@@ -80,9 +82,27 @@ bool AUnmadePrototypeHub::TryExperienceInteraction(AUnmadeCharacter* p,double co
  if(kind==4)return ExperienceAction(9,p),true;if(kind==5)return ExperienceAction(11,p),true;
  if(changed&&!CommitExperience(before,p)){WingRelayDeadline=deadlines;return true;}NotifyRpg(line);return true;
 }
-bool AUnmadePrototypeHub::ExperienceScene(int a,int scene,AUnmadeCharacter* p){auto* speaker=Resident(GetWorld(),a,scene==0?4:scene==1?3:scene==2?0:1);if(!speaker||!Near(p,speaker->GetActorLocation(),310,speaker))return false;if(a==0&&scene==0){auto action=speaker->DecideForPlayer(true);if(action==UnmadeCore::NpcAction::AvoidPlayer||action==UnmadeCore::NpcAction::RefuseTrade){NotifyRpg(speaker->GetDisplayLabel()+TEXT(" declines to guide you while afraid. Their refusal remains respected."));return false;}}auto before=Experience;if(!Experience.Scene(a,scene,Expeditions,Depth)||!CommitExperience(before,p))return false;const TCHAR* gestures[]={TEXT("Gesture"),TEXT("Speak"),TEXT("Inspect"),TEXT("Release")};double seconds=FMath::Clamp(FString(UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].scenes[scene])).Len()/14.,7.,20.);speaker->BeginDirectedBlocking(p->GetActorLocation(),seconds,FName(gestures[scene]));RpgSceneNotice=speaker->GetDisplayLabel()+TEXT(": ")+UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].scenes[scene]);RpgSceneUntil=GetWorld()->GetTimeSeconds()+seconds;NotifyRpg(RpgSceneNotice);return true;}
-
-bool AUnmadePrototypeHub::RecordExperienceConversation(FName id,AUnmadeCharacter* p){int a,n;if(bExperienceRejected||!PersonIndex(id,a,n)||!p)return false;auto* real=Resident(GetWorld(),a,n);if(!real||!Near(p,real->GetActorLocation(),310,real))return false;auto before=Experience;if(Experience.Visit(a,n,GetGameDay())&&!CommitExperience(before,p))return false;for(int scene=0;scene<4;++scene)if(ExperienceScene(a,scene,p))break;return true;}
+bool AUnmadePrototypeHub::RecordExperienceConversation(FName id,AUnmadeCharacter* p){
+ int a,n;if(!p||p->GetWorld()!=GetWorld()||!PersonIndex(id,a,n))return false;
+ auto* real=Resident(GetWorld(),a,n);if(!real||!Near(p,real->GetActorLocation(),310,real))return false;
+ if(bExperienceRejected||bDepthSaveRejected||bExpeditionSaveRejected||!UnmadeSave::IsSessionWritable(p)){
+  NotifyRpg(TEXT("Conversation progress is unavailable until this world is restored. No visits, lessons or scene rewards changed."));return true;
+ }
+ bool acceptsScene=true;
+ if(a==0&&n==4){auto action=real->DecideForPlayer(true);acceptsScene=action!=UnmadeCore::NpcAction::AvoidPlayer&&action!=UnmadeCore::NpcAction::RefuseTrade;}
+ const auto before=Experience;
+ const auto result=UnmadeCore::CommitResidentConversation(Experience,a,n,GetGameDay(),Expeditions,Depth,acceptsScene,[&]{return CommitExperience(before,p);});
+ if(result.state==UnmadeCore::ConversationState::SaveFailed)return true;
+ if(!acceptsScene){NotifyRpg(real->GetDisplayLabel()+TEXT(" declines to guide you while afraid. Their refusal remains respected."));return true;}
+ if(result.scene>=0){
+  const int scene=result.scene;const TCHAR* gestures[]={TEXT("Gesture"),TEXT("Speak"),TEXT("Inspect"),TEXT("Release")};
+  const double seconds=FMath::Clamp(FString(UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].scenes[scene])).Len()/14.,7.,20.);
+  real->BeginDirectedBlocking(p->GetActorLocation(),seconds,FName(gestures[scene]));
+  RpgSceneNotice=real->GetDisplayLabel()+TEXT(": ")+UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].scenes[scene]);
+  RpgSceneUntil=GetWorld()->GetTimeSeconds()+seconds;NotifyRpg(RpgSceneNotice);
+ }
+ return true; // Handled even after a failed save; do not try another tutorial writer.
+}
 FString AUnmadePrototypeHub::ExperienceReaction(FName id)const{int a,n;if(!PersonIndex(id,a,n)||bExperienceRejected)return FString();auto* x=Experience.Arc(a);auto* d=Depth.Arc(a);if(!x->visits[n]||(!d->choice&&!x->guardian&&!x->repair)||((n==1||n==2)&&!(Expeditions.Arc(a)->rescued&(1<<(n-1)))))return FString();FString line=FString::Printf(TEXT("%s remembers %d distinct days with you. "),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].people[n]),x->visits[n]);if(d->choice)line+=UTF8_TO_TCHAR(d->choice==1?UnmadeCore::ExperienceSpecs[a].reserve_return:UnmadeCore::ExperienceSpecs[a].witness_return);if(x->guardian)line+=x->guardian==2?TEXT(" The wing guardian yielded alive. "):TEXT(" The wing guardian died. ");if(x->repair)line+=TEXT(" The repaired work table has reopened the local shift. ");if(x->reconciled)line+=TEXT(" Mediation restored shared access; the original accord remains. ");return line;}
 bool AUnmadePrototypeHub::ExperienceRoutineTarget(FName id,const FVector& current,FVector& target)const{int a,n;if(bExperienceRejected||!PersonIndex(id,a,n))return false;auto* x=Experience.Arc(a);auto* d=Depth.Arc(a);if(a==0&&n==4&&x->offered&&(x->scenes&1)&&!x->complete){auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));if(!p||FVector::DistSquared2D(p->GetActorLocation(),current)>FMath::Square(700.f)){target=current;return true;}int step=x->steps==0?0:x->steps==1?1:2;if(EscortTrail.IsEmpty()||FVector::DistSquared2D(EscortTrail.Last(),p->GetActorLocation())>FMath::Square(180.f)){EscortTrail.Add(p->GetActorLocation());if(EscortTrail.Num()>256)EscortTrail.RemoveAt(0);}while(EscortTrail.Num()>1&&FVector::DistSquared2D(EscortTrail[0],current)<FMath::Square(100.f))EscortTrail.RemoveAt(0);target=EscortTrail.Num()?EscortTrail[0]:Station(a,step);return true;}if(!d->choice)return false;auto Approach=[&](FVector goal,FVector hall){auto q=UnmadeCore::ServiceApproach(current.X,current.Y,goal.X,goal.Y,hall.X,hall.Y);return FVector(q.x,q.y,current.Z);};bool open=ExperienceServicesOpen(a);if(n==4){int site=open&&x->repair?0:2;target=Approach(Hall(a,site)+FVector(-350,open&&x->repair?700:900,0),Hall(a,site));return true;}if(n==3){target=d->choice==2&&!x->reconciled?Approach(Hall(a,0)+FVector(400,800,0),Hall(a,0)):City(a)+FVector(-2600,11000,0);return true;}if(open&&x->repair&&(n==1||n==2)&&Expeditions.Arc(a)->returned&&(Expeditions.Arc(a)->rescued&(1<<(n-1)))){target=Approach(Hall(a,0)+FVector(n==1?-350:350,900,0),Hall(a,0));return true;}return false;}
 UnmadeCore::BuildEffect AUnmadePrototypeHub::ActiveBuild()const{int a=Experience.ActiveBuild();auto* x=Experience.Arc(a);if(bExperienceRejected||!x)return {};auto b=UnmadeCore::BuildEffects(x->build);if(x->recipe)b.armor+=2;return b;}
