@@ -17,6 +17,7 @@
 #include "World/UnmadeLivingEconomyRules.h"
 #include "World/UnmadeBesHouseholdRules.h"
 #include "World/UnmadeHearthPetitionRules.h"
+#include "World/UnmadePetitionRelayRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
@@ -74,7 +75,7 @@ bool ValidCombinedRecord(const Record& record, Text text)
         Save->bHasWitnessDispatchSnapshot||Save->bHasWitnessReturnSnapshot||
         Save->bHasRealityConsequenceSnapshot||Save->bHasOuterRealmReactions||
         Save->bHasMaterialWorld||Save->bHasLivingEconomy||Save->bHasBesHousehold||
-        Save->bHasHearthPetition)&&
+        Save->bHasHearthPetition||Save->bHasPetitionRelay)&&
         !Save->bHasLivingWorldSnapshot)return false;
     if(Save->bHasFractureSnapshot){
         FractureModel model("region.prototype.hub",{"variant.open","variant.sealed"});
@@ -188,6 +189,7 @@ bool ValidCombinedRecord(const Record& record, Text text)
     UnmadeCore::LivingEconomy RestoredLiving;
     UnmadeCore::BesHousehold RestoredBes;
     UnmadeCore::HearthPetition RestoredPetition;
+    UnmadeCore::PetitionRelay RestoredRelay;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -473,6 +475,13 @@ bool ValidCombinedRecord(const Record& record, Text text)
         if(Data.Num()!=6 || !RestoredPetition.Restore(
              {Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]},
              RestoredBes.Save(),RestoredClock.DayIndex()+1))return false;
+    }
+    if(Save->bHasPetitionRelay)
+    {
+        const auto& Data=Save->PetitionRelayState;
+        if(Data.Num()!=6 || !RestoredRelay.Restore(
+             {Data[0],Data[1],Data[2],Data[3],Data[4],Data[5]},
+             RestoredPetition,RestoredClock.DayIndex()+1))return false;
     }
     if(Save->bHasCinderholdAdventure)
     {
