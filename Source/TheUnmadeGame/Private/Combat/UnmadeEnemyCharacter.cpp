@@ -325,9 +325,12 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         bClearSight,bCrouched,DistanceCm/100.0,Facing);
     const bool bEngaged=bOrdinaryStealth
         ?bNearby&&Alertness.Update(Now,bSpotted):bNearby;
+    // A committed, already-warned strike is not canceled just because
+    // its species' feint cycle advances during that visible windup.
+    const bool bExistingWindup=WindupEndsAt>=0.0;
     auto Intent=bEngaged
         ?(bSpeciesConfigured
-            ?(bElderEncounter?UnmadeCore::CreatureIntent(Profile,DistanceCm/100.0,bClearSight,Now<RecoveryEndsAt)
+            ?((bElderEncounter||bExistingWindup)?UnmadeCore::CreatureIntent(Profile,DistanceCm/100.0,bClearSight,Now<RecoveryEndsAt)
             :UnmadeCore::TacticalCreatureIntent(Species,Profile,DistanceCm/100.0,
                  bClearSight,Now<RecoveryEndsAt,Now,
                  Combat->GetHealth()/FMath::Max(1.f,Combat->GetMaxHealth())))
@@ -395,7 +398,7 @@ void AUnmadeEnemyCharacter::Tick(float DeltaSeconds)
         const FVector Side(-Delta.Y,Delta.X,0);
         const FVector Flank=Player->GetActorLocation()+Side.GetSafeNormal2D()*
             (bTacticalFlank?Tactic.flankSide*260.f:((GetUniqueID()&1u)?260.f:-260.f));
-        const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:(bCircleForOpening||bTacticalFlank)?Flank:Intent==UnmadeCore::EnemyIntent::Retreat
+        const FVector Destination=bReturnHome?TerritoryHome:bLocalRoutine?RoutineTarget:bCircleForOpening?Flank:bTacticalFlank?Flank:Intent==UnmadeCore::EnemyIntent::Retreat
             ?GetActorLocation()-Delta.GetSafeNormal()*480.f
             :Player->GetActorLocation();
         if(Now>=NextPathRefreshAt)
