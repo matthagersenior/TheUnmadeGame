@@ -45,14 +45,13 @@ FString AUnmadePrototypeHub::GetPetitionRelayJournal()const
 
 FString AUnmadePrototypeHub::GetPetitionRelayResidentLine(FName StableId)const
 {
-    const auto Effects=UnmadeCore::EvaluateCivicReverberation(
-        PetitionRelay.Save(),BesHousehold.Save());
+    // Do NOT read live Cinderhold payroll into remote NPC speech.
+    // The traveler can inspect their own wage journal, but Mera and Orrel
+    // only know the documents they personally received.
     if(StableId==FName(TEXT("npc.saltwake.courier.001"))&&PetitionRelay.Stage()>=2)
-        return FString(UTF8_TO_TCHAR(PetitionRelay.MeraLine()))+
-               TEXT(" ")+UTF8_TO_TCHAR(Effects.wageLine);
+        return FString(UTF8_TO_TCHAR(PetitionRelay.MeraLine()));
     if(StableId==FName(TEXT("npc.bridgekeeper.001"))&&PetitionRelay.Stage()==4)
-        return FString(UTF8_TO_TCHAR(PetitionRelay.OrrelLine()))+
-               TEXT(" ")+UTF8_TO_TCHAR(Effects.wageLine);
+        return FString(UTF8_TO_TCHAR(PetitionRelay.OrrelLine()));
     return FString();
 }
 
@@ -97,7 +96,19 @@ bool AUnmadePrototypeHub::TryPetitionRelayInteraction(
         const bool SaltPublic=It->ActorHasTag(FName(TEXT("Relay.SaltwakePublic")));
         const bool CrossPrivate=It->ActorHasTag(FName(TEXT("Relay.CrossingsPrivate")));
         const bool CrossPublic=It->ActorHasTag(FName(TEXT("Relay.CrossingsPublic")));
-        if(!Copy&&!SaltPrivate&&!SaltPublic&&!CrossPrivate&&!CrossPublic)continue;
+        const bool SaltDebate=It->ActorHasTag(FName(TEXT("Civic.SaltwakeQuestion")));
+        const bool ProtectedRoute=It->ActorHasTag(FName(TEXT("Civic.PrivateShelterPassage")));
+        const bool PublicPlatform=It->ActorHasTag(FName(TEXT("Civic.PublicEvidencePlatform")));
+        if(!Copy&&!SaltPrivate&&!SaltPublic&&!CrossPrivate&&!CrossPublic&&
+           !SaltDebate&&!ProtectedRoute&&!PublicPlatform)continue;
+        const auto Effects=UnmadeCore::EvaluateCivicReverberation(
+            PetitionRelay.Save(),BesHousehold.Save());
+        if(SaltDebate&&(!Effects.saltwakeControversy||
+           Region->realm!=UnmadeCore::Realm::WidowedRain))continue;
+        if(ProtectedRoute&&(!Effects.protectedPassage||
+           Region->realm!=UnmadeCore::Realm::ThreefoldReach))continue;
+        if(PublicPlatform&&(!Effects.publicAudit||
+           Region->realm!=UnmadeCore::Realm::ThreefoldReach))continue;
         if(Copy&&(Region->realm!=UnmadeCore::Realm::HearthBeneath||
                   HearthPetition.Stage()!=4||PetitionRelay.Stage()!=0))continue;
         if((SaltPrivate||SaltPublic)&&
@@ -115,6 +126,14 @@ bool AUnmadePrototypeHub::TryPetitionRelayInteraction(
         if(GetWorld()->LineTraceTestByChannel(
              At+FVector(0,0,70),It->GetActorLocation()+FVector(0,0,65),
              ECC_Visibility,Sight))continue;
+        if(SaltDebate||ProtectedRoute||PublicPlatform)
+        {
+            NotifyRpg(SaltDebate
+               ?FString(UTF8_TO_TCHAR(Effects.saltwakeLine))
+               :FString(UTF8_TO_TCHAR(Effects.crossingLine))+
+                TEXT(" The question challenges Nhal-Vey's demand for one history; it does not end the confrontation."));
+            return true;
+        }
         if(!Copy)
         {
             NotifyRpg((SaltPrivate||SaltPublic)
