@@ -36,6 +36,10 @@ jobs:
           /tmp/unmade-style
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/defense_receipt_test.cpp -o /tmp/unmade-defense-receipts
           /tmp/unmade-defense-receipts
+      - name: Test crouched creature detection and lasting alertness
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/creature_awareness_test.cpp -o /tmp/unmade-creature-awareness
+          /tmp/unmade-creature-awareness
       - name: Test living wildlife navigation and ordinary group pressure
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/living_encounter_ecology_test.cpp -o /tmp/unmade-living-encounters
