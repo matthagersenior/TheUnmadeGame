@@ -1096,3 +1096,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Generated the native registry from the single JSON authoring source and connected the real service signs and interaction responses to those fields.
 - Added local journal tracking for actual saved hunt, hazard-map and 0–3 repaired-post progress; no new save schema, rewards or characters.
 - Red-first source tests and source CI validate authored uniqueness and wiring. Engine build, physical readability and full nine-realm runs remain unverified.
+
+- Corrected generated-registry drift after the first CI gate: the generator is the authority, and the native header contains no manual annotations.
