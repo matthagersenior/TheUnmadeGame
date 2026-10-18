@@ -28,4 +28,9 @@ return a>=0&&a<9&&lever>=0&&lever<3?coupling[a][lever]:0;}
 inline bool SignatureHit(int shape,double x,double y,double radius){if(!std::isfinite(x)||!std::isfinite(y)||radius<=0)return false;double d=std::hypot(x,y);
  switch(shape){case 1:return d<=radius&&d>=radius*.55;case 2:return std::abs(x)<=radius*.28&&std::abs(y)<=radius;case 3:return d<=radius&&y>=0;case 4:return d<=radius&&((std::abs(x)<=radius*.2&&std::abs(y)<=radius)||(std::abs(y)<=radius*.2&&std::abs(x)<=radius));case 5:return d<=radius&&x*y>=0;case 6:return d<=radius&&(x<=-radius*.25||x>=radius*.25);case 7:return d<=radius&&(y<=-radius*.25||y>=radius*.25);case 8:return std::abs(x)<=radius&&std::abs(y)<=radius;case 9:return d<=radius&&d>=radius*.75;default:return d<=radius;}
 }
+// Each realm's established signature footprint is also its room-three danger field.
+// The surrounding chamber and the free vent remain valid safe alternatives.
+inline bool RealmHazardFootprint(int realm,double x,double y,double radius){
+ return realm>=0&&realm<9&&SignatureHit(realm+1,x,y,radius);
+}
 }
