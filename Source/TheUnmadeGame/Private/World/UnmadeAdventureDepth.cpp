@@ -84,6 +84,7 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
     DepthAccordSigns[a]->SetActorHiddenInGame(!publicAftermath);
     if(publicAftermath){
      // Resolve this world's actual public branch directly from authored data.
+     // An earned public second stage is derived from real saved road receipts.
      const TCHAR* duty=s->choice==1
        ?(Identity.Arc(a)->repair==7?TEXT("SANCTUARY DUTY"):TEXT("PROTECTED RESERVE"))
        :(s->counterThreat?TEXT("ROAD WATCH"):TEXT("PUBLIC HEARING"));
