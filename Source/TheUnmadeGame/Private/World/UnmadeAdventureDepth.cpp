@@ -192,7 +192,7 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    const bool accepted=UnmadeCore::CommitCrossRealmCarry(CrossRealmCarry,[&]{
       return CrossRealmCarry.Deliver(source,arc,GetGameDay(),
         (Expeditions.Arc(source)->visited&1)!=0&&(Expeditions.Arc(arc)->visited&1)!=0);
-     },[&]{return WriteWorldSnapshot(p);});
+     },[&]{return WriteWorldSnapshot();});
    if(!accepted){
      NotifyRpg(TEXT("The destination could not save receipt of the physical packet. It remains in your custody."));
      return true;
@@ -205,6 +205,25 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    RefreshAdventureDepth();return true;
   }
  }
+ if(kind==7&&action==0){
+  const bool sourceReady=Depth.Arc(arc)->choice!=0&&
+    Expeditions.Arc(arc)->returned&&Identity.Arc(arc)->repair==7;
+  if(CrossRealmCarry.Stage(arc)==UnmadeCore::CarryStage::Waiting&&sourceReady){
+   const bool collected=UnmadeCore::CommitCrossRealmCarry(CrossRealmCarry,[&]{
+     return CrossRealmCarry.Collect(arc,GetGameDay(),sourceReady);
+    },[&]{return WriteWorldSnapshot();});
+   if(!collected){
+     NotifyRpg(TEXT("Could not save the physical record. It remains at this worksite."));
+     return true;
+   }
+   UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+   NotifyRpg(FString::Printf(TEXT("COLLECTED: You carry %s's authenticated civic record. Deliver it IN PERSON to the expedition chief in %s. No remote citizen has received it."),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[UnmadeCore::CrossRealmDestination(arc)].city)));
+   RefreshAdventureDepth();return true;
+  }
+
  if(kind==0){if(action==1||action==2){auto* state=Depth.Arc(arc);if(!state->evidence||!e->boss||state->choice)line=TEXT("Speak to the witness, examine their evidence, then resolve the boss before choosing. A committed choice cannot be changed.");else if(!DepthConfirmation.Confirm(arc,action,GetWorld()->GetTimeSeconds())){line=FString::Printf(TEXT("CONFIRM %s: %s\n%s\nPress the SAME choice again within twenty seconds, beside this person. This local accord is permanent. A earns four favor and cheaper provisions; B earns three favor and opens a public hearing, but a displaced claimant contests the return road."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),UTF8_TO_TCHAR(spec.quest),UTF8_TO_TCHAR(action==1?spec.option_a:spec.option_b));}else{changed=UnmadeCore::StagePersonalAccord(Depth,Experience,arc,action,true);line=UTF8_TO_TCHAR(action==1?spec.return_a:spec.return_b);}cue=TEXT("reward");}
   else if(!Depth.Arc(arc)->offered){changed=Depth.Offer(arc,(e->visited&1)!=0);line=UTF8_TO_TCHAR(spec.offer);}
   else if(Depth.Arc(arc)->choice)line=UTF8_TO_TCHAR(Depth.Arc(arc)->choice==1?spec.return_a:spec.return_b);
@@ -247,23 +266,6 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
   }
  }
  if(kind==7){
-  const bool sourceReady=Depth.Arc(arc)->choice!=0&&
-    Expeditions.Arc(arc)->returned&&Identity.Arc(arc)->repair==7;
-  if(action==0&&CrossRealmCarry.Stage(arc)==UnmadeCore::CarryStage::Waiting&&sourceReady){
-   const bool collected=UnmadeCore::CommitCrossRealmCarry(CrossRealmCarry,[&]{
-     return CrossRealmCarry.Collect(arc,GetGameDay(),sourceReady);
-    },[&]{return WriteWorldSnapshot(p);});
-   if(!collected){
-     NotifyRpg(TEXT("Could not save the physical record. It remains at this worksite."));
-     return true;
-   }
-   UnmadePresentation::Sound(p,TEXT("inspect"));
-   p->PlayIdentityMotion(FName(TEXT("Inspect")));
-   NotifyRpg(FString::Printf(TEXT("COLLECTED: You carry %s's authenticated civic record. Deliver it IN PERSON to the expedition chief in %s. No remote citizen has received it."),
-       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
-       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[UnmadeCore::CrossRealmDestination(arc)].city)));
-   RefreshAdventureDepth();return true;
-  }
   const int branch=Depth.Arc(arc)->choice;
   if(!e->returned||!branch||index!=branch)
    line=TEXT("This civic worksite is not staffed until the actual return and public choice are recorded.");
