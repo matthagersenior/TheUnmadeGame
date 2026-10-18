@@ -1077,3 +1077,24 @@ are no new global testimony/deed flags, automatic couriers, permanent
 power combinations or main-campaign gates. Real Unreal actor placement,
 collision, voice, navigation, pacing and platform persistence remain
 unverified.
+
+## 2026-10-17 — Civic reverberation and the one-history question
+
+A petition carried Cinderhold -> Saltwake -> Crossings now has independent,
+locally visible consequences. Once Mera personally receives the paper,
+the Saltwake civic dispute station exists. Only after Orrel physically
+receives her reply does the Crossings gain a protected screened side
+passage for confidential testimony OR a public redacted evidence platform.
+The two optional, collidable sites are mutually exclusive and do not
+override prior settlement choices, give any reward, or gate the campaign.
+
+The **player's** campaign journal can then ask Nhal-Vey how one history
+could contain protected identity and still honor a recorded obligation.
+The main confrontation, other realms and all witnessed endgame outcomes
+remain independent. Mera and Orrel retain their personally witnessed
+custody accounts, and do NOT automatically learn later repayments in
+Cinderhold. The player journal alone can show the actual later wage state.
+
+Effects are derived solely from existing saved petition, relay and household
+facts; no new schema or rumor flag has been added. Physical access,
+collision, compiled Unreal code and cinematic performance remain unverified.

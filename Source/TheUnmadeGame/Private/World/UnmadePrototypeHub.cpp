@@ -3419,11 +3419,21 @@ void AUnmadePrototypeHub::BuildForPrototype()
         FName(TEXT("Relay.SaltwakePrivate")));
     SpawnBlock(Saltwake+FVector(2050,600,155),FVector(.7,.35,2.1),
         FName(TEXT("Relay.SaltwakePublic")));
+    // Once Mera has actually read the document, a local discussion station
+    // becomes visible. Its state comes from custody, not instant rumors.
+    SpawnBlock(Saltwake+FVector(1800,990,108),FVector(.85,.55,1.7),
+        FName(TEXT("Civic.SaltwakeQuestion")));
     // Crossings archive. Orrel himself must receive the actual reply first.
     SpawnBlock(FVector(-1590,450,145),FVector(.8,.5,2.3),
         FName(TEXT("Relay.CrossingsPrivate")));
     SpawnBlock(FVector(-1910,450,145),FVector(.8,.5,2.3),
         FName(TEXT("Relay.CrossingsPublic")));
+    // Distinct optional, collidable, local routes. Both remain nonessential
+    // to the main road: a screened side deck or an open evidence platform.
+    SpawnBlock(FVector(-1260,860,18),FVector(5.2,1.4,.36),
+        FName(TEXT("Civic.PrivateShelterPassage")));
+    SpawnBlock(FVector(-1980,860,18),FVector(3.4,2.5,.36),
+        FName(TEXT("Civic.PublicEvidencePlatform")));
     RefreshBesHouseholdWorld();
     RefreshHearthPetitionWorld();
     RefreshPetitionRelayWorld();

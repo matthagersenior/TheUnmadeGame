@@ -1,3 +1,16 @@
+## 2026-10-17 — Civic Reverberation and Nhal-Vey's one-history dilemma
+
+The delivered Hearth Petition now produces local and mechanically distinct
+aftermath in Saltwake and the Crossings: a civic question station, an
+optional protected crossing side deck for sealed testimony, or an optional
+redacted evidence platform for public accountability. The two Crossings
+outcomes are exclusive, and every new site is inspectable. A branch-specific
+question enters the player's Unanswered Road journal only after receipt by
+Orrel, without bypassing the endgame or inventing a cosmic witness.
+Household repayments can change the player's accounting text, but not
+Mera's or Orrel's unverified remote knowledge. Deterministic portable
+checks and canon handoff accompany the work; Unreal playtesting remains.
+
 ## 2026-10-17 — Cross-realm Petition Relay
 
 Implemented a physical Cinderhold–Saltwake–Crossings optional

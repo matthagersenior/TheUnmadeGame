@@ -96,7 +96,7 @@ public:
  const char* OrrelLine()const noexcept{
   if(state_.stage!=4)return "";
   return state_.route==1
-   ?"Orrel: This sealed Saltwake reply is now in my hands. I will preserve the private passage, but an unanswered wage claim remains."
+   ?"Orrel: This sealed Saltwake reply is in my hands. I will preserve the private passage; later Cinderhold payroll must be verified separately."
    :"Orrel: I have the redacted public reply. The Crossings may request an accounting, not convict anyone or expose the people who took shelter.";
  }
 };
