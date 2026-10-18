@@ -362,6 +362,8 @@ private:
     // The boss counter is transient: no extra rewards, save flags or repeatable farming.
     std::array<UnmadeCore::ArenaCounter,9> ArenaCounters{};
     std::array<double,9> ArenaShelterUntil{};
+    // Cache visible state: avoid 36 full-world actor scans per 0.5s refresh.
+    std::array<int,9> ArenaShelterVisible{}, ArenaAftermathVisible{};
 
     FTimerHandle GossipTimer;
     FTimerHandle WorldSaveTimer;
