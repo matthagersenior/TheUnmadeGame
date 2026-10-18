@@ -35,6 +35,8 @@ int main(){
   assert(death.kind==CrossRealmCombatKind::BorderAlert);
   assert(death.hazardDelta>=2&&death.hazardDelta<=5);
   assert(sparse.hazardDelta>=1&&sparse.hazardDelta<death.hazardDelta);
+  assert(sparse.rescued==2 && death.rescued==0);
+  assert(CrossRealmCombatResponse(dst,1,0,2,true,true,false,true).rescued==1);
   assert(restraint.kind==CrossRealmCombatKind::OpenWitnessPass);
   assert(restraint.hazardDelta<=-1&&restraint.hazardDelta>=-4);
   auto moderated=CrossRealmCombatResponse(dst,1,255,0,true,true,true,true);
