@@ -1098,3 +1098,10 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Red-first source tests and source CI validate authored uniqueness and wiring. Engine build, physical readability and full nine-realm runs remain unverified.
 
 - Corrected generated-registry drift after the first CI gate: the generator is the authority, and the native header contains no manual annotations.
+
+
+## 2026-10-17 — Realm-shaped expedition danger fields
+
+- Reused the nine already-authored boss warning shapes for each realm's optional third-room hazard footprint and readable, realm-specific safe-space directions.
+- Kept the warning rhythm, finite vent suppression, existing field-kit and survey-map protection, damage amounts and no new persistence.
+- Added failing-first C++ geometry and native wiring regression tests; source compilation/CI is the verification gate, not Unreal playability certification.

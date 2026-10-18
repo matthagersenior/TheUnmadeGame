@@ -156,6 +156,7 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
     ArenaAftermathVisible[a]=outcomeValue;
   }
   auto hazard=UnmadeCore::SampleDungeonHazard(GetWorld()->GetTimeSeconds()+a,GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a]||t->boss!=0||bExpeditionSaveRejected||Identity.Arc(a)->chart!=0);
+  // Safe-space instructions and damage footprint share the same authored realm shape.
   const FString realmTell=UTF8_TO_TCHAR(UnmadeCore::ExpeditionMove(UnmadeCore::ExpeditionRole::Boss,a,2,false).warning);
   if(ExpeditionHazardSigns[a].IsValid()){
    const FString notice=hazard.warning?TEXT("DANGER FIELD WARNING"):hazard.danger?TEXT("FIELD ACTIVE - TAKE THE SAFE SHAPE"):TEXT("FIELD QUIET - NEXT WARNING BEFORE DAMAGE");
