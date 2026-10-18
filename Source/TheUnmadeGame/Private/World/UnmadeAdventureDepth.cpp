@@ -62,10 +62,9 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
         &&Expeditions.Arc(a)->returned&&s->choice!=0;
     DepthAccordSigns[a]->SetActorHiddenInGame(!publicAftermath);
     if(publicAftermath){
-     const auto& spec=UnmadeCore::DepthSpecs[a];
      const FString text=FString::Printf(TEXT("%s / PUBLIC RETURN ACCORD\n%s"),
          UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
-         UTF8_TO_TCHAR(s->choice==1?spec.public_return_a:spec.public_return_b));
+         UTF8_TO_TCHAR(s->choice==1?UnmadeCore::DepthSpecs[a].public_return_a:UnmadeCore::DepthSpecs[a].public_return_b));
      DepthAccordSigns[a]->GetTextRender()->SetText(FText::FromString(text));
     }
    }
