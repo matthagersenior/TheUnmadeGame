@@ -66,6 +66,7 @@ inline const char* ChallengeInstructions(int realm){
  };
  return realm>=0&&realm<9?hints[realm]:nullptr;
 }
+// The UI reads contextual outcomes without changing the physical challenge save receipt.
 class RealmChallenge {
  int progress=0,mask=0;double until=-1;
 public:
