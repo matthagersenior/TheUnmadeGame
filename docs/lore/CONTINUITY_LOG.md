@@ -1216,3 +1216,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Only a physically compared destination record tempers a provisional response. This preserves the separate local evidence review, the player's burden of proof and limited NPC knowledge.
 - Added distinct destination watch names, physical readable warning signs, attributed receiving-chief dialogue and dynamic existing hazard damage. Existing chart-based field grounding and eight-second free vent still work.
 - Added portable nine-realm defensive tests and native integration checks verifying no phantom report, no invalid save, no fake opponent death, no automatic rescue and no extra save/quest reward. UE pathfinding, actual hazard presentation and balance still require an engine playthrough.
+
+- Corrected the rescued-person display and propagated combat facts to use the count of the two recorded rescue bits, not the underlying bitmask integer. Added direct all-realm assertions for zero, one and two freed people.

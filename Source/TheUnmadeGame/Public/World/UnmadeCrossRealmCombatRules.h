@@ -42,6 +42,7 @@ inline CrossRealmCombatState CrossRealmCombatResponse(
     !sourceReturned||!received||!validSave)return {};
  int casualties=0;
  for(int k=0;k<8;++k)casualties+=(sourceKills&(1<<k))?1:0;
+ // Rescued is a 2-bit identity mask, never a head count.
  int personsFreed=0;
  for(int k=0;k<2;++k)personsFreed+=(sourceRescued&(1<<k))?1:0;
  if(sourceBoss==1){
