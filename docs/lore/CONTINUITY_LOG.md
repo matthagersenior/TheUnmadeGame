@@ -1222,3 +1222,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Differentiated genuine low-casualty living surrender from a high-casualty capitulation: four or more recorded guard deaths produce a distinct casualty vigil rather than magically safe borders. Compared destination evidence moderates this response, without changing the authoritative record of lives lost. Added explicit nine-realm assertions for both stages.
 
 - Added an explicit player-only BATTLE TESTIMONY preview while the report is physically in custody, counting saved guard and captive bits and warning that the receiving realm remains unchanged until hand-delivery. Regression tests guard the preview's stage and wording.
+
+- Made the nine physical combat-response signs report whether a modified hazard is actually active or already grounded by an earned survey map/local boss resolution. Added explicit source tests so disabled fields never falsely advertise damage.

@@ -203,15 +203,17 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
     const bool witnessed=response.kind!=UnmadeCore::CrossRealmCombatKind::Unknown;
     CrossRealmCombatSigns[a]->SetActorHiddenInGame(!witnessed);
     if(witnessed){
+      const bool fieldGrounded=Identity.Arc(a)->chart!=0||t->boss!=0;
       const FString account=FString::Printf(
-        TEXT("RECEIVED FROM %s / %s\n%s\n%s: %d guards fell; %d people released\nLOCAL WATCH DANGER %+d / %s"),
+        TEXT("RECEIVED FROM %s / %s\n%s\n%s: %d guards fell; %d people released\nLOCAL WATCH ADJUSTMENT %+d / %s / %s"),
         UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
         origin->boss==1?TEXT("BOSS DEFEATED"):TEXT("BOSS YIELDED ALIVE"),
         UTF8_TO_TCHAR(UnmadeCore::CrossRealmCombatProfiles[a].frontier),
         UTF8_TO_TCHAR(UnmadeCore::CrossRealmCombatProfiles[a].warning),
         response.casualties,response.rescued,
         response.hazardDelta,
-        stage==UnmadeCore::CarryStage::Reviewed?TEXT("LOCAL EVIDENCE REVIEWED"):TEXT("LOCAL EVIDENCE PENDING"));
+        stage==UnmadeCore::CarryStage::Reviewed?TEXT("LOCAL EVIDENCE REVIEWED"):TEXT("LOCAL EVIDENCE PENDING"),
+        fieldGrounded?TEXT("FIELD GROUNDED / NO ACTIVE PULSE"):TEXT("ACTIVE FIELD / USE FREE VENT OR SURVEY MAP"));
       CrossRealmCombatSigns[a]->GetTextRender()->SetText(FText::FromString(account));
     }
   }
