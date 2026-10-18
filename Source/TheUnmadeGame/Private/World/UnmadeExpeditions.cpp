@@ -41,6 +41,9 @@ bool Local(UWorld* w,AUnmadeCharacter* p,FVector at,double range=230){if(!w||!Al
 }
 void AUnmadePrototypeHub::BuildExpeditions(){
  if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
+ ArenaShelterVisible.fill(-1);ArenaAftermathVisible.fill(-1);
+ ArenaShelterUntil.fill(0);
+ for(auto& Counter:ArenaCounters)Counter.Reset();
  const auto Sign=[&](FVector at,const FString& text){auto* a=GetWorld()->SpawnActor<ATextRenderActor>(at+FVector(0,0,95),FRotator(0,90,0));if(a){a->GetTextRender()->SetWorldSize(20);a->GetTextRender()->SetText(FText::FromString(text));}return a;};
  const auto Gate=[&](FVector at){auto* a=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(a){auto* m=a->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(6,.25,3));}return a;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::ExpeditionSpecs[a];const auto Block=[&](FVector at,FVector scale){SpawnBlock(at,scale,FName(*FString::Printf(TEXT("Expedition.%d.Structure"),a)));};
@@ -118,15 +121,20 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
     ArenaShelterUntil[a]=0;
   }
   const double Now=GetWorld()->GetTimeSeconds();
-  SetRiteWorldActorState(FName(*FString::Printf(
-      TEXT("Expedition.%d.ArenaShelter"),a)),
-      !bExpeditionSaveRejected&&t->boss==0&&
-      UnmadeCore::Arenas[a].shelterSeconds>0&&Now<ArenaShelterUntil[a]);
-  const auto aftermath=UnmadeCore::ArenaAftermathRecord(*t);
-  for(int outcome=1;outcome<=3;++outcome){
+  const int shelter=(!bExpeditionSaveRejected&&t->boss==0&&
+      UnmadeCore::Arenas[a].shelterSeconds>0&&Now<ArenaShelterUntil[a])?1:0;
+  if(ArenaShelterVisible[a]!=shelter){
     SetRiteWorldActorState(FName(*FString::Printf(
-      TEXT("Expedition.%d.Aftermath.%d"),a,outcome)),
-      !bExpeditionSaveRejected&&static_cast<int>(aftermath)==outcome);
+        TEXT("Expedition.%d.ArenaShelter"),a)),shelter==1);
+    ArenaShelterVisible[a]=shelter;
+  }
+  const auto aftermath=UnmadeCore::ArenaAftermathRecord(*t);
+  const int outcomeValue=bExpeditionSaveRejected?0:static_cast<int>(aftermath);
+  if(ArenaAftermathVisible[a]!=outcomeValue){
+    for(int outcome=1;outcome<=3;++outcome)
+      SetRiteWorldActorState(FName(*FString::Printf(
+        TEXT("Expedition.%d.Aftermath.%d"),a,outcome)),outcome==outcomeValue);
+    ArenaAftermathVisible[a]=outcomeValue;
   }
   auto hazard=UnmadeCore::SampleDungeonHazard(GetWorld()->GetTimeSeconds()+a,GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a]||t->boss!=0||bExpeditionSaveRejected||Identity.Arc(a)->chart!=0);
   if(ExpeditionHazardSigns[a].IsValid())ExpeditionHazardSigns[a]->GetTextRender()->SetText(FText::FromString(hazard.warning?TEXT("FLOOR WARNING - STEP OUT OF THE FIELD"):hazard.danger?TEXT("DANGER PULSE - SAFE EDGES / FREE VENT"):TEXT("FLOOR QUIET - NEXT WARNING BEFORE DAMAGE")));
