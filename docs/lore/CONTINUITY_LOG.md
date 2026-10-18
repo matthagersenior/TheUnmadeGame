@@ -1165,3 +1165,12 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Built visible destination receipts and daytime receiving-chief inspection routines, with names and branch-specific text revealed only after actual handoff. Existing repair, hearing, and claimant aftermath remains distinct.
 - Added an optional, additive schema-one payload, fail-closed restore validation and transactional save rollback; original Cinderhold→Saltwake→Crossings petition and witness dispatch systems stay intact.
 - Red-first portable C++ and native wiring tests cover all nine source/destination pairs, source proof, recipient identity, save corruption/reload and non-omniscient response; no rewards or game-end gates. Unreal actor acceptance is pending.
+
+
+## 2026-10-18 — Physical receiving-realm evidence comparison
+
+- Added one inspectable comparison desk per realm, initially revealed only by a genuine personally delivered packet and updated after its receipt is compared against that destination's physically collected fourth-chamber evidence.
+- The player's evidence discovery is *not* itself the chief's knowledge: a separate E interaction at the desk requires the actual named chief within speaking range and commits a durable Reviewed stage.
+- Evolved the original cross-realm custody pack without changing version or size, preserving prior handoffs. Source proof, destination evidence, stage monotonicity, and failed-save rollback are enforced in both live restores and combined-save preflight.
+- Changed the chief's daytime duty and attributed return dialogue only after confirmed presentation. The journal now directs players to the missing local evidence or physical review station; no reward, global witness, or forced game path.
+- Red-first portable C++ plus native actor wiring regression checks cover all nine inbound relationships, review gates, attendance, save reload/tamper checks and daytime scene changes. In-engine user experience remains unverified.

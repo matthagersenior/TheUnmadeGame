@@ -249,6 +249,8 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    RefreshAdventureDepth();return true;
   }
 
+ // Canon: a destination witness must physically receive local proof; simply
+ // discovering it never grants NPC awareness of that evidence.
  // Local comparison is a separate save-atomic E action: inspecting the desk
  // is otherwise read-only. The actual recipient must be within speaking range.
  if(kind==8&&action==0){
