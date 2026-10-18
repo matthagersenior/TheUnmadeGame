@@ -1121,3 +1121,10 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Regenerated DepthSpec and appended the appropriate result to returned companions only when the saved accord exists; unreleased captives do not acquire knowledge of an unvisited outcome.
 - Preserved leaders and named witnesses' private firsthand lines, existing choice gates, journal/reward receipts, and all original save fields.
 - Added red-first nine-realm source and portable C++ coverage. Engine dialogue delivery, physical return and rendered cinematic context remain unverified.
+
+
+## 2026-10-17 — Physical public accord marker parity
+
+- Created one return-road civic result marker beside existing service markers in each of the nine realms and connected its displayed branch to the canonical public-return text.
+- Gated visibility on the actual saved accord, witnessed expedition return and accepted quest/expedition state; hidden markers make no claim about pending choices.
+- Source-only wiring and continuity checks exercise the nine-site count, branch selection and read-only effect; no new persistence, loot or requirements. Unreal physical placement and legibility remain unverified.
