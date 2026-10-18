@@ -18,6 +18,7 @@
 #include "World/UnmadeBesHouseholdRules.h"
 #include "World/UnmadeHearthPetitionRules.h"
 #include "World/UnmadePetitionRelayRules.h"
+#include "World/UnmadeCrossRealmCarryRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
@@ -75,7 +76,8 @@ bool ValidCombinedRecord(const Record& record, Text text)
         Save->bHasWitnessDispatchSnapshot||Save->bHasWitnessReturnSnapshot||
         Save->bHasRealityConsequenceSnapshot||Save->bHasOuterRealmReactions||
         Save->bHasMaterialWorld||Save->bHasLivingEconomy||Save->bHasBesHousehold||
-        Save->bHasHearthPetition||Save->bHasPetitionRelay)&&
+        Save->bHasHearthPetition||Save->bHasPetitionRelay||
+        Save->bHasCrossRealmCarry)&&
         !Save->bHasLivingWorldSnapshot)return false;
     if(Save->bHasFractureSnapshot){
         FractureModel model("region.prototype.hub",{"variant.open","variant.sealed"});
@@ -494,6 +496,21 @@ bool ValidCombinedRecord(const Record& record, Text text)
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){ return false; }}
     if(Save->bHasAdventureDepth){std::vector<int> Data;for(int V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){ return false; }}
     if(Save->bHasPlayerExperience){std::vector<int> Data;for(int V:Save->PlayerExperienceState)Data.push_back(V);if(!Experience.Restore(Data,Expeditions,Depth,RestoredClock.DayIndex()+1)){ return false; }}
+    if(Save->bHasCrossRealmCarry){
+        if(!Save->bHasExpeditions||!Save->bHasWorldIdentity||
+           !Save->bHasAdventureDepth)return false;
+        std::vector<int> data;
+        for(int value:Save->CrossRealmCarryState)data.push_back(value);
+        std::array<bool,9> sourceReady{},destVisited{};
+        for(int a=0;a<9;++a){
+            sourceReady[a]=Depth.Arc(a)->choice!=0&&
+                Expeditions.Arc(a)->returned&&Identity.Arc(a)->repair==7;
+            destVisited[a]=(Expeditions.Arc(a)->visited&1)!=0;
+        }
+        UnmadeCore::CrossRealmCarry proof;
+        if(!proof.Restore(data,RestoredClock.DayIndex()+1,
+                          sourceReady,destVisited))return false;
+    }
 
     if(Save->bHasRememberedRoads)
     {
