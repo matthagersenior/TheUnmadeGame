@@ -81,6 +81,7 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
   }
  }
 }
+// Read-only local duty: permanent narrative decisions stay in their original ledgers.
 bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtNight,FVector& Out)const{
  if(!GetWorld()||ResidentId.IsNone()||AtNight||bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected)return false;
  for(int a=0;a<9;++a){

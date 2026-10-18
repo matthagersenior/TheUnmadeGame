@@ -1130,3 +1130,11 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Source-only wiring and continuity checks exercise the nine-site count, branch selection and read-only effect; no new persistence, loot or requirements. Unreal physical placement and legibility remain unverified.
 
 - Clarified direct canonical registry binding in the actor after a failing source check; keeps a single authoring authority for all eighteen public aftereffects.
+
+
+## 2026-10-17 — Nine return-road work shifts and physical accord inspections
+
+- Added deterministic two-branch daytime duty locations in all nine realms. Existing NPC roles leave their normal tasks only during nonurgent routine motion after the saved choice, witnessed return and rescue proof.
+- Included guarded night/invalid-save behavior, distinct branch destinations and original swept navigation; no NPC spawn, forced position, invented contacts or auto-completed task.
+- Connected the existing public accord notice to the physical E interaction, with branch-specific next steps based on live claimant/waypost receipts.
+- Red-first Python/native C++ checks cover all nine sites, both choices, rescue restrictions and native wiring. Save schema unchanged. Unreal acceptance remains pending.
