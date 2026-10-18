@@ -389,6 +389,7 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     }
     if (Phase == UnmadeCore::DayPhase::Night && !LocalProfile)
         CharacterLine += TEXT(" It feels like the dark has started listening.");
+    // Source-authoritative record and witnessed memory remain independent.
     // Expedition residents must be able to recount their actual rescue and
     // choice without suppressing separate observed events and return context.
     if(!Expedition.IsEmpty())CharacterLine+=TEXT(" ")+Expedition;
