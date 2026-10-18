@@ -155,7 +155,8 @@ bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtN
    if(n==0&&Expeditions.Arc(a)->visited&&
       !bCrossRealmCarryRejected&&
       CrossRealmCarry.Stage((a+8)%9)>=UnmadeCore::CarryStage::Delivered){
-    Out=Shop(a,0,0)+(CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Reviewed?
+    Out=Shop(a,0,0)+(CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Reviewed&&
+      Depth.Arc(a)->evidence?
       FVector(550,800,0):FVector(950,600,0));
     return true;
    }

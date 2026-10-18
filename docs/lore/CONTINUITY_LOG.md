@@ -1174,3 +1174,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Evolved the original cross-realm custody pack without changing version or size, preserving prior handoffs. Source proof, destination evidence, stage monotonicity, and failed-save rollback are enforced in both live restores and combined-save preflight.
 - Changed the chief's daytime duty and attributed return dialogue only after confirmed presentation. The journal now directs players to the missing local evidence or physical review station; no reward, global witness, or forced game path.
 - Red-first portable C++ plus native actor wiring regression checks cover all nine inbound relationships, review gates, attendance, save reload/tamper checks and daytime scene changes. In-engine user experience remains unverified.
+
+- Follow-up proof guard: even after a received review stage, the NPC's completed-review station requires live saved destination evidence; portable integration test enforces the same rule.
