@@ -34,10 +34,10 @@ class NarrativePurposeIntegrity(unittest.TestCase):
    self.assertIn("?",row["mystery_question"])
    self.assertNotIn("Nhal-Vey",row["mystery_question"] if a<8 else "")
    self.assertTrue(any(x in row["physical_lead"].lower() for x in
-      ("evade","brace","fight","tune","turn","cross","read","inspect","reverse","climb","trace","disarm","ring","align")),
+      ("evade","brace","fight","tune","turn","cross","read","inspect","reverse","climb","trace","disarm","ring","align","affirm","disrupt","hold","open","release")),
       (a,"no physical player action"))
    self.assertTrue(any(x in row["physical_lead"].lower() for x in
-      ("guard","boss","tollkeeper","dungeon","threat","arena","sentinel","provost","counter","enemy","fracture","hazard","combat","seal","duelist","choir")),
+      ("guard","boss","tollkeeper","dungeon","threat","danger","arena","sentinel","provost","counter","enemy","fracture","hazard","combat","seal","duelist","choir")),
       (a,"no physical danger/counterplay"))
    self.assertNotEqual(row["option_a"],row["option_b"])
    self.assertNotEqual(row["return_a"],row["return_b"])
