@@ -1128,3 +1128,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Created one return-road civic result marker beside existing service markers in each of the nine realms and connected its displayed branch to the canonical public-return text.
 - Gated visibility on the actual saved accord, witnessed expedition return and accepted quest/expedition state; hidden markers make no claim about pending choices.
 - Source-only wiring and continuity checks exercise the nine-site count, branch selection and read-only effect; no new persistence, loot or requirements. Unreal physical placement and legibility remain unverified.
+
+- Clarified direct canonical registry binding in the actor after a failing source check; keeps a single authoring authority for all eighteen public aftereffects.
