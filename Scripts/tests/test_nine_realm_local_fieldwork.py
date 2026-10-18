@@ -32,7 +32,9 @@ class RealmFieldworkContent(unittest.TestCase):
         self.assertIn('TEXT("LOCAL FIELDWORK\\nE - CLAIM EARNED HUNT',native)
         self.assertIn('J - PURPOSE AND LOCAL CONSEQUENCES',native)
         self.assertNotIn('UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].hunt_task)',native)
-        self.assertNotIn('UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].survey_task)',native)
+        # The real survey objective remains visible on its relevant puzzle sign.
+        self.assertIn('UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].survey_task)',native)
+        self.assertNotIn('Sign(Service(a),FString::Printf(TEXT("E - %s',native)
         self.assertIn('IdentitySpecs[arc].hunt_task',native)
         self.assertIn('IdentitySpecs[arc].survey_task',native)
         self.assertIn('IdentitySpecs[arc].repair_task',native)
