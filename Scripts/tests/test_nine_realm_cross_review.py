@@ -22,7 +22,8 @@ int main(){
   assert(CrossRealmReview(target,CarryStage::Delivered,false,true,true)==ReviewState::Unavailable);
   assert(CrossRealmReview(target,CarryStage::Delivered,true,true,false)==ReviewState::Unavailable);
   assert(CrossRealmReview(target,CarryStage::Delivered,true,false,true)==ReviewState::NeedEvidence);
-  assert(CrossRealmReview(target,CarryStage::Delivered,true,true,true)==ReviewState::Compared);
+  assert(CrossRealmReview(target,CarryStage::Delivered,true,true,true)==ReviewState::ReadyToCompare);
+  assert(CrossRealmReview(target,CarryStage::Reviewed,true,true,true)==ReviewState::Compared);
  }
  assert(sources.size()==9);
  assert(CrossRealmSource(-1)==-1);
@@ -56,6 +57,7 @@ int main(){
   self.assertIn("E  Compare incoming report with local evidence",world)
   review=world.split("if(kind==8)",1)[1].split("if(kind==5",1)[0]
   self.assertIn("ReviewState::NeedEvidence",review)
+  self.assertIn("ReviewState::ReadyToCompare",review)
   self.assertIn("ReviewState::Compared",review)
   self.assertIn("UnmadePresentation::Sound(p,TEXT(\"inspect\"))",review)
   self.assertNotIn("WriteWorldSnapshot(",review)
