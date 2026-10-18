@@ -1148,3 +1148,11 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Physical E inspection reports the existing local branch outcome without creating a save action, reward or remote eyewitness.
 - Connected arriving daytime NPCs to the existing Repair versus Inspect animation clips, only during a legitimate routine shift; emergency behavior, night returns and existing earned services retain precedence.
 - Red-first source tests gate all nine scene families, hiding, interaction, performance and no-reward boundaries; Unreal acceptance for asset imports, placement and timing remains pending.
+
+
+## 2026-10-17 — Real second-stage sanctuary and road-watch NPC consequences
+
+- Added per-realm save-backed second-shift positions to the existing deterministic accord planner: sanctuary only after three recorded waypost repairs; road watch only after the claimant's recorded defeat.
+- Updated nine physical NPC routing behaviors, branch-specific motion cues, public notice and personal journal to distinguish unresolved duty from earned follow-through.
+- Preserved no-save fallback, no captive teleport, night behavior and all original rewards/schemas, with a new red-first portable C++ test covering nine realms, two original branches, second-stage uniqueness and the strict home safety envelope.
+- Pending Unreal acceptance for physical movement, performance, day-night transition and rendered sign accessibility.

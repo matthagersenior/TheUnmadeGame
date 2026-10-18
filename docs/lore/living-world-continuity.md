@@ -1206,3 +1206,12 @@ The nine return-road settlements display one of two noncolliding civic work stru
 The actual saved workers use the existing in-world navigation, and arriving daytime staff can perform the established Repair gesture while serving the protected reserve or Inspect when holding a public ledger. Urgent aid, nearby hazard response and the real night routine retain their priority. The player may approach and examine the active local station through the same physical interaction system, with inspection motion and sound; observation merely explains the remembered civic outcome and cannot create another quest receipt or favor.
 
 These are source-built graybox props and existing animation references. Artist-authored models, sound spatialization, navmesh path acceptance, collision edges, and dramatic performance still need Unreal validation; no fabricated citizens, remotely teleported stage actors, loot or persistence are introduced.
+
+
+## 2026-10-17 — The return road changes a second time when the player follows through
+
+The actual consequences of nine personal accords are no longer confined to a first return. Protected-reserve civic duty becomes a second daytime sanctuary shift only after all three local physical wayposts have been repaired in the existing identity ledger. Public-accountability civic duty becomes a second road-watch shift only after the named displaced return-road claimant has actually been defeated and the existing counter-threat receipt safely committed. Otherwise, the protected service or public hearing remains the current work, with no automatic promise of a repaired road or resolved grievance.
+
+Each realm has distinct assigned second-visit duty coordinates inside the previously established rescued-captive safety/home radius, and all work retains the original night fallback, emergency responses, real rescue restrictions, pathfinding, collision sweep and stable NPC IDs. Sanctuary attendants continue the established Repair motion; surviving road-watch neighbors can signal with the established Gesture motion, while ongoing hearing witnesses inspect ledgers. The visible accord record and personal journal reflect the actual committed stage. No new protected name is published, no worker teleports, no first-person knowledge is fabricated and no new reward, relationship point or save field is created.
+
+The mechanics and staged coordinates are portable/source-testable; the drama of nighttime returns, gesture timings, path reachability, crowd behavior and art remain to be verified in Unreal.
