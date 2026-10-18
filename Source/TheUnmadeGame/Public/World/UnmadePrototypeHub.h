@@ -322,6 +322,9 @@ public:
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthEvidenceActors,DepthCacheActors;
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthSecretGates;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthChallengeSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> DepthWitnessPlanSigns;
+    // Transient: the player must hear a real local witness and apply the map at a control.
+    std::array<double,9> DepthWitnessBriefUntil{};
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthAccordSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthCrossRealmReceiptSigns;
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthCrossRealmReviewActors;
