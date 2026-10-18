@@ -22,6 +22,8 @@ inline std::string FormatControlLabels(const std::string& input,const std::vecto
 enum class SessionIntent {None,Load,Recover,New};
 class SessionConfirmation final {SessionIntent intent_=SessionIntent::None;int profile_=-1;public:
  void Clear(){intent_=SessionIntent::None;profile_=-1;}
+ // Only a repeated press for the same pending intent/slot can discard an unsaved session.
+ bool Awaiting(SessionIntent intent,int profile)const{return intent!=SessionIntent::None&&profile>=0&&profile<=3&&intent_==intent&&profile_==profile;}
  bool Request(SessionIntent intent,int profile,bool saved){if(intent==SessionIntent::None||profile<0||profile>3){Clear();return false;}if(saved&&intent!=SessionIntent::Recover){Clear();return true;}if(intent_==intent&&profile_==profile){Clear();return true;}intent_=intent;profile_=profile;return false;}
 };
 inline bool PhysicalTradeAllowed(bool alive,bool consenting,double distanceSq,bool unobstructed){return alive&&consenting&&std::isfinite(distanceSq)&&distanceSq>=0&&distanceSq<=340.0*340.0&&unobstructed;}
