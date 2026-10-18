@@ -21,9 +21,9 @@ int main(){
   assert(s.cooldownSeconds>=20 && s.cooldownSeconds<=50);
   assert(s.offsetX!=0 && s.offsetY!=0);
   EvidenceCounterplay counter;
-  assert(counter.Use(a,10,true,true,false,true)==EvidenceCounterplayResult::MissingProof);
   assert(counter.Use(a,10,false,false,false,true)==EvidenceCounterplayResult::MissingProof);
   assert(counter.Use(a,10,true,false,false,true)==EvidenceCounterplayResult::Active);
+  assert(EvidenceCounterplay{}.Use(a,10,false,true,false,true)==EvidenceCounterplayResult::Active);
   assert(counter.Use(a,11,false,true,false,true)==EvidenceCounterplayResult::Recovering);
   assert(counter.Use(a,25,false,true,false,true)==EvidenceCounterplayResult::Recovering);
   assert(counter.Use(a,100,false,true,false,true)==EvidenceCounterplayResult::Active);
