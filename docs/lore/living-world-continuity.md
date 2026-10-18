@@ -1098,3 +1098,23 @@ Cinderhold. The player journal alone can show the actual later wage state.
 Effects are derived solely from existing saved petition, relay and household
 facts; no new schema or rumor flag has been added. Physical access,
 collision, compiled Unreal code and cinematic performance remain unverified.
+
+## 2026-10-17 — Nine realm-specific tactical boss counters
+
+The nine existing boss encounters now have transient two-station
+environmental counterplay requiring a real approach, positional order
+and time-limited execution under the active boss's telegraphed attacks.
+Each realm's counter uses its own physical motivation and timings.
+Success exposes the *living* boss for a bounded interval, sometimes
+opening temporary real cover; it cannot award an extra permanent victory,
+rescue a captive, overwrite a surrender, or repeat for rewards.
+Prior short grounding-lever and evidence-based mercy solutions remain.
+
+Following an actual witnessed return, physical and journal aftermath
+now distinguishes a defeated jailer with prisoners still held, prisoners
+physically freed, and an enforcer who yielded alive. The nine local lines
+remain grounded in each canon dungeon's actual people, records and
+civic costs. Evidence and combat are alternatives with different
+implications—not a disguised kill counter. The save schema, credits,
+town services, Nhal-Vey fate and individual residents' knowledge do
+not silently change. Source-only CI is not Unreal actor/animation QA.
