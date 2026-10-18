@@ -57,9 +57,9 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
     auto* enemy=DepthRetaliators[a].Get();if(IsValid(enemy)&&enemy->GetCombat()->IsDefeated()&&GetWorld()->GetTimeSeconds()>=NextDepthThreatSave[a]){NextDepthThreatSave[a]=GetWorld()->GetTimeSeconds()+2;const auto result=UnmadeCore::CommitCounterThreatReceipt(Depth,a,true,[&]{return WriteWorldSnapshot();});if(result==UnmadeCore::CounterThreatCommit::Recorded)NotifyRpg(TEXT("The named return-road threat is defeated and remembered. Two local favor earned; it will not respawn."));else if(result==UnmadeCore::CounterThreatCommit::SaveFailed)NotifyRpg(TEXT("Return-road victory could not save. Favor restored; automatic retries continue and complete checkpoints wait."));}}
   if(DepthCacheActors[a].IsValid())DepthCacheActors[a]->SetActorScale3D(s->secret?FVector(1,1,.15):FVector(1,1,.5));if(DepthSecretGates[a].IsValid()){DepthSecretGates[a]->SetActorHiddenInGame(s->route!=0);DepthSecretGates[a]->SetActorEnableCollision(!s->route);}
   if(DepthChallengeSigns[a].IsValid()){
-   FString status=FString::Printf(TEXT("\\n%s / STEPS %d / SWITCH MASK %d"),s->route?TEXT("SIDE PASSAGE OPEN"):TEXT("OPTIONAL ROUTE CHALLENGE"),DepthChallenges[a].Progress(),DepthChallenges[a].Mask());
-   if(a==1)status+=FString::Printf(TEXT("\\nTIDE %.1f / 12 — WORKING WINDOW 4-9"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds()));
-   if(a==2&&DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())>0)status+=FString::Printf(TEXT("\\nCOOLING WINDOW %.0f SECONDS REMAIN"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds()));
+   FString status=FString::Printf(TEXT("\n%s / STEPS %d / SWITCH MASK %d"),s->route?TEXT("SIDE PASSAGE OPEN"):TEXT("OPTIONAL ROUTE CHALLENGE"),DepthChallenges[a].Progress(),DepthChallenges[a].Mask());
+   if(a==1)status+=FString::Printf(TEXT("\nTIDE %.1f / 12 — WORKING WINDOW 4-9"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds()));
+   if(a==2&&DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())>0)status+=FString::Printf(TEXT("\nCOOLING WINDOW %.0f SECONDS REMAIN"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds()));
    DepthChallengeSigns[a]->GetTextRender()->SetText(FText::FromString(FString(UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(a)))+status));
   }
  }
@@ -91,9 +91,9 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
      case UnmadeCore::ChallengeOutcome::Progress: response=TEXT("The mechanism responded. Continue the physical sequence; failed attempts do not spend resources.");break;
      default: response=TEXT("This control cannot be operated now.");break;
     }
-    line=FString(UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(arc)))+TEXT("\\n")+response;
-    if(arc==1)line+=FString::Printf(TEXT("\\nCurrent tide phase: %.1f / 12 seconds (working: 4-9)."),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds()));
-    if(arc==2&&report.secondsRemaining>0)line+=FString::Printf(TEXT("\\nCooling window: %.0f seconds left."),report.secondsRemaining);
+    line=FString(UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(arc)))+TEXT("\n")+response;
+    if(arc==1)line+=FString::Printf(TEXT("\nCurrent tide phase: %.1f / 12 seconds (working: 4-9)."),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds()));
+    if(arc==2&&report.secondsRemaining>0)line+=FString::Printf(TEXT("\nCooling window: %.0f seconds left."),report.secondsRemaining);
    }
   }
  if(kind==4){if(Depth.Arc(arc)->route&&!Depth.Arc(arc)->secret){changed=Depth.Secret(arc,(e->rooms&8)!=0);if(!changed)Depth=before;}line=changed?FString(UTF8_TO_TCHAR(spec.secret_name))+TEXT(" found. Two local favor earned; the final mastery lesson is now available."):TEXT("Open the route, register chamber four and inspect the opened cache. Its discovery needs no consumable.");cue=TEXT("reward");}
