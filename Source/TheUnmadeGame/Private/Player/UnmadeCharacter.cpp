@@ -852,8 +852,10 @@ void AUnmadeCharacter::HandleMeleeImpact(AUnmadeEnemyCharacter* Target,float Bef
             AUnmadeBossCharacter* Boss=Cast<AUnmadeBossCharacter>(Target);
             if(Boss)Boss->CommitDefeatReceipt();
             else {
-                CombatRewards.Queue(Target->GetEnemyStyle());
-                RetryCombatRewards();
+                if(!Target->IsTemporaryArenaEscort()){
+                    CombatRewards.Queue(Target->GetEnemyStyle());
+                    RetryCombatRewards();
+                }
             }
         }
     ReportLocalEvent(FName("Player.Fought"),FName("combat.prototype.enemy"));
@@ -863,7 +865,7 @@ void AUnmadeCharacter::NotifyStatusDefeat(AUnmadeEnemyCharacter* Target)
 {
     if(!IsValid(Target)||Target->GetWorld()!=GetWorld()||!IsValid(Target->GetCombat())||!Target->GetCombat()->IsDefeated())return;
     if(auto* Boss=Cast<AUnmadeBossCharacter>(Target))Boss->CommitDefeatReceipt();
-    else {CombatRewards.Queue(Target->GetEnemyStyle());RetryCombatRewards();}
+    else if(!Target->IsTemporaryArenaEscort()){CombatRewards.Queue(Target->GetEnemyStyle());RetryCombatRewards();}
     // Delayed remote damage does not invent a fresh nearby fight witness.
 }
 
