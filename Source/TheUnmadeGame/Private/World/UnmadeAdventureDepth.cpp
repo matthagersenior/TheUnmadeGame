@@ -444,6 +444,32 @@ FString AUnmadePrototypeHub::GetCrossRealmReviewJournal()const{
  }
  return text;
 }
+FString AUnmadePrototypeHub::GetCrossRealmCombatRecipientLine(FName ResidentId)const{
+ if(bCrossRealmCarryRejected||bExpeditionSaveRejected||bDepthSaveRejected||bIdentitySaveRejected)
+  return FString();
+ for(int a=0;a<9;++a){
+  if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)))continue;
+  const int source=UnmadeCore::CrossRealmCombatSource(a);
+  const auto stage=CrossRealmCarry.Stage(source);
+  const auto* previous=Expeditions.Arc(source);
+  const auto response=UnmadeCore::CrossRealmCombatResponse(a,
+    previous->boss,previous->kills,previous->rescued,previous->returned!=0,
+    stage>=UnmadeCore::CarryStage::Delivered,
+    stage==UnmadeCore::CarryStage::Reviewed,true);
+  if(response.kind==UnmadeCore::CrossRealmCombatKind::Unknown)return FString();
+  return FString::Printf(
+   TEXT(" Your delivered battle account reports %s in %s, %d fallen guards and %d people freed. I responded at our %s: local sentries changed their warning strength by %+d. This is my response to a report, not an eyewitness claim.%s"),
+   previous->boss==1?TEXT("the guardian was defeated"):TEXT("the guardian yielded alive"),
+   UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
+   response.casualties,response.rescued,
+   UTF8_TO_TCHAR(UnmadeCore::CrossRealmCombatProfiles[a].frontier),
+   response.hazardDelta,
+   stage==UnmadeCore::CarryStage::Reviewed?
+    TEXT(" Our local evidence review has tempered the initial order."):
+    TEXT(" We still need to examine our own local evidence."));
+ }
+ return FString();
+}
 FString AUnmadePrototypeHub::GetCrossRealmCarryRecipientLine(FName ResidentId)const{
  if(bCrossRealmCarryRejected||bDepthSaveRejected||bExpeditionSaveRejected)return FString();
  for(int a=0;a<9;++a){
@@ -452,12 +478,12 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryRecipientLine(FName ResidentId)co
   if(CrossRealmCarry.Stage(source)<UnmadeCore::CarryStage::Delivered)return FString();
   if(CrossRealmCarry.Stage(source)==UnmadeCore::CarryStage::Reviewed&&Depth.Arc(a)->evidence)
    return FString::Printf(TEXT("I compared the actual %s record you brought with the local evidence you presented to me at our review table. Their stories can inform each other, but they do not absolve our own witnesses."),
-     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city))+GetCrossRealmCombatRecipientLine(ResidentId);
   return FString::Printf(TEXT("I personally received the hand-carried record from %s. Its account of %s is at our civic receipt station. We must still examine our own realm's conditions before acting."),
     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
     UTF8_TO_TCHAR(Depth.Arc(source)->choice==1?
       UnmadeCore::DepthSpecs[source].public_return_a:
-      UnmadeCore::DepthSpecs[source].public_return_b));
+      UnmadeCore::DepthSpecs[source].public_return_b))+GetCrossRealmCombatRecipientLine(ResidentId);
  }
  return FString();
 }
