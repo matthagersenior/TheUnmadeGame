@@ -42,6 +42,8 @@ inline CrossRealmCombatState CrossRealmCombatResponse(
     !sourceReturned||!received||!validSave)return {};
  int casualties=0;
  for(int k=0;k<8;++k)casualties+=(sourceKills&(1<<k))?1:0;
+ int personsFreed=0;
+ for(int k=0;k<2;++k)personsFreed+=(sourceRescued&(1<<k))?1:0;
  if(sourceBoss==1){
   // Many casualties can increase defensive alarm, yet real rescues moderate
   // the reaction. This is civic practice, not a universal judgment of guilt.
@@ -50,12 +52,12 @@ inline CrossRealmCombatState CrossRealmCombatResponse(
   return {reviewed?CrossRealmCombatKind::ReviewedAlert:
           CrossRealmCombatKind::BorderAlert,
           reviewed?std::max(0,heightened-2):heightened,
-          casualties,sourceRescued};
+          casualties,personsFreed};
  }
  const int open=std::min(-1,-3+std::min(2,casualties/3));
  return {reviewed?CrossRealmCombatKind::ReviewedPass:
          CrossRealmCombatKind::OpenWitnessPass,
          reviewed?std::min(0,open+2):open,
-         casualties,sourceRescued};
+         casualties,personsFreed};
 }
 } // namespace UnmadeCore
