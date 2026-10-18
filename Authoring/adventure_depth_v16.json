@@ -58,7 +58,9 @@
         3
       ],
       "witness_return_a": "I will keep checking the list. A warm bed does not make an excluded name disappear.",
-      "witness_return_b": "Now I can point to the names instead of asking somebody to believe my memory. I still have to find them beds."
+      "witness_return_b": "Now I can point to the names instead of asking somebody to believe my memory. I still have to find them beds.",
+      "public_return_a": "The refuge-road lanterns remain lit through the night, but the folded exclusion list has not been posted. There is still work for the shelter.",
+      "public_return_b": "Names of those denied beds now hang in the archive room; one road lantern was moved indoors, leaving the outer route less certain."
     },
     {
       "quest": "Water For Those Still Waiting",
@@ -117,7 +119,9 @@
         1
       ],
       "witness_return_a": "My household knows when the pump is ours. I will be the one explaining the wait to the next stranger.",
-      "witness_return_b": "I will bring our cups at the public hour. If the withdrawal sheet is wrong, I want my name beside the correction."
+      "witness_return_b": "I will bring our cups at the public hour. If the withdrawal sheet is wrong, I want my name beside the correction.",
+      "public_return_a": "A family water hour is marked on the harbor bell. Travelers now wait through the protected interval before they can draw from the shared pump.",
+      "public_return_b": "Every pump withdrawal is posted where the harbor can inspect it. Newcomers can ask for water, but the public accounting takes time."
     },
     {
       "quest": "The Heat Left Over",
@@ -176,7 +180,9 @@
         1
       ],
       "witness_return_a": "I measured the house line this morning. It is warm. I am also measuring what remains for a rescue.",
-      "witness_return_b": "The rescue meter is honest. It does not make the refuge warmer, and I will not stop saying that."
+      "witness_return_b": "The rescue meter is honest. It does not make the refuge warmer, and I will not stop saying that.",
+      "public_return_a": "The refuge houses have warmth again; crews still measure the smaller reserve before agreeing to another underground rescue.",
+      "public_return_b": "The rescue meter stands in public view and the rescue heat is kept back. Some families remain cold while the emergency crew prepares."
     },
     {
       "quest": "Whose Oath Remains",
@@ -235,7 +241,9 @@
         2
       ],
       "witness_return_a": "The forced margin is sealed separately. I kept a second copy so nobody can quietly join it to the promise again.",
-      "witness_return_b": "People can read the whole oath now. We still need to say which promise we will actually keep."
+      "witness_return_b": "People can read the whole oath now. We still need to say which promise we will actually keep.",
+      "public_return_a": "The two families still have a guarantor; the added forced debt margin is sealed separately, so the old collector cannot silently claim it.",
+      "public_return_b": "The complete oath is read openly at the pier. Negotiations continue, and people cannot yet count on a settlement to arrive."
     },
     {
       "quest": "A Voice On The Bridge",
@@ -294,7 +302,9 @@
         2
       ],
       "witness_return_a": "The anchor is carrying the span. Its locked record is my responsibility, not permission to listen whenever I please.",
-      "witness_return_b": "I have taken a manual load watch. Reading the crossing record will not hold the bridge up for me."
+      "witness_return_b": "I have taken a manual load watch. Reading the crossing record will not hold the bridge up for me.",
+      "public_return_a": "The choir anchor steadies the bridge, while its records remain restricted and every load still needs a responsible watch.",
+      "public_return_b": "Footstep records are open to inspection and manual load watchers now cover the bridge. Knowing who crossed does not make the span safer."
     },
     {
       "quest": "The Name In The Seam",
@@ -353,7 +363,9 @@
         3
       ],
       "witness_return_a": "Our claim is protected. I am still asking what happened to the neighboring names under the seal.",
-      "witness_return_b": "I read the neighbors' names aloud. Some families have answered, and we will have to make room for their claims."
+      "witness_return_b": "I read the neighbors' names aloud. Some families have answered, and we will have to make room for their claims.",
+      "public_return_a": "The family's claim is preserved in a sealed trust. The neighboring names in the same stone remain unresolved rather than erased.",
+      "public_return_b": "The neighboring names are displayed beside the family claim, drawing other households to ask whose work and home were overlooked."
     },
     {
       "quest": "Names For A Safe House",
@@ -412,7 +424,9 @@
         3
       ],
       "witness_return_a": "The storekeeper has a household total. The personal page will stay sealed until somebody gives permission to open it.",
-      "witness_return_b": "I wrote the appeal beside every name. I expect to be called when somebody tries to ignore it."
+      "witness_return_b": "I wrote the appeal beside every name. I expect to be called when somebody tries to ignore it.",
+      "public_return_a": "Storehouse staff count the rescued households without displaying personal names. The separate name page is still sealed until consent.",
+      "public_return_b": "An appeal witness stands beside the open census record. Being written in the index does not mean a person has surrendered a right to object."
     },
     {
       "quest": "The Branch They Did Not Graft",
@@ -471,7 +485,9 @@
         0
       ],
       "witness_return_a": "I put the public share at the post myself. My household cannot call it a gift and then take it back unseen.",
-      "witness_return_b": "The common path is open. I have a watch hour, and so does Sivra. That is how I will know we meant it."
+      "witness_return_b": "The common path is open. I have a watch hour, and so does Sivra. That is how I will know we meant it.",
+      "public_return_a": "The household boundary remains and a harvest share is left at the common post where everyone can check whether it arrived.",
+      "public_return_b": "The root passage is common again; rotating keepers now share the watch so the same gardener does not carry every lean season."
     },
     {
       "quest": "The Door We Can Describe",
@@ -530,7 +546,9 @@
         0
       ],
       "witness_return_a": "The rescue registry has the working route. The untested doors are still drawn as untested.",
-      "witness_return_b": "The traveler can read the route and its warning together. I have written no answer about where the absence began."
+      "witness_return_b": "The traveler can read the route and its warning together. I have written no answer about where the absence began.",
+      "public_return_a": "The working rescue route is recorded in a restricted registry; two untested doors remain marked as unknown, not solved.",
+      "public_return_b": "Travelers can read the public threshold map, including warnings for the untested side doors and a passage that still needs judgment."
     }
   ]
 }
