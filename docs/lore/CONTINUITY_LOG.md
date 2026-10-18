@@ -1183,3 +1183,13 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Bound the nine realm IDs to exact generated asset names in cross-realm review rules and triggered the corresponding sound only after successfully saved physical evidence comparison with the actual chief. Existing audio preferences remain honored; generic inspect behavior remains for other interactions.
 - Used the existing manifest-driven Unreal Editor importer and non-overwrite policy for custom audio. Prototype sounds are not claimed to be shipped, UE-imported, voiced or mastered.
 - Added deterministic PCM audio, manifest and runtime trigger tests; Unreal Editor import and practical playback verification remain pending.
+
+
+## 2026-10-18 — Nine-realm narrative purpose and consent audit
+
+- Compared nine personal accord masters, main-quest act and director contracts, identity fieldwork, nine arena tactics, and the approved Impossible-origin game vision.
+- Identified public-truth dialogue in Crossings, Vathless and Eillun that claimed named people or neighboring families had been disclosed without implementing individual consent. Rewrote the canonical choice/outcome and public witness prose to publish anonymous accounts, competing claims or voluntary appeal notices only; actual individual consent remains unimplemented and must not be implied.
+- Added nine differentiated central questions, tangible investigation/combat steps, explicit signature reality-discipline interplay and earned forward mystery threads to the canonical personal-story authoring master and compiled DepthSpec. Surface those in the player's journal, without revealing future mysteries before earned return.
+- Confirmed the core opening, frontier, middle, upper, Auvren and final gates remain authoritative, and that nine repeated carry/review packets remain optional source-level content instead of mandatory finale progression.
+- Corrected the living canon's outdated assertion that later six realm NPCs have not been spawned; nine generated graybox realm sources now exist but are not engine-validated production levels.
+- Added regression checks tying canonical narrative to physically authored tactical encounters, identity fieldwork, distinct choices, consent boundaries, source generation and journal gating. Remaining work: real Unreal compiler, physical playthrough, visual storytelling and arc pacing evaluations.

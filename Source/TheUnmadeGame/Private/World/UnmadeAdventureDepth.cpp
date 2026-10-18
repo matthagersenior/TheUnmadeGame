@@ -371,6 +371,7 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
  NotifyRpg(line);RefreshAdventureDepth();return true;
 }
 FString AUnmadePrototypeHub::GetDepthJournal()const{FString text=TEXT("PERSONAL STORIES AND LOCAL SERVICES\nEarned field kits work in any unresolved danger chamber; the supplying realm pays the kit. Suppression lasts for this visit only.\n");for(int a=0;a<9;++a){auto* s=Depth.Arc(a);if(!s->offered&&!s->route&&!Expeditions.Arc(a)->visited)continue;const auto& spec=UnmadeCore::DepthSpecs[a];text+=FString::Printf(TEXT("%s — %s\nWitness %s / evidence %s / accord %s / route %s / cache %s\nLocal favor %d; mastery %d/3; field kits %d; provisions %d/4\n%s\n\n"),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),UTF8_TO_TCHAR(spec.quest),s->witness?TEXT("heard"):TEXT("pending"),s->evidence?TEXT("read"):TEXT("pending"),s->choice==1?TEXT("protected reserve"):s->choice==2?TEXT("public witness"):TEXT("undecided"),s->route?TEXT("open"):TEXT("pending"),s->secret?TEXT("found"):TEXT("hidden"),s->favor,s->training,s->kits,s->purchases,UTF8_TO_TCHAR(s->choice==1?spec.return_a:s->choice==2?spec.return_b:spec.goal));
+ // Canon continuity + acceptance: not an already-settled answer.
  // Lore is playable: the journal names the witnessed contradiction and the
  // real exploration/combat/reality intervention, not an already-settled answer.
  text+=FString::Printf(TEXT("UNANSWERED QUESTION: %s\nWHAT YOU CAN DO: %s\nREALITY DISCIPLINES: %s\n"),
