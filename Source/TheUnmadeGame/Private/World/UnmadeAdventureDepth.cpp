@@ -249,6 +249,7 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
        UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[UnmadeCore::CrossRealmDestination(arc)].city)));
    RefreshAdventureDepth();return true;
   }
+ }
 
  // Canon: a destination witness must physically receive local proof; simply
  // discovering it never grants NPC awareness of that evidence.

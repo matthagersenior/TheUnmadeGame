@@ -1224,3 +1224,10 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Added an explicit player-only BATTLE TESTIMONY preview while the report is physically in custody, counting saved guard and captive bits and warning that the receiving realm remains unchanged until hand-delivery. Regression tests guard the preview's stage and wording.
 
 - Made the nine physical combat-response signs report whether a modified hazard is actually active or already grounded by an earned survey map/local boss resolution. Added explicit source tests so disabled fields never falsely advertise damage.
+
+
+## 2026-10-18 — Fix unreachable cross-realm receiving review
+
+- Found a native control-flow error: the kind-eight review branch sat inside the mutually exclusive kind-seven pickup branch. The genuine comparison could never trigger; the affected native C++ file also had unbalanced braces, undetected by previous source-only CI.
+- Closed the pickup handler before the review handler, preserving separate stations and the atomic comparison with genuine destination evidence and chief attendance.
+- Added red-first regression coverage for independent interaction scopes and balanced native source. Actual Unreal compilation and playable interaction acceptance remain outstanding.
