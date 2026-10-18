@@ -24,7 +24,7 @@ class NineRealmPublicAccordMarkers(unittest.TestCase):
         self.assertIn("DepthSpecs[a].public_return_b",world)
         self.assertIn("bDepthSaveRejected",world)
         self.assertIn("bExpeditionSaveRejected",world)
-        marker=world.split("if(DepthAccordSigns[a].IsValid())",1)[1].split("if(DepthCacheActors",1)[0]
+        marker=world.split("if(DepthAccordSigns[a].IsValid())",1)[1].split("if(!bDepthSaveRejected&&s->choice==2",1)[0]
         self.assertIn("SetText(",marker)
         self.assertNotIn("WriteWorldSnapshot(",marker)
         self.assertNotIn("Depth.Choose(",marker)
