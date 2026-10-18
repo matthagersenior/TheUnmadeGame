@@ -1176,3 +1176,10 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Red-first portable C++ plus native actor wiring regression checks cover all nine inbound relationships, review gates, attendance, save reload/tamper checks and daytime scene changes. In-engine user experience remains unverified.
 
 - Follow-up proof guard: even after a received review stage, the NPC's completed-review station requires live saved destination evidence; portable integration test enforces the same rule.
+
+## 2026-10-18 — Realm-specific physical evidence review Foley
+
+- Added nine original deterministic triple-pulse review cues to the identity-audio generator; retained all thirty-six prior cue names, order and asset paths, validating forty-five generated sounds.
+- Bound the nine realm IDs to exact generated asset names in cross-realm review rules and triggered the corresponding sound only after successfully saved physical evidence comparison with the actual chief. Existing audio preferences remain honored; generic inspect behavior remains for other interactions.
+- Used the existing manifest-driven Unreal Editor importer and non-overwrite policy for custom audio. Prototype sounds are not claimed to be shipped, UE-imported, voiced or mastered.
+- Added deterministic PCM audio, manifest and runtime trigger tests; Unreal Editor import and practical playback verification remain pending.
