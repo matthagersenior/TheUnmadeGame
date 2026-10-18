@@ -22,6 +22,12 @@ class NineRealmTacticalObjectives(unittest.TestCase):
   self.assertIn("CounterStep::Armed",hub)
   self.assertIn("std::array<ArenaTacticSpec,9>",rules)
   self.assertIn("ArenaAftermathText(",hub)
+ def test_streamed_arena_markers_start_hidden_until_restored_state_is_applied(self):
+  world=source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
+  self.assertIn('ArenaShelterVisible[a]=-1',world)
+  self.assertIn('ArenaAftermathVisible[a]=-1',world)
+  self.assertIn('SetRiteWorldActorState(b.Label,false)',world)
+
  def test_outcomes_are_derived_from_real_boss_and_captive_save_flags(self):
   hub=source("Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp")
   self.assertIn("ArenaAftermathRecord(",hub)
