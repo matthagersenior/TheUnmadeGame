@@ -172,19 +172,19 @@ void AUnmadeCharacter::ShowInventory()
 void AUnmadeCharacter::EquipNextWeapon()
 {
     if (IsValid(Equipment) && Equipment->EquipNext(UnmadeCore::GearSlot::Weapon))
-        ShowInventory();
+        if(!IsRpgMenuOpen())ShowInventory();
 }
 
 void AUnmadeCharacter::EquipNextArmor()
 {
     if (IsValid(Equipment) && Equipment->EquipNext(UnmadeCore::GearSlot::Armor))
-        ShowInventory();
+        if(!IsRpgMenuOpen())ShowInventory();
 }
 
 void AUnmadeCharacter::EquipNextCharm()
 {
     if (IsValid(Equipment) && Equipment->EquipNext(UnmadeCore::GearSlot::Charm))
-        ShowInventory();
+        if(!IsRpgMenuOpen())ShowInventory();
 }
 
 void AUnmadeCharacter::UseHealthPotion()

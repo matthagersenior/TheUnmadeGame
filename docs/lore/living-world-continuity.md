@@ -1133,3 +1133,10 @@ a repeatable XP/drop receipt, and not new durable quest history. The
 player's normal melee and status defeat reward paths explicitly ignore
 these two transient guard slots. Existing boss defeat, captive rescue,
 and evidence choices remain the only source of permanent arena outcomes.
+
+
+## 2026-10-17 — Inventory and profile-switch presentation safeguards
+
+Selecting another owned weapon, armor piece or charm while the Inventory menu is open leaves that menu on screen rather than treating its refresh as a request to close it. A gameplay shortcut made outside the menu still opens Inventory after a successful selection. These controls do not grant equipment, change earned gear ownership, or bypass the existing durable equip commit.
+
+After a checkpoint write fails, the second deliberate Load or New Game press confirms leaving the current unsaved session without attempting to write it again. Confirmation remains specific to the selected profile and intended action; choosing another profile, leaving the menu, or completing a successful save cannot silently approve a different operation. Backup recovery still never pre-saves over the backup. This is UI/save presentation and safety work; narrative facts, costs, witnesses, realm choices, identifiers and schema are unchanged. Physical controller and platform SaveGame validation remain for Unreal acceptance.
