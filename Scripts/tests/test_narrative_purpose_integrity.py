@@ -49,6 +49,24 @@ class NarrativePurposeIntegrity(unittest.TestCase):
   self.assertEqual(quest["final_encounter"]["id"],"QUEST_FINAL_NHAL_VEY")
   self.assertIn("QUEST_FINAL_NHAL_VEY",source("Authoring/main_quest_interaction_contracts.json"))
 
+ def test_fieldwork_combat_and_repairs_serve_each_realm_instead_of_filler(self):
+  fieldwork=data("Authoring/world_identity_v15.json")["realms"]
+  thematic=("charter","water","heat","debt","choir","ancestr","census","crown","threshold")
+  for index,row in enumerate(fieldwork):
+   hunt,survey,repair=row["side_quests"]
+   self.assertIn("four",hunt.lower())
+   self.assertTrue(any(word in hunt.lower() for word in
+     ("deny","enforc","contest","suppress","erasing","threaten","bar","guard")),
+     (row["city"],"combat has no purpose beyond a loot count"))
+   self.assertIn(thematic[index],hunt.lower(),row["city"])
+   self.assertIn("three",repair.lower())
+   self.assertTrue(any(word in repair.lower() for word in ("after a witnessed","after witnessed")),
+     (row["city"],"return repairs must follow actually earned story"))
+   self.assertIn(thematic[index],repair.lower(),row["city"])
+   self.assertIn(thematic[index],survey.lower(),row["city"])
+  self.assertEqual(len({row["side_quests"][0] for row in fieldwork}),9)
+  self.assertEqual(len({row["side_quests"][2] for row in fieldwork}),9)
+
  def test_consented_truth_never_fabricates_publicly_named_victims(self):
   depth=data("Authoring/adventure_depth_v16.json")["realms"]
   quest=data("Authoring/main_quest_interaction_contracts.json")["quests"]
