@@ -26,6 +26,7 @@
 #include "World/UnmadeHearthPetitionRules.h"
 #include "World/UnmadePetitionRelayRules.h"
 #include "World/UnmadeCrossRealmCarryRules.h"
+#include "World/UnmadeCrossRealmCombatRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
 #include "World/UnmadeCommunityConsequences.h"
@@ -371,6 +372,7 @@ private:
     double NextExpeditionRefresh=0;
     std::array<double,9> ExpeditionReleaseUntil{};
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionHazardSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> CrossRealmCombatSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionEvidenceSigns;
     std::array<double,9> ExpeditionHazardQuiet{};
     std::array<double,9> ExpeditionReleaseReady{};
