@@ -98,6 +98,7 @@ void AUnmadePrototypeHub::BuildExpeditions(){
        UTF8_TO_TCHAR(counter.counterObjective)));
     Block(at+FVector(0,0,-115),FVector(2.0,1.6,.28)); // navigable footing
   }
+  // Canon: evidence must be personally obtained; no social or battle outcome is invented.
   // Each physical report offers a deliberate alternate tactical station.
   const auto& discovery=UnmadeCore::EvidenceCounterplaySpecs[a];
   const FVector discoveryAt=EvidenceCounterStation(a);
