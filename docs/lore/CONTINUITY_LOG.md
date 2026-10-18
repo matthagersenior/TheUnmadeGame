@@ -1138,3 +1138,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Included guarded night/invalid-save behavior, distinct branch destinations and original swept navigation; no NPC spawn, forced position, invented contacts or auto-completed task.
 - Connected the existing public accord notice to the physical E interaction, with branch-specific next steps based on live claimant/waypost receipts.
 - Red-first Python/native C++ checks cover all nine sites, both choices, rescue restrictions and native wiring. Save schema unchanged. Unreal acceptance remains pending.
+
+- Regression reproduced former captive duty locations outside the built-in 2000-unit home recovery radius. Shifted each sheltered-service worksite within a stricter 1850-unit envelope; retained nine distinct local positions and the original rescue/home protection.
