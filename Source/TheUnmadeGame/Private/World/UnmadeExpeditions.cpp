@@ -29,6 +29,9 @@ FVector Council(int a){return Room(a,4)+FVector(650,0,0);}
 FVector Truce(int a){return Room(a,5)+FVector(-650,650,0);}
 FVector Kit(int a){return Site(a,0)+FVector(650,350,0);}
 FVector HomeGate(int a){return Room(a,5)+FVector(0,1250,0);}
+FVector ArenaCounterStations(int a,int station){
+ return Room(a,5)+(station==0?FVector(-620,-620,0):FVector(620,80,0));
+}
 FVector Entrance(int a,int r){return Room(a,r)+FVector(0,-650,0);}
 FName EnemyTag(int a,int slot){return FName(*FString::Printf(TEXT("Expedition.%d.Enemy.%d"),a,slot));}
 AUnmadeEnemyCharacter* Enemy(UWorld* w,int a,int slot){for(TActorIterator<AUnmadeEnemyCharacter> e(w);e;++e)if(e->ActorHasTag(EnemyTag(a,slot)))return *e;return nullptr;}
@@ -73,6 +76,24 @@ void AUnmadePrototypeHub::BuildExpeditions(){
   for(int q=0;q<2;++q){Sign(Captive(a,q),FString::Printf(TEXT("E - RELEASE %s / DEFEAT GUARD OR RESOLVE BOSS"),UTF8_TO_TCHAR(s.people[q+1])));Block(Captive(a,q)+FVector(-180,0,5),FVector(.2,5,2));}
   Sign(Council(a),TEXT("E: rescue resolution / F: expose evidence. Irreversible branch; inspect first."));Sign(Truce(a),TEXT("E: surrender evidence / F: read counterplay / Q: interrupt nearby attack"));Sign(HomeGate(a)+FVector(0,300,0),TEXT("RETURN PASS - opens after boss resolution"));
   Sign(Room(a,5)+FVector(650,-650,0),TEXT("E - GROUNDING LEVER / BRIEFLY INTERRUPTS THE BOSS; REUSABLE"));
+  // Every realm has a different, timed TWO-position battlefield counter.
+  // This is played while the existing signature boss remains dangerous:
+  // no quest log interaction can complete the counter remotely.
+  const auto& counter=UnmadeCore::Arenas[a];
+  for(int station=0;station<2;++station){
+    const FVector at=ArenaCounterStations(a,station);
+    Sign(at,FString::Printf(TEXT("E - %s / %s %d / %s"),
+       UTF8_TO_TCHAR(counter.name),
+       counter.first==station?TEXT("FIRST"):TEXT("SECOND"),station+1,
+       UTF8_TO_TCHAR(counter.counterObjective)));
+    Block(at+FVector(0,0,-115),FVector(2.0,1.6,.28)); // navigable footing
+  }
+  SpawnBlock(Room(a,5)+FVector(0,-70,50),FVector(1.4,1.9,2.8),
+      FName(*FString::Printf(TEXT("Expedition.%d.ArenaShelter"),a)));
+  for(int outcome=1;outcome<=3;++outcome)
+    SpawnBlock(Site(a,0)+FVector(-550+outcome*260,1200,115),
+      FVector(.65,.35,1.65),
+      FName(*FString::Printf(TEXT("Expedition.%d.Aftermath.%d"),a,outcome)));
   for(int k=0;k<9;++k){int room=k<4?k:k<8?4:5;FVector pos=Room(a,room)+FVector(k%2?600:300,k%2?-350:350,0);
    auto role=k==8?UnmadeCore::ExpeditionRole::Boss:static_cast<UnmadeCore::ExpeditionRole>(UnmadeCore::EnemyRoleAt(a,k));
    if(auto* e=GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(pos,FRotator::ZeroRotator)){e->ConfigureEncounter(EnemyTag(a,k),k==8?UTF8_TO_TCHAR(s.boss):role==UnmadeCore::ExpeditionRole::Sentinel?TEXT("Shield Sentinel"):role==UnmadeCore::ExpeditionRole::Skirmisher?TEXT("Flanking Skirmisher"):role==UnmadeCore::ExpeditionRole::Marksman?TEXT("Aimed Marksman"):TEXT("Fracture Disruptor"),FLinearColor(.7,.25+.04*a,.25));e->ConfigureExpedition(a,k,role);}
@@ -111,7 +132,8 @@ bool AUnmadePrototypeHub::ConfirmExpeditionDecision(int a,int kind,int value){
 bool AUnmadePrototypeHub::TryExpeditionInteraction(AUnmadeCharacter* p,double competing){
  if(!Alive(p)||!GetWorld())return false;if(TryExperienceInteraction(p,competing))return true;if(TryDepthInteraction(p,0,competing))return true;if(TryIdentityInteraction(p,competing))return true;int arc=-1,kind=-1,index=-1;double best=FMath::Min(230.*230.,competing);FVector at;
  auto Candidate=[&](int a,int k,int n,FVector pos){double d=FVector::DistSquared(p->GetActorLocation(),pos);if(d<best&&Local(GetWorld(),p,pos)){best=d;arc=a;kind=k;index=n;at=pos;}};
- for(int a=0;a<9;++a){Candidate(a,0,0,Board(a));for(int site=0;site<2;++site)Candidate(a,1,site,Site(a,site)+FVector(0,500,0));for(int r=0;r<6;++r)Candidate(a,2,r,Entrance(a,r));for(int c=0;c<3;++c)Candidate(a,3,c,Record(a,c));for(int q=0;q<2;++q)Candidate(a,4,q,Captive(a,q));Candidate(a,5,0,Council(a));Candidate(a,6,0,Truce(a));Candidate(a,7,0,Kit(a));Candidate(a,8,0,Room(a,5)+FVector(650,-650,0));Candidate(a,9,0,Room(a,3)+FVector(-650,-650,0));}
+ for(int a=0;a<9;++a){Candidate(a,0,0,Board(a));for(int site=0;site<2;++site)Candidate(a,1,site,Site(a,site)+FVector(0,500,0));for(int r=0;r<6;++r)Candidate(a,2,r,Entrance(a,r));for(int c=0;c<3;++c)Candidate(a,3,c,Record(a,c));for(int q=0;q<2;++q)Candidate(a,4,q,Captive(a,q));Candidate(a,5,0,Council(a));Candidate(a,6,0,Truce(a));Candidate(a,7,0,Kit(a));Candidate(a,8,0,Room(a,5)+FVector(650,-650,0));Candidate(a,9,0,Room(a,3)+FVector(-650,-650,0));
+ Candidate(a,10,0,ArenaCounterStations(a,0));Candidate(a,10,1,ArenaCounterStations(a,1));}
  if(arc<0)return false;if(bExpeditionSaveRejected){NotifyRpg(TEXT("This adventure save is invalid; its original record is protected."));return true;}auto before=Expeditions;auto* t=Expeditions.Arc(arc);bool change=false;const auto& s=UnmadeCore::ExpeditionSpecs[arc];FString line;
  switch(kind){case 0:change=Expeditions.Brief(arc);line=FString(UTF8_TO_TCHAR(s.brief))+TEXT(" Visit the frontier north of the city, then enter the six-chamber dungeon. J tracks progress.");break;
  case 1:change=Expeditions.Visit(arc,index);line=FString(UTF8_TO_TCHAR(index?s.refuge:s.frontier))+TEXT(": a real refuge, not a cargo stop. The dungeon lies farther north.");break;
@@ -123,6 +145,47 @@ bool AUnmadePrototypeHub::TryExpeditionInteraction(AUnmadeCharacter* p,double co
  case 7:if(!t->returned){bool Witness=false;for(TActorIterator<AUnmadeNpcCharacter> N(GetWorld());N;++N)if(N->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),arc))&&FVector::DistSquared(N->GetActorLocation(),p->GetActorLocation())<FMath::Square(1800.f)){FCollisionQueryParams sight(SCENE_QUERY_STAT(ExpeditionReturnWitness),false);sight.AddIgnoredActor(p);sight.AddIgnoredActor(*N);Witness=!GetWorld()->LineTraceTestByChannel(p->GetActorLocation()+FVector(0,0,45),N->GetActorLocation()+FVector(0,0,45),ECC_Visibility,sight);}change=Witness&&Expeditions.Return(arc);line=change?TEXT("Your return is witnessed. E again chooses the weapon; F chooses armor. Either includes the named technique."):TEXT("Resolve the boss and walk back to this frontier settlement first.");}else if(!t->reward){if(!ConfirmExpeditionDecision(arc,2,1))return true;change=Expeditions.Claim(arc,1);line=FString(UTF8_TO_TCHAR(s.weapon))+TEXT(" equipped. Technique: ")+UTF8_TO_TCHAR(s.technique);}else{change=Expeditions.Equip(arc);line=TEXT("Your chosen realm equipment and technique are active; previous gear remains owned.");}break;
  case 9:if(t->rooms&8){ExpeditionHazardQuiet[arc]=GetWorld()->GetTimeSeconds()+8;line=TEXT("Danger field vented for eight seconds. The edge route is always safe.");}else line=TEXT("Enter the chamber before operating its vent.");break;
  case 8:if((t->rooms&32)&&GetWorld()->GetTimeSeconds()>=ExpeditionReleaseReady[arc]){if(auto* boss=Enemy(GetWorld(),arc,8)){boss->ExposeToFold(GetWorld()->GetTimeSeconds(),3);ExpeditionReleaseReady[arc]=GetWorld()->GetTimeSeconds()+8;line=TEXT("Grounding lever interrupts the boss for three seconds. Eight-second recovery; no Strain required.");}}if(line.IsEmpty())line=TEXT("Enter the arena first. The grounding lever must recover between uses.");break;
+ case 10:{
+   // A real positional battle objective: reach two stations in the realm's
+   // prescribed order under active attacks. Partial progress never saves.
+   auto* boss=Enemy(GetWorld(),arc,8);
+   const bool bBossReady=t->branch!=0&&(t->rooms&32)&&t->boss==0&&
+      !ExpeditionEnemyInactive(arc,8)&&IsValid(boss)&&
+      IsValid(boss->GetCombat())&&!boss->GetCombat()->IsDefeated();
+   if(!bBossReady)ArenaCounters[arc].Reset();
+   const double now=GetWorld()->GetTimeSeconds();
+   const auto result=ArenaCounters[arc].Use(arc,index,now,bBossReady);
+   const auto& counter=UnmadeCore::Arenas[arc];
+   switch(result){
+     case UnmadeCore::CounterStep::Armed:
+       line=FString::Printf(TEXT("%s: FIRST STATION ARMED. Cross the arena and use the opposite control within %.0f seconds, avoiding boss warnings."),
+         UTF8_TO_TCHAR(counter.name),counter.openWindow);break;
+     case UnmadeCore::CounterStep::Success:
+       // The counter opens a genuine finite attack window by interrupting
+       // the existing native boss attack. Cover is a physical LOS obstruction.
+       boss->ExposeToFold(now,counter.exposureSeconds);
+       if(counter.shelterSeconds>0){
+          ArenaShelterUntil[arc]=now+counter.shelterSeconds;
+          SetRiteWorldActorState(FName(*FString::Printf(
+            TEXT("Expedition.%d.ArenaShelter"),arc)),true);
+       }
+       line=FString::Printf(TEXT("%s: COUNTER COMPLETED. Boss exposed for %.0f seconds. %s"),
+         UTF8_TO_TCHAR(counter.name),counter.exposureSeconds,
+         counter.shelterSeconds>0?TEXT("Temporary cover is active; fight around it."):
+           TEXT("Strike during recovery or reposition for the next pattern."));break;
+     case UnmadeCore::CounterStep::WrongOrder:
+       line=FString::Printf(TEXT("Wrong control first. %s"),UTF8_TO_TCHAR(counter.counterObjective));break;
+     case UnmadeCore::CounterStep::AlreadyArmed:
+       line=TEXT("The first station is armed. Reach the OTHER station before the signal expires.");break;
+     case UnmadeCore::CounterStep::Expired:
+       line=TEXT("The counter window expired during the crossing. Re-arm the FIRST station and try a safer route.");break;
+     case UnmadeCore::CounterStep::Cooldown:
+       line=TEXT("The arena counter is recharging. Defend, evade or use existing cover before the next attempt.");break;
+     default:
+       line=TEXT("This arena counter requires the active, living boss and the real branch entry.");break;
+   }
+   break;
+ }
  }
  if(change&&!CommitExpeditions(before,p))return true;if(change){if(kind==0)TrackExperienceRealm(arc,p);if(kind==2)LearnExperienceTutorial(1,p);if(kind==7&&Expeditions.Arc(arc)->reward&&(!p->GetEquipment()||!p->GetEquipment()->SelectRealmReward(arc))){NotifyRpg(TEXT("Reward ownership is saved, but equipment selection could not save. Press E at this reward marker to retry; your previous equipment remains active."));return true;}UnmadePresentation::Sound(p,kind==4?TEXT("release"):kind==6?TEXT("yield"):kind==7?TEXT("reward"):TEXT("inspect"));p->PlayIdentityMotion(FName(kind==4?TEXT("Release"):TEXT("Inspect")));}NotifyRpg(line);return true;
 }
