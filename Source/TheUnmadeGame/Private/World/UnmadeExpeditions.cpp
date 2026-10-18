@@ -65,6 +65,8 @@ void AUnmadePrototypeHub::BuildExpeditions(){
    Sign(h+FVector(0,500,0),TEXT("E - VISIT / LOCAL WITNESS"));
   }
   ExpeditionHazardSigns[a]=Sign(Room(a,3)+FVector(650,500,0),TEXT("DANGER FIELD - watch the warning; the chamber edges are safe"));
+  // The report conveys observed battle facts, not a morality score.
+  // Destination chart knowledge and the free vent still override this ward.
   // Local frontier watch responds only after a real receiving chief is handed
   // the previous realm's recorded battle testimony by the player.
   CrossRealmCombatSigns[a]=Sign(Room(a,3)+FVector(1050,850,0),TEXT("LOCAL BORDER WATCH"));

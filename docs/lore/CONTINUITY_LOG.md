@@ -1207,3 +1207,12 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Kept the free grounding lever, two-position arena counter, alternate evidence surrender and ordinary fights available; original save schemas and credited personal witnesses remain authoritative.
 - Added physically positioned stations with real READY, PROOF NEEDED, ARENA LOCKED, RECOVERING and RESOLVED prompts plus explicit journal tactics.
 - Red-first portable C++ tests and native actor-wiring tests cover no-proof, boss-status, cooldown, nonmonotone clocks, nine distinct specs and no implicit quest resolution. Unreal Editor and playable combat acceptance remain pending.
+
+
+## 2026-10-18 — Earned combat consequences propagate through nine realms
+
+- Derived nine neighboring-frontier sentry responses from source boss defeated/yielded state, actual guard death bitmask, real rescued-person bitmask, witnessed return and saved player-carried report delivery. A destination without a real chief handoff has no inherited combat consequence.
+- A killed guardian can increase the receiving jurisdiction's bounded ward-danger pulse; a living surrender can reduce it. Casualty and rescue counts moderate those values without assigning a universal morality score or violating original kill/surrender/return outcomes.
+- Only a physically compared destination record tempers a provisional response. This preserves the separate local evidence review, the player's burden of proof and limited NPC knowledge.
+- Added distinct destination watch names, physical readable warning signs, attributed receiving-chief dialogue and dynamic existing hazard damage. Existing chart-based field grounding and eight-second free vent still work.
+- Added portable nine-realm defensive tests and native integration checks verifying no phantom report, no invalid save, no fake opponent death, no automatic rescue and no extra save/quest reward. UE pathfinding, actual hazard presentation and balance still require an engine playthrough.
