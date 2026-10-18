@@ -2,7 +2,7 @@
 from pathlib import Path
 import argparse,json,re
 ROOT=Path(__file__).resolve().parents[1]
-FIELDS=['quest','goal','offer','witness','evidence','option_a','option_b','return_a','return_b','challenge','secret_name','power','counterparty','witness_return_a','witness_return_b','public_return_a','public_return_b']
+FIELDS=['quest','goal','offer','witness','evidence','option_a','option_b','return_a','return_b','challenge','secret_name','power','counterparty','witness_return_a','witness_return_b','public_return_a','public_return_b','mystery_question','physical_lead','signature_mechanics','thread_after_return']
 def build():
  rows=json.loads((ROOT/'Authoring/adventure_depth_v16.json').read_text())['realms'];assert len(rows)==9 and [x['realm_index'] for x in rows]==list(range(9));assert len({x['quest'] for x in rows})==9
  layout=(ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureLayout.h').read_text();coords=list(map(int,re.findall(r'-?\d+',layout.split('constexpr int paths[9][6][2]=')[1].split(';')[0])));assert coords==[v for row in rows for point in row['room_grid'] for v in point]
