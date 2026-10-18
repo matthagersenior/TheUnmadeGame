@@ -211,11 +211,6 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    if(DepthAccordWorkActors[a*2+choice-1].IsValid()&&!DepthAccordWorkActors[a*2+choice-1]->IsHidden())
     Add(a,7,choice,DepthAccordWorkActors[a*2+choice-1]->GetActorLocation()+FVector(0,0,65),
      DepthAccordWorkActors[a*2+choice-1].Get());
-  if(DepthWitnessPlanSigns.IsValidIndex(a)&&DepthWitnessPlanSigns[a].IsValid()&&
-     !Depth.Arc(a)->route&&(Expeditions.Arc(a)->rooms&4)&&
-     Near(p,DepthWitnessPlanSigns[a]->GetActorLocation()-FVector(0,0,150),
-          DepthWitnessPlanSigns[a].Get()))
-      return TEXT("E  Apply witness-guided route plan");
   if(DepthCrossRealmReviewActors.IsValidIndex(a)&&DepthCrossRealmReviewActors[a].IsValid()&&
      !DepthCrossRealmReviewActors[a]->IsHidden())
     Add(a,8,0,DepthCrossRealmReviewActors[a]->GetActorLocation()+FVector(0,0,75),
@@ -548,7 +543,12 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryRecipientLine(FName ResidentId)co
  return FString();
 }
 FString AUnmadePrototypeHub::GetDepthReaction(FName person)const{for(int a=0;a<9;++a){auto* s=Depth.Arc(a);if(!s->offered)continue;bool chief=person==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)),witness=person==FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a));if(!chief&&!witness)continue;auto& spec=UnmadeCore::DepthSpecs[a];return FString(UTF8_TO_TCHAR(s->choice?(witness?(s->choice==1?spec.witness_return_a:spec.witness_return_b):(s->choice==1?spec.return_a:spec.return_b)):witness?spec.witness:spec.offer))+(s->choice==2?(s->counterThreat?TEXT(" The return-road claimant is gone. We remember who faced it."):TEXT(" A displaced claimant is watching the outer return road. You can avoid that road or face them.")):TEXT(""));}return FString();}
-FString AUnmadePrototypeHub::GetDepthPrompt(AUnmadeCharacter* p)const{if(!Alive(p))return TEXT("Return to your checkpoint to recover.");for(int a=0;a<9;++a){for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)if(Near(p,Shop(a,n,site)))return FString::Printf(TEXT("E  %s — %d local favor"),n==0?TEXT("Buy provisions"):n==1?TEXT("Craft field kit"):TEXT("Learn mastery"),Depth.Price(a,n));if((Expeditions.Arc(a)->rooms&4)&&Near(p,Control(a,n)))return FString::Printf(TEXT("E  Route control %d — %s%s"),n+1,UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(a)),a==1?*FString::Printf(TEXT(" / tide %.0f of 12"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds())):a==2?*FString::Printf(TEXT(" / %.0f seconds left"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())):TEXT(""));}for(int choice=1;choice<=2;++choice)
+FString AUnmadePrototypeHub::GetDepthPrompt(AUnmadeCharacter* p)const{if(!Alive(p))return TEXT("Return to your checkpoint to recover.");for(int a=0;a<9;++a){for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)if(Near(p,Shop(a,n,site)))return FString::Printf(TEXT("E  %s — %d local favor"),n==0?TEXT("Buy provisions"):n==1?TEXT("Craft field kit"):TEXT("Learn mastery"),Depth.Price(a,n));if((Expeditions.Arc(a)->rooms&4)&&Near(p,Control(a,n)))return FString::Printf(TEXT("E  Route control %d — %s%s"),n+1,UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(a)),a==1?*FString::Printf(TEXT(" / tide %.0f of 12"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds())):a==2?*FString::Printf(TEXT(" / %.0f seconds left"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())):TEXT(""));}  if(DepthWitnessPlanSigns.IsValidIndex(a)&&DepthWitnessPlanSigns[a].IsValid()&&
+     !Depth.Arc(a)->route&&(Expeditions.Arc(a)->rooms&4)&&
+     Near(p,DepthWitnessPlanSigns[a]->GetActorLocation()-FVector(0,0,150),
+          DepthWitnessPlanSigns[a].Get()))
+      return TEXT("E  Apply witness-guided route plan");
+for(int choice=1;choice<=2;++choice)
    if(DepthAccordWorkActors.IsValidIndex(a*2+choice-1)&&DepthAccordWorkActors[a*2+choice-1].IsValid()
     &&!DepthAccordWorkActors[a*2+choice-1]->IsHidden()
     &&Near(p,DepthAccordWorkActors[a*2+choice-1]->GetActorLocation()+FVector(0,0,65),DepthAccordWorkActors[a*2+choice-1].Get()))

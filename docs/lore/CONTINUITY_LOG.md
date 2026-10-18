@@ -1239,3 +1239,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Added a separate side-route plan placard with live proof/briefing/route status. Using E while briefed pre-aligns one correct native control and consumes that briefing without marking the route, awarding favor or changing the save schema.
 - All nine ordered, timed, weighted, elevated and stealth-dependent challenges retain their original remaining input and danger conditions. No research or NPC consultation is required to finish them normally.
 - Added portable nine-realm priming tests and source wiring guards. The new transient guide cannot be mistaken for another witness's consent or knowledge; UE interactions and visual placement need engine validation.
+
+- Corrected a source-wiring mistake found during review: the new witness-guide E prompt belongs in GetDepthPrompt, not the bool-returning TryDepthInteraction. Added an explicit method-boundary regression and preserved the actual station candidate in TryDepthInteraction.
