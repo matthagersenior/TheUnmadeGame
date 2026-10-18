@@ -22,6 +22,18 @@ class NineRealmTacticalObjectives(unittest.TestCase):
   self.assertIn("CounterStep::Armed",hub)
   self.assertIn("std::array<ArenaTacticSpec,9>",rules)
   self.assertIn("ArenaAftermathText(",hub)
+ def test_boss_has_true_support_threats_without_reload_farming(self):
+  hub=source("Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp")
+  enemy=source("Source/TheUnmadeGame/Private/Combat/UnmadeEnemyCharacter.cpp")
+  header=source("Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h")
+  player=source("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
+  for token in ("ArenaEscort", "11+add", "ExpeditionRole::Sentinel", "ExpeditionRole::Marksman"):
+   self.assertIn(token,hub,token)
+  self.assertIn("IsTemporaryArenaEscort()",header)
+  self.assertIn("if(IsTemporaryArenaEscort())",enemy)
+  self.assertIn("!Target->IsTemporaryArenaEscort()",player)
+  self.assertIn("ExpeditionEnemyInactive(",hub)
+
  def test_streamed_arena_markers_start_hidden_until_restored_state_is_applied(self):
   world=source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
   self.assertIn('ArenaShelterVisible[a]=-1',world)
