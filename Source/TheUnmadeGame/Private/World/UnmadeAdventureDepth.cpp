@@ -128,9 +128,17 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
 bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtNight,FVector& Out)const{
  if(!GetWorld()||ResidentId.IsNone()||AtNight||bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected)return false;
  for(int a=0;a<9;++a){
-  if(!Expeditions.Arc(a)->returned||!Depth.Arc(a)->choice)continue;
   for(int n=0;n<5;++n){
    if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n)))continue;
+   // Only the chief who physically accepted the previous city's record
+   // is drawn to its local receipt; other citizens keep their own routines.
+   if(n==0&&Expeditions.Arc(a)->visited&&
+      !bCrossRealmCarryRejected&&
+      CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Delivered){
+    Out=Shop(a,0,0)+FVector(950,600,0);
+    return true;
+   }
+   if(!Expeditions.Arc(a)->returned||!Depth.Arc(a)->choice)return false;
    const auto work=UnmadeCore::PublicAccordDuty(a,n,Depth.Arc(a)->choice,
      Expeditions.Arc(a)->returned,Expeditions.Arc(a)->rescued,AtNight,
      !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected,
@@ -150,6 +158,9 @@ FName AUnmadePrototypeHub::GetPublicAccordWorkCue(FName ResidentId,const FVector
  const FString text=ResidentId.ToString();
  for(int a=0;a<9;++a){
   if(text.StartsWith(FString::Printf(TEXT("npc.expedition.%d."),a))){
+   if(ResidentId==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a))&&
+      CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Delivered)
+    return FName(TEXT("Inspect"));
    if(Depth.Arc(a)->choice==2&&Depth.Arc(a)->counterThreat)
     return FName(TEXT("Gesture"));
    return Depth.Arc(a)->choice==1?FName(TEXT("Repair")):FName(TEXT("Inspect"));
@@ -316,6 +327,20 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[dest].city),next);
  }
  return out;
+}
+FString AUnmadePrototypeHub::GetCrossRealmCarryRecipientLine(FName ResidentId)const{
+ if(bCrossRealmCarryRejected||bDepthSaveRejected||bExpeditionSaveRejected)return FString();
+ for(int a=0;a<9;++a){
+  if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)))continue;
+  const int source=(a+8)%9;
+  if(CrossRealmCarry.Stage(source)!=UnmadeCore::CarryStage::Delivered)return FString();
+  return FString::Printf(TEXT("I personally received the hand-carried record from %s. Its account of %s is at our civic receipt station. We must still examine our own realm's conditions before acting."),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
+    UTF8_TO_TCHAR(Depth.Arc(source)->choice==1?
+      UnmadeCore::DepthSpecs[source].public_return_a:
+      UnmadeCore::DepthSpecs[source].public_return_b));
+ }
+ return FString();
 }
 FString AUnmadePrototypeHub::GetDepthReaction(FName person)const{for(int a=0;a<9;++a){auto* s=Depth.Arc(a);if(!s->offered)continue;bool chief=person==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)),witness=person==FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a));if(!chief&&!witness)continue;auto& spec=UnmadeCore::DepthSpecs[a];return FString(UTF8_TO_TCHAR(s->choice?(witness?(s->choice==1?spec.witness_return_a:spec.witness_return_b):(s->choice==1?spec.return_a:spec.return_b)):witness?spec.witness:spec.offer))+(s->choice==2?(s->counterThreat?TEXT(" The return-road claimant is gone. We remember who faced it."):TEXT(" A displaced claimant is watching the outer return road. You can avoid that road or face them.")):TEXT(""));}return FString();}
 FString AUnmadePrototypeHub::GetDepthPrompt(AUnmadeCharacter* p)const{if(!Alive(p))return TEXT("Return to your checkpoint to recover.");for(int a=0;a<9;++a){for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)if(Near(p,Shop(a,n,site)))return FString::Printf(TEXT("E  %s — %d local favor"),n==0?TEXT("Buy provisions"):n==1?TEXT("Craft field kit"):TEXT("Learn mastery"),Depth.Price(a,n));if((Expeditions.Arc(a)->rooms&4)&&Near(p,Control(a,n)))return FString::Printf(TEXT("E  Route control %d — %s%s"),n+1,UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(a)),a==1?*FString::Printf(TEXT(" / tide %.0f of 12"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds())):a==2?*FString::Printf(TEXT(" / %.0f seconds left"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())):TEXT(""));}for(int choice=1;choice<=2;++choice)
