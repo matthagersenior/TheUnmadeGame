@@ -14,6 +14,7 @@ inline void CaptureWorldFields(SaveFixture::Record& out,const SaveFixture::Recor
  out.BesHouseholdDay=world.BesHouseholdDay;
  out.HearthPetitionState=world.HearthPetitionState;
  out.PetitionRelayState=world.PetitionRelayState;
+ out.CrossRealmCarryState=world.CrossRealmCarryState;
  out.BesMeraGuaranteeOwed=world.BesMeraGuaranteeOwed;
  out.BesQuestPhase=world.BesQuestPhase;
  out.BesReliefPacks=world.BesReliefPacks;
@@ -109,6 +110,7 @@ inline void CaptureWorldFields(SaveFixture::Record& out,const SaveFixture::Recor
  out.bHasBesHousehold=world.bHasBesHousehold;
  out.bHasHearthPetition=world.bHasHearthPetition;
  out.bHasPetitionRelay=world.bHasPetitionRelay;
+ out.bHasCrossRealmCarry=world.bHasCrossRealmCarry;
  out.bHasCinderholdAdventure=world.bHasCinderholdAdventure;
  out.bHasEchoQuestSnapshot=world.bHasEchoQuestSnapshot;
  out.bHasExpeditions=world.bHasExpeditions;
