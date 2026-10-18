@@ -22,10 +22,15 @@ inline JourneyObjective NextRealmObjective(const ExpeditionState& e,const DepthA
  if(!x.complete)return {JourneyStep::WingReward};
  return {JourneyStep::Home};
 }
-inline int ExpeditionEnemyRoom(int slot){return slot>=0&&slot<9?(slot<4?slot:slot<8?4:5):-1;}
+inline int ExpeditionEnemyRoom(int slot){
+ if(slot==11||slot==12)return 5; // transient boss support, never a durable kill slot
+ return slot>=0&&slot<9?(slot<4?slot:slot<8?4:5):-1;
+}
 inline bool ExpeditionEncounterActive(const ExpeditionState& e,int slot){
  const int room=ExpeditionEnemyRoom(slot);
- return room>=0&&e.brief&&(e.rooms&(1<<room))&&!e.boss&&(slot==8?e.branch!=0:!(e.kills&(1<<slot)));
+ return room>=0&&e.brief&&(e.rooms&(1<<room))&&!e.boss&&
+        (slot==8||slot==11||slot==12
+         ?e.branch!=0:!(e.kills&(1<<slot)));
 }
 inline bool InsideRegisteredChamber(int a,int room,double x,double y,double z){
  if(a<0||a>=9||room<0||room>=6||!std::isfinite(x)||!std::isfinite(y)||!std::isfinite(z))return false;
