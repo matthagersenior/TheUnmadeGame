@@ -46,7 +46,7 @@ bool Local(UWorld* w,AUnmadeCharacter* p,FVector at,double range=230){if(!w||!Al
 
 }
 void AUnmadePrototypeHub::BuildExpeditions(){
- if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);ExpeditionEvidenceSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
+ if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);CrossRealmCombatSigns.SetNum(9);ExpeditionEvidenceSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
  ArenaShelterVisible.fill(-1);ArenaAftermathVisible.fill(-1);
  ArenaShelterUntil.fill(0);
  for(auto& Counter:ArenaCounters)Counter.Reset();
@@ -65,6 +65,12 @@ void AUnmadePrototypeHub::BuildExpeditions(){
    Sign(h+FVector(0,500,0),TEXT("E - VISIT / LOCAL WITNESS"));
   }
   ExpeditionHazardSigns[a]=Sign(Room(a,3)+FVector(650,500,0),TEXT("DANGER FIELD - watch the warning; the chamber edges are safe"));
+  // The report conveys observed battle facts, not a morality score.
+  // Destination chart knowledge and the free vent still override this ward.
+  // Local frontier watch responds only after a real receiving chief is handed
+  // the previous realm's recorded battle testimony by the player.
+  CrossRealmCombatSigns[a]=Sign(Room(a,3)+FVector(1050,850,0),TEXT("LOCAL BORDER WATCH"));
+  if(CrossRealmCombatSigns[a].IsValid())CrossRealmCombatSigns[a]->SetActorHiddenInGame(true);
   Sign(Room(a,3)+FVector(-650,-650,0),TEXT("E - VENT THE DANGER FIELD FOR EIGHT SECONDS / FREE"));
   Block(Kit(a)+FVector(0,0,-75),FVector(2,1,.4));
   ExpeditionSigns[a]=Sign(Kit(a),TEXT("E weapon / F armor: choose one earned reward. Revisit to equip."));
@@ -183,6 +189,34 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
         TEXT("Expedition.%d.Aftermath.%d"),a,outcome)),outcome==outcomeValue);
     ArenaAftermathVisible[a]=outcomeValue;
   }
+  const int source=UnmadeCore::CrossRealmCombatSource(a);
+  const auto* origin=Expeditions.Arc(source);
+  const auto stage=CrossRealmCarry.Stage(source);
+  const auto response=UnmadeCore::CrossRealmCombatResponse(a,
+     Expeditions.Arc(source)->boss,Expeditions.Arc(source)->kills,
+     Expeditions.Arc(source)->rescued,
+     Expeditions.Arc(source)->returned!=0,
+     CrossRealmCarry.Stage(source)>=UnmadeCore::CarryStage::Delivered,
+     stage==UnmadeCore::CarryStage::Reviewed,
+     !bCrossRealmCarryRejected&&!bExpeditionSaveRejected&&!bDepthSaveRejected&&!bIdentitySaveRejected);
+  if(CrossRealmCombatSigns[a].IsValid()){
+    const bool witnessed=response.kind!=UnmadeCore::CrossRealmCombatKind::Unknown;
+    CrossRealmCombatSigns[a]->SetActorHiddenInGame(!witnessed);
+    if(witnessed){
+      const bool fieldGrounded=Identity.Arc(a)->chart!=0||t->boss!=0;
+      const FString account=FString::Printf(
+        TEXT("RECEIVED FROM %s / %s\n%s\n%s: %d guards fell; %d people released\nLOCAL WATCH ADJUSTMENT %+d / %s / %s"),
+        UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
+        origin->boss==1?TEXT("BOSS DEFEATED"):TEXT("BOSS YIELDED ALIVE"),
+        UTF8_TO_TCHAR(UnmadeCore::CrossRealmCombatProfiles[a].frontier),
+        UTF8_TO_TCHAR(UnmadeCore::CrossRealmCombatProfiles[a].warning),
+        response.casualties,response.rescued,
+        response.hazardDelta,
+        stage==UnmadeCore::CarryStage::Reviewed?TEXT("LOCAL EVIDENCE REVIEWED"):TEXT("LOCAL EVIDENCE PENDING"),
+        fieldGrounded?TEXT("FIELD GROUNDED / NO ACTIVE PULSE"):TEXT("ACTIVE FIELD / USE FREE VENT OR SURVEY MAP"));
+      CrossRealmCombatSigns[a]->GetTextRender()->SetText(FText::FromString(account));
+    }
+  }
   auto hazard=UnmadeCore::SampleDungeonHazard(GetWorld()->GetTimeSeconds()+a,GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a]||t->boss!=0||bExpeditionSaveRejected||Identity.Arc(a)->chart!=0);
   // Safe-space instructions and damage footprint share the same authored realm shape.
   const FString realmTell=UTF8_TO_TCHAR(UnmadeCore::ExpeditionMove(UnmadeCore::ExpeditionRole::Boss,a,2,false).warning);
@@ -193,7 +227,8 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
   const FVector hazardOffset=p?p->GetActorLocation()-(Room(a,3)+FVector(650,500,0)):FVector::ZeroVector;
   if(UnmadeCore::EncounterHazardInCylinder(playerReady,Alive(p),hazard,hazardOffset.X,hazardOffset.Y,hazardOffset.Z,280,150)
    &&UnmadeCore::RealmHazardFootprint(a,hazardOffset.X,hazardOffset.Y,280))
-   p->GetCombat()->ReceiveHazardPulse(static_cast<uint64>(GetUniqueID())*32+a+1,hazard.pulse,12+a);
+   p->GetCombat()->ReceiveHazardPulse(static_cast<uint64>(GetUniqueID())*32+a+1,hazard.pulse,
+     FMath::Clamp(12+a+response.hazardDelta,6,25));
   const auto Set=[](TWeakObjectPtr<AStaticMeshActor> g,bool open){if(g.IsValid()){g->SetActorHiddenInGame(open);g->SetActorEnableCollision(!open);}};Set(ExpeditionBossGates[a],!bExpeditionSaveRejected&&t->branch!=0);Set(ExpeditionReturnGates[a],!bExpeditionSaveRejected&&t->boss!=0);
   if(t->returned)for(TActorIterator<AUnmadeNpcCharacter> npc(GetWorld());npc;++npc)for(int person=1;person<=2;++person)if(npc->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,person))&&(t->rescued&(1<<(person-1)))&&FVector::DistSquared2D(npc->GetActorLocation(),Site(a,0))>FMath::Square(2000.f)){FVector At=Site(a,0)+FVector((person-1)*850,-560,0);npc->SetActorLocation(At,false);npc->SetExpeditionHome(At);}
   if(ExpeditionSigns[a].IsValid())ExpeditionSigns[a]->GetTextRender()->SetText(FText::FromString(t->returned?FString(UTF8_TO_TCHAR(t->boss==1?UnmadeCore::ExpeditionSpecs[a].kill_return:UnmadeCore::ExpeditionSpecs[a].mercy_return))+FString::Printf(TEXT("\nE %s (+%d attack) / F %s (+%d defense). ONE PERMANENT CHOICE; repeat to confirm.\nTechnique: %s. E re-equips an owned kit."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].weapon),7+a*2,UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].armor),5+a,UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].technique)):TEXT("Return from the dungeon to earn equipment and a technique. E weapon / F armor.")));
