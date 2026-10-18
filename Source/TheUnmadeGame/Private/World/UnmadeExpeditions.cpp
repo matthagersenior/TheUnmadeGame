@@ -3,6 +3,7 @@
 #include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadeEncounterHazardRules.h"
 #include "World/UnmadeIdentityRules.h"
+#include "World/UnmadeAdventureDepthRegistry.h"
 #include "Save/UnmadeSaveSession.h"
 #include "Combat/UnmadePresentation.h"
 #include "Player/UnmadeCharacter.h"
@@ -264,4 +265,12 @@ FString AUnmadePrototypeHub::GetExpeditionJournal()const{FString text=TEXT("COMB
        UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
        UTF8_TO_TCHAR(UnmadeCore::ArenaAftermathText(a,Outcome)));
  }return text;}
-FString AUnmadePrototypeHub::GetExpeditionReaction(FName person)const{FString Personal=GetDepthReaction(person),Integration=ExperienceReaction(person);if(!Personal.IsEmpty())return Personal+TEXT(" ")+Integration;for(int a=0;a<9;++a)for(int n=0;n<5;++n)if(person==FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n))){auto t=Expeditions.Arc(a);const auto& s=UnmadeCore::ExpeditionSpecs[a];if((n==1||n==2)&&!(t->rescued&(1<<(n-1))))return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": The door still needs your help. Release us at the holding chamber after the guard is defeated.");if(t->returned){auto* i=Identity.Arc(a);FString memory=n==1||n==2?TEXT("You opened my cell. I remember waiting until the passage was safe. "):n==3&&i->repair==7?TEXT("You repaired the three roadposts. I can watch the road again. "):i->repair?TEXT("I saw your repairs on the return road. "):TEXT("The return road still needs repair. ");return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": ")+memory+UTF8_TO_TCHAR(t->boss==1?s.kill_return:s.mercy_return)+TEXT(" ")+Integration;}if(t->boss)return TEXT("The dungeon passage is open. Return to our equipment bench so we can witness what you chose.");return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": ")+UTF8_TO_TCHAR(s.brief);}return FString();}
+FString AUnmadePrototypeHub::GetExpeditionReaction(FName person)const{FString Personal=GetDepthReaction(person),Integration=ExperienceReaction(person);if(!Personal.IsEmpty())return Personal+TEXT(" ")+Integration;for(int a=0;a<9;++a)for(int n=0;n<5;++n)if(person==FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n))){auto t=Expeditions.Arc(a);const auto& s=UnmadeCore::ExpeditionSpecs[a];if((n==1||n==2)&&!(t->rescued&(1<<(n-1))))return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": The door still needs your help. Release us at the holding chamber after the guard is defeated.");if(t->returned){auto* i=Identity.Arc(a);
+    // Public outcome text is descriptive only: it has no action or save side effects.
+    // Only a returned local companion observes the public consequences of the
+    // saved accord; personal witnesses retain their separate authored lines.
+    const int accord=Depth.Arc(a)->choice;
+    const FString publicAftereffect=(n==1||n==2||n==4)&&accord
+        ?FString(UTF8_TO_TCHAR(accord==1?UnmadeCore::DepthSpecs[a].public_return_a:UnmadeCore::DepthSpecs[a].public_return_b))
+        :FString();
+    FString memory=n==1||n==2?TEXT("You opened my cell. I remember waiting until the passage was safe. "):n==3&&i->repair==7?TEXT("You repaired the three roadposts. I can watch the road again. "):i->repair?TEXT("I saw your repairs on the return road. "):TEXT("The return road still needs repair. ");return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": ")+memory+UTF8_TO_TCHAR(t->boss==1?s.kill_return:s.mercy_return)+TEXT(" ")+publicAftereffect+TEXT(" ")+Integration;}if(t->boss)return TEXT("The dungeon passage is open. Return to our equipment bench so we can witness what you chose.");return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": ")+UTF8_TO_TCHAR(s.brief);}return FString();}

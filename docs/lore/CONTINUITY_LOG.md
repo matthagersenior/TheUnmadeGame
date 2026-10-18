@@ -1113,3 +1113,11 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Found the expedition-person shortcut returned immediately and skipped firsthand observations and later civic changes.
 - Selected day/night authored voice before saved memories, joined actual expedition remarks without early return, and limited personal familiarity to the 82 registered resident IDs.
 - Added regression checks before implementation. Actor rendering and speech timing remain unverified in Unreal; no save changes, extra testimony or new relationship credit.
+
+
+## 2026-10-17 — Nine local, branch-specific witnessed return accounts
+
+- Added two concrete observable accord aftereffects for each of nine realms in the canonical personal-story authoring source.
+- Regenerated DepthSpec and appended the appropriate result to returned companions only when the saved accord exists; unreleased captives do not acquire knowledge of an unvisited outcome.
+- Preserved leaders and named witnesses' private firsthand lines, existing choice gates, journal/reward receipts, and all original save fields.
+- Added red-first nine-realm source and portable C++ coverage. Engine dialogue delivery, physical return and rendered cinematic context remain unverified.
