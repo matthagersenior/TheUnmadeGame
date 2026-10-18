@@ -1,4 +1,5 @@
 #include "World/UnmadeArenaTacticsRules.h"
+#include "World/UnmadeRealmJourneyRules.h"
 #include <cassert>
 #include <cstring>
 #include <set>
@@ -23,6 +24,18 @@ int main(){
   assert(counter.Use(a,cfg.first,solvedAt+cfg.cooldown+1,true)==CounterStep::Armed);
   counter.Reset();
   assert(counter.Use(a,cfg.first,1,true)==CounterStep::Armed);
+  ExpeditionState support{};
+  support.brief=1;support.visited=1;support.branch=1;
+  assert(!ExpeditionEncounterActive(support,11));
+  support.rooms=32;
+  assert(ExpeditionEnemyRoom(11)==5&&ExpeditionEnemyRoom(12)==5);
+  assert(ExpeditionEncounterActive(support,11));
+  assert(ExpeditionEncounterActive(support,12));
+  support.boss=1;
+  assert(!ExpeditionEncounterActive(support,11));
+  assert(!ExpeditionEncounterActive(support,12));
+  support.boss=2;
+  assert(!ExpeditionEncounterActive(support,11));
   ExpeditionState none{};
   assert(ArenaAftermathRecord(none)==ArenaAftermath::None);
   ExpeditionState defeated{};defeated.boss=1;defeated.returned=1;
