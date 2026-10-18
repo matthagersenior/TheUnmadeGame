@@ -33,9 +33,12 @@ bool Near(AUnmadeCharacter* p,FVector at,AActor* ignored=nullptr){if(!Alive(p)||
 bool Quiet(UWorld* world,AUnmadeCharacter* p,int a){for(TActorIterator<AUnmadeEnemyCharacter> e(world);e;++e){if(!e->IsExpeditionArc(a)||!e->CanBeTargeted())continue;FVector d=p->GetActorLocation()-e->GetActorLocation();if(d.Size2D()>(p->bIsCrouched?350:650)||FVector::DotProduct(e->GetActorForwardVector(),d.GetSafeNormal())<.3)continue;FCollisionQueryParams q(SCENE_QUERY_STAT(DepthStealth),false);q.AddIgnoredActor(p);q.AddIgnoredActor(*e);if(!world->LineTraceTestByChannel(e->GetActorLocation()+FVector(0,0,55),p->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q))return false;}return true;}
 }
 void AUnmadePrototypeHub::BuildAdventureDepth(){
- if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
+ if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthAccordSigns.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
  auto Sign=[&](FVector at,const FString& text){auto* t=GetWorld()->SpawnActor<ATextRenderActor>(at+FVector(0,0,150),FRotator(0,90,0));if(t){t->GetTextRender()->SetWorldSize(17);t->GetTextRender()->SetText(FText::FromString(text));}return t;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::DepthSpecs[a];DepthChallengeSigns[a]=Sign(Room(a,2)+FVector(0,900,0),UTF8_TO_TCHAR(s.challenge));
+   // The notice stands beside existing local services; it never unlocks a
+   // route or grants favor, and it remains hidden until a witnessed return.
+   DepthAccordSigns[a]=Sign(Shop(a,0,0)+FVector(550,-500,0),TEXT("PUBLIC ACCORD / AWAITING RETURN"));
   for(int n=0;n<3;++n){Sign(Control(a,n),FString::Printf(TEXT("E - ROUTE CONTROL %d"),n+1));SpawnBlock(Control(a,n)+FVector(0,0,-60),FVector(.6,.6,.7),FName(TEXT("DepthControl")));}
   for(int site=0;site<(a==0?5:3);++site)for(int n=0;n<3;++n){SpawnBlock(Shop(a,n,site)+FVector(0,0,-70),FVector(2,1,.5),FName(TEXT("FrontierService")));Sign(Shop(a,n,site),n==0?TEXT("PROVISIONER / E BUY RECOVERY / FINITE DAILY STOCK"):n==1?TEXT("CRAFT BENCH / E MAKE FIELD KIT / LOCAL FAVOR"):TEXT("TRAINER / E LEARN TECHNIQUE / THREE MASTERY LEVELS"));}
   auto Object=[&](FVector at,FVector scale,FName tag){auto* actor=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(actor){auto* m=actor->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(scale);actor->Tags.Add(tag);}return actor;};
@@ -54,6 +57,18 @@ void AUnmadePrototypeHub::BuildAdventureDepth(){
 void AUnmadePrototypeHub::RefreshAdventureDepth(){
  if(!GetWorld()||DepthSecretGates.Num()!=9)return;
  for(int a=0;a<9;++a){auto* s=Depth.Arc(a);
+   if(DepthAccordSigns[a].IsValid()){
+    const bool publicAftermath=!bDepthSaveRejected&&!bExpeditionSaveRejected
+        &&Expeditions.Arc(a)->returned&&s->choice!=0;
+    DepthAccordSigns[a]->SetActorHiddenInGame(!publicAftermath);
+    if(publicAftermath){
+     const auto& spec=UnmadeCore::DepthSpecs[a];
+     const FString text=FString::Printf(TEXT("%s / PUBLIC RETURN ACCORD\n%s"),
+         UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+         UTF8_TO_TCHAR(s->choice==1?spec.public_return_a:spec.public_return_b));
+     DepthAccordSigns[a]->GetTextRender()->SetText(FText::FromString(text));
+    }
+   }
   if(!bDepthSaveRejected&&s->choice==2&&!s->counterThreat){if(!DepthRetaliators[a].IsValid()){auto* enemy=GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(Base(a)+FVector(4500,10500,0),FRotator::ZeroRotator);if(enemy){enemy->ConfigureStyle(a%2?UnmadeCore::EnemyStyle::Watcher:UnmadeCore::EnemyStyle::Stalker);enemy->ConfigureEncounter(FName(*FString::Printf(TEXT("Depth.CounterThreat.%d"),a)),UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].counterparty),FLinearColor(.8,.35,.15));DepthRetaliators[a]=enemy;}}
     auto* enemy=DepthRetaliators[a].Get();if(IsValid(enemy)&&enemy->GetCombat()->IsDefeated()&&GetWorld()->GetTimeSeconds()>=NextDepthThreatSave[a]){NextDepthThreatSave[a]=GetWorld()->GetTimeSeconds()+2;const auto result=UnmadeCore::CommitCounterThreatReceipt(Depth,a,true,[&]{return WriteWorldSnapshot();});if(result==UnmadeCore::CounterThreatCommit::Recorded)NotifyRpg(TEXT("The named return-road threat is defeated and remembered. Two local favor earned; it will not respawn."));else if(result==UnmadeCore::CounterThreatCommit::SaveFailed)NotifyRpg(TEXT("Return-road victory could not save. Favor restored; automatic retries continue and complete checkpoints wait."));}}
   if(DepthCacheActors[a].IsValid())DepthCacheActors[a]->SetActorScale3D(s->secret?FVector(1,1,.15):FVector(1,1,.5));if(DepthSecretGates[a].IsValid()){DepthSecretGates[a]->SetActorHiddenInGame(s->route!=0);DepthSecretGates[a]->SetActorEnableCollision(!s->route);}
