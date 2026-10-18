@@ -296,6 +296,7 @@ public:
     FString GetDepthPrompt(AUnmadeCharacter* Player)const;
     // Saved, local return-road work sites; no remote NPC knowledge or teleport.
     bool GetPublicAccordRoutineTarget(FName ResidentId,bool AtNight,FVector& Out)const;
+    FName GetPublicAccordWorkCue(FName ResidentId,const FVector& At,bool AtNight)const;
     UnmadeCore::WeaponStyle PlayerWeaponStyle(UnmadeCore::ItemId Legacy)const;
     int GetActiveMastery()const{auto* S=Depth.Arc(Depth.Active());return bDepthSaveRejected||!S?0:S->training;}
     TArray<FString> RpgHistory;
@@ -313,6 +314,7 @@ public:
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthSecretGates;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthChallengeSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthAccordSigns;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthAccordWorkActors;
     void BuildIdentity();
     void RefreshIdentity();
     bool TryIdentityInteraction(AUnmadeCharacter* Player,double Competing,bool Survey=false);
