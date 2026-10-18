@@ -328,6 +328,7 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
  }
  return out;
 }
+// Only a proven in-person delivery may become an NPC's firsthand local memory.
 FString AUnmadePrototypeHub::GetCrossRealmCarryRecipientLine(FName ResidentId)const{
  if(bCrossRealmCarryRejected||bDepthSaveRejected||bExpeditionSaveRejected)return FString();
  for(int a=0;a<9;++a){

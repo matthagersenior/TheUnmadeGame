@@ -1156,3 +1156,12 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Updated nine physical NPC routing behaviors, branch-specific motion cues, public notice and personal journal to distinguish unresolved duty from earned follow-through.
 - Preserved no-save fallback, no captive teleport, night behavior and all original rewards/schemas, with a new red-first portable C++ test covering nine realms, two original branches, second-stage uniqueness and the strict home safety envelope.
 - Pending Unreal acceptance for physical movement, performance, day-night transition and rendered sign accessibility.
+
+
+## 2026-10-18 — Nine-realm physical custody and receiving-chief consequence
+
+- Added an optional nine-city adjacent-realm delivery cycle, with nine independent persisted stages (waiting, player carrying, personally delivered); closing route Auvren to Crossings.
+- Source-side pickup requires the genuine saved personal accord, witnessed return, and all three restored return wayposts. Destination delivery requires E interaction with the real chief and a registered destination visit.
+- Built visible destination receipts and daytime receiving-chief inspection routines, with names and branch-specific text revealed only after actual handoff. Existing repair, hearing, and claimant aftermath remains distinct.
+- Added an optional, additive schema-one payload, fail-closed restore validation and transactional save rollback; original Cinderhold→Saltwake→Crossings petition and witness dispatch systems stay intact.
+- Red-first portable C++ and native wiring tests cover all nine source/destination pairs, source proof, recipient identity, save corruption/reload and non-omniscient response; no rewards or game-end gates. Unreal actor acceptance is pending.
