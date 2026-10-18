@@ -371,6 +371,7 @@ private:
     double NextExpeditionRefresh=0;
     std::array<double,9> ExpeditionReleaseUntil{};
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionHazardSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionEvidenceSigns;
     std::array<double,9> ExpeditionHazardQuiet{};
     std::array<double,9> ExpeditionReleaseReady{};
     // The boss counter is transient: no extra rewards, save flags or repeatable farming.
