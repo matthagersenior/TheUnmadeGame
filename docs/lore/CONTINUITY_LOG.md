@@ -1140,3 +1140,11 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Red-first Python/native C++ checks cover all nine sites, both choices, rescue restrictions and native wiring. Save schema unchanged. Unreal acceptance remains pending.
 
 - Regression reproduced former captive duty locations outside the built-in 2000-unit home recovery radius. Shifted each sheltered-service worksite within a stricter 1850-unit envelope; retained nine distinct local positions and the original rescue/home protection.
+
+
+## 2026-10-17 — Nine branch-specific worksite scenes and authored work cues
+
+- Added 18 nonblocking graybox civic scene structures (two designs in each realm), only the saved public or private branch appearing after a witnessed return.
+- Physical E inspection reports the existing local branch outcome without creating a save action, reward or remote eyewitness.
+- Connected arriving daytime NPCs to the existing Repair versus Inspect animation clips, only during a legitimate routine shift; emergency behavior, night returns and existing earned services retain precedence.
+- Red-first source tests gate all nine scene families, hiding, interaction, performance and no-reward boundaries; Unreal acceptance for asset imports, placement and timing remains pending.

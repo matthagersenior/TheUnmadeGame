@@ -106,6 +106,7 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     const auto Action = DecideForPlayer(bPlayerNearby);
 
     UnmadeCore::NpcMotion Motion = UnmadeCore::NpcMotion::Stay;
+    bool bAccordDutyAssigned=false;
     UnmadeCore::Vec2 Target{Current.X, Current.Y};
     double Speed = 70.0;
     double StopRadius = 120.0;
@@ -205,13 +206,14 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         // Saved daytime civic work is chosen only for routine actors. Urgent
         // help, avoidance, and local hazard evacuation still take precedence.
         // This target is followed with the existing navmesh and swept motion.
-        if(CachedHub.IsValid())
+        if(CachedHub.IsValid()&&ExpeditionHomeArc>=0)
         {
             FVector AccordTarget;
             if(CachedHub->GetPublicAccordRoutineTarget(NpcId,
                 Phase==UnmadeCore::DayPhase::Night,AccordTarget))
             {
                 Target={AccordTarget.X,AccordTarget.Y};
+                bAccordDutyAssigned=true;
                 Speed=72.0;
                 StopRadius=105.0;
             }
@@ -265,7 +267,12 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         SetActorRotation(Offset.Rotation());
         AnimateResident(FName(TEXT("Walk")));
     }
-    else {FName work=CachedHub.IsValid()?CachedHub->ServiceWorkCue(NpcId,Current):NAME_None;AnimateResident(work.IsNone()?FName(TEXT("Idle")):work);}
+    else {
+        FName work=CachedHub.IsValid()?CachedHub->ServiceWorkCue(NpcId,Current):NAME_None;
+        if(work.IsNone()&&bAccordDutyAssigned&&CachedHub.IsValid())
+            work=CachedHub->GetPublicAccordWorkCue(NpcId,Current,Phase==UnmadeCore::DayPhase::Night);
+        AnimateResident(work.IsNone()?FName(TEXT("Idle")):work);
+    }
 }
 
 void AUnmadeNpcCharacter::ConfigureFrontier(const UnmadeCore::FrontierResident& Resident)

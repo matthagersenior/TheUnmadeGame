@@ -1197,3 +1197,12 @@ A player can physically approach the existing visible accord notice and press th
 The code has source/portable tests but still needs Unreal playthrough validation for path reachability, spoken interaction range, day/night handoffs, attendance, obstruction, behavior legibility, and the intended emotional resonance of distinct worker performances.
 
 The exposed worksite geometry is bounded within the expedition's existing return-to-home recovery radius (including each named person’s formation offset). Rescued people therefore do not oscillate between civic duty and the old safety reset. The work stays near a known settlement provisioner rather than a fictional site outside the city.
+
+
+## 2026-10-17 — Nine witnessed civic agreements now have physical work scenes
+
+The nine return-road settlements display one of two noncolliding civic work structures when their personal agreement has actually committed and their expedition return was witnessed. Protected-reserve outcomes show a service/provisioning table; public-inquiry outcomes show a vertical ledger/hearing station. The inactive outcome stays hidden, and the site cannot appear from an unsafe or rejected save. Each station stands near the previously established civic work duty for that realm; eighteen authored appearances represent nine mutually exclusive pairs rather than extra settlements or supplies.
+
+The actual saved workers use the existing in-world navigation, and arriving daytime staff can perform the established Repair gesture while serving the protected reserve or Inspect when holding a public ledger. Urgent aid, nearby hazard response and the real night routine retain their priority. The player may approach and examine the active local station through the same physical interaction system, with inspection motion and sound; observation merely explains the remembered civic outcome and cannot create another quest receipt or favor.
+
+These are source-built graybox props and existing animation references. Artist-authored models, sound spatialization, navmesh path acceptance, collision edges, and dramatic performance still need Unreal validation; no fabricated citizens, remotely teleported stage actors, loot or persistence are introduced.
