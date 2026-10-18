@@ -17,9 +17,10 @@ int main(){
   assert(counter.Use(a,cfg.first,2,true)==CounterStep::Armed);
   assert(counter.Use(a,1-cfg.first,2+cfg.openWindow+0.1,true)==CounterStep::Expired);
   assert(counter.Use(a,cfg.first,15,true)==CounterStep::Armed);
-  assert(counter.Use(a,1-cfg.first,15+cfg.openWindow-0.1,true)==CounterStep::Success);
-  assert(counter.Use(a,cfg.first,16,true)==CounterStep::Cooldown);
-  assert(counter.Use(a,cfg.first,16+cfg.cooldown+cfg.openWindow,true)==CounterStep::Armed);
+  const double solvedAt=15+cfg.openWindow-0.1;
+  assert(counter.Use(a,1-cfg.first,solvedAt,true)==CounterStep::Success);
+  assert(counter.Use(a,cfg.first,solvedAt+1,true)==CounterStep::Cooldown);
+  assert(counter.Use(a,cfg.first,solvedAt+cfg.cooldown+1,true)==CounterStep::Armed);
   counter.Reset();
   assert(counter.Use(a,cfg.first,1,true)==CounterStep::Armed);
   ExpeditionState none{};
