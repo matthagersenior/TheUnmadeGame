@@ -113,6 +113,21 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
  // Register actual chamber arrival before its actors can accept combat receipts.
  if(playerReady&&!bExpeditionSaveRejected){auto before=Expeditions;bool changed=false;for(int a=0;a<9;++a)for(int r=0;r<6;++r){auto& spec=UnmadeCore::ExpeditionSpecs[a];FVector at=p->GetActorLocation()-FVector(spec.x,spec.y+15000,95);if(UnmadeCore::InsideRegisteredChamber(a,r,at.X,at.Y,at.Z))changed=Expeditions.Enter(a,r)||changed;}if(changed)CommitExpeditions(before,p);}
  for(int a=0;a<9;++a){auto t=Expeditions.Arc(a);
+  if(t->boss!=0||bExpeditionSaveRejected){
+    ArenaCounters[a].Reset();
+    ArenaShelterUntil[a]=0;
+  }
+  const double Now=GetWorld()->GetTimeSeconds();
+  SetRiteWorldActorState(FName(*FString::Printf(
+      TEXT("Expedition.%d.ArenaShelter"),a)),
+      !bExpeditionSaveRejected&&t->boss==0&&
+      UnmadeCore::Arenas[a].shelterSeconds>0&&Now<ArenaShelterUntil[a]);
+  const auto aftermath=UnmadeCore::ArenaAftermathRecord(*t);
+  for(int outcome=1;outcome<=3;++outcome){
+    SetRiteWorldActorState(FName(*FString::Printf(
+      TEXT("Expedition.%d.Aftermath.%d"),a,outcome)),
+      !bExpeditionSaveRejected&&static_cast<int>(aftermath)==outcome);
+  }
   auto hazard=UnmadeCore::SampleDungeonHazard(GetWorld()->GetTimeSeconds()+a,GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a]||t->boss!=0||bExpeditionSaveRejected||Identity.Arc(a)->chart!=0);
   if(ExpeditionHazardSigns[a].IsValid())ExpeditionHazardSigns[a]->GetTextRender()->SetText(FText::FromString(hazard.warning?TEXT("FLOOR WARNING - STEP OUT OF THE FIELD"):hazard.danger?TEXT("DANGER PULSE - SAFE EDGES / FREE VENT"):TEXT("FLOOR QUIET - NEXT WARNING BEFORE DAMAGE")));
   const FVector hazardOffset=p?p->GetActorLocation()-(Room(a,3)+FVector(650,500,0)):FVector::ZeroVector;
@@ -200,5 +215,19 @@ bool AUnmadePrototypeHub::TryExpeditionAbility(AUnmadeCharacter* p,int32 kind){
  }
  return false; // Q retains the existing earned Fold ability and strain cost.
 }
-FString AUnmadePrototypeHub::GetExpeditionJournal()const{FString text=TEXT("COMBAT & EXPLORATION / E interact; F inspect or alternate objective; J journal\n");for(int a=0;a<9;++a){auto t=Expeditions.Arc(a);if(!t->brief)continue;int rooms=0,clues=0,kills=0;for(int i=0;i<8;++i){rooms+=(i<6&&(t->rooms&(1<<i)))?1:0;clues+=(i<3&&(t->clues&(1<<i)))?1:0;kills+=(t->kills&(1<<i))?1:0;}text+=FString::Printf(TEXT("%s > %s > %s: rooms %d/6, evidence %d/3, guards %d/8, captives %d/2, branch %s, boss %s, return %s, reward %s\n"),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].frontier),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].dungeon),rooms,clues,kills,(t->rescued&1?1:0)+(t->rescued&2?1:0),t->branch==1?TEXT("rescue"):t->branch==2?TEXT("evidence"):TEXT("undecided"),t->boss==1?TEXT("defeated"):t->boss==2?TEXT("yielded alive"):TEXT("unresolved"),t->returned?TEXT("witnessed"):TEXT("pending"),t->reward==1?TEXT("weapon"):t->reward==2?TEXT("armor"):TEXT("unclaimed"));}if(GetWorld())if(auto* player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))if(auto* equipment=player->GetEquipment()){auto b=equipment->SelectedBenefit();text+=FString::Printf(TEXT("SELECTED REALM MODIFIERS: +%d attack, +%d defense, Glimpse cost -%d, Fold +%d seconds. I shows independent weapon, armor and techniques.\n"),b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);}for(int a=0;a<9;++a){auto* i=Identity.Arc(a);auto* e=Expeditions.Arc(a);if(!e->brief)continue;text+=FString::Printf(TEXT("%s side quests: valve lights %d / target %d; hunt ration %s; map %s; repairs %d%d%d; sanctuary last day %d. E service / F survey.\n"),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].frontier),i->puzzle,UnmadeCore::WorldIdentity::Target(a),i->hunt?TEXT("claimed"):TEXT("available"),i->chart?TEXT("owned"):TEXT("pending"),i->repair&1?1:0,i->repair&2?1:0,i->repair&4?1:0,i->restDay);}return text;}
+FString AUnmadePrototypeHub::GetExpeditionJournal()const{FString text=TEXT("COMBAT & EXPLORATION / E interact; F inspect or alternate objective; J journal\n");for(int a=0;a<9;++a){auto t=Expeditions.Arc(a);if(!t->brief)continue;int rooms=0,clues=0,kills=0;for(int i=0;i<8;++i){rooms+=(i<6&&(t->rooms&(1<<i)))?1:0;clues+=(i<3&&(t->clues&(1<<i)))?1:0;kills+=(t->kills&(1<<i))?1:0;}text+=FString::Printf(TEXT("%s > %s > %s: rooms %d/6, evidence %d/3, guards %d/8, captives %d/2, branch %s, boss %s, return %s, reward %s\n"),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].frontier),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].dungeon),rooms,clues,kills,(t->rescued&1?1:0)+(t->rescued&2?1:0),t->branch==1?TEXT("rescue"):t->branch==2?TEXT("evidence"):TEXT("undecided"),t->boss==1?TEXT("defeated"):t->boss==2?TEXT("yielded alive"):TEXT("unresolved"),t->returned?TEXT("witnessed"):TEXT("pending"),t->reward==1?TEXT("weapon"):t->reward==2?TEXT("armor"):TEXT("unclaimed"));}if(GetWorld())if(auto* player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))if(auto* equipment=player->GetEquipment()){auto b=equipment->SelectedBenefit();text+=FString::Printf(TEXT("SELECTED REALM MODIFIERS: +%d attack, +%d defense, Glimpse cost -%d, Fold +%d seconds. I shows independent weapon, armor and techniques.\n"),b.attack,b.armor,b.glimpseDiscount,b.foldSeconds);}for(int a=0;a<9;++a){auto* i=Identity.Arc(a);auto* e=Expeditions.Arc(a);if(!e->brief)continue;text+=FString::Printf(TEXT("%s side quests: valve lights %d / target %d; hunt ration %s; map %s; repairs %d%d%d; sanctuary last day %d. E service / F survey.\n"),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].frontier),i->puzzle,UnmadeCore::WorldIdentity::Target(a),i->hunt?TEXT("claimed"):TEXT("available"),i->chart?TEXT("owned"):TEXT("pending"),i->repair&1?1:0,i->repair&2?1:0,i->repair&4?1:0,i->restDay);}
+ for(int a=0;a<9;++a){
+   const auto* e=Expeditions.Arc(a);
+   if(!e||!e->brief)continue;
+   const auto& CounterObjective=UnmadeCore::Arenas[a];
+   text+=FString::Printf(TEXT("ARENA STRATEGY / %s: %s. Use FIRST and SECOND stations within %.0f seconds. Shield sentinels, aimed marksmen and boss warnings remain real.\n"),
+     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+     UTF8_TO_TCHAR(CounterObjective.counterObjective),
+     CounterObjective.openWindow);
+   const auto Outcome=UnmadeCore::ArenaAftermathRecord(*e);
+   if(Outcome!=UnmadeCore::ArenaAftermath::None)
+     text+=FString::Printf(TEXT("WITNESSED ARENA AFTERMATH / %s: %s\n"),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+       UTF8_TO_TCHAR(UnmadeCore::ArenaAftermathText(a,Outcome)));
+ }return text;}
 FString AUnmadePrototypeHub::GetExpeditionReaction(FName person)const{FString Personal=GetDepthReaction(person),Integration=ExperienceReaction(person);if(!Personal.IsEmpty())return Personal+TEXT(" ")+Integration;for(int a=0;a<9;++a)for(int n=0;n<5;++n)if(person==FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n))){auto t=Expeditions.Arc(a);const auto& s=UnmadeCore::ExpeditionSpecs[a];if((n==1||n==2)&&!(t->rescued&(1<<(n-1))))return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": The door still needs your help. Release us at the holding chamber after the guard is defeated.");if(t->returned){auto* i=Identity.Arc(a);FString memory=n==1||n==2?TEXT("You opened my cell. I remember waiting until the passage was safe. "):n==3&&i->repair==7?TEXT("You repaired the three roadposts. I can watch the road again. "):i->repair?TEXT("I saw your repairs on the return road. "):TEXT("The return road still needs repair. ");return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": ")+memory+UTF8_TO_TCHAR(t->boss==1?s.kill_return:s.mercy_return)+TEXT(" ")+Integration;}if(t->boss)return TEXT("The dungeon passage is open. Return to our equipment bench so we can witness what you chose.");return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": ")+UTF8_TO_TCHAR(s.brief);}return FString();}
