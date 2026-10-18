@@ -2,6 +2,7 @@
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadeEncounterHazardRules.h"
+#include "World/UnmadeIdentityRules.h"
 #include "Save/UnmadeSaveSession.h"
 #include "Combat/UnmadePresentation.h"
 #include "Player/UnmadeCharacter.h"
@@ -155,9 +156,15 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
     ArenaAftermathVisible[a]=outcomeValue;
   }
   auto hazard=UnmadeCore::SampleDungeonHazard(GetWorld()->GetTimeSeconds()+a,GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a]||t->boss!=0||bExpeditionSaveRejected||Identity.Arc(a)->chart!=0);
-  if(ExpeditionHazardSigns[a].IsValid())ExpeditionHazardSigns[a]->GetTextRender()->SetText(FText::FromString(hazard.warning?TEXT("FLOOR WARNING - STEP OUT OF THE FIELD"):hazard.danger?TEXT("DANGER PULSE - SAFE EDGES / FREE VENT"):TEXT("FLOOR QUIET - NEXT WARNING BEFORE DAMAGE")));
+  const FString realmTell=UTF8_TO_TCHAR(UnmadeCore::ExpeditionMove(UnmadeCore::ExpeditionRole::Boss,a,2,false).warning);
+  if(ExpeditionHazardSigns[a].IsValid()){
+   const FString notice=hazard.warning?TEXT("DANGER FIELD WARNING"):hazard.danger?TEXT("FIELD ACTIVE - TAKE THE SAFE SHAPE"):TEXT("FIELD QUIET - NEXT WARNING BEFORE DAMAGE");
+   ExpeditionHazardSigns[a]->GetTextRender()->SetText(FText::FromString(notice+TEXT("\n")+realmTell+TEXT("\nFREE VENT AVAILABLE / SURVEY MAP GROUNDS THIS FIELD")));
+  }
   const FVector hazardOffset=p?p->GetActorLocation()-(Room(a,3)+FVector(650,500,0)):FVector::ZeroVector;
-  if(UnmadeCore::EncounterHazardInCylinder(playerReady,Alive(p),hazard,hazardOffset.X,hazardOffset.Y,hazardOffset.Z,280,150))p->GetCombat()->ReceiveHazardPulse(static_cast<uint64>(GetUniqueID())*32+a+1,hazard.pulse,12+a);
+  if(UnmadeCore::EncounterHazardInCylinder(playerReady,Alive(p),hazard,hazardOffset.X,hazardOffset.Y,hazardOffset.Z,280,150)
+   &&UnmadeCore::RealmHazardFootprint(a,hazardOffset.X,hazardOffset.Y,280))
+   p->GetCombat()->ReceiveHazardPulse(static_cast<uint64>(GetUniqueID())*32+a+1,hazard.pulse,12+a);
   const auto Set=[](TWeakObjectPtr<AStaticMeshActor> g,bool open){if(g.IsValid()){g->SetActorHiddenInGame(open);g->SetActorEnableCollision(!open);}};Set(ExpeditionBossGates[a],!bExpeditionSaveRejected&&t->branch!=0);Set(ExpeditionReturnGates[a],!bExpeditionSaveRejected&&t->boss!=0);
   if(t->returned)for(TActorIterator<AUnmadeNpcCharacter> npc(GetWorld());npc;++npc)for(int person=1;person<=2;++person)if(npc->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,person))&&(t->rescued&(1<<(person-1)))&&FVector::DistSquared2D(npc->GetActorLocation(),Site(a,0))>FMath::Square(2000.f)){FVector At=Site(a,0)+FVector((person-1)*850,-560,0);npc->SetActorLocation(At,false);npc->SetExpeditionHome(At);}
   if(ExpeditionSigns[a].IsValid())ExpeditionSigns[a]->GetTextRender()->SetText(FText::FromString(t->returned?FString(UTF8_TO_TCHAR(t->boss==1?UnmadeCore::ExpeditionSpecs[a].kill_return:UnmadeCore::ExpeditionSpecs[a].mercy_return))+FString::Printf(TEXT("\nE %s (+%d attack) / F %s (+%d defense). ONE PERMANENT CHOICE; repeat to confirm.\nTechnique: %s. E re-equips an owned kit."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].weapon),7+a*2,UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].armor),5+a,UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].technique)):TEXT("Return from the dungeon to earn equipment and a technique. E weapon / F armor.")));
