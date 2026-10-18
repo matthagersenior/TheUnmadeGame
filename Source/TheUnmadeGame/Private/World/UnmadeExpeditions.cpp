@@ -46,7 +46,7 @@ bool Local(UWorld* w,AUnmadeCharacter* p,FVector at,double range=230){if(!w||!Al
 
 }
 void AUnmadePrototypeHub::BuildExpeditions(){
- if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
+ if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);ExpeditionEvidenceSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
  ArenaShelterVisible.fill(-1);ArenaAftermathVisible.fill(-1);
  ArenaShelterUntil.fill(0);
  for(auto& Counter:ArenaCounters)Counter.Reset();
@@ -101,7 +101,7 @@ void AUnmadePrototypeHub::BuildExpeditions(){
   // Each physical report offers a deliberate alternate tactical station.
   const auto& discovery=UnmadeCore::EvidenceCounterplaySpecs[a];
   const FVector discoveryAt=EvidenceCounterStation(a);
-  Sign(discoveryAt,FString::Printf(TEXT("E - %s / EARN LOCAL PROOF FIRST"),
+  ExpeditionEvidenceSigns[a]=Sign(discoveryAt,FString::Printf(TEXT("E - %s / EARN LOCAL PROOF FIRST"),
        UTF8_TO_TCHAR(discovery.name)));
   Block(discoveryAt+FVector(0,0,-115),FVector(1.8,1.6,.28));
   SpawnBlock(Room(a,5)+FVector(0,-70,50),FVector(1.4,1.9,2.8),
@@ -152,6 +152,20 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
     ArenaShelterUntil[a]=0;
   }
   const double Now=GetWorld()->GetTimeSeconds();
+  // Read the original save-backed evidence, not temporary journal prose.
+  if(ExpeditionEvidenceSigns[a].IsValid()){
+    const auto& counter=UnmadeCore::EvidenceCounterplaySpecs[a];
+    const bool hasProof=!bDepthSaveRejected&&!bExpeditionSaveRejected&&
+      (Depth.Arc(a)->evidence!=0||t->clues==7);
+    const TCHAR* state=bExpeditionSaveRejected||t->boss!=0
+      ?TEXT("RESOLVED")
+      :!hasProof?TEXT("PROOF NEEDED")
+      :Now<EvidenceCounters[a].ReadyAt()?TEXT("RECOVERING"):TEXT("READY");
+    ExpeditionEvidenceSigns[a]->GetTextRender()->SetText(
+      FText::FromString(FString::Printf(
+      TEXT("%s / %s\nE - USE EARNED EVIDENCE\n%s"),
+       UTF8_TO_TCHAR(counter.name),state,UTF8_TO_TCHAR(counter.intervention))));
+  }
   const int shelter=(!bExpeditionSaveRejected&&t->boss==0&&
       (UnmadeCore::Arenas[a].shelterSeconds>0||UnmadeCore::EvidenceCounterplaySpecs[a].coverSeconds>0)&&Now<ArenaShelterUntil[a])?1:0;
   if(ArenaShelterVisible[a]!=shelter){
