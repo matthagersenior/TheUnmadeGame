@@ -118,6 +118,7 @@ bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtN
  }
  return false;
 }
+// Existing resident animation assets provide the observable work performance.
 FName AUnmadePrototypeHub::GetPublicAccordWorkCue(FName ResidentId,const FVector& At,bool AtNight)const{
  FVector DutyTarget;
  if(!GetPublicAccordRoutineTarget(ResidentId,AtNight,DutyTarget)||
