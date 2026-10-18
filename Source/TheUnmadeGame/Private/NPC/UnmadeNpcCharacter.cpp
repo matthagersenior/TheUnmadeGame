@@ -202,6 +202,20 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
                 }
             }
         }
+        // Saved daytime civic work is chosen only for routine actors. Urgent
+        // help, avoidance, and local hazard evacuation still take precedence.
+        // This target is followed with the existing navmesh and swept motion.
+        if(CachedHub.IsValid())
+        {
+            FVector AccordTarget;
+            if(CachedHub->GetPublicAccordRoutineTarget(NpcId,
+                Phase==UnmadeCore::DayPhase::Night,AccordTarget))
+            {
+                Target={AccordTarget.X,AccordTarget.Y};
+                Speed=72.0;
+                StopRadius=105.0;
+            }
+        }
     }
 
     // The resident reacts only to the warning at their *own current place*.
