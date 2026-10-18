@@ -298,6 +298,7 @@ public:
     FString GetCrossRealmCarryJournal()const;
     FString GetCrossRealmReviewJournal()const;
     FString GetCrossRealmCarryRecipientLine(FName ResidentId)const;
+    FString GetCrossRealmCombatRecipientLine(FName ResidentId)const;
     FString GetDepthReaction(FName Person)const;
     FString GetDepthPrompt(AUnmadeCharacter* Player)const;
     // Saved, local return-road work sites; no remote NPC knowledge or teleport.
