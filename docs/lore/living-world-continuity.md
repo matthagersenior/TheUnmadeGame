@@ -1165,6 +1165,13 @@ The ordinary third-room dungeon fields now use the realm's existing authored spa
 The existing warning interval still precedes actual damage. Reach and height limits, inactive/boss-resolved fields, the free eight-second vent, earned field kits, and a permanent survey-map suppression remain unchanged. Effects share their existing encounter identity, damage and combat protections; no new save bits, loot, combat grades or boss rewards appear. Portable geometry and source integration are tested; actual floor art, collision, spatial signage visibility and combat feel remain Unreal acceptance tasks.
 
 
+## 2026-10-17 — Returning people retain actual memory across the nine realms
+
+A returning citizen's locally authored day/night voice is selected before their saved acquaintance, personal aid, physically carried correspondence or delivery recipient response is appended. A change of sky or work shift cannot erase a documented visit. The 82 registered residents receive familiarity lines only for real recorded meetings; expedition captives and guides are not falsely given a resident-history record when they are absent from that stable roster.
+
+Nine-realm expedition guides, witnesses and released captives retain the local choice, rescue, witness and roadwork dialogue without prematurely skipping their separate firsthand memory, rumor and local civic reactions. These responses draw from existing save records and the actor's own observation provenance. They cannot manufacture an unwitnessed deed, name a protected refuge guest or award loot or influence. No quest, relationship, reward or save schema changed. Actual delivery, dialogue presentation and scene interruption still require Unreal actor tests.
+
+
 ## 2026-10-17 — Public consequences witnessed after all nine personal accords
 
 Each realm's two existing permanent personal accords now has a distinct outward-facing aftereffect that returning, rescued companions and other local expedition witnesses can describe only after their actual witnessed return. The Crossings' lamp reserve and posted exclusion list; Saltwake's protected family water hour or public withdrawals; Cinderhold's warmed refuge or measured rescue reserve; Drevlach's sealed forced margin or renegotiated oath; Orravane's guarded anchor record or watched public crossing; Vathless's sealed family claim or published neighboring names; Eillun's anonymous household count or witnessed open census; Tharniv's household harvest post or shared rootway; and Auvren's restricted rescue registry or publicly warned threshold map now create two recognizable public local conversations per city.

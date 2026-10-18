@@ -3,6 +3,7 @@
 #include "NavigationPath.h"
 #include "Authoring/UnmadeOuterPeopleData.h"
 #include "NPC/UnmadeMemoryComponent.h"
+#include "NPC/UnmadeResidentContinuityRules.h"
 #include "NPC/UnmadeNpcMotionRules.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
@@ -349,7 +350,7 @@ bool AUnmadeNpcCharacter::CanTradeWithPlayer() const
 
 FString AUnmadeNpcCharacter::GetReactionText() const
 {
-    if(CachedHub.IsValid()){const FString Expedition=CachedHub->GetExpeditionReaction(NpcId);if(!Expedition.IsEmpty())return Expedition;}
+    const FString Expedition=CachedHub.IsValid()?CachedHub->GetExpeditionReaction(NpcId):FString();
     // Canonical authored dialogue never requires a model. AI can paraphrase,
     // but it cannot overwrite these deterministic permissions/choices.
     using UnmadeCore::NpcAction;
@@ -372,31 +373,8 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     // Resident dialogue is source-authored; adaptive reactions never change
     // stable identifiers or assert knowledge of unobserved remote events.
     FString CharacterLine = AuthoredLine;
-    if(CachedHub.IsValid())
-    {
-        UnmadeCore::Realm CurrentHome=UnmadeCore::Realm::ThreefoldReach;
-        if(bLaterRealmResident)CurrentHome=LaterHome;
-        else if(bFrontierResident)
-            CurrentHome=NpcId.ToString().StartsWith(TEXT("npc.saltwake."))
-                ?UnmadeCore::Realm::WidowedRain
-                :UnmadeCore::Realm::HearthBeneath;
-        CharacterLine+=TEXT(" ");
-        CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
-        // Only the named person who actually received the carried packet gets
-        // delivery knowledge; other residents need witnessed local testimony.
-        const FString ReturnReply=CachedHub->GetWitnessReturnLine(NpcId);
-        if(!ReturnReply.IsEmpty())
-        {
-            CharacterLine+=TEXT(" ");
-            CharacterLine+=ReturnReply;
-        }
-        const FString PhysicalReceipt=CachedHub->GetWitnessDispatchRecipientLine(NpcId);
-        if(!PhysicalReceipt.IsEmpty())
-        {
-            CharacterLine+=TEXT(" ");
-            CharacterLine+=PhysicalReceipt;
-        }
-    }
+    // First select this actual person's day/night authored voice. Never replace
+    // their persisted return conversation or firsthand evidence after it.
     const auto Phase = CachedHub.IsValid()
         ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
     const UnmadeCore::OuterPersonSpec* LocalProfile=nullptr;
@@ -411,6 +389,38 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     }
     if (Phase == UnmadeCore::DayPhase::Night && !LocalProfile)
         CharacterLine += TEXT(" It feels like the dark has started listening.");
+    // Source-authoritative record and witnessed memory remain independent.
+    // Expedition residents must be able to recount their actual rescue and
+    // choice without suppressing separate observed events and return context.
+    if(!Expedition.IsEmpty())CharacterLine+=TEXT(" ")+Expedition;
+    if(CachedHub.IsValid())
+    {
+        UnmadeCore::Realm CurrentHome=UnmadeCore::Realm::ThreefoldReach;
+        if(bLaterRealmResident)CurrentHome=LaterHome;
+        else if(bFrontierResident)
+            CurrentHome=NpcId.ToString().StartsWith(TEXT("npc.saltwake."))
+                ?UnmadeCore::Realm::WidowedRain
+                :UnmadeCore::Realm::HearthBeneath;
+        const FTCHARToUTF8 Identifier(*NpcId.ToString());
+        if(UnmadeCore::ResidentContinuityIndex(Identifier.Get())>=0)
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
+        }
+        // A carried reply is known only to its actual named recipient.
+        const FString ReturnReply=CachedHub->GetWitnessReturnLine(NpcId);
+        if(!ReturnReply.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=ReturnReply;
+        }
+        const FString PhysicalReceipt=CachedHub->GetWitnessDispatchRecipientLine(NpcId);
+        if(!PhysicalReceipt.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=PhysicalReceipt;
+        }
+    }
     if(CachedHub.IsValid())
     {
         CharacterLine+=CachedHub->GetRoadResidentLine(NpcId);

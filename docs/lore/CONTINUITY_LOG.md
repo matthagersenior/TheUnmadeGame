@@ -1107,6 +1107,14 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Added failing-first C++ geometry and native wiring regression tests; source compilation/CI is the verification gate, not Unreal playability certification.
 
 
+## 2026-10-17 — Return-dialogue provenance and memory continuity
+
+- Found that later-realm daily voice switching reassigned the complete dialogue string after saved visits and physical delivery replies were composed, erasing those memories.
+- Found the expedition-person shortcut returned immediately and skipped firsthand observations and later civic changes.
+- Selected day/night authored voice before saved memories, joined actual expedition remarks without early return, and limited personal familiarity to the 82 registered resident IDs.
+- Added regression checks before implementation. Actor rendering and speech timing remain unverified in Unreal; no save changes, extra testimony or new relationship credit.
+
+
 ## 2026-10-17 — Nine local, branch-specific witnessed return accounts
 
 - Added two concrete observable accord aftereffects for each of nine realms in the canonical personal-story authoring source.
