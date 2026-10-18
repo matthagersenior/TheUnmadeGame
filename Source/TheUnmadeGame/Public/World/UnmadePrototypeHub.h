@@ -25,6 +25,7 @@
 #include "World/UnmadeBesHouseholdRules.h"
 #include "World/UnmadeHearthPetitionRules.h"
 #include "World/UnmadePetitionRelayRules.h"
+#include "World/UnmadeCrossRealmCarryRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
 #include "World/UnmadeCommunityConsequences.h"
@@ -74,7 +75,7 @@ public:
     void PrepareRealmGeometry(const FVector& At,int Limit=48);
     const TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>>& CachedEnemies()const{return RuntimeEnemies;}
     FName ServiceWorkCue(FName Person,const FVector& At)const;
-    bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected||bHearthPetitionRejected||bPetitionRelayRejected;}
+    bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bCrossRealmCarryRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected||bHearthPetitionRejected||bPetitionRelayRejected;}
     bool IsWorldReady()const{return bWorldReady;}
     bool SaveRecoveryState(AUnmadeCharacter* Player);
     bool SavePlayerSession(AUnmadeCharacter* Player);
@@ -292,6 +293,7 @@ public:
     bool UseDepthPower(AUnmadeCharacter* Player);
     bool SelectDepthTechnique(int Arc,AUnmadeCharacter* Player);
     FString GetDepthJournal()const;
+    FString GetCrossRealmCarryJournal()const;
     FString GetDepthReaction(FName Person)const;
     FString GetDepthPrompt(AUnmadeCharacter* Player)const;
     // Saved, local return-road work sites; no remote NPC knowledge or teleport.
@@ -307,6 +309,8 @@ public:
     UnmadeCore::ScopedServiceConfirmation DepthConfirmation;
     bool bDepthSaveRejected=false;
     UnmadeCore::AdventureDepth Depth;
+    UnmadeCore::CrossRealmCarry CrossRealmCarry;
+    bool bCrossRealmCarryRejected=false;
     std::array<UnmadeCore::RealmChallenge,9> DepthChallenges;
     TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>> DepthRetaliators;
     std::array<double,9> NextDepthThreatSave{};
