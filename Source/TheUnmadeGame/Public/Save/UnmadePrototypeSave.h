@@ -304,6 +304,10 @@ public:
         Older schema-1 saves begin with no physical custody. */
     UPROPERTY(SaveGame) bool bHasPetitionRelay=false;
     UPROPERTY(SaveGame) TArray<int32> PetitionRelayState;
+    /** Additive schema-1 compatible physical nine-realm hand-carried custody.
+        Missing on older saves; exact 28-int payload is validated on load. */
+    UPROPERTY(SaveGame) bool bHasCrossRealmCarry=false;
+    UPROPERTY(SaveGame) TArray<int32> CrossRealmCarryState;
 
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)
