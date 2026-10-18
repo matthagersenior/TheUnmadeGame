@@ -441,6 +441,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             CharacterLine+=TEXT(" ");
             CharacterLine+=PhysicalReceipt;
         }
+        const FString CarriedReport=CachedHub->GetCrossRealmCarryRecipientLine(NpcId);
+        if(!CarriedReport.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=CarriedReport;
+        }
     }
     if(CachedHub.IsValid())
     {
