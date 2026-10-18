@@ -160,6 +160,7 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
     const TCHAR* state=bExpeditionSaveRejected||t->boss!=0
       ?TEXT("RESOLVED")
       :!hasProof?TEXT("PROOF NEEDED")
+      :!t->branch||!(t->rooms&32)?TEXT("ARENA LOCKED")
       :Now<EvidenceCounters[a].ReadyAt()?TEXT("RECOVERING"):TEXT("READY");
     ExpeditionEvidenceSigns[a]->GetTextRender()->SetText(
       FText::FromString(FString::Printf(
