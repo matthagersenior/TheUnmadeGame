@@ -55,6 +55,7 @@ inline CrossRealmCombatState CrossRealmCombatResponse(
           reviewed?std::max(0,heightened-2):heightened,
           casualties,personsFreed};
  }
+ // Lore: physical custody transmits the complete encounter, not a boss-only flag.
  // A living surrender after many guard deaths is not a bloodless truce.
  // Those local deaths still change the next chief's safety calculus.
  if(casualties>=4){

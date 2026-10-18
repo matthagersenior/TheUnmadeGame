@@ -1218,3 +1218,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Added portable nine-realm defensive tests and native integration checks verifying no phantom report, no invalid save, no fake opponent death, no automatic rescue and no extra save/quest reward. UE pathfinding, actual hazard presentation and balance still require an engine playthrough.
 
 - Corrected the rescued-person display and propagated combat facts to use the count of the two recorded rescue bits, not the underlying bitmask integer. Added direct all-realm assertions for zero, one and two freed people.
+
+- Differentiated genuine low-casualty living surrender from a high-casualty capitulation: four or more recorded guard deaths produce a distinct casualty vigil rather than magically safe borders. Compared destination evidence moderates this response, without changing the authoritative record of lives lost. Added explicit nine-realm assertions for both stages.
