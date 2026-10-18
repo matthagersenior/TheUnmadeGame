@@ -101,6 +101,24 @@ void AUnmadePrototypeHub::BuildExpeditions(){
    auto role=k==8?UnmadeCore::ExpeditionRole::Boss:static_cast<UnmadeCore::ExpeditionRole>(UnmadeCore::EnemyRoleAt(a,k));
    if(auto* e=GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(pos,FRotator::ZeroRotator)){e->ConfigureEncounter(EnemyTag(a,k),k==8?UTF8_TO_TCHAR(s.boss):role==UnmadeCore::ExpeditionRole::Sentinel?TEXT("Shield Sentinel"):role==UnmadeCore::ExpeditionRole::Skirmisher?TEXT("Flanking Skirmisher"):role==UnmadeCore::ExpeditionRole::Marksman?TEXT("Aimed Marksman"):TEXT("Fracture Disruptor"),FLinearColor(.7,.25+.04*a,.25));e->ConfigureExpedition(a,k,role);}
   }
+  // Distinct battle priorities: a shield sentinel actively lends armor to
+  // the boss while guarding within 500cm, and a marksman punishes stillness.
+  // Both stand down when the boss yields or dies. They never write kill bits
+  // and player attacks against them never mint renewable combat rewards.
+  for(int add=0;add<2;++add){
+    const auto role=add==0?UnmadeCore::ExpeditionRole::Sentinel:
+        UnmadeCore::ExpeditionRole::Marksman;
+    const FVector pos=Room(a,5)+(add==0?FVector(520,240,0):
+        FVector(-520,280,0));
+    if(auto* ArenaEscort=GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(
+         pos,FRotator::ZeroRotator)){
+      ArenaEscort->ConfigureEncounter(EnemyTag(a,11+add),
+          add==0?TEXT("Boss Ward Sentinel - BREAK THE SHIELD"):
+                 TEXT("Boss Lane Marksman - USE COVER"),
+          FLinearColor(.52,.32+.035*a,.64));
+      ArenaEscort->ConfigureExpedition(a,11+add,role);
+    }
+  }
   // A separate return walkway outside the dungeon wall rejoins the refuge and frontier.
   double OuterX=MaxX+2200,OuterY=MaxY+17000;double BossX=Room(a,5).X-s.x,BossY=Room(a,5).Y-s.y;Block(FVector(s.x+OuterX,s.y+(8000+OuterY)/2.,-25),FVector(10,(OuterY-8000+1000)/100.,.5));Block(FVector(s.x+OuterX/2.,s.y+8000,-25),FVector(OuterX/100.+10,10,.5));Block(FVector(s.x+(BossX+OuterX)/2.,s.y+OuterY,-25),FVector((OuterX-BossX)/100.+10,10,.5));Block(FVector(s.x+BossX,s.y+(BossY+OuterY)/2.,-25),FVector(10,(OuterY-BossY)/100.+10,.5));Sign(FVector(s.x+BossX,s.y+OuterY,95),TEXT("RETURN WALK - EAST TO THE OUTER ROAD"));Sign(FVector(s.x+OuterX,s.y+OuterY,95),TEXT("RETURN WALK - SOUTH TO THE FRONTIER"));Sign(FVector(s.x+OuterX,s.y+8000,95),TEXT("RETURN WALK - WEST TO THE EQUIPMENT BENCH"));Sign(HomeGate(a)+FVector(0,450,0),TEXT("EARNED RETURN - NORTH TO THE MARKED OUTER WALK"));
  }
