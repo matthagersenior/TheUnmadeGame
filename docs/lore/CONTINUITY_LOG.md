@@ -1193,3 +1193,6 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Confirmed the core opening, frontier, middle, upper, Auvren and final gates remain authoritative, and that nine repeated carry/review packets remain optional source-level content instead of mandatory finale progression.
 - Corrected the living canon's outdated assertion that later six realm NPCs have not been spawned; nine generated graybox realm sources now exist but are not engine-validated production levels.
 - Added regression checks tying canonical narrative to physically authored tactical encounters, identity fieldwork, distinct choices, consent boundaries, source generation and journal gating. Remaining work: real Unreal compiler, physical playthrough, visual storytelling and arc pacing evaluations.
+
+- Re-authored the three already implemented fieldwork activities in every realm with an explicit local conflict and player purpose, without increasing kill counts, inventing rewards or changing the actual survey, repair and save requirements. The one-time recovery ration remains unchanged.
+- Shortened the tiny world-space service billboard to action labels and journal directions; detailed stakes still appear in quest interaction and journal text. Visual text legibility, timing and readability need Unreal verification.
