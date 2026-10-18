@@ -1118,3 +1118,18 @@ civic costs. Evidence and combat are alternatives with different
 implications—not a disguised kill counter. The save schema, credits,
 town services, Nhal-Vey fate and individual residents' knowledge do
 not silently change. Source-only CI is not Unreal actor/animation QA.
+
+
+## Coordinated boss support
+
+Each active unresolved boss chamber spawns a shield sentinel (slot 11) and
+an aimed marksman (slot 12) on top of its existing nine expedition enemy
+slots. The sentinel's real combat guard can give its boss +4 armor in close
+formation; the marksman pressures the traveler out of a static position.
+Both become inactive on a boss death or evidence surrender.
+
+Their defeat is temporary combat state: not `ExpeditionState.kills`, not
+a repeatable XP/drop receipt, and not new durable quest history. The
+player's normal melee and status defeat reward paths explicitly ignore
+these two transient guard slots. Existing boss defeat, captive rescue,
+and evidence choices remain the only source of permanent arena outcomes.
