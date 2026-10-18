@@ -21,7 +21,7 @@ class NineRealmTacticalObjectives(unittest.TestCase):
   self.assertIn("counter.exposureSeconds",hub)
   self.assertIn("CounterStep::Armed",hub)
   self.assertIn("std::array<ArenaTacticSpec,9>",rules)
-  self.assertIn("ReadArenaAftermath",hub)
+  self.assertIn("ArenaAftermathText(",hub)
  def test_outcomes_are_derived_from_real_boss_and_captive_save_flags(self):
   hub=source("Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp")
   self.assertIn("ArenaAftermathRecord(",hub)
