@@ -1074,3 +1074,10 @@ a repeatable XP/drop receipt, and not new durable quest history. The
 player's normal melee and status defeat reward paths explicitly ignore
 these two transient guard slots. Existing boss defeat, captive rescue,
 and evidence choices remain the only source of permanent arena outcomes.
+
+
+## 2026-10-17 — Equipment menu and explicit unsaved-session confirmation
+
+- Kept the Inventory menu open during successful in-menu weapon, armor and charm cycling, while preserving gameplay shortcut access and existing saved gear rules.
+- Skipped a second checkpoint write when the player deliberately confirms the same pending Load/New after failure. Preserved per-intent/per-profile scope and no-save backup recovery.
+- Added red-first source tests plus a compiled portable confirmation-state test. This is source-only coverage; Unreal focus, input, travel and filesystem behavior remain unverified. No canon or save schema changes.
