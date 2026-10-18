@@ -52,6 +52,13 @@ int main(){
    self.assertIn(token,hub)
   self.assertIn("std::array<UnmadeCore::EvidenceCounterplay,9> EvidenceCounters",hdr)
   self.assertIn("ARENA DISCOVERY",hub)
+  self.assertIn("ExpeditionEvidenceSigns.SetNum(9)",hub)
+  self.assertIn("ExpeditionEvidenceSigns[a]=Sign(",hub)
+  self.assertIn("ExpeditionEvidenceSigns[a]->GetTextRender()->SetText(",hub)
+  self.assertIn('TEXT("PROOF NEEDED")',hub)
+  self.assertIn('TEXT("READY")',hub)
+  self.assertIn('TEXT("RESOLVED")',hub)
+
   self.assertIn("Counterplay earned",hub)
   self.assertIn("No boss outcome or rescue was automatically saved",hub)
   start=hub.index("case 13:")
