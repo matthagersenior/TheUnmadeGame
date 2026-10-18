@@ -8,9 +8,9 @@
       "witness": "I kept those names because a missing name becomes an empty bed. Maelin wants the lanterns on the road; I want somebody to admit who was left outside.",
       "evidence": "The torn charter lists both the abandoned beds and a reserve of lantern oil. Neither claim cancels the other.",
       "option_a": "Keep the lantern reserve on the refuge road",
-      "option_b": "Publish the excluded names and reserve the archive room",
+      "option_b": "Publish an anonymized account of refused beds and reserve the archive room",
       "return_a": "We will keep a bed ready. Jessa still asks why the list is folded shut.",
-      "return_b": "The names are posted. I have moved a lantern indoors; the outer road will need your field kit.",
+      "return_b": "The anonymous exclusion count is posted, not the names of people asking for refuge. I moved a lantern indoors; the outer road still needs protection.",
       "challenge": "Ring the road bells 1, 3, 2",
       "secret_name": "A lantern hidden behind the charter panel",
       "power": "Marked Opening",
@@ -58,9 +58,13 @@
         3
       ],
       "witness_return_a": "I will keep checking the list. A warm bed does not make an excluded name disappear.",
-      "witness_return_b": "Now I can point to the names instead of asking somebody to believe my memory. I still have to find them beds.",
+      "witness_return_b": "Now I can point to the refused-bed count rather than making anyone expose their name. I still have to help them find shelter.",
       "public_return_a": "The refuge-road lanterns remain lit through the night, but the folded exclusion list has not been posted. There is still work for the shelter.",
-      "public_return_b": "Names of those denied beds now hang in the archive room; one road lantern was moved indoors, leaving the outer route less certain."
+      "public_return_b": "An anonymized record of refused beds is displayed in the archive; the names of people seeking refuge remain withheld, and the outer road loses one lantern.",
+      "mystery_question": "If this road was removed from the record, why does its missing bell still direct real refugees?",
+      "physical_lead": "Ring the charter bells in their witnessed order, inspect contrary road records, and evade the Tollkeeper's mileglass ring before deciding who can travel.",
+      "signature_mechanics": "Living Roads and Witnesscraft: make contradictory routes traversable without declaring one witness a liar.",
+      "thread_after_return": "The absent bell's last note returns in the rain and a shared furnace. Follow either frontier story to learn what a missing thing costs the living."
     },
     {
       "quest": "Water For Those Still Waiting",
@@ -121,7 +125,11 @@
       "witness_return_a": "My household knows when the pump is ours. I will be the one explaining the wait to the next stranger.",
       "witness_return_b": "I will bring our cups at the public hour. If the withdrawal sheet is wrong, I want my name beside the correction.",
       "public_return_a": "A family water hour is marked on the harbor bell. Travelers now wait through the protected interval before they can draw from the shared pump.",
-      "public_return_b": "Every pump withdrawal is posted where the harbor can inspect it. Newcomers can ask for water, but the public accounting takes time."
+      "public_return_b": "Every pump withdrawal is posted where the harbor can inspect it. Newcomers can ask for water, but the public accounting takes time.",
+      "mystery_question": "Who profits when a vanished sea is billed as water that no family remembers receiving?",
+      "physical_lead": "Brace the floodgate, reverse the pressure lock under an undertow threat, and read soaked pump records from physically distinct shores.",
+      "signature_mechanics": "Unreliable Cartography and Witnesscraft: test whose map changes a safe crossing and who bears a false invoice.",
+      "thread_after_return": "The dry harbor's dated invoices echo the Reach's missing bell and the furnace's borrowed flame. A missing event can still create real debt."
     },
     {
       "quest": "The Heat Left Over",
@@ -182,7 +190,11 @@
       "witness_return_a": "I measured the house line this morning. It is warm. I am also measuring what remains for a rescue.",
       "witness_return_b": "The rescue meter is honest. It does not make the refuge warmer, and I will not stop saying that.",
       "public_return_a": "The refuge houses have warmth again; crews still measure the smaller reserve before agreeing to another underground rescue.",
-      "public_return_b": "The rescue meter stands in public view and the rescue heat is kept back. Some families remain cold while the emergency crew prepares."
+      "public_return_b": "The rescue meter stands in public view and the rescue heat is kept back. Some families remain cold while the emergency crew prepares.",
+      "mystery_question": "Why does the communal furnace breathe the missing rest of a bell that was never struck?",
+      "physical_lead": "Crossfeed the ash return into the shared vent, fight the provost around the heat hazard, and trace the canal to cold households.",
+      "signature_mechanics": "Oathbinding and Legacy Forging: test who may own an inherited promise whose heat sustains other lives.",
+      "thread_after_return": "A claimed ember and an absent bell both bind people to an unverified origin. Investigate where institutions charge tomorrow for yesterday."
     },
     {
       "quest": "Whose Oath Remains",
@@ -243,7 +255,11 @@
       "witness_return_a": "The forced margin is sealed separately. I kept a second copy so nobody can quietly join it to the promise again.",
       "witness_return_b": "People can read the whole oath now. We still need to say which promise we will actually keep.",
       "public_return_a": "The two families still have a guarantor; the added forced debt margin is sealed separately, so the old collector cannot silently claim it.",
-      "public_return_b": "The complete oath is read openly at the pier. Negotiations continue, and people cannot yet count on a settlement to arrive."
+      "public_return_b": "The complete oath is read openly at the pier. Negotiations continue, and people cannot yet count on a settlement to arrive.",
+      "mystery_question": "Who may collect tomorrow from people whose histories were erased before any oath was made?",
+      "physical_lead": "Release the debtor seal, reach the counterfoil within the arena window, and read the competing tide ledgers while the duelist still threatens the pier.",
+      "signature_mechanics": "Tomorrow's Debt and Oathbinding: pay for temporal strength and challenge debts imposed without consent.",
+      "thread_after_return": "The oath ledger lists days that no calendar grants; an impossible choir overhead may be measuring the same withheld interval."
     },
     {
       "quest": "A Voice On The Bridge",
@@ -304,7 +320,11 @@
       "witness_return_a": "The anchor is carrying the span. Its locked record is my responsibility, not permission to listen whenever I please.",
       "witness_return_b": "I have taken a manual load watch. Reading the crossing record will not hold the bridge up for me.",
       "public_return_a": "The choir anchor steadies the bridge, while its records remain restricted and every load still needs a responsible watch.",
-      "public_return_b": "Footstep records are open to inspection and manual load watchers now cover the bridge. Knowing who crossed does not make the span safer."
+      "public_return_b": "Footstep records are open to inspection and manual load watchers now cover the bridge. Knowing who crossed does not make the span safer.",
+      "mystery_question": "Who silenced the note that holds occupied homes aloft, and who must fall so others stay?",
+      "physical_lead": "Tune the high choir note, ground its opposing counterweight under attack, and cross the unstable elevated walkway to read the dissenting score.",
+      "signature_mechanics": "Unwrite Law and Paradox Convergence: test gravity and harmony while protecting an occupied dwelling.",
+      "thread_after_return": "The missing rest sustains a bridge at someone's expense; the layered quarry remembers a day the official score has no space to hold."
     },
     {
       "quest": "The Name In The Seam",
@@ -313,9 +333,9 @@
       "witness": "Aren can keep our claim safe. I still want the other names read. I do not want to inherit a house that depends on keeping another family invisible.",
       "evidence": "The seam copy carries a family claim and several neighboring names. The claimant's stamp covers both, rather than establishing either as false.",
       "option_a": "Protect the family claim in a sealed local trust",
-      "option_b": "Publish the neighboring names with the claim",
+      "option_b": "Publish contested lineage evidence without exposing unconsulted family names",
       "return_a": "The local trust holds the copy. Seyl visits the seam because the other names have not stopped mattering.",
-      "return_b": "The neighboring names are on the wall. Aren has had to defend our claim in front of people it once excluded.",
+      "return_b": "The disputed lineage patterns are on the wall, but neighboring families have not been named for them. They may bring their own claims if they choose.",
       "challenge": "Lock the memory shutters 1, 2, 3",
       "secret_name": "A seamfinder tooth behind the stopped shutter",
       "power": "Seam Read",
@@ -363,9 +383,13 @@
         3
       ],
       "witness_return_a": "Our claim is protected. I am still asking what happened to the neighboring names under the seal.",
-      "witness_return_b": "I read the neighbors' names aloud. Some families have answered, and we will have to make room for their claims.",
+      "witness_return_b": "I read the competing lineage patterns aloud without naming private households. Some families have answered voluntarily; others have not.",
       "public_return_a": "The family's claim is preserved in a sealed trust. The neighboring names in the same stone remain unresolved rather than erased.",
-      "public_return_b": "The neighboring names are displayed beside the family claim, drawing other households to ask whose work and home were overlooked."
+      "public_return_b": "The neighboring lineage evidence is displayed beside the claim without private family names; households may volunteer to dispute whose work was overlooked.",
+      "mystery_question": "When the stone remembers two ancestral days, who gets to unwrite the people between them?",
+      "physical_lead": "Brace the living seam, break its quarry tension while evading fracture hazards, and compare two physical ancestor records across the cut.",
+      "signature_mechanics": "Borrowed Lives and Witnesscraft: experience incompatible ancestry without treating testimony as permission to erase people.",
+      "thread_after_return": "The competing quarry chronologies lead to a census that treats living households as never born. Absence in a record cannot settle existence."
     },
     {
       "quest": "Names For A Safe House",
@@ -374,9 +398,9 @@
       "witness": "I have a blank page and a real storehouse. An unnamed household can be starved politely. A named household can be found by someone it fears.",
       "evidence": "The storehouse sheet accepts household totals without personal names. An attached index would identify each person if it were retained.",
       "option_a": "Register household totals and seal personal names",
-      "option_b": "Register names openly with an appeal witness",
+      "option_b": "Publish anonymized recognition notices and invite voluntary appeals",
       "return_a": "The storehouse has the totals. Ovin keeps the name page sealed and has promised to ask before opening it.",
-      "return_b": "The names have a witness beside them. Neris is still making sure nobody mistakes an appeal for permission.",
+      "return_b": "The anonymous recognition notices are public, but residents' personal names remain private unless they choose to speak for themselves.",
       "challenge": "Read all three lamps while unobserved; crouch or clear the patrol",
       "secret_name": "An unlisted cloak pin under the census stair",
       "power": "Unlisted Step",
@@ -424,9 +448,13 @@
         3
       ],
       "witness_return_a": "The storekeeper has a household total. The personal page will stay sealed until somebody gives permission to open it.",
-      "witness_return_b": "I wrote the appeal beside every name. I expect to be called when somebody tries to ignore it.",
+      "witness_return_b": "I posted unnamed appeal notices. No census can take away the right to withhold a protected name or offer voluntary testimony.",
       "public_return_a": "Storehouse staff count the rescued households without displaying personal names. The separate name page is still sealed until consent.",
-      "public_return_b": "An appeal witness stands beside the open census record. Being written in the index does not mean a person has surrendered a right to object."
+      "public_return_b": "An anonymized public notice recognizes unlisted households without publishing residents' names; an appeal witness can hear voluntary testimony.",
+      "mystery_question": "Who decides that an unregistered person is unreal when their bed and actions remain?",
+      "physical_lead": "Affirm the occupied bed, disrupt the empty census under a guard threat, and compare the shelter's physical evidence without exposing a resident's name.",
+      "signature_mechanics": "Witnesscraft and Borrowed Lives: distinguish a present person from an institution's claim of nonexistence.",
+      "thread_after_return": "The census refuses living people; in the orchard an unsigned law still commands them. Investigate who is permitted to author reality."
     },
     {
       "quest": "The Branch They Did Not Graft",
@@ -487,7 +515,11 @@
       "witness_return_a": "I put the public share at the post myself. My household cannot call it a gift and then take it back unseen.",
       "witness_return_b": "The common path is open. I have a watch hour, and so does Sivra. That is how I will know we meant it.",
       "public_return_a": "The household boundary remains and a harvest share is left at the common post where everyone can check whether it arrived.",
-      "public_return_b": "The root passage is common again; rotating keepers now share the watch so the same gardener does not carry every lean season."
+      "public_return_b": "The root passage is common again; rotating keepers now share the watch so the same gardener does not carry every lean season.",
+      "mystery_question": "Why does the unsigned law of a dead crown still control living roots and harvest?",
+      "physical_lead": "Disarm the graft, interrupt the opposite root in the boss chamber, and traverse the communal passage to inspect the unratified court record.",
+      "signature_mechanics": "Legacy Forging and Living Roads: make inherited rules answer to living residents and earned public access.",
+      "thread_after_return": "An empty throne cannot consent for the living. A threshold in Auvren asks who created the first rule that nobody remembers signing."
     },
     {
       "quest": "The Door We Can Describe",
@@ -548,7 +580,11 @@
       "witness_return_a": "The rescue registry has the working route. The untested doors are still drawn as untested.",
       "witness_return_b": "The traveler can read the route and its warning together. I have written no answer about where the absence began.",
       "public_return_a": "The working rescue route is recorded in a restricted registry; two untested doors remain marked as unknown, not solved.",
-      "public_return_b": "Travelers can read the public threshold map, including warnings for the untested side doors and a passage that still needs judgment."
+      "public_return_b": "Travelers can read the public threshold map, including warnings for the untested side doors and a passage that still needs judgment.",
+      "mystery_question": "If an answer survives after its question is erased, who gains the right to name the world's beginning?",
+      "physical_lead": "Hold one truthful threshold, open its opposite under paradox danger, and inspect both conflicting maps before confronting the final unanswered power.",
+      "signature_mechanics": "Unwrite Law and Unreliable Cartography: preserve a reliable way home while allowing two contradictory accounts to remain readable.",
+      "thread_after_return": "The ending must test every witness and cost you carried; victory cannot prove one history universally true or revoke others' right to exist."
     }
   ]
 }

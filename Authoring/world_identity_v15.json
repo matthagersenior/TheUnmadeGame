@@ -8,9 +8,9 @@
       "hint": "Light every road signal",
       "ambience": "crossings",
       "side_quests": [
-        "Defeat four Split Charter Vault guards; claim the one-time road scout recovery ration only when hurt.",
-        "Survey three charter records, align the Charter Signal, and earn a permanent map of refuge-road dangers.",
-        "After a witnessed Crossings return, repair three refugee wayposts to establish daily sanctuary care."
+        "Challenge four charter guards who deny travelers a safe look at the missing road; take the recovery ration only if wounded.",
+        "Survey three charter records, align the Charter Signal, and map refuge-road hazards without merging contradictory witnesses.",
+        "After a witnessed Crossings return, repair three charter-road wayposts for daily sanctuary; protect travelers without exposing hidden names."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [
@@ -26,9 +26,9 @@
       "hint": "Drain outer pumps; keep middle dark",
       "ambience": "saltwake",
       "side_quests": [
-        "Defeat four Hollow Breakwater guards; claim the one-time drywake recovery ration when wounded.",
-        "Examine three soaked pump records, align Breakwater Pumps, and chart the flooded safe lanes.",
-        "After a witnessed Saltwake return, restore three tide-washed wayposts for daily shore sanctuary."
+        "Fight four water-pump guards enforcing a false claim to rain; take the one-time recovery ration only if wounded.",
+        "Read three water-account pump records, align Breakwater Pumps, and chart flooded safe lanes across contradictory shorelines.",
+        "After a witnessed Saltwake return, repair three waterline wayposts for daytime shore refuge amid contested rain invoices."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [
@@ -44,9 +44,9 @@
       "hint": "Open two intake valves; close exhaust",
       "ambience": "cinderhold",
       "side_quests": [
-        "Defeat four Furnace Below Blackslag guards; claim the one-time cooling recovery ration when hurt.",
-        "Read three furnace service records, balance Kiln Pressure, and chart the dangerous heated channels.",
-        "After a witnessed Cinderhold return, mend three ash-choked roadside posts for daily hearth shelter."
+        "Confront four heat-channel guards denying access to furnace records; take a recovery ration only if injured.",
+        "Examine three heat-channel service records, balance Kiln Pressure, and chart dangerous communal furnace routes.",
+        "After a witnessed Cinderhold return, mend three heat-channel wayposts for daytime shelter without reallocating scarce fuel."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [
@@ -62,9 +62,9 @@
       "hint": "Float the two downstream buoys",
       "ambience": "drevlach",
       "side_quests": [
-        "Defeat four Foreclosed Anchorage guards; claim the one-time recovery ration if wounded.",
-        "Gather three debt-pier records, balance the Oath Buoys, and reveal the safe mooring route.",
-        "After a witnessed Drevlach return, repair three oath-pier wayposts for daily refuge care."
+        "Break through four debt-pier guards enforcing involuntary future debts; take the recovery ration only when wounded.",
+        "Gather three debt-pier records, balance the Oath Buoys, and map safe passage through contested collateral crossings.",
+        "After a witnessed Drevlach return, repair three debt-pier wayposts for household refuge while disputed oaths remain open."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [
@@ -80,9 +80,9 @@
       "hint": "Ground only the first counterweight",
       "ambience": "orravane",
       "side_quests": [
-        "Defeat four Fallen Choir Engine guards; claim the one-time recovery ration when injured.",
-        "Examine three span-load records, tune the Choir Counterweights, and map unstable bridge passages.",
-        "After a witnessed Orravane return, repair three wind-struck high-road posts for daily sanctuary."
+        "Defeat four choir-engine guards barring the dissenting span; claim the one-time recovery ration only if injured.",
+        "Inspect three choir span-load records, tune Choir Counterweights, and map unsafe routes beneath excluded singers.",
+        "After a witnessed Orravane return, repair three choir-span wayposts for daylight safety without silencing dissent."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [
@@ -98,9 +98,9 @@
       "hint": "Expose only the oldest seam",
       "ambience": "vathless",
       "side_quests": [
-        "Defeat four Buried Yesterday Foundry guards; claim a one-time recovery ration when hurt.",
-        "Inspect three seam records, tune Yesterday Seams, and chart the safe route through layered stone.",
-        "After a witnessed Vathless return, reset three broken quarry wayposts for daily safe rest."
+        "Defeat four ancestry-seam guards suppressing disputed quarry history; claim the recovery ration only if wounded.",
+        "Read three ancestry seam records, tune Yesterday Seams, and chart safe lanes between contradictory stone histories.",
+        "After a witnessed Vathless return, repair three ancestry-seam wayposts for safe rest without deciding whose past is true."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [
@@ -116,9 +116,9 @@
       "hint": "Leave only the unlisted lamp lit",
       "ambience": "eillun",
       "side_quests": [
-        "Defeat four Unentered Census House guards; claim a one-time recovery ration if wounded.",
-        "Recover three unlisted census records, tune Census Lamps, and mark passages without exposing names.",
-        "After a witnessed Eillun return, repair three unnumbered shelter posts for daily care."
+        "Stop four census sentries erasing evidence of occupied beds; claim the one-time recovery ration only if wounded.",
+        "Recover three census records, tune Census Lamps, and chart shelter passages without exposing residents' names.",
+        "After a witnessed Eillun return, repair three census-shelter posts for daily refuge without publishing private names."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [
@@ -134,9 +134,9 @@
       "hint": "Restore all three grafts",
       "ambience": "tharniv",
       "side_quests": [
-        "Defeat four Crownroot Keep guards; claim a one-time recovery ration when injured.",
-        "Compare three graft records, restore the Root Grafts, and chart danger beneath the common orchard.",
-        "After a witnessed Tharniv return, regraft three public path posts for daily nursery shelter."
+        "Confront four crownroot guards enforcing the unsigned orchard law; take one recovery ration only when wounded.",
+        "Compare three crown-era graft records, restore Root Grafts, and chart danger beneath the shared orchard.",
+        "After a witnessed Tharniv return, regraft three crownroot public wayposts for shared harvest care under an empty throne."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [
@@ -152,9 +152,9 @@
       "hint": "Light the two boundary lamps",
       "ambience": "auvren",
       "side_quests": [
-        "Defeat four Unfinished Bastion guards; claim a one-time recovery ration when wounded.",
-        "Examine three threshold records, align Threshold Lamps, and map safe return passages.",
-        "After a witnessed Auvren return, mend three threshold wayposts for daily open-door refuge."
+        "Defeat four threshold sentries barring inspection of the second map; claim the one-time recovery ration only when injured.",
+        "Examine three threshold records, align Threshold Lamps, and chart safe passage without declaring either map the origin.",
+        "After a witnessed Auvren return, mend three threshold wayposts for open-door refuge while incompatible honest maps remain."
       ],
       "service": "Sanctuary recovery once per game day after repairs",
       "reward_types": [

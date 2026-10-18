@@ -27,9 +27,17 @@ class RealmFieldworkContent(unittest.TestCase):
         self.assertIn("Identity.Arc(a)->chart",personal)
         self.assertIn("Identity.Arc(a)->repair",personal)
         self.assertIn("Identity.Arc(a)->hunt",personal)
-        self.assertIn("IdentitySpecs[a].survey_task",native)
-        self.assertIn("IdentitySpecs[a].hunt_task",native)
-        self.assertIn("IdentitySpecs[a].repair_task",native)
+        # Full authored stakes are in the physical E/F response and J journal.
+        # Tiny world-space signs must not print three unreadable paragraphs.
+        self.assertIn('TEXT("LOCAL FIELDWORK\\nE - CLAIM EARNED HUNT',native)
+        self.assertIn('J - PURPOSE AND LOCAL CONSEQUENCES',native)
+        self.assertNotIn('UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].hunt_task)',native)
+        # The real survey objective remains visible on its relevant puzzle sign.
+        self.assertIn('UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].survey_task)',native)
+        self.assertNotIn('Sign(Service(a),FString::Printf(TEXT("E - %s',native)
+        self.assertIn('IdentitySpecs[arc].hunt_task',native)
+        self.assertIn('IdentitySpecs[arc].survey_task',native)
+        self.assertIn('IdentitySpecs[arc].repair_task',native)
 
 if __name__=="__main__":
     unittest.main()

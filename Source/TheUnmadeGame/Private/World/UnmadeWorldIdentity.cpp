@@ -32,7 +32,9 @@ void AUnmadePrototypeHub::BuildIdentity(){
   for(int n=0;n<3;++n){Sign(Puzzle(a,n),FString::Printf(TEXT("E - VALVE %d / TOGGLES MASK %d (1,2,4 = LIGHTS)"),n+1,UnmadeCore::WorldIdentity::Coupling(a,n)));SpawnBlock(Puzzle(a,n)+FVector(0,0,-55),FVector(.8,.8,.7),FName(TEXT("IdentityValve")));
    auto* b=GetWorld()->SpawnActor<AStaticMeshActor>(RepairPost(a,n)+FVector(0,0,-35),FRotator::ZeroRotator);if(b){auto* m=b->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(.3,2,.4));m->SetCollisionEnabled(ECollisionEnabled::NoCollision);IdentityRepairs[a*3+n]=b;}Sign(RepairPost(a,n),TEXT("E - REPAIR WAYPOST AFTER WITNESSED RETURN"));
   }
-  Sign(Service(a),FString::Printf(TEXT("E - %s\nF - %s\nAFTER RETURN - %s"),UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].hunt_task),UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].survey_task),UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].repair_task)));
+  // The full morally grounded tasks are in interaction feedback and J;
+  // long quest paragraphs on a world-space sign are not legible or helpful.
+  Sign(Service(a),TEXT("LOCAL FIELDWORK\nE - CLAIM EARNED HUNT\nF - SURVEY RECORDS\nAFTER RETURN - 3 WAYPOSTS\nJ - PURPOSE AND LOCAL CONSEQUENCES"));
   for(TActorIterator<AUnmadeNpcCharacter> npc(GetWorld());npc;++npc)if(npc->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a)))IdentityPatrols[a]=*npc;
 
   // Different landmark silhouettes beyond the usable chamber edges; no invented nav shortcuts.
