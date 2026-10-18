@@ -7,6 +7,7 @@
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
 #include "World/UnmadePublicAccordDutyRules.h"
+#include "World/UnmadeCrossRealmReviewRules.h"
 #include "World/UnmadeIdentityRegistry.h"
 #include "Player/UnmadeCharacter.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -34,7 +35,7 @@ bool Near(AUnmadeCharacter* p,FVector at,AActor* ignored=nullptr){if(!Alive(p)||
 bool Quiet(UWorld* world,AUnmadeCharacter* p,int a){for(TActorIterator<AUnmadeEnemyCharacter> e(world);e;++e){if(!e->IsExpeditionArc(a)||!e->CanBeTargeted())continue;FVector d=p->GetActorLocation()-e->GetActorLocation();if(d.Size2D()>(p->bIsCrouched?350:650)||FVector::DotProduct(e->GetActorForwardVector(),d.GetSafeNormal())<.3)continue;FCollisionQueryParams q(SCENE_QUERY_STAT(DepthStealth),false);q.AddIgnoredActor(p);q.AddIgnoredActor(*e);if(!world->LineTraceTestByChannel(e->GetActorLocation()+FVector(0,0,55),p->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q))return false;}return true;}
 }
 void AUnmadePrototypeHub::BuildAdventureDepth(){
- if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthAccordSigns.SetNum(9);DepthAccordWorkActors.SetNum(18);DepthCrossRealmReceiptSigns.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
+ if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthAccordSigns.SetNum(9);DepthAccordWorkActors.SetNum(18);DepthCrossRealmReceiptSigns.SetNum(9);DepthCrossRealmReviewActors.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
  auto Sign=[&](FVector at,const FString& text){auto* t=GetWorld()->SpawnActor<ATextRenderActor>(at+FVector(0,0,150),FRotator(0,90,0));if(t){t->GetTextRender()->SetWorldSize(17);t->GetTextRender()->SetText(FText::FromString(text));}return t;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::DepthSpecs[a];DepthChallengeSigns[a]=Sign(Room(a,2)+FVector(0,900,0),UTF8_TO_TCHAR(s.challenge));
    // The notice stands beside existing local services; it never unlocks a
@@ -47,6 +48,14 @@ void AUnmadePrototypeHub::BuildAdventureDepth(){
   for(int site=0;site<(a==0?5:3);++site)for(int n=0;n<3;++n){SpawnBlock(Shop(a,n,site)+FVector(0,0,-70),FVector(2,1,.5),FName(TEXT("FrontierService")));Sign(Shop(a,n,site),n==0?TEXT("PROVISIONER / E BUY RECOVERY / FINITE DAILY STOCK"):n==1?TEXT("CRAFT BENCH / E MAKE FIELD KIT / LOCAL FAVOR"):TEXT("TRAINER / E LEARN TECHNIQUE / THREE MASTERY LEVELS"));}
   auto Object=[&](FVector at,FVector scale,FName tag){auto* actor=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(actor){auto* m=actor->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(scale);actor->Tags.Add(tag);}return actor;};
 
+  // Physical incoming-record review: no free witness, quest or reward.
+  auto* review=Object(Shop(a,0,0)+FVector(550,800,-75),FVector(1.2,.24,1.3),
+   FName(*FString::Printf(TEXT("CrossRealm.Review.%d"),a)));
+  if(review){
+   review->GetStaticMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+   DepthCrossRealmReviewActors[a]=review;
+   review->SetActorHiddenInGame(true);
+  }
   for(int choice=1;choice<=2;++choice){
    const auto work=UnmadeCore::PublicAccordDuty(a,0,choice,true,3,false,true);
    if(!work.active)continue;
@@ -78,8 +87,19 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
    if(DepthCrossRealmReceiptSigns[a].IsValid()){
     const bool received=!bCrossRealmCarryRejected&&!bDepthSaveRejected&&
       !bIdentitySaveRejected&&!bExpeditionSaveRejected&&
-      CrossRealmCarry.Stage(incoming)==UnmadeCore::CarryStage::Delivered;
+      CrossRealmCarry.Stage(incoming)>=UnmadeCore::CarryStage::Delivered;
     DepthCrossRealmReceiptSigns[a]->SetActorHiddenInGame(!received);
+    const auto localReview=UnmadeCore::CrossRealmReview(a,CrossRealmCarry.Stage(incoming),
+      (Expeditions.Arc(a)->visited&1)!=0,Depth.Arc(a)->evidence!=0,
+      !bDepthSaveRejected&&!bCrossRealmCarryRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected);
+    if(DepthCrossRealmReviewActors[a].IsValid()){
+     const bool visible=localReview==UnmadeCore::ReviewState::NeedEvidence||
+       localReview==UnmadeCore::ReviewState::ReadyToCompare||
+       localReview==UnmadeCore::ReviewState::Compared;
+     DepthCrossRealmReviewActors[a]->SetActorHiddenInGame(!visible);
+     DepthCrossRealmReviewActors[a]->SetActorScale3D(
+       localReview==UnmadeCore::ReviewState::Compared?FVector(2.1,.6,.5):FVector(1.2,.24,1.3));
+    }
     if(received){
       const FString receipt=FString::Printf(TEXT("RECEIVED IN %s FROM %s\n%s"),
         UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
