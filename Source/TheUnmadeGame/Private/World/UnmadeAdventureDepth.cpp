@@ -276,7 +276,9 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
     NotifyRpg(TEXT("The comparison did not save. The received packet remains here; present the evidence again."));
     return true;
    }
-   UnmadePresentation::Sound(p,TEXT("inspect"));
+   if(const char* cue=UnmadeCore::CrossRealmReviewCue(arc))
+    UnmadePresentation::Sound(p,UTF8_TO_TCHAR(cue));
+   else UnmadePresentation::Sound(p,TEXT("inspect"));
    p->PlayIdentityMotion(FName(TEXT("Inspect")));
    NotifyRpg(FString::Printf(TEXT("REVIEWED: %s's actual evidence has been examined alongside the hand-carried %s record with its receiving chief. Their local testimony changes, but no other realm learns this automatically."),
        UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
