@@ -7,7 +7,7 @@
 #include <algorithm>
 namespace UnmadeCore {
 enum class CrossRealmCombatKind:int {
- Unknown=0,BorderAlert=1,OpenWitnessPass=2,ReviewedAlert=3,ReviewedPass=4
+ Unknown=0,BorderAlert=1,OpenWitnessPass=2,ReviewedAlert=3,ReviewedPass=4,CasualtyVigil=5,ReviewedVigil=6
 };
 struct CrossRealmCombatProfile {
  const char* frontier;
@@ -55,7 +55,16 @@ inline CrossRealmCombatState CrossRealmCombatResponse(
           reviewed?std::max(0,heightened-2):heightened,
           casualties,personsFreed};
  }
- const int open=std::min(-1,-3+std::min(2,casualties/3));
+ // A living surrender after many guard deaths is not a bloodless truce.
+ // Those local deaths still change the next chief's safety calculus.
+ if(casualties>=4){
+  const int vigil=1+(casualties>=7?1:0);
+  return {reviewed?CrossRealmCombatKind::ReviewedVigil:
+          CrossRealmCombatKind::CasualtyVigil,
+          reviewed?std::max(0,vigil-1):vigil,
+          casualties,personsFreed};
+ }
+ const int open=std::min(-1,-3+casualties/2);
  return {reviewed?CrossRealmCombatKind::ReviewedPass:
          CrossRealmCombatKind::OpenWitnessPass,
          reviewed?std::min(0,open+2):open,
