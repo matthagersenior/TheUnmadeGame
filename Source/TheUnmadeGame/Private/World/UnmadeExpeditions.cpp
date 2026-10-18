@@ -266,6 +266,7 @@ FString AUnmadePrototypeHub::GetExpeditionJournal()const{FString text=TEXT("COMB
        UTF8_TO_TCHAR(UnmadeCore::ArenaAftermathText(a,Outcome)));
  }return text;}
 FString AUnmadePrototypeHub::GetExpeditionReaction(FName person)const{FString Personal=GetDepthReaction(person),Integration=ExperienceReaction(person);if(!Personal.IsEmpty())return Personal+TEXT(" ")+Integration;for(int a=0;a<9;++a)for(int n=0;n<5;++n)if(person==FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n))){auto t=Expeditions.Arc(a);const auto& s=UnmadeCore::ExpeditionSpecs[a];if((n==1||n==2)&&!(t->rescued&(1<<(n-1))))return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": The door still needs your help. Release us at the holding chamber after the guard is defeated.");if(t->returned){auto* i=Identity.Arc(a);
+    // Public outcome text is descriptive only: it has no action or save side effects.
     // Only a returned local companion observes the public consequences of the
     // saved accord; personal witnesses retain their separate authored lines.
     const int accord=Depth.Arc(a)->choice;

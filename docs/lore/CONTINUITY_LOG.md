@@ -1105,3 +1105,11 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Reused the nine already-authored boss warning shapes for each realm's optional third-room hazard footprint and readable, realm-specific safe-space directions.
 - Kept the warning rhythm, finite vent suppression, existing field-kit and survey-map protection, damage amounts and no new persistence.
 - Added failing-first C++ geometry and native wiring regression tests; source compilation/CI is the verification gate, not Unreal playability certification.
+
+
+## 2026-10-17 — Nine local, branch-specific witnessed return accounts
+
+- Added two concrete observable accord aftereffects for each of nine realms in the canonical personal-story authoring source.
+- Regenerated DepthSpec and appended the appropriate result to returned companions only when the saved accord exists; unreleased captives do not acquire knowledge of an unvisited outcome.
+- Preserved leaders and named witnesses' private firsthand lines, existing choice gates, journal/reward receipts, and all original save fields.
+- Added red-first nine-realm source and portable C++ coverage. Engine dialogue delivery, physical return and rendered cinematic context remain unverified.
