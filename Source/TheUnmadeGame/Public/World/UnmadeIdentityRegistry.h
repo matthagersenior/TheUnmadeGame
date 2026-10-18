@@ -1,15 +1,15 @@
 #pragma once
 namespace UnmadeCore {
-struct IdentitySpec{const char* mechanism;const char* hint;const char* ambience;};
+struct IdentitySpec{const char* mechanism;const char* hint;const char* ambience;const char* hunt_task;const char* survey_task;const char* repair_task;};
 inline constexpr IdentitySpec IdentitySpecs[]={
- {"Charter Signal","Light every road signal","crossings"},
- {"Breakwater Pumps","Drain outer pumps; keep middle dark","saltwake"},
- {"Kiln Pressure","Open two intake valves; close exhaust","cinderhold"},
- {"Oath Buoys","Float the two downstream buoys","drevlach"},
- {"Choir Counterweights","Ground only the first counterweight","orravane"},
- {"Yesterday Seams","Expose only the oldest seam","vathless"},
- {"Census Lamps","Leave only the unlisted lamp lit","eillun"},
- {"Root Grafts","Restore all three grafts","tharniv"},
- {"Threshold Lamps","Light the two boundary lamps","auvren"},
+ {"Charter Signal","Light every road signal","crossings","Defeat four Split Charter Vault guards; claim the one-time road scout recovery ration only when hurt.","Survey three charter records, align the Charter Signal, and earn a permanent map of refuge-road dangers.","After a witnessed Crossings return, repair three refugee wayposts to establish daily sanctuary care."},
+ {"Breakwater Pumps","Drain outer pumps; keep middle dark","saltwake","Defeat four Hollow Breakwater guards; claim the one-time drywake recovery ration when wounded.","Examine three soaked pump records, align Breakwater Pumps, and chart the flooded safe lanes.","After a witnessed Saltwake return, restore three tide-washed wayposts for daily shore sanctuary."},
+ {"Kiln Pressure","Open two intake valves; close exhaust","cinderhold","Defeat four Furnace Below Blackslag guards; claim the one-time cooling recovery ration when hurt.","Read three furnace service records, balance Kiln Pressure, and chart the dangerous heated channels.","After a witnessed Cinderhold return, mend three ash-choked roadside posts for daily hearth shelter."},
+ {"Oath Buoys","Float the two downstream buoys","drevlach","Defeat four Foreclosed Anchorage guards; claim the one-time recovery ration if wounded.","Gather three debt-pier records, balance the Oath Buoys, and reveal the safe mooring route.","After a witnessed Drevlach return, repair three oath-pier wayposts for daily refuge care."},
+ {"Choir Counterweights","Ground only the first counterweight","orravane","Defeat four Fallen Choir Engine guards; claim the one-time recovery ration when injured.","Examine three span-load records, tune the Choir Counterweights, and map unstable bridge passages.","After a witnessed Orravane return, repair three wind-struck high-road posts for daily sanctuary."},
+ {"Yesterday Seams","Expose only the oldest seam","vathless","Defeat four Buried Yesterday Foundry guards; claim a one-time recovery ration when hurt.","Inspect three seam records, tune Yesterday Seams, and chart the safe route through layered stone.","After a witnessed Vathless return, reset three broken quarry wayposts for daily safe rest."},
+ {"Census Lamps","Leave only the unlisted lamp lit","eillun","Defeat four Unentered Census House guards; claim a one-time recovery ration if wounded.","Recover three unlisted census records, tune Census Lamps, and mark passages without exposing names.","After a witnessed Eillun return, repair three unnumbered shelter posts for daily care."},
+ {"Root Grafts","Restore all three grafts","tharniv","Defeat four Crownroot Keep guards; claim a one-time recovery ration when injured.","Compare three graft records, restore the Root Grafts, and chart danger beneath the common orchard.","After a witnessed Tharniv return, regraft three public path posts for daily nursery shelter."},
+ {"Threshold Lamps","Light the two boundary lamps","auvren","Defeat four Unfinished Bastion guards; claim a one-time recovery ration when wounded.","Examine three threshold records, align Threshold Lamps, and map safe return passages.","After a witnessed Auvren return, mend three threshold wayposts for daily open-door refuge."},
 };
 }
