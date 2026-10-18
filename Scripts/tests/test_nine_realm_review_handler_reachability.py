@@ -15,6 +15,11 @@ class RealCrossRealmReviewReachability(unittest.TestCase):
   # Balanced prefix means the first handler closed before the second begins.
   self.assertEqual(prefix.count("}")-prefix.count("{"),1,
      "The kind-8 review must not be physically unreachable inside kind-7.")
+ def test_native_source_braces_are_balanced_across_the_full_interaction(self):
+  src=(ROOT/"Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp").read_text(encoding="utf-8")
+  self.assertEqual(src.count("{"),src.count("}"),
+    "Unbalanced world interaction C++ scopes must fail CI before Unreal compilation.")
+
  def test_review_is_a_real_separate_in_world_candidate_with_save_commit(self):
   s=(ROOT/"Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp").read_text(encoding="utf-8")
   self.assertIn("Add(a,8,0,DepthCrossRealmReviewActors[a]->GetActorLocation()",s)
