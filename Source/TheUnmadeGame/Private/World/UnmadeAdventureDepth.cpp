@@ -154,8 +154,9 @@ bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtN
    // is drawn to its local receipt; other citizens keep their own routines.
    if(n==0&&Expeditions.Arc(a)->visited&&
       !bCrossRealmCarryRejected&&
-      CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Delivered){
-    Out=Shop(a,0,0)+FVector(950,600,0);
+      CrossRealmCarry.Stage((a+8)%9)>=UnmadeCore::CarryStage::Delivered){
+    Out=Shop(a,0,0)+(CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Reviewed?
+      FVector(550,800,0):FVector(950,600,0));
     return true;
    }
    if(!Expeditions.Arc(a)->returned||!Depth.Arc(a)->choice)return false;
@@ -179,7 +180,7 @@ FName AUnmadePrototypeHub::GetPublicAccordWorkCue(FName ResidentId,const FVector
  for(int a=0;a<9;++a){
   if(text.StartsWith(FString::Printf(TEXT("npc.expedition.%d."),a))){
    if(ResidentId==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a))&&
-      CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Delivered)
+      CrossRealmCarry.Stage((a+8)%9)>=UnmadeCore::CarryStage::Delivered)
     return FName(TEXT("Inspect"));
    if(Depth.Arc(a)->choice==2&&Depth.Arc(a)->counterThreat)
     return FName(TEXT("Gesture"));
@@ -329,7 +330,7 @@ FString AUnmadePrototypeHub::GetDepthJournal()const{FString text=TEXT("PERSONAL 
  }
  text+=FString::Printf(TEXT("NEXT INVESTIGATION: %s\n\n"),
    UTF8_TO_TCHAR(UnmadeCore::NextInvestigationLead(a,*Expeditions.Arc(a),*s)));
- }return text+GetCrossRealmCarryJournal();}
+ }return text+GetCrossRealmCarryJournal()+GetCrossRealmReviewJournal();}
 FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
  FString out=TEXT("\nCROSS-REALM CUSTODY / PLAYER-CARRIED REPORTS\n");
  for(int a=0;a<9;++a){
@@ -338,7 +339,9 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
   const int dest=UnmadeCore::CrossRealmDestination(a);
   const bool ready=Depth.Arc(a)->choice!=0&&
     Expeditions.Arc(a)->returned&&Identity.Arc(a)->repair==7;
-  const TCHAR* next=stage==UnmadeCore::CarryStage::Delivered
+  const TCHAR* next=stage==UnmadeCore::CarryStage::Reviewed
+    ?TEXT("personally compared with destination evidence")
+    :stage==UnmadeCore::CarryStage::Delivered
     ?TEXT("delivered to the real expedition chief")
     :stage==UnmadeCore::CarryStage::Carrying
       ?TEXT("in your custody: travel to the destination chief and speak directly")
@@ -351,12 +354,36 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
  return out;
 }
 // Only a proven in-person delivery may become an NPC's firsthand local memory.
+FString AUnmadePrototypeHub::GetCrossRealmReviewJournal()const{
+ FString text=TEXT("\nCROSS-REALM INVESTIGATION / LOCAL WITNESS REVIEW\n");
+ for(int a=0;a<9;++a){
+  const int source=UnmadeCore::CrossRealmSource(a);
+  const auto status=UnmadeCore::CrossRealmReview(a,CrossRealmCarry.Stage(source),
+    (Expeditions.Arc(a)->visited&1)!=0,Depth.Arc(a)->evidence!=0,
+    !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected&&!bCrossRealmCarryRejected);
+  if(status==UnmadeCore::ReviewState::NeedEvidence)
+   text+=FString::Printf(TEXT("%s: The %s packet arrived. Speak to the local witness, examine this realm's physical chamber-four evidence, then return to the chief's review desk.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+  else if(status==UnmadeCore::ReviewState::ReadyToCompare)
+   text+=FString::Printf(TEXT("%s: You have the local evidence. Present it physically at the review desk beside the actual receiving chief; press E.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city));
+  else if(status==UnmadeCore::ReviewState::Compared)
+   text+=FString::Printf(TEXT("%s: Local evidence and the %s packet have been personally compared. The receiving chief now remembers both records.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+ }
+ return text;
+}
 FString AUnmadePrototypeHub::GetCrossRealmCarryRecipientLine(FName ResidentId)const{
  if(bCrossRealmCarryRejected||bDepthSaveRejected||bExpeditionSaveRejected)return FString();
  for(int a=0;a<9;++a){
   if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)))continue;
   const int source=(a+8)%9;
-  if(CrossRealmCarry.Stage(source)!=UnmadeCore::CarryStage::Delivered)return FString();
+  if(CrossRealmCarry.Stage(source)<UnmadeCore::CarryStage::Delivered)return FString();
+  if(CrossRealmCarry.Stage(source)==UnmadeCore::CarryStage::Reviewed&&Depth.Arc(a)->evidence)
+   return FString::Printf(TEXT("I compared the actual %s record you brought with the local evidence you presented to me at our review table. Their stories can inform each other, but they do not absolve our own witnesses."),
+     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
   return FString::Printf(TEXT("I personally received the hand-carried record from %s. Its account of %s is at our civic receipt station. We must still examine our own realm's conditions before acting."),
     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
     UTF8_TO_TCHAR(Depth.Arc(source)->choice==1?
