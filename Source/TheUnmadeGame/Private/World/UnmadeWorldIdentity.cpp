@@ -34,11 +34,7 @@ void AUnmadePrototypeHub::BuildIdentity(){
   }
   // The full morally grounded tasks are in interaction feedback and J;
   // long quest paragraphs on a world-space sign are not legible or helpful.
-  Sign(Service(a),TEXT("LOCAL FIELDWORK\
-E - CLAIM EARNED HUNT\
-F - SURVEY RECORDS\
-AFTER RETURN - 3 WAYPOSTS\
-J - PURPOSE AND LOCAL CONSEQUENCES"));
+  Sign(Service(a),TEXT("LOCAL FIELDWORK\nE - CLAIM EARNED HUNT\nF - SURVEY RECORDS\nAFTER RETURN - 3 WAYPOSTS\nJ - PURPOSE AND LOCAL CONSEQUENCES"));
   for(TActorIterator<AUnmadeNpcCharacter> npc(GetWorld());npc;++npc)if(npc->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a)))IdentityPatrols[a]=*npc;
 
   // Different landmark silhouettes beyond the usable chamber edges; no invented nav shortcuts.

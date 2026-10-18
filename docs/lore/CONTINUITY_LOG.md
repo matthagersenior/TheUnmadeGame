@@ -1196,3 +1196,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 
 - Re-authored the three already implemented fieldwork activities in every realm with an explicit local conflict and player purpose, without increasing kill counts, inventing rewards or changing the actual survey, repair and save requirements. The one-time recovery ration remains unchanged.
 - Shortened the tiny world-space service billboard to action labels and journal directions; detailed stakes still appear in quest interaction and journal text. Visual text legibility, timing and readability need Unreal verification.
+
+- Corrected the compact source sign to use C++ escaped newline sequences in a single valid text literal. Full quest instructions remain in the journal and interaction feedback.
