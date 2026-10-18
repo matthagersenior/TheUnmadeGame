@@ -34,6 +34,10 @@ FVector HomeGate(int a){return Room(a,5)+FVector(0,1250,0);}
 FVector ArenaCounterStations(int a,int station){
  return Room(a,5)+(station==0?FVector(-620,-620,0):FVector(620,80,0));
 }
+FVector EvidenceCounterStation(int a){
+ const auto& c=UnmadeCore::EvidenceCounterplaySpecs[a];
+ return Room(a,5)+FVector(c.offsetX,c.offsetY,0);
+}
 FVector Entrance(int a,int r){return Room(a,r)+FVector(0,-650,0);}
 FName EnemyTag(int a,int slot){return FName(*FString::Printf(TEXT("Expedition.%d.Enemy.%d"),a,slot));}
 AUnmadeEnemyCharacter* Enemy(UWorld* w,int a,int slot){for(TActorIterator<AUnmadeEnemyCharacter> e(w);e;++e)if(e->ActorHasTag(EnemyTag(a,slot)))return *e;return nullptr;}
@@ -42,10 +46,11 @@ bool Local(UWorld* w,AUnmadeCharacter* p,FVector at,double range=230){if(!w||!Al
 
 }
 void AUnmadePrototypeHub::BuildExpeditions(){
- if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
+ if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);ExpeditionEvidenceSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
  ArenaShelterVisible.fill(-1);ArenaAftermathVisible.fill(-1);
  ArenaShelterUntil.fill(0);
  for(auto& Counter:ArenaCounters)Counter.Reset();
+ for(auto& Counter:EvidenceCounters)Counter=UnmadeCore::EvidenceCounterplay{};
  const auto Sign=[&](FVector at,const FString& text){auto* a=GetWorld()->SpawnActor<ATextRenderActor>(at+FVector(0,0,95),FRotator(0,90,0));if(a){a->GetTextRender()->SetWorldSize(20);a->GetTextRender()->SetText(FText::FromString(text));}return a;};
  const auto Gate=[&](FVector at){auto* a=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(a){auto* m=a->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(6,.25,3));}return a;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::ExpeditionSpecs[a];const auto Block=[&](FVector at,FVector scale){SpawnBlock(at,scale,FName(*FString::Printf(TEXT("Expedition.%d.Structure"),a)));};
@@ -93,6 +98,13 @@ void AUnmadePrototypeHub::BuildExpeditions(){
        UTF8_TO_TCHAR(counter.counterObjective)));
     Block(at+FVector(0,0,-115),FVector(2.0,1.6,.28)); // navigable footing
   }
+  // Canon: evidence must be personally obtained; no social or battle outcome is invented.
+  // Each physical report offers a deliberate alternate tactical station.
+  const auto& discovery=UnmadeCore::EvidenceCounterplaySpecs[a];
+  const FVector discoveryAt=EvidenceCounterStation(a);
+  ExpeditionEvidenceSigns[a]=Sign(discoveryAt,FString::Printf(TEXT("E - %s / EARN LOCAL PROOF FIRST"),
+       UTF8_TO_TCHAR(discovery.name)));
+  Block(discoveryAt+FVector(0,0,-115),FVector(1.8,1.6,.28));
   SpawnBlock(Room(a,5)+FVector(0,-70,50),FVector(1.4,1.9,2.8),
       FName(*FString::Printf(TEXT("Expedition.%d.ArenaShelter"),a)));
   for(int outcome=1;outcome<=3;++outcome)
@@ -141,8 +153,23 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
     ArenaShelterUntil[a]=0;
   }
   const double Now=GetWorld()->GetTimeSeconds();
+  // Read the original save-backed evidence, not temporary journal prose.
+  if(ExpeditionEvidenceSigns[a].IsValid()){
+    const auto& counter=UnmadeCore::EvidenceCounterplaySpecs[a];
+    const bool hasProof=!bDepthSaveRejected&&!bExpeditionSaveRejected&&
+      (Depth.Arc(a)->evidence!=0||t->clues==7);
+    const TCHAR* state=bExpeditionSaveRejected||t->boss!=0
+      ?TEXT("RESOLVED")
+      :!hasProof?TEXT("PROOF NEEDED")
+      :!t->branch||!(t->rooms&32)?TEXT("ARENA LOCKED")
+      :Now<EvidenceCounters[a].ReadyAt()?TEXT("RECOVERING"):TEXT("READY");
+    ExpeditionEvidenceSigns[a]->GetTextRender()->SetText(
+      FText::FromString(FString::Printf(
+      TEXT("%s / %s\nE - USE EARNED EVIDENCE\n%s"),
+       UTF8_TO_TCHAR(counter.name),state,UTF8_TO_TCHAR(counter.intervention))));
+  }
   const int shelter=(!bExpeditionSaveRejected&&t->boss==0&&
-      UnmadeCore::Arenas[a].shelterSeconds>0&&Now<ArenaShelterUntil[a])?1:0;
+      (UnmadeCore::Arenas[a].shelterSeconds>0||UnmadeCore::EvidenceCounterplaySpecs[a].coverSeconds>0)&&Now<ArenaShelterUntil[a])?1:0;
   if(ArenaShelterVisible[a]!=shelter){
     SetRiteWorldActorState(FName(*FString::Printf(
         TEXT("Expedition.%d.ArenaShelter"),a)),shelter==1);
@@ -183,7 +210,7 @@ bool AUnmadePrototypeHub::TryExpeditionInteraction(AUnmadeCharacter* p,double co
  if(!Alive(p)||!GetWorld())return false;if(TryExperienceInteraction(p,competing))return true;if(TryDepthInteraction(p,0,competing))return true;if(TryIdentityInteraction(p,competing))return true;int arc=-1,kind=-1,index=-1;double best=FMath::Min(230.*230.,competing);FVector at;
  auto Candidate=[&](int a,int k,int n,FVector pos){double d=FVector::DistSquared(p->GetActorLocation(),pos);if(d<best&&Local(GetWorld(),p,pos)){best=d;arc=a;kind=k;index=n;at=pos;}};
  for(int a=0;a<9;++a){Candidate(a,0,0,Board(a));for(int site=0;site<2;++site)Candidate(a,1,site,Site(a,site)+FVector(0,500,0));for(int r=0;r<6;++r)Candidate(a,2,r,Entrance(a,r));for(int c=0;c<3;++c)Candidate(a,3,c,Record(a,c));for(int q=0;q<2;++q)Candidate(a,4,q,Captive(a,q));Candidate(a,5,0,Council(a));Candidate(a,6,0,Truce(a));Candidate(a,7,0,Kit(a));Candidate(a,8,0,Room(a,5)+FVector(650,-650,0));Candidate(a,9,0,Room(a,3)+FVector(-650,-650,0));
- Candidate(a,10,0,ArenaCounterStations(a,0));Candidate(a,10,1,ArenaCounterStations(a,1));}
+ Candidate(a,10,0,ArenaCounterStations(a,0));Candidate(a,10,1,ArenaCounterStations(a,1));Candidate(a,13,0,EvidenceCounterStation(a));}
  if(arc<0)return false;if(bExpeditionSaveRejected){NotifyRpg(TEXT("This adventure save is invalid; its original record is protected."));return true;}auto before=Expeditions;auto* t=Expeditions.Arc(arc);bool change=false;const auto& s=UnmadeCore::ExpeditionSpecs[arc];FString line;
  switch(kind){case 0:change=Expeditions.Brief(arc);line=FString(UTF8_TO_TCHAR(s.brief))+TEXT(" Visit the frontier north of the city, then enter the six-chamber dungeon. J tracks progress.");break;
  case 1:change=Expeditions.Visit(arc,index);line=FString(UTF8_TO_TCHAR(index?s.refuge:s.frontier))+TEXT(": a real refuge, not a cargo stop. The dungeon lies farther north.");break;
@@ -195,6 +222,43 @@ bool AUnmadePrototypeHub::TryExpeditionInteraction(AUnmadeCharacter* p,double co
  case 7:if(!t->returned){bool Witness=false;for(TActorIterator<AUnmadeNpcCharacter> N(GetWorld());N;++N)if(N->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),arc))&&FVector::DistSquared(N->GetActorLocation(),p->GetActorLocation())<FMath::Square(1800.f)){FCollisionQueryParams sight(SCENE_QUERY_STAT(ExpeditionReturnWitness),false);sight.AddIgnoredActor(p);sight.AddIgnoredActor(*N);Witness=!GetWorld()->LineTraceTestByChannel(p->GetActorLocation()+FVector(0,0,45),N->GetActorLocation()+FVector(0,0,45),ECC_Visibility,sight);}change=Witness&&Expeditions.Return(arc);line=change?TEXT("Your return is witnessed. E again chooses the weapon; F chooses armor. Either includes the named technique."):TEXT("Resolve the boss and walk back to this frontier settlement first.");}else if(!t->reward){if(!ConfirmExpeditionDecision(arc,2,1))return true;change=Expeditions.Claim(arc,1);line=FString(UTF8_TO_TCHAR(s.weapon))+TEXT(" equipped. Technique: ")+UTF8_TO_TCHAR(s.technique);}else{change=Expeditions.Equip(arc);line=TEXT("Your chosen realm equipment and technique are active; previous gear remains owned.");}break;
  case 9:if(t->rooms&8){ExpeditionHazardQuiet[arc]=GetWorld()->GetTimeSeconds()+8;line=TEXT("Danger field vented for eight seconds. The edge route is always safe.");}else line=TEXT("Enter the chamber before operating its vent.");break;
  case 8:if((t->rooms&32)&&GetWorld()->GetTimeSeconds()>=ExpeditionReleaseReady[arc]){if(auto* boss=Enemy(GetWorld(),arc,8)){boss->ExposeToFold(GetWorld()->GetTimeSeconds(),3);ExpeditionReleaseReady[arc]=GetWorld()->GetTimeSeconds()+8;line=TEXT("Grounding lever interrupts the boss for three seconds. Eight-second recovery; no Strain required.");}}if(line.IsEmpty())line=TEXT("Enter the arena first. The grounding lever must recover between uses.");break;
+ case 13:{
+   const auto& counter=UnmadeCore::EvidenceCounterplaySpecs[arc];
+   auto* boss=Enemy(GetWorld(),arc,8);
+   const bool bBossReady=t->branch!=0&&(t->rooms&32)&&t->boss==0&&
+       !bDepthSaveRejected&&!ExpeditionEnemyInactive(arc,8)&&
+       IsValid(boss)&&IsValid(boss->GetCombat())&&
+       !boss->GetCombat()->IsDefeated();
+   const auto result=EvidenceCounters[arc].Use(arc,GetWorld()->GetTimeSeconds(),
+       !bDepthSaveRejected&&Depth.Arc(arc)->evidence!=0,
+       t->clues==7,t->boss!=0,bBossReady);
+   switch(result){
+    case UnmadeCore::EvidenceCounterplayResult::Active:
+     boss->ExposeToFold(GetWorld()->GetTimeSeconds(),counter.exposureSeconds);
+     if(counter.coverSeconds>0){
+      ArenaShelterUntil[arc]=FMath::Max(ArenaShelterUntil[arc],
+         GetWorld()->GetTimeSeconds()+counter.coverSeconds);
+      SetRiteWorldActorState(FName(*FString::Printf(
+          TEXT("Expedition.%d.ArenaShelter"),arc)),true);
+     }
+     line=FString::Printf(TEXT("%s / %s. Counterplay earned from your actual local proof. Boss interrupted for %.0f seconds.%s No boss outcome or rescue was automatically saved."),
+       UTF8_TO_TCHAR(counter.name),UTF8_TO_TCHAR(counter.intervention),
+       counter.exposureSeconds,counter.coverSeconds>0?
+       TEXT(" Temporary physical cover blocks attack lines."):TEXT(" Exploit the opening while it lasts."));
+     break;
+    case UnmadeCore::EvidenceCounterplayResult::MissingProof:
+     line=TEXT("This account lacks evidence. Examine local personal evidence with its witness OR inspect all three dungeon records, then return.");
+     break;
+    case UnmadeCore::EvidenceCounterplayResult::Recovering:
+     line=FString::Printf(TEXT("The evidence station stabilizes for %.0f more seconds. The free lever and existing timed two-station counter still work."),
+       FMath::Max(0.,EvidenceCounters[arc].ReadyAt()-GetWorld()->GetTimeSeconds()));
+     break;
+    default:
+     line=TEXT("This station requires an entered objective branch and a living, active boss. The free grounding lever and two-station counter remain available.");
+     break;
+   }
+   break;
+ }
  case 10:{
    // A real positional battle objective: reach two stations in the realm's
    // prescribed order under active attacks. Partial progress never saves.
@@ -254,6 +318,14 @@ FString AUnmadePrototypeHub::GetExpeditionJournal()const{FString text=TEXT("COMB
  for(int a=0;a<9;++a){
    const auto* e=Expeditions.Arc(a);
    if(!e||!e->brief)continue;
+      // Discovery-derived tactical information cannot invent a permanent boss result.
+   const auto& proof=UnmadeCore::EvidenceCounterplaySpecs[a];
+   const bool earned=(!bDepthSaveRejected&&Depth.Arc(a)->evidence!=0)||e->clues==7;
+   text+=FString::Printf(TEXT("ARENA DISCOVERY / %s: %s. %s Counterplay earned: %s. E at the physical evidence station. Exposure %.0fs, cover %.0fs, cooldown %.0fs. Existing free grounding lever and two-station boss counters remain usable.\n"),
+     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+     UTF8_TO_TCHAR(proof.name),UTF8_TO_TCHAR(proof.intervention),
+     earned?TEXT("ready from your physical evidence"):TEXT("not yet; read local personal evidence or all three dungeon records"),
+     proof.exposureSeconds,proof.coverSeconds,proof.cooldownSeconds);
    const auto& CounterObjective=UnmadeCore::Arenas[a];
    text+=FString::Printf(TEXT("ARENA STRATEGY / %s: %s. Use FIRST and SECOND stations within %.0f seconds. Shield sentinels, aimed marksmen and boss warnings remain real.\n"),
      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),

@@ -1198,3 +1198,12 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Shortened the tiny world-space service billboard to action labels and journal directions; detailed stakes still appear in quest interaction and journal text. Visual text legibility, timing and readability need Unreal verification.
 
 - Corrected the compact source sign to use C++ escaped newline sequences in a single valid text literal. Full quest instructions remain in the journal and interaction feedback.
+
+
+## 2026-10-18 — Nine physical discovery-to-combat consequences
+
+- Added nine unique evidence-station interventions to active expedition boss arenas, each gated by the existing saved fourth-chamber personal evidence or three real inspected dungeon records. The original objective branch and physically active boss remain required.
+- Each real E interaction creates a realm-specific temporary boss exposure and, in some realms, tangible temporary line-of-sight cover. Independent per-realm cooldowns block farming. The source never records a boss defeat, political outcome, rescue or reward.
+- Kept the free grounding lever, two-position arena counter, alternate evidence surrender and ordinary fights available; original save schemas and credited personal witnesses remain authoritative.
+- Added physically positioned stations with real READY, PROOF NEEDED, ARENA LOCKED, RECOVERING and RESOLVED prompts plus explicit journal tactics.
+- Red-first portable C++ tests and native actor-wiring tests cover no-proof, boss-status, cooldown, nonmonotone clocks, nine distinct specs and no implicit quest resolution. Unreal Editor and playable combat acceptance remain pending.
