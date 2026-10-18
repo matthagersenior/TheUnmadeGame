@@ -1,5 +1,6 @@
 #pragma once
 namespace UnmadeCore {
+// The authoring-to-actor handoff retains each realm's existing rewards and receipts.
 struct IdentitySpec{const char* mechanism;const char* hint;const char* ambience;const char* hunt_task;const char* survey_task;const char* repair_task;};
 inline constexpr IdentitySpec IdentitySpecs[]={
  {"Charter Signal","Light every road signal","crossings","Defeat four Split Charter Vault guards; claim the one-time road scout recovery ration only when hurt.","Survey three charter records, align the Charter Signal, and earn a permanent map of refuge-road dangers.","After a witnessed Crossings return, repair three refugee wayposts to establish daily sanctuary care."},

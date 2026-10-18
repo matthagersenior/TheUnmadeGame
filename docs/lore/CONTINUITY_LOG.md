@@ -1088,3 +1088,11 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Added nine distinct human-readable physical puzzle directions with per-attempt feedback for sequence resets, closed tide, time expiry, elevated controls and detected stealth attempts.
 - Added live tide and kiln-time readouts to the existing native graybox route signage and interaction prompt; preserved already-earned route receipts, optionality and no-cost retries.
 - Added cross-realm portable regression coverage and native wiring assertions before implementation. No new loot, save fields, permanent choices or canonical names. Actual player navigation, timing, UHT and rendered widget acceptance await Unreal.
+
+
+## 2026-10-17 — Authored local fieldwork for all nine realms
+
+- Replaced the generic cloned hunt, survey and roadpost task text with nine local descriptions tied to existing dungeon guards, three records, coupled mechanisms and witnessed return repairs.
+- Generated the native registry from the single JSON authoring source and connected the real service signs and interaction responses to those fields.
+- Added local journal tracking for actual saved hunt, hazard-map and 0–3 repaired-post progress; no new save schema, rewards or characters.
+- Red-first source tests and source CI validate authored uniqueness and wiring. Engine build, physical readability and full nine-realm runs remain unverified.
