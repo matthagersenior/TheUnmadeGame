@@ -89,6 +89,10 @@ int main(){
   self.assertIn("CrossRealmCombatSigns.SetNum(9)",native)
   self.assertIn("CrossRealmCombatSigns[a]->GetTextRender()->SetText(",native)
   self.assertIn("GetCrossRealmCombatRecipientLine(",depth)
+  self.assertIn("BATTLE TESTIMONY:",depth)
+  self.assertIn("stage==UnmadeCore::CarryStage::Carrying",depth)
+  self.assertIn("nothing has changed there yet",depth)
+
   self.assertIn("CrossRealmCombatResponse(",depth)
  def test_chart_and_comparison_can_deescalate_but_not_spawn_unearned_outcomes(self):
   native=(ROOT/"Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp").read_text()

@@ -419,6 +419,17 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
   out+=FString::Printf(TEXT("%s -> %s: %s\n"),
     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[dest].city),next);
+  // No out-of-realm watch changes occur until somebody receives this packet.
+  if(stage==UnmadeCore::CarryStage::Carrying&&
+     !bCrossRealmCarryRejected&&!bExpeditionSaveRejected){
+   const auto* sourceBattle=Expeditions.Arc(a);
+   int guards=0,people=0;
+   for(int bit=0;bit<8;++bit)guards+=(sourceBattle->kills&(1<<bit))?1:0;
+   for(int bit=0;bit<2;++bit)people+=(sourceBattle->rescued&(1<<bit))?1:0;
+   out+=FString::Printf(TEXT("BATTLE TESTIMONY: guardian %s, %d guards died, %d people freed. The receiving chief may change their own frontier sentry ward AFTER hand-delivery; nothing has changed there yet.\n"),
+     sourceBattle->boss==1?TEXT("defeated"):TEXT("yielded alive"),
+     guards,people);
+  }
  }
  return out;
 }

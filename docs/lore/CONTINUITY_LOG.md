@@ -1220,3 +1220,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Corrected the rescued-person display and propagated combat facts to use the count of the two recorded rescue bits, not the underlying bitmask integer. Added direct all-realm assertions for zero, one and two freed people.
 
 - Differentiated genuine low-casualty living surrender from a high-casualty capitulation: four or more recorded guard deaths produce a distinct casualty vigil rather than magically safe borders. Compared destination evidence moderates this response, without changing the authoritative record of lives lost. Added explicit nine-realm assertions for both stages.
+
+- Added an explicit player-only BATTLE TESTIMONY preview while the report is physically in custody, counting saved guard and captive bits and warning that the receiving realm remains unchanged until hand-delivery. Regression tests guard the preview's stage and wording.
