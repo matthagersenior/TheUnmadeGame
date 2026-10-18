@@ -68,7 +68,10 @@ int main(){
   self.assertIn("Add(a,9,0,",world)
   self.assertIn("if(kind==9)",world)
   self.assertIn("DepthChallenges[arc].Prime(arc,",world)
-  self.assertIn("E  Apply witness-guided route plan",world)
+  prompt=world.split("FString AUnmadePrototypeHub::GetDepthPrompt(",1)[1]
+  interactions=world.split("bool AUnmadePrototypeHub::TryDepthInteraction(",1)[1].split("FString AUnmadePrototypeHub::GetDepthJournal(",1)[0]
+  self.assertIn("E  Apply witness-guided route plan",prompt)
+  self.assertNotIn('return TEXT("E  Apply witness-guided route plan")',interactions)
   self.assertIn("A witness can guide one control",world)
   segment=world.split("if(kind==9)",1)[1].split("if(kind==3)",1)[0]
   self.assertNotIn("Depth.Route(",segment)
