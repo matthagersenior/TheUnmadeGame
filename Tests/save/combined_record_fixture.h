@@ -135,6 +135,8 @@ struct Record {
     Array<int> HearthPetitionState;
     bool bHasPetitionRelay=false;
     Array<int> PetitionRelayState;
+    bool bHasCrossRealmCarry=false;
+    Array<int> CrossRealmCarryState;
     bool bHasResidentContinuitySnapshot=false;
     Array<int> ResidentEncounterVisits;
     Array<int> ResidentEncounterLastDays;
