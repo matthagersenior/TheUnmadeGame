@@ -33,6 +33,8 @@ public:
     bool IsWingGuardian(int Arc)const{return bWingGuardian&&ExpeditionArc==Arc;}
     bool IsExpeditionArc(int Arc)const{return ExpeditionArc==Arc;}
     bool IsExpeditionEnemy(int32 Arc,int32 Slot)const{return ExpeditionArc==Arc&&ExpeditionSlot==Slot;}
+    bool IsTemporaryArenaEscort()const{return ExpeditionArc>=0&&
+        (ExpeditionSlot==11||ExpeditionSlot==12);}
     void ConfigureRoadElder(int32 City){RoadElderCity=City;bCinderholdElder=true;TerritoryHome=GetActorLocation();}
     bool CanBeTargeted() const;
     FString GetCombatName()const;

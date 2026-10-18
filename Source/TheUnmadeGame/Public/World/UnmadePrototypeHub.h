@@ -43,6 +43,7 @@
 #include "World/UnmadeExpeditionRegistry.h"
 #include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadeExpeditionRules.h"
+#include "World/UnmadeArenaTacticsRules.h"
 #include "World/UnmadeIdentityRules.h"
 #include "World/UnmadeAdventureDepthRules.h"
 #include "Items/UnmadeItemRules.h"
@@ -358,6 +359,11 @@ private:
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionHazardSigns;
     std::array<double,9> ExpeditionHazardQuiet{};
     std::array<double,9> ExpeditionReleaseReady{};
+    // The boss counter is transient: no extra rewards, save flags or repeatable farming.
+    std::array<UnmadeCore::ArenaCounter,9> ArenaCounters{};
+    std::array<double,9> ArenaShelterUntil{};
+    // Cache visible state: avoid 36 full-world actor scans per 0.5s refresh.
+    std::array<int,9> ArenaShelterVisible{}, ArenaAftermathVisible{};
 
     FTimerHandle GossipTimer;
     FTimerHandle WorldSaveTimer;

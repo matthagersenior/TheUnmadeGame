@@ -3718,7 +3718,32 @@ void AUnmadePrototypeHub::SpreadLocalRumors()
 }
 
 
-void AUnmadePrototypeHub::PrepareRealmGeometry(const FVector& at,int limit){if(!GetWorld()||limit<1)return;int made=0;SpawningDeferred=true;for(int i=DeferredBlocks.Num()-1;i>=0&&made<limit;--i)if(FVector::DistSquared2D(at,DeferredBlocks[i].Center)<FMath::Square(30000.f)){auto b=DeferredBlocks[i];DeferredBlocks.RemoveAtSwap(i);SpawnBlock(b.Center,b.Scale,b.Label);++made;}SpawningDeferred=false;}
+void AUnmadePrototypeHub::PrepareRealmGeometry(const FVector& at,int limit){
+ if(!GetWorld()||limit<1)return;
+ int made=0;
+ SpawningDeferred=true;
+ for(int i=DeferredBlocks.Num()-1;i>=0&&made<limit;--i)
+  if(FVector::DistSquared2D(at,DeferredBlocks[i].Center)<FMath::Square(30000.f)){
+   const auto b=DeferredBlocks[i];DeferredBlocks.RemoveAtSwap(i);
+   SpawnBlock(b.Center,b.Scale,b.Label);
+   ++made;
+   // Streamed combat cover/aftermath markers must NOT arrive with their
+   // default solid/visible cube state. The normal half-second refresh will
+   // reveal only the event actually permitted by the saved expedition.
+   const FString label=b.Label.ToString();
+   if(label.Contains(TEXT(".ArenaShelter"))||
+      label.Contains(TEXT(".Aftermath."))){
+      SetRiteWorldActorState(b.Label,false);
+      for(int a=0;a<9;++a)
+       if(label.StartsWith(FString::Printf(TEXT("Expedition.%d."),a))){
+         ArenaShelterVisible[a]=-1;
+         ArenaAftermathVisible[a]=-1;
+         break;
+       }
+   }
+  }
+ SpawningDeferred=false;
+}
 void AUnmadePrototypeHub::RefreshSimulationBudget(){
  if(!GetWorld())return;auto* player=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));if(!player)return;const double now=GetWorld()->GetTimeSeconds();PrepareRealmGeometry(player->GetActorLocation());
  if(now>=NextRuntimeCache){NextRuntimeCache=now+5;RuntimeEnemies.Reset();RuntimePeople.Reset();RuntimeSigns.Reset();for(TActorIterator<AUnmadeEnemyCharacter> a(GetWorld());a;++a)RuntimeEnemies.Add(*a);for(TActorIterator<AUnmadeNpcCharacter> a(GetWorld());a;++a)RuntimePeople.Add(*a);for(TActorIterator<ATextRenderActor> a(GetWorld());a;++a)RuntimeSigns.Add(*a);}

@@ -1,3 +1,15 @@
+## 2026-10-17 — Nine realm-specific tactical arena counters
+
+Added two-position timed counterplay to the existing boss chambers for all
+nine realms, using each encounter's own enemy warnings and signature
+attacks. Successful execution creates bounded combat exposure; selected
+realms also gain temporary LOS shelter. Encounter progress is transient
+and cannot manufacture persistent victories. Real saved outcomes drive
+realm-specific prisoner-return, unfinished-rescue or evidence-surrender
+markers and journal consequences. Portable C++ and source integration
+tests cover order, expiry, cooldown, no loot farming and aftermath.
+Unreal compilation, playability and full combat balance remain pending.
+
 ## 2026-10-17 — Civic Reverberation and Nhal-Vey's one-history dilemma
 
 The delivered Hearth Petition now produces local and mechanically distinct

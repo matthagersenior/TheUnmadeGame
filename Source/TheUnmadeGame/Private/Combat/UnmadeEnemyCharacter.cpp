@@ -559,7 +559,17 @@ void AUnmadeEnemyCharacter::TickExpedition(float DeltaSeconds){
  bool Yielded=bWingGuardian?CachedRealityHub->WingGuardianYielded(ExpeditionArc):ExpeditionSlot==8&&CachedRealityHub->ExpeditionBossYielded(ExpeditionArc);
  SetActorHiddenInGame((Inactive&&!Yielded)||Combat->IsDefeated());SetActorEnableCollision(!Inactive&&!Combat->IsDefeated());
  if(Inactive){Interrupt();if(Yielded){SetMotionCue(FName(TEXT("Yield")));CombatSignal->SetText(FText::FromString((bWingGuardian?TEXT("YIELDED ALIVE - OATH HEARD"):TEXT("YIELDED ALIVE - EVIDENCE REMEMBERED"))));}GetCharacterMovement()->StopMovementImmediately();ElderAimMarker->SetVisibility(false);TelegraphLight->SetIntensity(0);return;}
- if(Combat->IsDefeated()){if(Now>=NextElderSaveAttemptAt){NextElderSaveAttemptAt=Now+2;if(bWingGuardian)CachedRealityHub->RecordWingGuardian(this,ExpeditionArc);else CachedRealityHub->RecordExpeditionDefeat(this,ExpeditionArc,ExpeditionSlot);}return;}
+ if(Combat->IsDefeated()){
+  if(IsTemporaryArenaEscort()){
+   // These temporary guards exert actual combat pressure but cannot claim
+   // persistent boss/captive receipts or respawn as reward farms.
+   SetActorHiddenInGame(true);SetActorEnableCollision(false);
+   GetCharacterMovement()->StopMovementImmediately();
+   SetActorTickEnabled(false);
+   return;
+  }
+  if(Now>=NextElderSaveAttemptAt){NextElderSaveAttemptAt=Now+2;if(bWingGuardian)CachedRealityHub->RecordWingGuardian(this,ExpeditionArc);else CachedRealityHub->RecordExpeditionDefeat(this,ExpeditionArc,ExpeditionSlot);}return;
+ }
  auto* P=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(World,0));
  if(!UnmadeCore::RequireEncounterPlayer(IsValid(P)&&IsValid(P->GetCombat())&&!P->GetCombat()->IsDefeated()&&P->GetWorld()==World&&UnmadeSave::IsSessionWritable(P),Interrupt))return;
  double Distance=FVector::Dist2D(P->GetActorLocation(),GetActorLocation());
@@ -568,7 +578,8 @@ void AUnmadeEnemyCharacter::TickExpedition(float DeltaSeconds){
  bool Sight=Territory&&!World->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,55),P->GetActorLocation()+FVector(0,0,55),ECC_Visibility,Params);
  bool Phase=Combat->GetHealth()<=Combat->GetMaxHealth()*.5;
  if((P->bIsCrouched||P->GetCombat()->HasQuietLens(Now))&&Distance>350)Sight=false;
- int Warnings=0;bool ShieldSupport=false;for(auto weak:CachedRealityHub->CachedEnemies()){auto* Ally=weak.Get();if(!Ally||Ally==this||!Ally->IsExpeditionArc(ExpeditionArc)||!Ally->CanBeTargeted())continue;Warnings+=Ally->bExpeditionWarning?1:0;if(Ally->ExpeditionRole==UnmadeCore::ExpeditionRole::Sentinel&&Ally->GetCombat()->IsGuarding()&&FVector::DistSquared2D(Ally->GetActorLocation(),GetActorLocation())<FMath::Square(500.f))ShieldSupport=true;}
+ int Warnings=0;bool ShieldSupport=false;for(auto weak:CachedRealityHub->CachedEnemies()){auto* Ally=weak.Get();if(!Ally||Ally==this||!Ally->IsExpeditionArc(ExpeditionArc)||!Ally->CanBeTargeted()||
+   FVector::DistSquared2D(Ally->GetActorLocation(),GetActorLocation())>FMath::Square(1750.f))continue;Warnings+=Ally->bExpeditionWarning?1:0;if(Ally->ExpeditionRole==UnmadeCore::ExpeditionRole::Sentinel&&Ally->GetCombat()->IsGuarding()&&FVector::DistSquared2D(Ally->GetActorLocation(),GetActorLocation())<FMath::Square(500.f))ShieldSupport=true;}
  if(!bExpeditionWarning&&Warnings>=2)Sight=false;Combat->SetGearBonuses(0,ShieldSupport?4:0);
  auto Step=ExpeditionPattern.Step(Now,ExpeditionRole,ExpeditionArc,Phase,Sight,Distance,IsFractureExposed(Now)||Combat->IsStaggered(Now));
  if(Step.started){UnmadePresentation::Sound(this,TEXT("warning"));ExpeditionAim=P->GetActorLocation();bExpeditionWarning=true;}
