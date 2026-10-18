@@ -501,15 +501,16 @@ bool ValidCombinedRecord(const Record& record, Text text)
            !Save->bHasAdventureDepth)return false;
         std::vector<int> data;
         for(int value:Save->CrossRealmCarryState)data.push_back(value);
-        std::array<bool,9> sourceReady{},destVisited{};
+        std::array<bool,9> sourceReady{},destVisited{},localEvidence{};
         for(int a=0;a<9;++a){
             sourceReady[a]=Depth.Arc(a)->choice!=0&&
                 Expeditions.Arc(a)->returned&&Identity.Arc(a)->repair==7;
             destVisited[a]=(Expeditions.Arc(a)->visited&1)!=0;
+            localEvidence[a]=Depth.Arc(a)->evidence!=0;
         }
         UnmadeCore::CrossRealmCarry proof;
         if(!proof.Restore(data,RestoredClock.DayIndex()+1,
-                          sourceReady,destVisited))return false;
+                          sourceReady,destVisited,localEvidence))return false;
     }
 
     if(Save->bHasRememberedRoads)

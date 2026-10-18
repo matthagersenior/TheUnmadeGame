@@ -7,6 +7,7 @@
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
 #include "World/UnmadePublicAccordDutyRules.h"
+#include "World/UnmadeCrossRealmReviewRules.h"
 #include "World/UnmadeIdentityRegistry.h"
 #include "Player/UnmadeCharacter.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -34,7 +35,7 @@ bool Near(AUnmadeCharacter* p,FVector at,AActor* ignored=nullptr){if(!Alive(p)||
 bool Quiet(UWorld* world,AUnmadeCharacter* p,int a){for(TActorIterator<AUnmadeEnemyCharacter> e(world);e;++e){if(!e->IsExpeditionArc(a)||!e->CanBeTargeted())continue;FVector d=p->GetActorLocation()-e->GetActorLocation();if(d.Size2D()>(p->bIsCrouched?350:650)||FVector::DotProduct(e->GetActorForwardVector(),d.GetSafeNormal())<.3)continue;FCollisionQueryParams q(SCENE_QUERY_STAT(DepthStealth),false);q.AddIgnoredActor(p);q.AddIgnoredActor(*e);if(!world->LineTraceTestByChannel(e->GetActorLocation()+FVector(0,0,55),p->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q))return false;}return true;}
 }
 void AUnmadePrototypeHub::BuildAdventureDepth(){
- if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthAccordSigns.SetNum(9);DepthAccordWorkActors.SetNum(18);DepthCrossRealmReceiptSigns.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
+ if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthAccordSigns.SetNum(9);DepthAccordWorkActors.SetNum(18);DepthCrossRealmReceiptSigns.SetNum(9);DepthCrossRealmReviewActors.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
  auto Sign=[&](FVector at,const FString& text){auto* t=GetWorld()->SpawnActor<ATextRenderActor>(at+FVector(0,0,150),FRotator(0,90,0));if(t){t->GetTextRender()->SetWorldSize(17);t->GetTextRender()->SetText(FText::FromString(text));}return t;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::DepthSpecs[a];DepthChallengeSigns[a]=Sign(Room(a,2)+FVector(0,900,0),UTF8_TO_TCHAR(s.challenge));
    // The notice stands beside existing local services; it never unlocks a
@@ -47,6 +48,14 @@ void AUnmadePrototypeHub::BuildAdventureDepth(){
   for(int site=0;site<(a==0?5:3);++site)for(int n=0;n<3;++n){SpawnBlock(Shop(a,n,site)+FVector(0,0,-70),FVector(2,1,.5),FName(TEXT("FrontierService")));Sign(Shop(a,n,site),n==0?TEXT("PROVISIONER / E BUY RECOVERY / FINITE DAILY STOCK"):n==1?TEXT("CRAFT BENCH / E MAKE FIELD KIT / LOCAL FAVOR"):TEXT("TRAINER / E LEARN TECHNIQUE / THREE MASTERY LEVELS"));}
   auto Object=[&](FVector at,FVector scale,FName tag){auto* actor=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(actor){auto* m=actor->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(scale);actor->Tags.Add(tag);}return actor;};
 
+  // Physical incoming-record review: no free witness, quest or reward.
+  auto* review=Object(Shop(a,0,0)+FVector(550,800,-75),FVector(1.2,.24,1.3),
+   FName(*FString::Printf(TEXT("CrossRealm.Review.%d"),a)));
+  if(review){
+   review->GetStaticMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+   DepthCrossRealmReviewActors[a]=review;
+   review->SetActorHiddenInGame(true);
+  }
   for(int choice=1;choice<=2;++choice){
    const auto work=UnmadeCore::PublicAccordDuty(a,0,choice,true,3,false,true);
    if(!work.active)continue;
@@ -78,8 +87,19 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
    if(DepthCrossRealmReceiptSigns[a].IsValid()){
     const bool received=!bCrossRealmCarryRejected&&!bDepthSaveRejected&&
       !bIdentitySaveRejected&&!bExpeditionSaveRejected&&
-      CrossRealmCarry.Stage(incoming)==UnmadeCore::CarryStage::Delivered;
+      CrossRealmCarry.Stage(incoming)>=UnmadeCore::CarryStage::Delivered;
     DepthCrossRealmReceiptSigns[a]->SetActorHiddenInGame(!received);
+    const auto localReview=UnmadeCore::CrossRealmReview(a,CrossRealmCarry.Stage(incoming),
+      (Expeditions.Arc(a)->visited&1)!=0,Depth.Arc(a)->evidence!=0,
+      !bDepthSaveRejected&&!bCrossRealmCarryRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected);
+    if(DepthCrossRealmReviewActors[a].IsValid()){
+     const bool visible=localReview==UnmadeCore::ReviewState::NeedEvidence||
+       localReview==UnmadeCore::ReviewState::ReadyToCompare||
+       localReview==UnmadeCore::ReviewState::Compared;
+     DepthCrossRealmReviewActors[a]->SetActorHiddenInGame(!visible);
+     DepthCrossRealmReviewActors[a]->SetActorScale3D(
+       localReview==UnmadeCore::ReviewState::Compared?FVector(2.1,.6,.5):FVector(1.2,.24,1.3));
+    }
     if(received){
       const FString receipt=FString::Printf(TEXT("RECEIVED IN %s FROM %s\n%s"),
         UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
@@ -134,8 +154,10 @@ bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtN
    // is drawn to its local receipt; other citizens keep their own routines.
    if(n==0&&Expeditions.Arc(a)->visited&&
       !bCrossRealmCarryRejected&&
-      CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Delivered){
-    Out=Shop(a,0,0)+FVector(950,600,0);
+      CrossRealmCarry.Stage((a+8)%9)>=UnmadeCore::CarryStage::Delivered){
+    Out=Shop(a,0,0)+(CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Reviewed&&
+      Depth.Arc(a)->evidence?
+      FVector(550,800,0):FVector(950,600,0));
     return true;
    }
    if(!Expeditions.Arc(a)->returned||!Depth.Arc(a)->choice)return false;
@@ -159,7 +181,7 @@ FName AUnmadePrototypeHub::GetPublicAccordWorkCue(FName ResidentId,const FVector
  for(int a=0;a<9;++a){
   if(text.StartsWith(FString::Printf(TEXT("npc.expedition.%d."),a))){
    if(ResidentId==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a))&&
-      CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Delivered)
+      CrossRealmCarry.Stage((a+8)%9)>=UnmadeCore::CarryStage::Delivered)
     return FName(TEXT("Inspect"));
    if(Depth.Arc(a)->choice==2&&Depth.Arc(a)->counterThreat)
     return FName(TEXT("Gesture"));
@@ -177,6 +199,10 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    if(DepthAccordWorkActors[a*2+choice-1].IsValid()&&!DepthAccordWorkActors[a*2+choice-1]->IsHidden())
     Add(a,7,choice,DepthAccordWorkActors[a*2+choice-1]->GetActorLocation()+FVector(0,0,65),
      DepthAccordWorkActors[a*2+choice-1].Get());
+  if(DepthCrossRealmReviewActors.IsValidIndex(a)&&DepthCrossRealmReviewActors[a].IsValid()&&
+     !DepthCrossRealmReviewActors[a]->IsHidden())
+    Add(a,8,0,DepthCrossRealmReviewActors[a]->GetActorLocation()+FVector(0,0,75),
+      DepthCrossRealmReviewActors[a].Get());
   for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)Add(a,5,n,Shop(a,n,site));if(Expeditions.Arc(a)->rooms&4)Add(a,3,n,Control(a,n));}}
  if(arc<0)return false;if(bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected||bCrossRealmCarryRejected){NotifyRpg(TEXT("Saved adventure data is invalid. The original record is protected."));return true;}
  auto before=Depth;auto beforeExperience=Experience;auto beforeChallenge=DepthChallenges;auto* e=Expeditions.Arc(arc);const auto& spec=UnmadeCore::DepthSpecs[arc];bool changed=false,heal=false;FString line;const TCHAR* cue=TEXT("inspect");
@@ -224,6 +250,40 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    RefreshAdventureDepth();return true;
   }
 
+ // Canon: a destination witness must physically receive local proof; simply
+ // discovering it never grants NPC awareness of that evidence.
+ // Local comparison is a separate save-atomic E action: inspecting the desk
+ // is otherwise read-only. The actual recipient must be within speaking range.
+ if(kind==8&&action==0){
+  const int source=UnmadeCore::CrossRealmSource(arc);
+  const auto state=UnmadeCore::CrossRealmReview(arc,CrossRealmCarry.Stage(source),
+    (Expeditions.Arc(arc)->visited&1)!=0,Depth.Arc(arc)->evidence!=0,
+    !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected&&!bCrossRealmCarryRejected);
+  if(state==UnmadeCore::ReviewState::ReadyToCompare){
+   const auto* chief=Person(GetWorld(),arc,0);
+   const FVector desk=DepthCrossRealmReviewActors[arc]->GetActorLocation()+FVector(0,0,75);
+   const bool recipientPresent=IsValid(chief)&&
+     FVector::DistSquared2D(chief->GetActorLocation(),desk)<FMath::Square(520.f);
+   if(!recipientPresent){
+    NotifyRpg(TEXT("Your local evidence is ready, but the actual receiving chief must be beside this table. Return during their daytime receipt duty."));
+    return true;
+   }
+   const bool committed=UnmadeCore::CommitCrossRealmCarry(CrossRealmCarry,[&]{
+      return CrossRealmCarry.Review(source,arc,GetGameDay(),
+          Depth.Arc(arc)->evidence!=0,recipientPresent);
+     },[&]{return WriteWorldSnapshot();});
+   if(!committed){
+    NotifyRpg(TEXT("The comparison did not save. The received packet remains here; present the evidence again."));
+    return true;
+   }
+   UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+   NotifyRpg(FString::Printf(TEXT("REVIEWED: %s's actual evidence has been examined alongside the hand-carried %s record with its receiving chief. Their local testimony changes, but no other realm learns this automatically."),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city)));
+   RefreshAdventureDepth();return true;
+  }
+ }
  if(kind==0){if(action==1||action==2){auto* state=Depth.Arc(arc);if(!state->evidence||!e->boss||state->choice)line=TEXT("Speak to the witness, examine their evidence, then resolve the boss before choosing. A committed choice cannot be changed.");else if(!DepthConfirmation.Confirm(arc,action,GetWorld()->GetTimeSeconds())){line=FString::Printf(TEXT("CONFIRM %s: %s\n%s\nPress the SAME choice again within twenty seconds, beside this person. This local accord is permanent. A earns four favor and cheaper provisions; B earns three favor and opens a public hearing, but a displaced claimant contests the return road."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),UTF8_TO_TCHAR(spec.quest),UTF8_TO_TCHAR(action==1?spec.option_a:spec.option_b));}else{changed=UnmadeCore::StagePersonalAccord(Depth,Experience,arc,action,true);line=UTF8_TO_TCHAR(action==1?spec.return_a:spec.return_b);}cue=TEXT("reward");}
   else if(!Depth.Arc(arc)->offered){changed=Depth.Offer(arc,(e->visited&1)!=0);line=UTF8_TO_TCHAR(spec.offer);}
   else if(Depth.Arc(arc)->choice)line=UTF8_TO_TCHAR(Depth.Arc(arc)->choice==1?spec.return_a:spec.return_b);
@@ -280,6 +340,23 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    p->PlayIdentityMotion(FName(TEXT("Inspect")));
   }
  }
+ if(kind==8){
+  const int source=UnmadeCore::CrossRealmSource(arc);
+  const auto review=UnmadeCore::CrossRealmReview(arc,CrossRealmCarry.Stage(source),
+   (e->visited&1)!=0,Depth.Arc(arc)->evidence!=0,
+   !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected&&!bCrossRealmCarryRejected);
+  if(review==UnmadeCore::ReviewState::NeedEvidence)
+   line=FString::Printf(TEXT("The %s packet arrived in person, but this realm cannot compare it yet. Speak to the local witness, inspect chamber-four evidence, and return to this desk."),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+  else if(review==UnmadeCore::ReviewState::ReadyToCompare)
+   line=TEXT("Bring the local evidence to this desk when the named receiving chief is physically present. The comparison cannot happen remotely.");
+  else if(review==UnmadeCore::ReviewState::Compared)
+   line=FString::Printf(TEXT("The received %s packet and this realm's evidence were personally compared. The chief can now describe the differences without naming protected witnesses.\nLocal evidence: %s"),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),UTF8_TO_TCHAR(spec.evidence));
+  else line=TEXT("No physically delivered record has arrived for an accountable comparison.");
+  UnmadePresentation::Sound(p,TEXT("inspect"));
+  p->PlayIdentityMotion(FName(TEXT("Inspect")));
+ }
  if(kind==5&&!ExperienceServicesOpen(arc)){NotifyRpg(ExperienceServiceHours(arc));return true;}
  if(kind==5){changed=Depth.Buy(arc,index,GetGameDay(),index!=0||p->GetCombat()->GetMissingHealth()>0);heal=changed&&index==0;line=changed?index==0?TEXT("Provision purchased. Up to 35 health restored."):index==1?TEXT("Field kit crafted. It suppresses a danger field; progression does not consume it."):TEXT("Earned mastery learned without spending favor. Improved stamina recovery, dodge and parry; F11 invokes your earned technique."):FString::Printf(TEXT("Service costs %d LOCAL FAVOR. Finish the personal quest first. Supplies: four total, once per day, while injured. Kits: capacity three. Training: route for level two, cache for level three."),Depth.Price(arc,index));cue=TEXT("reward");}
  const bool accord=changed&&kind==0&&Depth.Arc(arc)->choice;
@@ -309,7 +386,7 @@ FString AUnmadePrototypeHub::GetDepthJournal()const{FString text=TEXT("PERSONAL 
  }
  text+=FString::Printf(TEXT("NEXT INVESTIGATION: %s\n\n"),
    UTF8_TO_TCHAR(UnmadeCore::NextInvestigationLead(a,*Expeditions.Arc(a),*s)));
- }return text+GetCrossRealmCarryJournal();}
+ }return text+GetCrossRealmCarryJournal()+GetCrossRealmReviewJournal();}
 FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
  FString out=TEXT("\nCROSS-REALM CUSTODY / PLAYER-CARRIED REPORTS\n");
  for(int a=0;a<9;++a){
@@ -318,7 +395,9 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
   const int dest=UnmadeCore::CrossRealmDestination(a);
   const bool ready=Depth.Arc(a)->choice!=0&&
     Expeditions.Arc(a)->returned&&Identity.Arc(a)->repair==7;
-  const TCHAR* next=stage==UnmadeCore::CarryStage::Delivered
+  const TCHAR* next=stage==UnmadeCore::CarryStage::Reviewed
+    ?TEXT("personally compared with destination evidence")
+    :stage==UnmadeCore::CarryStage::Delivered
     ?TEXT("delivered to the real expedition chief")
     :stage==UnmadeCore::CarryStage::Carrying
       ?TEXT("in your custody: travel to the destination chief and speak directly")
@@ -331,12 +410,36 @@ FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
  return out;
 }
 // Only a proven in-person delivery may become an NPC's firsthand local memory.
+FString AUnmadePrototypeHub::GetCrossRealmReviewJournal()const{
+ FString text=TEXT("\nCROSS-REALM INVESTIGATION / LOCAL WITNESS REVIEW\n");
+ for(int a=0;a<9;++a){
+  const int source=UnmadeCore::CrossRealmSource(a);
+  const auto status=UnmadeCore::CrossRealmReview(a,CrossRealmCarry.Stage(source),
+    (Expeditions.Arc(a)->visited&1)!=0,Depth.Arc(a)->evidence!=0,
+    !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected&&!bCrossRealmCarryRejected);
+  if(status==UnmadeCore::ReviewState::NeedEvidence)
+   text+=FString::Printf(TEXT("%s: The %s packet arrived. Speak to the local witness, examine this realm's physical chamber-four evidence, then return to the chief's review desk.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+  else if(status==UnmadeCore::ReviewState::ReadyToCompare)
+   text+=FString::Printf(TEXT("%s: You have the local evidence. Present it physically at the review desk beside the actual receiving chief; press E.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city));
+  else if(status==UnmadeCore::ReviewState::Compared)
+   text+=FString::Printf(TEXT("%s: Local evidence and the %s packet have been personally compared. The receiving chief now remembers both records.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+ }
+ return text;
+}
 FString AUnmadePrototypeHub::GetCrossRealmCarryRecipientLine(FName ResidentId)const{
  if(bCrossRealmCarryRejected||bDepthSaveRejected||bExpeditionSaveRejected)return FString();
  for(int a=0;a<9;++a){
   if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)))continue;
   const int source=(a+8)%9;
-  if(CrossRealmCarry.Stage(source)!=UnmadeCore::CarryStage::Delivered)return FString();
+  if(CrossRealmCarry.Stage(source)<UnmadeCore::CarryStage::Delivered)return FString();
+  if(CrossRealmCarry.Stage(source)==UnmadeCore::CarryStage::Reviewed&&Depth.Arc(a)->evidence)
+   return FString::Printf(TEXT("I compared the actual %s record you brought with the local evidence you presented to me at our review table. Their stories can inform each other, but they do not absolve our own witnesses."),
+     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
   return FString::Printf(TEXT("I personally received the hand-carried record from %s. Its account of %s is at our civic receipt station. We must still examine our own realm's conditions before acting."),
     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
     UTF8_TO_TCHAR(Depth.Arc(source)->choice==1?
@@ -354,6 +457,11 @@ FString AUnmadePrototypeHub::GetDepthPrompt(AUnmadeCharacter* p)const{if(!Alive(
        Depth.Arc(a)->choice&&Expeditions.Arc(a)->returned&&Identity.Arc(a)->repair==7
        ?TEXT("E  Collect and carry local report to next realm")
        :TEXT("E  Inspect working accord station");
+  if(DepthCrossRealmReviewActors.IsValidIndex(a)&&DepthCrossRealmReviewActors[a].IsValid()&&
+   !DepthCrossRealmReviewActors[a]->IsHidden()&&
+   Near(p,DepthCrossRealmReviewActors[a]->GetActorLocation()+FVector(0,0,75),
+      DepthCrossRealmReviewActors[a].Get()))
+    return TEXT("E  Compare incoming report with local evidence");
   if(DepthAccordSigns.IsValidIndex(a)&&DepthAccordSigns[a].IsValid()&&!DepthAccordSigns[a]->IsHidden()
    &&Expeditions.Arc(a)->returned&&Depth.Arc(a)->choice
    &&Near(p,DepthAccordSigns[a]->GetActorLocation()-FVector(0,0,150),DepthAccordSigns[a].Get()))

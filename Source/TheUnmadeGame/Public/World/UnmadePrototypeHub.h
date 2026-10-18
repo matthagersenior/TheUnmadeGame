@@ -294,6 +294,7 @@ public:
     bool SelectDepthTechnique(int Arc,AUnmadeCharacter* Player);
     FString GetDepthJournal()const;
     FString GetCrossRealmCarryJournal()const;
+    FString GetCrossRealmReviewJournal()const;
     FString GetCrossRealmCarryRecipientLine(FName ResidentId)const;
     FString GetDepthReaction(FName Person)const;
     FString GetDepthPrompt(AUnmadeCharacter* Player)const;
@@ -320,6 +321,7 @@ public:
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthChallengeSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthAccordSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthCrossRealmReceiptSigns;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthCrossRealmReviewActors;
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthAccordWorkActors;
     void BuildIdentity();
     void RefreshIdentity();
