@@ -30,6 +30,6 @@ class RecipientScene(unittest.TestCase):
  def test_physical_receipt_is_visible_only_after_saved_handoff(self):
   world=read("Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp")
   self.assertIn("DepthCrossRealmReceiptSigns.SetNum(9)",world)
-  self.assertIn("CrossRealmCarry.Stage(incoming)==UnmadeCore::CarryStage::Delivered",world)
+  self.assertIn("CrossRealmCarry.Stage(incoming)>=UnmadeCore::CarryStage::Delivered",world)
   self.assertIn("DepthCrossRealmReceiptSigns[a]->SetActorHiddenInGame(!received)",world)
 if __name__=="__main__":unittest.main()
