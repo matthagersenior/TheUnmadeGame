@@ -36,6 +36,10 @@ jobs:
           /tmp/unmade-style
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/defense_receipt_test.cpp -o /tmp/unmade-defense-receipts
           /tmp/unmade-defense-receipts
+      - name: Test nine distinct timed arena counters and persistent rescue outcomes
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/nine_realm_tactics_test.cpp -o /tmp/unmade-nine-realm-tactics
+          /tmp/unmade-nine-realm-tactics
       - name: Test civic reverberation of petition choices and changing household debt
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/civic_reverberation_test.cpp -o /tmp/unmade-civic-reverberation
