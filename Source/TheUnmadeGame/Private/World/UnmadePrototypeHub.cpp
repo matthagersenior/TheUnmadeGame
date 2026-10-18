@@ -98,6 +98,13 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
 {
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
         UnmadeSave::LoadGameFromSlot());
+    if(Save&&Save->SchemaVersion==1&&Save->bHasCrossRealmCarry&&
+       (!Save->bHasLivingWorldSnapshot||!Save->bHasExpeditions||
+        !Save->bHasWorldIdentity||!Save->bHasAdventureDepth)){
+        bCrossRealmCarryRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Orphan cross-realm carry record: save protected"));
+        return;
+    }
     if(Save&&Save->SchemaVersion==1&&Save->bHasPetitionRelay&&
        (!Save->bHasLivingWorldSnapshot||!Save->bHasHearthPetition))
     {
@@ -145,6 +152,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     UnmadeCore::BesHousehold RestoredBes;
     UnmadeCore::HearthPetition RestoredPetition;
     UnmadeCore::PetitionRelay RestoredRelay;
+    UnmadeCore::CrossRealmCarry RestoredCarry;
     if (!RestoredClock.Restore(Save->LivingWorldSeconds) ||
         !RestoredDiscoveries.Restore(Save->DiscoveredLoreMask) ||
         !RestoredVillages.Restore(Save->VisitedSettlementsMask) ||
@@ -538,6 +546,21 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int32 V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bIdentitySaveRejected=true;UE_LOG(LogTemp,Error,TEXT("World identity save rejected; original protected"));}}
     if(Save->bHasAdventureDepth){std::vector<int> Data;for(int32 V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bDepthSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Adventure depth save rejected; original protected"));}}
     if(Save->bHasPlayerExperience){std::vector<int> Data;for(int V:Save->PlayerExperienceState)Data.push_back(V);if(!Experience.Restore(Data,Expeditions,Depth,RestoredClock.DayIndex()+1)){bExperienceRejected=true;UE_LOG(LogTemp,Error,TEXT("Player experience save rejected; original protected"));}}
+    if(Save->bHasCrossRealmCarry){
+        std::vector<int> data;
+        for(int32 value:Save->CrossRealmCarryState)data.push_back(value);
+        std::array<bool,9> sourceReady{},destVisited{};
+        for(int a=0;a<9;++a){
+            sourceReady[a]=Depth.Arc(a)->choice!=0&&
+               Expeditions.Arc(a)->returned&&Identity.Arc(a)->repair==7;
+            destVisited[a]=(Expeditions.Arc(a)->visited&1)!=0;
+        }
+        if(bDepthSaveRejected||bIdentitySaveRejected||bExpeditionSaveRejected||
+           !RestoredCarry.Restore(data,RestoredClock.DayIndex()+1,sourceReady,destVisited)){
+            bCrossRealmCarryRejected=true;
+            UE_LOG(LogTemp,Error,TEXT("Cross-realm custody invalid: world save write protected"));
+        }
+    }
 
     if(Save->bHasRememberedRoads)
     {
@@ -550,6 +573,7 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     BesHousehold=RestoredBes;
     HearthPetition=RestoredPetition;
     PetitionRelay=RestoredRelay;
+    CrossRealmCarry=RestoredCarry;
     LivingTrades=RestoredLiving;
     Materials=RestoredMaterials;
     OuterReactions=RestoredOuter;
@@ -658,6 +682,7 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
     if(bExpeditionSaveRejected)return false;
     if(bIdentitySaveRejected)return false;
     if(bDepthSaveRejected)return false;
+    if(bCrossRealmCarryRejected)return false;
     if(bExperienceRejected)return false;
     if(bRoadSaveRejected)return false;
     if(bCinderholdSaveRejected)return false;
@@ -680,6 +705,9 @@ bool AUnmadePrototypeHub::CaptureWorldSnapshot(UUnmadePrototypeSave* Save)
     Save->bHasFieldSurveys=true;Save->FieldSurveyStages=FieldSurveyStages;
     Save->bHasPlayerExperience=true;Save->PlayerExperienceState.Reset();for(int V:Experience.Pack())Save->PlayerExperienceState.Add(V);
     Save->bHasAdventureDepth=true;Save->AdventureDepthState.Reset();for(int V:Depth.Pack())Save->AdventureDepthState.Add(V);
+    Save->bHasCrossRealmCarry=true;
+    Save->CrossRealmCarryState.Reset();
+    for(int value:CrossRealmCarry.Pack())Save->CrossRealmCarryState.Add(value);
     Save->bHasWorldIdentity=true;Save->WorldIdentityState.Reset();for(int V:Identity.Pack())Save->WorldIdentityState.Add(V);
     Save->bHasExpeditions=true;Save->ExpeditionState.Reset();
     for(int V:Expeditions.Pack())Save->ExpeditionState.Add(V);
