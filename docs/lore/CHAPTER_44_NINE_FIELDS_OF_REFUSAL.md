@@ -68,3 +68,19 @@ Follow-on encounter work should include multi-priority defense, breaking
 shield formations, civilian escort under attack, and choices that persist
 without forcing one universal answer. No realm's chronology may be
 rewritten to turn an attempted strike into evidence a named witness saw.
+
+
+### Active boss-room support formation
+
+The final arena now also contains a finite active guard pair in each realm:
+a shield sentinel near the boss can reinforce its armor while genuinely
+guarding, and an aimed marksman forces the player to use physical cover or
+keep moving. This is a priority decision, not a delivery task. Breaking the
+sentinel's guard reduces the boss's current armor support; the ranged role
+exploits exposure while the player runs between counter stations. Boss
+surrender or defeat immediately causes both guards to stand down.
+
+These are temporary encounter threats, **not** persistent prisoner-kill
+receipts. Re-entering an unresolved fight may recreate them, but they
+cannot issue repeating XP/loot/skill rewards. They do not make a surrender
+unavailable or retroactively give any survivor knowledge of the combat.
