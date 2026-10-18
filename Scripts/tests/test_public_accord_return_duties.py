@@ -27,6 +27,13 @@ int main(){
   for(int n=0;n<5;++n){
    auto tasked=PublicAccordDuty(a,n,1,true,3,false,true);
    assert(tasked.active);
+   // The established expedition home-reset radius is 2000 units. Reassigned
+   // workers must never be repeatedly teleported home by that recovery rule.
+   for(int branch=1;branch<=2;++branch){
+    auto work=PublicAccordDuty(a,n,branch,true,3,false,true);
+    int worldX=-1800+work.dx, worldY=300+work.dy;
+    assert(worldX*worldX+worldY*worldY<1850*1850);
+   }
    assert(!PublicAccordDuty(a,n,1,false,3,false,true).active);
    assert(!PublicAccordDuty(a,n,0,true,3,false,true).active);
    assert(!PublicAccordDuty(a,n,1,true,3,true,true).active);
