@@ -84,9 +84,12 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
     DepthAccordSigns[a]->SetActorHiddenInGame(!publicAftermath);
     if(publicAftermath){
      // Resolve this world's actual public branch directly from authored data.
-     const FString text=FString::Printf(TEXT("%s / PUBLIC RETURN ACCORD\n%s"),
+     const TCHAR* duty=s->choice==1
+       ?(Identity.Arc(a)->repair==7?TEXT("SANCTUARY DUTY"):TEXT("PROTECTED RESERVE"))
+       :(s->counterThreat?TEXT("ROAD WATCH"):TEXT("PUBLIC HEARING"));
+     const FString text=FString::Printf(TEXT("%s / PUBLIC RETURN ACCORD\n%s\n%s"),
          UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
-         UTF8_TO_TCHAR(s->choice==1?UnmadeCore::DepthSpecs[a].public_return_a:UnmadeCore::DepthSpecs[a].public_return_b));
+         UTF8_TO_TCHAR(s->choice==1?UnmadeCore::DepthSpecs[a].public_return_a:UnmadeCore::DepthSpecs[a].public_return_b),duty);
      DepthAccordSigns[a]->GetTextRender()->SetText(FText::FromString(text));
     }
    }
@@ -110,7 +113,8 @@ bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtN
    if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n)))continue;
    const auto work=UnmadeCore::PublicAccordDuty(a,n,Depth.Arc(a)->choice,
      Expeditions.Arc(a)->returned,Expeditions.Arc(a)->rescued,AtNight,
-     !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected);
+     !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected,
+     Depth.Arc(a)->counterThreat,Identity.Arc(a)->repair==7);
    if(!work.active)return false;
    Out=Shop(a,0,0)+FVector(work.dx,work.dy,0);
    return true;
@@ -125,8 +129,11 @@ FName AUnmadePrototypeHub::GetPublicAccordWorkCue(FName ResidentId,const FVector
     FVector::DistSquared2D(At,DutyTarget)>FMath::Square(175.f))return NAME_None;
  const FString text=ResidentId.ToString();
  for(int a=0;a<9;++a){
-  if(text.StartsWith(FString::Printf(TEXT("npc.expedition.%d."),a)))
+  if(text.StartsWith(FString::Printf(TEXT("npc.expedition.%d."),a))){
+   if(Depth.Arc(a)->choice==2&&Depth.Arc(a)->counterThreat)
+    return FName(TEXT("Gesture"));
    return Depth.Arc(a)->choice==1?FName(TEXT("Repair")):FName(TEXT("Inspect"));
+  }
  }
  return NAME_None;
 }
@@ -180,7 +187,7 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
     line+=TEXT("\nThe displaced claimant still contests the outer road. Seek the actual return-road opponent or choose another route.");
    else if(Identity.Arc(arc)->repair!=7)
     line+=TEXT("\nThe public wayposts remain incomplete. Speak with the returning roadkeeper and repair all three posts.");
-   else line+=TEXT("\nThe wayposts are restored. Return during the day to find the surviving workers at their duty sites.");
+   else line+=local->choice==1?TEXT("\nSANCTUARY DUTY: repaired wayposts are staffed by returning neighbors during daylight."):TEXT("\nROAD WATCH: the public ledger remains open and surviving neighbors now patrol the cleared road.");
   }
  }
  if(kind==7){
@@ -217,6 +224,13 @@ FString AUnmadePrototypeHub::GetDepthJournal()const{FString text=TEXT("PERSONAL 
    UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].hunt_task),Identity.Arc(a)->hunt?TEXT("claimed"):TEXT("available after four guards"),
    UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].survey_task),Identity.Arc(a)->chart?TEXT("mapped"):TEXT("pending records and mechanism"),
    UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].repair_task),repaired);
+ }
+ if(Expeditions.Arc(a)->returned&&s->choice){
+  if(s->choice==1&&Identity.Arc(a)->repair==7)
+   text+=TEXT("SANCTUARY DUTY / The repaired wayposts now support a lived daytime rest shift. Find returning residents nearby.\n");
+  else if(s->choice==2&&s->counterThreat)
+   text+=TEXT("ROAD WATCH / The displaced claimant is defeated and the surviving witnesses have changed their daytime patrol.\n");
+  else text+=TEXT("LOCAL ACCORD DUTY / The daytime refuge service or public hearing continues until its unresolved work is addressed.\n");
  }
  text+=FString::Printf(TEXT("NEXT INVESTIGATION: %s\n\n"),
    UTF8_TO_TCHAR(UnmadeCore::NextInvestigationLead(a,*Expeditions.Arc(a),*s)));
