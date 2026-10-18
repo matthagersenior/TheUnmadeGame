@@ -1186,3 +1186,14 @@ Each of the nine existing local service centers now hosts a physical, readable g
 Notices are read-only visible consequences: they do not grant favor, create witnesses, open the main road, select a choice, alter the NPC's memory, save a record or invent a second objective. The city-service placement uses the existing graybox geography. Sign visibility, text readability, accessibility, collision and the player's physical route to each of the nine signs remain Unreal acceptance tasks.
 
 The native graybox notice uses the generated realm registry field directly for each committed branch. It is a read-only display of that city's known public outcome, not an independent narrative or save authority.
+
+
+## 2026-10-17 — Public accords become daytime work and site-inspectable consequences
+
+After a personally committed accord and witnessed expedition return, the existing local guide, chief, witness, and genuinely rescued companions can walk to real daytime civic work positions around the known return-road provisioner. Protected-reserve outcomes redirect their routine to guarded supplies, household services or refuge work. Public-witness outcomes redirect routine workers toward the open hearing, appeal board or public ledger. Each realm retains distinct work positions grounded beside its own graybox public accord site, using its original branch rather than a universal telepathic schedule. The living road never summons an unrescued captive, unrecorded guide, or person from another city. No resident invents a relationship or knowledge, and night routines remain their established home behavior.
+
+A player can physically approach the existing visible accord notice and press the ordinary contextual interaction to review that realm's actual public branch outcome and one grounded unresolved task: a contested return-road claimant if the public branch has not faced them, three unrepaired wayposts if they remain unfinished, or the ongoing daylight duty positions once those are repaired. Inspecting the notice is informational and does not count as witness testimony, grant favor, teleport an NPC, complete a repair, publish protected identities, consume supplies or mutate saves. Active safety/urgent NPC responses override this optional daytime work, and movement continues through the existing collision-swept/navmesh path system.
+
+The code has source/portable tests but still needs Unreal playthrough validation for path reachability, spoken interaction range, day/night handoffs, attendance, obstruction, behavior legibility, and the intended emotional resonance of distinct worker performances.
+
+The exposed worksite geometry is bounded within the expedition's existing return-to-home recovery radius (including each named person’s formation offset). Rescued people therefore do not oscillate between civic duty and the old safety reset. The work stays near a known settlement provisioner rather than a fictional site outside the city.

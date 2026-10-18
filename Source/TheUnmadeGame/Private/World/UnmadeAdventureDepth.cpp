@@ -6,6 +6,7 @@
 #include "Combat/UnmadeMasteryRules.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
+#include "World/UnmadePublicAccordDutyRules.h"
 #include "World/UnmadeIdentityRegistry.h"
 #include "Player/UnmadeCharacter.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -80,10 +81,28 @@ void AUnmadePrototypeHub::RefreshAdventureDepth(){
   }
  }
 }
+// Read-only local duty: permanent narrative decisions stay in their original ledgers.
+bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtNight,FVector& Out)const{
+ if(!GetWorld()||ResidentId.IsNone()||AtNight||bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected)return false;
+ for(int a=0;a<9;++a){
+  if(!Expeditions.Arc(a)->returned||!Depth.Arc(a)->choice)continue;
+  for(int n=0;n<5;++n){
+   if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n)))continue;
+   const auto work=UnmadeCore::PublicAccordDuty(a,n,Depth.Arc(a)->choice,
+     Expeditions.Arc(a)->returned,Expeditions.Arc(a)->rescued,AtNight,
+     !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected);
+   if(!work.active)return false;
+   Out=Shop(a,0,0)+FVector(work.dx,work.dy,0);
+   return true;
+  }
+ }
+ return false;
+}
 bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,double competing){
  if(!Alive(p)||!GetWorld()||action<0||action>3)return false;int arc=-1,kind=-1,index=0;double best=FMath::Min(310.*310.,competing+1.);
  auto Add=[&](int a,int k,int n,FVector at,AActor* ignored=nullptr){double d=FVector::DistSquared(p->GetActorLocation(),at);if(d<=best&&Near(p,at,ignored)){best=d;arc=a;kind=k;index=n;}};
- for(int a=0;a<9;++a){if(auto* n=Person(GetWorld(),a,0))Add(a,0,0,n->GetActorLocation(),n);if(action!=0)continue;if(auto* n=Person(GetWorld(),a,3))Add(a,1,0,n->GetActorLocation(),n);if(DepthEvidenceActors[a].IsValid())Add(a,2,0,DepthEvidenceActors[a]->GetActorLocation()+FVector(0,0,42),DepthEvidenceActors[a].Get());if(DepthCacheActors[a].IsValid())Add(a,4,0,DepthCacheActors[a]->GetActorLocation()+FVector(0,0,60),DepthCacheActors[a].Get());for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)Add(a,5,n,Shop(a,n,site));if(Expeditions.Arc(a)->rooms&4)Add(a,3,n,Control(a,n));}}
+ for(int a=0;a<9;++a){if(auto* n=Person(GetWorld(),a,0))Add(a,0,0,n->GetActorLocation(),n);if(action!=0)continue;if(auto* n=Person(GetWorld(),a,3))Add(a,1,0,n->GetActorLocation(),n);if(DepthEvidenceActors[a].IsValid())Add(a,2,0,DepthEvidenceActors[a]->GetActorLocation()+FVector(0,0,42),DepthEvidenceActors[a].Get());if(DepthCacheActors[a].IsValid())Add(a,4,0,DepthCacheActors[a]->GetActorLocation()+FVector(0,0,60),DepthCacheActors[a].Get());if(DepthAccordSigns[a].IsValid()&&!DepthAccordSigns[a]->IsHidden()&&Expeditions.Arc(a)->returned&&Depth.Arc(a)->choice)
+   Add(a,6,0,DepthAccordSigns[a]->GetActorLocation()-FVector(0,0,150),DepthAccordSigns[a].Get());for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)Add(a,5,n,Shop(a,n,site));if(Expeditions.Arc(a)->rooms&4)Add(a,3,n,Control(a,n));}}
  if(arc<0)return false;if(bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected){NotifyRpg(TEXT("Saved adventure data is invalid. The original record is protected."));return true;}
  auto before=Depth;auto beforeExperience=Experience;auto beforeChallenge=DepthChallenges;auto* e=Expeditions.Arc(arc);const auto& spec=UnmadeCore::DepthSpecs[arc];bool changed=false,heal=false;FString line;const TCHAR* cue=TEXT("inspect");
  if(kind==0){if(action==1||action==2){auto* state=Depth.Arc(arc);if(!state->evidence||!e->boss||state->choice)line=TEXT("Speak to the witness, examine their evidence, then resolve the boss before choosing. A committed choice cannot be changed.");else if(!DepthConfirmation.Confirm(arc,action,GetWorld()->GetTimeSeconds())){line=FString::Printf(TEXT("CONFIRM %s: %s\n%s\nPress the SAME choice again within twenty seconds, beside this person. This local accord is permanent. A earns four favor and cheaper provisions; B earns three favor and opens a public hearing, but a displaced claimant contests the return road."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),UTF8_TO_TCHAR(spec.quest),UTF8_TO_TCHAR(action==1?spec.option_a:spec.option_b));}else{changed=UnmadeCore::StagePersonalAccord(Depth,Experience,arc,action,true);line=UTF8_TO_TCHAR(action==1?spec.return_a:spec.return_b);}cue=TEXT("reward");}
@@ -113,6 +132,20 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    }
   }
  if(kind==4){if(Depth.Arc(arc)->route&&!Depth.Arc(arc)->secret){changed=Depth.Secret(arc,(e->rooms&8)!=0);if(!changed)Depth=before;}line=changed?FString(UTF8_TO_TCHAR(spec.secret_name))+TEXT(" found. Two local favor earned; the final mastery lesson is now available."):TEXT("Open the route, register chamber four and inspect the opened cache. Its discovery needs no consumable.");cue=TEXT("reward");}
+ if(kind==6){
+  const auto* local=Depth.Arc(arc);
+  if(!e->returned||!local->choice)line=TEXT("A witnessed return and resolved personal accord are required before a public account can be examined.");
+  else{
+   line=FString::Printf(TEXT("%s / RETURN-ROAD ACCOUNT\n%s"),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
+    UTF8_TO_TCHAR(local->choice==1?spec.public_return_a:spec.public_return_b));
+   if(local->choice==2&&!Depth.Arc(arc)->counterThreat)
+    line+=TEXT("\nThe displaced claimant still contests the outer road. Seek the actual return-road opponent or choose another route.");
+   else if(Identity.Arc(arc)->repair!=7)
+    line+=TEXT("\nThe public wayposts remain incomplete. Speak with the returning roadkeeper and repair all three posts.");
+   else line+=TEXT("\nThe wayposts are restored. Return during the day to find the surviving workers at their duty sites.");
+  }
+ }
  if(kind==5&&!ExperienceServicesOpen(arc)){NotifyRpg(ExperienceServiceHours(arc));return true;}
  if(kind==5){changed=Depth.Buy(arc,index,GetGameDay(),index!=0||p->GetCombat()->GetMissingHealth()>0);heal=changed&&index==0;line=changed?index==0?TEXT("Provision purchased. Up to 35 health restored."):index==1?TEXT("Field kit crafted. It suppresses a danger field; progression does not consume it."):TEXT("Earned mastery learned without spending favor. Improved stamina recovery, dodge and parry; F11 invokes your earned technique."):FString::Printf(TEXT("Service costs %d LOCAL FAVOR. Finish the personal quest first. Supplies: four total, once per day, while injured. Kits: capacity three. Training: route for level two, cache for level three."),Depth.Price(arc,index));cue=TEXT("reward");}
  const bool accord=changed&&kind==0&&Depth.Arc(arc)->choice;
@@ -137,7 +170,10 @@ FString AUnmadePrototypeHub::GetDepthJournal()const{FString text=TEXT("PERSONAL 
    UTF8_TO_TCHAR(UnmadeCore::NextInvestigationLead(a,*Expeditions.Arc(a),*s)));
  }return text;}
 FString AUnmadePrototypeHub::GetDepthReaction(FName person)const{for(int a=0;a<9;++a){auto* s=Depth.Arc(a);if(!s->offered)continue;bool chief=person==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)),witness=person==FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a));if(!chief&&!witness)continue;auto& spec=UnmadeCore::DepthSpecs[a];return FString(UTF8_TO_TCHAR(s->choice?(witness?(s->choice==1?spec.witness_return_a:spec.witness_return_b):(s->choice==1?spec.return_a:spec.return_b)):witness?spec.witness:spec.offer))+(s->choice==2?(s->counterThreat?TEXT(" The return-road claimant is gone. We remember who faced it."):TEXT(" A displaced claimant is watching the outer return road. You can avoid that road or face them.")):TEXT(""));}return FString();}
-FString AUnmadePrototypeHub::GetDepthPrompt(AUnmadeCharacter* p)const{if(!Alive(p))return TEXT("Return to your checkpoint to recover.");for(int a=0;a<9;++a){for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)if(Near(p,Shop(a,n,site)))return FString::Printf(TEXT("E  %s — %d local favor"),n==0?TEXT("Buy provisions"):n==1?TEXT("Craft field kit"):TEXT("Learn mastery"),Depth.Price(a,n));if((Expeditions.Arc(a)->rooms&4)&&Near(p,Control(a,n)))return FString::Printf(TEXT("E  Route control %d — %s%s"),n+1,UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(a)),a==1?*FString::Printf(TEXT(" / tide %.0f of 12"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds())):a==2?*FString::Printf(TEXT(" / %.0f seconds left"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())):TEXT(""));}if(DepthEvidenceActors.IsValidIndex(a)&&DepthEvidenceActors[a].IsValid()&&Near(p,Evidence(a)))return TEXT("E  Read personal evidence");if(DepthCacheActors.IsValidIndex(a)&&DepthCacheActors[a].IsValid()&&Near(p,Secret(a)))return TEXT("E  Inspect opened route cache");if(auto* n=Person(GetWorld(),a,0))if(Near(p,n->GetActorLocation(),n))return FString::Printf(TEXT("E  Speak to %s / 6 or 7 choose after evidence and boss resolution"),*n->GetDisplayLabel());}return TEXT("E interact  •  F inspect  •  J journal  •  I equipment  •  Tab map  •  Shift dodge  •  Ctrl sneak");}
+FString AUnmadePrototypeHub::GetDepthPrompt(AUnmadeCharacter* p)const{if(!Alive(p))return TEXT("Return to your checkpoint to recover.");for(int a=0;a<9;++a){for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)if(Near(p,Shop(a,n,site)))return FString::Printf(TEXT("E  %s — %d local favor"),n==0?TEXT("Buy provisions"):n==1?TEXT("Craft field kit"):TEXT("Learn mastery"),Depth.Price(a,n));if((Expeditions.Arc(a)->rooms&4)&&Near(p,Control(a,n)))return FString::Printf(TEXT("E  Route control %d — %s%s"),n+1,UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(a)),a==1?*FString::Printf(TEXT(" / tide %.0f of 12"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds())):a==2?*FString::Printf(TEXT(" / %.0f seconds left"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())):TEXT(""));}if(DepthAccordSigns.IsValidIndex(a)&&DepthAccordSigns[a].IsValid()&&!DepthAccordSigns[a]->IsHidden()
+   &&Expeditions.Arc(a)->returned&&Depth.Arc(a)->choice
+   &&Near(p,DepthAccordSigns[a]->GetActorLocation()-FVector(0,0,150),DepthAccordSigns[a].Get()))
+   return TEXT("E  Inspect public accord and return-road work");if(DepthEvidenceActors.IsValidIndex(a)&&DepthEvidenceActors[a].IsValid()&&Near(p,Evidence(a)))return TEXT("E  Read personal evidence");if(DepthCacheActors.IsValidIndex(a)&&DepthCacheActors[a].IsValid()&&Near(p,Secret(a)))return TEXT("E  Inspect opened route cache");if(auto* n=Person(GetWorld(),a,0))if(Near(p,n->GetActorLocation(),n))return FString::Printf(TEXT("E  Speak to %s / 6 or 7 choose after evidence and boss resolution"),*n->GetDisplayLabel());}return TEXT("E interact  •  F inspect  •  J journal  •  I equipment  •  Tab map  •  Shift dodge  •  Ctrl sneak");}
 UnmadeCore::WeaponStyle AUnmadePrototypeHub::PlayerWeaponStyle(UnmadeCore::ItemId legacy)const{auto Apply=[&](UnmadeCore::WeaponStyle s){auto b=ActiveBuild();s.cost*=b.cost;s.reach*=b.reach;return s;};if(GetWorld())if(auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))if(p->GetEquipment()&&p->GetEquipment()->RealmWeapon()>=0)return Apply(UnmadeCore::RealmWeapon(p->GetEquipment()->RealmWeapon()));using I=UnmadeCore::ItemId;if(legacy==I::Waybreaker||legacy==I::DebtCollector)return Apply({280,1.05,23,1.2,UnmadeCore::CombatStatus::Weaken,"Heavy blade"});if(legacy==I::MapmakersNeedle)return Apply({380,.8,18,1,UnmadeCore::CombatStatus::Expose,"Long needle"});if(legacy==I::RedactedScepter)return Apply({650,1.1,24,1,UnmadeCore::CombatStatus::Slow,"Redacted focus"});if(legacy==I::TemperedEdge)return Apply({235,.55,12,.95,UnmadeCore::CombatStatus::Burn,"Tempered blade"});return Apply({});}
 bool AUnmadePrototypeHub::SelectDepthTechnique(int a,AUnmadeCharacter* p){
  if(!Alive(p)||bDepthSaveRejected||p->GetWorld()!=GetWorld()||!UnmadeSave::IsSessionWritable(p)){NotifyRpg(TEXT("Technique selection unavailable until the current save and world are ready. The previous technique is unchanged."));return false;}

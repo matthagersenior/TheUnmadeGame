@@ -294,6 +294,8 @@ public:
     FString GetDepthJournal()const;
     FString GetDepthReaction(FName Person)const;
     FString GetDepthPrompt(AUnmadeCharacter* Player)const;
+    // Saved, local return-road work sites; no remote NPC knowledge or teleport.
+    bool GetPublicAccordRoutineTarget(FName ResidentId,bool AtNight,FVector& Out)const;
     UnmadeCore::WeaponStyle PlayerWeaponStyle(UnmadeCore::ItemId Legacy)const;
     int GetActiveMastery()const{auto* S=Depth.Arc(Depth.Active());return bDepthSaveRejected||!S?0:S->training;}
     TArray<FString> RpgHistory;
