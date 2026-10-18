@@ -35,9 +35,11 @@ bool Near(AUnmadeCharacter* p,FVector at,AActor* ignored=nullptr){if(!Alive(p)||
 bool Quiet(UWorld* world,AUnmadeCharacter* p,int a){for(TActorIterator<AUnmadeEnemyCharacter> e(world);e;++e){if(!e->IsExpeditionArc(a)||!e->CanBeTargeted())continue;FVector d=p->GetActorLocation()-e->GetActorLocation();if(d.Size2D()>(p->bIsCrouched?350:650)||FVector::DotProduct(e->GetActorForwardVector(),d.GetSafeNormal())<.3)continue;FCollisionQueryParams q(SCENE_QUERY_STAT(DepthStealth),false);q.AddIgnoredActor(p);q.AddIgnoredActor(*e);if(!world->LineTraceTestByChannel(e->GetActorLocation()+FVector(0,0,55),p->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q))return false;}return true;}
 }
 void AUnmadePrototypeHub::BuildAdventureDepth(){
- if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthAccordSigns.SetNum(9);DepthAccordWorkActors.SetNum(18);DepthCrossRealmReceiptSigns.SetNum(9);DepthCrossRealmReviewActors.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
+ if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthWitnessPlanSigns.SetNum(9);DepthAccordSigns.SetNum(9);DepthAccordWorkActors.SetNum(18);DepthCrossRealmReceiptSigns.SetNum(9);DepthCrossRealmReviewActors.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
  auto Sign=[&](FVector at,const FString& text){auto* t=GetWorld()->SpawnActor<ATextRenderActor>(at+FVector(0,0,150),FRotator(0,90,0));if(t){t->GetTextRender()->SetWorldSize(17);t->GetTextRender()->SetText(FText::FromString(text));}return t;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::DepthSpecs[a];DepthChallengeSigns[a]=Sign(Room(a,2)+FVector(0,900,0),UTF8_TO_TCHAR(s.challenge));
+  DepthWitnessPlanSigns[a]=Sign(Control(a,0)+FVector(400,350,0),
+    TEXT("REALM WITNESS ROUTE GUIDE / RETURN WITH PERSONALLY READ EVIDENCE"));
    // The notice stands beside existing local services; it never unlocks a
    // route or grants favor, and it remains hidden until a witnessed return.
    DepthAccordSigns[a]=Sign(Shop(a,0,0)+FVector(550,-500,0),TEXT("PUBLIC ACCORD / AWAITING RETURN"));
@@ -83,6 +85,16 @@ void AUnmadePrototypeHub::BuildAdventureDepth(){
 void AUnmadePrototypeHub::RefreshAdventureDepth(){
  if(!GetWorld()||DepthSecretGates.Num()!=9)return;
  for(int a=0;a<9;++a){auto* s=Depth.Arc(a);
+  if(DepthWitnessPlanSigns[a].IsValid()){
+   const bool proof=!bDepthSaveRejected&&!bExpeditionSaveRejected&&s->witness&&s->evidence;
+   const bool brief=DepthWitnessBriefUntil[a]>GetWorld()->GetTimeSeconds();
+   const TCHAR* status=s->route?TEXT("ROUTE OPEN"):!proof?TEXT("EVIDENCE NEEDED")
+      :brief?TEXT("PLAN READY / E APPLY"):TEXT("RETURN TO THE REAL WITNESS");
+   DepthWitnessPlanSigns[a]->GetTextRender()->SetText(FText::FromString(
+      FString::Printf(TEXT("REALM %s / WITNESS ROUTE GUIDE\\n%s"),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),status)));
+  }
+
    const int incoming=(a+8)%9;
    if(DepthCrossRealmReceiptSigns[a].IsValid()){
     const bool received=!bCrossRealmCarryRejected&&!bDepthSaveRejected&&
@@ -199,10 +211,19 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
    if(DepthAccordWorkActors[a*2+choice-1].IsValid()&&!DepthAccordWorkActors[a*2+choice-1]->IsHidden())
     Add(a,7,choice,DepthAccordWorkActors[a*2+choice-1]->GetActorLocation()+FVector(0,0,65),
      DepthAccordWorkActors[a*2+choice-1].Get());
+  if(DepthWitnessPlanSigns.IsValidIndex(a)&&DepthWitnessPlanSigns[a].IsValid()&&
+     !Depth.Arc(a)->route&&(Expeditions.Arc(a)->rooms&4)&&
+     Near(p,DepthWitnessPlanSigns[a]->GetActorLocation()-FVector(0,0,150),
+          DepthWitnessPlanSigns[a].Get()))
+      return TEXT("E  Apply witness-guided route plan");
   if(DepthCrossRealmReviewActors.IsValidIndex(a)&&DepthCrossRealmReviewActors[a].IsValid()&&
      !DepthCrossRealmReviewActors[a]->IsHidden())
     Add(a,8,0,DepthCrossRealmReviewActors[a]->GetActorLocation()+FVector(0,0,75),
       DepthCrossRealmReviewActors[a].Get());
+  if((Expeditions.Arc(a)->rooms&4)&&!Depth.Arc(a)->route&&
+      DepthWitnessPlanSigns[a].IsValid())
+    Add(a,9,0,DepthWitnessPlanSigns[a]->GetActorLocation()-FVector(0,0,150),
+        DepthWitnessPlanSigns[a].Get());
   for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)Add(a,5,n,Shop(a,n,site));if(Expeditions.Arc(a)->rooms&4)Add(a,3,n,Control(a,n));}}
  if(arc<0)return false;if(bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected||bCrossRealmCarryRejected){NotifyRpg(TEXT("Saved adventure data is invalid. The original record is protected."));return true;}
  auto before=Depth;auto beforeExperience=Experience;auto beforeChallenge=DepthChallenges;auto* e=Expeditions.Arc(arc);const auto& spec=UnmadeCore::DepthSpecs[arc];bool changed=false,heal=false;FString line;const TCHAR* cue=TEXT("inspect");
@@ -291,8 +312,35 @@ bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,dou
   else if(!Depth.Arc(arc)->offered){changed=Depth.Offer(arc,(e->visited&1)!=0);line=UTF8_TO_TCHAR(spec.offer);}
   else if(Depth.Arc(arc)->choice)line=UTF8_TO_TCHAR(Depth.Arc(arc)->choice==1?spec.return_a:spec.return_b);
   else line=FString(UTF8_TO_TCHAR(spec.goal))+TEXT("\n6: ")+UTF8_TO_TCHAR(spec.option_a)+TEXT("\n7: ")+UTF8_TO_TCHAR(spec.option_b)+TEXT("\nChoices commit after the witness, physical evidence and boss resolution. J opens your journal.");}
- if(kind==1){changed=Depth.Witness(arc);line=UTF8_TO_TCHAR(spec.witness);}
+ if(kind==1){
+  changed=Depth.Witness(arc);
+  line=UTF8_TO_TCHAR(spec.witness);
+  // The witness does not learn unseen evidence. The player must return with
+  // the physically acquired proof and ask this actual person face to face.
+  if(Depth.Arc(arc)->witness&&Depth.Arc(arc)->evidence&&
+     !Depth.Arc(arc)->route&&(Expeditions.Arc(arc)->visited&1)){
+   DepthWitnessBriefUntil[arc]=GetWorld()->GetTimeSeconds()+360.;
+   line+=TEXT(" A witness can guide one control now. Carry this spoken route plan to the REALM witness guide by the side-route controls and press E. It is temporary, cannot open the route, and never waives tide, height, stealth or combat.");
+  }
+ }
  if(kind==2){changed=Depth.Evidence(arc,(e->rooms&8)!=0);line=UTF8_TO_TCHAR(spec.evidence);}
+ if(kind==9){
+  const double now=GetWorld()->GetTimeSeconds();
+  const bool realProof=Depth.Arc(arc)->witness&&Depth.Arc(arc)->evidence&&
+       (Expeditions.Arc(arc)->visited&1)!=0;
+  if(Depth.Arc(arc)->route)line=TEXT("This side route is already open.");
+  else if(!realProof||DepthWitnessBriefUntil[arc]<=now)
+   line=TEXT("This guide has no current firsthand route account. Examine the local personal evidence, then return and speak to its real witness before using this plan.");
+  else if(!DepthChallenges[arc].Prime(arc,now))
+   line=TEXT("The mechanism is already partly set. Your witness's map only primes an untouched route; finish the remaining steps normally or restart its actual controls.");
+  else{
+   DepthWitnessBriefUntil[arc]=0;
+   line=FString::Printf(TEXT("%s / One genuine first control is aligned by your witness's route plan. YOU must still operate the remaining controls and satisfy physical tide, time, elevation and stealth constraints. No passage or favor has been granted."),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city));
+   UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+  }
+ }
   if(kind==3){
    if(Depth.Arc(arc)->route)line=TEXT("This side route is already open.");
    else{

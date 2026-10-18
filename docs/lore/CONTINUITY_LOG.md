@@ -1231,3 +1231,11 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Found a native control-flow error: the kind-eight review branch sat inside the mutually exclusive kind-seven pickup branch. The genuine comparison could never trigger; the affected native C++ file also had unbalanced braces, undetected by previous source-only CI.
 - Closed the pickup handler before the review handler, preserving separate stations and the atomic comparison with genuine destination evidence and chief attendance.
 - Added red-first regression coverage for independent interaction scopes and balanced native source. Actual Unreal compilation and playable interaction acceptance remain outstanding.
+
+
+## 2026-10-18 — Nine real witness-guided side-route assists
+
+- Added one optional, temporary in-person route briefing per realm, offered only after the player has personally read local evidence and physically returned to its named witness.
+- Added a separate side-route plan placard with live proof/briefing/route status. Using E while briefed pre-aligns one correct native control and consumes that briefing without marking the route, awarding favor or changing the save schema.
+- All nine ordered, timed, weighted, elevated and stealth-dependent challenges retain their original remaining input and danger conditions. No research or NPC consultation is required to finish them normally.
+- Added portable nine-realm priming tests and source wiring guards. The new transient guide cannot be mistaken for another witness's consent or knowledge; UE interactions and visual placement need engine validation.
