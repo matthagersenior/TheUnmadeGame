@@ -310,6 +310,7 @@ public:
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthEvidenceActors,DepthCacheActors;
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthSecretGates;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthChallengeSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> DepthAccordSigns;
     void BuildIdentity();
     void RefreshIdentity();
     bool TryIdentityInteraction(AUnmadeCharacter* Player,double Competing,bool Survey=false);
