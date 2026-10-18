@@ -48,22 +48,51 @@ FieldKitResult CommitFieldKit(AdventureDepth& depth,int target,bool benefit,
  return FieldKitResult::Used;
 }
 // Distinct challenge state is transient until a physical completion is committed.
+// Realm-local challenge progress is transient until the existing route receipt saves.
+// Every attempt reports *why* progress advanced or stopped. No save schema changes.
+enum class ChallengeOutcome { Invalid, Progress, Reset, WaitForWindow, NeedElevation, Observed, Complete };
+struct ChallengeReport { ChallengeOutcome outcome=ChallengeOutcome::Invalid; double secondsRemaining=0; };
+inline const char* ChallengeInstructions(int realm){
+ constexpr const char* hints[]={
+  "Ring road bells 1, 3, 2. A wrong note restarts the charter signal.",
+  "Keep pump switches 1 and 3 on, 2 off. Complete during tide seconds 4-9 of each 12-second cycle.",
+  "Touch all three cooling relays within 18 seconds from the first relay. Expiry starts a new attempt.",
+  "Float buoys 1 and 2: their weights are 2 and 3; buoy 3 weighs 4. The required load is 5; toggle a buoy to remove it.",
+  "Climb the upper choir walkway before grounding all three anchors. Controls cannot be worked from below.",
+  "Close yesterday shutters 1, 2, 3 in order. The wrong shutter resets the sequence.",
+  "Read all three census lamps while unseen. Crouch outside the patrol gaze or clear the guards; detection resets the lamps.",
+  "Regraft the public root path in order 3, 1, 2. A wrong graft resets the sequence.",
+  "Light threshold lamps 2 and 3, leaving lamp 1 dark. Any lamp can be toggled again."
+ };
+ return realm>=0&&realm<9?hints[realm]:nullptr;
+}
 class RealmChallenge {
  int progress=0,mask=0;double until=-1;
 public:
  int Progress()const{return progress;}
  int Mask()const{return mask;}
- bool Step(int realm,int control,double now,bool elevated,bool quiet){if(realm<0||realm>8||control<0||control>2||!std::isfinite(now)||now<0)return false;
- switch(realm){
- case 0:{constexpr int seq[]={0,2,1};progress=control==seq[progress%3]?progress+1:control==0?1:0;return progress>=3;}
- case 1:mask^=1<<control;return mask==5&&std::fmod(now,12.)>=4&&std::fmod(now,12.)<9;
- case 2:if(until<now){progress=0;mask=0;until=now+18;}mask|=1<<control;return mask==7;
- case 3:mask^=1<<control;return ((mask&1?2:0)+(mask&2?3:0)+(mask&4?4:0))==5;
- case 4:if(!elevated)return false;mask|=1<<control;return mask==7;
- case 5:progress=control==progress%3?progress+1:0;return progress>=3;
- case 6:if(!quiet){progress=0;mask=0;return false;}mask|=1<<control;return mask==7;
- case 7:{constexpr int seq[]={2,0,1};progress=control==seq[progress%3]?progress+1:0;return progress>=3;}
- case 8:mask^=1<<control;return mask==6;
- }return false;}
+ static double TidePhase(double now){return std::isfinite(now)&&now>=0?std::fmod(now,12.):0;}
+ double SecondsRemaining(double now)const{return std::isfinite(now)&&now>=0&&until>=now?until-now:0;}
+ ChallengeReport Attempt(int realm,int control,double now,bool elevated,bool quiet){
+  if(realm<0||realm>8||control<0||control>2||!std::isfinite(now)||now<0)return {};
+  switch(realm){
+   case 0:{constexpr int seq[]={0,2,1};bool right=control==seq[progress%3];progress=right?progress+1:control==0?1:0;return {right?(progress>=3?ChallengeOutcome::Complete:ChallengeOutcome::Progress):ChallengeOutcome::Reset,0};}
+   case 1:{mask^=1<<control;if(mask!=5)return {ChallengeOutcome::Progress,0};
+    double phase=TidePhase(now);return {phase>=4&&phase<9?ChallengeOutcome::Complete:ChallengeOutcome::WaitForWindow,0};}
+   case 2:{bool expired=until>=0&&until<now;if(until<now){progress=0;mask=0;until=now+18;}
+    mask|=1<<control;return {mask==7?ChallengeOutcome::Complete:expired?ChallengeOutcome::Reset:ChallengeOutcome::Progress,SecondsRemaining(now)};}
+   case 3:{mask^=1<<control;int load=(mask&1?2:0)+(mask&2?3:0)+(mask&4?4:0);return {load==5?ChallengeOutcome::Complete:ChallengeOutcome::Progress,0};}
+   case 4:{if(!elevated)return {ChallengeOutcome::NeedElevation,0};mask|=1<<control;return {mask==7?ChallengeOutcome::Complete:ChallengeOutcome::Progress,0};}
+   case 5:{bool right=control==progress%3;progress=right?progress+1:0;return {right?(progress>=3?ChallengeOutcome::Complete:ChallengeOutcome::Progress):ChallengeOutcome::Reset,0};}
+   case 6:{if(!quiet){progress=0;mask=0;return {ChallengeOutcome::Observed,0};}mask|=1<<control;return {mask==7?ChallengeOutcome::Complete:ChallengeOutcome::Progress,0};}
+   case 7:{constexpr int seq[]={2,0,1};bool right=control==seq[progress%3];progress=right?progress+1:0;return {right?(progress>=3?ChallengeOutcome::Complete:ChallengeOutcome::Progress):ChallengeOutcome::Reset,0};}
+   case 8:{mask^=1<<control;return {mask==6?ChallengeOutcome::Complete:ChallengeOutcome::Progress,0};}
+  }
+  return {};
+ }
+ // Kept for existing callers and portable contracts.
+ bool Step(int realm,int control,double now,bool elevated,bool quiet){
+  return Attempt(realm,control,now,elevated,quiet).outcome==ChallengeOutcome::Complete;
+ }
 };
 }
