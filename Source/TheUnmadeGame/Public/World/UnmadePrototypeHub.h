@@ -318,6 +318,7 @@ public:
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthSecretGates;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthChallengeSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthAccordSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> DepthCrossRealmReceiptSigns;
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthAccordWorkActors;
     void BuildIdentity();
     void RefreshIdentity();
