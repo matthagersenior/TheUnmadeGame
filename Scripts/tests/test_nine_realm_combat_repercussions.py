@@ -38,6 +38,13 @@ int main(){
   assert(sparse.rescued==2 && death.rescued==0);
   assert(CrossRealmCombatResponse(dst,1,0,2,true,true,false,true).rescued==1);
   assert(restraint.kind==CrossRealmCombatKind::OpenWitnessPass);
+  auto costlyMercy=CrossRealmCombatResponse(dst,2,255,0,true,true,false,true);
+  auto costlyMercyReviewed=CrossRealmCombatResponse(dst,2,255,0,true,true,true,true);
+  assert(costlyMercy.kind==CrossRealmCombatKind::CasualtyVigil);
+  assert(costlyMercy.hazardDelta>0);
+  assert(costlyMercyReviewed.kind==CrossRealmCombatKind::ReviewedVigil);
+  assert(costlyMercyReviewed.hazardDelta<costlyMercy.hazardDelta);
+  assert(costlyMercyReviewed.hazardDelta>=0);
   assert(restraint.hazardDelta<=-1&&restraint.hazardDelta>=-4);
   auto moderated=CrossRealmCombatResponse(dst,1,255,0,true,true,true,true);
   auto verifiedPass=CrossRealmCombatResponse(dst,2,0,3,true,true,true,true);
