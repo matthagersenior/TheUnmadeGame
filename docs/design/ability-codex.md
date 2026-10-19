@@ -2,7 +2,7 @@
 
 **Canonical index:** [`Authoring/ability_codex.json`](../../Authoring/ability_codex.json)
 
-The Ability Codex registers **186** named or defined entries across inherent reality effects, ten earned rites, six Confluences, fundamental combat, combat builds, nine regional techniques, nine realm weapon styles, the entire 60-item catalog (including seven materials), three professions, six workshop recipes, nine field recipes, nine local privileges, creatures, bosses, and observed enemy patterns.
+The current Ability Codex registers **243** named or defined entries (October 19, 2026 source snapshot) across inherent reality effects, ten earned rites, six Confluences, fundamental combat, combat builds, nine regional techniques, nine realm weapon styles, the entire 60-item catalog (including seven materials), three professions, six workshop recipes, nine field recipes, nine local privileges, creatures, bosses, and observed enemy patterns.
 
 This is a **discoverability, provenance and learning index**, not a claim that all entries are independent usable spells. Every entry has a stable ID, name, category, acquisition and prerequisites, effect, cost, duration, limitations, combinations, observation policy, implementation status and source file reference. Some fields are marked unspecified rather than fabricated.
 
