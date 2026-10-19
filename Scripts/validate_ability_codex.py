@@ -22,7 +22,7 @@ STYLES = "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
 CREATURES = "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
 BOSSES = "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
 GUARDIANS = "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
-EXPERIENCE = "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+EXPERIENCE = "Source/TheUnmadeGame/Public/World/UnmadeCodexExperienceGenerated.inc"
 CRAFT = "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
 FIELD = "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h"
 FINAL = "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
@@ -338,6 +338,16 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
             issues.append(f"journey.expedition.{realm}: incomplete authored people or clues")
         if contract.get("kill_return")==contract.get("mercy_return"):
             issues.append(f"journey.expedition.{realm}: mercy and combat must differ")
+    if '#include "World/UnmadeCodexExperienceGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"):
+        issues.append("ExperienceSpec runtime is not connected to canonical Codex")
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                  "TidalLedger","SkyBelow","CinderSpine",
+                                  "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        record=by_id.get("journey.wing."+realm)
+        if record is None:continue
+        c=record.get("rule_contract",{})
+        if c.get("source_index")!=index or len(c.get("scenes",[]))!=4 or len(c.get("wing_grid",[]))!=3:
+            issues.append(f"journey.wing.{realm}: four scenes and three physical rooms required")
     wing_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"',source(EXPERIENCE))
     _expect(issues,len(wing_rows),9,"wing registry count")
     for realm,row in zip(realms,wing_rows):

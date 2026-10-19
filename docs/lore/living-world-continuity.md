@@ -502,3 +502,7 @@ The original nine-world atlas and thirteen bidirectional connecting routes, incl
 ## 2026-10-19 — Codex owns nine expedition contracts
 
 The existing nine expedition definitions—including each local crew, physical clue, geographical anchor, confrontation and explicitly separate mercy-versus-kill return language—are now compiled from the canonical Codex. Defeating or sparing a boss still requires the original live encounter and the saved state-machine outcome; a written entry does not free a captive or settle a witness's question. The generated table retains the exact original text, reward identities and XY anchors, while six later realm maps remain unverified in Unreal.
+
+## 2026-10-19 — Experience-wing fidelity to physical layout and witnesses
+
+The Codex now supplies all nine executable optional `ExperienceSpecs`. Each preserves its three tangible rooms, bespoke physical challenge, local guardian and unique reward, plus both saved public-witness and reserve aftermath narratives and the four scene-specific reactions. This does not claim an unearned NPC testimony, a visited level, a completed wing or any cooked Unreal asset. The 256-record Codex is unchanged in record count: existing experience entries now carry the full runtime rule definitions.

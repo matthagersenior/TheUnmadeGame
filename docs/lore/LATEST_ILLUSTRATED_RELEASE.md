@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**19 October 2026 source milestone:** Nine optional experience wings now use Codex-generated runtime specifications, preserving physical grid and witness texts. No v20 artwork or file hashes were changed.
+
 **Source milestone, 19 October 2026:** The expedition's nine authored boss/crew/clue/return definitions are Codex-generated. Historic illustrated package contents and SHA-256 checksums have not changed.
 
 **19 October 2026 follow-on source milestone:** Realm descriptions and their 13 attunement-gated passages are now Codex-generated, not hand-maintained. The historical illustrated v20 assets and their hashes remain unchanged.

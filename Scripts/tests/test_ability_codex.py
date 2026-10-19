@@ -69,6 +69,20 @@ class AbilityCodexContract(unittest.TestCase):
         row["rule_contract"]["mercy_return"]=row["rule_contract"]["kill_return"]
         self.assertTrue(any("mercy and combat must differ" in issue for issue in validate(ROOT,changed)))
 
+    def test_experience_wing_room_grid_and_scenes_are_source_owned(self):
+        records=[x for x in self.codex["records"] if x["id"].startswith("journey.wing.")]
+        self.assertEqual(len(records),9)
+        for row in records:
+            rule=row["rule_contract"]
+            self.assertEqual(len(rule["scenes"]),4)
+            self.assertEqual(len(rule["wing_grid"]),3)
+            self.assertTrue(all(len(pair)==2 for pair in rule["wing_grid"]))
+            self.assertNotEqual(rule["reserve_return"],rule["witness_return"])
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="journey.wing.ThreefoldReach")
+        row["rule_contract"]["scenes"]=[]
+        self.assertTrue(any("four scenes" in issue for issue in validate(ROOT,changed)))
+
     def test_invalid_dependency_rejected(self):
         changed=deepcopy(self.codex)
         row=next(x for x in changed["records"] if x["id"]=="journey.wing.FirstAbsence")

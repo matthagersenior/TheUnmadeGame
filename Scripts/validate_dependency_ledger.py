@@ -176,7 +176,9 @@ def validate(data: dict) -> list[str]:
                   r'\{Realm::(\w+),"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*(\d+),(\d+),([\d.]+),([\d.]+),(\d+)\}')
     roads = rows("World/UnmadeRememberedRoadRegistry.h",
                  r'\{"([^"]+)",Realm::(\w+),[-\d.]+,[-\d.]+,\d+,"([^"]+)","([^"]+)","([^"]+)","([^"]+)",\{[^}]+\},"([^"]+)","([^"]+)",CreatureKind::(\w+),"([^"]+)"')
-    wings = rows("World/UnmadePlayerExperienceRegistry.h", r'\{"([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
+    if '#include "World/UnmadeCodexExperienceGenerated.inc"' not in read(PUBLIC + "World/UnmadePlayerExperienceRegistry.h"):
+        errors.append("wing registry is not Codex-generated")
+    wings = rows("World/UnmadeCodexExperienceGenerated.inc", r'\{"([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
     wings = [w for w in wings if w[0] in city_to_realm]
     error_if(len(original) != 3 or len(guards) != 6 or len(roads) != 11 or len(wings) != 9,
              "boss/guardian/wing/road source parse changed: inspect the registry", errors)

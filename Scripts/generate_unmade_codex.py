@@ -129,6 +129,30 @@ def generate_expeditions(codex):
     out.append("}};")
     return "\n".join(out)+"\n"
 
+
+EXPERIENCE_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexExperienceGenerated.inc"
+
+def generate_experience(codex):
+    by={row["id"]:row for row in codex["records"]}
+    out=["// GENERATED FROM Authoring/ability_codex.json. Do not hand-edit.",
+         "// Included inside namespace UnmadeCore after ExperienceSpec.",
+         "inline constexpr ExperienceSpec ExperienceSpecs[9]={"]
+    for index,realm in enumerate(REALMS):
+        entry=by["journey.wing."+realm]
+        c=entry["rule_contract"]
+        if c["source_index"]!=index:
+            raise ValueError("Wing source index drift "+realm)
+        if len(c["scenes"])!=4 or len(c["wing_grid"])!=3 or any(len(pair)!=2 for pair in c["wing_grid"]):
+            raise ValueError("Wing layout and four witness reactions required for "+realm)
+        strings=(c["city"],c["wing"],c["guardian"],c["interior"],c["specialty"],
+                 c["task"],c["hint"],c["tool"],c["recipe"],c["reserve_return"],c["witness_return"])
+        scenes="{"+",".join(quote(s) for s in c["scenes"])+"}"
+        grid="{{"+",".join("{"+",".join(str(v) for v in pair)+"}" for pair in c["wing_grid"])+"}}"
+        parts=tuple(quote(s) for s in strings)+(scenes,grid)
+        out.append("    {"+",".join(parts)+"}"+("" if index==8 else ","))
+    out.append("};")
+    return "\n".join(out)+"\n"
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
@@ -138,9 +162,13 @@ def main():
     crafting=generate_crafting(codex)
     atlas=generate_atlas(codex)
     expeditions=generate_expeditions(codex)
+    experience=generate_experience(codex)
     if args.check:
         if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
             print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")
+            return 1
+        if not EXPERIENCE_OUTPUT.is_file() or EXPERIENCE_OUTPUT.read_text(encoding="utf-8")!=experience:
+            print("FAIL: Codex-generated experience wing / room graph is stale.")
             return 1
         if not EXPEDITION_OUTPUT.is_file() or EXPEDITION_OUTPUT.read_text(encoding="utf-8")!=expeditions:
             print("FAIL: Codex-generated expedition content differs from authoring.")
@@ -157,7 +185,8 @@ def main():
     CRAFT_OUTPUT.write_text(crafting,encoding="utf-8")
     ATLAS_OUTPUT.write_text(atlas,encoding="utf-8")
     EXPEDITION_OUTPUT.write_text(expeditions,encoding="utf-8")
-    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT))
+    EXPERIENCE_OUTPUT.write_text(experience,encoding="utf-8")
+    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT),EXPERIENCE_OUTPUT.relative_to(ROOT))
     return 0
 
 if __name__=="__main__":raise SystemExit(main())

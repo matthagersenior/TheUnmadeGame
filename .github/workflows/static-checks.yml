@@ -149,6 +149,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_expedition_rules_test.cpp -o /tmp/unmade-codex-expeditions
           /tmp/unmade-codex-expeditions
+      - name: Test Codex-owned experience wing locations and saved witness variants
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_experience_rules_test.cpp -o /tmp/unmade-codex-wings
+          /tmp/unmade-codex-wings
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check

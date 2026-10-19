@@ -392,3 +392,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Migrated the nine executable expedition specification records from independently maintained C++ tables to generated entries in the unified Codex (256 total records).
 - Preserved exact original NPCs, clue text, boss identities, realm positioning and combat/mercy return narration; did not rewrite quest stages or saved outcomes.
 - Added C++ tests and source-parity contracts for all nine expedition rules; no Unreal Editor compile or illustrated-release rebuild claimed.
+
+## 2026-10-19 — Nine optional experience wings become Codex-authored runtime tables
+
+- Moved all nine optional wing gameplay specification tables, including three physical room coordinates each, all task instructions and their NPC witness/choice-dependent reactions, into the existing Codex.
+- Added a generated C++ table, source/JSON parity tests and a portable realm-wing geometry test. Preserved saved indices, physical chapter gates and already-authored social consequences.
+- No Unreal compilation, v20 illustrated file regeneration, or fabricated available levels claimed.
