@@ -119,7 +119,7 @@ def validate(data: dict) -> list[str]:
     equal_ids(all_gear, [f"gear:{r}:{kind}" for r in realm_ids for kind in ("weapon","armor")], "regional gear", errors)
     study = re.search(
         r'enum class StudyId\s*:\s*int\s*\{([^}]+)\}', read(PUBLIC + "World/UnmadeAbilityStudyRules.h")).group(1)
-    study_ids = re.findall(r'(\w+)\s*=\s*\d+', study)
+    study_ids = [id for id in re.findall(r'(\w+)\s*=\s*\d+', study) if id != "Count"]
     source_study = read(PUBLIC + "World/UnmadeAbilityStudyRules.h")
     study_names = re.findall(r'"([^"]+)"', source_study.split("StudyNames={{", 1)[1].split("}};", 1)[0])
     if len(study_ids) != len(study_names) or len(study_ids) < 4:
@@ -274,7 +274,7 @@ def validate(data: dict) -> list[str]:
     for id, skill in all_skills.items():
         if skill.get("learning_quest") not in all_quests or not skill.get("teacher_or_source"):
             errors.append(id + ": no concrete learning source/quest")
-        if skill.get("mastery_reward") and skill["mastery_reward"] not in item_refs:
+        if skill.get("mastery_reward") and skill["mastery_reward"] not in item_refs and not skill["mastery_reward"].startswith(("world:", "resource:")):
             errors.append(id + ": mastery item not catalogued")
     # The larger Ability Codex indexes inherent, learned, observed, passive
     # and equipment-mediated capabilities. Do not clone its full 182 records.
