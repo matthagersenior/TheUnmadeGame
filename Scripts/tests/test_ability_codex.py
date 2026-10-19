@@ -19,6 +19,22 @@ class AbilityCodexContract(unittest.TestCase):
         self.assertEqual(errors, [], "\n".join(errors))
         self.assertGreaterEqual(len(self.codex["records"]), 182)
 
+    def test_every_codex_record_has_a_non_fabricated_requirements_checklist(self):
+        for row in self.codex["records"]:
+            checklist = row["requirements_checklist"]
+            self.assertGreater(len(checklist["items"]), 0)
+            for item in checklist["items"]:
+                self.assertEqual(item["completion_status"], "evaluated_in_game_only")
+                self.assertTrue(item["text"].strip())
+        self.assertEqual(self.codex["records"][0]["requirements_checklist"]["verification"],
+                         "source_authored_not_runtime_verified")
+
+    def test_fake_checked_checklist_is_rejected(self):
+        data = deepcopy(self.codex)
+        data["records"][0]["requirements_checklist"]["items"][0]["completion_status"] = "complete"
+        self.assertTrue(any("checklist cannot claim an unlocked state" in e
+                            for e in validate(ROOT,data)))
+
     def test_duplicate_ids_are_rejected(self):
         data = deepcopy(self.codex)
         data["records"].append(deepcopy(data["records"][0]))

@@ -40,7 +40,18 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "inherent.glimpse.requirement.1",
+            "text": "appropriate fracture target when needed",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -71,7 +82,18 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "inherent.fold.requirement.1",
+            "text": "appropriate fracture target when needed",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -102,7 +124,18 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "inherent.rewrite.requirement.1",
+            "text": "appropriate fracture target when needed",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -133,7 +166,18 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "inherent.reality_strain_recovery.requirement.1",
+            "text": "appropriate fracture target when needed",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -164,7 +208,18 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "inherent.fracture_exposure.requirement.1",
+            "text": "appropriate fracture target when needed",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -211,7 +266,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.UnwriteLaw.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.UnwriteLaw.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.UnwriteLaw.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.UnwriteLaw.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.UnwriteLaw.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -258,7 +348,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.Witnesscraft.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Witnesscraft.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Witnesscraft.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Witnesscraft.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Witnesscraft.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -305,7 +430,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.BorrowedLives.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.BorrowedLives.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.BorrowedLives.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.BorrowedLives.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.BorrowedLives.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -352,7 +512,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.LegacyForging.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.LegacyForging.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.LegacyForging.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.LegacyForging.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.LegacyForging.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -399,7 +594,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.LivingRoads.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.LivingRoads.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.LivingRoads.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.LivingRoads.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.LivingRoads.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -446,7 +676,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.TomorrowDebt.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.TomorrowDebt.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.TomorrowDebt.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.TomorrowDebt.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.TomorrowDebt.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -493,7 +758,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.UnderstandingBosses.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.UnderstandingBosses.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.UnderstandingBosses.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.UnderstandingBosses.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.UnderstandingBosses.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -540,7 +840,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.ParadoxConvergence.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.ParadoxConvergence.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.ParadoxConvergence.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.ParadoxConvergence.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.ParadoxConvergence.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -587,7 +922,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.Oathbinding.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Oathbinding.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Oathbinding.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Oathbinding.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Oathbinding.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -634,7 +1004,42 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "rite.Cartography.requirement.1",
+            "text": "Physically discover inscription",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Cartography.requirement.2",
+            "text": "Speak to named witness",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Cartography.requirement.3",
+            "text": "Perform Strain-costing trial",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Cartography.requirement.4",
+            "text": "Reach witnessed choice",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "rite.Cartography.requirement.5",
+            "text": "Return for discipline-specific mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -672,7 +1077,30 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "confluence.SilentAlarm.requirement.1",
+            "text": "Master both rites",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.SilentAlarm.requirement.2",
+            "text": "Use both within 120 in-world seconds at the chamber",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.SilentAlarm.requirement.3",
+            "text": "Obtain two credible witnesses for the outcome",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -710,7 +1138,30 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "confluence.TwoNames.requirement.1",
+            "text": "Master both rites",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.TwoNames.requirement.2",
+            "text": "Use both within 120 in-world seconds at the chamber",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.TwoNames.requirement.3",
+            "text": "Obtain two credible witnesses for the outcome",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -748,7 +1199,30 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "confluence.UnmappedWay.requirement.1",
+            "text": "Master both rites",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.UnmappedWay.requirement.2",
+            "text": "Use both within 120 in-world seconds at the chamber",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.UnmappedWay.requirement.3",
+            "text": "Obtain two credible witnesses for the outcome",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -786,7 +1260,30 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "confluence.TomorrowPromise.requirement.1",
+            "text": "Master both rites",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.TomorrowPromise.requirement.2",
+            "text": "Use both within 120 in-world seconds at the chamber",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.TomorrowPromise.requirement.3",
+            "text": "Obtain two credible witnesses for the outcome",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -824,7 +1321,30 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "confluence.TwoKeepers.requirement.1",
+            "text": "Master both rites",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.TwoKeepers.requirement.2",
+            "text": "Use both within 120 in-world seconds at the chamber",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.TwoKeepers.requirement.3",
+            "text": "Obtain two credible witnesses for the outcome",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -862,7 +1382,30 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "confluence.FirstAbsence.requirement.1",
+            "text": "Master both rites",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.FirstAbsence.requirement.2",
+            "text": "Use both within 120 in-world seconds at the chamber",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "confluence.FirstAbsence.requirement.3",
+            "text": "Obtain two credible witnesses for the outcome",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -898,7 +1441,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.salvager.requirement.1",
+            "text": "starter",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -934,7 +1488,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.traveler.requirement.1",
+            "text": "starter",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -972,7 +1537,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.elixir.hearth.requirement.1",
+            "text": "starter/craft",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1010,7 +1586,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.elixir.strain.requirement.1",
+            "text": "starter/craft",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -1048,7 +1635,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.mat.echo_glass.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -1086,7 +1684,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.mat.bell_metal.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -1124,7 +1733,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.mat.archive_ink.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1160,7 +1780,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.bellwold.requirement.1",
+            "text": "Bellwold lantern story",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1198,7 +1829,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.paperhaven.requirement.1",
+            "text": "Paperhaven testimony",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1234,7 +1876,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.wayfarer.requirement.1",
+            "text": "visit three villages",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1270,7 +1923,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.lost_hour.requirement.1",
+            "text": "bellgrave discovery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1304,7 +1968,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.orchard.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1340,7 +2015,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.debt.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1378,7 +2064,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.voice.requirement.1",
+            "text": "Echo Well discovery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1412,7 +2109,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.silent.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1448,7 +2156,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.lantern.requirement.1",
+            "text": "shelter supply run",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1482,7 +2201,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.registry.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1516,7 +2246,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.witness.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -1554,7 +2295,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.mat.rift_seed.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1590,7 +2342,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.elixir.nightwatch.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1626,7 +2389,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.elixir.rootbound.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1662,7 +2436,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.mapmaker.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1696,7 +2481,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.key.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1732,7 +2528,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.threepaths.requirement.1",
+            "text": "visit three villages",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1770,7 +2577,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.waybreaker.requirement.1",
+            "text": "unique Bellwold forge craft after shelter, testimony, villages and materials",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1808,7 +2626,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.unwritten_crown.requirement.1",
+            "text": "all six initial landmarks",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1844,7 +2673,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.elixir.possible_lives.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1895,7 +2735,66 @@
         "Source/TheUnmadeGame/Public/Items/UnmadeEquipmentComponent.h",
         "Source/TheUnmadeGame/Private/World/UnmadeTenfoldComponent.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "playable_save_backed",
+        "items": [
+          {
+            "key": "item.charm.atlas.requirement.1",
+            "text": "Personally inspect the Well of Returned Voices",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "item.charm.atlas.requirement.2",
+            "text": "Master the Memory Lens ability through firsthand experience",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "item.charm.atlas.requirement.3",
+            "text": "Master two distinct hostile principles in physical combat",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "item.charm.atlas.requirement.4",
+            "text": "Complete the Cartography rite through its existing staged quest",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "item.charm.atlas.requirement.5",
+            "text": "Verify at least one route through physical frontier exploration",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "item.charm.atlas.requirement.6",
+            "text": "Resolve The Place Before a First Story with two credible witnesses",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "item.charm.atlas.requirement.7",
+            "text": "Return physically to the Echo Well to claim the artifact",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "item.charm.atlas.requirement.8",
+            "text": "Keep a valid, writable character study and inventory save",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "item.charm.atlas.requirement.9",
+            "text": "Collect the once-only reward; previously claimed Atlas cannot be awarded again",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1929,7 +2828,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.bellheart.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1965,7 +2875,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.weapon.redacted.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -1999,7 +2920,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.pilgrim.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -2037,7 +2969,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.mat.iron_scrap.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -2075,7 +3018,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.mat.wild_herbs.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -2113,7 +3067,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.mat.blank_parchment.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2149,7 +3114,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.tempered.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2183,7 +3159,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.lanternmail.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2217,7 +3204,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.inkbound.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2251,7 +3249,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.stormglass.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2285,7 +3294,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.emberheart.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2319,7 +3339,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.refuge_oathguard.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2353,7 +3384,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.archivist_quill.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2387,7 +3429,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.roadbound.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2423,7 +3476,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.bellmakers_verse.requirement.1",
+            "text": "Unwrite Law mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2459,7 +3523,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.remembered_bridge.requirement.1",
+            "text": "Witnesscraft mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2495,7 +3570,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.second_name.requirement.1",
+            "text": "Borrowed Lives mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2531,7 +3617,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.three_deed.requirement.1",
+            "text": "Legacy Forging mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2567,7 +3664,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.common_causeway.requirement.1",
+            "text": "Living Roads mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2603,7 +3711,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.weapon.future_receipt.requirement.1",
+            "text": "Tomorrow Debt mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2639,7 +3758,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.hollow_mercy.requirement.1",
+            "text": "Understanding Bosses mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2675,7 +3805,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.between_histories.requirement.1",
+            "text": "Paradox Convergence mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2711,7 +3852,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.unbroken_lantern.requirement.1",
+            "text": "Oathbinding mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2747,7 +3899,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.coast_true.requirement.1",
+            "text": "Cartography mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2783,7 +3946,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.last_warning.requirement.1",
+            "text": "The Alarm Nobody Heard confluence",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2819,7 +3993,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.blade.elseborn_smith.requirement.1",
+            "text": "A Blade for Both Your Names confluence",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2855,7 +4040,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.common_chart.requirement.1",
+            "text": "The Route Nobody Owned confluence",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2891,7 +4087,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.borrowed_dawn.requirement.1",
+            "text": "Tomorrow Is Not Yours to Spend confluence",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2927,7 +4134,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.two_keepers.requirement.1",
+            "text": "The Bell Fell and Stood confluence",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2963,7 +4181,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.first_absence.requirement.1",
+            "text": "The Place Before a First Story confluence",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -2997,7 +4226,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.armor.afterlight_ward.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3031,7 +4271,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "item.charm.unredacted_lantern.requirement.1",
+            "text": "Confirm legitimate acquisition and its gameplay effect in cited source before treating this as a collectible ability",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3070,7 +4321,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "build.duelist.requirement.1",
+            "text": "Complete a regional optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "build.duelist.requirement.2",
+            "text": "Spend 2 Insight first unlock, 1 to change type",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3109,7 +4377,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "build.warden.requirement.1",
+            "text": "Complete a regional optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "build.warden.requirement.2",
+            "text": "Spend 2 Insight first unlock, 1 to change type",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3148,7 +4433,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "build.pathfinder.requirement.1",
+            "text": "Complete a regional optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "build.pathfinder.requirement.2",
+            "text": "Spend 2 Insight first unlock, 1 to change type",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3192,7 +4494,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.0.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.0.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3236,7 +4555,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.1.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.1.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3280,7 +4616,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.2.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.2.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3324,7 +4677,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.3.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.3.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3368,7 +4738,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.4.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.4.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3412,7 +4799,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.5.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.5.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3456,7 +4860,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.6.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.6.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3500,7 +4921,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.7.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.7.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -3544,7 +4982,24 @@
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "technique.realm.8.requirement.1",
+            "text": "Resolve optional region content",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "technique.realm.8.requirement.2",
+            "text": "Earn matching active mastery",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3581,7 +5036,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.0.requirement.1",
+            "text": "Earn region weapon Mileglass Edge",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3618,7 +5084,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.1.requirement.1",
+            "text": "Earn region weapon Breakwater Spear",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3655,7 +5132,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.2.requirement.1",
+            "text": "Earn region weapon Kilnfang Maul",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3692,7 +5180,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.3.requirement.1",
+            "text": "Earn region weapon Undertide Hook",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3729,7 +5228,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.4.requirement.1",
+            "text": "Earn region weapon Downfall Glaive",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3766,7 +5276,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.5.requirement.1",
+            "text": "Earn region weapon Yesterday Pickblade",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3803,7 +5324,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.6.requirement.1",
+            "text": "Earn region weapon Elseborn Saber",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3840,7 +5372,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.7.requirement.1",
+            "text": "Earn region weapon Crownroot Falchion",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3877,7 +5420,18 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "weapon_style.realm.8.requirement.1",
+            "text": "Earn region weapon Nearness Blade",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3908,7 +5462,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "profession.smith.requirement.1",
+            "text": "Valid available workbench, materials and recipe",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3939,7 +5504,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "profession.apothecary.requirement.1",
+            "text": "Valid available workbench, materials and recipe",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -3970,7 +5546,18 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "profession.scribe.requirement.1",
+            "text": "Valid available workbench, materials and recipe",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4012,7 +5599,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.workshop.TemperedEdge.requirement.1",
+            "text": "Requires Smith skill 0",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.workshop.TemperedEdge.requirement.2",
+            "text": "Must use Bellwold workshop",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4054,7 +5658,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.workshop.HerbSalve.requirement.1",
+            "text": "Requires Apothecary skill 0",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.workshop.HerbSalve.requirement.2",
+            "text": "Must use Bellwold workshop",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4096,7 +5717,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.workshop.ScribedStillness.requirement.1",
+            "text": "Requires Scribe skill 0",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.workshop.ScribedStillness.requirement.2",
+            "text": "Must use Paperhaven workshop",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4138,7 +5776,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.workshop.LanternMail.requirement.1",
+            "text": "Requires Smith skill 2",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.workshop.LanternMail.requirement.2",
+            "text": "Must use Bellwold workshop",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4180,7 +5835,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.workshop.InkboundCharm.requirement.1",
+            "text": "Requires Scribe skill 2",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.workshop.InkboundCharm.requirement.2",
+            "text": "Must use Paperhaven workshop",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4222,7 +5894,24 @@
       "implementation": "source_rule",
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.workshop.LifeAsh.requirement.1",
+            "text": "Requires Apothecary skill 2",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.workshop.LifeAsh.requirement.2",
+            "text": "Must use Bellwold workshop",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4266,7 +5955,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.0.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.0.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4310,7 +6016,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.1.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.1.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4354,7 +6077,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.2.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.2.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4398,7 +6138,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.3.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.3.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4442,7 +6199,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.4.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.4.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4486,7 +6260,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.5.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.5.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4530,7 +6321,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.6.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.6.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4574,7 +6382,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.7.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.7.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4618,7 +6443,24 @@
       "sources": [
         "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h",
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "recipe.field.realm.8.requirement.1",
+            "text": "Complete matching optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "recipe.field.realm.8.requirement.2",
+            "text": "Craft at local open workbench",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4656,7 +6498,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.0.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.0.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.0.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4694,7 +6559,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.1.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.1.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.1.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4732,7 +6620,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.2.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.2.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.2.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4770,7 +6681,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.3.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.3.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.3.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4808,7 +6742,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.4.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.4.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.4.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4846,7 +6803,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.5.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.5.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.5.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4884,7 +6864,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.6.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.6.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.6.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4922,7 +6925,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.7.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.7.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.7.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -4960,7 +6986,30 @@
       "sources": [
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "service.realm.8.requirement.1",
+            "text": "Complete optional wing",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.8.requirement.2",
+            "text": "Spend Insight on privilege",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "service.realm.8.requirement.3",
+            "text": "Attend open service location",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -4992,7 +7041,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.melee.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5024,7 +7084,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.combo.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5056,7 +7127,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.guard.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5088,7 +7170,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.parry.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5120,7 +7213,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.dodge.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5152,7 +7256,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.sneak.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5184,7 +7299,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.stagger.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5216,7 +7342,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.projectile.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5248,7 +7385,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.field_kit.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [],
@@ -5280,7 +7428,18 @@
       "sources": [
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "combat.healing.requirement.1",
+            "text": "Ability must be available and target valid",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5324,7 +7483,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.Cinderjaw.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.Cinderjaw.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.Cinderjaw.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5368,7 +7550,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.PaleStrider.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.PaleStrider.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.PaleStrider.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5412,7 +7617,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.Veilwatch.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.Veilwatch.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.Veilwatch.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5456,7 +7684,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.GleamMoth.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.GleamMoth.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.GleamMoth.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5500,7 +7751,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.HollowHound.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.HollowHound.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.HollowHound.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5544,7 +7818,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.GriefLantern.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.GriefLantern.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.GriefLantern.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5588,7 +7885,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.Inkmaw.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.Inkmaw.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.Inkmaw.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5632,7 +7952,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.RedactionEye.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.RedactionEye.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.RedactionEye.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5676,7 +8019,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.SaltglassCrawler.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.SaltglassCrawler.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.SaltglassCrawler.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5720,7 +8086,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.DrownedWatch.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.DrownedWatch.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.DrownedWatch.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5764,7 +8153,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.Ashmaw.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.Ashmaw.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.Ashmaw.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5808,7 +8220,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.creature.KilnWisp.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.KilnWisp.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.creature.KilnWisp.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5850,7 +8285,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.boss.HollowBell.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.boss.HollowBell.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.boss.HollowBell.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5892,7 +8350,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.boss.RedactedCurator.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.boss.RedactedCurator.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.boss.RedactedCurator.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5934,7 +8415,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.boss.UnfinishedPilgrim.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.boss.UnfinishedPilgrim.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.boss.UnfinishedPilgrim.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -5975,7 +8479,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.guardian.realm.1.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.1.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.1.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6016,7 +8543,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.guardian.realm.2.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.2.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.2.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6057,7 +8607,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.guardian.realm.3.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.3.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.3.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6098,7 +8671,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.guardian.realm.4.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.4.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.4.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6139,7 +8735,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.guardian.realm.5.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.5.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.5.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6180,7 +8799,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.guardian.realm.6.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.6.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.guardian.realm.6.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6218,7 +8860,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.0.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.0.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.0.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6256,7 +8921,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.1.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.1.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.1.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6294,7 +8982,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.2.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.2.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.2.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6332,7 +9043,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.3.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.3.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.3.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6370,7 +9104,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.4.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.4.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.4.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6408,7 +9165,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.5.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.5.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.5.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6446,7 +9226,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.6.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.6.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.6.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6484,7 +9287,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.7.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.7.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.7.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6522,7 +9348,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.wing_guardian.realm.8.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.8.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.wing_guardian.realm.8.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6561,7 +9410,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.0.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.0.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.0.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6600,7 +9472,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.1.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.1.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.1.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6639,7 +9534,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.2.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.2.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.2.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6678,7 +9596,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.3.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.3.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.3.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6717,7 +9658,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.4.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.4.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.4.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6756,7 +9720,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.5.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.5.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.5.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6795,7 +9782,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.6.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.6.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.6.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6834,7 +9844,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.7.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.7.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.7.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6873,7 +9906,30 @@
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.expedition_signature.realm.8.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.8.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.expedition_signature.realm.8.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6911,7 +9967,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.final.Bell.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.final.Bell.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.final.Bell.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6949,7 +10028,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.final.Horizon.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.final.Horizon.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.final.Horizon.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -6987,7 +10089,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.final.Names.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.final.Names.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.final.Names.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "limitations": [
@@ -7025,7 +10150,30 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "source_authored_not_runtime_verified",
+        "items": [
+          {
+            "key": "enemy.final.Counterfactual.requirement.1",
+            "text": "Encounter real target and survive/read its attack telegraph",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.final.Counterfactual.requirement.2",
+            "text": "Investigate a real vulnerability to earn counterplay",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "enemy.final.Counterfactual.requirement.3",
+            "text": "Observation only unlocks analysis or counterplay; acquiring the attack as a player skill is not yet implemented",
+            "completion_source": "source definition or planned quest; not automatically assumed complete",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "id": "study.Cinderjaw",
@@ -7077,7 +10225,48 @@
         "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "playable_save_backed",
+        "items": [
+          {
+            "key": "study.Cinderjaw.requirement.1",
+            "text": "Personally witness a real attack warning by this living enemy species",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.Cinderjaw.requirement.2",
+            "text": "Corroborate observation by dealing actual damage to the same living enemy species",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.Cinderjaw.requirement.3",
+            "text": "Interpret both firsthand observations to reach Understanding",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.Cinderjaw.requirement.4",
+            "text": "Complete experiment one at the actual subject with required Strain and time limits",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.Cinderjaw.requirement.5",
+            "text": "Complete experiment two at the actual subject with a fresh attack warning when applicable",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.Cinderjaw.requirement.6",
+            "text": "Master the skill physically, pay its cost, and commit the result to the character's save",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "id": "study.PaleStrider",
@@ -7128,7 +10317,48 @@
         "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "playable_save_backed",
+        "items": [
+          {
+            "key": "study.PaleStrider.requirement.1",
+            "text": "Personally witness a real attack warning by this living enemy species",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.PaleStrider.requirement.2",
+            "text": "Corroborate observation by dealing actual damage to the same living enemy species",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.PaleStrider.requirement.3",
+            "text": "Interpret both firsthand observations to reach Understanding",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.PaleStrider.requirement.4",
+            "text": "Complete experiment one at the actual subject with required Strain and time limits",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.PaleStrider.requirement.5",
+            "text": "Complete experiment two at the actual subject with a fresh attack warning when applicable",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.PaleStrider.requirement.6",
+            "text": "Master the skill physically, pay its cost, and commit the result to the character's save",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "id": "study.RedactionEye",
@@ -7180,7 +10410,48 @@
         "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "playable_save_backed",
+        "items": [
+          {
+            "key": "study.RedactionEye.requirement.1",
+            "text": "Personally witness a real attack warning by this living enemy species",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.RedactionEye.requirement.2",
+            "text": "Corroborate observation by dealing actual damage to the same living enemy species",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.RedactionEye.requirement.3",
+            "text": "Interpret both firsthand observations to reach Understanding",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.RedactionEye.requirement.4",
+            "text": "Complete experiment one at the actual subject with required Strain and time limits",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.RedactionEye.requirement.5",
+            "text": "Complete experiment two at the actual subject with a fresh attack warning when applicable",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.RedactionEye.requirement.6",
+            "text": "Master the skill physically, pay its cost, and commit the result to the character's save",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     },
     {
       "id": "study.EchoWell",
@@ -7232,7 +10503,48 @@
         "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
         "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
-      ]
+      ],
+      "requirements_checklist": {
+        "verification": "playable_save_backed",
+        "items": [
+          {
+            "key": "study.EchoWell.requirement.1",
+            "text": "Personally inspect the physical Echo Well",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.EchoWell.requirement.2",
+            "text": "Corroborate the Well through a real Strain-priced measurement",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.EchoWell.requirement.3",
+            "text": "Interpret both firsthand observations to reach Understanding",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.EchoWell.requirement.4",
+            "text": "Complete experiment one at the actual subject with required Strain and time limits",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.EchoWell.requirement.5",
+            "text": "Complete experiment two at the actual subject with a fresh attack warning when applicable",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          },
+          {
+            "key": "study.EchoWell.requirement.6",
+            "text": "Master the skill physically, pay its cost, and commit the result to the character's save",
+            "completion_source": "live game state and character save; never free-form manual completion",
+            "completion_status": "evaluated_in_game_only"
+          }
+        ]
+      }
     }
   ]
 }

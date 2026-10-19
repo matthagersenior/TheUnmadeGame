@@ -74,6 +74,23 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         for target in row.get("combines_with", []):
             if target not in by_id and not any(other.get("id") == target for other in records if isinstance(other, dict)):
                 issues.append(f"{key}: unknown combination {target}")
+        checklist = row.get("requirements_checklist")
+        if not isinstance(checklist, dict) or not checklist.get("items"):
+            issues.append(f"{key}: missing prerequisites checklist")
+        else:
+            seen_requirements = set()
+            for item in checklist["items"]:
+                if not isinstance(item, dict) or not isinstance(item.get("text"), str) or not item["text"].strip():
+                    issues.append(f"{key}: empty/invalid requirement")
+                elif item.get("key") in seen_requirements:
+                    issues.append(f"{key}: duplicate requirement ID")
+                else:
+                    seen_requirements.add(item.get("key"))
+                if item.get("completion_status") != "evaluated_in_game_only":
+                    issues.append(f"{key}: checklist cannot claim an unlocked state from static JSON")
+            if key.startswith("study.") or key == "item.charm.atlas":
+                if checklist.get("verification") != "playable_save_backed":
+                    issues.append(f"{key}: playable requirements must derive from real save state")
         obs = row.get("observation", {})
         if not isinstance(obs, dict) or obs.get("automatically_learnable") is True:
             issues.append(f"{key}: observation cannot automatically grant powers")
