@@ -322,8 +322,10 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         check("journey.expedition."+realm,"name",dungeon+" — "+city)
         check("journey.expedition."+realm,"rule_contract.boss",boss)
         check("journey.expedition."+realm,"rule_contract.frontier",frontier)
-    wing_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)","([^"]+)"',source(EXPERIENCE))
-    for realm,(city,wing,guardian) in zip(realms,wing_rows[:9]):
+    wing_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"',source(EXPERIENCE))
+    _expect(issues,len(wing_rows),9,"wing registry count")
+    for realm,row in zip(realms,wing_rows):
+        city,wing,guardian=row[:3]
         check("journey.wing."+realm,"name",wing+" — "+city)
         check("journey.wing."+realm,"rule_contract.guardian",guardian)
     story_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCampaignSpineRules.h"))
