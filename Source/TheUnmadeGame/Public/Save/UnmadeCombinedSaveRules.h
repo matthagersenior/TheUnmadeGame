@@ -493,6 +493,8 @@ bool ValidCombinedRecord(const Record& record, Text text)
         { return false; }
     }
     if(Save->bHasExpeditions){std::vector<int> Data;for(int V:Save->ExpeditionState)Data.push_back(V);if(!Expeditions.Restore(Data)){ return false; }}
+    if(Cinderhold.Save().route==4 && (!Save->bHasExpeditions||
+        !(Expeditions.Arc(2)->rooms&1)))return false;
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){ return false; }}
     if(Save->bHasAdventureDepth){std::vector<int> Data;for(int V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){ return false; }}
     if(Save->bHasPlayerExperience){std::vector<int> Data;for(int V:Save->PlayerExperienceState)Data.push_back(V);if(!Experience.Restore(Data,Expeditions,Depth,RestoredClock.DayIndex()+1)){ return false; }}
