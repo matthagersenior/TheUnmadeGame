@@ -96,6 +96,8 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  const int atlas=GrayboxIndexAfter(label,"Atlas.Gateway.",8);
  const int depth=GrayboxIndexAfter(label,"Depth.CivicWork.",8);
  const int artifact=GrayboxIndexAfter(label,"Depth.Evidence.",8);
+ const int secretGate=GrayboxIndexAfter(label,"Depth.SecretGate.",8);
+ const int identity=GrayboxIndexAfter(label,"Identity.",8);
  const int cache=GrayboxIndexAfter(label,"Depth.Cache.",8);
  const int cross=GrayboxIndexAfter(label,"CrossRealm.Review.",8);
  const auto malformed=GrayboxHas(label,"Road.")&&(std::strncmp(label,"Road.",5)==0)&&r<0&&h<0;
@@ -114,6 +116,8 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  else if(atlas>=0){out.realm=atlas;out.paletteSlot=out.realm;}
  else if(depth>=0){out.realm=depth;out.paletteSlot=out.realm;}
  else if(artifact>=0){out.realm=artifact;out.paletteSlot=out.realm;}
+ else if(secretGate>=0){out.realm=secretGate;out.paletteSlot=out.realm;}
+ else if(identity>=0){out.realm=identity;out.paletteSlot=out.realm;}
  else if(cache>=0){out.realm=cache;out.paletteSlot=out.realm;}
  else if(cross>=0){out.realm=cross;out.paletteSlot=out.realm;}
  else {
@@ -167,6 +171,7 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  else if(GrayboxHas(label,"Signal"))kit=GrayboxKit::Signal;
  else if(GrayboxHas(label,"Resonance.")||GrayboxHas(label,"Plinth")||
          GrayboxHas(label,"Echo.")||GrayboxHas(label,"Ritual"))kit=GrayboxKit::Ritual;
+ else if(GrayboxHas(label,"RepairPost"))kit=GrayboxKit::Workshop;
  else if(GrayboxHas(label,"Crank")||GrayboxHas(label,"Valve")||
          GrayboxHas(label,"Vent")||GrayboxHas(label,"Accord")||
          GrayboxHas(label,"Control")||GrayboxHas(label,"Mechanism")||

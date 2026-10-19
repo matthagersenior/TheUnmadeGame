@@ -75,7 +75,11 @@ void AUnmadePrototypeHub::BuildAdventureDepth(){
   DepthCacheActors[a]=Object(Secret(a)+FVector(0,0,-60),FVector(1,1,.5),FName(*FString::Printf(TEXT("Depth.Cache.%d"),a)));
   Sign(Evidence(a),TEXT("E - EXAMINE PERSONAL QUEST EVIDENCE"));Sign(Secret(a),FString(UTF8_TO_TCHAR(s.secret_name))+TEXT(" / E SEARCH AFTER OPENING ROUTE"));
   SpawnBlock(Room(a,3)+FVector(-450,850,20),FVector(.2,7,2.4),FName(TEXT("SecretAlcoveWall")));
-  auto* gate=GetWorld()->SpawnActor<AStaticMeshActor>(Room(a,3)+FVector(-825,500,20),FRotator::ZeroRotator);if(gate){auto* m=gate->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(7.5,.2,2.4));DepthSecretGates[a]=gate;}
+  auto* gate=GetWorld()->SpawnActor<AStaticMeshActor>(Room(a,3)+FVector(-825,500,20),FRotator::ZeroRotator);if(gate){auto* m=gate->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(7.5,.2,2.4));
+   const FName Tag(*FString::Printf(TEXT("Depth.SecretGate.%d"),a));
+   gate->Tags.AddUnique(Tag);
+   StyleWorldProp(gate,Tag,FVector(7.5,.2,2.4));
+   DepthSecretGates[a]=gate;}
   if(a==4){SpawnBlock(Room(a,2)+FVector(-700,650,240),FVector(7,4,.4),FName(TEXT("ChoirUpperWalkway")));auto* ramp=GetWorld()->SpawnActor<AStaticMeshActor>(Room(a,2)+FVector(0,650,90),FRotator(-16,0,0));if(ramp){auto* m=ramp->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(17,4,.35));}}
   if(a==1)for(int n=0;n<5;++n)SpawnBlock(Room(a,2)+FVector(650,-800+n*350,-5),FVector(3,2,.3),FName(TEXT("DryBreakwaterSteps")));
   if(a==7)SpawnBlock(Room(a,2)+FVector(0,0,-70),FVector(3,15,.35),FName(TEXT("LivingRootWalkway")));

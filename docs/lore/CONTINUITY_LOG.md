@@ -1291,3 +1291,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - 2026-10-19: Authored nine genuinely different realm skyline crowns, an Unreal Editor material generator with explicit Color→Base Color, and first-PC acceptance checklist for palette, geometry, collision, navmesh, visibility, mobile performance and final asset handoff. Source checks alone do not verify rendering or material cooking.
 
 - 2026-10-19: Added later-realm city/arena objects, 13 atlas passage gateway markers and nine-realm physically inspectable record/accord actors to realm-specific palette/ornamentation; no changes to collision, gate state or quest save IDs. Regression covers tag parsing and unchanged floor semantics.
+
+- 2026-10-19: Applied the 34-profile graybox kit taxonomy to direct-spawned road gates/cargo, Blackslag access, optional survey gates, nine physical repair posts, nine secret passages, and identity landforms; source tags remain authoritative, decorative children never own gameplay collision.

@@ -29,8 +29,11 @@ void AUnmadePrototypeHub::BuildIdentity(){
  if(!GetWorld())return;IdentityPuzzleSigns.SetNum(9);IdentityRepairs.SetNum(27);IdentityPatrols.SetNum(9);
  auto Sign=[&](FVector at,const FString& line){auto* t=GetWorld()->SpawnActor<ATextRenderActor>(at+FVector(0,0,130),FRotator(0,90,0));if(t){t->GetTextRender()->SetWorldSize(18);t->GetTextRender()->SetText(FText::FromString(line));}return t;};
  for(int a=0;a<9;++a){auto& s=UnmadeCore::IdentitySpecs[a];IdentityPuzzleSigns[a]=Sign(Puzzle(a,1)+FVector(0,0,150),UTF8_TO_TCHAR(s.mechanism));
-  for(int n=0;n<3;++n){Sign(Puzzle(a,n),FString::Printf(TEXT("E - VALVE %d / TOGGLES MASK %d (1,2,4 = LIGHTS)"),n+1,UnmadeCore::WorldIdentity::Coupling(a,n)));SpawnBlock(Puzzle(a,n)+FVector(0,0,-55),FVector(.8,.8,.7),FName(TEXT("IdentityValve")));
-   auto* b=GetWorld()->SpawnActor<AStaticMeshActor>(RepairPost(a,n)+FVector(0,0,-35),FRotator::ZeroRotator);if(b){auto* m=b->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(.3,2,.4));m->SetCollisionEnabled(ECollisionEnabled::NoCollision);IdentityRepairs[a*3+n]=b;}Sign(RepairPost(a,n),TEXT("E - REPAIR WAYPOST AFTER WITNESSED RETURN"));
+  for(int n=0;n<3;++n){Sign(Puzzle(a,n),FString::Printf(TEXT("E - VALVE %d / TOGGLES MASK %d (1,2,4 = LIGHTS)"),n+1,UnmadeCore::WorldIdentity::Coupling(a,n)));SpawnBlock(Puzzle(a,n)+FVector(0,0,-55),FVector(.8,.8,.7),FName(*FString::Printf(TEXT("Identity.%d.Valve.%d"),a,n)));
+   auto* b=GetWorld()->SpawnActor<AStaticMeshActor>(RepairPost(a,n)+FVector(0,0,-35),FRotator::ZeroRotator);if(b){auto* m=b->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(.3,2,.4));m->SetCollisionEnabled(ECollisionEnabled::NoCollision);const FName Post(*FString::Printf(TEXT("Identity.%d.RepairPost.%d"),a,n));
+    b->Tags.AddUnique(Post);
+    StyleWorldProp(b,Post,FVector(.3,2,.4));
+    IdentityRepairs[a*3+n]=b;}Sign(RepairPost(a,n),TEXT("E - REPAIR WAYPOST AFTER WITNESSED RETURN"));
   }
   // The full morally grounded tasks are in interaction feedback and J;
   // long quest paragraphs on a world-space sign are not legible or helpful.
@@ -38,7 +41,11 @@ void AUnmadePrototypeHub::BuildIdentity(){
   for(TActorIterator<AUnmadeNpcCharacter> npc(GetWorld());npc;++npc)if(npc->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a)))IdentityPatrols[a]=*npc;
 
   // Different landmark silhouettes beyond the usable chamber edges; no invented nav shortcuts.
-  for(int n=0;n<3+a%4;++n){FVector at=Base(a)+FVector(-2200-n*150,16000+n*600,0);auto* landmark=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator(0,a*17,n*9));if(landmark){auto* m=landmark->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,a%3==0?TEXT("/Engine/BasicShapes/Cylinder.Cylinder"):a%3==1?TEXT("/Engine/BasicShapes/Cone.Cone"):TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(1+a*.12,1+a*.12,3+n*.7));if(auto* mat=m->CreateAndSetMaterialInstanceDynamic(0))mat->SetVectorParameterValue(TEXT("Color"),FLinearColor(.18+a*.06,.35-a*.015,.6-a*.045));}}
+  for(int n=0;n<3+a%4;++n){FVector at=Base(a)+FVector(-2200-n*150,16000+n*600,0);auto* landmark=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator(0,a*17,n*9));if(landmark){auto* m=landmark->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,a%3==0?TEXT("/Engine/BasicShapes/Cylinder.Cylinder"):a%3==1?TEXT("/Engine/BasicShapes/Cone.Cone"):TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(1+a*.12,1+a*.12,3+n*.7));
+  const FName Tag(*FString::Printf(TEXT("Identity.%d.Landmark.%d"),a,n));
+  landmark->Tags.AddUnique(Tag);
+  StyleWorldProp(landmark,Tag,FVector(1+a*.12,1+a*.12,3+n*.7));
+  if(auto* mat=m->CreateAndSetMaterialInstanceDynamic(0))mat->SetVectorParameterValue(TEXT("Color"),FLinearColor(.18+a*.06,.35-a*.015,.6-a*.045));}}
   FString name=TEXT("SFX_ID_ambience_")+FString(UTF8_TO_TCHAR(s.ambience));FString path=TEXT("/Game/UnmadeProduction/Audio/Identity/")+name+TEXT(".")+name;
   if(auto* sound=LoadObject<USoundBase>(nullptr,*path,nullptr,LOAD_NoWarn)){auto* audio=NewObject<UAudioComponent>(this);audio->RegisterComponent();audio->SetWorldLocation(Service(a));audio->SetSound(sound);audio->bAllowSpatialization=true;audio->bOverrideAttenuation=true;audio->AttenuationOverrides.bAttenuate=true;audio->AttenuationOverrides.AttenuationShape=EAttenuationShape::Sphere;audio->AttenuationOverrides.AttenuationShapeExtents=FVector(2500,0,0);audio->AttenuationOverrides.FalloffDistance=5000;audio->SetVolumeMultiplier(.18f);audio->Play();}
  }

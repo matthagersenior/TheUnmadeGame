@@ -180,6 +180,7 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             Mesh->SetMobility(EComponentMobility::Movable);
             Mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
             Mesh->SetWorldScale3D(FVector(2.5,.3,2.4));
+            StyleWorldProp(Gate,FName(*(Id+TEXT(".SurveyGate"))),FVector(2.5,.3,2.4));
             FieldSurveyGates[GuideIndex]=Gate;
             Gate->SetActorEnableCollision(FieldSurveyStages[GuideIndex]==0);
             Gate->SetActorHiddenInGame(FieldSurveyStages[GuideIndex]>0);
@@ -213,6 +214,7 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
                     Geometry->SetWorldScale3D(Scale);
                     Geometry->SetCollisionEnabled(bSolid
                         ?ECollisionEnabled::QueryAndPhysics:ECollisionEnabled::NoCollision);
+                    StyleWorldProp(Shape,FName(*(Id+Suffix)),Scale);
                     const FString MatName(Site.Material);
                     const FString MatPath=FString::Printf(
                         TEXT("/Game/UnmadeProduction/Materials/%s.%s"),

@@ -66,7 +66,8 @@ void AUnmadePrototypeHub::BuildCinderholdAdventure()
         if(Gate){Gate->Tags.AddUnique(Tag);auto* Mesh=Gate->GetStaticMeshComponent();
             Mesh->SetMobility(EComponentMobility::Movable);
             Mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
-            Mesh->SetWorldScale3D(FVector(.35,2.4,2.4));}
+            Mesh->SetWorldScale3D(FVector(.35,2.4,2.4));
+            StyleWorldProp(Gate,Tag,FVector(.35,2.4,2.4));}
         return Gate;
     };
     // Narrow covered doorways have enclosing walls; these gates are actual
