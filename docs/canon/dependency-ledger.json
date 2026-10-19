@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "edition": "2026-10-19",
+  "edition": "2026-10-19 (concurrent first-hand study integration reconciled)",
   "authority": "C++ source and Authoring/ability_codex.json remain mechanical/ability references; this ledger is the enforceable cross-system index. UE runtime not verified.",
   "policy": {
     "discovery": "Must be physically earned and sourced; testimony is not omniscience.",
@@ -10,11 +10,6 @@
     "open_mysteries": "Open mysteries remain open unless deliberately approved in new canon."
   },
   "exceptions": [
-    {
-      "id": "AtlasOfAbsence",
-      "type": "unwired_milestone",
-      "description": "Achievement::AtlasOfAbsenceMastery now grants Atlas of Absence in source, but the acquisition has not been verified wired from AbilityStudy::AtlasReady() through a live claim and save. Do not label obtainable until gameplay awards it."
-    },
     {
       "id": "TomorrowDebt",
       "type": "reward_name_conflict",
@@ -684,10 +679,10 @@
         {
           "method": "milestone",
           "via": "AtlasOfAbsenceMastery",
-          "detail": "Award switch exists in current main; no gameplay caller has been confirmed to claim this milestone after AtlasReady() study mastery."
+          "detail": "Earn after mastering at least three firsthand studies including Echo Well; live player action checks AbilityStudy::AtlasReady() and saves Achievement::AtlasOfAbsenceMastery before grant."
         }
       ],
-      "availability": "declared_unwired",
+      "availability": "earnable",
       "source": "Items/UnmadeItemRules.h"
     },
     {
