@@ -1261,3 +1261,11 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Authored nine deterministic original 1.6-second Foley stings distinct in frequency, pulse intervals and overtones; extended the existing identity-audio manifest from 45 to 54 without renaming/reordering its prior sources. Existing review-cue tests continue covering offsets 36–44.
 - Preserved non-overwriting Unreal import, player audio-volume preferences and avatar control; no fabricated witness, XP, new quest gate, reward or save field.
 - Red-first regression checks cover sound hashes and waveform measurements, nine non-spoiler cues, save-before-audio behavior, physical entry through both valid paths and no repeated forced animation. In-engine import, spatial sound and physical camera presentation remain unverified.
+
+
+## 2026-10-18 — Nine physical first-fracture clue actors
+
+- Added one distinct revisitable, nonblocking anomaly in each realm's first expedition chamber, grounded in the already authored first-fracture mystery and a physical follow-up action.
+- Clue prompts and inspection require the player's actual room visit; their text directs players to physical local investigation rather than granting remote witness memories, quest completions, rewards or spoiler knowledge.
+- Nine-realm portable and source-wiring checks verify distinct authored placements, observed/hidden state transitions and actual physical interaction.
+- Native source, living-world canon, and the continuity log updated together to satisfy the project's gameplay-lore gate. Unreal geometry, actor/interaction readability and pathfinding still await in-engine acceptance.

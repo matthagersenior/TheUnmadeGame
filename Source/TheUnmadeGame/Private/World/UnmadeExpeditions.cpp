@@ -56,6 +56,7 @@ void AUnmadePrototypeHub::BuildExpeditions(){
  const auto Gate=[&](FVector at){auto* a=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(a){auto* m=a->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(6,.25,3));}return a;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::ExpeditionSpecs[a];const auto Block=[&](FVector at,FVector scale){SpawnBlock(at,scale,FName(*FString::Printf(TEXT("Expedition.%d.Structure"),a)));};
   Block(FVector(s.x-500,s.y+7500,-25),FVector(100,170,.5)); // connected city/frontier/refuge approach
+  // Canon: this clue is an actual visited-room investigation, not an earned reward.
   // A revisitable physical clue belongs to the room that was actually entered.
   // It is never a hidden quest gate, source of NPC omniscience, or free victory.
   const auto& fracture=UnmadeCore::FirstFracturePhysicals[a];
