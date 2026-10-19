@@ -74,6 +74,19 @@ public:
  int Mask()const{return mask;}
  static double TidePhase(double now){return std::isfinite(now)&&now>=0?std::fmod(now,12.):0;}
  double SecondsRemaining(double now)const{return std::isfinite(now)&&now>=0&&until>=now?until-now:0;}
+ // A local witness can mark just the first physical step of an untouched
+ // side-route mechanism. Every remaining operation and danger gate survives;
+ // this never calls AdventureDepth::Route or grants favor.
+ bool Prime(int realm,double now){
+  if(realm<0||realm>=9||!std::isfinite(now)||now<0||progress||mask)return false;
+  switch(realm){
+   case 0:case 5:case 7: progress=1;break; // witnessed first sequence switch
+   case 8:mask=2;break;                     // first true lamp, not the false one
+   default:mask=1;break;                     // first anchored weight/valve/lamp
+  }
+  if(realm==2)until=now+18;                 // no timer or safety bypass
+  return true;
+ }
  ChallengeReport Attempt(int realm,int control,double now,bool elevated,bool quiet){
   if(realm<0||realm>8||control<0||control>2||!std::isfinite(now)||now<0)return {};
   switch(realm){
