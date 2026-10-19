@@ -144,6 +144,8 @@ jobs:
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check
+      - name: Verify complete source-indexed world canon encyclopedia
+        run: python Scripts/validate_canon_encyclopedia.py
       - name: Audit canonical ability codex and source parity
         run: python Scripts/validate_ability_codex.py --report
       - name: Run validator unit tests
