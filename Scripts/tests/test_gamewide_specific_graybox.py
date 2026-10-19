@@ -9,6 +9,7 @@ class GamewideHotbox(unittest.TestCase):
   code=r'''
 #include "World/UnmadeGamewideGrayboxRules.h"
 #include <cassert>
+#include <cstdio>
 #include <set>
 #include <string>
 using namespace UnmadeCore;
@@ -52,6 +53,8 @@ int main(){
  for(const auto& entry:cases){
   const auto art=ClassifyGrayboxArt(entry.name,1,1,1);
   assert(art.realm==entry.realm);
+  if(art.kit!=entry.kit)std::fprintf(stderr,"graybox kit mismatch: %s actual=%d expected=%d\\n",
+     entry.name,static_cast<int>(art.kit),static_cast<int>(entry.kit));
   assert(art.kit==entry.kit);
   assert(art.footprintUnchanged);
   assert(art.detail&&art.replacementMesh&&art.detail[0]&&art.replacementMesh[0]);
