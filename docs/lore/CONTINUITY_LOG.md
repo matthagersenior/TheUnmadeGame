@@ -1252,3 +1252,12 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Added nine-realm portable progression regression tests and native journal/map integration checks. Actual in-engine compass and route readability remain unverified.
 
 - Fixed pure-header include of the canonical expedition registry, removed a guessed wing branch room, and matched the final optional reward bearing to the real third-station claim marker. Added coordinates to nine-realm tests.
+
+
+## 2026-10-18 — Nine first-discovery sensory moments
+
+- Added nine separate non-spoiler first-fracture observations keyed to actually saved first-chamber entry from either physical E doorway interaction or actual movement into the chamber.
+- A single authoritative saved room bit prevents replay across reloads. The cue and journal notice are emitted only after world-save success; failed writes, map inspection, equipment changes or returning visits do not manufacture a discovery.
+- Authored nine deterministic original 1.6-second Foley stings distinct in frequency, pulse intervals and overtones; extended the existing identity-audio manifest from 45 to 54 without renaming/reordering its prior sources. Existing review-cue tests continue covering offsets 36–44.
+- Preserved non-overwriting Unreal import, player audio-volume preferences and avatar control; no fabricated witness, XP, new quest gate, reward or save field.
+- Red-first regression checks cover sound hashes and waveform measurements, nine non-spoiler cues, save-before-audio behavior, physical entry through both valid paths and no repeated forced animation. In-engine import, spatial sound and physical camera presentation remain unverified.

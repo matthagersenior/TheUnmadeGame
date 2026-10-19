@@ -149,6 +149,8 @@ void AUnmadePrototypeHub::BuildExpeditions(){
 bool AUnmadePrototypeHub::CommitExpeditions(const UnmadeCore::Expeditions& before,AUnmadeCharacter* player){
  if(WriteWorldSnapshot(player)){
   RefreshExpeditions();
+  // Canon limit: this is one player's firsthand sense at the saved threshold,
+  // not an NPC witness or proof of a preferred cosmological explanation.
   // This is a firsthand sound and observation, not a staged lore answer.
   // The original saved chamber bit makes it one-time across reloads,
   // including physical E entry as well as walking over the room boundary.
