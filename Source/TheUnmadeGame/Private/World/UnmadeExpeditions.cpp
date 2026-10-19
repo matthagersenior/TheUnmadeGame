@@ -1,6 +1,7 @@
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeRealmJourneyRules.h"
+#include "World/UnmadeFirstFractureRules.h"
 #include "World/UnmadeEncounterHazardRules.h"
 #include "World/UnmadeIdentityRules.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
@@ -145,7 +146,27 @@ void AUnmadePrototypeHub::BuildExpeditions(){
  RestoreCitizens(); // New stable residents now exist; restore their personal memory too.
  RefreshExpeditions();
 }
-bool AUnmadePrototypeHub::CommitExpeditions(const UnmadeCore::Expeditions& before,AUnmadeCharacter* player){if(WriteWorldSnapshot(player)){RefreshExpeditions();return true;}Expeditions=before;NotifyRpg(TEXT("Adventure could not save. The choice and reward remain uncommitted; retry."));return false;}
+bool AUnmadePrototypeHub::CommitExpeditions(const UnmadeCore::Expeditions& before,AUnmadeCharacter* player){
+ if(WriteWorldSnapshot(player)){
+  RefreshExpeditions();
+  // This is a firsthand sound and observation, not a staged lore answer.
+  // The original saved chamber bit makes it one-time across reloads,
+  // including physical E entry as well as walking over the room boundary.
+  if(IsValid(player))for(int a=0;a<9;++a)
+   if(!(before.Arc(a)->rooms&1)&&(Expeditions.Arc(a)->rooms&1)){
+    if(const char* cue=UnmadeCore::FirstFractureCue(a))
+     UnmadePresentation::Sound(player,UTF8_TO_TCHAR(cue));
+    if(const char* line=UnmadeCore::FirstFractureLine(a))
+     NotifyRpg(FString::Printf(TEXT("FIRST FRACTURE / %s\n%s"),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+       UTF8_TO_TCHAR(line)));
+   }
+  return true;
+ }
+ Expeditions=before;
+ NotifyRpg(TEXT("Adventure could not save. The choice and reward remain uncommitted; retry."));
+ return false;
+}
 void AUnmadePrototypeHub::RefreshExpeditions(){
  if(!GetWorld()||GetWorld()->GetTimeSeconds()<NextExpeditionRefresh)return;NextExpeditionRefresh=GetWorld()->GetTimeSeconds()+.5;
  auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
