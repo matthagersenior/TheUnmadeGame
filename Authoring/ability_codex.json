@@ -1,0 +1,873 @@
+{
+  "schema_version": 1,
+  "title": "THE UNMADE — Ability Codex",
+  "goal": "Anything demonstrating a repeatable skill, technique, or supernatural principle may become a subject of study, but observation never automatically grants a power.",
+  "authority": "Canonical index of discovery, acquisition and status; cited production C++ remains authoritative for runtime effect, costs and save identity until explicitly migrated.",
+  "states": {
+    "source_rule": "implemented portable rules, engine behavior unverified",
+    "prototype_handler": "connected Unreal C++ source, uncompiled in engine",
+    "definition_only": "registered but no verified usable unlock",
+    "proposed": "future design, not available to player"
+  },
+  "observation_policy": {
+    "evidence": "record witness identity and firsthand provenance",
+    "research": "observe, infer, trial, master, then combine; no automatic copying",
+    "consent": "respect the subject's consent and existing mystery",
+    "unlock": "new unlocks require persistent save state and executable physical tests"
+  },
+  "records": [
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "inherent.glimpse",
+      "name": "Glimpse",
+      "category": "inherent",
+      "summary": "Reveal alternate authored physical states and clues",
+      "acquisition": {
+        "method": "inherent",
+        "requirements": [
+          "appropriate fracture target when needed"
+        ]
+      },
+      "effect": {
+        "kind": "reality",
+        "summary": "Reveal alternate authored physical states and clues"
+      },
+      "cost": {
+        "strain": 8
+      },
+      "duration": 3,
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "inherent.fold",
+      "name": "Fold",
+      "category": "inherent",
+      "summary": "Temporarily change a valid fracture barrier and expose nearby enemies",
+      "acquisition": {
+        "method": "inherent",
+        "requirements": [
+          "appropriate fracture target when needed"
+        ]
+      },
+      "effect": {
+        "kind": "reality",
+        "summary": "Temporarily change a valid fracture barrier and expose nearby enemies"
+      },
+      "cost": {
+        "strain": 24
+      },
+      "duration": 6,
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "inherent.rewrite",
+      "name": "Rewrite",
+      "category": "inherent",
+      "summary": "Confirm and persist a supported world variant",
+      "acquisition": {
+        "method": "inherent",
+        "requirements": [
+          "appropriate fracture target when needed"
+        ]
+      },
+      "effect": {
+        "kind": "reality",
+        "summary": "Confirm and persist a supported world variant"
+      },
+      "cost": {
+        "strain": 60
+      },
+      "duration": "persistent",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "inherent.reality_strain_recovery",
+      "name": "Reality Strain Recovery",
+      "category": "inherent",
+      "summary": "Naturally recover 3 Strain per second",
+      "acquisition": {
+        "method": "inherent",
+        "requirements": [
+          "appropriate fracture target when needed"
+        ]
+      },
+      "effect": {
+        "kind": "reality",
+        "summary": "Naturally recover 3 Strain per second"
+      },
+      "cost": {
+        "strain": 0
+      },
+      "duration": "passive",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "inherent.fracture_exposure",
+      "name": "Fracture Exposure",
+      "category": "inherent",
+      "summary": "Temporarily stagger or expose enemies with a Fold-based effect",
+      "acquisition": {
+        "method": "inherent",
+        "requirements": [
+          "appropriate fracture target when needed"
+        ]
+      },
+      "effect": {
+        "kind": "reality",
+        "summary": "Temporarily stagger or expose enemies with a Fold-based effect"
+      },
+      "cost": {
+        "strain": "via Fold"
+      },
+      "duration": "temporary",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Fracture/UnmadeFractureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.UnwriteLaw",
+      "name": "UnwriteLaw",
+      "quest": "The Law Beneath the Last Bell",
+      "category": "rite",
+      "discipline": "Unmaker",
+      "summary": "Suspend local gravity (launch), sound (expose threats), or momentum (push nearby enemies)",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "Bellgrave",
+        "witness": "npc.bellmaker.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Suspend local gravity (launch), sound (expose threats), or momentum (push nearby enemies)"
+      },
+      "cost": {
+        "strain": 18,
+        "cooldown_seconds": 80
+      },
+      "duration": {
+        "seconds": 12
+      },
+      "reward": "The Bellmaker's Unwritten Verse",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.Witnesscraft",
+      "name": "Witnesscraft",
+      "quest": "The Bridge of Living Testimony",
+      "category": "rite",
+      "discipline": "Witness",
+      "summary": "Require credible living witnesses to manifest a missing bridge and classify evidence",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "EchoWell",
+        "witness": "npc.welllistener.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Require credible living witnesses to manifest a missing bridge and classify evidence"
+      },
+      "cost": {
+        "strain": 14,
+        "cooldown_seconds": 75
+      },
+      "duration": {
+        "seconds": 20
+      },
+      "reward": "The Bridge That Remembers",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.BorrowedLives",
+      "name": "BorrowedLives",
+      "quest": "The Life Not Taken",
+      "category": "rite",
+      "discipline": "Elseborn",
+      "summary": "Borrow temporary fighter, artisan or archivist skills from an alternate life",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "PaperOrchard",
+        "witness": "npc.orchardexile.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Borrow temporary fighter, artisan or archivist skills from an alternate life"
+      },
+      "cost": {
+        "strain": 20,
+        "cooldown_seconds": 120
+      },
+      "duration": {
+        "seconds": 40
+      },
+      "reward": "The Second Name",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.LegacyForging",
+      "name": "LegacyForging",
+      "quest": "A Blade That Was There",
+      "category": "rite",
+      "discipline": "Relicwright",
+      "summary": "Imbue a weapon using genuine protected, discovered and reconciled deeds",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "BellwoldForge",
+        "witness": "npc.bellwold.stonewright.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Imbue a weapon using genuine protected, discovered and reconciled deeds"
+      },
+      "cost": {
+        "strain": 12,
+        "cooldown_seconds": 110
+      },
+      "duration": {
+        "seconds": 55
+      },
+      "reward": "The Three-Deed Temper",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.LivingRoads",
+      "name": "LivingRoads",
+      "quest": "No Road Belongs to One",
+      "category": "rite",
+      "discipline": "Pathweaver",
+      "summary": "Temporarily form a shared road; earned reconciliation may stabilize it",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "SilentMile",
+        "witness": "npc.roadwarden.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Temporarily form a shared road; earned reconciliation may stabilize it"
+      },
+      "cost": {
+        "strain": 16,
+        "cooldown_seconds": 90
+      },
+      "duration": {
+        "seconds": 30
+      },
+      "reward": "The Common Causeway",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.TomorrowDebt",
+      "name": "TomorrowDebt",
+      "quest": "The Ledger of Borrowed Dawn",
+      "category": "rite",
+      "discipline": "Unmaker",
+      "summary": "Borrow attack strength now, suffer exhaustion when future debt comes due",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "DebtMarket",
+        "witness": "npc.tollbroker.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Borrow attack strength now, suffer exhaustion when future debt comes due"
+      },
+      "cost": {
+        "strain": 8,
+        "cooldown_seconds": 125
+      },
+      "duration": {
+        "seconds": 17
+      },
+      "reward": "The Unpaid Sunrise",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.UnderstandingBosses",
+      "name": "UnderstandingBosses",
+      "quest": "The Name Beneath the Monster",
+      "category": "rite",
+      "discipline": "Witness",
+      "summary": "Use verified memory to interrupt or spare a specific eligible boss",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "BellOssuary",
+        "witness": "npc.bellwold.matron.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Use verified memory to interrupt or spare a specific eligible boss"
+      },
+      "cost": {
+        "strain": 24,
+        "cooldown_seconds": 140
+      },
+      "duration": {
+        "seconds": 16
+      },
+      "reward": "Mercy of the Hollow Keeper",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.ParadoxConvergence",
+      "name": "ParadoxConvergence",
+      "quest": "The Tower That Fell and Stood",
+      "category": "rite",
+      "discipline": "Elseborn",
+      "summary": "Overlay two physical versions of a place and inspect their conflicting routes",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "PaperhavenScribe",
+        "witness": "npc.paperhaven.mapmaker.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Overlay two physical versions of a place and inspect their conflicting routes"
+      },
+      "cost": {
+        "strain": 26,
+        "cooldown_seconds": 150
+      },
+      "duration": {
+        "seconds": 19
+      },
+      "reward": "The Room Between Histories",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.Oathbinding",
+      "name": "Oathbinding",
+      "quest": "The Lantern You Promised",
+      "category": "rite",
+      "discipline": "Oathkeeper",
+      "summary": "Protect people through a witnessed oath; betrayal costs trust and ability use",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "BellwoldRefuge",
+        "witness": "npc.bellwold.guard.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Protect people through a witnessed oath; betrayal costs trust and ability use"
+      },
+      "cost": {
+        "strain": 12,
+        "cooldown_seconds": 135
+      },
+      "duration": {
+        "seconds": 50
+      },
+      "reward": "The Unbroken Shelter Oath",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Cannot claim mastery from dialogue alone",
+        "Limited physical context, Strain and cooldown"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "unlock_path": "authored rite stages"
+      },
+      "id": "rite.Cartography",
+      "name": "Cartography",
+      "quest": "The Map of Disagreeing Shores",
+      "category": "rite",
+      "discipline": "Pathweaver",
+      "summary": "Show truth confidence for rumored, speculative and personally verified crossings",
+      "acquisition": {
+        "method": "five_stage_rite",
+        "site": "SaltwakeHarbor",
+        "witness": "npc.saltwake.navigator.001",
+        "requirements": [
+          "Physically discover inscription",
+          "Speak to named witness",
+          "Perform Strain-costing trial",
+          "Reach witnessed choice",
+          "Return for discipline-specific mastery"
+        ]
+      },
+      "effect": {
+        "kind": "reality_rite",
+        "summary": "Show truth confidence for rumored, speculative and personally verified crossings"
+      },
+      "cost": {
+        "strain": 15,
+        "cooldown_seconds": 95
+      },
+      "duration": {
+        "seconds": 35
+      },
+      "reward": "Atlas of the Missing Coast",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [
+        "rite.UnwriteLaw",
+        "rite.Witnesscraft"
+      ],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "confluence.SilentAlarm",
+      "name": "The Alarm Nobody Heard",
+      "category": "confluence",
+      "summary": "Bellwold's warning bell must fall silent long enough to stop the keeper, but witnesses must restore its message before the town sleeps.",
+      "acquisition": {
+        "method": "dual_rite_challenge",
+        "requirements": [
+          "Master both rites",
+          "Use both within 120 in-world seconds at the chamber",
+          "Obtain two credible witnesses for the outcome"
+        ]
+      },
+      "effect": {
+        "kind": "combined_rite_challenge",
+        "summary": "Bellwold's warning bell must fall silent long enough to stop the keeper, but witnesses must restore its message before the town sleeps."
+      },
+      "cost": {
+        "component_rite_costs": true,
+        "window_seconds": 120
+      },
+      "duration": "chapter resolution",
+      "reward": "Aegis of the Last Warning",
+      "implementation": "source_rule",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [
+        "rite.BorrowedLives",
+        "rite.LegacyForging"
+      ],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "confluence.TwoNames",
+      "name": "A Blade for Both Your Names",
+      "category": "confluence",
+      "summary": "The neverborn orchard sent a smith who was never apprenticed. Two versions of the hero must agree on which acts a weapon should remember.",
+      "acquisition": {
+        "method": "dual_rite_challenge",
+        "requirements": [
+          "Master both rites",
+          "Use both within 120 in-world seconds at the chamber",
+          "Obtain two credible witnesses for the outcome"
+        ]
+      },
+      "effect": {
+        "kind": "combined_rite_challenge",
+        "summary": "The neverborn orchard sent a smith who was never apprenticed. Two versions of the hero must agree on which acts a weapon should remember."
+      },
+      "cost": {
+        "component_rite_costs": true,
+        "window_seconds": 120
+      },
+      "duration": "chapter resolution",
+      "reward": "Edge of the Elseborn Smith",
+      "implementation": "source_rule",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [
+        "rite.LivingRoads",
+        "rite.Cartography"
+      ],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "confluence.UnmappedWay",
+      "name": "The Route Nobody Owned",
+      "category": "confluence",
+      "summary": "A passage with no legal owner will remain unstable until cartographers preserve both the safe road and the dangerous rumor.",
+      "acquisition": {
+        "method": "dual_rite_challenge",
+        "requirements": [
+          "Master both rites",
+          "Use both within 120 in-world seconds at the chamber",
+          "Obtain two credible witnesses for the outcome"
+        ]
+      },
+      "effect": {
+        "kind": "combined_rite_challenge",
+        "summary": "A passage with no legal owner will remain unstable until cartographers preserve both the safe road and the dangerous rumor."
+      },
+      "cost": {
+        "component_rite_costs": true,
+        "window_seconds": 120
+      },
+      "duration": "chapter resolution",
+      "reward": "Chart of the Common Path",
+      "implementation": "source_rule",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [
+        "rite.TomorrowDebt",
+        "rite.Oathbinding"
+      ],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "confluence.TomorrowPromise",
+      "name": "Tomorrow Is Not Yours to Spend",
+      "category": "confluence",
+      "summary": "A borrowed dawn could light an entire refuge, but its lender has promised not to push the bill onto the helpless.",
+      "acquisition": {
+        "method": "dual_rite_challenge",
+        "requirements": [
+          "Master both rites",
+          "Use both within 120 in-world seconds at the chamber",
+          "Obtain two credible witnesses for the outcome"
+        ]
+      },
+      "effect": {
+        "kind": "combined_rite_challenge",
+        "summary": "A borrowed dawn could light an entire refuge, but its lender has promised not to push the bill onto the helpless."
+      },
+      "cost": {
+        "component_rite_costs": true,
+        "window_seconds": 120
+      },
+      "duration": "chapter resolution",
+      "reward": "Heart of the Borrowed Dawn",
+      "implementation": "source_rule",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [
+        "rite.UnderstandingBosses",
+        "rite.ParadoxConvergence"
+      ],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "confluence.TwoKeepers",
+      "name": "The Bell Fell and Stood",
+      "category": "confluence",
+      "summary": "A monster and its innocent keeper may stand in contradictory versions of the same place; mercy and truth need not annihilate one another.",
+      "acquisition": {
+        "method": "dual_rite_challenge",
+        "requirements": [
+          "Master both rites",
+          "Use both within 120 in-world seconds at the chamber",
+          "Obtain two credible witnesses for the outcome"
+        ]
+      },
+      "effect": {
+        "kind": "combined_rite_challenge",
+        "summary": "A monster and its innocent keeper may stand in contradictory versions of the same place; mercy and truth need not annihilate one another."
+      },
+      "cost": {
+        "component_rite_costs": true,
+        "window_seconds": 120
+      },
+      "duration": "chapter resolution",
+      "reward": "Mirror of the Two Keepers",
+      "implementation": "source_rule",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [
+        "rite.UnwriteLaw",
+        "rite.Cartography"
+      ],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "confluence.FirstAbsence",
+      "name": "The Place Before a First Story",
+      "category": "confluence",
+      "summary": "Beyond the coast is a border with neither maps nor ownership. Ten learned disciplines offer choices but no automatic victory over existence itself.",
+      "acquisition": {
+        "method": "dual_rite_challenge",
+        "requirements": [
+          "Master both rites",
+          "Use both within 120 in-world seconds at the chamber",
+          "Obtain two credible witnesses for the outcome"
+        ]
+      },
+      "effect": {
+        "kind": "combined_rite_challenge",
+        "summary": "Beyond the coast is a border with neither maps nor ownership. Ten learned disciplines offer choices but no automatic victory over existence itself."
+      },
+      "cost": {
+        "component_rite_costs": true,
+        "window_seconds": 120
+      },
+      "duration": "chapter resolution",
+      "reward": "Witness of the First Absence",
+      "implementation": "source_rule",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
+      ]
+    }
+  ]
+}
