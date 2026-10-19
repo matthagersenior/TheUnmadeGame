@@ -34,16 +34,18 @@ class FirstFractureSenses(unittest.TestCase):
   self.assertNotIn("Held Morning",rules)
  def test_sound_only_on_first_physically_saved_chamber_arrival(self):
   cpp=(ROOT/"Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp").read_text()
-  start=cpp.index("if(playerReady&&!bExpeditionSaveRejected)")
-  segment=cpp[start:cpp.index("for(int a=0;a<9;++a){auto t=Expeditions.Arc(a);",start)]
-  self.assertIn("CommitExpeditions(before,p)",segment)
+  start=cpp.index("bool AUnmadePrototypeHub::CommitExpeditions(")
+  segment=cpp[start:cpp.index("void AUnmadePrototypeHub::RefreshExpeditions()",start)]
+  self.assertIn("if(WriteWorldSnapshot(player))",segment)
+  self.assertIn("if(IsValid(player))",segment)
   self.assertIn("!(before.Arc(a)->rooms&1)",segment)
   self.assertIn("(Expeditions.Arc(a)->rooms&1)",segment)
   self.assertIn("FirstFractureCue(a)",segment)
   self.assertIn("FirstFractureLine(a)",segment)
-  self.assertIn("UnmadePresentation::Sound(p,UTF8_TO_TCHAR(cue))",segment)
+  self.assertIn("UnmadePresentation::Sound(player,UTF8_TO_TCHAR(cue))",segment)
   self.assertIn("NotifyRpg(",segment)
-  self.assertLess(segment.index("CommitExpeditions(before,p)"),segment.index("FirstFractureCue(a)"))
+  self.assertLess(segment.index("WriteWorldSnapshot(player)"),segment.index("FirstFractureCue(a)"))
+  self.assertIn("if(changed)CommitExpeditions(before,p)",cpp)
   self.assertNotIn("PlayIdentityMotion(",segment)
   self.assertNotIn("Expeditions.Boss(",segment)
   self.assertNotIn("CrossRealmCarry.",segment)
