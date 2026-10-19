@@ -22,7 +22,11 @@ class ProvenanceWiring(unittest.TestCase):
         config=source("Config/DefaultInput.ini")
         self.assertIn('ActionName="EvidenceNotebook",Key=F9',config)
         self.assertIn('BindAction("EvidenceNotebook"',player)
-        self.assertIn('Hub->GetEvidenceNotebook()+TEXT("\\n\\n")+GetStudyJournal()',player)
+        notebook = player.split("void AUnmadeCharacter::ShowEvidenceNotebook()", 1)[1].split(
+            "\\nvoid AUnmadeCharacter::", 1)[0]
+        self.assertIn("Hub->GetEvidenceNotebook()", notebook)
+        self.assertIn("GetStudyJournal()", notebook)
+        self.assertIn("UnmadeRpgFeedback", notebook)
         self.assertIn('World.WitnessBraidShelter',player)
         self.assertIn('World.WitnessBraidDocket',player)
         self.assertNotIn('World.WitnessBraidResolved',player)
