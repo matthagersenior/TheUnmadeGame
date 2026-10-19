@@ -35,6 +35,27 @@ class AbilityCodexContract(unittest.TestCase):
         self.assertTrue(any("checklist cannot claim an unlocked state" in e
                             for e in validate(ROOT,data)))
 
+    def test_unified_codex_realm_and_progression_registry(self):
+        kinds={row["category"] for row in self.codex["records"]}
+        for kind in ("realm","journey","experience","personal_quest","campaign_quest",
+                     "aftermath_quest","settlement"):
+            self.assertIn(kind,kinds)
+        self.assertEqual(len([x for x in self.codex["records"] if x["category"]=="realm"]),9)
+        self.assertEqual(len([x for x in self.codex["records"] if x["category"]=="settlement"]),3)
+        self.assertGreaterEqual(len(self.codex["records"]),243)
+
+    def test_invalid_dependency_rejected(self):
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="journey.wing.FirstAbsence")
+        row["depends_on"].append("realm.nonexistent")
+        self.assertTrue(any("invalid Codex dependency" in e for e in validate(ROOT,changed)))
+
+    def test_crafting_material_count_drift_rejected(self):
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="recipe.workshop.HerbSalve")
+        row["rule_contract"]["inputs"][0]["count"]+=1
+        self.assertTrue(any("recipe.workshop.HerbSalve" in e for e in validate(ROOT,changed)))
+
     def test_duplicate_ids_are_rejected(self):
         data = deepcopy(self.codex)
         data["records"].append(deepcopy(data["records"][0]))

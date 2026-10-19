@@ -279,6 +279,83 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
                   "AbilityStudyTrials", "AbilityStudySelection"):
         if token not in saves:
             issues.append(f"save-backed Ability Study source missing: {token}")
+    # Unified canonical authoring: all top-level domains must have one stable ID
+    # and every dependency must refer to a known authored record (not a rumor).
+    required=("realm","journey.expedition","journey.wing","quest.personal",
+              "quest.campaign","quest.aftermath")
+    realms=("ThreefoldReach","WidowedRain","HearthBeneath","TidalLedger",
+            "SkyBelow","CinderSpine","HundredUnlived","OrchardOfKings","FirstAbsence")
+    if not isinstance(codex.get("domains"),dict) or not isinstance(codex.get("rules_of_authoring"),list):
+        issues.append("missing whole-game Codex domains and authoring rules")
+    else:
+        indexed={kind for domain in codex["domains"].values()
+                 for kind in domain.get("categories",[])}
+        used={row.get("category") for row in records if isinstance(row,dict)}
+        for missing in sorted(used-indexed):
+            issues.append("Codex category not assigned to a domain: "+str(missing))
+    for realm in realms:
+        for prefix in required:
+            if prefix+"."+realm not in by_id:
+                issues.append("missing canonical progression/realm record "+prefix+"."+realm)
+    for town in ("Crossings","Bellwold","Paperhaven"):
+        if "settlement."+town not in by_id:
+            issues.append("missing canonical settlement "+town)
+    for row in records:
+        if not isinstance(row,dict):continue
+        key=row.get("id","")
+        for dependency in row.get("depends_on",[]):
+            if dependency not in by_id or dependency==key:
+                issues.append(f"{key}: invalid Codex dependency {dependency}")
+        if row.get("category") in ("realm","journey","experience","personal_quest",
+                                    "campaign_quest","aftermath_quest","settlement"):
+            if not isinstance(row.get("rule_contract"),dict):
+                issues.append(f"{key}: missing realm/progression rule contract")
+    # Direct source parity for authoritative names and numeric recipe costs.
+    atlas=source("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")
+    world_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',atlas)
+    for realm,name in world_rows[:9]:
+        check("realm."+realm,"name",name)
+    expedition_rows=re.findall(
+        r'\{Realm::(\w+),"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"',
+        source(EXPEDITION))
+    for realm,city,frontier,refuge,dungeon,boss in expedition_rows:
+        check("journey.expedition."+realm,"name",dungeon+" — "+city)
+        check("journey.expedition."+realm,"rule_contract.boss",boss)
+        check("journey.expedition."+realm,"rule_contract.frontier",frontier)
+    wing_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)","([^"]+)"',source(EXPERIENCE))
+    for realm,(city,wing,guardian) in zip(realms,wing_rows[:9]):
+        check("journey.wing."+realm,"name",wing+" — "+city)
+        check("journey.wing."+realm,"rule_contract.guardian",guardian)
+    story_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCampaignSpineRules.h"))
+    for realm,title in story_rows[:9]:
+        check("quest.campaign."+realm,"name",title)
+    aftermath_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h"))
+    for realm,title in aftermath_rows[:9]:
+        check("quest.aftermath."+realm,"name",title)
+    personal_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h"))
+    for realm,(title,goal) in zip(realms,personal_rows[:9]):
+        check("quest.personal."+realm,"name",title)
+        check("quest.personal."+realm,"rule_contract.goal",goal)
+    settlement_rows=re.findall(r'\{SettlementId::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeSettlementRegistry.h"))
+    for key,name in settlement_rows[:3]:
+        check("settlement."+key,"name",name)
+    recipe_rows=re.findall(
+        r'\{RecipeId::(\w+),"([^"]+)",Profession::(\w+),SettlementId::(\w+),(\d+),\s*'
+        r'ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}',
+        source(CRAFT))
+    for key,name,profession,town,skill,ing_a,n_a,ing_b,n_b,output,n_out in recipe_rows:
+        ident="recipe.workshop."+key
+        check(ident,"rule_contract.profession","profession."+profession.lower())
+        check(ident,"rule_contract.workshop","settlement."+town)
+        check(ident,"rule_contract.min_skill",int(skill))
+        check(ident,"rule_contract.inputs",[{"item_enum":ing_a,"count":int(n_a)},
+                                           {"item_enum":ing_b,"count":int(n_b)}])
+        check(ident,"rule_contract.output",{"item_enum":output,"count":int(n_out)})
+    study_source=source("Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h")
+    for token in ('#include "World/UnmadeCodexGenerated.h"',"CodexStudyNames",
+                  "CodexStudyRequirements[static_cast<int>(id)][0]","CodexAtlasRequirements[0]"):
+        if token not in study_source:
+            issues.append("study game requirements not Codex-generated: "+token)
     return issues
 
 
