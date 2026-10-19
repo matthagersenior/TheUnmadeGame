@@ -1,5 +1,6 @@
 """Every major game-wide graybox family must have a concrete semantic art kit."""
-import subprocess,tempfile,unittest
+import csv,subprocess,tempfile,unittest
+from collections import Counter
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2]
 def src(p):return (ROOT/p).read_text(encoding="utf8")
@@ -93,6 +94,27 @@ int main(){
   self.assertIn("StyleWorldProp",roads)
   self.assertIn("StyleWorldProp",encounters)
   self.assertIn("GrayboxProfiles",rules)
+ def test_every_canonical_place_item_person_has_an_asset_choice(self):
+  path=ROOT/"docs/art/gamewide-graybox-choice-ledger.csv"
+  with path.open(encoding="utf8",newline="") as f:
+   rows=list(csv.DictReader(f))
+  assert len(rows)==228,len(rows)
+  counts=Counter(row["scope"] for row in rows)
+  self.assertEqual(counts["Resident dwelling"],88)
+  self.assertEqual(counts["Item"],60)
+  self.assertEqual(counts["Reusable kit"],34)
+  self.assertEqual(counts["Cargo road"],11)
+  self.assertEqual(counts["Realm"],9)
+  self.assertEqual(counts["Creature"],12)
+  self.assertEqual(counts["NPC profession"],5)
+  self.assertEqual(counts["Optional survey"],6)
+  self.assertEqual(counts["Settlement"],3)
+  ids=[(row["scope"],row["stable_id"]) for row in rows]
+  self.assertEqual(len(ids),len(set(ids)))
+  for row in rows:
+   for key in ("stable_id","existing_tag","detail","desired","guard","status"):
+    self.assertTrue(row[key].strip(),(row["scope"],row["stable_id"],key))
+   self.assertNotIn("Engine-tested",row["status"])
  def test_art_choices_are_registered_before_content_replacement(self):
   qa=src("docs/qa/gamewide-specific-graybox-art.md")
   for word in ("88 homes","11 cargo","nine realms","Bellwold","Paperhaven",
