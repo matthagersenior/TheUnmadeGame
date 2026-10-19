@@ -6878,7 +6878,7 @@
       "summary": "Cities, individual witness dramas and evidence whose interpretation evolves"
     },
     {
-      "key": "faction:Refuge",
+      "key": "faction:faction.Refuge",
       "group": "faction",
       "id": "faction.Refuge",
       "name": "The Refuge Compact",
@@ -6889,7 +6889,7 @@
       "summary": "Three genuine witness stages, local evidence, mutually exclusive Solidarity or Truth decision"
     },
     {
-      "key": "faction:Archive",
+      "key": "faction:faction.Archive",
       "group": "faction",
       "id": "faction.Archive",
       "name": "The Redacted Charter",
@@ -6900,7 +6900,7 @@
       "summary": "Three genuine witness stages, local evidence, mutually exclusive Solidarity or Truth decision"
     },
     {
-      "key": "faction:Roadbound",
+      "key": "faction:faction.Roadbound",
       "group": "faction",
       "id": "faction.Roadbound",
       "name": "The Roadbound Assembly",
@@ -6911,7 +6911,7 @@
       "summary": "Three genuine witness stages, local evidence, mutually exclusive Solidarity or Truth decision"
     },
     {
-      "key": "trade_contract:SaltToHearth",
+      "key": "trade_contract:trade.SaltToHearth",
       "group": "trade_contract",
       "id": "trade.SaltToHearth",
       "name": "Sealed rainwater casks to hearth",
@@ -6922,7 +6922,7 @@
       "summary": "Verified cargo delivery, finite municipal payment and preserved inventory and receipt provenance"
     },
     {
-      "key": "trade_contract:HearthToSalt",
+      "key": "trade_contract:trade.HearthToSalt",
       "group": "trade_contract",
       "id": "trade.HearthToSalt",
       "name": "Common ember baskets to coast",
