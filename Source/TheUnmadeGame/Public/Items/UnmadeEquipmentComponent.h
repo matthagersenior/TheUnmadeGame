@@ -36,7 +36,7 @@ public:
     int32 GetAtlasAttunement() const;
     FString DescribeInventory() const;
     int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount()+ExpeditionGlimpse; }
-    int32 FoldBonusSeconds() const { return (Loadout.weapon>=0?0:Inventory.FoldDurationBonus())+ExpeditionFold; }
+    int32 FoldBonusSeconds() const { return (Loadout.weapon>=0?0:Inventory.FoldDurationBonus())+ExpeditionFold+(Loadout.weapon>=0 && Inventory.Equipped(UnmadeCore::GearSlot::Charm)==UnmadeCore::ItemId::AtlasOfAbsence?2:0); }
     double StrainRecoveryMultiplier() const { return Inventory.RecoveryMultiplier(); }
     void SetStudyBonuses(int32 Attack,int32 Armor) { StudyAttack=FMath::Clamp(Attack,0,8);StudyArmor=FMath::Clamp(Armor,0,8);RefreshCombatBonuses(); }
     void SetTemporaryBonuses(int32 Attack,int32 Armor) {
