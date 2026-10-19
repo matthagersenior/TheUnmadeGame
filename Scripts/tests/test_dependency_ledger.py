@@ -53,6 +53,12 @@ class DependencyLedgerTests(unittest.TestCase):
         item["availability"] = "reserved"
         self.assertTrue(any("item AtlasOfAbsence" in e for e in validate(modified)))
 
+    def test_rite_reward_title_must_match_item_granted(self):
+        modified = copy.deepcopy(self.canon)
+        rite = next(q for q in modified["quests"] if q["id"] == "quest:rite:TomorrowDebt")
+        rite["rite_reward_label"] = "The Unpaid Sunrise"
+        self.assertTrue(any("rite TomorrowDebt" in e for e in validate(modified)))
+
     def test_new_unexplained_reward_is_rejected(self):
         modified = copy.deepcopy(self.canon)
         modified["bosses"][0]["rewards"].append("item:invented_legendary")

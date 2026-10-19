@@ -76,9 +76,12 @@ bool AUnmadePrototypeHub::TryTravelAtlas(AUnmadeCharacter* Player)
                 }
             }
             if(!bNearby)continue;
-            // Gated by actually earned relics, not by a map cheat or hidden UI.
+            // Real witnessed first chapters unlock the main passage; earned
+            // relics remain optional shortcuts and do not award story progress.
             const UUnmadeEquipmentComponent* Equipment=Player->GetEquipment();
-            const int32 Attunement=IsValid(Equipment)?Equipment->GetAtlasAttunement():0;
+            const int32 Attunement=UnmadeCore::RoadTravelAttunement(
+                GetUnansweredRoadEvidence(),
+                IsValid(Equipment)?Equipment->GetAtlasAttunement():0);
             if(Attunement<Edge.attunement)
             {
                 if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,

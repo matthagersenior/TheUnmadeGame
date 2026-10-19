@@ -88,6 +88,24 @@ inline constexpr std::uint16_t RoadMask(Realm r) noexcept {
 inline constexpr bool RoadHas(const RoadEvidence& state,Realm r)noexcept {
     return (state.firstStories&RoadMask(r))!=0;
 }
+// Relics offer early shortcuts; completed FIRST chapters independently
+// make the Unanswered Road traversable, without the optional forge or landmarks.
+inline int RoadTravelAttunement(const RoadEvidence& state,int relicAttunement) noexcept {
+    const int relic=std::clamp(relicAttunement,0,4);
+    // Preserve passage access for legitimately progressed final-stage saves.
+    if(state.finalAct>=1 && state.finalAct<=5) return 4;
+    if(!state.openingWitnessed) return relic;
+    const bool frontier=RoadHas(state,Realm::WidowedRain)||
+                        RoadHas(state,Realm::HearthBeneath);
+    if(!frontier) return std::max(relic,1);
+    const bool middle=RoadHas(state,Realm::TidalLedger)||
+                      RoadHas(state,Realm::SkyBelow)||
+                      RoadHas(state,Realm::CinderSpine);
+    if(!middle) return std::max(relic,2);
+    const bool upper=RoadHas(state,Realm::HundredUnlived)||
+                     RoadHas(state,Realm::OrchardOfKings);
+    return std::max(relic,upper?4:3);
+}
 inline RoadGuidance EvaluateUnansweredRoad(const RoadEvidence& state)noexcept {
     RoadGuidance out;
     if(state.finalAct>=3 && state.finalAct<=5) {

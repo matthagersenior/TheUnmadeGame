@@ -1,21 +1,16 @@
 {
   "schema": 1,
-  "edition": "2026-10-19 (concurrent first-hand study integration reconciled)",
+  "edition": "2026-10-19 (Paid Receipt and optional-relic travel reconciliation)",
   "authority": "C++ source and Authoring/ability_codex.json remain mechanical/ability references; this ledger is the enforceable cross-system index. UE runtime not verified.",
   "policy": {
     "discovery": "Must be physically earned and sourced; testimony is not omniscience.",
     "choices": "Exclusive care/truth and defeat/mercy state must never both resolve the same quest.",
     "rewards": "A story promise is not a catalog item; regional gear and techniques use independent earned ownership.",
     "aftermath": "Save-backed, local, witnessed, visible after returning; never erase prior quests or chosen player identity.",
-    "open_mysteries": "Open mysteries remain open unless deliberately approved in new canon."
+    "open_mysteries": "Open mysteries remain open unless deliberately approved in new canon.",
+    "travel": "Only witnessed coherent opening/frontier/middle/upper first chapters unlock Auvren as main-story route; optional relics remain earlier shortcuts, never phantom story completions."
   },
-  "exceptions": [
-    {
-      "id": "TomorrowDebt",
-      "type": "reward_name_conflict",
-      "description": "Rite prose says The Unpaid Sunrise; milestone grants FutureReceipt, Tomorrow's Paid Receipt. Do not silently rewrite story or source."
-    }
-  ],
+  "exceptions": [],
   "items": [
     {
       "id": "SalvagerBlade",
@@ -3099,7 +3094,7 @@
       ],
       "source": "World/UnmadeTenfoldChronicle.h",
       "skill": "skill:rite:TomorrowDebt",
-      "rite_reward_label": "The Unpaid Sunrise",
+      "rite_reward_label": "Tomorrow's Paid Receipt",
       "actual_reward_name": "Tomorrow's Paid Receipt"
     },
     {

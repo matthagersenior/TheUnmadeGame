@@ -89,7 +89,7 @@ inline constexpr std::array<RiteSpec,10> RiteSpecs = {{
     {RiteId::TomorrowDebt,Discipline::Unmaker,"The Ledger of Borrowed Dawn",
      "DebtMarket","npc.tollbroker.001",
      "The market can lend someone tomorrow's strength before tomorrow exists. The debt comes due regardless of victories, and no signature can transfer that fatigue to an innocent.",
-     "The Unpaid Sunrise",
+     "Tomorrow's Paid Receipt",
      {{"Find your name dated tomorrow in the deserted market ledger.",
        "Ask the keeper of future debts who collects a day that never arrived.",
        "Borrow one short burst of strength and accept its recorded due date.",
