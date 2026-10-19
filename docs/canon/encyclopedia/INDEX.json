@@ -30,7 +30,9 @@
     "city": 11,
     "mystery": 9,
     "callback": 13,
-    "volume": 10
+    "volume": 10,
+    "faction": 3,
+    "trade_contract": 2
   },
   "entries": [
     {
@@ -6874,6 +6876,61 @@
       "canon_class": "editorial_volume",
       "realm": null,
       "summary": "Cities, individual witness dramas and evidence whose interpretation evolves"
+    },
+    {
+      "key": "faction:Refuge",
+      "group": "faction",
+      "id": "faction.Refuge",
+      "name": "The Refuge Compact",
+      "section": "08_FACTIONS_SOCIAL_SYSTEMS_AND_ECONOMIES.md",
+      "source": "Source/TheUnmadeGame/Public/World/UnmadeFactionChronicleRules.h",
+      "canon_class": "source_faction_chronicle",
+      "realm": "ThreefoldReach",
+      "summary": "Three genuine witness stages, local evidence, mutually exclusive Solidarity or Truth decision"
+    },
+    {
+      "key": "faction:Archive",
+      "group": "faction",
+      "id": "faction.Archive",
+      "name": "The Redacted Charter",
+      "section": "08_FACTIONS_SOCIAL_SYSTEMS_AND_ECONOMIES.md",
+      "source": "Source/TheUnmadeGame/Public/World/UnmadeFactionChronicleRules.h",
+      "canon_class": "source_faction_chronicle",
+      "realm": "ThreefoldReach",
+      "summary": "Three genuine witness stages, local evidence, mutually exclusive Solidarity or Truth decision"
+    },
+    {
+      "key": "faction:Roadbound",
+      "group": "faction",
+      "id": "faction.Roadbound",
+      "name": "The Roadbound Assembly",
+      "section": "08_FACTIONS_SOCIAL_SYSTEMS_AND_ECONOMIES.md",
+      "source": "Source/TheUnmadeGame/Public/World/UnmadeFactionChronicleRules.h",
+      "canon_class": "source_faction_chronicle",
+      "realm": "ThreefoldReach",
+      "summary": "Three genuine witness stages, local evidence, mutually exclusive Solidarity or Truth decision"
+    },
+    {
+      "key": "trade_contract:SaltToHearth",
+      "group": "trade_contract",
+      "id": "trade.SaltToHearth",
+      "name": "Sealed rainwater casks to hearth",
+      "section": "08_FACTIONS_SOCIAL_SYSTEMS_AND_ECONOMIES.md",
+      "source": "Source/TheUnmadeGame/Public/World/UnmadeLivingEconomyRules.h",
+      "canon_class": "source_finite_trade",
+      "realm": null,
+      "summary": "Verified cargo delivery, finite municipal payment and preserved inventory and receipt provenance"
+    },
+    {
+      "key": "trade_contract:HearthToSalt",
+      "group": "trade_contract",
+      "id": "trade.HearthToSalt",
+      "name": "Common ember baskets to coast",
+      "section": "08_FACTIONS_SOCIAL_SYSTEMS_AND_ECONOMIES.md",
+      "source": "Source/TheUnmadeGame/Public/World/UnmadeLivingEconomyRules.h",
+      "canon_class": "source_finite_trade",
+      "realm": null,
+      "summary": "Verified cargo delivery, finite municipal payment and preserved inventory and receipt provenance"
     }
   ]
 }
