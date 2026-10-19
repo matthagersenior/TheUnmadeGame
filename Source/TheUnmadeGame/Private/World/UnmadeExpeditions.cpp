@@ -2,6 +2,7 @@
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadeFirstFractureRules.h"
+#include "World/UnmadeDiscoveryCivicRules.h"
 #include "World/UnmadeEncounterHazardRules.h"
 #include "World/UnmadeIdentityRules.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
@@ -48,7 +49,7 @@ bool Local(UWorld* w,AUnmadeCharacter* p,FVector at,double range=230){if(!w||!Al
 }
 void AUnmadePrototypeHub::BuildExpeditions(){
  if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);CrossRealmCombatSigns.SetNum(9);ExpeditionEvidenceSigns.SetNum(9);ExpeditionFractureActors.SetNum(9);ExpeditionFractureSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
- ArenaShelterVisible.fill(-1);ArenaAftermathVisible.fill(-1);
+ ArenaShelterVisible.fill(-1);ArenaAftermathVisible.fill(-1);CivicAftermathVisible.fill(-1);
  ArenaShelterUntil.fill(0);
  for(auto& Counter:ArenaCounters)Counter.Reset();
  for(auto& Counter:EvidenceCounters)Counter=UnmadeCore::EvidenceCounterplay{};
@@ -133,6 +134,36 @@ void AUnmadePrototypeHub::BuildExpeditions(){
   Block(discoveryAt+FVector(0,0,-115),FVector(1.8,1.6,.28));
   SpawnBlock(Room(a,5)+FVector(0,-70,50),FVector(1.4,1.9,2.8),
       FName(*FString::Printf(TEXT("Expedition.%d.ArenaShelter"),a)));
+
+  // The seven formerly narrative-only aftermaths now have distinct reachable
+  // physical investigation sites near their REAL expedition frontier homes.
+  if(UnmadeCore::CivicUsesExpeditionAftermath(a)){
+   const auto& civic=UnmadeCore::DiscoveryCivicSites[a];
+   const auto& spec=UnmadeCore::RealmAftermathSpecs[a];
+   const FVector home=Site(a,0);
+   SpawnBlock(home+FVector(civic.mechanismX,900,25),FVector(.7,.8,1.4),FName(UTF8_TO_TCHAR(spec.mechanismSite)));
+   SpawnBlock(home+FVector(civic.careX,1430,25),FVector(.8,.65,1.5),FName(UTF8_TO_TCHAR(spec.evidenceForCare)));
+   SpawnBlock(home+FVector(civic.truthX,1430,25),FVector(.8,.65,1.5),FName(UTF8_TO_TCHAR(spec.evidenceForTruth)));
+   Sign(home+FVector(civic.mechanismX,900,100),FString(TEXT("E - OPERATE / "))+UTF8_TO_TCHAR(civic.title));
+   Sign(home+FVector(civic.careX,1430,100),TEXT("E - EXAMINE CARE EVIDENCE; TELL SUPPORT WITNESS"));
+   Sign(home+FVector(civic.truthX,1430,100),TEXT("E - EXAMINE PUBLIC ACCOUNT; TELL TRUTH WITNESS"));
+   for(int outcome=1;outcome<=2;++outcome){
+    const double x=outcome==1?civic.careX:civic.truthX;
+    // Enclosed branch doorway and visible platform, not a purely decorative line.
+    SpawnBlock(home+FVector(x-360,1940,110),FVector(2.6,.4,2.5),
+        FName(*FString::Printf(TEXT("Expedition.%d.CivicWall"),a)));
+    SpawnBlock(home+FVector(x+360,1940,110),FVector(2.6,.4,2.5),
+        FName(*FString::Printf(TEXT("Expedition.%d.CivicWall"),a)));
+    SpawnBlock(home+FVector(x,1940,275),FVector(3.4,.4,.3),
+        FName(*FString::Printf(TEXT("Expedition.%d.CivicWall"),a)));
+    SpawnBlock(home+FVector(x,1940,110),FVector(2.6,.4,2.35),
+        FName(*FString::Printf(TEXT("Expedition.%d.Civic%sGate"),a,outcome==1?TEXT("Care"):TEXT("Truth"))));
+    SpawnBlock(home+FVector(x,2280,-40),FVector(7,8,.35),
+        FName(*FString::Printf(TEXT("Expedition.%d.Civic%sRoute"),a,outcome==1?TEXT("Care"):TEXT("Truth"))));
+    Sign(home+FVector(x,2370,95),UTF8_TO_TCHAR(outcome==1?civic.careWork:civic.truthWork));
+   }
+   Sign(home+FVector(-480,290,95),TEXT("CIVIC RETURN: EARN THREE RECORDS, DEFEAT OR SPARE THE BOSS, RETURN TO THE GUIDE"));
+  }
   for(int outcome=1;outcome<=3;++outcome)
     SpawnBlock(Site(a,0)+FVector(-550+outcome*260,1200,115),
       FVector(.65,.35,1.65),
@@ -443,7 +474,25 @@ FString AUnmadePrototypeHub::GetExpeditionJournal()const{FString text=TEXT("COMB
      text+=FString::Printf(TEXT("WITNESSED ARENA AFTERMATH / %s: %s\n"),
        UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
        UTF8_TO_TCHAR(UnmadeCore::ArenaAftermathText(a,Outcome)));
- }return text;}
+ }
+ for(int a=0;a<9;++a){
+  const auto* e=Expeditions.Arc(a);
+  if(!e||!e->brief)continue;
+  if(UnmadeCore::CivicUsesExpeditionAftermath(a)){
+   const auto* civic=UnmadeCore::CivicSite(a);
+   const auto realm=static_cast<UnmadeCore::Realm>(a);
+   const int ending=RealmAftermath.Ending(realm);
+   text+=FString::Printf(TEXT("CIVIC RETURN / %s: %s | evidence %s | stage %d/4 | %s\\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),UTF8_TO_TCHAR(civic->title),
+      UnmadeCore::CivicEvidenceReady(a,e)?TEXT("earned; speak to frontier guide"):TEXT("requires 3 records and witnessed return"),
+      RealmAftermath.Stage(realm),UTF8_TO_TCHAR(ending?RealmAftermath.WorldConsequence(realm):
+                               UnmadeCore::RealmAftermathSpecs[a].ethicalDilemma));
+  }else if(a==1){
+   text+=FString::Printf(TEXT("SALTWAKE / existing storm sluice and two civic resolutions. Returned breakwater proof: %s\\n"),
+     UnmadeCore::CivicSaltwakeWitnessedDiscovery(e->rooms&1,e->clues,e->returned)?TEXT("personally earned"):TEXT("not complete"));
+  }
+ }
+ return text;}
 FString AUnmadePrototypeHub::GetExpeditionReaction(FName person)const{FString Personal=GetDepthReaction(person),Integration=ExperienceReaction(person);if(!Personal.IsEmpty())return Personal+TEXT(" ")+Integration;for(int a=0;a<9;++a)for(int n=0;n<5;++n)if(person==FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n))){auto t=Expeditions.Arc(a);const auto& s=UnmadeCore::ExpeditionSpecs[a];if((n==1||n==2)&&!(t->rescued&(1<<(n-1))))return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": The door still needs your help. Release us at the holding chamber after the guard is defeated.");if(t->returned){auto* i=Identity.Arc(a);
     // Public outcome text is descriptive only: it has no action or save side effects.
     // Only a returned local companion observes the public consequences of the

@@ -9,6 +9,7 @@
 #include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeDiscoveryCivicRules.h"
 #include "Save/UnmadeCounterThreatRules.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -550,6 +551,13 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     {
         bCinderholdSaveRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Shared kiln missing its actual Cinderhold discovery; original save protected"));
+    }
+    if(Save->bHasRealmAftermathSnapshot &&
+       !UnmadeCore::CivicEvidenceValidOnRestore(RestoredRealmAftermath.Snapshot(),
+             Expeditions,Save->bHasExpeditions&&!bExpeditionSaveRejected)){
+        bRealmAftermathSaveRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Civic aftermath lacks earned local expedition evidence; original protected"));
+        return;
     }
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int32 V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bIdentitySaveRejected=true;UE_LOG(LogTemp,Error,TEXT("World identity save rejected; original protected"));}}
     if(Save->bHasAdventureDepth){std::vector<int> Data;for(int32 V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bDepthSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Adventure depth save rejected; original protected"));}}
