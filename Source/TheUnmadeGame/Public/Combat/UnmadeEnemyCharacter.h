@@ -35,6 +35,8 @@ public:
     FString GetCombatName()const;
     FString GetCombatWarning()const;
     void ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion=false);
+    bool StudyCreature(UnmadeCore::CreatureKind& Kind)const {if(!bSpeciesConfigured)return false;Kind=SpeciesKind;return true;}
+    bool IsActivelyTelegraphing(double Now)const{return CanBeTargeted()&&WindupEndsAt>Now;}
     void ConfigureStyle(UnmadeCore::EnemyStyle NewStyle);
     void SetVisualScale(FVector Scale);
     void ExposeToFold(double Now, double Seconds = 4.0);
@@ -83,6 +85,7 @@ private:
     void SetMotionCue(FName Motion);
     UnmadeCore::EnemyStyle Style = UnmadeCore::EnemyStyle::Stalker;
     bool bSpeciesConfigured=false;
+    UnmadeCore::CreatureKind SpeciesKind=UnmadeCore::CreatureKind::Cinderjaw;
     bool bElderEncounter=false;
     UnmadeCore::CreatureProfile Profile=UnmadeCore::CreatureStats(UnmadeCore::CreatureKind::Cinderjaw);
     double RecoveryEndsAt=0.0;
