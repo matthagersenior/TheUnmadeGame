@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**19 October 2026 subsequent source/canon amendment (not a new illustrated edition):** Tomorrow's Debt rite and Ability Codex now correctly advertise **Tomorrow's Paid Receipt**. Witnessed first chapters unlock Auvren without the optional forge/landmark relic checklist, with one rule for the portals and campaign journal. The archived v20 PDF/DOCX/ZIP and their verified historical SHA-256 hashes have **not** been regenerated or rehashed. Unreal Engine walkthrough and actual gameplay acceptance remain deferred.
+
+
 **19 October 2026 source update (not a new illustrated edition):** The canonical Ability Codex now includes 186 records, four authored study/learning routes, a physical Atlas of Absence acquisition method, source-native controls and save-backed experiments. This is **not** included in the dated v20 PDF/DOCX/ZIP. Those artifacts have not been re-rendered or rehashed; their existing verified member digests below remain those of the historical v20 release. Engine compilation and gameplay acceptance remain deferred.
 
 Date: 12 October 2026 UTC. Source baseline: `f166de49e51888d540975148855b3b32452dbee7`. Exact source tree and member hashes are recorded in the dated package.

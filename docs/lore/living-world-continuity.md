@@ -470,3 +470,11 @@ The player may now understand a corroborated subject, perform two timed, paid ph
 **Atlas of Absence:** the charm was always defined as containing absent countries without a true acquisition method. It is now earned at the Well after the Memory Lens plus two separate field masteries, with a saved one-time reward, -4 Glimpse Strain and +2 seconds of Fold while the charm is equipped. This does not replace The Unreliable Map's verification discipline or witness-centered route lore.
 
 The new study records are appended as optional schema-1 save data; malformed records prevent overwrite, and unrevised earlier saved characters remain legible. Player controls appear in the source-native actions menu and evidence notebook. These are C++ gameplay and portable-test facts only: there has **not** been an Unreal Editor compile, asset import, physical playthrough or regenerated illustrated lore release. The v20 illustrated artifacts and their recorded hashes remain authoritative for that older edition.
+
+## 2026-10-19 — The Paid Receipt and main-story crossing attunement (source-only)
+
+**The Ledger of Borrowed Dawn** is the quest; **Tomorrow's Paid Receipt** (`FutureReceipt`) is its singular, actual weapon reward. The poetic “Unpaid Sunrise” may still express the fear of owing tomorrow, but is not the item name or a second reward. Its due-day exhaustion, strain and witnessed decision remain unchanged.
+
+Atlas passage attunement now follows genuine, saved first-chapter evidence. The opening witness grants level 1, one complete frontier first chapter grants level 2, one complete middle first chapter grants level 3, and a complete upper first chapter grants level 4 *only if the earlier groups are coherent*. This permits Auvren without all landmarks, the optional Waybreaker forge, the Unwritten Crown, Echoes, guardians or Confluences. Relics still optionally grant earlier exploration access, without inventing first-chapter outcomes. The actual atlas portal and its journal share the same combined rule. Legitimately progressed older final saves retain access and their original world choices.
+
+Portable C++ checks verify the alternative routes and reject out-of-order shortcuts. This source amendment is not an Unreal Editor compile/playthrough and does not regenerate the October 12 illustrated v20 release, whose historic hashes remain unchanged.

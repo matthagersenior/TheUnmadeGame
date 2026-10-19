@@ -83,7 +83,8 @@ FString AUnmadePrototypeHub::DescribeUnansweredRoad(AUnmadeCharacter* Player) co
     if(!IsValid(Player) || Lead.available==0)return Message;
     const auto From=WhereRoadBegins(Player->GetActorLocation());
     const UUnmadeEquipmentComponent* Gear=Player->GetEquipment();
-    const int Attunement=IsValid(Gear)?Gear->GetAtlasAttunement():0;
+    const int Attunement=UnmadeCore::RoadTravelAttunement(
+        GetUnansweredRoadEvidence(),IsValid(Gear)?Gear->GetAtlasAttunement():0);
     Message+=TEXT(" | Leads: ");
     for(int n=0;n<Lead.available;++n)
     {

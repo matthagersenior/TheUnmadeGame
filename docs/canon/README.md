@@ -35,8 +35,8 @@ The validator deliberately fails closed if an existing C++ registry stops matchi
 ## Already identified open conflicts
 
 1. **AtlasOfAbsence** now has an `AtlasOfAbsenceMastery` reward-switch case and an `AbilityStudy::AtlasReady()` prerequisite (three studies mastered including Echo Well). The current main branch also wires its player claim and persistence; the ledger now marks it earnable in source. Engine compilation and player acquisition still require testing.
-2. **TomorrowDebt** rite prose advertises *The Unpaid Sunrise*, but the actual awarded item is `FutureReceipt`, named *Tomorrow's Paid Receipt*. Both names are recorded to expose the mismatch—not silently declared equivalent.
-3. **Main campaign versus atlas attunement** needs a clean-save traversal acceptance test. Optional exploration rewards currently raise travel attunement; verify that the player can reach Auvren without unintentionally mandating optional questlines.
+2. **TomorrowDebt — reconciled:** the Tenfold rite, Ability Codex and actual `FutureReceipt` inventory grant all name **Tomorrow's Paid Receipt**; the quest remains *The Ledger of Borrowed Dawn*.
+3. **Travel gate — corrected at the source level:** verified main-story first chapters independently raise atlas attunement (opening 1, frontier 2, middle 3, upper 4); no Waybreaker or Unwritten Crown is required to reach Auvren. Optional earned relics remain exploration shortcuts. Unreal Editor end-to-end travel must still be tested.
 
 Do not invent a new reward or change canon just to make this document look complete.
 

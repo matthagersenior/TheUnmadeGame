@@ -47,12 +47,12 @@
   ],
   "post_release_source_milestone": {
     "date": "2026-10-19",
-    "name": "Ability Codex research mastery and Atlas of Absence",
+    "name": "Ability Codex mastery, canonical Paid Receipt and first-chapter route attunement",
     "status": "source_and_portable_tests_only",
     "illustrated_release_regenerated": false,
     "illustrated_member_hashes_recomputed": false,
     "engine_compiled": false,
     "engine_playtested": false,
-    "notes": "The files array and hashes remain the verified 2026-10-12 v20 package receipt; these source updates are not included in those assets."
+    "notes": "Historic October 12 v20 illustrated artifacts remain unchanged, original file SHA-256 hashes retained, not regenerated/rehashed. October 19 portable sources reconcile Tomorrow's Debt label and first-story atlas travel. Unreal compilation and playthrough remain unverified."
   }
 }

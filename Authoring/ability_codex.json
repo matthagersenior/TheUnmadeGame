@@ -442,7 +442,7 @@
       "duration": {
         "seconds": 17
       },
-      "reward": "The Unpaid Sunrise",
+      "reward": "Tomorrow's Paid Receipt",
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"

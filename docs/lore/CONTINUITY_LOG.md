@@ -352,3 +352,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Gave the previously definition-only Atlas of Absence a one-time, place-bound, mastery-gated reward and distinct +Fold/-Glimpse equipment effects; existing equipment/item ID order was not changed.
 - Added the portable C++ regression executable and integrated source parity checks. The 186-entry Codex distinguishes real active effects from observations and stat-only equipment.
 - Updated living canon and release receipts. The **v20 illustrated artifacts have not been regenerated**, and their original SHA-256 file digests are preserved. Unreal Header Tool compilation, save-load and combat tests inside the Editor are unverified.
+
+## 2026-10-19 — Tomorrow's Debt award and witnessed Auvren route (source-only)
+- Reconciled Tenfold rite reward with existing `FutureReceipt` award: **Tomorrow's Paid Receipt**, while the quest remains *The Ledger of Borrowed Dawn* and the debt cost continues to apply.
+- Main-story witnessed first chapters now provide level 1/2/3/4 atlas attunement for opening/frontier/middle/upper, independent of optional mythic gear, without making skipped chapters count as completed. The same level is used by journal route advice and actual portals, with legacy relic shortcuts preserved.
+- Added portable regression coverage for alternative branches, absent evidence, and relic shortcuts. Saved character identities, NPC witness rules, and endings are not overwritten. Actual Unreal Editor travel/save-load testing remains outstanding.
+- The v20 illustrated artifacts and original SHA-256 receipts are unchanged, not regenerated or rehashed.

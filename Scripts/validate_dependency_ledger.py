@@ -108,9 +108,8 @@ def validate(data: dict) -> list[str]:
     recorded = [r.get("id") for r in data.get("exceptions", [])
                 if r.get("type") in ("no_acquisition", "unwired_milestone")]
     equal_ids(recorded, pending, "unobtainable/unwired exception", errors)
-    if any("The Unpaid Sunrise" in s for s in [read(PUBLIC + "World/UnmadeTenfoldChronicle.h")]):
-        error_if(not any(r.get("type") == "reward_name_conflict" and r.get("id") == "TomorrowDebt"
-                         for r in data.get("exceptions", [])), "known TomorrowDebt naming conflict must remain explicit", errors)
+    error_if(any(r.get("type") == "reward_name_conflict" for r in data.get("exceptions", [])),
+             "obsolete rite reward exception; correct the gameplay/ledger names", errors)
 
     expedition = rows("World/UnmadeExpeditionRegistry.h", r'\{Realm::(\w+),"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
     error_if(len(expedition) != 9, "ExpeditionSpecs parse expected nine realm records", errors)
@@ -145,6 +144,8 @@ def validate(data: dict) -> list[str]:
                         if achievement == "Rite" + id), None)
         error_if(skill.get("mastery_reward") != "item:" + str(granted),
                  "rite " + id + ": mastery reward no longer linked to source grant", errors)
+        error_if(advertised != all_items.get(granted, {}).get("name"),
+                 "rite " + id + ": named reward differs from actual ItemCatalog grant", errors)
 
     for i, e in enumerate(expedition):
         realm, city, _, _, dungeon, boss_name, weapon, armor, technique = e
@@ -297,6 +298,11 @@ def validate(data: dict) -> list[str]:
         for id in [x[0] for x in rites]:
             if "rite."+id not in ability_ids:
                 errors.append("Learned rite missing from canonical Ability Codex: "+id)
+    codex_by_id = {row.get("id"): row for row in
+                   json.loads(read("Authoring/ability_codex.json")).get("records", [])}
+    for id, _, _, _, _, _, reward_name in rites:
+        if codex_by_id.get("rite."+id, {}).get("reward") != reward_name:
+            errors.append("Ability Codex reward mismatch: " + id)
     for id, gear in all_gear.items():
         if gear.get("acquisition") not in all_quests:
             errors.append(id + ": no available regional quest")
