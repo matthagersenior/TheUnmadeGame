@@ -62,6 +62,12 @@ The repository has one **unified directory to the entire established game univer
 - **Source evidence versus gameplay:** Real compiled behavior, character animations, VO/music, full accessibility, pathfinding, collision, packaging, all-save migrations and human playtesting remain explicit Unreal/production gates.
 - **Illustrated novels and guides:** Historical publication files are dated artifacts. Updating this source index is not an assertion that the full illustrated book has been regenerated and visually approved.
 
+## All new additions must pass the canon gate
+
+**[Canonical admission and change policy](../CANON_ADMISSION_POLICY.md)** · **[Source registration manifest](../SOURCE_COVERAGE.json)**.
+
+Future gameplay code, production assets, abilities, NPCs, quests, bosses and new lore manuscripts cannot be introduced as untracked new files. They must reference an existing canonical ID or define a new source-backed ID with a matching index entry and volume. Changes to authoritative authoring tables also require the relevant readable volume to be updated in the same PR. Native checks cannot replace a human continuity review or an actual Unreal playtest.
+
 ## Maintaining the encyclopedia
 
 When a new canon ID, NPC, weapon, ability, enemy or quest enters an authoritative registry, update its entry in the correct readable volume and `INDEX.json` together. Run:
