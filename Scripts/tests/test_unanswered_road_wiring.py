@@ -37,6 +37,30 @@ class UnansweredRoadWiring(unittest.TestCase):
         self.assertIn('if(state.finalAct>=3',rules)
         self.assertIn('if(state.finalAct>0',rules)
         self.assertIn('firstStories',rules)
+    def test_main_story_attunement_powers_both_actual_portals_and_guidance(self):
+        road=src("Source/TheUnmadeGame/Private/World/UnmadeCampaignWorld.cpp")
+        gates=src("Source/TheUnmadeGame/Private/World/UnmadeLaterRealmWorld.cpp")
+        rules=src("Source/TheUnmadeGame/Public/World/UnmadeCampaignSpineRules.h")
+        self.assertIn("const int Attunement=UnmadeCore::RoadTravelAttunement(",road)
+        self.assertIn("const int32 Attunement=UnmadeCore::RoadTravelAttunement(",gates)
+        self.assertIn("GetUnansweredRoadEvidence()",road)
+        self.assertIn("GetUnansweredRoadEvidence()",gates)
+        self.assertIn("Attunement<Edge.attunement",gates)
+        self.assertIn("if(!state.openingWitnessed) return relic;",rules)
+        self.assertIn("return std::max(relic,upper?4:3);",rules)
+        self.assertNotIn("Gated by actually earned relics",gates)
+    def test_tomorrow_debt_mastery_name_matches_inventory_and_codex(self):
+        import json
+        rite=src("Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h")
+        inventory=src("Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h")
+        codex=json.loads(src("Authoring/ability_codex.json"))
+        ledger=json.loads(src("docs/canon/dependency-ledger.json"))
+        self.assertIn("Tomorrow's Paid Receipt",rite)
+        self.assertIn('ItemId::FutureReceipt',inventory)
+        self.assertIn('Tomorrow\'s Paid Receipt',inventory)
+        self.assertEqual(next(r for r in codex["records"] if r["id"]=="rite.TomorrowDebt")["reward"],"Tomorrow's Paid Receipt")
+        self.assertEqual(next(q for q in ledger["quests"] if q["id"]=="quest:rite:TomorrowDebt")["rite_reward_label"],"Tomorrow's Paid Receipt")
+        self.assertFalse(any(e.get("type")=="reward_name_conflict" for e in ledger["exceptions"]))
     def test_ci(self):
         self.assertIn("Tests/story/unanswered_road_test.cpp",
                       src(".github/workflows/static-checks.yml"))
