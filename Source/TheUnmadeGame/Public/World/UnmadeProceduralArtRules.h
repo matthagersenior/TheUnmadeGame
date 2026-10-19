@@ -72,10 +72,28 @@ inline bool VisualHas(const char* s,const char* part) noexcept {
 }
 inline int RealmForVisualTag(const char* label) noexcept {
  if(!label||!label[0])return -1;
- if(std::strncmp(label,"Expedition.",11)==0) {
-   const char digit=label[11];
-   return digit>='0'&&digit<='8'&&label[12]=='.'?digit-'0':-1;
- }
+ const auto SingleArc=[&](const char* prefix,int first,int last,int offset)->int{
+   const auto length=std::strlen(prefix);
+   if(std::strncmp(label,prefix,length)!=0)return -1;
+   const char digit=label[length];
+   return digit>=('0'+first)&&digit<=('0'+last)&&
+      (label[length+1]=='.'||label[length+1]=='\\0')?
+      digit-'0'+offset:-1;
+ };
+ if(std::strncmp(label,"Expedition.",11)==0)
+   return SingleArc("Expedition.",0,8,0);
+ if(std::strncmp(label,"Later.",6)==0)
+   return SingleArc("Later.",0,5,3); // the six later realms begin at atlas index 3
+ if(std::strncmp(label,"Atlas.Gateway.",14)==0)
+   return SingleArc("Atlas.Gateway.",0,8,0);
+ if(std::strncmp(label,"Depth.CivicWork.",16)==0)
+   return SingleArc("Depth.CivicWork.",0,8,0);
+ if(std::strncmp(label,"Depth.Evidence.",15)==0)
+   return SingleArc("Depth.Evidence.",0,8,0);
+ if(std::strncmp(label,"Depth.Cache.",12)==0)
+   return SingleArc("Depth.Cache.",0,8,0);
+ if(std::strncmp(label,"CrossRealm.Review.",18)==0)
+   return SingleArc("CrossRealm.Review.",0,8,0);
  constexpr const char* names[9]={
   "Crossings.","Saltwake.","Cinderhold.","Tidal.","Sky.",
   "Bones.","Unlived.","Orchard.","Absence."};
