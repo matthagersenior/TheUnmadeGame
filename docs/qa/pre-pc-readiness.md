@@ -1,4 +1,7 @@
 # THE UNMADE — PC-independent readiness ledger
+
+**19 October 2026 source-audit supplement:** [Pre-PC closure matrix](pre-pc-closure-matrix.md) is now the single categorized queue for campaign, reality effects, NPC knowledge, economy, abilities, bosses, UI, assets and the first playable slice. A new exhaustive native campaign walkthrough enumerates 1,024 witness/completion combinations and tests all offered no-relic routes plus both saved mornings. This does **not** close Unreal compilation, level traversal, actual quest completion or player-facing acceptance; the v21 parity gate remains a source floor.
+
 **Updated 2026-10-12 | Live engineering backlog; this is not a release-complete certification. Historical entries below retain their original dates.**
 
 ## Evidence codes
