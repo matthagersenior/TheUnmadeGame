@@ -135,6 +135,8 @@ jobs:
         run: |
           python Scripts/build_cinderhold_audio.py --check
           python Scripts/unreal_editor/import_cinderhold_audio.py
+      - name: Audit canonical ability codex and source parity
+        run: python Scripts/validate_ability_codex.py --report
       - name: Run validator unit tests
         run: python -m unittest discover -s Scripts/tests -v
       - name: Compile and test deterministic C++ fracture rules
