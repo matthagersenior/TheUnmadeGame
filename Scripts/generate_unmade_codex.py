@@ -43,19 +43,50 @@ def generate(codex):
     out.extend(["}};","} // namespace UnmadeCore"])
     return "\n".join(out)+"\n"
 
+
+CRAFT_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/Items/UnmadeCodexCraftingGenerated.inc"
+CRAFT_IDS=("TemperedEdge","HerbSalve","ScribedStillness","LanternMail","InkboundCharm","LifeAsh")
+
+def generate_crafting(codex):
+    by={row["id"]:row for row in codex["records"]}
+    out=["// GENERATED FROM Authoring/ability_codex.json. Do not edit.",
+         "// This table is included inside namespace UnmadeCore after RecipeDef.",
+         "inline constexpr std::array<RecipeDef,6> Recipes = {{"]
+    for i,key in enumerate(CRAFT_IDS):
+        rec=by["recipe.workshop."+key]
+        data=rec["rule_contract"]
+        inputs=data["inputs"]
+        product=data["output"]
+        if len(inputs)!=2:raise ValueError("Codex craft contract requires two material kinds")
+        profession=data["profession"].split(".")[1].capitalize()
+        town=data["workshop"].split(".")[1]
+        material=lambda value:"ItemId::"+value["item_enum"]+","+str(value["count"])
+        fields=("RecipeId::"+key,quote(rec["name"]),"Profession::"+profession,
+                "SettlementId::"+town,str(data["min_skill"]),
+                material(inputs[0]),material(inputs[1]),material(product))
+        out.append("    {"+",".join(fields)+"}"+("" if i==5 else ","))
+    out.append("}};")
+    return "\n".join(out)+"\n"
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
     args=parser.parse_args()
-    generated=generate(json.loads(CODEX.read_text(encoding="utf-8")))
+    codex=json.loads(CODEX.read_text(encoding="utf-8"))
+    generated=generate(codex)
+    crafting=generate_crafting(codex)
     if args.check:
         if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
             print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")
             return 1
-        print("PASS: generated Codex runtime references match authoring JSON.")
+        if not CRAFT_OUTPUT.is_file() or CRAFT_OUTPUT.read_text(encoding="utf-8")!=crafting:
+            print("FAIL: Codex-generated crafting rules differ from canonical recipe data.")
+            return 1
+        print("PASS: Codex-generated runtime and crafting rules match authoring JSON.")
         return 0
     OUTPUT.write_text(generated,encoding="utf-8")
-    print("Wrote",OUTPUT.relative_to(ROOT))
+    CRAFT_OUTPUT.write_text(crafting,encoding="utf-8")
+    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT))
     return 0
 
 if __name__=="__main__":raise SystemExit(main())

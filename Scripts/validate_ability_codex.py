@@ -221,7 +221,7 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
     for name in (x.split("=")[0].strip() for x in final.split(",")):
         check("enemy.final." + name, "name", "Nhal-Vey: " + name)
 
-    for recipe in re.findall(r'\{RecipeId::(\w+),\s*"([^"]+)"', source(CRAFT)):
+    for recipe in re.findall(r'\{RecipeId::(\w+),\s*"([^"]+)"', source("Source/TheUnmadeGame/Public/Items/UnmadeCodexCraftingGenerated.inc")):
         check("recipe.workshop." + recipe[0], "name", recipe[1])
     fields = re.findall(r'\{\s*"([^"]+)",\s*Profession::', source(FIELD))
     _expect(issues, len(fields), 9, "field recipe count")
@@ -344,7 +344,7 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
     recipe_rows=re.findall(
         r'\{RecipeId::(\w+),"([^"]+)",Profession::(\w+),SettlementId::(\w+),(\d+),\s*'
         r'ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}',
-        source(CRAFT))
+        source("Source/TheUnmadeGame/Public/Items/UnmadeCodexCraftingGenerated.inc"))
     for key,name,profession,town,skill,ing_a,n_a,ing_b,n_b,output,n_out in recipe_rows:
         ident="recipe.workshop."+key
         check(ident,"rule_contract.profession","profession."+profession.lower())
@@ -353,6 +353,8 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         check(ident,"rule_contract.inputs",[{"item_enum":ing_a,"count":int(n_a)},
                                            {"item_enum":ing_b,"count":int(n_b)}])
         check(ident,"rule_contract.output",{"item_enum":output,"count":int(n_out)})
+    if '#include "Items/UnmadeCodexCraftingGenerated.inc"' not in source(CRAFT):
+        issues.append("live crafting model must include Codex-generated recipe table")
     study_source=source("Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h")
     for token in ('#include "World/UnmadeCodexGenerated.h"',"CodexStudyNames",
                   "CodexStudyRequirements[static_cast<int>(id)][0]","CodexAtlasRequirements[0]"):

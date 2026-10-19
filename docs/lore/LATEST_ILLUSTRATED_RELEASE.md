@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**19 October 2026 further source milestone:** Workshop recipe rules are now generated from the canonical Codex into the portable C++ crafting engine. Historic illustrated v20 members and their existing hashes remain unchanged, and gameplay has not been engine-compiled.
+
 **19 October 2026 (unillustrated source milestone):** The canonical Codex now spans all major game systems with 243 records, and a generated C++ study checklist/realm descriptor header. The downloadable v20 illustrations, documents, and ZIP **have not been rebuilt**; their existing hashes below remain historical.
 
 **19 October 2026 subsequent source-only lore audit:** Added save-backed requirements checklists and stronger Atlas gates (mastered Cartography, physically verified route, first Absence Confluence with witnessed resolution). Existing v20 illustrations/PDFs/DOCXs and their SHA-256 hashes are unchanged; the new checklist is NOT included in those artifacts.

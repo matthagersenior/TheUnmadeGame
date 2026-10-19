@@ -373,3 +373,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Added typed workshop recipe costs/workbench/skill/output contracts and explicit realm/journey dependency references without inventing any saved rewards or quest outcomes.
 - Replaced manually authored Study and Atlas checklist words with Codex-generated C++ reference tables. A reproducible generator supplies nine realm summaries; CI checks for drift.
 - Preserved existing runtime models, active player saves, provenance and consent rules; full engine runtime data migration and Unreal compilation remain unverified. No illustrated artifact was regenerated.
+
+## 2026-10-19 — Generated workshop recipe rule source
+
+- Replaced the six manually maintained runtime workshop recipe table rows with a deterministic table generated directly from the 243-record canonical Codex.
+- Preserved RecipeId and ItemId numbering, ingredient amounts, skill levels, settlement workbenches, output counts and existing atomic save/economy behavior.
+- Generator checks both Study/Atlas/realm reference tables and the compiled crafting recipe table. Full Unreal compilation and recipe playtesting remain unverified; no illustrated release was rebuilt.
