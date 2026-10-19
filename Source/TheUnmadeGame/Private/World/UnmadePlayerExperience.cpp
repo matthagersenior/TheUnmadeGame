@@ -151,7 +151,12 @@ FString AUnmadePrototypeHub::GetTrackedObjective()const{
  case S::WingReward:task=TEXT("Claim insight at the final wing reward station; defeating its guardian alone does not claim it");break;
  case S::Home:task=TEXT("Adventure resolved. Optional: meet returning people, buy upgrades, repair the work table, and mediate shared access");break;
  }
- return FString(UTF8_TO_TCHAR(spec.city))+TEXT(" — ")+task;
+ const auto waypoint=UnmadeCore::NextRealmWaypoint(a,*Expeditions.Arc(a),*Depth.Arc(a),*Experience.Arc(a));
+ const TCHAR* focus=waypoint.focus==UnmadeCore::JourneyFocus::Main?TEXT("MAIN QUEST"):
+   waypoint.focus==UnmadeCore::JourneyFocus::Personal?TEXT("OPTIONAL PERSONAL STORY"):
+   waypoint.focus==UnmadeCore::JourneyFocus::Optional?TEXT("OPTIONAL WING"):TEXT("FREE EXPLORATION");
+ return FString(UTF8_TO_TCHAR(spec.city))+TEXT(" / ")+focus+TEXT(" — ")+task+
+   TEXT("\n")+UTF8_TO_TCHAR(waypoint.cue);
 }
 FString AUnmadePrototypeHub::GetExperienceJournal()const{
  const auto First=UnmadeCore::NextOpeningBeat(
@@ -162,6 +167,23 @@ FString AUnmadePrototypeHub::GetExperienceJournal()const{
     TEXT("TRACKED OBJECTIVE\n")+GetTrackedObjective()+
     TEXT("\n\nOPTIONAL FIELDWORK AND RETURN RELATIONSHIPS\n");for(int a=0;a<9;++a){auto* x=Experience.Arc(a);if(!x->offered)continue;int completed=0;for(int n=0;n<3;++n)completed+=(x->steps&(1<<n))?1:0;const TCHAR* builds[]={TEXT("none"),TEXT("Duelist"),TEXT("Warden"),TEXT("Pathfinder")};t+=FString::Printf(TEXT("%s / %s: fieldwork %d/3; guardian %s; completion %s.\nInsight %d; build %s; tool %s; binding %s; privilege %s; repairs %s; mediation %s.\n%s\n"),UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].city),UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].task),completed,x->guardian==2?TEXT("yielded alive"):x->guardian?TEXT("defeated"):TEXT("unresolved"),x->complete?TEXT("claimed"):TEXT("pending"),x->insight,builds[x->build],x->tool?TEXT("earned"):TEXT("pending"),x->recipe?TEXT("crafted"):TEXT("pending"),x->privilege?TEXT("earned"):TEXT("pending"),x->repair?TEXT("complete"):TEXT("pending"),x->reconciled?TEXT("shared access restored"):TEXT("pending"),UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].hint));}t+=TEXT("\nUPGRADE COSTS: first build 2 insight; a different build 1; tool 1; crafted binding 1 (+2 armor); privilege 1; repair 1. Wing gives 5 total insight; four earned relationship scenes can add 4. Spending is finite.\n");if(!GetDefault<UUnmadePlayerPreferences>()->ShowTutorials)return t;int tutorial=Experience.Tutorial();if(!(tutorial&1))t+=TEXT("FIRST STEPS: use E beside a real person or object. F inspects alternate evidence. J opens your journal.\n");if(!(tutorial&2))t+=TEXT("EXPLORATION: walk inside rooms or inspect their entrances to record visits. Undiscovered rooms remain hidden on the map.\n");if(!(tutorial&4))t+=TEXT("COMBAT: left mouse attacks; contact follows windup. Right mouse guards; time guard entry to parry. Shift dodges. Watch enemy warnings.\n");if(!(tutorial&8))t+=TEXT("EQUIPMENT: selecting a weapon or armor replaces that slot. Techniques and charm modifiers remain distinct.\n");if(!(tutorial&16))t+=TEXT("CONSEQUENCES: personal decisions need confirmation. Public witness attracts a road claimant; repairs and mediation can restore access.\n");return t;}
 FString AUnmadePrototypeHub::GetExperienceMap(int a,AUnmadeCharacter* p)const{if(!IsRealmKnown(a))return TEXT("Unrecorded realm. Find an adventure board or arrive through an earned route before its local map is revealed.");const auto& s=UnmadeCore::ExpeditionSpecs[a];auto* e=Expeditions.Arc(a);auto* d=Depth.Arc(a);auto* x=Experience.Arc(a);FString t=FString(UTF8_TO_TCHAR(s.city))+TEXT("\n");if(p){FVector delta=City(a)-p->GetActorLocation();t+=FString::Printf(TEXT("City bearing: %.0f m east, %.0f m north; %.0f m away.\n"),delta.X/100,delta.Y/100,delta.Size2D()/100);}t+=TEXT("Recorded frontier: ")+FString(e->visited&1?UTF8_TO_TCHAR(s.frontier):TEXT("not visited"))+TEXT(" / refuge: ")+FString(e->visited&2?UTF8_TO_TCHAR(s.refuge):TEXT("not visited"))+TEXT("\n");for(int room=0;room<6;++room){if(!UnmadeCore::MapKnowsRoom(*e,room)){t+=FString::Printf(TEXT("Chamber %d: undiscovered\n"),room+1);continue;}auto c=UnmadeCore::DungeonRoom(a,room);t+=FString::Printf(TEXT("Recorded chamber %d: %.0f m east, %.0f m north of city\n"),room+1,c.x/100.,(15000+c.y)/100.);}if(x->offered){t+=FString(UTF8_TO_TCHAR(UnmadeCore::ExperienceSpecs[a].wing))+TEXT("\n");for(int n=0;n<3;++n)if(x->steps&(1<<n)){auto c=UnmadeCore::WingRoom(a,n);t+=FString::Printf(TEXT("Recorded wing station %d: %.0f m east, %.0f m north\n"),n+1,c.x/100.,(15000+c.y)/100.);}}if(UnmadeCore::MapKnowsChoice(*d))t+=TEXT("Known personal options:\nA: ")+FString(UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].option_a))+TEXT("\nB: ")+FString(UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].option_b));else t+=TEXT("Personal options are unknown until the offer and witness conversation.");if(a==0)t+=TEXT("\nThe Reach also includes Bellwold and Paperhaven.");
+ // A documented waypoint is not an omniscient marker for moving NPCs,
+ // unrevealed rooms or future answers. The last visited chamber is an anchor.
+ const auto waypoint=UnmadeCore::NextRealmWaypoint(a,*e,*d,*x);
+ t+=TEXT("\nWAYFINDER / ")+FString(waypoint.optional?
+   TEXT("OPTIONAL — does not block the main story"):TEXT("MAIN QUEST"));
+ t+=TEXT("\n")+FString(UTF8_TO_TCHAR(waypoint.cue));
+ if(waypoint.available&&p){
+  const FVector delta=FVector(waypoint.x,waypoint.y,0)-
+    FVector(p->GetActorLocation().X,p->GetActorLocation().Y,0);
+  t+=FString::Printf(waypoint.precise?
+     TEXT("\nNEXT KNOWN POSITION: %.0f m east, %.0f m north; %.0f m away.\n"):
+     TEXT("\nLAST RECORDED POSITION: %.0f m east, %.0f m north; %.0f m away. Explore from here; new passages and people remain uncharted.\n"),
+     delta.X/100.,delta.Y/100.,delta.Size2D()/100.);
+ }else if(!waypoint.available)
+  t+=TEXT("\nNo tracked mandatory local step remains. Choose the next world mystery or return to a living character.\n");
+ else
+  t+=TEXT("\nOpen the map in the world to see the bearing from your current position.\n");
  t+=TEXT("\nINVESTIGATION LEAD: ")+FString(
     UTF8_TO_TCHAR(UnmadeCore::NextInvestigationLead(a,*e,*d)));
  return t;}
