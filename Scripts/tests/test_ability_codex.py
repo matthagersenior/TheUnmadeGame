@@ -83,6 +83,18 @@ class AbilityCodexContract(unittest.TestCase):
         row["rule_contract"]["scenes"]=[]
         self.assertTrue(any("four scenes" in issue for issue in validate(ROOT,changed)))
 
+    def test_unanswered_road_chapters_are_codex_owned_and_ordered(self):
+        rows=[r for r in self.codex["records"] if r["id"].startswith("quest.campaign.")]
+        self.assertEqual(len(rows),9)
+        self.assertEqual({r["rule_contract"]["source_index"] for r in rows},set(range(9)))
+        for row in rows:
+            self.assertTrue(row["rule_contract"]["witnessed_discovery"])
+            self.assertTrue(row["rule_contract"]["next_direction"])
+        changed=deepcopy(self.codex)
+        row=next(r for r in changed["records"] if r["id"]=="quest.campaign.FirstAbsence")
+        row["rule_contract"]["source_index"]=0
+        self.assertTrue(any("changed the authored road order" in issue for issue in validate(ROOT,changed)))
+
     def test_invalid_dependency_rejected(self):
         changed=deepcopy(self.codex)
         row=next(x for x in changed["records"] if x["id"]=="journey.wing.FirstAbsence")

@@ -402,3 +402,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 ### 2026-10-19 — Generated wing table compiler correction
 
 - Fixed the C++ generator's excess aggregate braces for each three-room grid, preserving all existing coordinates and original scene text. Portable regression compilation verifies the generated source.
+
+## 2026-10-19 — Main-story campaign chapter parity
+
+- Migrated the nine canonical Unanswered Road chapter descriptions, physical discoveries and next-road guidance to the existing Codex and generated `UnmadeCodexCampaignGenerated.inc` consumed by C++.
+- Added C++ and JSON tests for nine ordered chapters, source event IDs and truthful mystery evidence.
+- Preserved the original physically earned campaign, branch alternatives, final-boss gate, save contract and illustrated v20 artifacts.

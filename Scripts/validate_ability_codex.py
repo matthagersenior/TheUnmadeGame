@@ -354,9 +354,17 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         city,wing,guardian=row[:3]
         check("journey.wing."+realm,"name",wing+" — "+city)
         check("journey.wing."+realm,"rule_contract.guardian",guardian)
-    story_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCampaignSpineRules.h"))
+    if '#include "World/UnmadeCodexCampaignGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeCampaignSpineRules.h"):
+        issues.append("main campaign chapters not compiled from Codex")
+    story_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCodexCampaignGenerated.inc"))
     for realm,title in story_rows[:9]:
         check("quest.campaign."+realm,"name",title)
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                   "TidalLedger","SkyBelow","CinderSpine",
+                                   "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        entry=by_id.get("quest.campaign."+realm)
+        if entry and entry["rule_contract"].get("source_index")!=index:
+            issues.append("quest.campaign."+realm+": changed the authored road order")
     aftermath_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h"))
     for realm,title in aftermath_rows[:9]:
         check("quest.aftermath."+realm,"name",title)

@@ -153,6 +153,25 @@ def generate_experience(codex):
     out.append("};")
     return "\n".join(out)+"\n"
 
+
+CAMPAIGN_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexCampaignGenerated.inc"
+
+def generate_campaign(codex):
+    by={row["id"]:row for row in codex["records"]}
+    out=["// GENERATED FROM Authoring/ability_codex.json. Do not hand-edit.",
+         "// Included after RoadBeat inside namespace UnmadeCore.",
+         "inline constexpr std::array<RoadBeat,9> UnansweredRoadBeats={{"]
+    for index,realm in enumerate(REALMS):
+        row=by["quest.campaign."+realm]
+        c=row["rule_contract"]
+        if c["source_index"]!=index:
+            raise ValueError("Campaign source ordinal drift: "+realm)
+        args=("Realm::"+realm,quote(row["name"]),quote(c["central_question"]),
+              quote(c["witnessed_discovery"]),quote(c["next_direction"]),quote(c["public_event"]))
+        out.append("    {"+",".join(args)+"}"+("" if index==8 else ","))
+    out.append("}};")
+    return "\n".join(out)+"\n"
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
@@ -163,9 +182,13 @@ def main():
     atlas=generate_atlas(codex)
     expeditions=generate_expeditions(codex)
     experience=generate_experience(codex)
+    campaign=generate_campaign(codex)
     if args.check:
         if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
             print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")
+            return 1
+        if not CAMPAIGN_OUTPUT.is_file() or CAMPAIGN_OUTPUT.read_text(encoding="utf-8")!=campaign:
+            print("FAIL: Codex-generated campaign chapter data differs from authored Codex.")
             return 1
         if not EXPERIENCE_OUTPUT.is_file() or EXPERIENCE_OUTPUT.read_text(encoding="utf-8")!=experience:
             print("FAIL: Codex-generated experience wing / room graph is stale.")
@@ -186,7 +209,8 @@ def main():
     ATLAS_OUTPUT.write_text(atlas,encoding="utf-8")
     EXPEDITION_OUTPUT.write_text(expeditions,encoding="utf-8")
     EXPERIENCE_OUTPUT.write_text(experience,encoding="utf-8")
-    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT),EXPERIENCE_OUTPUT.relative_to(ROOT))
+    CAMPAIGN_OUTPUT.write_text(campaign,encoding="utf-8")
+    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT),EXPERIENCE_OUTPUT.relative_to(ROOT),CAMPAIGN_OUTPUT.relative_to(ROOT))
     return 0
 
 if __name__=="__main__":raise SystemExit(main())

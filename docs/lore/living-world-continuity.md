@@ -508,3 +508,7 @@ The existing nine expedition definitions—including each local crew, physical c
 The Codex now supplies all nine executable optional `ExperienceSpecs`. Each preserves its three tangible rooms, bespoke physical challenge, local guardian and unique reward, plus both saved public-witness and reserve aftermath narratives and the four scene-specific reactions. This does not claim an unearned NPC testimony, a visited level, a completed wing or any cooked Unreal asset. The 256-record Codex is unchanged in record count: existing experience entries now carry the full runtime rule definitions.
 
 **19 October 2026 compiler correction:** The Codex-owned optional-wing 3×2 room-grid initializer now emits the original valid aggregate-brace shape. Original coordinates and saved physical fieldwork remain unchanged; this is syntax repair, not lore or mechanic revision.
+
+## 2026-10-19 — The Unanswered Road chapters now sourced from Codex
+
+The canonical main campaign's nine authored road-beat descriptions and discovery leads are compiled directly from Codex data; historical questions, first-person evidence and the choice of roads are preserved. No automatic nine-realm completion checklist is introduced, and entering a realm is neither proof of its central answer nor authorization to expose a private witness's story. The campaign's save-backed evidence and boss-access rules remain intact, with the final answer withheld until earned. Unreal engine execution remains unverified.

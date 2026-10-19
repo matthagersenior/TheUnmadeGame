@@ -11237,7 +11237,8 @@
         "public_event": "Campaign.Thread.0",
         "central_question": "Why does the Crossings bell ring from a road that no one has walked?",
         "witnessed_discovery": "In Bellwold a refugee remembers a bell that has never been cast. In Paperhaven its absence has a signed record. Neither settlement can prove the other wrong.",
-        "next_direction": "Listen to a rain-counter on the lost coast or a hearth-reader beneath the mountain."
+        "next_direction": "Listen to a rain-counter on the lost coast or a hearth-reader beneath the mountain.",
+        "source_index": 0
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -11774,7 +11775,8 @@
         "public_event": "Campaign.Thread.1",
         "central_question": "Who can remember a sea that is missing without owning the grief of those left ashore?",
         "witnessed_discovery": "Sella's sea chart is not an error. The rain preserved a record of something intentionally withheld, and the debt dates are written in another city's script.",
-        "next_direction": "Follow the ferrymen's unpaid dates into Drevlach, or ask the inverted choir who still bears the missing weight."
+        "next_direction": "Follow the ferrymen's unpaid dates into Drevlach, or ask the inverted choir who still bears the missing weight.",
+        "source_index": 1
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -12311,7 +12313,8 @@
         "public_event": "Campaign.Thread.2",
         "central_question": "Who keeps a common flame burning when the sun whose gift it was never existed?",
         "witnessed_discovery": "Tarin reads a fire with the same missing second found in the bell. The city's warmth survives because someone accepted a cost they did not create.",
-        "next_direction": "Seek Orravane's weight-bearing score or Vathless's fossil history to find who pays that cost."
+        "next_direction": "Seek Orravane's weight-bearing score or Vathless's fossil history to find who pays that cost.",
+        "source_index": 2
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -12848,7 +12851,8 @@
         "public_event": "Campaign.Thread.3",
         "central_question": "Can a debt be legitimate when its signatory has not been born?",
         "witnessed_discovery": "Veynu's impossible dates show that the world's missing things were pledged as collateral; a contract is written on the underside of reality itself.",
-        "next_direction": "A census of people who never arrived may reveal who had the right to authorize those bargains."
+        "next_direction": "A census of people who never arrived may reveal who had the right to authorize those bargains.",
+        "source_index": 3
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -13385,7 +13389,8 @@
         "public_event": "Campaign.Thread.4",
         "central_question": "How many people were removed from history to keep a single hanging street above the ground?",
         "witnessed_discovery": "Yllesh's missing voice proves that the same absences are doing work in several realms. The common pattern is a decision, not an accident.",
-        "next_direction": "Compare the unentered citizens of Eillun or the untitled court that authorized no crown."
+        "next_direction": "Compare the unentered citizens of Eillun or the untitled court that authorized no crown.",
+        "source_index": 4
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -13922,7 +13927,8 @@
         "public_event": "Campaign.Thread.5",
         "central_question": "When a family is mined out of time, who gets to call its descendants fictional?",
         "witnessed_discovery": "Ghraet's seams show erased lineages in the mountain's living load. Someone has been converting impossible people into stable places.",
-        "next_direction": "Travel toward the court without kings; ask who signed a law that everyone now obeys."
+        "next_direction": "Travel toward the court without kings; ask who signed a law that everyone now obeys.",
+        "source_index": 5
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -14459,7 +14465,8 @@
         "public_event": "Campaign.Thread.6",
         "central_question": "Can a person be a valid witness without having a beginning recognized by the city?",
         "witnessed_discovery": "Eillun's unentered people are not echoes; they live and disagree. A missing origin is not evidence that someone deserves to be erased.",
-        "next_direction": "The contradictory threshold in Auvren may be a door rather than the end of the world."
+        "next_direction": "The contradictory threshold in Auvren may be a door rather than the end of the world.",
+        "source_index": 6
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -14996,7 +15003,8 @@
         "public_event": "Campaign.Thread.7",
         "central_question": "Who has been enforcing the world's oldest rule after every prospective ruler refused it?",
         "witnessed_discovery": "Tharniv's root-court remembers a law signed by nobody. Its force survived because an answering consciousness was made responsible for every unresolved question.",
-        "next_direction": "Return to the place before geography and ask whether the answer is actually keeping the world safe."
+        "next_direction": "Return to the place before geography and ask whether the answer is actually keeping the world safe.",
+        "source_index": 7
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -15533,7 +15541,8 @@
         "public_event": "Campaign.Thread.8",
         "central_question": "Why does the first witness remember a traveler who has not yet arrived?",
         "witnessed_discovery": "Auvren reveals a seam older than either origin. Nhal-Vey did not create the contradictions; it has been eating the questions people were afraid to ask.",
-        "next_direction": "Face Nhal-Vey on the northern terrace, where it insists that only one history may survive."
+        "next_direction": "Face Nhal-Vey on the northern terrace, where it insists that only one history may survive.",
+        "source_index": 8
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -16797,7 +16806,7 @@
       ]
     },
     "journeys": {
-      "status": "source_mirrored",
+      "status": "codex_generated_campaign_chapters_and_expeditions_source_mirrored_quest_execution",
       "categories": [
         "journey",
         "personal_quest",
