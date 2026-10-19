@@ -93,6 +93,10 @@ void AUnmadeCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
     PlayerInputComponent->BindAction("SupplyActivity", IE_Pressed, this, &AUnmadeCharacter::ProgressSupplyActivity);
     PlayerInputComponent->BindAction("StoryJournal", IE_Pressed, this, &AUnmadeCharacter::ShowStoryJournal);
     PlayerInputComponent->BindAction("EvidenceNotebook", IE_Pressed, this, &AUnmadeCharacter::ShowEvidenceNotebook);
+    PlayerInputComponent->BindAction("StudyObserve", IE_Pressed, this, &AUnmadeCharacter::StudyObserve);
+    PlayerInputComponent->BindAction("StudyProgress", IE_Pressed, this, &AUnmadeCharacter::StudyProgress);
+    PlayerInputComponent->BindAction("StudyUse", IE_Pressed, this, &AUnmadeCharacter::StudyUse);
+    PlayerInputComponent->BindAction("StudyNext", IE_Pressed, this, &AUnmadeCharacter::StudyNext);
     PlayerInputComponent->BindAction("CharacterProfile",IE_Pressed,this,&AUnmadeCharacter::ShowCharacterProfile);
     PlayerInputComponent->BindAction("ItemInventory", IE_Pressed, this, &AUnmadeCharacter::ShowInventory);
     PlayerInputComponent->BindAction("ItemWeapon", IE_Pressed, this, &AUnmadeCharacter::EquipNextWeapon);
@@ -751,7 +755,7 @@ void AUnmadeCharacter::ShowEvidenceNotebook()
     if(!GetWorld())return;
     for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
-        const FString Evidence=Hub->GetEvidenceNotebook();
+        const FString Evidence=Hub->GetEvidenceNotebook()+TEXT("\n\n")+GetStudyJournal();
         // Text-mode input remains useful in the graybox; this same function
         // is BlueprintPure on the hub for a proper accessible UMG notebook.
         UE_LOG(LogTemp,Display,TEXT("%s"),*Evidence);
@@ -887,6 +891,17 @@ void AUnmadeCharacter::TickWeaponContact(){
  for(const auto& hit:hits){auto* enemy=Cast<AUnmadeEnemyCharacter>(hit.GetActor());if(!enemy||!enemy->CanBeTargeted())continue;FVector toward=enemy->GetActorLocation()-start;if(toward.Size2D()>WeaponReach+65||FVector::DotProduct(GetActorForwardVector(),toward.GetSafeNormal2D())<.2)continue;FCollisionQueryParams sight(q);sight.AddIgnoredActor(enemy);if(GetWorld()->LineTraceTestByChannel(start,enemy->GetActorLocation()+FVector(0,0,55),ECC_Visibility,sight))continue;float before=enemy->GetCombat()->GetHealth();if(Combat->ResolveWeaponContact(enemy->GetCombat(),now,enemy->IsFractureExposed(now)))HandleMeleeImpact(enemy,before);break;}
 }
 void AUnmadeCharacter::HandleMeleeImpact(AUnmadeEnemyCharacter* Target,float Before){if(!Target)return;Target->NotifyPlayerHit(Before-Target->GetCombat()->GetHealth());
+        if(Target->GetCombat() && Before>Target->GetCombat()->GetHealth())
+        {
+            UnmadeCore::CreatureKind Species;
+            if(Target->StudyCreature(Species)){
+                UnmadeCore::StudyId StudyId=UnmadeCore::StudyId::Count;
+                if(Species==UnmadeCore::CreatureKind::Cinderjaw)StudyId=UnmadeCore::StudyId::Cinderjaw;
+                else if(Species==UnmadeCore::CreatureKind::PaleStrider)StudyId=UnmadeCore::StudyId::PaleStrider;
+                else if(Species==UnmadeCore::CreatureKind::RedactionEye)StudyId=UnmadeCore::StudyId::RedactionEye;
+                if(StudyId!=UnmadeCore::StudyId::Count)RecordStudyEvidence(StudyId,2);
+            }
+        }
         if (Target->GetCombat()->IsDefeated() && IsValid(Equipment))
         {
             const AUnmadeBossCharacter* Boss=Cast<AUnmadeBossCharacter>(Target);
@@ -1406,6 +1421,21 @@ void AUnmadeCharacter::BeginPlay()
     }
     const UUnmadePrototypeSave* Save = Cast<UUnmadePrototypeSave>(
         UnmadeSave::LoadGameFromSlot());
+    if(Save && Save->SchemaVersion==1 && Save->bHasAbilityStudy)
+    {
+        UnmadeCore::StudySnapshot Snapshot;
+        bool Valid=Save->AbilityStudyStages.Num()==UnmadeCore::StudyCount &&
+            Save->AbilityStudyEvidence.Num()==UnmadeCore::StudyCount &&
+            Save->AbilityStudyTrials.Num()==UnmadeCore::StudyCount &&
+            Save->AbilityStudySelection>=0 && Save->AbilityStudySelection<UnmadeCore::StudyCount;
+        if(Valid){for(int i=0;i<UnmadeCore::StudyCount;++i){
+            Snapshot.stages[i]=Save->AbilityStudyStages[i];
+            Snapshot.evidence[i]=Save->AbilityStudyEvidence[i];
+            Snapshot.trials[i]=Save->AbilityStudyTrials[i];
+        }Valid=AbilityStudy.Restore(Snapshot);}
+        if(Valid)SelectedStudy=Save->AbilityStudySelection;
+        else {bStudySaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Malformed Ability Study save. Existing profile protected from overwrite."));}
+    }
     if (Save && Save->SchemaVersion == 1 && Save->bHasFractureSnapshot)
     {
         const FString Variant = Save->WorldVariantId.IsNone()
@@ -1496,6 +1526,8 @@ void AUnmadeCharacter::Tick(float DeltaSeconds)
     RestoreSessionWhenReady();
     if(bSessionRestored&&GetWorld()&&GetWorld()->GetTimeSeconds()>=NextSessionSave){NextSessionSave=GetWorld()->GetTimeSeconds()+20;SaveSessionNow();}
     TickWeaponContact();
+    if(StudyWardUntil>=0 && GetWorld() && GetWorld()->GetTimeSeconds()>=StudyWardUntil)
+    {StudyWardUntil=-1;if(IsValid(Equipment))Equipment->SetStudyBonuses(0,0);}
     if(!RpgWidget)if(auto* PC=Cast<APlayerController>(GetController())){RpgWidget=CreateWidget<UUnmadeRpgWidget>(PC,UUnmadeRpgWidget::StaticClass());if(RpgWidget)RpgWidget->AddToViewport(30);}
     if(GetWorld() && GetWorld()->GetTimeSeconds()>=PlayerAttackMotionUntil)
         AnimatePlayer(Combat&&Combat->IsDefeated()?FName(TEXT("Death")):Combat&&Combat->IsGuarding()?FName(TEXT("Guard")):GetVelocity().SizeSquared2D()>FMath::Square(12.f)
@@ -1659,7 +1691,7 @@ void AUnmadeCharacter::PersonalChoiceA(){if(GetWorld())for(TActorIterator<AUnmad
 void AUnmadeCharacter::PersonalChoiceB(){if(GetWorld())for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)if(Hub->TryDepthInteraction(this,2))return;}
 void AUnmadeCharacter::UseFieldTechnique(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub){if(!Hub->UseDepthPower(this))Hub->NotifyRpg(TEXT("Technique needs an earned mastery lesson, stamina, recovery time and a suitable nearby target."));return;}}
 void AUnmadeCharacter::DodgeStep(){if(!GetWorld()||IsRpgMenuOpen()||!Combat->Dodge(GetWorld()->GetTimeSeconds()))return;FVector Direction=GetLastMovementInputVector().GetSafeNormal2D();if(Direction.IsNearlyZero())Direction=GetActorForwardVector();LaunchCharacter(Direction*650,false,false);PlayIdentityMotion(FName(TEXT("Dodge")));UnmadePresentation::Sound(this,TEXT("guard"));}
-void AUnmadeCharacter::RpgMenuAction(FName Action){if(!Combat||Combat->IsDefeated())return;if(Action==FName(TEXT("Weapon")))EquipNextWeapon();else if(Action==FName(TEXT("Armor")))EquipNextArmor();else if(Action==FName(TEXT("Charm")))EquipNextCharm();else if(Action==FName(TEXT("Heal")))UseHealthPotion();else if(Action==FName(TEXT("ChoiceA")))PersonalChoiceA();else if(Action==FName(TEXT("ChoiceB")))PersonalChoiceB();else if(Action==FName(TEXT("AnomalyPulse"))){DemonstrateAnomaly();}else if(Action==FName(TEXT("FoldReality"))){FoldReality();}else if(Action==FName(TEXT("RewriteOpen"))){RewriteOpen();}else if(Action==FName(TEXT("RewriteSealed"))){RewriteSealed();}else if(Action==FName(TEXT("FrontierTravel"))){CrossFrontierGateway();}else if(Action==FName(TEXT("RiteNext"))){if(Tenfold)Tenfold->NextRite();}else if(Action==FName(TEXT("RitePrevious"))){if(Tenfold)Tenfold->PreviousRite();}else if(Action==FName(TEXT("RiteStudy"))){if(Tenfold)Tenfold->StudyRite();}else if(Action==FName(TEXT("RiteUse"))){if(Tenfold)Tenfold->InvokeRite();}else if(Action==FName(TEXT("RiteChoice1"))){if(Tenfold)Tenfold->DecideSolidarity();}else if(Action==FName(TEXT("RiteChoice2"))){if(Tenfold)Tenfold->DecideTruth();}else if(Action==FName(TEXT("RiteBreak"))){if(Tenfold)Tenfold->BreakChosenOath();}else if(Action==FName(TEXT("RiteLaw"))){if(Tenfold)Tenfold->CycleWorldLaw();}else if(Action==FName(TEXT("ConfluenceCycle"))){if(Tenfold)Tenfold->CycleConfluence();}else if(Action==FName(TEXT("ConfluenceStudy"))){if(Tenfold)Tenfold->StudyConfluence();}else if(Action==FName(TEXT("ConfluenceOption1"))){if(Tenfold)Tenfold->ConfluenceChoice1();}else if(Action==FName(TEXT("ConfluenceOption2"))){if(Tenfold)Tenfold->ConfluenceChoice2();}else if(Action==FName(TEXT("FactionSolidarity"))){CommitSolidarity();}else if(Action==FName(TEXT("FactionTruth"))){CommitTruth();}else if(Action==FName(TEXT("StoryShelter"))){ChooseShelter();}else if(Action==FName(TEXT("StoryResearch"))){ChooseResearch();}else if(Action==FName(TEXT("OfferAid"))){OfferAid();}else if(Action==FName(TEXT("SupplyActivity"))){ProgressSupplyActivity();}else if(Action==FName(TEXT("FieldKit"))){UseFieldKit();}else if(Action==FName(TEXT("FieldTechnique"))){UseFieldTechnique();}else if(Action==FName(TEXT("ItemStrain"))){UseStrainPotion();}else if(Action==FName(TEXT("ItemForge"))){ForgeMythicGear();}else if(Action==FName(TEXT("Sneak"))){if(bIsCrouched)StopSneak();else StartSneak();}}
+void AUnmadeCharacter::RpgMenuAction(FName Action){if(!Combat||Combat->IsDefeated())return;if(Action==FName(TEXT("StudyObserve"))){StudyObserve();return;}if(Action==FName(TEXT("StudyProgress"))){StudyProgress();return;}if(Action==FName(TEXT("StudyUse"))){StudyUse();return;}if(Action==FName(TEXT("StudyNext"))){StudyNext();return;}if(Action==FName(TEXT("Weapon")))EquipNextWeapon();else if(Action==FName(TEXT("Armor")))EquipNextArmor();else if(Action==FName(TEXT("Charm")))EquipNextCharm();else if(Action==FName(TEXT("Heal")))UseHealthPotion();else if(Action==FName(TEXT("ChoiceA")))PersonalChoiceA();else if(Action==FName(TEXT("ChoiceB")))PersonalChoiceB();else if(Action==FName(TEXT("AnomalyPulse"))){DemonstrateAnomaly();}else if(Action==FName(TEXT("FoldReality"))){FoldReality();}else if(Action==FName(TEXT("RewriteOpen"))){RewriteOpen();}else if(Action==FName(TEXT("RewriteSealed"))){RewriteSealed();}else if(Action==FName(TEXT("FrontierTravel"))){CrossFrontierGateway();}else if(Action==FName(TEXT("RiteNext"))){if(Tenfold)Tenfold->NextRite();}else if(Action==FName(TEXT("RitePrevious"))){if(Tenfold)Tenfold->PreviousRite();}else if(Action==FName(TEXT("RiteStudy"))){if(Tenfold)Tenfold->StudyRite();}else if(Action==FName(TEXT("RiteUse"))){if(Tenfold)Tenfold->InvokeRite();}else if(Action==FName(TEXT("RiteChoice1"))){if(Tenfold)Tenfold->DecideSolidarity();}else if(Action==FName(TEXT("RiteChoice2"))){if(Tenfold)Tenfold->DecideTruth();}else if(Action==FName(TEXT("RiteBreak"))){if(Tenfold)Tenfold->BreakChosenOath();}else if(Action==FName(TEXT("RiteLaw"))){if(Tenfold)Tenfold->CycleWorldLaw();}else if(Action==FName(TEXT("ConfluenceCycle"))){if(Tenfold)Tenfold->CycleConfluence();}else if(Action==FName(TEXT("ConfluenceStudy"))){if(Tenfold)Tenfold->StudyConfluence();}else if(Action==FName(TEXT("ConfluenceOption1"))){if(Tenfold)Tenfold->ConfluenceChoice1();}else if(Action==FName(TEXT("ConfluenceOption2"))){if(Tenfold)Tenfold->ConfluenceChoice2();}else if(Action==FName(TEXT("FactionSolidarity"))){CommitSolidarity();}else if(Action==FName(TEXT("FactionTruth"))){CommitTruth();}else if(Action==FName(TEXT("StoryShelter"))){ChooseShelter();}else if(Action==FName(TEXT("StoryResearch"))){ChooseResearch();}else if(Action==FName(TEXT("OfferAid"))){OfferAid();}else if(Action==FName(TEXT("SupplyActivity"))){ProgressSupplyActivity();}else if(Action==FName(TEXT("FieldKit"))){UseFieldKit();}else if(Action==FName(TEXT("FieldTechnique"))){UseFieldTechnique();}else if(Action==FName(TEXT("ItemStrain"))){UseStrainPotion();}else if(Action==FName(TEXT("ItemForge"))){ForgeMythicGear();}else if(Action==FName(TEXT("Sneak"))){if(bIsCrouched)StopSneak();else StartSneak();}}
 
 void AUnmadeCharacter::UseFieldKit(){if(!GetWorld()||IsRpgMenuOpen())return;for(TActorIterator<AUnmadePrototypeHub> h(GetWorld());h;++h){if(!h->UseDepthFieldKit(this))h->NotifyRpg(TEXT("Use a crafted field kit inside an unresolved dungeon danger chamber. No kit is consumed if there is no benefit."));return;}}
 
@@ -1675,3 +1707,276 @@ bool AUnmadeCharacter::SaveSessionNow(){RestoreSessionWhenReady();if(!bSessionRe
 void AUnmadeCharacter::TradeSelection(UnmadeCore::ItemId item,bool buy){SelectedTrade=item;if(buy)BuyMarketSupplies();else SellMarketSupplies();SelectedTrade=UnmadeCore::ItemId::Count;}
 
 int AUnmadeCharacter::GetCharacterFeature(int aspect)const{return aspect>=0&&aspect<8?Identity.Snapshot().options[aspect]:-1;}
+
+
+bool AUnmadeCharacter::PersistStudy()
+{
+    if(bStudySaveRejected)return false;
+    UUnmadePrototypeSave* Save=UUnmadePrototypeSave::LoadOrCreate();
+    if(!Save)return false;
+    const auto& S=AbilityStudy.Snapshot();
+    Save->AbilityStudyStages.Reset();
+    Save->AbilityStudyEvidence.Reset();
+    Save->AbilityStudyTrials.Reset();
+    for(int i=0;i<UnmadeCore::StudyCount;++i)
+    {
+        Save->AbilityStudyStages.Add(S.stages[i]);
+        Save->AbilityStudyEvidence.Add(S.evidence[i]);
+        Save->AbilityStudyTrials.Add(S.trials[i]);
+    }
+    Save->AbilityStudySelection=SelectedStudy;
+    Save->bHasAbilityStudy=true;
+    return UnmadeSave::SaveGameToSlot(Save);
+}
+
+bool AUnmadeCharacter::RecordStudyEvidence(UnmadeCore::StudyId Id,int Bit)
+{
+    if(bStudySaveRejected)return false;
+    const auto Before=AbilityStudy.Snapshot();
+    if(AbilityStudy.Observe(Id,Bit)!=UnmadeCore::StudyResult::EvidenceRecorded)return false;
+    if(!PersistStudy()){AbilityStudy.Restore(Before);return false;}
+    if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Cyan,
+        FString::Printf(TEXT("EVIDENCE: %s / firsthand signal %d committed to the Study Codex."),
+            UTF8_TO_TCHAR(UnmadeCore::StudyNames[static_cast<int>(Id)]),Bit));
+    return true;
+}
+
+AUnmadeEnemyCharacter* AUnmadeCharacter::FindStudyEnemy(int32 Subject,bool RequireWarning)const
+{
+    if(!GetWorld())return nullptr;
+    AUnmadeEnemyCharacter* Nearest=nullptr;
+    double Best=FMath::Square(700.0);
+    const double Now=GetWorld()->GetTimeSeconds();
+    for(TActorIterator<AUnmadeEnemyCharacter> It(GetWorld());It;++It)
+    {
+        AUnmadeEnemyCharacter* Enemy=*It;
+        if(!Enemy||!Enemy->CanBeTargeted())continue;
+        UnmadeCore::CreatureKind Species;
+        if(Subject>=0 && Subject<3)
+        {
+            if(!Enemy->StudyCreature(Species))continue;
+            const auto Want=Subject==0?UnmadeCore::CreatureKind::Cinderjaw:
+                Subject==1?UnmadeCore::CreatureKind::PaleStrider:UnmadeCore::CreatureKind::RedactionEye;
+            if(Species!=Want)continue;
+        }
+        if(RequireWarning&&!Enemy->IsActivelyTelegraphing(Now))continue;
+        double Dist=FVector::DistSquared(GetActorLocation(),Enemy->GetActorLocation());
+        if(Dist>=Best)continue;
+        FCollisionQueryParams Query(SCENE_QUERY_STAT(UnmadeStudyLineOfSight),false);
+        Query.AddIgnoredActor(this);Query.AddIgnoredActor(Enemy);
+        if(GetWorld()->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,50),
+            Enemy->GetActorLocation()+FVector(0,0,50),ECC_Visibility,Query))continue;
+        Best=Dist;Nearest=Enemy;
+    }
+    return Nearest;
+}
+
+bool AUnmadeCharacter::NearEchoStudySite()const
+{
+    if(!GetWorld())return false;
+    for(TActorIterator<AUnmadeLoreSite> It(GetWorld());It;++It)
+    {
+        if(It->GetDistrict()!=UnmadeCore::District::EchoWell ||
+           FVector::DistSquared(GetActorLocation(),It->GetActorLocation())>FMath::Square(320.0))continue;
+        FCollisionQueryParams Query(SCENE_QUERY_STAT(UnmadeStudyEchoWell),false);
+        Query.AddIgnoredActor(this);Query.AddIgnoredActor(*It);
+        if(!GetWorld()->LineTraceTestByChannel(GetActorLocation()+FVector(0,0,50),
+            It->GetActorLocation()+FVector(0,0,50),ECC_Visibility,Query))return true;
+    }
+    return false;
+}
+
+FString AUnmadeCharacter::GetStudyJournal()const
+{
+    FString Out=TEXT("ABILITY STUDY / authored firsthand research (5 Observe, 6 Progress, 7 Use, 8 Cycle)\n");
+    static const TCHAR* Stages[]={TEXT("unknown"),TEXT("observed"),TEXT("understood"),
+                                  TEXT("experimented"),TEXT("mastered")};
+    for(int i=0;i<UnmadeCore::StudyCount;++i)
+    {
+        const auto Id=static_cast<UnmadeCore::StudyId>(i);
+        const int Stage=static_cast<int>(AbilityStudy.Stage(Id));
+        Out+=FString::Printf(TEXT("%s%s: %s | evidence %d/3 | trials %d/2\n"),
+            i==SelectedStudy?TEXT("> "):TEXT("  "),
+            UTF8_TO_TCHAR(UnmadeCore::StudyNames[i]),Stages[Stage],
+            AbilityStudy.Evidence(Id),AbilityStudy.Trials(Id));
+    }
+    Out+=TEXT("Enemy research: record a live warning, then land actual contact; Echo Well: approach site and corroborate via Strain.\n");
+    Out+=TEXT("Understanding requires both signals, then two paid live experiments and physical mastery.\n");
+    Out+=AbilityStudy.AtlasReady()?TEXT("Atlas of Absence ready: return to Echo Well and select Memory Lens, then press 6.\n")
+        :TEXT("Atlas of Absence: master Memory Lens and any two distinct enemy principles.\n");
+    return Out;
+}
+
+void AUnmadeCharacter::StudyNext()
+{
+    if(IsRpgMenuOpen())return;
+    SelectedStudy=(SelectedStudy+1)%UnmadeCore::StudyCount;
+    if(!PersistStudy())UE_LOG(LogTemp,Warning,TEXT("Study selection not yet saved; no progression granted."));
+    if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Cyan,GetStudyJournal());
+}
+
+void AUnmadeCharacter::StudyObserve()
+{
+    if(!Combat||Combat->IsDefeated()||IsRpgMenuOpen()||bStudySaveRejected)return;
+    const auto Id=static_cast<UnmadeCore::StudyId>(SelectedStudy);
+    bool Valid=SelectedStudy==3?NearEchoStudySite():FindStudyEnemy(SelectedStudy,true)!=nullptr;
+    if(!Valid)
+    {
+        if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,
+            SelectedStudy==3?TEXT("Go to the actual Echo Well to observe its reflection."):
+            TEXT("Observe a nearby living creature of the selected species during its actual attack warning."));
+        return;
+    }
+    RecordStudyEvidence(Id,1);
+}
+
+void AUnmadeCharacter::TryClaimAtlas()
+{
+    if(!AbilityStudy.AtlasReady()||!NearEchoStudySite()||!IsValid(Equipment))return;
+    if(Equipment->Claim(UnmadeCore::Achievement::AtlasOfAbsenceMastery)&&GEngine)
+        UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
+            TEXT("ATLAS OF ABSENCE earned at Echo Well! Equip the charm: -4 Glimpse Strain and +2 Fold seconds."));
+}
+
+void AUnmadeCharacter::StudyProgress()
+{
+    if(!GetWorld()||!Combat||Combat->IsDefeated()||IsRpgMenuOpen()||bStudySaveRejected)return;
+    const auto Id=static_cast<UnmadeCore::StudyId>(SelectedStudy);
+    const auto Stage=AbilityStudy.Stage(Id);
+    const bool AtSubject=SelectedStudy==3?NearEchoStudySite():FindStudyEnemy(SelectedStudy)!=nullptr;
+    const double Now=GetWorld()->GetTimeSeconds();
+    if(Stage==UnmadeCore::StudyStage::Mastered)
+    {
+        if(SelectedStudy==3)TryClaimAtlas();
+        if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Cyan,GetStudyJournal());
+        return;
+    }
+    if(Stage==UnmadeCore::StudyStage::Unknown)
+    {
+        if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,TEXT("First observe the real subject (press 5)."));
+        return;
+    }
+    if(Stage==UnmadeCore::StudyStage::Observed && SelectedStudy==3 && AbilityStudy.Evidence(Id)==1)
+    {
+        if(!AtSubject||!FractureModel.SpendStrain(8))
+        {
+            if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,TEXT("Echo Well corroboration needs its physical site and 8 available Strain."));
+            return;
+        }
+        if(!RecordStudyEvidence(Id,2))
+        {
+            FractureModel.Recover(8.0/UnmadeCore::FractureModel::RecoveryPerSecond);
+            return;
+        }
+        if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Cyan,TEXT("Echo Well corroborated. Press 6 again to understand."));
+        return;
+    }
+    if(Stage==UnmadeCore::StudyStage::Observed)
+    {
+        const auto Before=AbilityStudy.Snapshot();
+        if(AbilityStudy.Understand(Id)!=UnmadeCore::StudyResult::Advanced)
+        {
+            if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,
+                TEXT("Understanding needs both firsthand signals: observe the warning, then strike the observed enemy."));
+            return;
+        }
+        if(!PersistStudy())AbilityStudy.Restore(Before);
+        else if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Cyan,TEXT("Understanding earned. Return to the real subject for two experiments."));
+        return;
+    }
+    if(!AtSubject)
+    {
+        if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,TEXT("Revisit your live subject / Echo Well to perform the physical trial."));
+        return;
+    }
+    if(Stage==UnmadeCore::StudyStage::Understood)
+    {
+        if(Now<NextStudyTrialAt||!FractureModel.SpendStrain(10))
+        {
+            if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Silver,TEXT("Trial needs 10 available Strain and 8 seconds recovery."));
+            return;
+        }
+        const auto Before=AbilityStudy.Snapshot();
+        if(AbilityStudy.Experiment(Id)!=UnmadeCore::StudyResult::Advanced||!PersistStudy())
+        {
+            AbilityStudy.Restore(Before);
+            FractureModel.Recover(10.0/UnmadeCore::FractureModel::RecoveryPerSecond);
+            return;
+        }
+        NextStudyTrialAt=Now+8;
+        if(SelectedStudy!=3)if(auto* Enemy=FindStudyEnemy(SelectedStudy))
+            Enemy->ExposeToFold(Now,2.0); // A real, interrupted field experiment.
+        if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Cyan,
+            FString::Printf(TEXT("Field experiment %d/2 saved."),AbilityStudy.Trials(Id)));
+        return;
+    }
+    if(Stage==UnmadeCore::StudyStage::Experimented)
+    {
+        if(!FractureModel.SpendStrain(5))
+        {
+            if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Silver,TEXT("Final embodied mastery needs 5 available Strain."));
+            return;
+        }
+        const auto Before=AbilityStudy.Snapshot();
+        if(AbilityStudy.Master(Id)!=UnmadeCore::StudyResult::Advanced||!PersistStudy())
+        {
+            AbilityStudy.Restore(Before);
+            FractureModel.Recover(5.0/UnmadeCore::FractureModel::RecoveryPerSecond);
+            return;
+        }
+        if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
+            FString::Printf(TEXT("MASTERED: %s. The earned technique is now usable (press 7)."),
+                UTF8_TO_TCHAR(UnmadeCore::StudyNames[SelectedStudy])));
+        TryClaimAtlas();
+    }
+}
+
+void AUnmadeCharacter::StudyUse()
+{
+    if(!GetWorld()||!Combat||Combat->IsDefeated()||IsRpgMenuOpen()||bStudySaveRejected)return;
+    const auto Id=static_cast<UnmadeCore::StudyId>(SelectedStudy);
+    const double Now=GetWorld()->GetTimeSeconds();
+    if(!AbilityStudy.HasMastered(Id)||Now<NextStudyPowerAt)return;
+    AUnmadeEnemyCharacter* Enemy=FindStudyEnemy(-1);
+    if((SelectedStudy==2||SelectedStudy==3)&&!Enemy)return;
+    if(!FractureModel.SpendStrain(9))return;
+    int Ward=0;
+    double WardTime=6.0;
+    if(SelectedStudy==0)
+    {
+        Ward=5;
+        if(AbilityStudy.CanCombine(UnmadeCore::StudyId::Cinderjaw,UnmadeCore::StudyId::EchoWell))
+            WardTime=9.0;
+        if(Enemy&&AbilityStudy.CanCombine(UnmadeCore::StudyId::Cinderjaw,UnmadeCore::StudyId::RedactionEye))
+            Enemy->ExposeToFold(Now,3);
+    }
+    else if(SelectedStudy==1)
+    {
+        if(!Combat->Dodge(Now))
+        {
+            FractureModel.Recover(9.0/UnmadeCore::FractureModel::RecoveryPerSecond);
+            return;
+        }
+        LaunchCharacter(GetActorForwardVector()*650,false,false);
+        Ward=AbilityStudy.CanCombine(UnmadeCore::StudyId::PaleStrider,UnmadeCore::StudyId::EchoWell)?2:0;
+        WardTime=3;
+        PlayIdentityMotion(FName(TEXT("Dodge")));
+    }
+    else
+    {
+        Enemy->ExposeToFold(Now,SelectedStudy==2?6.0:4.0);
+        if(AbilityStudy.CanCombine(UnmadeCore::StudyId::RedactionEye,UnmadeCore::StudyId::EchoWell))
+            Enemy->ExposeToFold(Now,8.0);
+        Ward=SelectedStudy==3?2:0;
+    }
+    if(Ward>0&&IsValid(Equipment))
+    {
+        Equipment->SetStudyBonuses(0,Ward);
+        StudyWardUntil=FMath::Max(StudyWardUntil,Now+WardTime);
+    }
+    NextStudyPowerAt=Now+18.0;
+    if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Cyan,
+        FString::Printf(TEXT("Earned technique: %s (9 Strain, 18s recovery)."),
+            UTF8_TO_TCHAR(UnmadeCore::StudyNames[SelectedStudy])));
+}
+
