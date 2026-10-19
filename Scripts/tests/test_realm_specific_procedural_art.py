@@ -16,10 +16,12 @@ class RealmVisualIdentityTest(unittest.TestCase):
 using namespace UnmadeCore;
 int main(){
  std::set<std::string> names, colors;
+ std::set<int> crownKinds;
  for(int a=0;a<9;++a){
    const auto& d=RealmVisualDesigns[a];
    assert(d.name && d.landmark && d.storyMotif && d.color.R>=0);
    assert(names.insert(d.landmark).second);
+   crownKinds.insert(static_cast<int>(d.crown));
    colors.insert(std::to_string(d.color.R)+":"+std::to_string(d.color.G)+":"+std::to_string(d.color.B));
    char label[80];
    std::snprintf(label,sizeof(label),"Expedition.%d.CivicCareGate",a);
@@ -39,6 +41,7 @@ int main(){
    }
  }
  assert(colors.size()==9);
+ assert(crownKinds.size()==9);
  assert(ClassifyRealmProp("Saltwake.Aftermath.RainLedger",0.6,.6,1.5).realm==1);
  assert(ClassifyRealmProp("Cinderhold.Adventure.SharedKilnAccord",.8,.6,1.0).realm==2);
  assert(ClassifyRealmProp("Orchard.Aftermath.CommonRoots",1,1,1).realm==7);
@@ -73,6 +76,10 @@ int main(){
   self.assertIn("Expedition.%d.Landmark.%d",expedition)
   self.assertIn("SpawnBlock(",expedition)
   self.assertIn("SetRiteWorldActorState",hub)
+  material=read("Scripts/unreal/author_realm_palette.py")
+  self.assertIn("MaterialExpressionVectorParameter",material)
+  self.assertIn("unreal.MaterialProperty.MP_BASE_COLOR",material)
+  self.assertIn("/Game/Art/Generated/M_UnmadeRealmPalette",hub)
   self.assertIn("Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics)",hub)
  def test_firsthand_fractures_still_nonblocking_and_realm_styled(self):
   expedition=read("Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp")
