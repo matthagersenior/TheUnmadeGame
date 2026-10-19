@@ -45,7 +45,11 @@ def verify(data):
         unique(group, "id")
     realm_src = (ROOT / "Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h").read_text()
     rite_src = (ROOT / "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h").read_text()
-    witness_src = (ROOT / "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h").read_text()
+    witness_file = ROOT / "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h"
+    witness_src = witness_file.read_text(encoding="utf-8")
+    if '#include "World/UnmadeCodexAftermathGenerated.inc"' not in witness_src:
+        raise ValueError("The realm aftermath source is no longer Codex-owned")
+    witness_src += (ROOT / "Source/TheUnmadeGame/Public/World/UnmadeCodexAftermathGenerated.inc").read_text(encoding="utf-8")
     actual_realm = realm_src.split("enum class Realm : int {",1)[1].split("};",1)[0]
     actual_rite = rite_src.split("enum class RiteId : int {",1)[1].split("};",1)[0]
     def enum_ids(text):
