@@ -29,7 +29,7 @@ A canonical entry must state:
 ## Scope and limits of automatic enforcement
 
 - `validate_canon_encyclopedia.py` checks existing registered IDs, names, source provenance and readable volume coverage.
-- `check_canon_change.py` compares the whole PR against its base. New C++ gameplay files, content assets, source authoring masters and lore manuscripts need a [SOURCE_COVERAGE](SOURCE_COVERAGE.json) mapping. Edits to critical machine-readable registries require the corresponding readable volume to change in the same PR.
+- `check_canon_change.py` compares each PR against its base **and every direct push to `main` against the push's previous commit**. New C++ gameplay files, content assets, source authoring masters and lore manuscripts need a [SOURCE_COVERAGE](SOURCE_COVERAGE.json) mapping. Edits to critical machine-readable registries require the corresponding readable volume to change in the same PR.
 - A bug fix **without** an added feature or changed canon may reuse existing identifiers; cosmetic or build-only work must not invent lore just to satisfy a checklist.
 - **Not fully machine-decidable:** A new mechanic inserted inside an *existing* non-authority file, a hidden plot contradiction, a misleading preproduction claim, or an inaccurate explanation can still escape this check. Existing source validators, source review and first-person playtests remain necessary. Expand the affected validator when a new registry family is added; never falsely claim universal automatic protection.
 - GitHub checks only prevent merges if the repository's branch rules make the applicable checks **required** and merges/admin bypass are controlled. Confirm repository rules separately.
