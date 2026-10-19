@@ -47,10 +47,10 @@ class DependencyLedgerTests(unittest.TestCase):
         modified["skills"][0]["learning_quest"] = "quest:nonexistent"
         self.assertTrue(any("no concrete learning source/quest" in e for e in validate(modified)))
 
-    def test_unearned_relic_cannot_be_misrepresented(self):
+    def test_earned_relic_cannot_be_marked_reserved(self):
         modified = copy.deepcopy(self.canon)
         item = next(item for item in modified["items"] if item["id"] == "AtlasOfAbsence")
-        item["availability"] = "earnable"
+        item["availability"] = "reserved"
         self.assertTrue(any("item AtlasOfAbsence" in e for e in validate(modified)))
 
     def test_new_unexplained_reward_is_rejected(self):
