@@ -102,6 +102,33 @@ def generate_atlas(codex):
     out.append("}};")
     return "\n".join(out)+"\n"
 
+
+EXPEDITION_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexExpeditionGenerated.inc"
+
+def generate_expeditions(codex):
+    by={row["id"]:row for row in codex["records"]}
+    out=["// GENERATED FROM Authoring/ability_codex.json. Do not hand-edit.",
+         "// Included inside namespace UnmadeCore after ExpeditionSpec.",
+         "inline constexpr std::array<ExpeditionSpec,9> ExpeditionSpecs={{"]
+    for index,key in enumerate(REALMS):
+        row=by["journey.expedition."+key]
+        spec=row["rule_contract"]
+        if spec["source_index"]!=index:
+            raise ValueError("Expedition ordinal drift "+key)
+        strings=(spec["city"],spec["frontier"],spec["refuge"],spec["dungeon"],
+                 spec["boss"],spec["weapon"],spec["armor"],spec["technique"],
+                 row["summary"],spec["kill_return"],spec["mercy_return"])
+        if len(spec["people"])!=5 or len(spec["clues"])!=3 or spec["kill_return"]==spec["mercy_return"]:
+            raise ValueError("Expedition needs five people, three clues and two different outcomes")
+        origin=spec["world_origin"]
+        parts=("Realm::"+key,)+tuple(quote(x) for x in strings)+(
+              "{{"+",".join(quote(x) for x in spec["people"])+"}}",
+              "{{"+",".join(quote(x) for x in spec["clues"])+"}}",
+              str(origin["x"]),str(origin["y"]))
+        out.append("    {"+",".join(parts)+"}"+("" if index==8 else ","))
+    out.append("}};")
+    return "\n".join(out)+"\n"
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
@@ -110,9 +137,13 @@ def main():
     generated=generate(codex)
     crafting=generate_crafting(codex)
     atlas=generate_atlas(codex)
+    expeditions=generate_expeditions(codex)
     if args.check:
         if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
             print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")
+            return 1
+        if not EXPEDITION_OUTPUT.is_file() or EXPEDITION_OUTPUT.read_text(encoding="utf-8")!=expeditions:
+            print("FAIL: Codex-generated expedition content differs from authoring.")
             return 1
         if not ATLAS_OUTPUT.is_file() or ATLAS_OUTPUT.read_text(encoding="utf-8")!=atlas:
             print("FAIL: Codex-generated world atlas or passage graph differs from authoring.")
@@ -125,7 +156,8 @@ def main():
     OUTPUT.write_text(generated,encoding="utf-8")
     CRAFT_OUTPUT.write_text(crafting,encoding="utf-8")
     ATLAS_OUTPUT.write_text(atlas,encoding="utf-8")
-    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT))
+    EXPEDITION_OUTPUT.write_text(expeditions,encoding="utf-8")
+    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT))
     return 0
 
 if __name__=="__main__":raise SystemExit(main())

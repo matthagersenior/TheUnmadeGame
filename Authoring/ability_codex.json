@@ -10943,7 +10943,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Tollkeeper Without a Road is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Tollkeeper Without a Road yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Maelin",
+          "Tovin",
+          "Rusk",
+          "Jessa",
+          "Noll"
+        ],
+        "clues": [
+          "A toll charter lists people as road fixtures.",
+          "A cut seal identifies the collectors.",
+          "Three contradictory maps share one trapped stair."
+        ],
+        "world_origin": {
+          "x": 0,
+          "y": 0
+        },
+        "source_index": 0
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -11438,7 +11457,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Undertow Bailiff is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Undertow Bailiff yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Ceryn",
+          "Ossa",
+          "Brelt",
+          "Havin",
+          "Teska"
+        ],
+        "clues": [
+          "Water payments conceal a captive labor levy.",
+          "A cracked helmet bears the divers’ signal.",
+          "The dry chamber contains the genuine levy register."
+        ],
+        "world_origin": {
+          "x": 0,
+          "y": -50000
+        },
+        "source_index": 1
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -11933,7 +11971,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Ashbound Provost is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Ashbound Provost yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Kerrin",
+          "Dova",
+          "Sarn",
+          "Ilyet",
+          "Fen"
+        ],
+        "clues": [
+          "The provost has diverted a communal furnace.",
+          "A scorched shift slate records the false closure.",
+          "A surviving valve diagram reveals the bypass."
+        ],
+        "world_origin": {
+          "x": 0,
+          "y": 50000
+        },
+        "source_index": 2
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -12428,7 +12485,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Interest Warden is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Interest Warden yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Velka",
+          "Roven",
+          "Anset",
+          "Deyra",
+          "Sull"
+        ],
+        "clues": [
+          "A forged future debt binds the ferrymen.",
+          "A ship’s seal predates the alleged bargain.",
+          "The counterfoil names the creditor’s own unpaid promise."
+        ],
+        "world_origin": {
+          "x": 100000,
+          "y": -50000
+        },
+        "source_index": 3
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -12923,7 +12999,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Counterweight Cantor is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Counterweight Cantor yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Liora",
+          "Vaun",
+          "Eris",
+          "Kelm",
+          "Sora"
+        ],
+        "clues": [
+          "The cantor is using prisoners to stabilize a private span.",
+          "A rigger’s knot ties a voice to a counterweight.",
+          "The tuning record proves the public span can stand without prisoners."
+        ],
+        "world_origin": {
+          "x": -100000,
+          "y": -50000
+        },
+        "source_index": 4
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -13418,7 +13513,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Last Claimant is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Last Claimant yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Aren",
+          "Torva",
+          "Mekk",
+          "Seyl",
+          "Brann"
+        ],
+        "clues": [
+          "The claimant treats descendants as expendable mining rights.",
+          "An intact family token survives the spoil.",
+          "The seam register proves the workers’ living claim."
+        ],
+        "world_origin": {
+          "x": 100000,
+          "y": 50000
+        },
+        "source_index": 5
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -13913,7 +14027,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Registrar of Empty Beds is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Registrar of Empty Beds yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Neris",
+          "Aella",
+          "Durn",
+          "Ovin",
+          "Meya"
+        ],
+        "clues": [
+          "The registrar uses a missing entry as permission to imprison.",
+          "An unsigned blanket list records occupied beds.",
+          "A witness ledger proves the caretakers were present before the census."
+        ],
+        "world_origin": {
+          "x": -100000,
+          "y": 50000
+        },
+        "source_index": 6
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -14408,7 +14541,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Unwritten Castellan is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Unwritten Castellan yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Sivra",
+          "Holl",
+          "Perren",
+          "Alva",
+          "Neyt"
+        ],
+        "clues": [
+          "The castellan has claimed a common orchard as crown land.",
+          "A graft tag carries the names of its communal tenders.",
+          "The buried title reserves the root road for everyone."
+        ],
+        "world_origin": {
+          "x": 200000,
+          "y": 0
+        },
+        "source_index": 7
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -14903,7 +15055,26 @@
           "Boss",
           "Return",
           "Reward"
-        ]
+        ],
+        "kill_return": "The Keeper of the Single Door is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+        "mercy_return": "The Keeper of the Single Door yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+        "people": [
+          "Thaelin",
+          "Iven",
+          "Roa",
+          "Essel",
+          "Venn"
+        ],
+        "clues": [
+          "The keeper has closed a shared threshold to enforce one account.",
+          "A tether line proves the witnesses entered voluntarily.",
+          "The original door mark allows more than one return."
+        ],
+        "world_origin": {
+          "x": -200000,
+          "y": 0
+        },
+        "source_index": 8
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",

@@ -498,3 +498,7 @@ All six workshop RecipeDef table entries are now **generated from the canonical 
 ## 2026-10-19 — Travel topology becomes Codex rule data
 
 The original nine-world atlas and thirteen bidirectional connecting routes, including the correct 0–4 attunement tiers, are now compiled from the unified Codex. Reality remains bounded by actual play: a planned path is not a generated realm, a validated quest, or evidence that a world is built. The realm-passages preserve the exact pre-migration graph; no new shortcut, historical explanation or access to the Place Before Place is granted. Source C++ pathfinding still requires correct attunement. A portable route test enforces parity and prevents reaching First Absence below tier four. Unreal-level loading remains unverified.
+
+## 2026-10-19 — Codex owns nine expedition contracts
+
+The existing nine expedition definitions—including each local crew, physical clue, geographical anchor, confrontation and explicitly separate mercy-versus-kill return language—are now compiled from the canonical Codex. Defeating or sparing a boss still requires the original live encounter and the saved state-machine outcome; a written entry does not free a captive or settle a witness's question. The generated table retains the exact original text, reward identities and XY anchors, while six later realm maps remain unverified in Unreal.

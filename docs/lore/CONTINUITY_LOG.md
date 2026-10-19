@@ -386,3 +386,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Moved executable WorldAtlas and AtlasPassages tables to deterministic generated `UnmadeCodexAtlasGenerated.inc`, consumed by the original path-planning runtime.
 - Added source, JSON and compiled-C++ tests to detect incorrect edge thresholds, invalid endpoints, shortcut routes and drift between Codex and world descriptions.
 - Existing realm scenes are not claimed to exist without an actual Unreal level; v20 illustrated files were not rebuilt.
+
+## 2026-10-19 — Codex-generated expedition registry
+
+- Migrated the nine executable expedition specification records from independently maintained C++ tables to generated entries in the unified Codex (256 total records).
+- Preserved exact original NPCs, clue text, boss identities, realm positioning and combat/mercy return narration; did not rewrite quest stages or saved outcomes.
+- Added C++ tests and source-parity contracts for all nine expedition rules; no Unreal Editor compile or illustrated-release rebuild claimed.

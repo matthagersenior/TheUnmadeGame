@@ -145,6 +145,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_realm_route_test.cpp -o /tmp/unmade-codex-routes
           /tmp/unmade-codex-routes
+      - name: Verify Codex-owned expedition people, clues and alternative resolutions
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_expedition_rules_test.cpp -o /tmp/unmade-codex-expeditions
+          /tmp/unmade-codex-expeditions
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check

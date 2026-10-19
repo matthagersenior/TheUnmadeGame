@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**Source milestone, 19 October 2026:** The expedition's nine authored boss/crew/clue/return definitions are Codex-generated. Historic illustrated package contents and SHA-256 checksums have not changed.
+
 **19 October 2026 follow-on source milestone:** Realm descriptions and their 13 attunement-gated passages are now Codex-generated, not hand-maintained. The historical illustrated v20 assets and their hashes remain unchanged.
 
 **19 October 2026 further source milestone:** Workshop recipe rules are now generated from the canonical Codex into the portable C++ crafting engine. Historic illustrated v20 members and their existing hashes remain unchanged, and gameplay has not been engine-compiled.

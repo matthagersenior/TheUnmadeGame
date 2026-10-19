@@ -17,7 +17,7 @@ CODEX = "Authoring/ability_codex.json"
 ITEMS = "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
 RITES = "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
 CONFLUENCES = "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-EXPEDITION = "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
+EXPEDITION = "Source/TheUnmadeGame/Public/World/UnmadeCodexExpeditionGenerated.inc"
 STYLES = "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
 CREATURES = "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
 BOSSES = "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
@@ -317,6 +317,8 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
     world_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',atlas)
     for realm,name in world_rows[:9]:
         check("realm."+realm,"name",name)
+    if '#include "World/UnmadeCodexExpeditionGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"):
+        issues.append("expedition runtime must consume Codex-generated authored source")
     expedition_rows=re.findall(
         r'\{Realm::(\w+),"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"',
         source(EXPEDITION))
@@ -324,6 +326,18 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         check("journey.expedition."+realm,"name",dungeon+" — "+city)
         check("journey.expedition."+realm,"rule_contract.boss",boss)
         check("journey.expedition."+realm,"rule_contract.frontier",frontier)
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                   "TidalLedger","SkyBelow","CinderSpine",
+                                   "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        row=by_id.get("journey.expedition."+realm)
+        if row is None:continue
+        contract=row["rule_contract"]
+        if contract.get("source_index")!=index:
+            issues.append(f"journey.expedition.{realm}: invalid source index")
+        if len(contract.get("people",[]))!=5 or len(contract.get("clues",[]))!=3:
+            issues.append(f"journey.expedition.{realm}: incomplete authored people or clues")
+        if contract.get("kill_return")==contract.get("mercy_return"):
+            issues.append(f"journey.expedition.{realm}: mercy and combat must differ")
     wing_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"',source(EXPERIENCE))
     _expect(issues,len(wing_rows),9,"wing registry count")
     for realm,row in zip(realms,wing_rows):

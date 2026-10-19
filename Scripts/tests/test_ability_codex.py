@@ -56,6 +56,19 @@ class AbilityCodexContract(unittest.TestCase):
         ref["rule_contract"]["minimum_attunement"]=0
         self.assertTrue(any("passage.11." in e for e in validate(ROOT,changed)))
 
+    def test_expedition_reward_and_mercy_are_distinct_and_source_owned(self):
+        journeys=[x for x in self.codex["records"] if x["id"].startswith("journey.expedition.")]
+        self.assertEqual(len(journeys),9)
+        for journey in journeys:
+            contract=journey["rule_contract"]
+            self.assertEqual(len(contract["people"]),5)
+            self.assertEqual(len(contract["clues"]),3)
+            self.assertNotEqual(contract["kill_return"],contract["mercy_return"])
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="journey.expedition.ThreefoldReach")
+        row["rule_contract"]["mercy_return"]=row["rule_contract"]["kill_return"]
+        self.assertTrue(any("mercy and combat must differ" in issue for issue in validate(ROOT,changed)))
+
     def test_invalid_dependency_rejected(self):
         changed=deepcopy(self.codex)
         row=next(x for x in changed["records"] if x["id"]=="journey.wing.FirstAbsence")

@@ -113,7 +113,9 @@ def validate(data: dict) -> list[str]:
     error_if(any(r.get("type") == "reward_name_conflict" for r in data.get("exceptions", [])),
              "obsolete rite reward exception; correct the gameplay/ledger names", errors)
 
-    expedition = rows("World/UnmadeExpeditionRegistry.h", r'\{Realm::(\w+),"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
+    if '#include "World/UnmadeCodexExpeditionGenerated.inc"' not in read(PUBLIC + "World/UnmadeExpeditionRegistry.h"):
+        errors.append("expedition runtime not using Codex-generated rules")
+    expedition = rows("World/UnmadeCodexExpeditionGenerated.inc", r'\{Realm::(\w+),"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
     error_if(len(expedition) != 9, "ExpeditionSpecs parse expected nine realm records", errors)
     realm_ids = [x[0] for x in expedition]
     city_to_realm = {x[1]: x[0] for x in expedition}
