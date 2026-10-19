@@ -26,6 +26,10 @@ A canonical entry must state:
 6. **Respect continuity publishing:** Content-changing lore still follows [UPDATE_POLICY](../lore/UPDATE_POLICY.md), including protected mysteries, continuity log and dated illustrated release rules when a new full edition is actually issued.
 7. **Merge only on passing required checks** and preserve a clean `main`. Review the final CI outcome and the exact merge commit. Unreal validation is a separate required release gate.
 
+## Mandatory GitHub merge protection
+
+The admission gate can only **block a merge** once GitHub enforces the `source-checks` result on `main`. See [main protection policy and activation](MAIN_PROTECTION.md) and [versioned active ruleset definition](../../.github/rulesets/main-canon-protection.json). The ruleset is a repository administration setting; storing its JSON alone does not activate it. The GitHub connection used for source/PR changes does not provide the Administration write operation, so confirm the live rule separately before claiming merge-time enforcement.
+
 ## Scope and limits of automatic enforcement
 
 - `validate_canon_encyclopedia.py` checks existing registered IDs, names, source provenance and readable volume coverage.
