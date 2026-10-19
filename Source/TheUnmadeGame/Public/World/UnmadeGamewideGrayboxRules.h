@@ -31,7 +31,7 @@ inline constexpr std::array<GrayboxProfile,34> GrayboxProfiles={{
  {GrayboxKit::Records,"Registers and ledgers","Inkstone slab, paper creases and wax imprints","M_ArchiveInk","One horizontal witness shelf and offset folio disc","SM_Records_WitnessLedger01",true},
  {GrayboxKit::Scriptorium,"Scribes' workshop","Wood desks with laminated paper niches","M_InkStainedWood","Sloped reading surface and blind emboss seal","SM_Paperhaven_Scriptorium01",true},
  {GrayboxKit::Forge,"Forge and kiln","Cinderbrick, heat-checked metal and fire glazing","M_KilnAsh","A ventilated chimney hood and furnace rim","SM_Cinderhold_CommuneForge01",true},
- {GrayboxKit::Home,"Domestic walls","Locally repaired plaster and dark timber","M_LivedInPlaster","Low structural beam without added wall collision","SM_Home_ModularWall01",false},
+ {GrayboxKit::Home,"Domestic walls","Locally repaired plaster and dark timber","M_LivedInPlaster","Low structural beam without added wall collision","SM_Home_ModularWall01",true},
  {GrayboxKit::Bed,"Domestic bed","Worn linen with simple bedframe","M_SpunLinen","Pillow head and simple cylinder bedroll","SM_Home_RefugeBed01",true},
  {GrayboxKit::Hearth,"Shared hearth","Blackened charcoal ring and clay mantle","M_CharcoalClay","Wide low brazier with a visible central ember stone","SM_Home_CommonHearth01",true},
  {GrayboxKit::Table,"Domestic table","Cross-braced wood with handmade pottery","M_RoughTimber","Flat circular vessel and a shallow ledger saucer","SM_Home_Worktable01",true},
@@ -144,6 +144,7 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  else if(GrayboxHas(label,"ArchiveTower"))kit=GrayboxKit::ArchiveTower;
  else if(GrayboxHas(label,"Refuge")||GrayboxHas(label,"Shelter")||
          GrayboxHas(label,"Sanctuary"))kit=GrayboxKit::Sanctuary;
+ else if(GrayboxHas(label,"CivicWitnessBoard"))kit=GrayboxKit::Evidence;
  else if(GrayboxHas(label,"Civic")||GrayboxHas(label,"WitnessBraid")||
          GrayboxHas(label,"AccordWork"))kit=GrayboxKit::Civic;
  else if(GrayboxHas(label,"Registry")||GrayboxHas(label,"ServiceCopies")||
@@ -186,7 +187,9 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  else if(GrayboxHas(label,"Village.Housing")||GrayboxHas(label,"Road.Home."))kit=GrayboxKit::Home;
  const auto& detail=GrayboxDetail(kit);
  out.kit=kit;out.detail=detail.detail;out.replacementMesh=detail.replacementMesh;
- out.decorate=detail.detailEnabled&&sx<15&&sy<15&&sz<12;
+ out.decorate=detail.detailEnabled&&sx<15&&sy<15&&sz<12&&
+   (kit!=GrayboxKit::Home||GrayboxHas(label,"Roof"));
+ if(kit==GrayboxKit::Generic&&out.realm==0)out.paletteSlot=11;
  return out;
 }
 } // namespace UnmadeCore
