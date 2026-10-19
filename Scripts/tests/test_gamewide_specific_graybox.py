@@ -27,7 +27,7 @@ int main(){
  {"Road.8.ReceivingShelf",6,GrayboxKit::Cargo},
  {"Road.Home.17.Bed",0,GrayboxKit::Bed},
  {"Road.Home.22.Hearth",0,GrayboxKit::Hearth},
- {"Road.Home.51.Table",0,GrayboxKit::Table},
+ {"Road.Home.51.Table",static_cast<int>(RoadCities[RoadPeople[51].city].realm),GrayboxKit::Table},
  {"Expedition.8.CivicCareGate",8,GrayboxKit::Gate},
  {"Later.0.Aftermath.Gate.Truth",3,GrayboxKit::Gate},
  {"Expedition.4.ArenaShelter",4,GrayboxKit::Sanctuary},
