@@ -378,6 +378,7 @@ private:
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionHazardSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> CrossRealmCombatSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionEvidenceSigns;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> ExpeditionFractureActors;
     std::array<double,9> ExpeditionHazardQuiet{};
     std::array<double,9> ExpeditionReleaseReady{};
     // The boss counter is transient: no extra rewards, save flags or repeatable farming.
