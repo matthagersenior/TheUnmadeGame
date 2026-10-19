@@ -1,5 +1,8 @@
 # THE UNMADE — Engineering status
 
+**Current source supplement — 19 October 2026:** Read [the consolidated pre-PC closure matrix](qa/pre-pc-closure-matrix.md) for verified native coverage, outstanding source work, and unresolved Unreal/asset gates. The branching campaign's exhaustive portable walkthrough is registered as a separate Static checks step. Treat the 12 October milestone numbers below as historical, not the current CI run, item count or PR status. A green native test never means a Windows/Unreal playable build exists.
+
+
 **Snapshot:** 2026-10-12, `main` at `6c9716abfaa37e7ac4321ee23f533d9ef2ea26b5` (Player Facing Reliability v20). Repository: [`matthagersenior/TheUnmadeGame`](https://github.com/matthagersenior/TheUnmadeGame).
 
 ## Current state
