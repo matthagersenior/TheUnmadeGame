@@ -2,6 +2,7 @@
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadeFirstFractureRules.h"
+#include "World/UnmadeProceduralArtRules.h"
 #include "World/UnmadeDiscoveryCivicRules.h"
 #include "World/UnmadeEncounterHazardRules.h"
 #include "World/UnmadeIdentityRules.h"
@@ -71,6 +72,9 @@ void AUnmadePrototypeHub::BuildExpeditions(){
    relic->SetActorScale3D(FVector(fracture.scaleX,fracture.scaleY,fracture.scaleZ));
    relic->GetStaticMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
    relic->SetActorHiddenInGame(true);
+   const FName FractureTag(*FString::Printf(TEXT("Expedition.%d.Fracture"),a));
+   relic->Tags.AddUnique(FractureTag);
+   StyleWorldProp(relic,FractureTag,FVector(fracture.scaleX,fracture.scaleY,fracture.scaleZ));
    ExpeditionFractureActors[a]=relic;
    ExpeditionFractureSigns[a]=Sign(at+FVector(0,0,175),TEXT("E - EXAMINE FIRSTHAND FRACTURE"));
    if(ExpeditionFractureSigns[a].IsValid())
@@ -78,6 +82,18 @@ void AUnmadePrototypeHub::BuildExpeditions(){
   }
 
   int MinX=0,MaxX=0,MinY=0,MaxY=0;for(int r=0;r<6;++r){auto q=UnmadeCore::DungeonRoom(a,r);MinX=FMath::Min(MinX,q.x);MaxX=FMath::Max(MaxX,q.x);MinY=FMath::Min(MinY,q.y);MaxY=FMath::Max(MaxY,q.y);}Block(Room(a,0)+FVector((MinX+MaxX)/2.,(MinY+MaxY)/2.,-120),FVector((MaxX-MinX+2600)/100.,(MaxY-MinY+2600)/100.,.5));
+  const auto& Design=UnmadeCore::RealmVisualDesigns[a];
+  const FVector FrontierMarker=Site(a,0);
+  for(int j=0;j<3;++j){
+    const auto& Piece=Design.silhouette[j];
+    SpawnBlock(FrontierMarker+FVector(Piece.dx,Piece.dy,Piece.dz),
+       FVector(Piece.sx,Piece.sy,Piece.sz),
+       FName(*FString::Printf(TEXT("Expedition.%d.Landmark.%d"),a,j)));
+  }
+  Sign(FrontierMarker+FVector(-2200,270,0),
+    FString::Printf(TEXT("%s | %s\\n%s"),
+       UTF8_TO_TCHAR(Design.name),UTF8_TO_TCHAR(Design.landmark),
+       UTF8_TO_TCHAR(Design.storyMotif)));
   Sign(Board(a),FString(UTF8_TO_TCHAR(s.dungeon))+TEXT(" / E accept adventure; J journal"));
   for(int site=0;site<2;++site){FVector h=Site(a,site);Sign(h,UTF8_TO_TCHAR(site?s.refuge:s.frontier));
    for(int n=0;n<(site?2:3);++n){FVector home=h+FVector((n-1)*850,-700,0);Block(home+FVector(0,0,-105),FVector(7,6,.3));Block(home+FVector(-340,0,30),FVector(.2,6,2.6));Block(home+FVector(340,0,30),FVector(.2,6,2.6));Block(home+FVector(0,-290,30),FVector(7,.2,2.6));Block(home+FVector(0,0,175),FVector(7,6,.25));Block(home+FVector(-180,-120,-55),FVector(2,.8,.7));Block(home+FVector(170,-120,-55),FVector(1,1,.7));

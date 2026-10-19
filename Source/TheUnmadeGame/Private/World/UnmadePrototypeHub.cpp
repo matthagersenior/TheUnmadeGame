@@ -9,6 +9,7 @@
 #include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeProceduralArtRules.h"
 #include "World/UnmadeDiscoveryCivicRules.h"
 #include "Save/UnmadeCounterThreatRules.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
@@ -30,6 +31,8 @@
 #include "Components/DirectionalLightComponent.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Materials/MaterialInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "EngineUtils.h"
 #include "Engine/World.h"
@@ -2294,6 +2297,91 @@ void AUnmadePrototypeHub::SpawnLoreSite(UnmadeCore::District District, FName Sit
         Site->Configure(District, SiteId, FString(Name), FString(DayLine), FString(NightLine));
 }
 
+
+void AUnmadePrototypeHub::StyleWorldProp(AStaticMeshActor* Block,FName Label,FVector WorldScale)
+{
+    // One visual skin for all tagged blockout pieces; the actor's original cube,
+    // identifier and collision remain the source of truth for every E/gate/route.
+    if(!IsValid(Block))return;
+    UStaticMeshComponent* CollisionOwner=Block->GetStaticMeshComponent();
+    if(!IsValid(CollisionOwner))return;
+    const FString Written=Label.ToString();
+    const FTCHARToUTF8 Utf8(*Written);
+    const auto Id=UnmadeCore::ClassifyRealmProp(Utf8.Get(),
+        WorldScale.X,WorldScale.Y,WorldScale.Z);
+    if(Id.realm<0)return;
+    const auto& Design=UnmadeCore::RealmVisualDesigns[Id.realm];
+    const UMaterialInterface* Source=LoadObject<UMaterialInterface>(
+        nullptr,TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
+    if(Source){
+        // Only 18 material instances for thousands of blocks. The hub retains
+        // the UPROPERTY refs across GC; no per-frame material allocations.
+        if(ProceduralPaletteMaterials.Num()<18)ProceduralPaletteMaterials.SetNum(18);
+        const int32 Slot=Id.realm*2;
+        auto MaterialFor=[&](bool Accent)->UMaterialInstanceDynamic*{
+            const int32 Key=Slot+(Accent?1:0);
+            if(!ProceduralPaletteMaterials[Key]){
+                auto* Material=UMaterialInstanceDynamic::Create(
+                    const_cast<UMaterialInterface*>(Source),this);
+                if(!Material)return nullptr;
+                const auto Rgb=Accent?Design.accent:Design.color;
+                const FLinearColor Color(Rgb.R/255.f,Rgb.G/255.f,Rgb.B/255.f);
+                // BasicShapeMaterial exposes Color on stock engine builds.
+                // Tint is also authored for compatible replacement materials.
+                Material->SetVectorParameterValue(TEXT("Color"),Color);
+                Material->SetVectorParameterValue(TEXT("Tint"),Color);
+                ProceduralPaletteMaterials[Key]=Material;
+            }
+            return ProceduralPaletteMaterials[Key].Get();
+        };
+        if(auto* BaseMaterial=MaterialFor(false))CollisionOwner->SetMaterial(0,BaseMaterial);
+        if(Id.allowDecoration){
+            UStaticMesh* Cylinder=LoadObject<UStaticMesh>(
+                nullptr,TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
+            UStaticMesh* Sphere=LoadObject<UStaticMesh>(
+                nullptr,TEXT("/Engine/BasicShapes/Sphere.Sphere"));
+            UStaticMesh* Cone=LoadObject<UStaticMesh>(
+                nullptr,TEXT("/Engine/BasicShapes/Cone.Cone"));
+            auto Decorate=[&](UStaticMesh* Shape,FVector Offset,FVector Scale,FRotator Orientation){
+                if(!Shape)return;
+                auto* Piece=NewObject<UStaticMeshComponent>(Block);
+                if(!Piece)return;
+                Piece->SetMobility(EComponentMobility::Movable);
+                Piece->SetStaticMesh(Shape);
+                Piece->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+                Piece->SetGenerateOverlapEvents(false);
+                Piece->SetCanEverAffectNavigation(false);
+                Piece->SetCastShadow(false);
+                Piece->SetupAttachment(CollisionOwner);
+                Piece->RegisterComponent();
+                Piece->SetWorldLocation(Block->GetActorLocation()+Offset);
+                Piece->SetWorldRotation(Orientation);
+                Piece->SetWorldScale3D(Scale);
+                if(auto* Ink=MaterialFor(true))Piece->SetMaterial(0,Ink);
+            };
+            const float H=WorldScale.Z*50.f;
+            if(Id.role==UnmadeCore::VisualRole::Landmark){
+                // Silhouette-specific crown: players identify this realm from
+                // the skyline, before reading a floating sign.
+                Decorate(Cone,FVector(0,0,H+40),FVector(.55,.55,.8),FRotator::ZeroRotator);
+                Decorate(Sphere,FVector(0,0,H+104),FVector(.26,.26,.26),FRotator::ZeroRotator);
+            }else if(Id.role==UnmadeCore::VisualRole::Gate){
+                // A tagged gate hides/toggles all its purely visual child trims.
+                Decorate(Cylinder,FVector(-WorldScale.X*34,0,H+13),
+                         FVector(.23,.23,.28),FRotator::ZeroRotator);
+                Decorate(Cylinder,FVector(WorldScale.X*34,0,H+13),
+                         FVector(.23,.23,.28),FRotator::ZeroRotator);
+            }else if(Id.role==UnmadeCore::VisualRole::Mechanism){
+                Decorate(Cylinder,FVector(0,0,H+20),FVector(.5,.5,.20),FRotator(90,0,0));
+                Decorate(Sphere,FVector(0,0,H+58),FVector(.23,.23,.23),FRotator::ZeroRotator);
+            }else if(Id.role==UnmadeCore::VisualRole::Evidence){
+                Decorate(Cylinder,FVector(0,0,H+15),FVector(.64,.64,.16),FRotator::ZeroRotator);
+                Decorate(Sphere,FVector(0,0,H+55),FVector(.29,.29,.29),FRotator::ZeroRotator);
+            }
+        }
+    }
+}
+
 void AUnmadePrototypeHub::SpawnBlock(FVector Center, FVector Scale, FName Label)
 {
     const bool floor=Scale.Z<=.8&&Scale.X>=10&&Scale.Y>=10;
@@ -2310,6 +2398,7 @@ void AUnmadePrototypeHub::SpawnBlock(FVector Center, FVector Scale, FName Label)
     Mesh->SetStaticMesh(Cube);
     Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
     Block->SetActorScale3D(Scale);
+    StyleWorldProp(Block,Label,Scale);
 }
 
 void AUnmadePrototypeHub::SpawnCitizen(const UnmadeCore::ResidentSpec& Resident)
@@ -3333,7 +3422,8 @@ void AUnmadePrototypeHub::BuildForPrototype()
     Sunlight = GetWorld()->SpawnActor<ADirectionalLight>(
         FVector(0, 0, 1200), FRotator(-50.f, 0.f, 0.f));
 
-    // All geometry uses Unreal's primitive cube assets: temporary untextured blockout.
+    // Native primitive blockout now uses realm-coded palette, emblem and silhouette
+    // components; art assets/texturing and final Unreal playtest remain pending.
     // Walking ground: top at Z=0; center at -50 with 1*100 cm tall mesh.
     SpawnBlock(FVector(0, 0, -50), FVector(52, 52, 1), FName("Hub.Ground"));
     BuildVillages();

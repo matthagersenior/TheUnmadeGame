@@ -60,6 +60,7 @@ class ADirectionalLight;
 class AUnmadeCharacter;
 class AStaticMeshActor;
 class ACameraActor;
+class UMaterialInstanceDynamic;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(
     FUnmadeBesDirectedBeat, FName, SpeakerId,
@@ -277,6 +278,8 @@ public:
     }
 
     /** Created at runtime so the initial experiment needs no hand-authored .umap. */
+    /** Semantic, purely cosmetic shapes/palettes; gameplay collision stays with the tagged cube. */
+    void StyleWorldProp(AStaticMeshActor* Block,FName Label,FVector WorldScale);
     void BuildForPrototype();
     void BuildPlayableEncounters();
     bool bFieldSurveySaveUsable=true;
@@ -373,6 +376,8 @@ private:
     void BuildPlayerExperience();
     void RefreshPlayerExperience();
     bool CommitExperience(const UnmadeCore::PlayerExperience& Before,AUnmadeCharacter* Player);
+    UPROPERTY(Transient)
+    TArray<TObjectPtr<UMaterialInstanceDynamic>> ProceduralPaletteMaterials;
     bool bBuilt = false;
     bool bExpeditionSaveRejected=false;
     UnmadeCore::Expeditions Expeditions;
