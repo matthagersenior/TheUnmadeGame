@@ -15,7 +15,7 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v7
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - name: Test integration rewards, unified equipment and bounded weapon contact
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/player_experience_test.cpp -o /tmp/unmade-experience
@@ -168,6 +168,16 @@ jobs:
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check
+      - name: Verify new gameplay assets are registered to the canon
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: python Scripts/check_canon_change.py --base "origin/$BASE_REF"
+      - name: Validate source-to-canon manifest on main and direct runs
+        if: github.event_name != 'pull_request'
+        run: python Scripts/check_canon_change.py
+      - name: Verify complete source-indexed world canon encyclopedia
+        run: python Scripts/validate_canon_encyclopedia.py
       - name: Audit canonical ability codex and source parity
         run: python Scripts/validate_ability_codex.py --report
       - name: Run validator unit tests

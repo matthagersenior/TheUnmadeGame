@@ -4,6 +4,8 @@
 
 [Browse the ledger](dependency-ledger.json).
 
+**Complete universe reference:** [The Definitive Canon Encyclopedia](encyclopedia/README.md) now indexes realms, cities, 88 distinct resident identities, 39 bosses, 60 inventory items, 18 regional gear variants, 99 quest groups, factions, economics, Volume X literary canon, and the current 243-entry Ability Codex. The original dependency ledger remains the cross-system gameplay reference, not an encyclopedia of every NPC and lore claim.
+
 The ledger ties five otherwise independent registries together: **60 ordinary inventory items, 18 separately owned regional weapon/armor choices, 23 learned disciplines/techniques/studies, 39 named encounters, and 99 grouped quests**. Content is grouped by source family rather than by every NPC interaction; the latter remain tracked by the C++ encounter code.
 
 ## What this ledger guarantees
@@ -28,7 +30,7 @@ python -m unittest Scripts.tests.test_dependency_ledger -v
 
 The validator runs in GitHub's **Static checks** on push and PR. It reads actual source registries and compares item IDs, names, stats and acquisitions; regional weapons/armor and their values; rite teachers, quests and mastery rewards; 3 original bosses, 9 expedition bosses, 9 wing guardians, 6 Echo guardians, 11 road elders, and Nhal-Vey; plus the major quest families, exact aftermath branches, and links. It fails with a `CANON DRIFT` diagnostic if a source change is not reconciled here, or if ledger references are dangling.
 
-The ledger also references [the full 182-entry Ability Codex](../../Authoring/ability_codex.json), covering inherent powers, combat, professions, learned rites, observed enemy patterns and equipment-related capabilities; the validator checks that every codex record retains its source and acquisition. The four newly defined firsthand studies are separately indexed until their real gameplay integration is accepted.
+The ledger also references [the current source Ability Codex (256 entries as of October 19, 2026)](../../Authoring/ability_codex.json), covering inherent powers, combat, professions, learned rites, observed enemy patterns and equipment-related capabilities; the validator checks that every codex record retains its source and acquisition. The four newly defined firsthand studies are separately indexed until their real gameplay integration is accepted.
 
 The validator deliberately fails closed if an existing C++ registry stops matching its recognizable literal format. If the registry changes shape, update the parser and test within the same PR rather than suppressing a failing gate.
 
