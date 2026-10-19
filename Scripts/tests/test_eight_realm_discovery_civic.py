@@ -87,7 +87,7 @@ int main() {
   for token in ("CivicUsesExpeditionAftermath(a)","spec.mechanismSite",
                 "spec.evidenceForCare",
                 "spec.evidenceForTruth",
-                "Expedition.%d.CivicCareGate","Expedition.%d.CivicTruthGate"):
+                "Expedition.%d.Civic%sGate","Expedition.%d.Civic%sRoute"):
    self.assertIn(token,expedition)
   for token in ("CivicUsesExpeditionAftermath(i)","CivicEvidenceReady",
                 "CivicEvidenceValidOnRestore","RealmAftermath.Begin(",
@@ -100,9 +100,11 @@ int main() {
   world=read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
   for term in ("GetDiscoveryCivicResidentLine", "GetDiscoveryCivicRoutineTarget"):
    self.assertIn(term,npc)
-   self.assertIn(term,world)
+   self.assertIn(term,expedition)
   self.assertIn("MaterialDuty::Regular",npc)
   self.assertIn("CivicSaltwakeWitnessedDiscovery",expedition)
+  self.assertIn("Saltwake.CivicWitnessBoard",expedition)
+  self.assertIn("case 15:",expedition)
  def test_saved_provenance_preflight_and_no_invented_resources(self):
   validator=read("Source/TheUnmadeGame/Public/Save/UnmadeCombinedSaveRules.h")
   world=read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
