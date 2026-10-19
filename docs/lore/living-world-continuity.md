@@ -506,3 +506,5 @@ The existing nine expedition definitions—including each local crew, physical c
 ## 2026-10-19 — Experience-wing fidelity to physical layout and witnesses
 
 The Codex now supplies all nine executable optional `ExperienceSpecs`. Each preserves its three tangible rooms, bespoke physical challenge, local guardian and unique reward, plus both saved public-witness and reserve aftermath narratives and the four scene-specific reactions. This does not claim an unearned NPC testimony, a visited level, a completed wing or any cooked Unreal asset. The 256-record Codex is unchanged in record count: existing experience entries now carry the full runtime rule definitions.
+
+**19 October 2026 compiler correction:** The Codex-owned optional-wing 3×2 room-grid initializer now emits the original valid aggregate-brace shape. Original coordinates and saved physical fieldwork remain unchanged; this is syntax repair, not lore or mechanic revision.

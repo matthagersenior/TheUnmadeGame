@@ -398,3 +398,7 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Moved all nine optional wing gameplay specification tables, including three physical room coordinates each, all task instructions and their NPC witness/choice-dependent reactions, into the existing Codex.
 - Added a generated C++ table, source/JSON parity tests and a portable realm-wing geometry test. Preserved saved indices, physical chapter gates and already-authored social consequences.
 - No Unreal compilation, v20 illustrated file regeneration, or fabricated available levels claimed.
+
+### 2026-10-19 — Generated wing table compiler correction
+
+- Fixed the C++ generator's excess aggregate braces for each three-room grid, preserving all existing coordinates and original scene text. Portable regression compilation verifies the generated source.

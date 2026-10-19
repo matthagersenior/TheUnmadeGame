@@ -147,7 +147,7 @@ def generate_experience(codex):
         strings=(c["city"],c["wing"],c["guardian"],c["interior"],c["specialty"],
                  c["task"],c["hint"],c["tool"],c["recipe"],c["reserve_return"],c["witness_return"])
         scenes="{"+",".join(quote(s) for s in c["scenes"])+"}"
-        grid="{{"+",".join("{"+",".join(str(v) for v in pair)+"}" for pair in c["wing_grid"])+"}}"
+        grid="{"+",".join("{"+",".join(str(v) for v in pair)+"}" for pair in c["wing_grid"])+"}"
         parts=tuple(quote(s) for s in strings)+(scenes,grid)
         out.append("    {"+",".join(parts)+"}"+("" if index==8 else ","))
     out.append("};")
