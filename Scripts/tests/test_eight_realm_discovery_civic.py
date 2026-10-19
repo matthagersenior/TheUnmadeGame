@@ -84,14 +84,14 @@ int main() {
   expedition=read("Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp")
   world=read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
   hub=read("Source/TheUnmadeGame/Public/World/UnmadePrototypeHub.h")
-  for token in ("CivicUsesExpeditionAftermath(a)","RealmAftermathSpecs[a].mechanismSite",
-                "RealmAftermathSpecs[a].evidenceForCare",
-                "RealmAftermathSpecs[a].evidenceForTruth",
+  for token in ("CivicUsesExpeditionAftermath(a)","spec.mechanismSite",
+                "spec.evidenceForCare",
+                "spec.evidenceForTruth",
                 "Expedition.%d.CivicCareGate","Expedition.%d.CivicTruthGate"):
    self.assertIn(token,expedition)
   for token in ("CivicUsesExpeditionAftermath(i)","CivicEvidenceReady",
                 "CivicEvidenceValidOnRestore","RealmAftermath.Begin(",
-                "RealmAftermath.Testify(", "CivicCareGate", "CivicTruthGate"):
+                "RealmAftermath.Testify(", "Civic%sGate", "Civic%sRoute"):
    self.assertIn(token,world)
   self.assertIn("GetDiscoveryCivicRoutineTarget",hub)
  def test_witnesses_have_local_reactions_and_real_daytime_work_routes(self):

@@ -1357,3 +1357,5 @@ Implementation note (2026-10-19): seven expedition frontier sites now stage phys
 The seven new civic gates are restored only from real saved aftermath endings; the opposite branch remains physically closed. The Crossings now emits its own local civic event rather than misreporting a Cinderhold kiln event.
 
 The returned frontier guide and the actually consulted care/truth witness now have deterministic dialogue and daytime work targets. They use ordinary NPC movement; emergency material duties, existing public-accord service and imminent hazards retain priority. Saltwake's own witnessed physical breakwater records can inform commentary on its already-completed local aftermath without asserting another character saw a remote scene.
+
+Saltwake has a separate E-inspectable frontier pressure-evidence board; it displays only the actual returned three physical breakwater records and an already-earned local civic outcome, without granting a free truth verdict or skipping the older sluice, cistern, ledger and witness interactions.

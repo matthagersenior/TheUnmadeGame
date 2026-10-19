@@ -36,6 +36,7 @@ FVector HomeGate(int a){return Room(a,5)+FVector(0,1250,0);}
 FVector ArenaCounterStations(int a,int station){
  return Room(a,5)+(station==0?FVector(-620,-620,0):FVector(620,80,0));
 }
+FVector SaltwakeWitnessBoard(){return Site(1,0)+FVector(480,1900,0);}
 FVector EvidenceCounterStation(int a){
  const auto& c=UnmadeCore::EvidenceCounterplaySpecs[a];
  return Room(a,5)+FVector(c.offsetX,c.offsetY,0);
@@ -163,6 +164,12 @@ void AUnmadePrototypeHub::BuildExpeditions(){
     Sign(home+FVector(x,2370,95),UTF8_TO_TCHAR(outcome==1?civic.careWork:civic.truthWork));
    }
    Sign(home+FVector(-480,290,95),TEXT("CIVIC RETURN: EARN THREE RECORDS, DEFEAT OR SPARE THE BOSS, RETURN TO THE GUIDE"));
+  }
+  if(a==1){
+    SpawnBlock(SaltwakeWitnessBoard()+FVector(0,0,-60),FVector(.95,.75,.65),
+      TEXT("Saltwake.CivicWitnessBoard"));
+    Sign(SaltwakeWitnessBoard()+FVector(0,0,90),
+      TEXT("E - COMPARE RETURNED DRYWATER EVIDENCE WITH THE STORM INVOICE"));
   }
   for(int outcome=1;outcome<=3;++outcome)
     SpawnBlock(Site(a,0)+FVector(-550+outcome*260,1200,115),
@@ -330,13 +337,23 @@ bool AUnmadePrototypeHub::TryExpeditionInteraction(AUnmadeCharacter* p,double co
  if(!Alive(p)||!GetWorld())return false;if(TryExperienceInteraction(p,competing))return true;if(TryDepthInteraction(p,0,competing))return true;if(TryIdentityInteraction(p,competing))return true;int arc=-1,kind=-1,index=-1;double best=FMath::Min(230.*230.,competing);FVector at;
  auto Candidate=[&](int a,int k,int n,FVector pos){double d=FVector::DistSquared(p->GetActorLocation(),pos);if(d<best&&Local(GetWorld(),p,pos)){best=d;arc=a;kind=k;index=n;at=pos;}};
  for(int a=0;a<9;++a){Candidate(a,0,0,Board(a));for(int site=0;site<2;++site)Candidate(a,1,site,Site(a,site)+FVector(0,500,0));for(int r=0;r<6;++r)Candidate(a,2,r,Entrance(a,r));for(int c=0;c<3;++c)Candidate(a,3,c,Record(a,c));for(int q=0;q<2;++q)Candidate(a,4,q,Captive(a,q));Candidate(a,5,0,Council(a));Candidate(a,6,0,Truce(a));Candidate(a,7,0,Kit(a));Candidate(a,8,0,Room(a,5)+FVector(650,-650,0));Candidate(a,9,0,Room(a,3)+FVector(-650,-650,0));
- Candidate(a,10,0,ArenaCounterStations(a,0));Candidate(a,10,1,ArenaCounterStations(a,1));Candidate(a,13,0,EvidenceCounterStation(a));
+ if(a==1)Candidate(a,15,0,SaltwakeWitnessBoard());Candidate(a,10,0,ArenaCounterStations(a,0));Candidate(a,10,1,ArenaCounterStations(a,1));Candidate(a,13,0,EvidenceCounterStation(a));
   if(ExpeditionFractureActors.IsValidIndex(a)&&ExpeditionFractureActors[a].IsValid()
       &&!ExpeditionFractureActors[a]->IsHidden())
    Candidate(a,14,0,ExpeditionFractureActors[a]->GetActorLocation());
  }
  if(arc<0)return false;if(bExpeditionSaveRejected){NotifyRpg(TEXT("This adventure save is invalid; its original record is protected."));return true;}auto before=Expeditions;auto* t=Expeditions.Arc(arc);bool change=false;const auto& s=UnmadeCore::ExpeditionSpecs[arc];FString line;
- switch(kind){case 0:change=Expeditions.Brief(arc);line=FString(UTF8_TO_TCHAR(s.brief))+TEXT(" Visit the frontier north of the city, then enter the six-chamber dungeon. J tracks progress.");break;
+ switch(kind){
+ case 15:{
+    const int ending=RealmAftermath.Ending(UnmadeCore::Realm::WidowedRain);
+    if(UnmadeCore::CivicSaltwakeWitnessedDiscovery(t->rooms&1,t->clues,t->returned))
+     line=FString::Printf(TEXT("FIRSTHAND BREAKWATER: three physically returned water records challenge the invoice. %s Other residents may examine these records locally. This does not publish anyone's private identity or force a new ending."),
+       UTF8_TO_TCHAR(ending?RealmAftermath.WorldConsequence(UnmadeCore::Realm::WidowedRain):
+                              UnmadeCore::RealmAftermathSpecs[1].ethicalDilemma));
+    else line=TEXT("Examine the real first chamber, all three dungeon records and return to the frontier with a witnessed account before comparing the storm invoice. Saltwake's original sluice quest remains independently playable.");
+    break;
+ }
+ case 0:change=Expeditions.Brief(arc);line=FString(UTF8_TO_TCHAR(s.brief))+TEXT(" Visit the frontier north of the city, then enter the six-chamber dungeon. J tracks progress.");break;
  case 1:change=Expeditions.Visit(arc,index);line=FString(UTF8_TO_TCHAR(index?s.refuge:s.frontier))+TEXT(": a real refuge, not a cargo stop. The dungeon lies farther north.");break;
  case 2:change=Expeditions.Enter(arc,index);line=change?TEXT("Chamber entered. Watch the enemy warnings; pillars break aimed attacks. Walking inside the next chamber registers entry; its doorway can also be inspected."):TEXT("Inspect earlier chambers and establish your objective branch before entering the boss arena.");break;
  case 3:change=Expeditions.Inspect(arc,index);line=UTF8_TO_TCHAR(s.clues[index]);break;
