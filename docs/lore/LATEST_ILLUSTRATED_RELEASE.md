@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**19 October 2026 source update (not a new illustrated edition):** The canonical Ability Codex now includes 186 records, four authored study/learning routes, a physical Atlas of Absence acquisition method, source-native controls and save-backed experiments. This is **not** included in the dated v20 PDF/DOCX/ZIP. Those artifacts have not been re-rendered or rehashed; their existing verified member digests below remain those of the historical v20 release. Engine compilation and gameplay acceptance remain deferred.
+
 Date: 12 October 2026 UTC. Source baseline: `f166de49e51888d540975148855b3b32452dbee7`. Exact source tree and member hashes are recorded in the dated package.
 
 Complete cumulative Bible: **170 pages / 64 illustrations**. Complete standalone Volume X: **124 pages / 17 illustrations**. Both complete PDF/DOCX editions extend intact v19 masters. All 168/121 inherited page texts and rendered images, 63/16 illustrations and inherited paragraphs remain unchanged. New pages rendered and visually inspected; zero blank pages or off-page text. Earlier editions remain preserved.

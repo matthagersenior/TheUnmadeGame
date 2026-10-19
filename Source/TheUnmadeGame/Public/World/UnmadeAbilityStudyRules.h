@@ -30,6 +30,7 @@ public:
             if(s>0&&!(e&1))return false; // physical firsthand encounter mandatory
             if(s>=2&&e!=3)return false; // a second independent physical signal
             if(s<2&&t!=0)return false;
+            if(s==2&&t>=2)return false;
             if(s==3&&t!=2)return false;
             if(s==4&&t!=2)return false;
         }

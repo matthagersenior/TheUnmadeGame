@@ -44,5 +44,15 @@
       "bytes": 140769,
       "sha256": "0d8be362c6d9ce2437abdcf3c0e6ccd60fa6c7fd817f3975cf3eb4a47ec51a5a"
     }
-  ]
+  ],
+  "post_release_source_milestone": {
+    "date": "2026-10-19",
+    "name": "Ability Codex research mastery and Atlas of Absence",
+    "status": "source_and_portable_tests_only",
+    "illustrated_release_regenerated": false,
+    "illustrated_member_hashes_recomputed": false,
+    "engine_compiled": false,
+    "engine_playtested": false,
+    "notes": "The files array and hashes remain the verified 2026-10-12 v20 package receipt; these source updates are not included in those assets."
+  }
 }

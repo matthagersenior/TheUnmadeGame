@@ -2,7 +2,7 @@
 
 **Canonical index:** [`Authoring/ability_codex.json`](../../Authoring/ability_codex.json)
 
-The Ability Codex registers **182** named or defined entries across inherent reality effects, ten earned rites, six Confluences, fundamental combat, combat builds, nine regional techniques, nine realm weapon styles, the entire 60-item catalog (including seven materials), three professions, six workshop recipes, nine field recipes, nine local privileges, creatures, bosses, and observed enemy patterns.
+The Ability Codex registers **186** named or defined entries across inherent reality effects, ten earned rites, six Confluences, fundamental combat, combat builds, nine regional techniques, nine realm weapon styles, the entire 60-item catalog (including seven materials), three professions, six workshop recipes, nine field recipes, nine local privileges, creatures, bosses, and observed enemy patterns.
 
 This is a **discoverability, provenance and learning index**, not a claim that all entries are independent usable spells. Every entry has a stable ID, name, category, acquisition and prerequisites, effect, cost, duration, limitations, combinations, observation policy, implementation status and source file reference. Some fields are marked unspecified rather than fabricated.
 
@@ -52,8 +52,20 @@ The report separately identifies:
 - **Observed enemy techniques** which currently have no authored player learning path.
 - **Stat-only equipment** whose lore implies richer powers than the current effects implement.
 
-None of these categories should be disguised as finished content. Future work can add source-backed, tested mechanics and an explicit persisted research/learning ledger. Do not mutate existing saved enum IDs, imply AI-generated factual memory, grant a learned profession by rumor, invent testimony, or undermine the tenfold rite quest gates.
+None of these categories should be disguised as finished content. A first **four-subject persistent research/learning ledger is now wired to actual Unreal source**; future work must expand beyond it without pretending every observed attack is copied. Do not mutate existing saved enum IDs, imply AI-generated factual memory, grant a learned profession by rumor, invent testimony, or undermine the tenfold rite quest gates.
 
 ## Release boundaries
 
-The Codex and its tests can be authored and exercised without the Windows game PC. No claim of imported assets, compiled Unreal gameplay, UI integration, combat balance, engine save-reload, enemy capture, or packaged play is made by this source milestone.
+The Codex and its tests can be authored and exercised without the Windows game PC. Native UMG Actions controls and save-backed actor handlers exist in source; no claim of imported assets, compiled Unreal gameplay, in-engine save-reload, full combat balancing, arbitrary enemy capture, or packaged play is made.
+
+## 2026-10-19 source milestone — first real study loop
+
+Four authored subjects: **Cinderjaw, Pale Strider, Redaction Eye, Echo Well**. Enemy study only accepts the actual telegraphed warning of a living nearby enemy of the right species, clear physical line of sight (700 cm), and a subsequently landed, damaging weapon hit. The Echo Well subject must be reached physically; a second firsthand reality observation costs 8 Strain. Understanding requires both signals. Two physical experiments each cost 10 Reality Strain with an 8-second trial cooldown. Final mastery costs 5 Strain at that same physical subject; every accepted advancement is save-backed, and malformed study records block overwrites.
+
+**Learned combat effects** (only after mastery) cost 9 Strain, with 18 seconds between activations: **Kiln Ward** temporarily grants +5 armor, **Seam Step** performs actual stamina-costing evasive movement, **Redaction Read** exposes a physically present enemy, and **Memory Lens** exposes a nearby enemy and provides a modest ward. Combining independently mastered principles changes duration and can add real ward/exposure effects; no automatic enemy power transfer exists.
+
+**Atlas of Absence** has its first legitimate earned route: master Memory Lens and at least two separate enemy studies, return to the **physical Echo Well**, and complete the one-time achievement grant via the study interaction. Equipping the charm reduces Glimpse Strain cost by 4 and increases Fold duration by 2 seconds, including with regional weapons. The existing 60-item enum IDs remain unchanged; the new achievement ID is appended.
+
+**Controls:** `5` record physical observation, `9` advance understanding/trial/mastery, `0` use mastered technique, `O` select subject; the native Actions page exposes four clickable controls and the journal for mouse/controller accessibility. These operations do not bypass costs, line of sight, mastery, location or save protection.
+
+**Verification:** portable C++ state-machine and reward tests, source-wiring contracts, 186-entry codex parity, and CI. Full Unreal Header Tool compilation, real save/load in-engine, NPC/animation/VFX presentation and extended balance testing are still pending a supported Unreal host.

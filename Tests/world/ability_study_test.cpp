@@ -50,6 +50,9 @@ int main(){
     assert(!fresh.Restore(bad));
     assert(fresh.Stage(StudyId::Cinderjaw)==StudyStage::Unknown);
     bad=reloaded.Snapshot();
+    bad.stages[0]=2; // two completed experiments cannot be labeled 'understood'
+    assert(!fresh.Restore(bad));
+    bad=reloaded.Snapshot();
     bad.evidence[0]=1; // claimed mastery with uncorroborated evidence
     assert(!fresh.Restore(bad));
     assert(fresh.Restore(reloaded.Snapshot()));

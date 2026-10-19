@@ -344,3 +344,11 @@ Second audit fixed isolated fieldwork saves, stale profile confirmation and auto
 Six follow-up audit fixes: scoped, visibly explained backup recovery without overwriting its target; single-pass binding labels; unobstructed alive/consenting merchant checks in both trade directions; native chosen-name and eight-aspect Character page; held stagger/death priority; production-rule behavioral audit coverage. Added actual Toggle Sneak access, eight menu pages and 28 complete action callbacks. A second inspection fixed feedback hidden behind the open menu. Existing saved IDs, wages, consent, protagonist origin, rewards and OPEN mysteries remain authoritative. Identity art remains prototype; no final face, hair, voice or mark assets claimed.
 
 Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`. Engine compilation, imports, storage interruption, controller focus/platform keyboard, collision, clip/audio timing and complete walkthroughs remain deferred. Chapter 40 and `docs/design/player-facing-reliability-v20-acceptance.md` record the source scope.
+
+## 2026-10-19 — Four authored Ability Study subjects and earned Atlas (source-only)
+
+- Added a four-subject, evidence- and encounter-gated Observation → Understanding → two physical Experiments → Mastery loop, with save integrity, actual Strain costs and earned tactical synergies, not generic automatic enemy skill copying.
+- Added native UI buttons, keyboard inputs, journal and physical telegraph/strike inspection. The true Echo Well is the only provenance-checked origin for the Memory Lens.
+- Gave the previously definition-only Atlas of Absence a one-time, place-bound, mastery-gated reward and distinct +Fold/-Glimpse equipment effects; existing equipment/item ID order was not changed.
+- Added the portable C++ regression executable and integrated source parity checks. The 186-entry Codex distinguishes real active effects from observations and stat-only equipment.
+- Updated living canon and release receipts. The **v20 illustrated artifacts have not been regenerated**, and their original SHA-256 file digests are preserved. Unreal Header Tool compilation, save-load and combat tests inside the Editor are unverified.
