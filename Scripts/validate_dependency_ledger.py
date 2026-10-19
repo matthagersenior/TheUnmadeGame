@@ -81,7 +81,9 @@ def validate(data: dict) -> list[str]:
         for item in re.findall(r'add\(ItemId::(\w+),\d+\)', expr):
             add(item, "milestone", milestone)
     craft = "Items/UnmadeCraftEconomyRules.h"
-    recipes = rows(craft, r'\{RecipeId::(\w+),"([^"]+)",Profession::(\w+),SettlementId::(\w+),(\d+),\s*ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}')
+    if '#include "Items/UnmadeCodexCraftingGenerated.inc"' not in read(PUBLIC + craft):
+        errors.append("workshop crafting table is not wired to Codex-generated source")
+    recipes = rows("Items/UnmadeCodexCraftingGenerated.inc", r'\{RecipeId::(\w+),"([^"]+)",Profession::(\w+),SettlementId::(\w+),(\d+),\s*ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}')
     field = rows("Items/UnmadeFieldCraftRules.h", r'\{"([^"]+)",Profession::(\w+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}')
     error_if(len(recipes) < 6 or len(field) < 9, "craft recipe source parser is incomplete", errors)
     for recipe in recipes:
@@ -120,7 +122,11 @@ def validate(data: dict) -> list[str]:
         r'enum class StudyId\s*:\s*int\s*\{([^}]+)\}', read(PUBLIC + "World/UnmadeAbilityStudyRules.h")).group(1)
     study_ids = [id for id in re.findall(r'(\w+)\s*=\s*\d+', study) if id != "Count"]
     source_study = read(PUBLIC + "World/UnmadeAbilityStudyRules.h")
-    study_names = re.findall(r'"([^"]+)"', source_study.split("StudyNames={{", 1)[1].split("}};", 1)[0])
+    if "StudyNames=CodexStudyNames" not in source_study:
+        errors.append("Study names are not wired to Codex-generated source")
+    generated_study = read(PUBLIC + "World/UnmadeCodexGenerated.h")
+    match = re.search(r'CodexStudyNames\s*=\s*\{\{(.*?)\}\};', generated_study, flags=re.DOTALL)
+    study_names = re.findall(r'"([^"]+)"', match.group(1)) if match else []
     if len(study_ids) != len(study_names) or len(study_ids) < 4:
         errors.append("new firsthand Study registry or title parsing changed")
     for id, title in zip(study_ids, study_names):
