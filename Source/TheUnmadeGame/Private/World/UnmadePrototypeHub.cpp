@@ -2366,10 +2366,56 @@ void AUnmadePrototypeHub::StyleWorldProp(AStaticMeshActor* Block,FName Label,FVe
             };
             const float H=WorldScale.Z*50.f;
             if(Id.role==UnmadeCore::VisualRole::Landmark){
-                // Silhouette-specific crown: players identify this realm from
-                // the skyline, before reading a floating sign.
-                Decorate(Cone,FVector(0,0,H+40),FVector(.55,.55,.8),FRotator::ZeroRotator);
-                Decorate(Sphere,FVector(0,0,H+104),FVector(.26,.26,.26),FRotator::ZeroRotator);
+                // Narrative silhouettes: the crown is different in every
+                // realm; color alone must never be the only distinguishing cue.
+                using UnmadeCore::RealmCrown;
+                switch(Design.crown){
+                case RealmCrown::CharterArch:
+                    Decorate(Cylinder,FVector(0,0,H+34),FVector(1.2,.35,.22),
+                        FRotator(0,0,90));
+                    Decorate(Sphere,FVector(0,0,H+82),FVector(.28,.28,.28),
+                        FRotator::ZeroRotator);break;
+                case RealmCrown::TideGauge:
+                    Decorate(Cylinder,FVector(0,0,H+46),FVector(.28,.28,.86),
+                        FRotator::ZeroRotator);
+                    Decorate(Sphere,FVector(0,0,H+128),FVector(.34,.34,.12),
+                        FRotator::ZeroRotator);break;
+                case RealmCrown::EmberFlue:
+                    Decorate(Cone,FVector(0,0,H+45),FVector(.8,.8,.90),
+                        FRotator::ZeroRotator);
+                    Decorate(Sphere,FVector(0,0,H+122),FVector(.3,.3,.3),
+                        FRotator::ZeroRotator);break;
+                case RealmCrown::LedgerChain:
+                    Decorate(Cylinder,FVector(0,0,H+34),FVector(1.20,.24,.26),
+                        FRotator(90,0,0));
+                    Decorate(Cylinder,FVector(0,0,H+100),FVector(.46,.46,.18),
+                        FRotator::ZeroRotator);break;
+                case RealmCrown::ChoirWeight:
+                    Decorate(Cylinder,FVector(0,0,H+90),FVector(1.30,.28,.21),
+                        FRotator(0,0,90));
+                    Decorate(Sphere,FVector(0,0,H+38),FVector(.43,.43,.43),
+                        FRotator::ZeroRotator);break;
+                case RealmCrown::SplitSeam:
+                    Decorate(Cone,FVector(-36,0,H+45),FVector(.57,.48,.95),
+                        FRotator(14,0,0));
+                    Decorate(Cone,FVector(36,0,H+52),FVector(.57,.48,.95),
+                        FRotator(-14,0,0));break;
+                case RealmCrown::OccupiedBed:
+                    Decorate(Cylinder,FVector(0,0,H+30),FVector(1.55,.28,.18),
+                        FRotator(0,0,90));
+                    Decorate(Sphere,FVector(0,0,H+82),FVector(.16,.16,.16),
+                        FRotator::ZeroRotator);break;
+                case RealmCrown::RootGraft:
+                    Decorate(Cone,FVector(-27,0,H+44),FVector(.70,.60,1.0),
+                        FRotator(0,-20,0));
+                    Decorate(Cone,FVector(32,0,H+40),FVector(.68,.57,.93),
+                        FRotator(0,23,0));break;
+                case RealmCrown::PairedThreshold:
+                    Decorate(Cylinder,FVector(-47,0,H+48),FVector(.32,.32,.96),
+                        FRotator::ZeroRotator);
+                    Decorate(Cylinder,FVector(47,0,H+22),FVector(.32,.32,.66),
+                        FRotator::ZeroRotator);break;
+                }
             }else if(Id.role==UnmadeCore::VisualRole::Gate){
                 // A tagged gate hides/toggles all its purely visual child trims.
                 Decorate(Cylinder,FVector(-WorldScale.X*34,0,H+13),
