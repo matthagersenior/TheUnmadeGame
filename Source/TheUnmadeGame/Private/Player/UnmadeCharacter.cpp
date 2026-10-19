@@ -755,7 +755,8 @@ void AUnmadeCharacter::ShowEvidenceNotebook()
     if(!GetWorld())return;
     for(TActorIterator<AUnmadePrototypeHub> Hub(GetWorld());Hub;++Hub)
     {
-        const FString Evidence=Hub->GetEvidenceNotebook()+TEXT("\n\n")+GetStudyJournal();
+        FString Evidence=Hub->GetEvidenceNotebook();
+        Evidence+=TEXT("\n\n")+GetStudyJournal();
         // Text-mode input remains useful in the graybox; this same function
         // is BlueprintPure on the hub for a proper accessible UMG notebook.
         UE_LOG(LogTemp,Display,TEXT("%s"),*Evidence);
