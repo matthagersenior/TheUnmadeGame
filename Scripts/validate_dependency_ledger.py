@@ -166,7 +166,7 @@ def validate(data: dict) -> list[str]:
                  "guardian Echo prerequisite drift: " + row[0], errors)
     for row in roads:
         b = all_bosses.get("boss:road:" + row[0], {})
-        error_if(b.get("name") != row[10] or b.get("creature") != row[9],
+        error_if(b.get("name") != row[9] or b.get("creature") != row[8],
                  "road elder identity changed: " + row[0], errors)
     for city, wing_name, guardian_name, _ in wings:
         realm = city_to_realm[city]
@@ -207,7 +207,7 @@ def validate(data: dict) -> list[str]:
         error_if(q.get("name") != title or q.get("mechanism") != control,
                  "aftermath source identity drift: " + realm, errors)
         # These must be actual distinct source-defined effects, not generic promises.
-        error_if(q.get("aftermath") != [row[9], row[10]],
+        error_if(q.get("aftermath") != [row[8], row[9]],
                  "aftermath care/truth world effects drift: " + realm, errors)
     for row in echoes:
         error_if(all_quests.get("quest:echo:"+row[0], {}).get("name") != row[1],
