@@ -392,6 +392,12 @@ public:
 
     UPROPERTY(SaveGame) bool bHasPlayerExperience=false;
     UPROPERTY(SaveGame) TArray<int32> PlayerExperienceState;
+    /** Optional firsthand Ability Codex learning ledger; legacy schema-1 slots default to unknown. */
+    UPROPERTY(SaveGame) bool bHasAbilityStudy=false;
+    UPROPERTY(SaveGame) TArray<int32> AbilityStudyStages;
+    UPROPERTY(SaveGame) TArray<int32> AbilityStudyEvidence;
+    UPROPERTY(SaveGame) TArray<int32> AbilityStudyTrials;
+
     UPROPERTY(SaveGame) bool bHasUnifiedLoadout=false;
     UPROPERTY(SaveGame) TArray<int32> UnifiedRealmLoadout;
 
