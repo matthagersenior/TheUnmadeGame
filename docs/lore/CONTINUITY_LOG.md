@@ -1250,3 +1250,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Character searches are directed to known districts, not to an unseen moving NPC's live coordinates. Uncharted optional wing locations remain indirect until the player has earned discovery.
 - Labeled the core, optional personal and optional wing routes separately and preserved all actual quest progress, costs, decisions, saved records and ending conditions. No teleport, new save fields, NPC knowledge or reward.
 - Added nine-realm portable progression regression tests and native journal/map integration checks. Actual in-engine compass and route readability remain unverified.
+
+- Fixed pure-header include of the canonical expedition registry, removed a guessed wing branch room, and matched the final optional reward bearing to the real third-station claim marker. Added coordinates to nine-realm tests.

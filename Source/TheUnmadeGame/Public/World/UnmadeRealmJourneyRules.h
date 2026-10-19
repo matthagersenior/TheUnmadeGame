@@ -1,5 +1,6 @@
 #pragma once
 #include "World/UnmadePlayerExperienceRules.h"
+#include "World/UnmadeExpeditionRegistry.h"
 namespace UnmadeCore {
 enum class JourneyStep { Board, Frontier, Chamber, Resolution, Boss, Return, Reward, PersonalOffer, Witness, PersonalEvidence, Accord, WingOffer, WingFieldwork, WingGuardian, WingReward, Home };
 struct JourneyObjective {JourneyStep step;int index=-1;};
@@ -81,11 +82,11 @@ inline JourneyWaypoint NextRealmWaypoint(int a,const ExpeditionState& e,
  case JourneyStep::Accord:
   point(0,8000,false,"Find the leader in person to compare and deliberately confirm both optional public accord outcomes.");break;
  case JourneyStep::WingOffer:
-  dungeon(4,0,0,false,"The wing is optional. Search from the last documented far chamber for the eastward branch.");break;
+  dungeon(WingAnchor(a),0,0,false,"The wing is optional. Search from its last documented anchor chamber for the eastward branch.");break;
  case JourneyStep::WingFieldwork:{
   const int previous=goal.index>0?goal.index-1:0;
   if(goal.index==0)
-   dungeon(4,0,0,false,"Enter the optional wing from the previously charted dungeon. Its first station is not yet mapped.");
+   dungeon(WingAnchor(a),0,0,false,"Enter the optional wing from its documented anchor chamber. Its first station is not yet mapped.");
   else{
    const auto last=WingRoom(a,previous);
    point(last.x+450,15000+last.y-450,false,
@@ -100,8 +101,8 @@ inline JourneyWaypoint NextRealmWaypoint(int a,const ExpeditionState& e,
   break;
  }
  case JourneyStep::WingReward:{
-  const auto last=WingRoom(a,3);
-  point(last.x,15000+last.y,true,
+  const auto last=WingRoom(a,2);
+  point(last.x-600,15000+last.y+600,true,
     "The optional guardian is resolved. Claim the earned reward at the now-known final wing site.");
   break;
  }

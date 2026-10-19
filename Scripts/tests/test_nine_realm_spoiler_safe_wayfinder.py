@@ -61,6 +61,9 @@ int main(){
   x.guardian=1;
   auto reward=NextRealmWaypoint(a,e,d,x);
   assert(reward.step==JourneyStep::WingReward&&reward.optional&&reward.precise);
+  auto lastWing=WingRoom(a,2);
+  assert(std::abs(reward.x-(ExpeditionSpecs[a].x+lastWing.x-600))<.01);
+  assert(std::abs(reward.y-(ExpeditionSpecs[a].y+15000+lastWing.y+600))<.01);
   x.complete=1;
   auto finished=NextRealmWaypoint(a,e,d,x);
   assert(!finished.available&&finished.focus==JourneyFocus::FreeRoam);
