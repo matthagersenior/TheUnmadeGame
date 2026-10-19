@@ -76,6 +76,20 @@ int main() {
             execute=subprocess.run([str(binary)],text=True,capture_output=True)
             self.assertEqual(execute.returncode,0,execute.stderr)
 
+    def test_named_witnesses_take_real_daytime_work_routines_after_report(self):
+        scene=source("Source/TheUnmadeGame/Private/World/UnmadeCinderholdAdventure.cpp")
+        npc=source("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")
+        hub=source("Source/TheUnmadeGame/Public/World/UnmadePrototypeHub.h")
+        self.assertIn("GetCinderholdAccordRoutineTarget",hub)
+        self.assertIn("GetCinderholdAccordRoutineTarget",scene)
+        self.assertIn("GetCinderholdAccordRoutineTarget",npc)
+        for proof in ("Cinderhold.Has(UnmadeCore::VardaReported)",
+                      "Cinderhold.Has(UnmadeCore::RhevaTold)",
+                      "Cinderhold.Has(UnmadeCore::OvennaTold)",
+                      "Cinderhold.Save().route!=4"):
+            self.assertIn(proof,scene)
+        self.assertIn("UnmadeCore::MaterialDuty::Regular",npc)
+
     def test_real_interaction_world_gates_and_attributed_social_return(self):
         scene=source("Source/TheUnmadeGame/Private/World/UnmadeCinderholdAdventure.cpp")
         roads=source("Source/TheUnmadeGame/Private/World/UnmadeRememberedRoads.cpp")
