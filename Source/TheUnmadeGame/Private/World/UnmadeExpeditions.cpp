@@ -502,3 +502,75 @@ FString AUnmadePrototypeHub::GetExpeditionReaction(FName person)const{FString Pe
         ?FString(UTF8_TO_TCHAR(accord==1?UnmadeCore::DepthSpecs[a].public_return_a:UnmadeCore::DepthSpecs[a].public_return_b))
         :FString();
     FString memory=n==1||n==2?TEXT("You opened my cell. I remember waiting until the passage was safe. "):n==3&&i->repair==7?TEXT("You repaired the three roadposts. I can watch the road again. "):i->repair?TEXT("I saw your repairs on the return road. "):TEXT("The return road still needs repair. ");return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": ")+memory+UTF8_TO_TCHAR(t->boss==1?s.kill_return:s.mercy_return)+TEXT(" ")+publicAftereffect+TEXT(" ")+Integration;}if(t->boss)return TEXT("The dungeon passage is open. Return to our equipment bench so we can witness what you chose.");return FString(UTF8_TO_TCHAR(s.people[n]))+TEXT(": ")+UTF8_TO_TCHAR(s.brief);}return FString();}
+
+FString AUnmadePrototypeHub::GetDiscoveryCivicResidentLine(FName Id)const
+{
+ if(bRealmAftermathSaveRejected)return FString();
+ for(int a=0;a<9;++a)if(UnmadeCore::CivicUsesExpeditionAftermath(a)){
+  const auto* C=UnmadeCore::CivicSite(a);
+  const auto realm=static_cast<UnmadeCore::Realm>(a);
+  const int stage=RealmAftermath.Stage(realm);
+  const int ending=RealmAftermath.Ending(realm);
+  const int approach=RealmAftermath.Snapshot().approach[a];
+  if(!stage)continue;
+  if(Id==FName(UTF8_TO_TCHAR(C->initiator))){
+   if(ending)return FString(TEXT(" The local proof was brought home. We now maintain the chosen route: "))+
+      UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(realm))+
+      TEXT(" The alternate public decision remains closed.");
+   return TEXT(" We spoke about the returned physical clues. Operate the worksite, find care or truth evidence, then speak to that actual witness.");
+  }
+  if(Id==FName(UTF8_TO_TCHAR(C->careWitness))&&approach==1&&stage>=3)
+   return FString(TEXT(" I received the local shelter evidence. "))+UTF8_TO_TCHAR(C->careWork)+
+     TEXT(". No public identity or innocent verdict is implied.");
+  if(Id==FName(UTF8_TO_TCHAR(C->truthWitness))&&approach==2&&stage>=3)
+   return FString(TEXT(" I personally heard your evidence for public scrutiny. "))+UTF8_TO_TCHAR(C->truthWork)+
+     TEXT(". Records may be published only with the needed privacy and consent.");
+ }
+ if(!bExpeditionSaveRejected&&
+    (Id==FName(TEXT("npc.saltwake.rainkeeper.001"))||
+     Id==FName(TEXT("npc.saltwake.navigator.001")))){
+  const auto* e=Expeditions.Arc(1);
+  if(RealmAftermath.Ending(UnmadeCore::Realm::WidowedRain)!=0&&
+     UnmadeCore::CivicSaltwakeWitnessedDiscovery(e->rooms&1,e->clues,e->returned))
+     return TEXT(" The traveler has three returned breakwater records. I can compare those records against the local invoice, but cannot pretend to have seen their earlier journey.");
+ }
+ return FString();
+}
+bool AUnmadePrototypeHub::GetDiscoveryCivicRoutineTarget(
+ FName Id,bool AtNight,FVector& Out)const
+{
+ if(AtNight||bRealmAftermathSaveRejected)return false;
+ for(int a=0;a<9;++a)if(UnmadeCore::CivicUsesExpeditionAftermath(a)){
+  const auto* C=UnmadeCore::CivicSite(a);
+  const auto realm=static_cast<UnmadeCore::Realm>(a);
+  const int stage=RealmAftermath.Stage(realm),ending=RealmAftermath.Ending(realm);
+  const int approach=RealmAftermath.Snapshot().approach[a];
+  if(!stage)continue;
+  const auto& expedition=UnmadeCore::ExpeditionSpecs[a];
+  const FVector home(expedition.x,expedition.y+8000,95);
+  if(Id==FName(UTF8_TO_TCHAR(C->initiator))){
+   Out=home+FVector(C->mechanismX,900,0);return true;
+  }
+  if(stage>=3&&approach==1&&Id==FName(UTF8_TO_TCHAR(C->careWitness))){
+   Out=home+FVector(C->careX,ending==1?2280:1430,0);return true;
+  }
+  if(stage>=3&&approach==2&&Id==FName(UTF8_TO_TCHAR(C->truthWitness))){
+   Out=home+FVector(C->truthX,ending==2?2280:1430,0);return true;
+  }
+ }
+ if(!bExpeditionSaveRejected&&
+    RealmAftermath.Stage(UnmadeCore::Realm::WidowedRain)==4){
+  const auto* e=Expeditions.Arc(1);
+  if(UnmadeCore::CivicSaltwakeWitnessedDiscovery(e->rooms&1,e->clues,e->returned)){
+   if(Id==FName(TEXT("npc.saltwake.rainkeeper.001"))&&
+      RealmAftermath.Ending(UnmadeCore::Realm::WidowedRain)==1){
+    Out=FVector(0,-49000,95);return true;
+   }
+   if(Id==FName(TEXT("npc.saltwake.navigator.001"))&&
+      RealmAftermath.Ending(UnmadeCore::Realm::WidowedRain)==2){
+    Out=FVector(1200,-49000,95);return true;
+   }
+  }
+ }
+ return false;
+}

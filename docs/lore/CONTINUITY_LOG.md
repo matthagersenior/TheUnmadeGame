@@ -1279,3 +1279,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - 2026-10-19: Started seven physical civic frontier scenes with existing aftermath outcomes; reserved separate physical evidence and gate tags. Cross-system save validation checks expedition provenance; Unreal stage/playtest not claimed.
 
 - 2026-10-19: Wired seven civic aftermaths through actual nearby NPC testimony, save-transaction rollback, real physical controls and mutually exclusive branch gates. Protected Crossings' correct event identity. NPC movement and engine acceptance still being verified.
+
+- 2026-10-19: Wired personal realm testimony and civic work routines for seven real expedition resident identities; enhanced Saltwake's existing aftershock witnesses. No new money, role identity, save slot or remote witness authority.
