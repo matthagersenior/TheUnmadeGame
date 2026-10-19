@@ -1945,14 +1945,14 @@ void AUnmadeCharacter::StudyUse()
     if((SelectedStudy==2||SelectedStudy==3)&&!Enemy)return;
     if(!FractureModel.SpendStrain(9))return;
     int Ward=0;
-    double WardTime=6.0;
+    double WardTime=6.0,ExposeSeconds=0.0;
     if(SelectedStudy==0)
     {
         Ward=5;
         if(AbilityStudy.CanCombine(UnmadeCore::StudyId::Cinderjaw,UnmadeCore::StudyId::EchoWell))
-            WardTime=9.0;
+            WardTime=9;
         if(Enemy&&AbilityStudy.CanCombine(UnmadeCore::StudyId::Cinderjaw,UnmadeCore::StudyId::RedactionEye))
-            Enemy->ExposeToFold(Now,3);
+            ExposeSeconds=3;
     }
     else if(SelectedStudy==1)
     {
@@ -1961,29 +1961,35 @@ void AUnmadeCharacter::StudyUse()
             FractureModel.Recover(9.0/UnmadeCore::FractureModel::RecoveryPerSecond);
             return;
         }
-        LaunchCharacter(GetActorForwardVector()*650,false,false);
         Ward=AbilityStudy.CanCombine(UnmadeCore::StudyId::PaleStrider,UnmadeCore::StudyId::EchoWell)?2:0;
         WardTime=3;
-        PlayIdentityMotion(FName(TEXT("Dodge")));
     }
     else
     {
-        Enemy->ExposeToFold(Now,SelectedStudy==2?6.0:4.0);
+        ExposeSeconds=SelectedStudy==2?6:4;
         if(AbilityStudy.CanCombine(UnmadeCore::StudyId::RedactionEye,UnmadeCore::StudyId::EchoWell))
-            Enemy->ExposeToFold(Now,8.0);
+            ExposeSeconds=8;
         Ward=SelectedStudy==3?2:0;
     }
+    // Save the paid Reality Strain before granting an encounter effect. No free
+    // attack/ward is produced when persistence refuses this profile.
     if(!PersistStudy())
     {
         FractureModel.Recover(9.0/UnmadeCore::FractureModel::RecoveryPerSecond);
         return;
     }
+    if(SelectedStudy==1)
+    {
+        LaunchCharacter(GetActorForwardVector()*650,false,false);
+        PlayIdentityMotion(FName(TEXT("Dodge")));
+    }
+    if(Enemy&&ExposeSeconds>0)Enemy->ExposeToFold(Now,ExposeSeconds);
     if(Ward>0&&IsValid(Equipment))
     {
         Equipment->SetStudyBonuses(0,Ward);
         StudyWardUntil=FMath::Max(StudyWardUntil,Now+WardTime);
     }
-    NextStudyPowerAt=Now+18.0;
+    NextStudyPowerAt=Now+18;
     if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Cyan,
         FString::Printf(TEXT("Earned technique: %s (9 Strain, 18s recovery)."),
             UTF8_TO_TCHAR(UnmadeCore::StudyNames[SelectedStudy])));
