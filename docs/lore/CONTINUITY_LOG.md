@@ -1241,3 +1241,14 @@ and evidence choices remain the only source of permanent arena outcomes.
 - Added portable nine-realm priming tests and source wiring guards. The new transient guide cannot be mistaken for another witness's consent or knowledge; UE interactions and visual placement need engine validation.
 
 - Corrected a source-wiring mistake found during review: the new witness-guide E prompt belongs in GetDepthPrompt, not the bool-returning TryDepthInteraction. Added an explicit method-boundary regression and preserved the actual station candidate in TryDepthInteraction.
+
+
+## 2026-10-18 — Nine-realm progress-aware, spoiler-safe wayfinding
+
+- Unified the tracked objective and the text map around a derived saved-state next-waypoint model in all nine realms.
+- Direct bearings go only to already documented city/frontier/entered-chamber, earned council/boss/return-reward, and inspected personal-evidence locations; a not-yet-entered chamber uses the previous entered chamber as a search origin without disclosing the hidden room location.
+- Character searches are directed to known districts, not to an unseen moving NPC's live coordinates. Uncharted optional wing locations remain indirect until the player has earned discovery.
+- Labeled the core, optional personal and optional wing routes separately and preserved all actual quest progress, costs, decisions, saved records and ending conditions. No teleport, new save fields, NPC knowledge or reward.
+- Added nine-realm portable progression regression tests and native journal/map integration checks. Actual in-engine compass and route readability remain unverified.
+
+- Fixed pure-header include of the canonical expedition registry, removed a guessed wing branch room, and matched the final optional reward bearing to the real third-station claim marker. Added coordinates to nine-realm tests.
