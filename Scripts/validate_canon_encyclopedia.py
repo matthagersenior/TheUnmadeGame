@@ -73,12 +73,12 @@ def expected_records(root: Path) -> dict[str, tuple[str, str, str]]:
         raise ValueError("cannot reliably read 3 named faction arcs from C++")
     page = "08_FACTIONS_SOCIAL_SYSTEMS_AND_ECONOMIES.md"
     for faction_id, name in factions:
-        out[f"faction:{faction_id}"] = (name, page, faction_source)
+        out[f"faction:faction.{faction_id}"] = (name, page, faction_source)
     trade_ids = re.findall(r"\{TradeRoute::(\w+),Realm::", trade_text)
     if len(trade_ids) != 2 or len(set(trade_ids)) != 2:
         raise ValueError("cannot reliably read 2 trade routes from C++")
     for trade_id in trade_ids:
-        out[f"trade_contract:{trade_id}"] = ("", page, trade_source)
+        out[f"trade_contract:trade.{trade_id}"] = ("", page, trade_source)
 
     # 88 source residents versus 82 authored return records: a covered
     # distinction, not an invitation to silently invent return dialogue.
