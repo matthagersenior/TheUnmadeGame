@@ -11,6 +11,8 @@ class FrontierAftermathWiring(unittest.TestCase):
     def test_two_physical_mechanisms_and_two_evidence_routes_per_realm(self):
         world=source("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         rules=source("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h")
+        self.assertIn('#include "World/UnmadeCodexAftermathGenerated.inc"',rules)
+        rules+=source("Source/TheUnmadeGame/Public/World/UnmadeCodexAftermathGenerated.inc")
         for tag in ("Saltwake.Aftermath.StormSluice",
                     "Saltwake.Aftermath.Cistern","Saltwake.Aftermath.RainLedger",
                     "Cinderhold.Aftermath.HeatVent",
