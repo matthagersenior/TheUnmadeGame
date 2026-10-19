@@ -9,6 +9,7 @@
 #include "Save/UnmadeSaveSession.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeDiscoveryCivicRules.h"
 #include "Save/UnmadeCounterThreatRules.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
 #include "NPC/UnmadeNpcCharacter.h"
@@ -551,6 +552,13 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         bCinderholdSaveRejected=true;
         UE_LOG(LogTemp,Error,TEXT("Shared kiln missing its actual Cinderhold discovery; original save protected"));
     }
+    if(Save->bHasRealmAftermathSnapshot &&
+       !UnmadeCore::CivicEvidenceValidOnRestore(RestoredRealmAftermath.Snapshot(),
+             Expeditions,Save->bHasExpeditions&&!bExpeditionSaveRejected)){
+        bRealmAftermathSaveRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Civic aftermath lacks earned local expedition evidence; original protected"));
+        return;
+    }
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int32 V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bIdentitySaveRejected=true;UE_LOG(LogTemp,Error,TEXT("World identity save rejected; original protected"));}}
     if(Save->bHasAdventureDepth){std::vector<int> Data;for(int32 V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bDepthSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Adventure depth save rejected; original protected"));}}
     if(Save->bHasPlayerExperience){std::vector<int> Data;for(int V:Save->PlayerExperienceState)Data.push_back(V);if(!Experience.Restore(Data,Expeditions,Depth,RestoredClock.DayIndex()+1)){bExperienceRejected=true;UE_LOG(LogTemp,Error,TEXT("Player experience save rejected; original protected"));}}
@@ -652,6 +660,9 @@ bool AUnmadePrototypeHub::CommitWorldEvent(FName Event,FName Subject)
 }
 bool AUnmadePrototypeHub::CommitRealmAftermathEvent(UnmadeCore::Realm Realm,int32 Choice)
 {
+    if(UnmadeCore::CivicUsesExpeditionAftermath(static_cast<int>(Realm)))
+        return CommitWorldEvent(FName("World.CivicAftermathResolved"),
+            FName(*FString::Printf(TEXT("Reality.Realm.%d"),static_cast<int>(Realm))));
     for(const auto& Region:UnmadeCore::LaterRealms)if(Region.realm==Realm)
         return CommitWorldEvent(FName("World.LaterRealmResolved"),FName(UTF8_TO_TCHAR(Region.name)));
     const bool Rain=Realm==UnmadeCore::Realm::WidowedRain;
@@ -1301,14 +1312,15 @@ bool AUnmadePrototypeHub::InspectRealmAftermathSite(
     bool bMechanism=false;
     int32 Approach=0;
     double BestDistSq=FMath::Min(FMath::Square(310.0),CompetingNpcDistanceSq);
-    // Only two created destinations have physical actors; future realm IDs
-    // are narrative contracts and must not be triggered through worldless UI.
+    // Physical actors exist at every realm supported here: existing Saltwake/Cinderhold
+    // frontier sites and the seven expedition-civic worksites.
     for(TActorIterator<AStaticMeshActor> It(GetWorld());It;++It)
     {
         const double Dist=FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation());
         if(Dist>=BestDistSq)continue;
-        for(int32 i=1;i<=2;++i)
+        for(int32 i=0;i<9;++i)
         {
+            if(i!=1&&i!=2&&!UnmadeCore::CivicUsesExpeditionAftermath(i))continue;
             const auto& Spec=UnmadeCore::RealmAftermathSpecs[i];
             const bool Mechanism=It->ActorHasTag(FName(UTF8_TO_TCHAR(Spec.mechanismSite)));
             const bool Care=It->ActorHasTag(FName(UTF8_TO_TCHAR(Spec.evidenceForCare)));
@@ -1334,7 +1346,7 @@ bool AUnmadePrototypeHub::InspectRealmAftermathSite(
     if(Stage==0 || Stage==4)
     {
         if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Cyan,
-            Stage==0?TEXT("RETURN STORY LOCKED: resolve the local harbor/hearth accord and talk to its warden.")
+            Stage==0?TEXT("RETURN STORY LOCKED: earn the real local evidence and speak to its named frontier guide.")
                     :FString(UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(At))));
         return true;
     }
@@ -1368,31 +1380,73 @@ bool AUnmadePrototypeHub::InspectRealmAftermathSite(
 
 bool AUnmadePrototypeHub::TryRealmAftermathConversation(FName ResidentId)
 {
-    if(ResidentId.IsNone() || bRealmAftermathSaveRejected)return false;
+    if(ResidentId.IsNone()||bRealmAftermathSaveRejected||!GetWorld())return false;
     const FString Id=ResidentId.ToString();
-    const FTCHARToUTF8 Utf8(*Id);
-    const auto* Resident=UnmadeCore::FindFrontierResident(Utf8.Get());
-    if(!Resident)return false;
-    const auto Realm=Resident->home;
-    const int32 Stage=RealmAftermath.Stage(Realm);
-    if(Stage!=0 && Stage!=2)return false;
+    const FTCHARToUTF8 Encoded(*Id);
+    const auto* FrontierResident=UnmadeCore::FindFrontierResident(Encoded.Get());
+    int CivicArc=-1;
+    const UnmadeCore::DiscoveryCivicSpec* Civic=nullptr;
+    for(int i=0;i<9;++i)if(UnmadeCore::CivicUsesExpeditionAftermath(i)){
+        const auto* S=UnmadeCore::CivicSite(i);
+        if(std::strcmp(Encoded.Get(),S->initiator)==0||
+           std::strcmp(Encoded.Get(),S->careWitness)==0||
+           std::strcmp(Encoded.Get(),S->truthWitness)==0){
+            CivicArc=i;Civic=S;break;
+        }
+    }
+    if(CivicArc<0&&!FrontierResident)return false;
+    // No forged or remote conversation. The player must face this actual local
+    // spawned stable person, in range and with unobstructed sight.
+    if(CivicArc>=0){
+        if(bExpeditionSaveRejected||
+           !UnmadeCore::CivicEvidenceReady(CivicArc,Expeditions.Arc(CivicArc)))return false;
+        const auto* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
+        if(!IsValid(Player))return false;
+        bool Seen=false;
+        for(TActorIterator<AUnmadeNpcCharacter> Npc(GetWorld());Npc;++Npc){
+            if(Npc->GetStableId()!=ResidentId||
+               FVector::DistSquared(Player->GetActorLocation(),Npc->GetActorLocation())>FMath::Square(360.f))
+                continue;
+            FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeCivicWitnessSight),false);
+            Sight.AddIgnoredActor(Player);Sight.AddIgnoredActor(*Npc);
+            Seen=!GetWorld()->LineTraceTestByChannel(
+                Player->GetActorLocation()+FVector(0,0,50),
+                Npc->GetActorLocation()+FVector(0,0,50),ECC_Visibility,Sight);
+            if(Seen)break;
+        }
+        if(!Seen)return false;
+    }
+    const auto Realm=CivicArc>=0?static_cast<UnmadeCore::Realm>(CivicArc):FrontierResident->home;
+    const int Stage=RealmAftermath.Stage(Realm);
+    if(Stage!=0&&Stage!=2)return false;
     const auto Before=RealmAftermath.Snapshot();
-    const int32 idx=UnmadeCore::FrontierIndex(Realm);
-    const bool bVisited=idx>=0 && (Frontier.Snapshot().visits&(1<<idx))!=0;
-    const auto Event=Stage==0
-        ?RealmAftermath.Begin(Realm,Frontier.IsResolved(Realm),bVisited,Utf8.Get())
-        :RealmAftermath.Testify(Realm,Utf8.Get());
-    if(Event!=UnmadeCore::RealmAftermathResult::Started &&
+    const int FrontierIndex=UnmadeCore::FrontierIndex(Realm);
+    const bool Visited=CivicArc>=0?
+        (Expeditions.Arc(CivicArc)->visited&1)!=0:
+        FrontierIndex>=0&&(Frontier.Snapshot().visits&(1<<FrontierIndex))!=0;
+    const bool Resolved=CivicArc>=0?
+        UnmadeCore::CivicEvidenceReady(CivicArc,Expeditions.Arc(CivicArc)):
+        Frontier.IsResolved(Realm);
+    const char* CivicWitness=nullptr;
+    if(Civic){
+        const int chosen=Before.approach[CivicArc];
+        CivicWitness=Stage==0?Civic->initiator:
+            chosen==1?Civic->careWitness:chosen==2?Civic->truthWitness:nullptr;
+    }
+    const auto Event=Stage==0?
+        RealmAftermath.Begin(Realm,Resolved,Visited,Encoded.Get(),CivicWitness):
+        RealmAftermath.Testify(Realm,Encoded.Get(),CivicWitness);
+    if(Event!=UnmadeCore::RealmAftermathResult::Started&&
        Event!=UnmadeCore::RealmAftermathResult::Witnessed)return false;
-    if(!WriteWorldSnapshot())
-    {
+    if(!WriteWorldSnapshot()){
         RealmAftermath.Restore(Before);
         return false;
     }
+    RefreshRealmAftermathWorld();
     if(GEngine)UnmadeRpgFeedback(-1,12.f,FColor::Cyan,
-        Event==UnmadeCore::RealmAftermathResult::Started
-        ?TEXT("AFTERSHOCK: find and operate the local sluice or heat vent, then investigate either physical record.")
-        :TEXT("TESTIMONY RECORDED: return to the warden. F7 gives immediate public relief; F8 makes the concealed claim public. Only the evidenced route can be committed."));
+      Event==UnmadeCore::RealmAftermathResult::Started?
+      TEXT("CIVIC INQUIRY: operate the physical control, examine ONE evidence route and bring it to its named local witness."):
+      TEXT("LOCAL TESTIMONY SAVED: return to the actual frontier guide. F7 chooses care; F8 chooses public accountability. Only the evidenced branch can resolve."));
     return true;
 }
 
@@ -1401,13 +1455,15 @@ bool AUnmadePrototypeHub::ResolveNearbyRealmAftermath(int32 Choice)
     if(!GetWorld() || bRealmAftermathSaveRejected || (Choice!=1 && Choice!=2))return false;
     const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0);
     if(!IsValid(Player))return false;
-    for(int32 i=1;i<static_cast<int32>(UnmadeCore::RealmAftermathSpecs.size());++i)
+    for(int32 i=0;i<static_cast<int32>(UnmadeCore::RealmAftermathSpecs.size());++i)
     {
         const auto& Spec=UnmadeCore::RealmAftermathSpecs[i];
+        const auto* Civic=UnmadeCore::CivicSite(i);
+        if(Civic&&(!UnmadeCore::CivicEvidenceReady(i,Expeditions.Arc(i))||bExpeditionSaveRejected))continue;
         if(RealmAftermath.Stage(Spec.realm)!=3)continue;
         for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
         {
-            if(It->GetStableId()!=FName(UTF8_TO_TCHAR(Spec.initiatingWitness)) ||
+            if(It->GetStableId()!=FName(UTF8_TO_TCHAR(Civic?Civic->initiator:Spec.initiatingWitness)) ||
                 FVector::DistSquared(Player->GetActorLocation(),It->GetActorLocation())>
                     FMath::Square(390.f))continue;
             FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeRealmDecisionSight),false);
@@ -1526,6 +1582,20 @@ void AUnmadePrototypeHub::BuildFrontierAftermath()
 
 void AUnmadePrototypeHub::RefreshRealmAftermathWorld()
 {
+    for(int a=0;a<9;++a)if(UnmadeCore::CivicUsesExpeditionAftermath(a)){
+        const int ending=bRealmAftermathSaveRejected||bExpeditionSaveRejected||
+            !UnmadeCore::CivicEvidenceReady(a,Expeditions.Arc(a))?0:
+            RealmAftermath.Ending(static_cast<UnmadeCore::Realm>(a));
+        if(CivicAftermathVisible[a]==ending)continue;
+        for(int branch=1;branch<=2;++branch){
+            const TCHAR* name=branch==1?TEXT("Care"):TEXT("Truth");
+            SetRiteWorldActorState(FName(*FString::Printf(
+                TEXT("Expedition.%d.Civic%sGate"),a,name)),ending!=branch);
+            SetRiteWorldActorState(FName(*FString::Printf(
+                TEXT("Expedition.%d.Civic%sRoute"),a,name)),ending==branch);
+        }
+        CivicAftermathVisible[a]=ending;
+    }
     for(int32 i=1;i<=2;++i)
     {
         const auto Realm=UnmadeCore::RealmAftermathSpecs[i].realm;

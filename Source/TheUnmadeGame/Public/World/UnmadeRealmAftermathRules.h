@@ -132,12 +132,14 @@ public:
         return i>=0 && i<9?state_.ending[i]:0;
     }
     RealmAftermathResult Begin(Realm r, bool firstArcResolved,
-                              bool locationVisited, const char* witness) noexcept {
+                              bool locationVisited, const char* witness,
+                              const char* civicWitness=nullptr) noexcept {
         const int i=static_cast<int>(r);
         if(i<0 || i>=9)return RealmAftermathResult::NoChange;
         if(state_.stage[i]!=0)return RealmAftermathResult::NoChange;
         if(!firstArcResolved || !locationVisited)return RealmAftermathResult::Locked;
-        if(!witness || std::strcmp(witness,RealmAftermathSpecs[i].initiatingWitness)!=0)
+        if(!witness || (std::strcmp(witness,RealmAftermathSpecs[i].initiatingWitness)!=0 &&
+            (!civicWitness || std::strcmp(witness,civicWitness)!=0)))
             return RealmAftermathResult::WrongWitness;
         state_.stage[i]=1;return RealmAftermathResult::Started;
     }
@@ -162,12 +164,14 @@ public:
         state_.stage[i]=2;state_.approach[i]=approach;
         return RealmAftermathResult::EvidenceFound;
     }
-    RealmAftermathResult Testify(Realm r,const char* witness) noexcept {
+    RealmAftermathResult Testify(Realm r,const char* witness,
+                                 const char* civicWitness=nullptr) noexcept {
         const int i=static_cast<int>(r);
         if(i<0 || i>=9 || state_.stage[i]!=2)return RealmAftermathResult::NoChange;
         const auto& spec=RealmAftermathSpecs[i];
         const char* expected=state_.approach[i]==1?spec.careWitness:spec.truthWitness;
-        if(!witness || std::strcmp(witness,expected)!=0)
+        if(!witness || (std::strcmp(witness,expected)!=0 &&
+            (!civicWitness || std::strcmp(witness,civicWitness)!=0)))
             return RealmAftermathResult::WrongWitness;
         state_.stage[i]=3;
         return RealmAftermathResult::Witnessed;

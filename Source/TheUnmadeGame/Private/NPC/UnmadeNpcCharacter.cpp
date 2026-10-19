@@ -231,6 +231,17 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
                 StopRadius=105.0;
             }
         }
+        if(CachedHub.IsValid()&&!bAccordDutyAssigned&&
+           CachedHub->GetMaterialDuty(HomeLocation,Role)==UnmadeCore::MaterialDuty::Regular)
+        {
+            FVector CivicTarget;
+            if(CachedHub->GetDiscoveryCivicRoutineTarget(NpcId,
+                  Phase==UnmadeCore::DayPhase::Night,CivicTarget))
+            {
+                Target={CivicTarget.X,CivicTarget.Y};
+                Speed=72.0;StopRadius=105.0;
+            }
+        }
     }
 
     // The resident reacts only to the warning at their *own current place*.
@@ -464,6 +475,8 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     if(CachedHub.IsValid())
     {
         CharacterLine+=CachedHub->GetRoadResidentLine(NpcId);
+        const FString CivicLine=CachedHub->GetDiscoveryCivicResidentLine(NpcId);
+        if(!CivicLine.IsEmpty())CharacterLine+=TEXT(" ")+CivicLine;
         const FString AdventureLine=CachedHub->GetCinderholdResidentLine(NpcId);
         if(!AdventureLine.IsEmpty())CharacterLine+=TEXT(" ")+AdventureLine;
         const FString BesHomeLine=CachedHub->GetBesHouseholdResidentLine(NpcId);

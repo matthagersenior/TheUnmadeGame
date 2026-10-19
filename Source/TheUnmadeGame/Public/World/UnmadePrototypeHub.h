@@ -33,6 +33,7 @@
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
+#include "World/UnmadeDiscoveryCivicRules.h"
 #include "World/UnmadeLaterRealmRules.h"
 #include "World/UnmadeCampaignSpineRules.h"
 #include "World/UnmadeEchoQuestRules.h"
@@ -222,6 +223,8 @@ public:
     /** Returns true when a closer physical aftershock control/clue handled E. */
     bool InspectRealmAftermathSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryRealmAftermathConversation(FName ResidentId);
+    FString GetDiscoveryCivicResidentLine(FName Id) const;
+    bool GetDiscoveryCivicRoutineTarget(FName Id,bool AtNight,FVector& Out) const;
     bool ResolveNearbyRealmAftermath(int32 Choice);
     bool InspectLaterRealmSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryLaterRealmConversation(FName ResidentId);
@@ -391,6 +394,7 @@ private:
     std::array<double,9> ArenaShelterUntil{};
     // Cache visible state: avoid 36 full-world actor scans per 0.5s refresh.
     std::array<int,9> ArenaShelterVisible{}, ArenaAftermathVisible{};
+    std::array<int,9> CivicAftermathVisible{};
 
     FTimerHandle GossipTimer;
     FTimerHandle WorldSaveTimer;
