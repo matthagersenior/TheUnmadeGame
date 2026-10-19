@@ -311,7 +311,9 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
             if not isinstance(row.get("rule_contract"),dict):
                 issues.append(f"{key}: missing realm/progression rule contract")
     # Direct source parity for authoritative names and numeric recipe costs.
-    atlas=source("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")
+    if '#include "World/UnmadeCodexAtlasGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"):
+        issues.append("real world routing must consume Codex-generated realm and passage table")
+    atlas=source("Source/TheUnmadeGame/Public/World/UnmadeCodexAtlasGenerated.inc")
     world_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',atlas)
     for realm,name in world_rows[:9]:
         check("realm."+realm,"name",name)
@@ -355,6 +357,17 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         check(ident,"rule_contract.output",{"item_enum":output,"count":int(n_out)})
     if '#include "Items/UnmadeCodexCraftingGenerated.inc"' not in source(CRAFT):
         issues.append("live crafting model must include Codex-generated recipe table")
+    graph_rows=re.findall(r'\{Realm::(\w+),Realm::(\w+),(\d+)\}',atlas)
+    if len(graph_rows)!=13:
+        issues.append("Codex route graph must describe exactly 13 original passages")
+    for i,(origin,destination,level) in enumerate(graph_rows):
+        path_id=f"passage.{i+1:02d}.{origin}.{destination}"
+        check(path_id,"rule_contract.minimum_attunement",int(level))
+        check(path_id,"rule_contract.from","realm."+origin)
+        check(path_id,"rule_contract.to","realm."+destination)
+        check(path_id,"rule_contract.bidirectional",True)
+        if int(level)<0 or int(level)>4:
+            issues.append(f"{path_id}: invalid attunement tier")
     study_source=source("Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h")
     for token in ('#include "World/UnmadeCodexGenerated.h"',"CodexStudyNames",
                   "CodexStudyRequirements[static_cast<int>(id)][0]","CodexAtlasRequirements[0]"):

@@ -379,3 +379,10 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Replaced the six manually maintained runtime workshop recipe table rows with a deterministic table generated directly from the 243-record canonical Codex.
 - Preserved RecipeId and ItemId numbering, ingredient amounts, skill levels, settlement workbenches, output counts and existing atomic save/economy behavior.
 - Generator checks both Study/Atlas/realm reference tables and the compiled crafting recipe table. Full Unreal compilation and recipe playtesting remain unverified; no illustrated release was rebuilt.
+
+## 2026-10-19 — Codex-owned realm and passage topology
+
+- Added 13 append-only named route dependencies to the existing Codex (now 256 records); preserved all nine original realm names, statuses, conflicts, and attunement tiers.
+- Moved executable WorldAtlas and AtlasPassages tables to deterministic generated `UnmadeCodexAtlasGenerated.inc`, consumed by the original path-planning runtime.
+- Added source, JSON and compiled-C++ tests to detect incorrect edge thresholds, invalid endpoints, shortcut routes and drift between Codex and world descriptions.
+- Existing realm scenes are not claimed to exist without an actual Unreal level; v20 illustrated files were not rebuilt.

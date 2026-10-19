@@ -95,3 +95,7 @@ A completed checkbox is always derived from the actual player/quest save state, 
 ## Codex-controlled crafting rules (six workshop recipes)
 
 Unlike source-mirrored world quests, the six original workshop recipe definitions are now **generated from Codex**. The existing C++ `RegionalEconomy` executes these Codex-owned ingredients, quantities, profession/skill thresholds, workshop and outputs as before. The table is generated into `UnmadeCodexCraftingGenerated.inc`, automatically checked for drift alongside `UnmadeCodexGenerated.h`. This does not migrate vendor prices, inventory semantics, field recipes, or NPC stories yet: each needs a separately tested Codex-controlled rule adapter.
+
+## Codex-owned world graph (19 October 2026)
+
+The nine existing realm descriptions and all **13 actual realm-passages** are now sourced from the single Codex rather than copied into the world atlas. Each directed-record ID describes an **undirected** edge with an explicit minimum attunement tier (0–4), real endpoint dependencies, and a player-facing checklist; neither a map pin nor a planned route grants the ability to visit an unbuilt Unreal level. The generator writes `Source/TheUnmadeGame/Public/World/UnmadeCodexAtlasGenerated.inc`, compiled directly into the existing `UnmadeWorldAtlas.h` route planner. C++ route tests prove late realms cannot be reached below the original attunement threshold and that realm names/stages still agree with the Codex. Identity, source map coordinates, map-build claims and saved quest outcomes are unchanged.

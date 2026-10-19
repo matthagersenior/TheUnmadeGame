@@ -68,6 +68,40 @@ def generate_crafting(codex):
     out.append("}};")
     return "\n".join(out)+"\n"
 
+
+ATLAS_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexAtlasGenerated.inc"
+PASSAGE_IDS=(
+ ("ThreefoldReach","WidowedRain"),("ThreefoldReach","HearthBeneath"),
+ ("WidowedRain","TidalLedger"),("WidowedRain","SkyBelow"),
+ ("HearthBeneath","SkyBelow"),("HearthBeneath","CinderSpine"),
+ ("TidalLedger","HundredUnlived"),("SkyBelow","HundredUnlived"),
+ ("SkyBelow","OrchardOfKings"),("CinderSpine","OrchardOfKings"),
+ ("HundredUnlived","FirstAbsence"),("OrchardOfKings","FirstAbsence"),
+ ("TidalLedger","CinderSpine")
+)
+
+def generate_atlas(codex):
+    by={row["id"]:row for row in codex["records"]}
+    out=["// GENERATED FROM Authoring/ability_codex.json. Do not hand-edit.",
+         "// These tables live inside namespace UnmadeCore after RealmSpec and AtlasPassage.",
+         "inline constexpr std::array<RealmSpec,static_cast<int>(Realm::Count)> WorldAtlas = {{"]
+    for index,key in enumerate(REALMS):
+        row=by["realm."+key]
+        info=row["rule_contract"]
+        values=("Realm::"+key,quote(row["name"]),quote(info["landscape"]),
+                quote(info["civilization"]),quote(row["summary"]),
+                quote(info["rare_reward_theme"]),str(info["stage"]))
+        out.append("    {"+",".join(values)+"}"+("" if index==8 else ","))
+    out.extend(["}};","inline constexpr std::array<AtlasPassage,13> AtlasPassages = {{"])
+    for index,(origin,destination) in enumerate(PASSAGE_IDS):
+        ref="passage."+str(index+1).zfill(2)+"."+origin+"."+destination
+        record=by[ref]["rule_contract"]
+        if record["from"]!="realm."+origin or record["to"]!="realm."+destination or not record["bidirectional"] or record["source_index"]!=index:
+            raise ValueError("Codex route edge identity drift "+ref)
+        out.append("    {Realm::"+origin+",Realm::"+destination+","+str(record["minimum_attunement"])+"}"+("" if index==12 else ","))
+    out.append("}};")
+    return "\n".join(out)+"\n"
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
@@ -75,9 +109,13 @@ def main():
     codex=json.loads(CODEX.read_text(encoding="utf-8"))
     generated=generate(codex)
     crafting=generate_crafting(codex)
+    atlas=generate_atlas(codex)
     if args.check:
         if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
             print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")
+            return 1
+        if not ATLAS_OUTPUT.is_file() or ATLAS_OUTPUT.read_text(encoding="utf-8")!=atlas:
+            print("FAIL: Codex-generated world atlas or passage graph differs from authoring.")
             return 1
         if not CRAFT_OUTPUT.is_file() or CRAFT_OUTPUT.read_text(encoding="utf-8")!=crafting:
             print("FAIL: Codex-generated crafting rules differ from canonical recipe data.")
@@ -86,7 +124,8 @@ def main():
         return 0
     OUTPUT.write_text(generated,encoding="utf-8")
     CRAFT_OUTPUT.write_text(crafting,encoding="utf-8")
-    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT))
+    ATLAS_OUTPUT.write_text(atlas,encoding="utf-8")
+    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT))
     return 0
 
 if __name__=="__main__":raise SystemExit(main())

@@ -141,6 +141,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/ability_study_test.cpp -o /tmp/unmade-study
           /tmp/unmade-study
+      - name: Test Codex-owned world realms and attunement-gated passages
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_realm_route_test.cpp -o /tmp/unmade-codex-routes
+          /tmp/unmade-codex-routes
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check

@@ -494,3 +494,7 @@ The study and Atlas checklist labels are now compiled from Codex-generated C++ t
 ## 2026-10-19 — Codex-owned workshop crafting recipe authority
 
 All six workshop RecipeDef table entries are now **generated from the canonical Codex recipe contracts**, compiled via `#include "Items/UnmadeCodexCraftingGenerated.inc"` inside the existing deterministic crafting engine. The generator and static CI verify that the executable recipe names, profession requirements, location, materials, quantities and outputs are exactly Codex-authored. This is actual rule-data migration, not only a searchable catalog. It preserves the previous RecipeId enumeration ordering, recipe outputs, atomic inventory transaction model, NPC/market restrictions and schema-1 saves. General craft/economy behavior outside these six recipes is still sourced from its existing stateful runtime models.
+
+## 2026-10-19 — Travel topology becomes Codex rule data
+
+The original nine-world atlas and thirteen bidirectional connecting routes, including the correct 0–4 attunement tiers, are now compiled from the unified Codex. Reality remains bounded by actual play: a planned path is not a generated realm, a validated quest, or evidence that a world is built. The realm-passages preserve the exact pre-migration graph; no new shortcut, historical explanation or access to the Place Before Place is granted. Source C++ pathfinding still requires correct attunement. A portable route test enforces parity and prevents reaching First Absence below tier four. Unreal-level loading remains unverified.

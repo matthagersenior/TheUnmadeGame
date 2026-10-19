@@ -44,6 +44,18 @@ class AbilityCodexContract(unittest.TestCase):
         self.assertEqual(len([x for x in self.codex["records"] if x["category"]=="settlement"]),3)
         self.assertGreaterEqual(len(self.codex["records"]),243)
 
+    def test_codex_passages_have_no_free_shortcuts(self):
+        routes=[x for x in self.codex["records"] if x["category"]=="realm_passage"]
+        self.assertEqual(len(routes),13)
+        for edge in routes:
+            self.assertIn(edge["rule_contract"]["minimum_attunement"],range(5))
+            self.assertEqual(len(edge["depends_on"]),2)
+            self.assertTrue(edge["rule_contract"]["bidirectional"])
+        changed=deepcopy(self.codex)
+        ref=next(x for x in changed["records"] if x["id"].startswith("passage.11."))
+        ref["rule_contract"]["minimum_attunement"]=0
+        self.assertTrue(any("passage.11." in e for e in validate(ROOT,changed)))
+
     def test_invalid_dependency_rejected(self):
         changed=deepcopy(self.codex)
         row=next(x for x in changed["records"] if x["id"]=="journey.wing.FirstAbsence")
