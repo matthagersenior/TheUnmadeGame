@@ -321,6 +321,27 @@ FString AUnmadePrototypeHub::GetCinderholdResidentLine(FName Id) const
         TEXT("You told me you killed the elder. I will tend whoever walks that road, but I would have wanted you to try the cadence.");
     return FString();
 }
+bool AUnmadePrototypeHub::GetCinderholdAccordRoutineTarget(FName Id,bool bNight,FVector& Out)const
+{
+    if(bNight||bCinderholdSaveRejected||bExpeditionSaveRejected||
+       Cinderhold.Save().route!=4)return false;
+    // Resident work changes only after that person was actually told.
+    // This routine uses the NPC's ordinary navmesh movement, not teleport.
+    if(Id==FName(TEXT("npc.cinderhold.blackslag.scout.001"))&&
+       Cinderhold.Has(UnmadeCore::VardaReported)){
+        Out=FVector(-3190,53310,100);return true;
+    }
+    if(Id==FName(TEXT("npc.cinderhold.emberwarden.001"))&&
+       Cinderhold.Has(UnmadeCore::RhevaTold)){
+        Out=FVector(-2780,52480,100);return true;
+    }
+    if(Id==FName(TEXT("npc.cinderhold.healer.001"))&&
+       Cinderhold.Has(UnmadeCore::OvennaTold)){
+        Out=FVector(-3380,52880,100);return true;
+    }
+    return false;
+}
+
 FString AUnmadePrototypeHub::GetCinderholdJournal()const
 {
     if(bCinderholdSaveRejected)return TEXT("Cinderhold adventure snapshot rejected; original data protected.");
