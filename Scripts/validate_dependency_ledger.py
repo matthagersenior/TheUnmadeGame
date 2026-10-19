@@ -85,7 +85,7 @@ def validate(data: dict) -> list[str]:
     field = rows("Items/UnmadeFieldCraftRules.h", r'\{"([^"]+)",Profession::(\w+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}')
     error_if(len(recipes) < 6 or len(field) < 9, "craft recipe source parser is incomplete", errors)
     for recipe in recipes:
-        add(recipe[9], "workshop", recipe[1])
+        add(recipe[9], "workshop", recipe[0])
     for recipe in field:
         add(recipe[6], "field_recipe", recipe[0])
     for item in re.findall(r'case ItemId::(\w+):\s*base=\d+;break;', read(PUBLIC + craft)):
@@ -108,9 +108,12 @@ def validate(data: dict) -> list[str]:
     realm_ids = [x[0] for x in expedition]
     city_to_realm = {x[1]: x[0] for x in expedition}
     equal_ids(all_gear, [f"gear:{r}:{kind}" for r in realm_ids for kind in ("weapon","armor")], "regional gear", errors)
+    study = re.search(
+        r'enum class StudyId\s*:\s*int\s*\{([^}]+)\}', read(PUBLIC + "World/UnmadeAbilityStudyRules.h")).group(1)
+    study_ids = re.findall(r'(\w+)\s*=\s*\d+', study)
     rites = rows("World/UnmadeTenfoldChronicle.h", r'\{RiteId::(\w+),Discipline::(\w+),"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)"')
     error_if(len(rites) < 10, "RiteSpecs parse expected original ten rites", errors)
-    equal_ids(all_skills, ["skill:rite:" + x[0] for x in rites] + ["skill:technique:" + x[0] for x in expedition], "skills", errors)
+    equal_ids(all_skills, ["skill:rite:" + x[0] for x in rites] + ["skill:technique:" + x[0] for x in expedition] + ["skill:study:" + x for x in study_ids], "skills", errors)
     for id, disc, title, site, teacher, _, advertised in rites:
         skill = all_skills.get("skill:rite:" + id, {})
         quest = all_quests.get("quest:rite:" + id, {})
@@ -198,6 +201,7 @@ def validate(data: dict) -> list[str]:
                        ["quest:faction:"+e[0] for e in faction] +
                        ["quest:depth:"+e for e in realm_ids] +
                        ["quest:identity:"+e for e in realm_ids] +
+                       ["quest:study:"+x for x in study_ids] +
                        ["quest:local:BellwoldLanterns","quest:local:PaperhavenTestimony","quest:local:Afterlight",
                         "quest:frontier:WidowedRain","quest:frontier:HearthBeneath"])
     equal_ids(all_quests, expected_quests, "major quest registry", errors)
