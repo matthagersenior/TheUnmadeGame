@@ -104,6 +104,10 @@ Creatures: 12 distinct species silhouettes (and slightly larger champion visual 
 
 **Player and inventory:** the 60 individual item rows are tied to `ItemId`, kind, rarity and their specific story description. Equip appearance, VFX, crafting, and UI icon decisions remain for actual Unreal build and assets. Player remains a neutral early prototype silhouette; do not conflate it with any one player progression path.
 
+## Approved asset replacement workflow
+
+The asset replacement rule is to preserve every original collision owner, stable ID, source-of-truth interaction and save-backed visibility until a genuine cooked asset has been tested. Choose an item's final silhouette and finish from the CSV before changing its in-game representation. A replacement is considered finished only when actual Unreal visuals, collisions, gameplay and performance have been inspected.
+
 ## Specific art and QA decisions, in order
 
 1. **Critical / first-person proximity E checks:** Inspect from gameplay camera, with text disabled; can a player distinguish a real mechanism, private note, gate, monster windup, shelter, civic record and collectible? Any object only understood from a floating caption fails.
