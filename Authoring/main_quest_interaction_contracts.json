@@ -124,7 +124,7 @@
           "interaction": "Inspect either physical evidence object, never resolve by dialogue text alone",
           "objective": "Carry supplies through the contested neighborhood and speak to local witnesses",
           "speaker": "npc.bellwold.matron.001",
-          "line": "I hold a document proving this bell was never made. Your ears aren't evidence, but neither is my paper complete.",
+          "line": "Get these supplies to the refuge. A roof should not depend on what anyone can prove about that bell.",
           "evidence_tags": [
             "Reach.Bell.Remembered",
             "Reach.Paperhaven.AbsenceRecord"
@@ -139,8 +139,8 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Choose shelter or research testimony with a clear permanent preview",
           "speaker": "npc.archivist.001",
-          "line": "The bell's last note is missing. Is that silence part of the road, or proof someone cut it short?",
-          "design_notes": "The unanswered interval is the bell without a last note.",
+          "line": "The document says no bell was made. I heard it. What could make both accounts true?",
+          "design_notes": "The unanswered interval is the bell without a last note. Set the document's denial beside the archivist's hearing and leave the cause unresolved.",
           "physical_tag": "Reach.CrossingsWitness",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
@@ -176,8 +176,8 @@
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
           "objective": "Inspect the saved physical consequence and speak with an individual resident.",
           "speaker": "npc.archivist.001",
-          "line": "You came back. Did your choice keep the shelter lantern in use, or make the missing record open to inspection?",
-          "design_notes": "Return staging note: Local evidence should let a stranger trace shelter and archive route options; residents remember only the side they witnessed.",
+          "line": "You came back. The bell road carries the mark your choices left. I'll record what it shows and leave the rest to its witnesses.",
+          "design_notes": "Return staging note: Let the visible change carry the cumulative choices saved for this route. The archivist records what the change shows; residents speak only from what they witnessed or learned.",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits"
