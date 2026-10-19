@@ -1726,6 +1726,8 @@ bool AUnmadeCharacter::PersistStudy()
     }
     Save->AbilityStudySelection=SelectedStudy;
     Save->bHasAbilityStudy=true;
+    Save->PlayerStrain=FractureModel.CurrentStrain();
+    Save->bHasFractureSnapshot=true;
     return UnmadeSave::SaveGameToSlot(Save);
 }
 
@@ -1788,7 +1790,7 @@ bool AUnmadeCharacter::NearEchoStudySite()const
 
 FString AUnmadeCharacter::GetStudyJournal()const
 {
-    FString Out=TEXT("ABILITY STUDY / authored firsthand research (5 Observe, 6 Progress, 7 Use, 8 Cycle)\n");
+    FString Out=TEXT("ABILITY STUDY / authored firsthand research (5 Observe, 9 Progress, 0 Use, O Cycle)\n");
     static const TCHAR* Stages[]={TEXT("unknown"),TEXT("observed"),TEXT("understood"),
                                   TEXT("experimented"),TEXT("mastered")};
     for(int i=0;i<UnmadeCore::StudyCount;++i)
@@ -1802,7 +1804,7 @@ FString AUnmadeCharacter::GetStudyJournal()const
     }
     Out+=TEXT("Enemy research: record a live warning, then land actual contact; Echo Well: approach site and corroborate via Strain.\n");
     Out+=TEXT("Understanding requires both signals, then two paid live experiments and physical mastery.\n");
-    Out+=AbilityStudy.AtlasReady()?TEXT("Atlas of Absence ready: return to Echo Well and select Memory Lens, then press 6.\n")
+    Out+=AbilityStudy.AtlasReady()?TEXT("Atlas of Absence ready: return to Echo Well and select Memory Lens, then press 9.\n")
         :TEXT("Atlas of Absence: master Memory Lens and any two distinct enemy principles.\n");
     return Out;
 }
@@ -1810,8 +1812,9 @@ FString AUnmadeCharacter::GetStudyJournal()const
 void AUnmadeCharacter::StudyNext()
 {
     if(IsRpgMenuOpen())return;
+    const int32 Before=SelectedStudy;
     SelectedStudy=(SelectedStudy+1)%UnmadeCore::StudyCount;
-    if(!PersistStudy())UE_LOG(LogTemp,Warning,TEXT("Study selection not yet saved; no progression granted."));
+    if(!PersistStudy()){SelectedStudy=Before;UE_LOG(LogTemp,Warning,TEXT("Study selection save failed; previous selection restored."));}
     if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Cyan,GetStudyJournal());
 }
 
@@ -1868,7 +1871,7 @@ void AUnmadeCharacter::StudyProgress()
             FractureModel.Recover(8.0/UnmadeCore::FractureModel::RecoveryPerSecond);
             return;
         }
-        if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Cyan,TEXT("Echo Well corroborated. Press 6 again to understand."));
+        if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Cyan,TEXT("Echo Well corroborated. Press 9 again to understand."));
         return;
     }
     if(Stage==UnmadeCore::StudyStage::Observed)
@@ -1925,7 +1928,7 @@ void AUnmadeCharacter::StudyProgress()
             return;
         }
         if(GEngine)UnmadeRpgFeedback(-1,8.f,FColor::Yellow,
-            FString::Printf(TEXT("MASTERED: %s. The earned technique is now usable (press 7)."),
+            FString::Printf(TEXT("MASTERED: %s. The earned technique is now usable (press 0)."),
                 UTF8_TO_TCHAR(UnmadeCore::StudyNames[SelectedStudy])));
         TryClaimAtlas();
     }
@@ -1968,6 +1971,11 @@ void AUnmadeCharacter::StudyUse()
         if(AbilityStudy.CanCombine(UnmadeCore::StudyId::RedactionEye,UnmadeCore::StudyId::EchoWell))
             Enemy->ExposeToFold(Now,8.0);
         Ward=SelectedStudy==3?2:0;
+    }
+    if(!PersistStudy())
+    {
+        FractureModel.Recover(9.0/UnmadeCore::FractureModel::RecoveryPerSecond);
+        return;
     }
     if(Ward>0&&IsValid(Equipment))
     {
