@@ -99,6 +99,7 @@ void AUnmadeEnemyCharacter::ConfigureCinderholdElder()
 void AUnmadeEnemyCharacter::ConfigureCreature(UnmadeCore::CreatureKind Kind,bool bChampion)
 {
     bElderEncounter=bChampion;
+    SpeciesKind=Kind;
     Profile=UnmadeCore::CreatureStats(Kind,bChampion);
     ConfigureStyle(Profile.style);
     Combat->Configure(Profile.health,Profile.damage,Profile.cooldown);
