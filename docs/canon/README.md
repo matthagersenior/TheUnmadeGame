@@ -4,11 +4,11 @@
 
 [Browse the ledger](dependency-ledger.json).
 
-The ledger ties five otherwise independent registries together: **60 ordinary inventory items, 18 separately owned regional weapon/armor choices, 19 learned disciplines/techniques, 39 named encounters, and 95 grouped quests**. Content is grouped by source family rather than by every NPC interaction; the latter remain tracked by the C++ encounter code.
+The ledger ties five otherwise independent registries together: **60 ordinary inventory items, 18 separately owned regional weapon/armor choices, 23 learned disciplines/techniques/studies, 39 named encounters, and 99 grouped quests**. Content is grouped by source family rather than by every NPC interaction; the latter remain tracked by the C++ encounter code.
 
 ## What this ledger guarantees
 
-- Every ordinary item has a source-backed grant, vendor, recipe or unique forge, **or is explicitly reserved**. Multiple legitimate ways to obtain an item are recorded separately.
+- Every ordinary item has a source-backed grant, vendor, recipe or unique forge, **or its defined-only/unwired award is disclosed**. A grant switch without a reachable in-game claim is not silently treated as earned. Multiple legitimate ways to obtain an item are recorded separately.
 - Each regional expedition presents two mutually exclusive equipment rewards and a learned selectable technique. These are not silently added to `ItemCatalog`.
 - Every learned ability has a physical inscription/teacher or a prerequisite quest. A grant description cannot authorize an invented skill.
 - Every named boss has a location, access conditions, attacks, resolution routes, and a saved consequence or reward. Killing and pacification are not interchangeable.
@@ -28,11 +28,13 @@ python -m unittest Scripts.tests.test_dependency_ledger -v
 
 The validator runs in GitHub's **Static checks** on push and PR. It reads actual source registries and compares item IDs, names, stats and acquisitions; regional weapons/armor and their values; rite teachers, quests and mastery rewards; 3 original bosses, 9 expedition bosses, 9 wing guardians, 6 Echo guardians, 11 road elders, and Nhal-Vey; plus the major quest families, exact aftermath branches, and links. It fails with a `CANON DRIFT` diagnostic if a source change is not reconciled here, or if ledger references are dangling.
 
+The ledger also references [the full 182-entry Ability Codex](../../Authoring/ability_codex.json), covering inherent powers, combat, professions, learned rites, observed enemy patterns and equipment-related capabilities; the validator checks that every codex record retains its source and acquisition. The four newly defined firsthand studies are separately indexed until their real gameplay integration is accepted.
+
 The validator deliberately fails closed if an existing C++ registry stops matching its recognizable literal format. If the registry changes shape, update the parser and test within the same PR rather than suppressing a failing gate.
 
 ## Already identified open conflicts
 
-1. **AtlasOfAbsence** exists as a mythic charm but has no source grant, shop, forge, or recipe. It is correctly marked `reserved` until a legitimate acquisition route is implemented.
+1. **AtlasOfAbsence** now has an `AtlasOfAbsenceMastery` reward-switch case and an `AbilityStudy::AtlasReady()` prerequisite (three studies mastered including Echo Well). Its actual gameplay claim trigger is not yet verified, so the ledger marks it `declared_unwired`, not player-obtainable.
 2. **TomorrowDebt** rite prose advertises *The Unpaid Sunrise*, but the actual awarded item is `FutureReceipt`, named *Tomorrow's Paid Receipt*. Both names are recorded to expose the mismatch—not silently declared equivalent.
 3. **Main campaign versus atlas attunement** needs a clean-save traversal acceptance test. Optional exploration rewards currently raise travel attunement; verify that the player can reach Auvren without unintentionally mandating optional questlines.
 
