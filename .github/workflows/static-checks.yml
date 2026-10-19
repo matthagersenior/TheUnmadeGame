@@ -123,6 +123,8 @@ jobs:
         run: python Scripts/validate_hygiene.py
       - name: Test release publication and interrupted-run recovery
         run: node Scripts/tests/source_release_test.cjs
+      - name: Check source-backed items, skills, bosses, quest rewards and persistent aftermath
+        run: python Scripts/validate_dependency_ledger.py
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
       - name: Enforce lore continuity on gameplay source commits

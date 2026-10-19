@@ -22,7 +22,7 @@ class ProvenanceWiring(unittest.TestCase):
         config=source("Config/DefaultInput.ini")
         self.assertIn('ActionName="EvidenceNotebook",Key=F9',config)
         self.assertIn('BindAction("EvidenceNotebook"',player)
-        self.assertIn("Hub->GetEvidenceNotebook();",player)
+        self.assertIn('Hub->GetEvidenceNotebook()+TEXT("\\n\\n")+GetStudyJournal()',player)
         self.assertIn('World.WitnessBraidShelter',player)
         self.assertIn('World.WitnessBraidDocket',player)
         self.assertNotIn('World.WitnessBraidResolved',player)
