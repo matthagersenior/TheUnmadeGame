@@ -34,7 +34,7 @@ The validator deliberately fails closed if an existing C++ registry stops matchi
 
 ## Already identified open conflicts
 
-1. **AtlasOfAbsence** now has an `AtlasOfAbsenceMastery` reward-switch case and an `AbilityStudy::AtlasReady()` prerequisite (three studies mastered including Echo Well). Its actual gameplay claim trigger is not yet verified, so the ledger marks it `declared_unwired`, not player-obtainable.
+1. **AtlasOfAbsence** now has an `AtlasOfAbsenceMastery` reward-switch case and an `AbilityStudy::AtlasReady()` prerequisite (three studies mastered including Echo Well). The current main branch also wires its player claim and persistence; the ledger now marks it earnable in source. Engine compilation and player acquisition still require testing.
 2. **TomorrowDebt** rite prose advertises *The Unpaid Sunrise*, but the actual awarded item is `FutureReceipt`, named *Tomorrow's Paid Receipt*. Both names are recorded to expose the mismatch—not silently declared equivalent.
 3. **Main campaign versus atlas attunement** needs a clean-save traversal acceptance test. Optional exploration rewards currently raise travel attunement; verify that the player can reach Auvren without unintentionally mandating optional questlines.
 
