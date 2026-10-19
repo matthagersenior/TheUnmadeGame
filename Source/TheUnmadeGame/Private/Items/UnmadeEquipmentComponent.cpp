@@ -105,7 +105,7 @@ bool UUnmadeEquipmentComponent::Persist(double UpdatedStrain)
     return UnmadeSave::SaveGameToSlot(Save);
 }
 
-FIntPoint UUnmadeEquipmentComponent::NativeGearBonuses()const{int attack=Inventory.AttackBonus(),armor=Inventory.ArmorBonus();for(int slot=0;slot<2;++slot)if((slot==0?Loadout.weapon:Loadout.armor)>=0)if(auto* item=UnmadeCore::FindItem(Inventory.Equipped(static_cast<UnmadeCore::GearSlot>(slot)))){attack-=item->attack;armor-=item->armor;}return FIntPoint(FMath::Max(0,attack+TemporaryAttack+ExpeditionAttack+BuildAttack),FMath::Max(0,armor+TemporaryArmor+ExpeditionArmor+BuildArmor));}
+FIntPoint UUnmadeEquipmentComponent::NativeGearBonuses()const{int attack=Inventory.AttackBonus(),armor=Inventory.ArmorBonus();for(int slot=0;slot<2;++slot)if((slot==0?Loadout.weapon:Loadout.armor)>=0)if(auto* item=UnmadeCore::FindItem(Inventory.Equipped(static_cast<UnmadeCore::GearSlot>(slot)))){attack-=item->attack;armor-=item->armor;}return FIntPoint(FMath::Max(0,attack+TemporaryAttack+StudyAttack+ExpeditionAttack+BuildAttack),FMath::Max(0,armor+TemporaryArmor+StudyArmor+ExpeditionArmor+BuildArmor));}
 void UUnmadeEquipmentComponent::RefreshCombatBonuses(){auto* p=Cast<AUnmadeCharacter>(GetOwner());if(p&&p->GetCombat()){auto b=NativeGearBonuses();p->GetCombat()->SetGearBonuses(b.X,b.Y);}}
 
 bool UUnmadeEquipmentComponent::Claim(UnmadeCore::Achievement Reward)
