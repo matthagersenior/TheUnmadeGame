@@ -9,12 +9,7 @@
     "definition_only": "registered but no verified usable unlock",
     "proposed": "future design, not available to player"
   },
-  "observation_policy": {
-    "evidence": "record witness identity and firsthand provenance",
-    "research": "observe, infer, trial, master, then combine; no automatic copying",
-    "consent": "respect the subject's consent and existing mystery",
-    "unlock": "new unlocks require persistent save state and executable physical tests"
-  },
+  "observation_policy": "A witnessed repeating principle may be studied, but not automatically copied. The first playable study slice implements three named creature subjects and the physical Echo Well; additional abilities require authored evidence, trials, bounded effects and save integrity.",
   "records": [
     {
       "limitations": [],
@@ -1867,9 +1862,12 @@
       "slot": "Charm",
       "stack_cap": 1,
       "acquisition": {
-        "method": "future-reserved; no legitimate acquisition path established",
+        "method": "three_firsthand_masteries_at_echo_well",
         "requirements": [
-          "future-reserved; no legitimate acquisition path established"
+          "Witness and master Memory Lens at the physical Echo Well",
+          "Master two different enemy-derived research techniques",
+          "Return to Echo Well and invoke Study Progress to claim the once-only award",
+          "Claim succeeds only if validated, persisted study evidence exists and charm slot inventory has room"
         ]
       },
       "effect": {
@@ -1878,13 +1876,19 @@
         "armor": 12,
         "healing": 0,
         "strain_recovery": 0,
-        "distinct_effects": []
+        "distinct_effects": [
+          "Equipped charm: Glimpse Strain discount 4",
+          "Equipped charm: Fold duration +2 seconds (even while using regional weapon)"
+        ]
       },
       "cost": {},
       "duration": "while equipped",
-      "implementation": "definition_only",
+      "implementation": "prototype_handler",
       "sources": [
-        "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
+        "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Items/UnmadeEquipmentComponent.h"
       ]
     },
     {
@@ -7015,6 +7019,209 @@
       "implementation": "prototype_handler",
       "sources": [
         "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
+      ]
+    },
+    {
+      "id": "study.Cinderjaw",
+      "name": "Kiln Ward",
+      "category": "earned_study_ability",
+      "summary": "Temporarily grants +5 armor; with Memory Lens increases duration from 6 to 9 seconds; with Redaction Read exposes a nearby foe.",
+      "acquisition": {
+        "method": "observed_understood_experimented_mastered",
+        "requirements": [
+          "Observe Cinderjaw warning and land a real hit; understand, complete two paid experiments, master at a live Cinderjaw.",
+          "No automatic copying; firsthand provenance required",
+          "Confirmed local target with line of sight"
+        ]
+      },
+      "effect": {
+        "kind": "learned_combat",
+        "detail": "Temporarily grants +5 armor; with Memory Lens increases duration from 6 to 9 seconds; with Redaction Read exposes a nearby foe."
+      },
+      "cost": {
+        "strain_per_activation": 9,
+        "activation_cooldown_seconds": 18,
+        "experiment_strain": 10,
+        "experiment_cooldown_seconds": 8,
+        "mastery_strain": 5,
+        "other_actions": "Pale Strider dodge also consumes stamina"
+      },
+      "duration": "bounded active effect; mastery persists per save profile",
+      "limitations": [
+        "4 authored subjects only in this initial slice",
+        "Only selected subject with completed mastery can be invoked",
+        "Temporary bonuses clear after expiration and do not replace other gear bonuses"
+      ],
+      "modifications": [
+        "paired mastery alters effect and duration"
+      ],
+      "combines_with": [
+        "study.EchoWell",
+        "study.RedactionEye"
+      ],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": true,
+        "unlock_path": "confirmed firsthand warning or Echo Well, corroboration, understanding, two physical experiments and mastery"
+      },
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+      ]
+    },
+    {
+      "id": "study.PaleStrider",
+      "name": "Seam Step",
+      "category": "earned_study_ability",
+      "summary": "Executes actual stamina-priced evasive dodge launch; paired with Memory Lens adds a 2-armor, 3-second ward.",
+      "acquisition": {
+        "method": "observed_understood_experimented_mastered",
+        "requirements": [
+          "Observe Pale Strider warning and land a real hit; understand, complete two paid experiments, master at a live Pale Strider.",
+          "No automatic copying; firsthand provenance required",
+          "Confirmed local target with line of sight"
+        ]
+      },
+      "effect": {
+        "kind": "learned_combat",
+        "detail": "Executes actual stamina-priced evasive dodge launch; paired with Memory Lens adds a 2-armor, 3-second ward."
+      },
+      "cost": {
+        "strain_per_activation": 9,
+        "activation_cooldown_seconds": 18,
+        "experiment_strain": 10,
+        "experiment_cooldown_seconds": 8,
+        "mastery_strain": 5,
+        "other_actions": "Pale Strider dodge also consumes stamina"
+      },
+      "duration": "bounded active effect; mastery persists per save profile",
+      "limitations": [
+        "4 authored subjects only in this initial slice",
+        "Only selected subject with completed mastery can be invoked",
+        "Temporary bonuses clear after expiration and do not replace other gear bonuses"
+      ],
+      "modifications": [
+        "paired mastery alters effect and duration"
+      ],
+      "combines_with": [
+        "study.EchoWell"
+      ],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": true,
+        "unlock_path": "confirmed firsthand warning or Echo Well, corroboration, understanding, two physical experiments and mastery"
+      },
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+      ]
+    },
+    {
+      "id": "study.RedactionEye",
+      "name": "Redaction Read",
+      "category": "earned_study_ability",
+      "summary": "Exposes a nearby real enemy for 6 seconds, rising to 8 seconds combined with Memory Lens; pairs with Kiln Ward for an interrupting defense.",
+      "acquisition": {
+        "method": "observed_understood_experimented_mastered",
+        "requirements": [
+          "Observe Redaction Eye warning and land a real hit; understand, complete two paid experiments, master at a live Redaction Eye.",
+          "No automatic copying; firsthand provenance required",
+          "Confirmed local target with line of sight"
+        ]
+      },
+      "effect": {
+        "kind": "learned_combat",
+        "detail": "Exposes a nearby real enemy for 6 seconds, rising to 8 seconds combined with Memory Lens; pairs with Kiln Ward for an interrupting defense."
+      },
+      "cost": {
+        "strain_per_activation": 9,
+        "activation_cooldown_seconds": 18,
+        "experiment_strain": 10,
+        "experiment_cooldown_seconds": 8,
+        "mastery_strain": 5,
+        "other_actions": "Pale Strider dodge also consumes stamina"
+      },
+      "duration": "bounded active effect; mastery persists per save profile",
+      "limitations": [
+        "4 authored subjects only in this initial slice",
+        "Only selected subject with completed mastery can be invoked",
+        "Temporary bonuses clear after expiration and do not replace other gear bonuses"
+      ],
+      "modifications": [
+        "paired mastery alters effect and duration"
+      ],
+      "combines_with": [
+        "study.EchoWell",
+        "study.Cinderjaw"
+      ],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": true,
+        "unlock_path": "confirmed firsthand warning or Echo Well, corroboration, understanding, two physical experiments and mastery"
+      },
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+      ]
+    },
+    {
+      "id": "study.EchoWell",
+      "name": "Memory Lens",
+      "category": "earned_study_ability",
+      "summary": "Exposes a real nearby foe for 4 seconds; in combination with Redaction Read extends it to 8 seconds and grants a 2-armor ward.",
+      "acquisition": {
+        "method": "observed_understood_experimented_mastered",
+        "requirements": [
+          "Visit the physical Echo Well; record firsthand observation, corroborate for 8 Strain, understand, perform two 10-Strain experiments and master at the well.",
+          "No automatic copying; firsthand provenance required",
+          "Confirmed local target with line of sight"
+        ]
+      },
+      "effect": {
+        "kind": "learned_combat",
+        "detail": "Exposes a real nearby foe for 4 seconds; in combination with Redaction Read extends it to 8 seconds and grants a 2-armor ward."
+      },
+      "cost": {
+        "strain_per_activation": 9,
+        "activation_cooldown_seconds": 18,
+        "experiment_strain": 10,
+        "experiment_cooldown_seconds": 8,
+        "mastery_strain": 5,
+        "other_actions": "Pale Strider dodge also consumes stamina"
+      },
+      "duration": "bounded active effect; mastery persists per save profile",
+      "limitations": [
+        "4 authored subjects only in this initial slice",
+        "Only selected subject with completed mastery can be invoked",
+        "Temporary bonuses clear after expiration and do not replace other gear bonuses"
+      ],
+      "modifications": [
+        "paired mastery alters effect and duration"
+      ],
+      "combines_with": [
+        "study.RedactionEye",
+        "study.Cinderjaw"
+      ],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": true,
+        "unlock_path": "confirmed firsthand warning or Echo Well, corroboration, understanding, two physical experiments and mastery"
+      },
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
       ]
     }
   ]
