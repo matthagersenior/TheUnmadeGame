@@ -210,6 +210,52 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
     _expect(issues, len(fields), 9, "field recipe count")
     for i, name in enumerate(fields):
         check(f"recipe.field.realm.{i}", "name", name)
+    # The first actual learned abilities are distinct from raw enemy attacks.
+    study_source = source("Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h")
+    study_ids = re.search(r'enum class StudyId : int \{([^}]+)\}', study_source)
+    if study_ids is None:
+        issues.append("missing stable study subject enum")
+    else:
+        subjects = [p.split("=")[0].strip() for p in study_ids[1].split(",")]
+        _expect(issues, subjects, ["Cinderjaw", "PaleStrider", "RedactionEye", "EchoWell", "Count"],
+                "study subject IDs must be append-only")
+        for subject in subjects[:-1]:
+            entry = by_id.get("study." + subject)
+            if not entry:
+                issues.append(f"missing learned ability for firsthand subject {subject}")
+                continue
+            check("study." + subject, "implementation", "prototype_handler")
+            check("study." + subject, "cost.strain_per_activation", 9)
+            check("study." + subject, "cost.activation_cooldown_seconds", 18)
+            check("study." + subject, "observation.automatically_learnable", False)
+            check("study." + subject, "acquisition.method", "observed_understood_experimented_mastered")
+    atlas = by_id.get("item.charm.atlas")
+    if atlas:
+        check("item.charm.atlas", "implementation", "prototype_handler")
+        check("item.charm.atlas", "acquisition.method", "three_firsthand_masteries_at_echo_well")
+        expected_effects = ["Equipped charm: Glimpse Strain discount 4",
+                            "Equipped charm: Fold duration +2 seconds (even while using regional weapon)"]
+        check("item.charm.atlas", "effect.distinct_effects", expected_effects)
+    player = source("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
+    items = source(ITEMS)
+    saves = source("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
+    for token in ("AbilityStudy.AtlasReady()", "NearEchoStudySite()",
+                  "Achievement::AtlasOfAbsenceMastery", "bool AUnmadeCharacter::PersistStudy()",
+                  "UnmadeSave::SaveGameToSlot(Save)", "RecordStudyEvidence(Id,1)",
+                  "AbilityStudy.Experiment(Id)", "AbilityStudy.Master(Id)",
+                  "Enemy->IsActivelyTelegraphing(Now)", "Before>Target->GetCombat()->GetHealth()",
+                  "Enemy->ExposeToFold"):
+        if token not in player:
+            issues.append(f"ability-study gameplay linkage missing: {token}")
+    for token in ("case Achievement::AtlasOfAbsenceMastery:",
+                  "charm==ItemId::AtlasOfAbsence ? 4",
+                  "Equipped(GearSlot::Charm)==ItemId::AtlasOfAbsence ? 2"):
+        if token not in items:
+            issues.append(f"Atlas award/effect source missing: {token}")
+    for token in ("bHasAbilityStudy", "AbilityStudyStages", "AbilityStudyEvidence",
+                  "AbilityStudyTrials", "AbilityStudySelection"):
+        if token not in saves:
+            issues.append(f"save-backed Ability Study source missing: {token}")
     return issues
 
 
@@ -233,11 +279,12 @@ def main() -> int:
                     not r["observation"].get("currently_usable_by_player", True)]
         gear_only = [r for r in doc["records"] if r["category"] == "equipment"
                      and not r["effect"].get("distinct_effects")]
-        print(f"GAPS: {len(missing)} definition-only; {len(observed)} observable enemy patterns "
-              f"not currently learnable; {len(gear_only)} equipment definitions with only basic bonuses")
+        print(f"GAPS: {len(missing)} definition-only; {len(observed)} enemy patterns not directly transferable; "
+              f"{len(gear_only)} equipment definitions with only basic bonuses; "
+              f"{counts.get('earned_study_ability', 0)} authored learnable variants")
         for row in missing:
             print("  FUTURE:", row["name"])
-    print("NOTE: Unreal compilation, gameplay and observation-based power acquisition NOT proven.")
+    print("NOTE: four gameplay study paths are wired in Unreal source; Unreal Editor compile and playtesting remain unverified.")
     return 0
 
 
