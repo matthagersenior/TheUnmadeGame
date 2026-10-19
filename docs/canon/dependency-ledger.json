@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "edition": "2026-10-19",
-  "authority": "C++ game source; ledger is an enforceable cross-system index, not a compiled/PIE-tested Unreal release.",
+  "authority": "C++ source and Authoring/ability_codex.json remain mechanical/ability references; this ledger is the enforceable cross-system index. UE runtime not verified.",
   "policy": {
     "discovery": "Must be physically earned and sourced; testimony is not omniscience.",
     "choices": "Exclusive care/truth and defeat/mercy state must never both resolve the same quest.",
@@ -12,8 +12,8 @@
   "exceptions": [
     {
       "id": "AtlasOfAbsence",
-      "type": "no_acquisition",
-      "description": "Item catalog entry has no milestone, recipe, shop or forge route. Reserved and cannot be marketed as obtainable."
+      "type": "unwired_milestone",
+      "description": "Achievement::AtlasOfAbsenceMastery now grants Atlas of Absence in source, but the acquisition has not been verified wired from AbilityStudy::AtlasReady() through a live claim and save. Do not label obtainable until gameplay awards it."
     },
     {
       "id": "TomorrowDebt",
@@ -680,8 +680,14 @@
       "armor": 12,
       "heal": 0,
       "strain_recovery": 0,
-      "acquisition": [],
-      "availability": "reserved",
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "AtlasOfAbsenceMastery",
+          "detail": "Award switch exists in current main; no gameplay caller has been confirmed to claim this milestone after AtlasReady() study mastery."
+        }
+      ],
+      "availability": "declared_unwired",
       "source": "Items/UnmadeItemRules.h"
     },
     {
@@ -1736,6 +1742,50 @@
       "learning_quest": "quest:rite:Cartography",
       "mastery_reward": "item:CoastTrueAtlas",
       "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:study:Cinderjaw",
+      "name": "Kiln Ward / Cinderjaw",
+      "discipline": "Firsthand Study",
+      "realm": "Encounter territory",
+      "teacher_or_source": "Two independent direct observations of a living Cinderjaw encounter",
+      "learning_quest": "quest:study:Cinderjaw",
+      "mastery_reward": "world:learned_skill:Cinderjaw",
+      "source": "World/UnmadeAbilityStudyRules.h",
+      "implementation": "portable_rules; verify live acquisition and consumption in Unreal"
+    },
+    {
+      "id": "skill:study:PaleStrider",
+      "name": "Seam Step / Pale Strider",
+      "discipline": "Firsthand Study",
+      "realm": "Encounter territory",
+      "teacher_or_source": "Two independent direct observations of a living PaleStrider encounter",
+      "learning_quest": "quest:study:PaleStrider",
+      "mastery_reward": "world:learned_skill:PaleStrider",
+      "source": "World/UnmadeAbilityStudyRules.h",
+      "implementation": "portable_rules; verify live acquisition and consumption in Unreal"
+    },
+    {
+      "id": "skill:study:RedactionEye",
+      "name": "Redaction Read / Redaction Eye",
+      "discipline": "Firsthand Study",
+      "realm": "Encounter territory",
+      "teacher_or_source": "Two independent direct observations of a living RedactionEye encounter",
+      "learning_quest": "quest:study:RedactionEye",
+      "mastery_reward": "world:learned_skill:RedactionEye",
+      "source": "World/UnmadeAbilityStudyRules.h",
+      "implementation": "portable_rules; verify live acquisition and consumption in Unreal"
+    },
+    {
+      "id": "skill:study:EchoWell",
+      "name": "Memory Lens / Echo Well",
+      "discipline": "Firsthand Study",
+      "realm": "ThreefoldReach",
+      "teacher_or_source": "Two independent signals at the physical Echo Well",
+      "learning_quest": "quest:study:EchoWell",
+      "mastery_reward": "world:learned_skill:EchoWell",
+      "source": "World/UnmadeAbilityStudyRules.h",
+      "implementation": "portable_rules; verify live acquisition and consumption in Unreal"
     }
   ],
   "bosses": [
@@ -4549,6 +4599,94 @@
         "item:EmberheartBlade"
       ],
       "source": "World/UnmadeFrontierRealmRules.h"
+    },
+    {
+      "id": "quest:study:Cinderjaw",
+      "name": "Study: Kiln Ward / Cinderjaw",
+      "realm": "Creature encounter territory",
+      "entry": "Physically observe Cinderjaw and collect two independent firsthand evidence bits before understanding.",
+      "choices": [
+        "Test the inference twice using valid paid physical trial",
+        "Keep the ability unmastered until evidence is convincing"
+      ],
+      "aftermath": [
+        "Source study state becomes Mastered only after two real experiments, and can combine with another mastered Study. This is a saved personal knowledge outcome, not a claim of civic/world changes yet."
+      ],
+      "rewards": [
+        "skill:study:Cinderjaw"
+      ],
+      "source": "World/UnmadeAbilityStudyRules.h",
+      "status": "source_rule; visual/world response not yet verified"
+    },
+    {
+      "id": "quest:study:PaleStrider",
+      "name": "Study: Seam Step / Pale Strider",
+      "realm": "Creature encounter territory",
+      "entry": "Physically observe PaleStrider and collect two independent firsthand evidence bits before understanding.",
+      "choices": [
+        "Test the inference twice using valid paid physical trial",
+        "Keep the ability unmastered until evidence is convincing"
+      ],
+      "aftermath": [
+        "Source study state becomes Mastered only after two real experiments, and can combine with another mastered Study. This is a saved personal knowledge outcome, not a claim of civic/world changes yet."
+      ],
+      "rewards": [
+        "skill:study:PaleStrider"
+      ],
+      "source": "World/UnmadeAbilityStudyRules.h",
+      "status": "source_rule; visual/world response not yet verified"
+    },
+    {
+      "id": "quest:study:RedactionEye",
+      "name": "Study: Redaction Read / Redaction Eye",
+      "realm": "Creature encounter territory",
+      "entry": "Physically observe RedactionEye and collect two independent firsthand evidence bits before understanding.",
+      "choices": [
+        "Test the inference twice using valid paid physical trial",
+        "Keep the ability unmastered until evidence is convincing"
+      ],
+      "aftermath": [
+        "Source study state becomes Mastered only after two real experiments, and can combine with another mastered Study. This is a saved personal knowledge outcome, not a claim of civic/world changes yet."
+      ],
+      "rewards": [
+        "skill:study:RedactionEye"
+      ],
+      "source": "World/UnmadeAbilityStudyRules.h",
+      "status": "source_rule; visual/world response not yet verified"
+    },
+    {
+      "id": "quest:study:EchoWell",
+      "name": "Study: Memory Lens / Echo Well",
+      "realm": "ThreefoldReach",
+      "entry": "Physically observe EchoWell and collect two independent firsthand evidence bits before understanding.",
+      "choices": [
+        "Test the inference twice using valid paid physical trial",
+        "Keep the ability unmastered until evidence is convincing"
+      ],
+      "aftermath": [
+        "Source study state becomes Mastered only after two real experiments, and can combine with another mastered Study. This is a saved personal knowledge outcome, not a claim of civic/world changes yet."
+      ],
+      "rewards": [
+        "skill:study:EchoWell"
+      ],
+      "source": "World/UnmadeAbilityStudyRules.h",
+      "status": "source_rule; visual/world response not yet verified"
     }
-  ]
+  ],
+  "codex": {
+    "path": "Authoring/ability_codex.json",
+    "role": "Canonical wide ability/discoverability index, linked rather than copied to avoid conflicting mechanics. Validator audits every codex record for acquisition and source provenance.",
+    "required_categories": [
+      "inherent",
+      "rite",
+      "field_technique",
+      "fundamental_combat",
+      "enemy_creature_pattern",
+      "enemy_boss_pattern",
+      "enemy_realm_guardian",
+      "enemy_wing_guardian",
+      "enemy_expedition_boss",
+      "enemy_final_boss"
+    ]
+  }
 }
