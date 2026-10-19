@@ -1,5 +1,6 @@
 #pragma once
 // Optional local adventure. No wage, inventory, campaign or ending authority.
+// The documented shared route is earned at an actual workstone, witnessed locally.
 #include <cmath>
 #include <cstdint>
 namespace UnmadeCore {
