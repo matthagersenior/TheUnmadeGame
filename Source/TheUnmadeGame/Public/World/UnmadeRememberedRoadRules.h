@@ -24,6 +24,12 @@ public:
   state_.cities[i].resolution=result;return true;
  }
  bool Choose(int i,int route)noexcept{if(!Ready(i)||route<1||route>3||state_.cities[i].route)return false;state_.cities[i].route=route;return true;}
+ // Only Cinderhold's saved and physically earned accord may be inherited.
+ // Ordinary cargo and Rewrite controls cannot issue this fourth route.
+ bool InheritCinderholdAccord(int i,bool documented)noexcept{
+  if(i!=4||!documented||!Ready(i)||state_.cities[i].route||state_.cities[i].resolution!=2)return false;
+  state_.cities[i].route=4;return true;
+ }
  bool Maintain(int i,double now)noexcept{
   if(!Ready(i)||state_.cities[i].route||!Time(now)||now<nextTurn_[i])return false;
   nextTurn_[i]=now+2;return ++turns_[i]>=3?Choose(i,1):false;
@@ -72,7 +78,7 @@ public:
  bool Glimpse(int i,double now)noexcept{if(!ValidCity(i)||!Time(now)||now<glimpse_[i])return false;glimpse_[i]=now+3;return true;}
  bool Fold(int i,double now)noexcept{if(!ValidCity(i)||!Time(now)||FoldActive(i,now))return false;fold_[i]=now+6;if(Cooling(i,now))cool_[i]=now+18;return true;}
  bool FoldActive(int i,double now)const noexcept{return ValidCity(i)&&Time(now)&&now<fold_[i];}
- bool LaneOpen(int i,bool daylight)const noexcept{return ValidCity(i)&&(state_.cities[i].route==2||(state_.cities[i].route==1&&daylight));}
+ bool LaneOpen(int i,bool daylight)const noexcept{return ValidCity(i)&&(state_.cities[i].route==2||state_.cities[i].route==4||(state_.cities[i].route==1&&daylight));}
  bool RecessOpen(int i)const noexcept{return ValidCity(i)&&state_.cities[i].route!=2;}
  int TotalUnits()const noexcept{int n=state_.cargoCity>=0?1:0;for(const auto& c:state_.cities)n+=c.stock;return n;}
  std::vector<int> Pack()const{
@@ -90,8 +96,9 @@ public:
   int pending=0;
   for(int i=0;i<RoadCityCount;++i){const auto& c=s.cities[i];
    for(int d:{c.briefDay,c.departDay,c.arrivalDay,c.reportDay,c.returnDay})if(d<0||d>day)return false;
-   if(c.clues<0||c.clues>7||c.resolution<0||c.resolution>2||c.route<0||c.route>3||c.returnRoute<0||c.returnRoute>3)return false;
+   if(c.clues<0||c.clues>7||c.resolution<0||c.resolution>2||c.route<0||c.route>(i==4?4:3)||c.returnRoute<0||c.returnRoute>(i==4?4:3))return false;
    if(c.resolution==2&&c.clues!=7)return false;
+   if((c.route==4||c.returnRoute==4)&&(i!=4||c.resolution!=2))return false;
    if(c.route&&(!c.briefDay||c.clues!=7||!c.resolution))return false;
    if(c.departDay&&(!c.route||c.departDay<c.briefDay))return false;
    if(c.arrivalDay&&(!c.departDay||c.arrivalDay<c.departDay))return false;

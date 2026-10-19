@@ -39,7 +39,9 @@ bool LocalSight(UWorld* World,AUnmadeCharacter* Player,FVector Target,double Lim
 }
 const TCHAR* RouteName(int Route){return Route==1?TEXT("hand-maintained, daylight kiln path"):
     Route==2?TEXT("permanently open vent; kiln path open, archive sealed"):
-    Route==3?TEXT("permanently sealed vent; archive open, kiln path shut"):TEXT("route undecided");}
+    Route==3?TEXT("permanently sealed vent; archive open, kiln path shut"):
+    Route==4?TEXT("witnessed communal heat accord; both kiln and archive passages open"):
+    TEXT("route undecided");}
 }
 
 bool AUnmadePrototypeHub::CommitCinderhold(const UnmadeCore::CinderholdAdventure& Before,AUnmadeCharacter* StrainOwner)
@@ -102,6 +104,9 @@ void AUnmadePrototypeHub::BuildCinderholdAdventure()
     Sign(FVector(-3300,51130,170),TEXT("BLACKSLAG FIELDWORK - COVERED WEST PATH / OPTIONAL"));
     Sign(FVector(-3680,52900,100),TEXT("ARCHIVE ALCOVE - OLD SERVICE COPIES KEPT DRY"));
     SpawnBlock(FVector(-3670,52900,45),FVector(.8,.6,.9),TEXT("Cinderhold.Adventure.ServiceCopies"));
+    // A separate reachable civic worksite, not a second free vent button.
+    SpawnBlock(FVector(-3190,53310,35),FVector(.9,.8,.65),TEXT("Cinderhold.Adventure.SharedKilnAccord"));
+    Sign(FVector(-3190,53310,145),TEXT("E - COMMUNITY KILN ACCORD / QUIET ELDER + WITNESSES + REAL FRACTURE"));
     CinderholdHomeSign=Sign(HomeShelf+FVector(0,0,90),TEXT("E - INSPECT BES'S RETURN SHELF"));
 }
 
@@ -135,9 +140,9 @@ void AUnmadePrototypeHub::RefreshCinderholdAdventure()
 bool AUnmadePrototypeHub::TryCinderholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq)
 {
     if(!Able(Player)||!GetWorld())return false;
-    const FVector Targets[6]={SlagClues[0],SlagClues[1],SlagClues[2],SlagVent,SlagCadence,HomeShelf};
+    const FVector Targets[7]={SlagClues[0],SlagClues[1],SlagClues[2],SlagVent,SlagCadence,HomeShelf,FVector(-3190,53310,75)};
     int Closest=-1;double Distance=FMath::Min(CompetingNpcDistanceSq,FMath::Square(240.0));
-    for(int i=0;i<6;++i){
+    for(int i=0;i<7;++i){
         // Completed shelf no longer consumes household relief/pay interactions.
         if(i==5&&Cinderhold.Has(UnmadeCore::ReturnedHome))continue;
         const double D=FVector::DistSquared(Player->GetActorLocation(),Targets[i]);
@@ -178,7 +183,7 @@ bool AUnmadePrototypeHub::TryCinderholdInteraction(AUnmadeCharacter* Player,doub
                 if(CommitCinderhold(Before)){SlagSound(GetWorld(),TEXT("cadence"),SlagCadence);Notice(TEXT("Two short knocks. A pause. One low knock. The elder settles beside the cooled vent; it is alive. Decide the route, then tell Varda."));}
             }else Notice(TEXT("The elder will not answer an invented signal. Read all three clues, cool the vent, then return here before it reheats."));
         }
-    }else{
+    }else if(Closest==5){
         const auto House=BesHousehold.Save();
         const auto* Worker=LivingTrades.Worker(UnmadeCore::Realm::HearthBeneath);
         if(bBesHouseholdRejected||bLivingEconomyRejected||!Worker){Notice(TEXT("Household evidence is unavailable; return cannot be recorded."),FColor::Red);return true;}
@@ -187,6 +192,22 @@ bool AUnmadePrototypeHub::TryCinderholdInteraction(AUnmadeCharacter* Player,doub
         if((Changed||Returned)&&!CommitCinderhold(Before))return true;
         if(Returned)PlayCinderholdScene(3);
         else Notice(FString::Printf(TEXT("Bes's return shelf: %d real heat baskets, %d remembered cold days, %d marks still owed. Hear Varda, resolve Blackslag, report to her, then tell Bes and return here."),House.heatBaskets,House.daysCold,Worker->owedMarks));
+    }
+    else if(Closest==6){
+        // This cannot be unlocked by a narrated guess. The player must have
+        // physically entered Cinderhold's first expedition chamber (saved),
+        // listened to Bes and Varda, learned the three Blackslag facts and
+        // quieted the living elder. It is a fourth, non-Rewrite local outcome.
+        const bool FirsthandFracture=!bExpeditionSaveRejected&&
+            Expeditions.Arc(2)&&(Expeditions.Arc(2)->rooms&1)!=0;
+        Changed=Cinderhold.ChooseSharedAccord(FirsthandFracture);
+        if(Changed){
+            if(CommitCinderhold(Before)){
+                Notice(TEXT("SHARED KILN ACCORD: the observed reversed ember, Varda's log, Bes's testimony and a spared elder guide the vent. Kiln and archive gates physically open, including at night. Tell Varda and Bes; neither wages nor household fuel have been paid."));
+            }
+        }else if(Cinderhold.Save().route!=0)
+            Notice(TEXT("Your earlier route is already committed. This accord cannot overwrite the history of that decision."));
+        else Notice(TEXT("The communal accord needs all three Blackslag clues, Bes and Varda's firsthand accounts, a living quieted elder, and a real entry into Cinderhold's first fracture chamber. Neither a boss win nor a distant report substitutes."));
     }
     NextCinderholdRefreshAt=0;RefreshCinderholdAdventure();return true;
 }
@@ -275,28 +296,59 @@ FString AUnmadePrototypeHub::GetCinderholdResidentLine(FName Id) const
     if(bCinderholdSaveRejected)return FString();
     const auto S=Cinderhold.Save();
     if(Id==FName(TEXT("npc.cinderhold.blackslag.scout.001"))){
+        if(Cinderhold.Has(UnmadeCore::VardaReported)&&S.route==4)return TEXT("You brought me both witnessed hearth accounts and the impossible ember trace. I witnessed your communal kiln route after your report; the archive and kiln stay open. Bes still needs actual fuel and lawful pay.");
         if(Cinderhold.Has(UnmadeCore::VardaReported))return FString::Printf(
             TEXT("You reported the elder %s and chose %s. I recorded your fieldwork; I did not witness Bes's wages."),S.resolution==2?TEXT("quieted alive"):TEXT("defeated"),RouteName(S.route));
         if(Cinderhold.Has(UnmadeCore::VardaBriefed))return TEXT("You heard my warning. Read the west-path tracks, service log and cadence plate. The elder will settle only while its vent is cool; you can also face it. Bring the result to me yourself.");
     }
     if(Id==FName(TEXT("npc.cinderhold.courier.001"))){
+        if(Cinderhold.Has(UnmadeCore::ReturnedHome)&&S.route==4)return FString::Printf(
+            TEXT("You returned on day %d after establishing the shared kiln. I saw both passages reopen, not a receipt for the %d marks owed. Our home still counted %d heat baskets and %d cold days."),S.returnDay,S.returnedOwed,S.returnedHeat,S.returnedColdDays);
         if(Cinderhold.Has(UnmadeCore::ReturnedHome))return FString::Printf(
             TEXT("You came home again on day %d, after telling me what happened at Blackslag. We counted %d baskets, %d cold days and %d unpaid marks that day. I remember the visit; the current ledger may have changed since."),S.returnDay,S.returnedHeat,S.returnedColdDays,S.returnedOwed);
+        if(Cinderhold.Has(UnmadeCore::BesReported)&&S.route==4)return TEXT("You told me the shared kiln is open and the elder still lives. I can travel at night; the heat baskets and the unpaid marks are still separate debts.");
         if(Cinderhold.Has(UnmadeCore::BesReported))return FString::Printf(TEXT("You told me the elder was %s. I remember the %s. Come back to the shelf at home; the fuel and the wage ledger still tell their own truth."),S.resolution==2?TEXT("left alive"):TEXT("killed"),RouteName(S.route));
         if(Cinderhold.Has(UnmadeCore::BesHeard))return TEXT("You stopped to hear me. Varda keeps a service log west of Blackslag. A safer road matters, but it cannot sign my pay mark.");
     }
+    if(Id==FName(TEXT("npc.cinderhold.emberwarden.001"))&&Cinderhold.Has(UnmadeCore::RhevaTold)&&S.route==4)return
+        TEXT("Varda gave us your verified common-kiln route. We can tend both night passages without sealing the archive; the original withheld warmth is still on the ledger.");
     if(Id==FName(TEXT("npc.cinderhold.emberwarden.001"))&&Cinderhold.Has(UnmadeCore::RhevaTold))return
         TEXT("You brought Varda's field report to me. I can put that route on the work board; the unpaid entry remains a separate obligation.");
+    if(Id==FName(TEXT("npc.cinderhold.healer.001"))&&Cinderhold.Has(UnmadeCore::OvennaTold)&&S.route==4)return
+        TEXT("I heard how you quieted the elder and showed the reverse ember. Both passages are now walkable; I still need to visit the cold homes myself.");
     if(Id==FName(TEXT("npc.cinderhold.healer.001"))&&Cinderhold.Has(UnmadeCore::OvennaTold))return S.resolution==2?
         TEXT("You told me you quieted the elder alive. I prefer a road that leaves room for another living thing. Tell me too if the houses stay cold."):
         TEXT("You told me you killed the elder. I will tend whoever walks that road, but I would have wanted you to try the cadence.");
     return FString();
 }
+bool AUnmadePrototypeHub::GetCinderholdAccordRoutineTarget(FName Id,bool bNight,FVector& Out)const
+{
+    if(bNight||bCinderholdSaveRejected||bExpeditionSaveRejected||
+       Cinderhold.Save().route!=4)return false;
+    // Resident work changes only after that person was actually told.
+    // This routine uses the NPC's ordinary navmesh movement, not teleport.
+    if(Id==FName(TEXT("npc.cinderhold.blackslag.scout.001"))&&
+       Cinderhold.Has(UnmadeCore::VardaReported)){
+        Out=FVector(-3190,53310,100);return true;
+    }
+    if(Id==FName(TEXT("npc.cinderhold.emberwarden.001"))&&
+       Cinderhold.Has(UnmadeCore::RhevaTold)){
+        Out=FVector(-2780,52480,100);return true;
+    }
+    if(Id==FName(TEXT("npc.cinderhold.healer.001"))&&
+       Cinderhold.Has(UnmadeCore::OvennaTold)){
+        Out=FVector(-3380,52880,100);return true;
+    }
+    return false;
+}
+
 FString AUnmadePrototypeHub::GetCinderholdJournal()const
 {
     if(bCinderholdSaveRejected)return TEXT("Cinderhold adventure snapshot rejected; original data protected.");
     const auto S=Cinderhold.Save();
     FString Text=FString(UTF8_TO_TCHAR(Cinderhold.Objective()))+TEXT(" | ")+RouteName(S.route);
+    if(S.route==4)Text+=TEXT(" | DISCOVERY CONSEQUENCE: two physical gates and a witnessed shared route persist; local residents learn only when told. Bes still holds a separate debt.");
+    else if(!S.route)Text+=TEXT(" | ALTERNATIVE: investigate the first Cinderhold expedition fracture and the three Blackslag clues; spare the elder, then inspect the communal accord stone.");
     if(Cinderhold.Has(UnmadeCore::ReturnedHome))Text+=FString::Printf(
         TEXT(" | Returned day %d: hearth %d baskets, remembered cold %d days, Bes owed %d marks at that visit."),S.returnDay,S.returnedHeat,S.returnedColdDays,S.returnedOwed);
     return Text;

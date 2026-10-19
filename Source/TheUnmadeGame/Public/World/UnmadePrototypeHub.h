@@ -137,6 +137,8 @@ public:
     bool TryCinderholdAbility(AUnmadeCharacter* Player,int32 Ability,int32 Choice=0);
     bool RecordCinderholdConversation(FName StableId);
     FString GetCinderholdResidentLine(FName StableId) const;
+    /** Local work routine unlocked only after the resident receives the saved report. */
+    bool GetCinderholdAccordRoutineTarget(FName Id,bool bNight,FVector& Out) const;
     FString GetCinderholdJournal() const;
     bool RecordCinderholdElderDefeat(class AUnmadeEnemyCharacter* Elder);
     bool IsCinderholdElderResolved() const { return !bCinderholdSaveRejected&&Cinderhold.Resolved(); }

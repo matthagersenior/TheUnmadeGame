@@ -29,7 +29,7 @@ int main(){
  // Restore fails atomically, including dependent/corrupt values and future days.
  for(int field=0;field<10;++field){auto bad=saved;
  switch(field){case 0:bad.version=2;break;case 1:bad.memories=256;break;case 2:bad.clues=8;break;
- case 3:bad.resolution=3;break;case 4:bad.route=4;break;case 5:bad.firstDay=5;break;
+ case 3:bad.resolution=3;break;case 4:bad.route=5;break;case 5:bad.firstDay=5;break;
  case 6:bad.returnDay=5;break;case 7:bad.returnedHeat=-1;break;case 8:bad.returnedColdDays=5;break;
  case 9:bad.returnedOwed=-1;break;}
  assert(!restored.Restore(bad,4));assert(restored.Save().returnedOwed==6);}

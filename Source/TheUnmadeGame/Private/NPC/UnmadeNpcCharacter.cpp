@@ -201,6 +201,19 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
                     Speed=Role==UnmadeCore::NpcRole::Courier?105.0:80.0;
                     StopRadius=115.0;
                 }
+                else
+                {
+                    // Emergency duty overrides ordinary civic work. Only an
+                    // informed Cinderhold resident can take the shared shift.
+                    FVector AccordSite;
+                    if(CachedHub->GetCinderholdAccordRoutineTarget(NpcId,
+                        Phase==UnmadeCore::DayPhase::Night,AccordSite))
+                    {
+                        Target={AccordSite.X,AccordSite.Y};
+                        Speed=72.0;
+                        StopRadius=105.0;
+                    }
+                }
             }
         }
         // Saved daytime civic work is chosen only for routine actors. Urgent
