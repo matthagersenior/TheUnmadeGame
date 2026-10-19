@@ -47,7 +47,7 @@ enum class Achievement : int {
     RiteParadoxConvergence, RiteOathbinding, RiteCartography,
     ConfluenceSilentAlarm, ConfluenceTwoNames, ConfluenceUnmappedWay,
     ConfluenceTomorrowPromise, ConfluenceTwoKeepers, ConfluenceFirstAbsence,
-    AfterlightShelter, AfterlightNames, Count
+    AfterlightShelter, AfterlightNames, AtlasOfAbsenceMastery, Count
 };
 struct ItemDef {
     ItemId id;
@@ -200,10 +200,11 @@ public:
     int GlimpseStrainDiscount() const noexcept {
         const auto charm=Equipped(GearSlot::Charm);
         return charm==ItemId::ReturnedVoice ? 3
-            : charm==ItemId::PaperhavenLens ? 2 : 0;
+            : charm==ItemId::PaperhavenLens ? 2 : charm==ItemId::AtlasOfAbsence ? 4 : 0;
     }
     int FoldDurationBonus() const noexcept {
-        return Equipped(GearSlot::Weapon)==ItemId::Waybreaker ? 3 : 0;
+        return (Equipped(GearSlot::Weapon)==ItemId::Waybreaker ? 3 : 0)+
+               (Equipped(GearSlot::Charm)==ItemId::AtlasOfAbsence ? 2 : 0);
     }
     double RecoveryMultiplier() const noexcept {
         return Equipped(GearSlot::Charm)==ItemId::UnwrittenCrown ? 1.5 : 1.0;
@@ -276,6 +277,7 @@ public:
         case Achievement::ConfluenceFirstAbsence: okay=add(ItemId::FirstAbsenceWitness,1);break;
         case Achievement::AfterlightShelter: okay=add(ItemId::AfterlightWard,1);break;
         case Achievement::AfterlightNames: okay=add(ItemId::UnredactedLantern,1);break;
+        case Achievement::AtlasOfAbsenceMastery: okay=add(ItemId::AtlasOfAbsence,1);break;
         default: return RewardResult::Invalid;
         }
         if(!okay)return RewardResult::NoRoom;
