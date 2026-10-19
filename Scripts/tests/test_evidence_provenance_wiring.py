@@ -23,7 +23,7 @@ class ProvenanceWiring(unittest.TestCase):
         self.assertIn('ActionName="EvidenceNotebook",Key=F9',config)
         self.assertIn('BindAction("EvidenceNotebook"',player)
         notebook = player.split("void AUnmadeCharacter::ShowEvidenceNotebook()", 1)[1].split(
-            "\\nvoid AUnmadeCharacter::", 1)[0]
+            "void AUnmadeCharacter::", 1)[0]
         self.assertIn("Hub->GetEvidenceNotebook()", notebook)
         self.assertIn("GetStudyJournal()", notebook)
         self.assertIn("UnmadeRpgFeedback", notebook)
