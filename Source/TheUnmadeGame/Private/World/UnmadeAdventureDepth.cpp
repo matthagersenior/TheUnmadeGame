@@ -48,7 +48,7 @@ void AUnmadePrototypeHub::BuildAdventureDepth(){
    if(DepthCrossRealmReceiptSigns[a].IsValid())DepthCrossRealmReceiptSigns[a]->SetActorHiddenInGame(true);
   for(int n=0;n<3;++n){Sign(Control(a,n),FString::Printf(TEXT("E - ROUTE CONTROL %d"),n+1));SpawnBlock(Control(a,n)+FVector(0,0,-60),FVector(.6,.6,.7),FName(TEXT("DepthControl")));}
   for(int site=0;site<(a==0?5:3);++site)for(int n=0;n<3;++n){SpawnBlock(Shop(a,n,site)+FVector(0,0,-70),FVector(2,1,.5),FName(TEXT("FrontierService")));Sign(Shop(a,n,site),n==0?TEXT("PROVISIONER / E BUY RECOVERY / FINITE DAILY STOCK"):n==1?TEXT("CRAFT BENCH / E MAKE FIELD KIT / LOCAL FAVOR"):TEXT("TRAINER / E LEARN TECHNIQUE / THREE MASTERY LEVELS"));}
-  auto Object=[&](FVector at,FVector scale,FName tag){auto* actor=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(actor){auto* m=actor->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(scale);actor->Tags.Add(tag);}return actor;};
+  auto Object=[&](FVector at,FVector scale,FName tag){auto* actor=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(actor){auto* m=actor->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(scale);actor->Tags.Add(tag);StyleWorldProp(actor,tag,scale);}return actor;};
 
   // Physical incoming-record review: no free witness, quest or reward.
   auto* review=Object(Shop(a,0,0)+FVector(550,800,-75),FVector(1.2,.24,1.3),
