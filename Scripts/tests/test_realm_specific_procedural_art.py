@@ -48,6 +48,14 @@ int main(){
  assert(ClassifyRealmProp("Absence.Aftermath.OriginDial",1,1,1).realm==8);
  assert(ClassifyRealmProp("Hub.Ground",52,52,1).role==VisualRole::Foundation);
  assert(ClassifyRealmProp("Expedition.8.CivicTruthRoute",7,8,.35).role==VisualRole::Foundation);
+ assert(ClassifyRealmProp("Later.0.Aftermath.Gate.Care",8,.55,3.2).realm==3);
+ assert(ClassifyRealmProp("Later.5.Trial.Route.Truth",8,6,.35).realm==8);
+ assert(ClassifyRealmProp("Atlas.Gateway.8.6",.42,.42,2.15).realm==8);
+ assert(ClassifyRealmProp("Depth.CivicWork.4.2",1,.3,1).realm==4);
+ assert(ClassifyRealmProp("Depth.Evidence.1",1,.6,.04).realm==1);
+ assert(ClassifyRealmProp("Depth.Cache.7",1,1,.5).realm==7);
+ assert(ClassifyRealmProp("CrossRealm.Review.5",1,.4,1).realm==5);
+ assert(ClassifyRealmProp("Later.9.Trial.Barrier",2,2,3).realm==-1);
  assert(ClassifyRealmProp("Expedition.99.Structure",1,1,1).realm==-1);
  assert(ClassifyRealmProp("Expedition.1x.Structure",1,1,1).realm==-1);
  assert(ClassifyRealmProp("",1,1,1).realm==-1);
@@ -84,6 +92,8 @@ int main(){
  def test_firsthand_fractures_still_nonblocking_and_realm_styled(self):
   expedition=read("Source/TheUnmadeGame/Private/World/UnmadeExpeditions.cpp")
   self.assertIn("StyleWorldProp(relic",expedition)
+  depth=read("Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp")
+  self.assertIn("StyleWorldProp(actor,tag,scale)",depth)
   self.assertIn("SetCollisionEnabled(ECollisionEnabled::NoCollision)",expedition)
   self.assertIn("FirstFracturePhysicals[a]",expedition)
 if __name__=="__main__":unittest.main()

@@ -126,7 +126,9 @@ inline VisualProp ClassifyRealmProp(const char* label,double sx,double sy,double
           VisualHas(label,"Ledger")||VisualHas(label,"Archive")||
           VisualHas(label,"Record")||VisualHas(label,"Fracture")||
           VisualHas(label,"Deed")||VisualHas(label,"Registry")||
-          VisualHas(label,"Board")||VisualHas(label,"Counterfoil")||
+          VisualHas(label,"Board")||VisualHas(label,"Cache")||
+          VisualHas(label,"Review")||VisualHas(label,"CivicWork")||
+          VisualHas(label,"Counterfoil")||
           VisualHas(label,"Common")||VisualHas(label,"Brace")||
           VisualHas(label,"Seam")||VisualHas(label,"Census")){
   result.role=VisualRole::Evidence;result.allowDecoration=true;

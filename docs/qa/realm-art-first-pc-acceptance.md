@@ -41,3 +41,5 @@ The nine landmark motifs use **distinct shapes**, not palette alone. Decorative 
 ## Production upgrade path
 
 Replace the procedural actors with cooked, authored modular meshes **one realm at a time**, keeping the same semantic tags, world centers, footprint/collision envelope, safe E-interaction distance and save-derived visibility. Art asset names should carry realm+role (e.g. `SM_Cinderhold_CommonVent_01`, `MI_Cinderhold_Stone`, `SM_Auvren_DoubleThreshold_01`), with separate LOD/collision and material profiles. Never change a stable ID just because a visual asset improved. This procedure protects the Atlas of Absence and witnesses from art-driven gameplay regression.
+
+The central style now covers the six later realm hubs and their gate/care/truth routes, both directions of atlas gateway markers, and nine-realm personal evidence, return accord work and physical cross-realm receipt review actors. These source-owned tags preserve the actual gameplay actor and save flag; color is conditional on cooking the material master.
