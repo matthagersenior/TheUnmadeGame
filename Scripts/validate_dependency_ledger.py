@@ -120,7 +120,24 @@ def validate(data: dict) -> list[str]:
         r'enum class StudyId\s*:\s*int\s*\{([^}]+)\}', read(PUBLIC + "World/UnmadeAbilityStudyRules.h")).group(1)
     study_ids = [id for id in re.findall(r'(\w+)\s*=\s*\d+', study) if id != "Count"]
     source_study = read(PUBLIC + "World/UnmadeAbilityStudyRules.h")
-    study_names = re.findall(r'"([^"]+)"', source_study.split("StudyNames={{", 1)[1].split("}};", 1)[0])
+    # StudyNames is now an alias to the generated canonical Codex; earlier
+    # literal array parsing fails after that legitimate migration.
+    if "StudyNames=CodexStudyNames" in source_study:
+        generated = read(PUBLIC + "World/UnmadeCodexGenerated.h")
+        marker = "CodexStudyNames = {{"
+        if marker not in generated or "}};" not in generated.split(marker, 1)[1]:
+            errors.append("generated CodexStudyNames array is missing")
+            study_names = []
+        else:
+            raw_names = re.findall(r'"([^"]+)"', generated.split(marker, 1)[1].split("}};", 1)[0])
+            # The runtime display appends / source-name for study detail,
+            # but the dependency ledger names the earned skill itself.
+            study_names = [name.split(" / ", 1)[0] for name in raw_names]
+    elif "StudyNames={{" in source_study:
+        study_names = re.findall(r'"([^"]+)"', source_study.split("StudyNames={{", 1)[1].split("}};", 1)[0])
+    else:
+        errors.append("StudyNames source moved without a canonical authoring contract")
+        study_names = []
     if len(study_ids) != len(study_names) or len(study_ids) < 4:
         errors.append("new firsthand Study registry or title parsing changed")
     for id, title in zip(study_ids, study_names):
