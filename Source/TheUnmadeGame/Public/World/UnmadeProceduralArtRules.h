@@ -77,7 +77,7 @@ inline int RealmForVisualTag(const char* label) noexcept {
    if(std::strncmp(label,prefix,length)!=0)return -1;
    const char digit=label[length];
    return digit>=('0'+first)&&digit<=('0'+last)&&
-      (label[length+1]=='.'||label[length+1]=='\\0')?
+      (label[length+1]=='.'||label[length+1]=='\0')?
       digit-'0'+offset:-1;
  };
  if(std::strncmp(label,"Expedition.",11)==0)
