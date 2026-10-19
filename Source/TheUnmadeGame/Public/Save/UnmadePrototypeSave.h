@@ -397,6 +397,7 @@ public:
     UPROPERTY(SaveGame) TArray<int32> AbilityStudyStages;
     UPROPERTY(SaveGame) TArray<int32> AbilityStudyEvidence;
     UPROPERTY(SaveGame) TArray<int32> AbilityStudyTrials;
+    UPROPERTY(SaveGame) int32 AbilityStudySelection=0;
 
     UPROPERTY(SaveGame) bool bHasUnifiedLoadout=false;
     UPROPERTY(SaveGame) TArray<int32> UnifiedRealmLoadout;
