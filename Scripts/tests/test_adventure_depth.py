@@ -6,7 +6,7 @@ class DepthContracts(unittest.TestCase):
  def test_authored_quests_distinct(self):
   rows=json.loads((ROOT/'Authoring/adventure_depth_v16.json').read_text())['realms']
   for f in builder.FIELDS:self.assertEqual(len({r[f] for r in rows}),9,f)
-  self.assertEqual(builder.build(),(ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h').read_text())
+  self.assertEqual(builder.build(),(ROOT/'Source/TheUnmadeGame/Public/World/UnmadeCodexPersonalQuestsGenerated.inc').read_text(encoding='utf-8'))
  def test_duplicate_combat_declaration_regression(self):
   s=(ROOT/'Source/TheUnmadeGame/Public/Combat/UnmadeCombatComponent.h').read_text();self.assertEqual(s.count('bool IsGuarding('),1)
  def test_choice_and_resource_receipts(self):

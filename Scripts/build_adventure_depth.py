@@ -1,14 +1,43 @@
 #!/usr/bin/env python3
+"""Protect historical personal quests and physical layouts against canonical Codex drift."""
 from pathlib import Path
-import argparse,json,re
+import argparse,json,re,sys
 ROOT=Path(__file__).resolve().parents[1]
-FIELDS=['quest','goal','offer','witness','evidence','option_a','option_b','return_a','return_b','challenge','secret_name','power','counterparty','witness_return_a','witness_return_b']
+sys.path.insert(0,str(ROOT))
+from Scripts.generate_unmade_codex import REALMS,PERSONAL_FIELDS,generate_personal_quests
+FIELDS=('quest','goal')+PERSONAL_FIELDS
+TARGET=ROOT/'Source/TheUnmadeGame/Public/World/UnmadeCodexPersonalQuestsGenerated.inc'
+WRAPPER=ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h'
+
 def build():
- rows=json.loads((ROOT/'Authoring/adventure_depth_v16.json').read_text())['realms'];assert len(rows)==9 and [x['realm_index'] for x in rows]==list(range(9));assert len({x['quest'] for x in rows})==9
- layout=(ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureLayout.h').read_text();coords=list(map(int,re.findall(r'-?\d+',layout.split('constexpr int paths[9][6][2]=')[1].split(';')[0])));assert coords==[v for row in rows for point in row['room_grid'] for v in point]
- return '#pragma once\nnamespace UnmadeCore {\nstruct DepthSpec{'+''.join('const char* '+k+';' for k in FIELDS)+'};\ninline constexpr DepthSpec DepthSpecs[]={\n'+''.join('{'+','.join(json.dumps(x[k]) for k in FIELDS)+'},\n' for x in rows)+'};\n}\n'
+    old=json.loads((ROOT/'Authoring/adventure_depth_v16.json').read_text(encoding='utf-8'))['realms']
+    canon=json.loads((ROOT/'Authoring/ability_codex.json').read_text(encoding='utf-8'))
+    by={row['id']:row for row in canon['records']}
+    if len(old)!=9 or [x['realm_index'] for x in old]!=list(range(9)):
+        raise ValueError('Personal quest saved indices drift')
+    coords=list(map(int,re.findall(r'-?\\d+', (ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureLayout.h').read_text().split('constexpr int paths[9][6][2]=')[1].split(';')[0])))
+    expected=[v for x in old for point in x['room_grid'] for v in point]
+    if coords!=expected:
+        raise ValueError('Personal quest physical dungeon layout drift')
+    for index,(key,old_row) in enumerate(zip(REALMS,old)):
+        row=by['quest.personal.'+key]
+        rule=row['rule_contract']
+        if row['name']!=old_row['quest'] or rule['source_order']!=index or rule['goal']!=old_row['goal']:
+            raise ValueError('Personal quest name/source ordinal drift: '+key)
+        for field in PERSONAL_FIELDS:
+            if rule[field]!=old_row[field]:
+                raise ValueError('Personal quest witness/choice continuity drift: '+key+'.'+field)
+        if rule['room_grid']!=old_row['room_grid']:
+            raise ValueError('Personal quest physical rooms changed: '+key)
+    if '#include "World/UnmadeCodexPersonalQuestsGenerated.inc"' not in WRAPPER.read_text(encoding='utf-8'):
+        raise ValueError('Personal quest gameplay no longer compiles Codex rules')
+    return generate_personal_quests(canon)
+
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args();out=ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h';s=build()
- if a.check:assert out.read_text()==s
- else:out.write_text(s)
- print('PASS: nine personal quest and exploration specifications')
+    parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');args=parser.parse_args()
+    generated=build()
+    if args.check:
+        if not TARGET.is_file() or TARGET.read_text(encoding='utf-8')!=generated:
+            raise SystemExit('FAIL: Codex personal quest rules need regeneration')
+    else:TARGET.write_text(generated,encoding='utf-8')
+    print('PASS: nine personal quest choices, witnesses and physical rooms match Codex')

@@ -141,6 +141,22 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/ability_study_test.cpp -o /tmp/unmade-study
           /tmp/unmade-study
+      - name: Test Codex-owned world realms and attunement-gated passages
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_realm_route_test.cpp -o /tmp/unmade-codex-routes
+          /tmp/unmade-codex-routes
+      - name: Verify Codex-owned expedition people, clues and alternative resolutions
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_expedition_rules_test.cpp -o /tmp/unmade-codex-expeditions
+          /tmp/unmade-codex-expeditions
+      - name: Test Codex-owned experience wing locations and saved witness variants
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_experience_rules_test.cpp -o /tmp/unmade-codex-wings
+          /tmp/unmade-codex-wings
+      - name: Protect Codex-owned Unanswered Road chapter order and evidence
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_campaign_spine_test.cpp -o /tmp/unmade-codex-campaign
+          /tmp/unmade-codex-campaign
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check

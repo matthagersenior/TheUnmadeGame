@@ -44,6 +44,70 @@ class AbilityCodexContract(unittest.TestCase):
         self.assertEqual(len([x for x in self.codex["records"] if x["category"]=="settlement"]),3)
         self.assertGreaterEqual(len(self.codex["records"]),243)
 
+    def test_codex_passages_have_no_free_shortcuts(self):
+        routes=[x for x in self.codex["records"] if x["category"]=="realm_passage"]
+        self.assertEqual(len(routes),13)
+        for edge in routes:
+            self.assertIn(edge["rule_contract"]["minimum_attunement"],range(5))
+            self.assertEqual(len(edge["depends_on"]),2)
+            self.assertTrue(edge["rule_contract"]["bidirectional"])
+        changed=deepcopy(self.codex)
+        ref=next(x for x in changed["records"] if x["id"].startswith("passage.11."))
+        ref["rule_contract"]["minimum_attunement"]=0
+        self.assertTrue(any("passage.11." in e for e in validate(ROOT,changed)))
+
+    def test_expedition_reward_and_mercy_are_distinct_and_source_owned(self):
+        journeys=[x for x in self.codex["records"] if x["id"].startswith("journey.expedition.")]
+        self.assertEqual(len(journeys),9)
+        for journey in journeys:
+            contract=journey["rule_contract"]
+            self.assertEqual(len(contract["people"]),5)
+            self.assertEqual(len(contract["clues"]),3)
+            self.assertNotEqual(contract["kill_return"],contract["mercy_return"])
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="journey.expedition.ThreefoldReach")
+        row["rule_contract"]["mercy_return"]=row["rule_contract"]["kill_return"]
+        self.assertTrue(any("mercy and combat must differ" in issue for issue in validate(ROOT,changed)))
+
+    def test_experience_wing_room_grid_and_scenes_are_source_owned(self):
+        records=[x for x in self.codex["records"] if x["id"].startswith("journey.wing.")]
+        self.assertEqual(len(records),9)
+        for row in records:
+            rule=row["rule_contract"]
+            self.assertEqual(len(rule["scenes"]),4)
+            self.assertEqual(len(rule["wing_grid"]),3)
+            self.assertTrue(all(len(pair)==2 for pair in rule["wing_grid"]))
+            self.assertNotEqual(rule["reserve_return"],rule["witness_return"])
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="journey.wing.ThreefoldReach")
+        row["rule_contract"]["scenes"]=[]
+        self.assertTrue(any("four scenes" in issue for issue in validate(ROOT,changed)))
+
+    def test_unanswered_road_chapters_are_codex_owned_and_ordered(self):
+        rows=[r for r in self.codex["records"] if r["id"].startswith("quest.campaign.")]
+        self.assertEqual(len(rows),9)
+        self.assertEqual({r["rule_contract"]["source_index"] for r in rows},set(range(9)))
+        for row in rows:
+            self.assertTrue(row["rule_contract"]["witnessed_discovery"])
+            self.assertTrue(row["rule_contract"]["next_direction"])
+        changed=deepcopy(self.codex)
+        row=next(r for r in changed["records"] if r["id"]=="quest.campaign.FirstAbsence")
+        row["rule_contract"]["source_index"]=0
+        self.assertTrue(any("changed the authored road order" in issue for issue in validate(ROOT,changed)))
+
+    def test_personal_quests_have_two_witnessed_and_mutually_exclusive_outcomes(self):
+        records=[x for x in self.codex["records"] if x["id"].startswith("quest.personal.")]
+        self.assertEqual(len(records),9)
+        for row in records:
+            c=row["rule_contract"]
+            self.assertNotEqual(c["option_a"],c["option_b"])
+            self.assertNotEqual(c["return_a"],c["return_b"])
+            self.assertNotEqual(c["witness_return_a"],c["witness_return_b"])
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="quest.personal.ThreefoldReach")
+        row["rule_contract"]["option_a"]=row["rule_contract"]["option_b"]
+        self.assertTrue(any("distinct saved social outcomes" in issue for issue in validate(ROOT,changed)))
+
     def test_invalid_dependency_rejected(self):
         changed=deepcopy(self.codex)
         row=next(x for x in changed["records"] if x["id"]=="journey.wing.FirstAbsence")

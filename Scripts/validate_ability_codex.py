@@ -17,12 +17,12 @@ CODEX = "Authoring/ability_codex.json"
 ITEMS = "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h"
 RITES = "Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h"
 CONFLUENCES = "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
-EXPEDITION = "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
+EXPEDITION = "Source/TheUnmadeGame/Public/World/UnmadeCodexExpeditionGenerated.inc"
 STYLES = "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
 CREATURES = "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
 BOSSES = "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
 GUARDIANS = "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
-EXPERIENCE = "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+EXPERIENCE = "Source/TheUnmadeGame/Public/World/UnmadeCodexExperienceGenerated.inc"
 CRAFT = "Source/TheUnmadeGame/Public/Items/UnmadeCraftEconomyRules.h"
 FIELD = "Source/TheUnmadeGame/Public/Items/UnmadeFieldCraftRules.h"
 FINAL = "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
@@ -221,7 +221,7 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
     for name in (x.split("=")[0].strip() for x in final.split(",")):
         check("enemy.final." + name, "name", "Nhal-Vey: " + name)
 
-    for recipe in re.findall(r'\{RecipeId::(\w+),\s*"([^"]+)"', source(CRAFT)):
+    for recipe in re.findall(r'\{RecipeId::(\w+),\s*"([^"]+)"', source("Source/TheUnmadeGame/Public/Items/UnmadeCodexCraftingGenerated.inc")):
         check("recipe.workshop." + recipe[0], "name", recipe[1])
     fields = re.findall(r'\{\s*"([^"]+)",\s*Profession::', source(FIELD))
     _expect(issues, len(fields), 9, "field recipe count")
@@ -311,10 +311,14 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
             if not isinstance(row.get("rule_contract"),dict):
                 issues.append(f"{key}: missing realm/progression rule contract")
     # Direct source parity for authoritative names and numeric recipe costs.
-    atlas=source("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")
+    if '#include "World/UnmadeCodexAtlasGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"):
+        issues.append("real world routing must consume Codex-generated realm and passage table")
+    atlas=source("Source/TheUnmadeGame/Public/World/UnmadeCodexAtlasGenerated.inc")
     world_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',atlas)
     for realm,name in world_rows[:9]:
         check("realm."+realm,"name",name)
+    if '#include "World/UnmadeCodexExpeditionGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"):
+        issues.append("expedition runtime must consume Codex-generated authored source")
     expedition_rows=re.findall(
         r'\{Realm::(\w+),"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"',
         source(EXPEDITION))
@@ -322,27 +326,69 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         check("journey.expedition."+realm,"name",dungeon+" — "+city)
         check("journey.expedition."+realm,"rule_contract.boss",boss)
         check("journey.expedition."+realm,"rule_contract.frontier",frontier)
-    wing_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)","([^"]+)"',source(EXPERIENCE))
-    for realm,(city,wing,guardian) in zip(realms,wing_rows[:9]):
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                   "TidalLedger","SkyBelow","CinderSpine",
+                                   "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        row=by_id.get("journey.expedition."+realm)
+        if row is None:continue
+        contract=row["rule_contract"]
+        if contract.get("source_index")!=index:
+            issues.append(f"journey.expedition.{realm}: invalid source index")
+        if len(contract.get("people",[]))!=5 or len(contract.get("clues",[]))!=3:
+            issues.append(f"journey.expedition.{realm}: incomplete authored people or clues")
+        if contract.get("kill_return")==contract.get("mercy_return"):
+            issues.append(f"journey.expedition.{realm}: mercy and combat must differ")
+    if '#include "World/UnmadeCodexExperienceGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"):
+        issues.append("ExperienceSpec runtime is not connected to canonical Codex")
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                  "TidalLedger","SkyBelow","CinderSpine",
+                                  "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        record=by_id.get("journey.wing."+realm)
+        if record is None:continue
+        c=record.get("rule_contract",{})
+        if c.get("source_index")!=index or len(c.get("scenes",[]))!=4 or len(c.get("wing_grid",[]))!=3:
+            issues.append(f"journey.wing.{realm}: four scenes and three physical rooms required")
+    wing_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"',source(EXPERIENCE))
+    _expect(issues,len(wing_rows),9,"wing registry count")
+    for realm,row in zip(realms,wing_rows):
+        city,wing,guardian=row[:3]
         check("journey.wing."+realm,"name",wing+" — "+city)
         check("journey.wing."+realm,"rule_contract.guardian",guardian)
-    story_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCampaignSpineRules.h"))
+    if '#include "World/UnmadeCodexCampaignGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeCampaignSpineRules.h"):
+        issues.append("main campaign chapters not compiled from Codex")
+    story_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCodexCampaignGenerated.inc"))
     for realm,title in story_rows[:9]:
         check("quest.campaign."+realm,"name",title)
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                   "TidalLedger","SkyBelow","CinderSpine",
+                                   "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        entry=by_id.get("quest.campaign."+realm)
+        if entry and entry["rule_contract"].get("source_index")!=index:
+            issues.append("quest.campaign."+realm+": changed the authored road order")
     aftermath_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h"))
     for realm,title in aftermath_rows[:9]:
         check("quest.aftermath."+realm,"name",title)
-    personal_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h"))
+    if '#include "World/UnmadeCodexPersonalQuestsGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h"):
+        issues.append("personal quest gameplay not compiled from Codex")
+    personal_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCodexPersonalQuestsGenerated.inc"))
     for realm,(title,goal) in zip(realms,personal_rows[:9]):
         check("quest.personal."+realm,"name",title)
         check("quest.personal."+realm,"rule_contract.goal",goal)
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                   "TidalLedger","SkyBelow","CinderSpine",
+                                   "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        row=by_id.get("quest.personal."+realm)
+        if not row:continue
+        c=row["rule_contract"]
+        if c["source_order"]!=index or c["option_a"]==c["option_b"] or c["return_a"]==c["return_b"]:
+            issues.append("quest.personal."+realm+": missing distinct saved social outcomes")
     settlement_rows=re.findall(r'\{SettlementId::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeSettlementRegistry.h"))
     for key,name in settlement_rows[:3]:
         check("settlement."+key,"name",name)
     recipe_rows=re.findall(
         r'\{RecipeId::(\w+),"([^"]+)",Profession::(\w+),SettlementId::(\w+),(\d+),\s*'
         r'ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}',
-        source(CRAFT))
+        source("Source/TheUnmadeGame/Public/Items/UnmadeCodexCraftingGenerated.inc"))
     for key,name,profession,town,skill,ing_a,n_a,ing_b,n_b,output,n_out in recipe_rows:
         ident="recipe.workshop."+key
         check(ident,"rule_contract.profession","profession."+profession.lower())
@@ -351,6 +397,19 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         check(ident,"rule_contract.inputs",[{"item_enum":ing_a,"count":int(n_a)},
                                            {"item_enum":ing_b,"count":int(n_b)}])
         check(ident,"rule_contract.output",{"item_enum":output,"count":int(n_out)})
+    if '#include "Items/UnmadeCodexCraftingGenerated.inc"' not in source(CRAFT):
+        issues.append("live crafting model must include Codex-generated recipe table")
+    graph_rows=re.findall(r'\{Realm::(\w+),Realm::(\w+),(\d+)\}',atlas)
+    if len(graph_rows)!=13:
+        issues.append("Codex route graph must describe exactly 13 original passages")
+    for i,(origin,destination,level) in enumerate(graph_rows):
+        path_id=f"passage.{i+1:02d}.{origin}.{destination}"
+        check(path_id,"rule_contract.minimum_attunement",int(level))
+        check(path_id,"rule_contract.from","realm."+origin)
+        check(path_id,"rule_contract.to","realm."+destination)
+        check(path_id,"rule_contract.bidirectional",True)
+        if int(level)<0 or int(level)>4:
+            issues.append(f"{path_id}: invalid attunement tier")
     study_source=source("Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h")
     for token in ('#include "World/UnmadeCodexGenerated.h"',"CodexStudyNames",
                   "CodexStudyRequirements[static_cast<int>(id)][0]","CodexAtlasRequirements[0]"):

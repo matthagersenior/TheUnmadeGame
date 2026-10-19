@@ -30,7 +30,7 @@ python -m unittest Scripts.tests.test_dependency_ledger -v
 
 The validator runs in GitHub's **Static checks** on push and PR. It reads actual source registries and compares item IDs, names, stats and acquisitions; regional weapons/armor and their values; rite teachers, quests and mastery rewards; 3 original bosses, 9 expedition bosses, 9 wing guardians, 6 Echo guardians, 11 road elders, and Nhal-Vey; plus the major quest families, exact aftermath branches, and links. It fails with a `CANON DRIFT` diagnostic if a source change is not reconciled here, or if ledger references are dangling.
 
-The ledger also references [the current source Ability Codex (243 entries as of October 19, 2026)](../../Authoring/ability_codex.json), covering inherent powers, combat, professions, learned rites, observed enemy patterns and equipment-related capabilities; the validator checks that every codex record retains its source and acquisition. The four newly defined firsthand studies are separately indexed until their real gameplay integration is accepted.
+The ledger also references [the current source Ability Codex (256 entries as of October 19, 2026)](../../Authoring/ability_codex.json), covering inherent powers, combat, professions, learned rites, observed enemy patterns and equipment-related capabilities; the validator checks that every codex record retains its source and acquisition. The four newly defined firsthand studies are separately indexed until their real gameplay integration is accepted.
 
 The validator deliberately fails closed if an existing C++ registry stops matching its recognizable literal format. If the registry changes shape, update the parser and test within the same PR rather than suppressing a failing gate.
 

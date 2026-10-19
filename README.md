@@ -6,7 +6,7 @@ Explore nine authored realms through combat, investigation, rescue and reality-c
 
 ## The complete canon encyclopedia
 
-[**Browse the Definitive Canon Encyclopedia**](docs/canon/encyclopedia/README.md) — eight volumes covering realms, cities, NPCs, characters, factions, creatures and bosses, weapons and items, all registered abilities and studies, major quests, endings, and unresolved lore. Its [627-entry stable-ID index](docs/canon/encyclopedia/INDEX.json) is source-derived and verified in CI; it does **not** claim Unreal playability.
+[**Browse the Definitive Canon Encyclopedia**](docs/canon/encyclopedia/README.md) — eight volumes covering realms, cities, NPCs, characters, factions, creatures and bosses, weapons and items, all registered abilities and studies, major quests, endings, and unresolved lore. Its [640-entry stable-ID index](docs/canon/encyclopedia/INDEX.json) is source-derived and verified in CI; it does **not** claim Unreal playability.
 
 ## Current status
 

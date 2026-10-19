@@ -2,7 +2,7 @@
 
 **Canonical index:** [`Authoring/ability_codex.json`](../../Authoring/ability_codex.json)
 
-The current Ability Codex registers **243** named or defined entries (October 19, 2026 source snapshot) across inherent reality effects, ten earned rites, six Confluences, fundamental combat, combat builds, nine regional techniques, nine realm weapon styles, the entire 60-item catalog (including seven materials), three professions, six workshop recipes, nine field recipes, nine local privileges, creatures, bosses, and observed enemy patterns.
+The Ability Codex registers **256** named or defined entries across inherent reality effects, ten earned rites, six Confluences, fundamental combat, combat builds, nine regional techniques, nine realm weapon styles, the entire 60-item catalog (including seven materials), three professions, six workshop recipes, nine field recipes, nine local privileges, creatures, bosses, and observed enemy patterns.
 
 This is a **discoverability, provenance and learning index**, not a claim that all entries are independent usable spells. Every entry has a stable ID, name, category, acquisition and prerequisites, effect, cost, duration, limitations, combinations, observation policy, implementation status and source file reference. Some fields are marked unspecified rather than fabricated.
 
@@ -91,3 +91,23 @@ The single **243-record** `Authoring/ability_codex.json` includes all prior 186 
 The Codex is the **canonical authoring authority** across abilities, enemies, crafting, skill progression, exploration, quests, worlds and rewards. `Scripts/generate_unmade_codex.py` generates the `UnmadeCodexGenerated.h` C++ header that the Study/Atlas live checklist now reads; it also publishes nine world summaries to native code. CI checks that no one hand-edits generated rules or changes the Codex without regenerating. The remaining individual C++ runtime state machines are still authoritative *executors* and must undergo domain-by-domain Codex-backed migration with parity tests. Do **not** claim that every Unreal actor or calculation reads JSON until that migration and engine compilation actually occur.
 
 A completed checkbox is always derived from the actual player/quest save state, **not** from a static record. Authored-but-unbuilt realms remain marked separately from playable game spaces, and alternate outcomes, witness provenance, consent, costs and progression integrity remain mandatory.
+
+## Codex-controlled crafting rules (six workshop recipes)
+
+Unlike source-mirrored world quests, the six original workshop recipe definitions are now **generated from Codex**. The existing C++ `RegionalEconomy` executes these Codex-owned ingredients, quantities, profession/skill thresholds, workshop and outputs as before. The table is generated into `UnmadeCodexCraftingGenerated.inc`, automatically checked for drift alongside `UnmadeCodexGenerated.h`. This does not migrate vendor prices, inventory semantics, field recipes, or NPC stories yet: each needs a separately tested Codex-controlled rule adapter.
+
+## Codex-owned world graph (19 October 2026)
+
+The nine existing realm descriptions and all **13 actual realm-passages** are now sourced from the single Codex rather than copied into the world atlas. Each directed-record ID describes an **undirected** edge with an explicit minimum attunement tier (0–4), real endpoint dependencies, and a player-facing checklist; neither a map pin nor a planned route grants the ability to visit an unbuilt Unreal level. The generator writes `Source/TheUnmadeGame/Public/World/UnmadeCodexAtlasGenerated.inc`, compiled directly into the existing `UnmadeWorldAtlas.h` route planner. C++ route tests prove late realms cannot be reached below the original attunement threshold and that realm names/stages still agree with the Codex. Identity, source map coordinates, map-build claims and saved quest outcomes are unchanged.
+
+## Codex-owned expedition source (19 October 2026)
+
+Each of the nine expedition rule rows now includes the full original settlement/frontier/refuge/dungeon, boss, weapon, armor, learned technique, specific mission briefing, **five named local people**, **three physical clues**, distinct **combat and mercy return consequences**, and fixed XY region coordinates. They are generated as the actual `ExpeditionSpecs` table in `UnmadeCodexExpeditionGenerated.inc` and included in the existing C++ expedition registry. The original outcome language and coordinates are unchanged. This is executable rule-data migration, **not** an automatic quest completion or a claim that the later dungeons are cooked Unreal worlds. CI now checks distinct non-lethal vs lethal aftermath; both resolution routes remain legitimate where authored.
+
+## Codex-owned optional experience wings (19 October 2026)
+
+Each of the nine optional wings now has its exact realm-linked `ExperienceSpec` **generated from Codex**: city, wing, guardian, interior, profession specialization, physical fieldwork task and hint, earned tool and recipe, separate reserve versus public-witness return text, four distinct source-authored scene reactions, and the original three-by-two physical room coordinate grid. The existing wing progression machinery and physics consume the generated `UnmadeCodexExperienceGenerated.inc` without reordering the nine saved indices or inventing an additional guardian. The room grid remains constrained to the original positional rules; portable C++ tests compare generated room positions with the real wing layout function. Each recorded witness response remains conditional on the actual saved world choice, not any Codex declaration.
+
+## Codex-owned Unanswered Road chapters (19 October 2026)
+
+The actual `UnansweredRoadBeats` array in `UnmadeCampaignSpineRules.h` is now generated from nine canonical `quest.campaign.<realm>` Codex entries. Each retains its source-authored chapter name, central mystery question, **attributed physical discovery**, next optional region lead and stable `Campaign.Thread.N` public event tag. The saved campaign stage model remains an independent executor that demands completed real evidence and witnessed branches; the Codex does not auto-award threads, remove two-path act choices, or prematurely unlock Nhal-Vey. CI verifies all nine chapters, identifiers and event ordering.

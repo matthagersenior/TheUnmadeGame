@@ -10,7 +10,7 @@ The repository has one **unified directory to the entire established game univer
 - [II — All 88 resident identities, character motives, testimony limits, relationships and returns](02_CHARACTERS_NPCS_AND_RELATIONSHIPS.md)
 - [III — All 39 named boss encounters, creature patterns, guardians, counters, options and aftermath](03_BESTIARY_BOSSES_AND_GUARDIANS.md)
 - [IV — All 60 inventory items, eighteen exclusive regional rewards, weapon styles, recipes and professions](04_ARMORY_ITEMS_AND_CRAFTING.md)
-- [V — Every 243-record Ability Codex entry, costs, study and mastery requirements, limits and mechanics](05_ABILITIES_SKILLS_AND_RULES.md)
+- [V — Every 256-record Ability Codex entry, costs, study and mastery requirements, limits and mechanics](05_ABILITIES_SKILLS_AND_RULES.md)
 - [VI — All 99 grouped quests, twenty-three learned skills, nine physical main chapters and alternate endings](06_QUESTS_STORY_AND_ENDINGS.md)
 - [VII — Volume X chronology, nine deliberately open mysteries, callbacks and adaptation boundaries](07_LORE_MYSTERIES_AND_CONTINUITY.md)
 - [VIII — Three faction chronicles, worker pay, households and two conserved cross-realm trade contracts](08_FACTIONS_SOCIAL_SYSTEMS_AND_ECONOMIES.md)
@@ -20,7 +20,7 @@ The repository has one **unified directory to the entire established game univer
 
 | Indexed family | Entries |
 |---|---:|
-| codex | 243 |
+| codex | 256 |
 | item | 60 |
 | regional gear | 18 |
 | boss | 39 |
@@ -35,7 +35,7 @@ The repository has one **unified directory to the entire established game univer
 | faction | 3 |
 | trade contract | 2 |
 
-**Total searchable index records:** 627. Entries in one family may describe the same character, weapon or encounter concept represented in another; the groups should not be added together and described as unique content.
+**Total searchable index records:** 640. Entries in one family may describe the same character, weapon or encounter concept represented in another; the groups should not be added together and described as unique content.
 
 ## Authority hierarchy
 
@@ -56,7 +56,7 @@ The repository has one **unified directory to the entire established game univer
 
 ## Current source gaps and reconciliations
 
-- **243 codex entries:** Earlier static descriptions mention 182 or 186 entries; those are historical snapshots. Only the current Ability Codex file defines the present count, and not all entries are castable powers.
+- **256 codex entries:** Earlier static descriptions mention 182 or 186 entries; those are historical snapshots. Only the current Ability Codex file defines the present count, and not all entries are castable powers.
 - **88 resident identities, 82 return dossiers:** The six newer scouts have source identity records but not the independent 82-person resident-return dialogue. The characters are preserved and their missing expansion is visible.
 - **Eleven literary cities, three original playable-settlement source definitions:** Additional cities are real world-building and production contracts, not yet verified explorable Unreal levels.
 - **Source evidence versus gameplay:** Real compiled behavior, character animations, VO/music, full accessibility, pathfinding, collision, packaging, all-save migrations and human playtesting remain explicit Unreal/production gates.

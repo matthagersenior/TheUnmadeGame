@@ -64,8 +64,11 @@ class GearSourceContract(unittest.TestCase):
 
     def test_atlas_is_explicitly_future_data_not_silent_unreal_claims(self):
         atlas=read("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")
-        self.assertIn("std::array<RealmSpec,",atlas)
-        self.assertIn("WorldAtlas",atlas)
+        generated=read("Source/TheUnmadeGame/Public/World/UnmadeCodexAtlasGenerated.inc")
+        self.assertIn('#include "World/UnmadeCodexAtlasGenerated.inc"',atlas)
+        self.assertIn("std::array<RealmSpec,",generated)
+        self.assertIn("WorldAtlas",generated)
+        self.assertIn("AtlasPassages",generated)
         self.assertIn("PlanRealmRoute(",atlas)
         self.assertIn("AttunementFromRewards(",atlas)
         self.assertIn("DESIGN DATA",atlas)

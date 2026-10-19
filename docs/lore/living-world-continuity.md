@@ -490,3 +490,29 @@ The saved Study Codex now shows an in-game requirements checklist for each of it
 The Codex is the single canonical source for authored requirements covering physical techniques, enemy patterns, craftsmanship, profession skills, experience wings, settlement duties, the nine realms, expeditions, personal dilemmas, the nine Unanswered Road campaign threads, aftermath quests and rewards. It has 243 indexed records with realm links and actual recipe quantities. No documented ability or journey is automatically earned; every completion remains traceable to a saved encounter, direct evidence, an authored witness, resources or an actual choice. The six unbuilt or incompletely integrated realms remain explicitly labeled source-authored, not completed maps.
 
 The study and Atlas checklist labels are now compiled from Codex-generated C++ tables instead of locally retyped text. Unreal gameplay models still make and persist real decisions; fully migrating those executors to Codex-owned data is ongoing engineering, not a claim of a compiled or tested packaged game.
+
+## 2026-10-19 — Codex-owned workshop crafting recipe authority
+
+All six workshop RecipeDef table entries are now **generated from the canonical Codex recipe contracts**, compiled via `#include "Items/UnmadeCodexCraftingGenerated.inc"` inside the existing deterministic crafting engine. The generator and static CI verify that the executable recipe names, profession requirements, location, materials, quantities and outputs are exactly Codex-authored. This is actual rule-data migration, not only a searchable catalog. It preserves the previous RecipeId enumeration ordering, recipe outputs, atomic inventory transaction model, NPC/market restrictions and schema-1 saves. General craft/economy behavior outside these six recipes is still sourced from its existing stateful runtime models.
+
+## 2026-10-19 — Travel topology becomes Codex rule data
+
+The original nine-world atlas and thirteen bidirectional connecting routes, including the correct 0–4 attunement tiers, are now compiled from the unified Codex. Reality remains bounded by actual play: a planned path is not a generated realm, a validated quest, or evidence that a world is built. The realm-passages preserve the exact pre-migration graph; no new shortcut, historical explanation or access to the Place Before Place is granted. Source C++ pathfinding still requires correct attunement. A portable route test enforces parity and prevents reaching First Absence below tier four. Unreal-level loading remains unverified.
+
+## 2026-10-19 — Codex owns nine expedition contracts
+
+The existing nine expedition definitions—including each local crew, physical clue, geographical anchor, confrontation and explicitly separate mercy-versus-kill return language—are now compiled from the canonical Codex. Defeating or sparing a boss still requires the original live encounter and the saved state-machine outcome; a written entry does not free a captive or settle a witness's question. The generated table retains the exact original text, reward identities and XY anchors, while six later realm maps remain unverified in Unreal.
+
+## 2026-10-19 — Experience-wing fidelity to physical layout and witnesses
+
+The Codex now supplies all nine executable optional `ExperienceSpecs`. Each preserves its three tangible rooms, bespoke physical challenge, local guardian and unique reward, plus both saved public-witness and reserve aftermath narratives and the four scene-specific reactions. This does not claim an unearned NPC testimony, a visited level, a completed wing or any cooked Unreal asset. The 256-record Codex is unchanged in record count: existing experience entries now carry the full runtime rule definitions.
+
+**19 October 2026 compiler correction:** The Codex-owned optional-wing 3×2 room-grid initializer now emits the original valid aggregate-brace shape. Original coordinates and saved physical fieldwork remain unchanged; this is syntax repair, not lore or mechanic revision.
+
+## 2026-10-19 — The Unanswered Road chapters now sourced from Codex
+
+The canonical main campaign's nine authored road-beat descriptions and discovery leads are compiled directly from Codex data; historical questions, first-person evidence and the choice of roads are preserved. No automatic nine-realm completion checklist is introduced, and entering a realm is neither proof of its central answer nor authorization to expose a private witness's story. The campaign's save-backed evidence and boss-access rules remain intact, with the final answer withheld until earned. Unreal engine execution remains unverified.
+
+## 2026-10-19 — Codex governs personal moral choices, not player decisions
+
+The nine personal story definitions now originate from the Codex with all their original witnesses, physical clue requirements, actual puzzle goals, exclusive choice language and attributed follow-up. The saved local outcome and testimony must be earned through live agency; no moral resolution, NPC omniscience or entitlement to a reward is automatically inferred from a catalog entry. The previous nine-stage saved IDs, geographic room grids, and authored ways to resolve each personal dilemma are unchanged. Engine-level visual completion remains unverified.

@@ -81,7 +81,9 @@ def validate(data: dict) -> list[str]:
         for item in re.findall(r'add\(ItemId::(\w+),\d+\)', expr):
             add(item, "milestone", milestone)
     craft = "Items/UnmadeCraftEconomyRules.h"
-    recipes = rows(craft, r'\{RecipeId::(\w+),"([^"]+)",Profession::(\w+),SettlementId::(\w+),(\d+),\s*ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}')
+    if '#include "Items/UnmadeCodexCraftingGenerated.inc"' not in read(PUBLIC + craft):
+        errors.append("workshop crafting table is not wired to Codex-generated source")
+    recipes = rows("Items/UnmadeCodexCraftingGenerated.inc", r'\{RecipeId::(\w+),"([^"]+)",Profession::(\w+),SettlementId::(\w+),(\d+),\s*ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}')
     field = rows("Items/UnmadeFieldCraftRules.h", r'\{"([^"]+)",Profession::(\w+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+),ItemId::(\w+),(\d+)\}')
     error_if(len(recipes) < 6 or len(field) < 9, "craft recipe source parser is incomplete", errors)
     for recipe in recipes:
@@ -111,7 +113,9 @@ def validate(data: dict) -> list[str]:
     error_if(any(r.get("type") == "reward_name_conflict" for r in data.get("exceptions", [])),
              "obsolete rite reward exception; correct the gameplay/ledger names", errors)
 
-    expedition = rows("World/UnmadeExpeditionRegistry.h", r'\{Realm::(\w+),"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
+    if '#include "World/UnmadeCodexExpeditionGenerated.inc"' not in read(PUBLIC + "World/UnmadeExpeditionRegistry.h"):
+        errors.append("expedition runtime not using Codex-generated rules")
+    expedition = rows("World/UnmadeCodexExpeditionGenerated.inc", r'\{Realm::(\w+),"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
     error_if(len(expedition) != 9, "ExpeditionSpecs parse expected nine realm records", errors)
     realm_ids = [x[0] for x in expedition]
     city_to_realm = {x[1]: x[0] for x in expedition}
@@ -120,24 +124,11 @@ def validate(data: dict) -> list[str]:
         r'enum class StudyId\s*:\s*int\s*\{([^}]+)\}', read(PUBLIC + "World/UnmadeAbilityStudyRules.h")).group(1)
     study_ids = [id for id in re.findall(r'(\w+)\s*=\s*\d+', study) if id != "Count"]
     source_study = read(PUBLIC + "World/UnmadeAbilityStudyRules.h")
-    # StudyNames is now an alias to the generated canonical Codex; earlier
-    # literal array parsing fails after that legitimate migration.
-    if "StudyNames=CodexStudyNames" in source_study:
-        generated = read(PUBLIC + "World/UnmadeCodexGenerated.h")
-        marker = "CodexStudyNames = {{"
-        if marker not in generated or "}};" not in generated.split(marker, 1)[1]:
-            errors.append("generated CodexStudyNames array is missing")
-            study_names = []
-        else:
-            raw_names = re.findall(r'"([^"]+)"', generated.split(marker, 1)[1].split("}};", 1)[0])
-            # The runtime display appends / source-name for study detail,
-            # but the dependency ledger names the earned skill itself.
-            study_names = [name.split(" / ", 1)[0] for name in raw_names]
-    elif "StudyNames={{" in source_study:
-        study_names = re.findall(r'"([^"]+)"', source_study.split("StudyNames={{", 1)[1].split("}};", 1)[0])
-    else:
-        errors.append("StudyNames source moved without a canonical authoring contract")
-        study_names = []
+    if "StudyNames=CodexStudyNames" not in source_study:
+        errors.append("Study names are not wired to Codex-generated source")
+    generated_study = read(PUBLIC + "World/UnmadeCodexGenerated.h")
+    match = re.search(r'CodexStudyNames\s*=\s*\{\{(.*?)\}\};', generated_study, flags=re.DOTALL)
+    study_names = re.findall(r'"([^"]+)"', match.group(1)) if match else []
     if len(study_ids) != len(study_names) or len(study_ids) < 4:
         errors.append("new firsthand Study registry or title parsing changed")
     for id, title in zip(study_ids, study_names):
@@ -185,7 +176,9 @@ def validate(data: dict) -> list[str]:
                   r'\{Realm::(\w+),"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*(\d+),(\d+),([\d.]+),([\d.]+),(\d+)\}')
     roads = rows("World/UnmadeRememberedRoadRegistry.h",
                  r'\{"([^"]+)",Realm::(\w+),[-\d.]+,[-\d.]+,\d+,"([^"]+)","([^"]+)","([^"]+)","([^"]+)",\{[^}]+\},"([^"]+)","([^"]+)",CreatureKind::(\w+),"([^"]+)"')
-    wings = rows("World/UnmadePlayerExperienceRegistry.h", r'\{"([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
+    if '#include "World/UnmadeCodexExperienceGenerated.inc"' not in read(PUBLIC + "World/UnmadePlayerExperienceRegistry.h"):
+        errors.append("wing registry is not Codex-generated")
+    wings = rows("World/UnmadeCodexExperienceGenerated.inc", r'\{"([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
     wings = [w for w in wings if w[0] in city_to_realm]
     error_if(len(original) != 3 or len(guards) != 6 or len(roads) != 11 or len(wings) != 9,
              "boss/guardian/wing/road source parse changed: inspect the registry", errors)
@@ -222,9 +215,13 @@ def validate(data: dict) -> list[str]:
     echoes = rows("World/UnmadeEchoQuestRules.h", r'\{Realm::(\w+),"([^"]+)","([^"]+)",\s*"([^"]+)"')
     faction = rows("World/UnmadeFactionChronicleRules.h",
                    r'\{Faction::(\w+),"([^"]+)",\s*"([^"]+)","([^"]+)","([^"]+)",\s*"([^"]+)"\}')
-    depth = rows("World/UnmadeAdventureDepthRegistry.h",
+    if '#include "World/UnmadeCodexPersonalQuestsGenerated.inc"' not in read(PUBLIC + "World/UnmadeAdventureDepthRegistry.h"):
+        errors.append("personal quest runtime not Codex-generated")
+    depth = rows("World/UnmadeCodexPersonalQuestsGenerated.inc",
                  r'\{"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
-    campaign = rows("World/UnmadeCampaignSpineRules.h",
+    if '#include "World/UnmadeCodexCampaignGenerated.inc"' not in read(PUBLIC + "World/UnmadeCampaignSpineRules.h"):
+        errors.append("main story source not wired to Codex-owned chapters")
+    campaign = rows("World/UnmadeCodexCampaignGenerated.inc",
                     r'\{Realm::(\w+),"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)"\}')
     error_if((len(confluences),len(aftermath),len(echoes),len(faction),len(depth),len(campaign)) !=
              (6,9,6,3,9,9), "quest registry parser shape changed", errors)

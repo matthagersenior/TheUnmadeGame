@@ -1,6 +1,6 @@
 # Volume V — Entire Ability Codex: Reality, Combat, Mastery, Studies, Progression and Rules
 
-**Coverage:** 243 indexed codex entries across 28 categories. These entries encompass spells, skills, gear, quests, enemies, areas and mechanics, **not** 243 independently castable powers.
+**Coverage:** 256 indexed codex entries across 28 categories. These entries encompass spells, skills, gear, quests, enemies, areas and mechanics, **not** 243 independently castable powers.
 
 **Authority:** [canonical Ability Codex JSON](../../../Authoring/ability_codex.json). C++ source remains authoritative for actual runtime values and save state. `source_rule` = source model; `prototype_handler` = an Unreal-facing handler not engine verified; `definition_only`/`proposed` = non-executable definition. None of these labels establishes a packaged playable build.
 
@@ -5218,6 +5218,230 @@
 - [ ] `settlement.Paperhaven.requirement.2` — Respect residents' local consent and availability. Evidence: physical action and source-state verification; not granted by static checklist; state: evaluated_in_game_only
 - [ ] `settlement.Paperhaven.requirement.3` — Earn and preserve supported outcomes. Evidence: physical action and source-state verification; not granted by static checklist; state: evaluated_in_game_only
 
+
+
+## REALM PASSAGES (13)
+
+### The Threefold Reach → The Rain That Forgot the Sea — `passage.01.ThreefoldReach.WidowedRain`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 0; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 0 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":0}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.ThreefoldReach","realm.WidowedRain"]  
+**rule_contract:** {"source_index":0,"from":"realm.ThreefoldReach","to":"realm.WidowedRain","minimum_attunement":0,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Threefold Reach → The Hearth Beneath — `passage.02.ThreefoldReach.HearthBeneath`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 0; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 0 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":0}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.ThreefoldReach","realm.HearthBeneath"]  
+**rule_contract:** {"source_index":1,"from":"realm.ThreefoldReach","to":"realm.HearthBeneath","minimum_attunement":0,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Rain That Forgot the Sea → The Sea of Written Debts — `passage.03.WidowedRain.TidalLedger`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 1; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 1 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":1}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.WidowedRain","realm.TidalLedger"]  
+**rule_contract:** {"source_index":2,"from":"realm.WidowedRain","to":"realm.TidalLedger","minimum_attunement":1,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Rain That Forgot the Sea → The Upside-Down Choir — `passage.04.WidowedRain.SkyBelow`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 2; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 2 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":2}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.WidowedRain","realm.SkyBelow"]  
+**rule_contract:** {"source_index":3,"from":"realm.WidowedRain","to":"realm.SkyBelow","minimum_attunement":2,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Hearth Beneath → The Upside-Down Choir — `passage.05.HearthBeneath.SkyBelow`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 1; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 1 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":1}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.HearthBeneath","realm.SkyBelow"]  
+**rule_contract:** {"source_index":4,"from":"realm.HearthBeneath","to":"realm.SkyBelow","minimum_attunement":1,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Hearth Beneath → The Bones of Yesterdays — `passage.06.HearthBeneath.CinderSpine`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 2; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 2 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":2}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.HearthBeneath","realm.CinderSpine"]  
+**rule_contract:** {"source_index":5,"from":"realm.HearthBeneath","to":"realm.CinderSpine","minimum_attunement":2,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Sea of Written Debts → The Hundred Unlived — `passage.07.TidalLedger.HundredUnlived`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 2; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 2 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":2}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.TidalLedger","realm.HundredUnlived"]  
+**rule_contract:** {"source_index":6,"from":"realm.TidalLedger","to":"realm.HundredUnlived","minimum_attunement":2,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Upside-Down Choir → The Hundred Unlived — `passage.08.SkyBelow.HundredUnlived`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 2; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 2 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":2}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.SkyBelow","realm.HundredUnlived"]  
+**rule_contract:** {"source_index":7,"from":"realm.SkyBelow","to":"realm.HundredUnlived","minimum_attunement":2,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Upside-Down Choir → The Orchard of Unwritten Kings — `passage.09.SkyBelow.OrchardOfKings`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 3; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 3 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":3}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.SkyBelow","realm.OrchardOfKings"]  
+**rule_contract:** {"source_index":8,"from":"realm.SkyBelow","to":"realm.OrchardOfKings","minimum_attunement":3,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Bones of Yesterdays → The Orchard of Unwritten Kings — `passage.10.CinderSpine.OrchardOfKings`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 3; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 3 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":3}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.CinderSpine","realm.OrchardOfKings"]  
+**rule_contract:** {"source_index":9,"from":"realm.CinderSpine","to":"realm.OrchardOfKings","minimum_attunement":3,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Hundred Unlived → The Place Before Place — `passage.11.HundredUnlived.FirstAbsence`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 4; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 4 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":4}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.HundredUnlived","realm.FirstAbsence"]  
+**rule_contract:** {"source_index":10,"from":"realm.HundredUnlived","to":"realm.FirstAbsence","minimum_attunement":4,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Orchard of Unwritten Kings → The Place Before Place — `passage.12.OrchardOfKings.FirstAbsence`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 4; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 4 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":4}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.OrchardOfKings","realm.FirstAbsence"]  
+**rule_contract:** {"source_index":11,"from":"realm.OrchardOfKings","to":"realm.FirstAbsence","minimum_attunement":4,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
+
+### The Sea of Written Debts → The Bones of Yesterdays — `passage.13.TidalLedger.CinderSpine`
+
+**category:** realm_passage  
+**summary:** Bidirectional authored passage requiring realm attunement 3; no automatic teleport, discovery, or completion.  
+**acquisition:** {"method":"world_atlas_passage","requirements":["The player must have realm attunement 3 or higher","Both named realms must be part of the authored world atlas","A route is a plan only; physical level access requires a real implemented destination"]}  
+**effect:** {"kind":"route_graph_edge","summary":"Permits bidirectional path planning at the recorded attunement tier."}  
+**cost:** {"minimum_attunement":3}  
+**duration:** 0  
+**observation:** {"possible_to_study":false,"automatically_learnable":false}  
+**limitations:** ["Path planning does not fabricate a traversable Unreal map","Cannot bypass existing relic-backed attunement rules or realm-local quests"]  
+**modifications:** []  
+**combines_with:** []  
+**depends_on:** ["realm.TidalLedger","realm.CinderSpine"]  
+**rule_contract:** {"source_index":12,"from":"realm.TidalLedger","to":"realm.CinderSpine","minimum_attunement":3,"bidirectional":true}  
+**implementation:** source_rule  
+**sources:** ["Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h"]  
 
 ## Canonical source and gameplay boundaries
 

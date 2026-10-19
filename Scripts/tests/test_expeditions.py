@@ -3,7 +3,10 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(ROOT/'Scripts'))
 from build_frontier_adventures import build
 class ExpeditionContracts(unittest.TestCase):
- def test_generated_registry_matches(self):self.assertEqual(build(),(ROOT/'Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h').read_text())
+ def test_generated_registry_matches(self):
+  self.assertEqual(build(),(ROOT/'Source/TheUnmadeGame/Public/World/UnmadeCodexExpeditionGenerated.inc').read_text(encoding="utf-8"))
+  source=(ROOT/'Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h').read_text(encoding="utf-8")
+  self.assertIn('#include "World/UnmadeCodexExpeditionGenerated.inc"',source)
  def test_nine_unique_adventures_and_eighteen_sites(self):
   a=json.loads((ROOT/'Authoring/frontier_adventures_v14.json').read_text())['arcs'];self.assertEqual(len(a),9)
   for key in ['realm','frontier','refuge','dungeon','boss','weapon','armor','technique']:self.assertEqual(len({x[key] for x in a}),9)

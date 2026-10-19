@@ -7,7 +7,7 @@ class PlayerExperienceContract(unittest.TestCase):
  def test_authored_wings_scenes_and_specialties(self):
   rows=json.loads((ROOT/'Authoring/player_experience_v17.json').read_text())['realms']
   self.assertEqual(len(rows),9);self.assertEqual(sum(len(r['scenes']) for r in rows),36)
-  self.assertEqual(build.build(),(ROOT/'Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h').read_text())
+  self.assertEqual(build.build(),(ROOT/'Source/TheUnmadeGame/Public/World/UnmadeCodexExperienceGenerated.inc').read_text(encoding='utf-8'))
  def test_source_lexical_regression(self):
   self.assertTrue(lexical.errors('auto s="bad\nstring";'))
   self.assertTrue(lexical.errors('void f(){}\\nvoid g(){}'))

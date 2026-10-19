@@ -373,3 +373,44 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Added typed workshop recipe costs/workbench/skill/output contracts and explicit realm/journey dependency references without inventing any saved rewards or quest outcomes.
 - Replaced manually authored Study and Atlas checklist words with Codex-generated C++ reference tables. A reproducible generator supplies nine realm summaries; CI checks for drift.
 - Preserved existing runtime models, active player saves, provenance and consent rules; full engine runtime data migration and Unreal compilation remain unverified. No illustrated artifact was regenerated.
+
+## 2026-10-19 — Generated workshop recipe rule source
+
+- Replaced the six manually maintained runtime workshop recipe table rows with a deterministic table generated directly from the 243-record canonical Codex.
+- Preserved RecipeId and ItemId numbering, ingredient amounts, skill levels, settlement workbenches, output counts and existing atomic save/economy behavior.
+- Generator checks both Study/Atlas/realm reference tables and the compiled crafting recipe table. Full Unreal compilation and recipe playtesting remain unverified; no illustrated release was rebuilt.
+
+## 2026-10-19 — Codex-owned realm and passage topology
+
+- Added 13 append-only named route dependencies to the existing Codex (now 256 records); preserved all nine original realm names, statuses, conflicts, and attunement tiers.
+- Moved executable WorldAtlas and AtlasPassages tables to deterministic generated `UnmadeCodexAtlasGenerated.inc`, consumed by the original path-planning runtime.
+- Added source, JSON and compiled-C++ tests to detect incorrect edge thresholds, invalid endpoints, shortcut routes and drift between Codex and world descriptions.
+- Existing realm scenes are not claimed to exist without an actual Unreal level; v20 illustrated files were not rebuilt.
+
+## 2026-10-19 — Codex-generated expedition registry
+
+- Migrated the nine executable expedition specification records from independently maintained C++ tables to generated entries in the unified Codex (256 total records).
+- Preserved exact original NPCs, clue text, boss identities, realm positioning and combat/mercy return narration; did not rewrite quest stages or saved outcomes.
+- Added C++ tests and source-parity contracts for all nine expedition rules; no Unreal Editor compile or illustrated-release rebuild claimed.
+
+## 2026-10-19 — Nine optional experience wings become Codex-authored runtime tables
+
+- Moved all nine optional wing gameplay specification tables, including three physical room coordinates each, all task instructions and their NPC witness/choice-dependent reactions, into the existing Codex.
+- Added a generated C++ table, source/JSON parity tests and a portable realm-wing geometry test. Preserved saved indices, physical chapter gates and already-authored social consequences.
+- No Unreal compilation, v20 illustrated file regeneration, or fabricated available levels claimed.
+
+### 2026-10-19 — Generated wing table compiler correction
+
+- Fixed the C++ generator's excess aggregate braces for each three-room grid, preserving all existing coordinates and original scene text. Portable regression compilation verifies the generated source.
+
+## 2026-10-19 — Main-story campaign chapter parity
+
+- Migrated the nine canonical Unanswered Road chapter descriptions, physical discoveries and next-road guidance to the existing Codex and generated `UnmadeCodexCampaignGenerated.inc` consumed by C++.
+- Added C++ and JSON tests for nine ordered chapters, source event IDs and truthful mystery evidence.
+- Preserved the original physically earned campaign, branch alternatives, final-boss gate, save contract and illustrated v20 artifacts.
+
+## 2026-10-19 — Nine authored personal-choice definitions now Codex-owned
+
+- Ported complete witness/physical-evidence/two-choice/lasting aftermath/secret/counterparty texts into the nine existing personal quest Codex entries and generated `UnmadeCodexPersonalQuestsGenerated.inc` consumed by runtime C++.
+- Converted the older adventure-depth builder into a Codex-versus-historical-manuscript compatibility verifier, retaining original dungeon positions.
+- Added regression tests for the nine saved ordinals and mutually exclusive social outcomes. No earned milestones, engine build claims or illustrated release bytes were altered.

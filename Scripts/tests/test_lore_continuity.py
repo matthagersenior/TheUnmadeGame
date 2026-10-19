@@ -5,7 +5,9 @@ def read(p):return (ROOT/p).read_text(encoding="utf8")
 class IllustratedLoreContinuity(unittest.TestCase):
     def test_all_realms_from_source_represented(self):
         canon=read("docs/lore/living-world-continuity.md")
-        atlas=read("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")
+        world_source=read("Source/TheUnmadeGame/Public/World/UnmadeWorldAtlas.h")
+        self.assertIn('#include "World/UnmadeCodexAtlasGenerated.inc"',world_source)
+        atlas=read("Source/TheUnmadeGame/Public/World/UnmadeCodexAtlasGenerated.inc")
         for name in ("The Threefold Reach","The Rain That Forgot the Sea",
           "The Hearth Beneath","The Sea of Written Debts","The Upside-Down Choir",
           "The Bones of Yesterdays","The Hundred Unlived",

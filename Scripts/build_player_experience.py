@@ -1,23 +1,51 @@
-"""Project nine authored optional wings and return scenes without authoring a mystery answer."""
+"""Check historical nine optional wing definitions against Codex-owned gameplay."""
 from pathlib import Path
-import json,argparse
+import json,argparse,sys
 ROOT=Path(__file__).resolve().parents[1]
-FIELDS=['city','wing','guardian','interior','specialty','task','hint','tool','recipe','reserve_return','witness_return']
+sys.path.insert(0,str(ROOT))
+from Scripts.generate_unmade_codex import REALMS,generate_experience
+
+FIELDS=('city','wing','guardian','interior','specialty','task','hint',
+        'tool','recipe','reserve_return','witness_return')
+TARGET=ROOT/'Source/TheUnmadeGame/Public/World/UnmadeCodexExperienceGenerated.inc'
+WRAPPER=ROOT/'Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h'
+
 def build():
- rows=json.loads((ROOT/'Authoring/player_experience_v17.json').read_text())['realms'];assert len(rows)==9
- for i,r in enumerate(rows):
-  assert r['arc']==i and len(r['scenes'])==4 and r['canonical_id']==f'quest.wing.{i}'
-  assert len(r['wing_grid'])==3 and all(len(p)==2 and all(isinstance(v,int) for v in p) for p in r['wing_grid'])
-  assert all(abs(a[0]-b[0])+abs(a[1]-b[1])==1 for a,b in zip(r['wing_grid'],r['wing_grid'][1:]))
-  assert all(isinstance(r[f],str) and r[f] for f in FIELDS)
- for f in ['wing','guardian','task','tool','recipe']:assert len({r[f] for r in rows})==9
- q=lambda s:json.dumps(s,ensure_ascii=True)
- s='#pragma once\nnamespace UnmadeCore {\nstruct ExperienceSpec {'+''.join('const char* '+f+';' for f in FIELDS)+'const char* scenes[4];int wing_grid[3][2];};\ninline constexpr ExperienceSpec ExperienceSpecs[9]={\n'
- for r in rows:s+=' {'+','.join(q(r[f]) for f in FIELDS)+',{'+','.join(q(t) for t in r['scenes'])+'},{'+','.join('{'+str(p[0])+','+str(p[1])+'}' for p in r['wing_grid'])+'}},\n'
- return s+'};\n}\n'
+    historical=json.loads((ROOT/'Authoring/player_experience_v17.json').read_text(encoding='utf-8'))['realms']
+    codex=json.loads((ROOT/'Authoring/ability_codex.json').read_text(encoding='utf-8'))
+    records={row['id']:row for row in codex['records']}
+    if len(historical)!=9:
+        raise ValueError('Exactly nine optional experience wings must remain')
+    for i,old in enumerate(historical):
+        key=REALMS[i]
+        c=records['journey.wing.'+key]['rule_contract']
+        if old['arc']!=i or old['canonical_id']!=f'quest.wing.{i}' or c['source_index']!=i:
+            raise ValueError('Wing source/save identity drift: '+key)
+        for field in FIELDS:
+            if old[field]!=c[field]:
+                raise ValueError('Wing dialogue, challenge or reward drift: '+key+'.'+field)
+        if old['scenes']!=c['scenes'] or old['wing_grid']!=c['wing_grid']:
+            raise ValueError('Wing physical room grid or witness reaction drift: '+key)
+        if len(old['scenes'])!=4 or len(old['wing_grid'])!=3:
+            raise ValueError('Wing needs four return scenes and three rooms: '+key)
+        if any(len(pair)!=2 for pair in old['wing_grid']):
+            raise ValueError('Wing room coordinates malformed: '+key)
+        if any(abs(a[0]-b[0])+abs(a[1]-b[1])!=1 for a,b in zip(old['wing_grid'],old['wing_grid'][1:])):
+            raise ValueError('Wing fieldwork rooms lost physical adjacency: '+key)
+    if '#include "World/UnmadeCodexExperienceGenerated.inc"' not in WRAPPER.read_text(encoding='utf-8'):
+        raise ValueError('Wing gameplay source no longer includes Codex table')
+    return generate_experience(codex)
+
 def main():
- p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args();target=ROOT/'Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h';s=build()
- if a.check:assert target.read_text()==s,'experience registry drift'
- else:target.write_text(s)
- print('PASS: nine authored wings, specialties and 36 return scenes')
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--check',action='store_true')
+    args=parser.parse_args()
+    generated=build()
+    if args.check:
+        if not TARGET.is_file() or TARGET.read_text(encoding='utf-8')!=generated:
+            raise SystemExit('FAIL: Codex-generated optional wing definitions are stale')
+    else:
+        TARGET.write_text(generated,encoding='utf-8')
+    print('PASS: nine authored optional wings and 36 return scenes match Codex')
+
 if __name__=='__main__':main()

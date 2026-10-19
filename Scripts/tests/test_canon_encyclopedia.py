@@ -63,7 +63,7 @@ class CanonEncyclopediaTests(unittest.TestCase):
         self.assertEqual(3, self.index["counts"]["faction"])
         self.assertEqual(2, self.index["counts"]["trade_contract"])
         self.assertEqual(88, self.index["counts"]["npc"])
-        self.assertEqual(243, self.index["counts"]["codex"])
+        self.assertEqual(256, self.index["counts"]["codex"])
 
 
 if __name__ == "__main__":

@@ -19,7 +19,7 @@
     "Personal testimony and rumor remain distinct"
   ],
   "counts": {
-    "codex": 243,
+    "codex": 256,
     "item": 60,
     "regional_gear": 18,
     "boss": 39,
@@ -6931,6 +6931,149 @@
       "canon_class": "source_finite_trade",
       "realm": null,
       "summary": "Verified cargo delivery, finite municipal payment and preserved inventory and receipt provenance"
+    },
+    {
+      "key": "codex:passage.01.ThreefoldReach.WidowedRain",
+      "group": "codex",
+      "id": "passage.01.ThreefoldReach.WidowedRain",
+      "name": "The Threefold Reach → The Rain That Forgot the Sea",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 0; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.02.ThreefoldReach.HearthBeneath",
+      "group": "codex",
+      "id": "passage.02.ThreefoldReach.HearthBeneath",
+      "name": "The Threefold Reach → The Hearth Beneath",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 0; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.03.WidowedRain.TidalLedger",
+      "group": "codex",
+      "id": "passage.03.WidowedRain.TidalLedger",
+      "name": "The Rain That Forgot the Sea → The Sea of Written Debts",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 1; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.04.WidowedRain.SkyBelow",
+      "group": "codex",
+      "id": "passage.04.WidowedRain.SkyBelow",
+      "name": "The Rain That Forgot the Sea → The Upside-Down Choir",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 2; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.05.HearthBeneath.SkyBelow",
+      "group": "codex",
+      "id": "passage.05.HearthBeneath.SkyBelow",
+      "name": "The Hearth Beneath → The Upside-Down Choir",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 1; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.06.HearthBeneath.CinderSpine",
+      "group": "codex",
+      "id": "passage.06.HearthBeneath.CinderSpine",
+      "name": "The Hearth Beneath → The Bones of Yesterdays",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 2; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.07.TidalLedger.HundredUnlived",
+      "group": "codex",
+      "id": "passage.07.TidalLedger.HundredUnlived",
+      "name": "The Sea of Written Debts → The Hundred Unlived",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 2; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.08.SkyBelow.HundredUnlived",
+      "group": "codex",
+      "id": "passage.08.SkyBelow.HundredUnlived",
+      "name": "The Upside-Down Choir → The Hundred Unlived",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 2; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.09.SkyBelow.OrchardOfKings",
+      "group": "codex",
+      "id": "passage.09.SkyBelow.OrchardOfKings",
+      "name": "The Upside-Down Choir → The Orchard of Unwritten Kings",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 3; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.10.CinderSpine.OrchardOfKings",
+      "group": "codex",
+      "id": "passage.10.CinderSpine.OrchardOfKings",
+      "name": "The Bones of Yesterdays → The Orchard of Unwritten Kings",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 3; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.11.HundredUnlived.FirstAbsence",
+      "group": "codex",
+      "id": "passage.11.HundredUnlived.FirstAbsence",
+      "name": "The Hundred Unlived → The Place Before Place",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 4; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.12.OrchardOfKings.FirstAbsence",
+      "group": "codex",
+      "id": "passage.12.OrchardOfKings.FirstAbsence",
+      "name": "The Orchard of Unwritten Kings → The Place Before Place",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 4; no automatic teleport, discovery, or completion."
+    },
+    {
+      "key": "codex:passage.13.TidalLedger.CinderSpine",
+      "group": "codex",
+      "id": "passage.13.TidalLedger.CinderSpine",
+      "name": "The Sea of Written Debts → The Bones of Yesterdays",
+      "section": "05_ABILITIES_SKILLS_AND_RULES.md",
+      "source": "Authoring/ability_codex.json",
+      "canon_class": "source_rule",
+      "realm": null,
+      "summary": "Bidirectional authored passage requiring realm attunement 3; no automatic teleport, discovery, or completion."
     }
   ]
 }
