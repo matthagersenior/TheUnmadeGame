@@ -96,9 +96,18 @@ def validate(data: dict) -> list[str]:
         actual = {(g.get("method"), g.get("via")) for g in item.get("acquisition", [])}
         equal_ids(actual, grants.get(id, set()), "item acquisition " + id, errors)
         expect = "earnable" if grants.get(id) else "reserved"
+        # A Claim() switch branch alone is not an executable acquisition route.
+        if id == "AtlasOfAbsence" and ("milestone", "AtlasOfAbsenceMastery") in grants.get(id, set()):
+            wiring = any("Achievement::AtlasOfAbsenceMastery" in file.read_text(encoding="utf-8")
+                         for file in (ROOT / "Source/TheUnmadeGame/Private").rglob("*.cpp")
+                         if "/Tests/" not in file.as_posix())
+            if not wiring:
+                expect = "declared_unwired"
         error_if(item.get("availability") != expect, f"item {id}: incorrect {expect} availability", errors)
-    reserved = [r.get("id") for r in data.get("exceptions", []) if r.get("type") == "no_acquisition"]
-    equal_ids(reserved, [id for id in all_items if not grants.get(id)], "reserved item exception", errors)
+    pending = [id for id, item in all_items.items() if item.get("availability") in ("reserved", "declared_unwired")]
+    recorded = [r.get("id") for r in data.get("exceptions", [])
+                if r.get("type") in ("no_acquisition", "unwired_milestone")]
+    equal_ids(recorded, pending, "unobtainable/unwired exception", errors)
     if any("The Unpaid Sunrise" in s for s in [read(PUBLIC + "World/UnmadeTenfoldChronicle.h")]):
         error_if(not any(r.get("type") == "reward_name_conflict" and r.get("id") == "TomorrowDebt"
                          for r in data.get("exceptions", [])), "known TomorrowDebt naming conflict must remain explicit", errors)
@@ -111,6 +120,17 @@ def validate(data: dict) -> list[str]:
     study = re.search(
         r'enum class StudyId\s*:\s*int\s*\{([^}]+)\}', read(PUBLIC + "World/UnmadeAbilityStudyRules.h")).group(1)
     study_ids = re.findall(r'(\w+)\s*=\s*\d+', study)
+    source_study = read(PUBLIC + "World/UnmadeAbilityStudyRules.h")
+    study_names = re.findall(r'"([^"]+)"', source_study.split("StudyNames={{", 1)[1].split("}};", 1)[0])
+    if len(study_ids) != len(study_names) or len(study_ids) < 4:
+        errors.append("new firsthand Study registry or title parsing changed")
+    for id, title in zip(study_ids, study_names):
+        skill = all_skills.get("skill:study:"+id, {})
+        quest = all_quests.get("quest:study:"+id, {})
+        if skill.get("name") != title or quest.get("name") != "Study: "+title:
+            errors.append("firsthand study source identity drift: "+id)
+        if skill.get("learning_quest") != "quest:study:"+id:
+            errors.append("firsthand study has no earned mastery quest: "+id)
     rites = rows("World/UnmadeTenfoldChronicle.h", r'\{RiteId::(\w+),Discipline::(\w+),"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)"')
     error_if(len(rites) < 10, "RiteSpecs parse expected original ten rites", errors)
     equal_ids(all_skills, ["skill:rite:" + x[0] for x in rites] + ["skill:technique:" + x[0] for x in expedition] + ["skill:study:" + x for x in study_ids], "skills", errors)
@@ -256,6 +276,27 @@ def validate(data: dict) -> list[str]:
             errors.append(id + ": no concrete learning source/quest")
         if skill.get("mastery_reward") and skill["mastery_reward"] not in item_refs:
             errors.append(id + ": mastery item not catalogued")
+    # The larger Ability Codex indexes inherent, learned, observed, passive
+    # and equipment-mediated capabilities. Do not clone its full 182 records.
+    codex = data.get("codex", {})
+    codex_path = codex.get("path")
+    if codex_path != "Authoring/ability_codex.json":
+        errors.append("the canonical Ability Codex source must remain linked")
+    else:
+        ability = json.loads(read(codex_path))
+        records = ability.get("records", [])
+        if len(records) < 182:
+            errors.append("Ability Codex unexpectedly lost registered capabilities")
+        ability_ids = {r.get("id") for r in records}
+        for r in records:
+            if not r.get("id") or not r.get("name") or not r.get("category") or not r.get("sources") or not r.get("acquisition", {}).get("method"):
+                errors.append("Ability Codex capability has missing identity, acquisition, or source: "+str(r.get("id")))
+        for id, item in all_items.items():
+            if "item."+item["code"] not in ability_ids:
+                errors.append("Item missing from canonical Ability Codex: "+id)
+        for id in [x[0] for x in rites]:
+            if "rite."+id not in ability_ids:
+                errors.append("Learned rite missing from canonical Ability Codex: "+id)
     for id, gear in all_gear.items():
         if gear.get("acquisition") not in all_quests:
             errors.append(id + ": no available regional quest")
