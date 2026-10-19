@@ -173,8 +173,18 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref }}
         run: python Scripts/check_canon_change.py --base "origin/$BASE_REF"
-      - name: Validate source-to-canon manifest on main and direct runs
-        if: github.event_name != 'pull_request'
+      - name: Verify canonical registration on direct main pushes
+        if: github.event_name == 'push'
+        env:
+          BASE_COMMIT: ${{ github.event.before }}
+        run: |
+          if [[ ! "$BASE_COMMIT" =~ ^[0-9a-f]{40}$ ]] || [[ "$BASE_COMMIT" =~ ^0+$ ]]; then
+            echo "Cannot compare source against a valid previous main commit."
+            exit 1
+          fi
+          python Scripts/check_canon_change.py --base "$BASE_COMMIT"
+      - name: Validate canon source manifest on manual workflows
+        if: github.event_name == 'workflow_dispatch'
         run: python Scripts/check_canon_change.py
       - name: Verify complete source-indexed world canon encyclopedia
         run: python Scripts/validate_canon_encyclopedia.py
