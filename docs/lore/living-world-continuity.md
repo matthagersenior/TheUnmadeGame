@@ -1365,3 +1365,12 @@ Legacy compatibility correction: realm aftermath records from before the new exp
 Art specificity upgrade: the nine landmark crowns now have separate architectural grammar rather than a shared cone topper. The cookable tint material is reproducibly authored through Unreal Editor Python, not assumed to exist in BasicShapeMaterial. Color is conditional on that generated asset actually being saved and cooked; source CI is not a visual renderer.
 
 Visual-family coverage extends to Later.0–5 hubs, atlas gateway endpoints, Depth.Evidence/Cache/CivicWork and physical CrossRealm.Review props, not just the nine expedition frontier landings. Existing tagged geometry and save rules remain authoritative.
+
+### Game-wide physical retrofit: source-only (2026-10-19)
+All eleven hand-operated road cargo gates now have explicit, distinct semantic gate tags and child-only decorative hardware; the original gate actor is still the only saved collision/visibility owner. Existing cross-road cargo cubes have a color/signature corresponding to their actual carried city (no teleport or free sale). Blackslag's archive and kiln gates, the six optional survey doors, the nine realm secret alcoves, nine field repair posts, and the realm-specific stone-mass silhouettes now all use the same semantic art builder. This is strictly an art pass: no new path, enemy warning or local eyewitness assertion is created by the decorative shapes.
+
+### Characters as authored graybox silhouettes (2026-10-19)
+
+All five civilian roles have a specific, non-colliding profession silhouette: merchant's two-sided balance, guard's elevated watch cap, scholar's ledger bag, courier's asymmetric sealed satchel and wanderer's patched hood. The actual named identity, role, trust, witness memory and schedule are unchanged. All twelve creature species, including the champion forms, now have independent primitive shapes and different crests grounded in their combat/lore signatures. The capsule still owns physics and enemy reach; imported skeletal rigs supersede this temporary art. Champion silhouettes can scale visually but never change hit boxes, damage, windup or AI.
+
+These props are only a first pass. The canonical source registry provides exact future mesh IDs and physical identifiers for art handoff, not a claim that final skeletal assets or animations have been created.

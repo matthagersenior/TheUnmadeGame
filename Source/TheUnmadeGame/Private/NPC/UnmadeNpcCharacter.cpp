@@ -1,4 +1,5 @@
 #include "NPC/UnmadeNpcCharacter.h"
+#include "World/UnmadeCharacterGrayboxRules.h"
 #include "NavigationSystem.h"
 #include "NavigationPath.h"
 #include "Authoring/UnmadeOuterPeopleData.h"
@@ -30,6 +31,11 @@ AUnmadeNpcCharacter::AUnmadeNpcCharacter()
 
     static ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
     if (Mesh.Succeeded()) PlaceholderVisual->SetStaticMesh(Mesh.Object);
+    AccessoryVisual=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NPCProfessionSilhouette"));
+    AccessoryVisual->SetupAttachment(GetCapsuleComponent());
+    AccessoryVisual->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    AccessoryVisual->SetGenerateOverlapEvents(false);
+    AccessoryVisual->SetCanEverAffectNavigation(false);
 }
 
 void AUnmadeNpcCharacter::BeginPlay()
@@ -49,6 +55,7 @@ void AUnmadeNpcCharacter::TryLoadResidentRig()
         GetMesh()->SetRelativeLocation(FVector(0,0,-88));
         GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
         PlaceholderVisual->SetVisibility(false);
+        AccessoryVisual->SetVisibility(false);
         bSkeletalRigLoaded=true;
         AnimateResident(FName(TEXT("Idle")));
     }
@@ -332,6 +339,21 @@ void AUnmadeNpcCharacter::ConfigureIdentity(FName StableId, const FString& Displ
     Role = InRole;
     Temperament = InTemperament;
     Tags.AddUnique(StableId);
+    // NPC memory, dialogue, occupation and capsule do not depend on this
+    // visual affordance. A unique crest reads even in untextured graybox.
+    if(!bSkeletalRigLoaded&&IsValid(PlaceholderVisual)&&IsValid(AccessoryVisual)){
+        const auto& Visual=UnmadeCore::ResidentGraybox(Role);
+        PlaceholderVisual->SetRelativeScale3D(FVector(Visual.sx,Visual.sy,Visual.sz));
+        const FString Path=FString::Printf(TEXT("/Engine/BasicShapes/%s.%s"),
+            UTF8_TO_TCHAR(Visual.accessoryShape),UTF8_TO_TCHAR(Visual.accessoryShape));
+        if(UStaticMesh* Object=LoadObject<UStaticMesh>(nullptr,*Path))
+            AccessoryVisual->SetStaticMesh(Object);
+        AccessoryVisual->SetRelativeLocation(FVector(
+            Role==UnmadeCore::NpcRole::Courier?38.f:0.f,0.f,Visual.accessoryHeight));
+        AccessoryVisual->SetRelativeScale3D(FVector(
+            Visual.accessoryScale,Visual.accessoryScale,Visual.accessoryScale));
+        AccessoryVisual->SetVisibility(true);
+    }
 }
 
 UnmadeCore::NpcAction AUnmadeNpcCharacter::DecideForPlayer(bool bPlayerNearby) const

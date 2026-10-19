@@ -53,11 +53,21 @@ void AUnmadePrototypeHub::BuildRememberedRoads(){
   Block(FVector(400,440,200),FVector(6,3.1,.3),TEXT("LaneRoof"));
   // Gate spans the entry of a walled covered lane, and the recess has a closed back.
   RoadLaneGates[i]=Gate(Yard(i,FVector(100,440,45)));
+  if(RoadLaneGates[i].IsValid()){
+    const FName Tag(*FString::Printf(TEXT("Road.%d.LaneGate"),i));
+    RoadLaneGates[i]->Tags.AddUnique(Tag);
+    StyleWorldProp(RoadLaneGates[i].Get(),Tag,FVector(.3,2.7,2.4));
+  }
   Block(FVector(-100,900,50),FVector(6,.3,2.5),TEXT("RecessSouth"));
   Block(FVector(-100,1180,50),FVector(6,.3,2.5),TEXT("RecessNorth"));
   Block(FVector(-400,1040,50),FVector(.3,3.1,2.5),TEXT("RecessBack"));
   Block(FVector(-100,1040,200),FVector(6,3.1,.3),TEXT("RecessRoof"));
   RoadRecessGates[i]=Gate(Yard(i,FVector(200,1040,45)));
+  if(RoadRecessGates[i].IsValid()){
+    const FName Tag(*FString::Printf(TEXT("Road.%d.RecessGate"),i));
+    RoadRecessGates[i]->Tags.AddUnique(Tag);
+    StyleWorldProp(RoadRecessGates[i].Get(),Tag,FVector(.3,2.7,2.4));
+  }
   RoadSigns[i]=Sign(Yard(i,FVector(0,-100,100)),FString(UTF8_TO_TCHAR(C.title))+TEXT(" / E - LOAD AFTER FIELDWORK"));
   for(int j=0;j<3;++j){Block(FVector(-150,300+j*350,-40),FVector(.6,.5,.5),TEXT("ClueStand"));Sign(Clue(i,j)+FVector(0,0,75),FString::Printf(TEXT("E / F - FIELD RECORD %d"),j+1));}
   Sign(Mechanism(i)+FVector(0,0,95),FString(UTF8_TO_TCHAR(C.mechanism))+TEXT(" / E calm or maintain / Q Fold / R-T review"));
@@ -95,7 +105,11 @@ void AUnmadePrototypeHub::RefreshRememberedRoads(){
  auto* P=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0));
  if(Carrying&&Able(P)&&!RoadCargoVisual.IsValid()){
   auto* A=GetWorld()->SpawnActor<AStaticMeshActor>(P->GetActorLocation(),FRotator::ZeroRotator);
-  if(A){auto* M=A->GetStaticMeshComponent();M->SetMobility(EComponentMobility::Movable);M->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));M->SetWorldScale3D(FVector(.45,.45,.35));A->SetActorEnableCollision(false);A->AttachToActor(P,FAttachmentTransformRules::KeepRelativeTransform);A->SetActorRelativeLocation(FVector(-45,0,15));RoadCargoVisual=A;}
+  if(A){auto* M=A->GetStaticMeshComponent();M->SetMobility(EComponentMobility::Movable);M->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));M->SetWorldScale3D(FVector(.45,.45,.35));A->SetActorEnableCollision(false);A->AttachToActor(P,FAttachmentTransformRules::KeepRelativeTransform);A->SetActorRelativeLocation(FVector(-45,0,15));
+   const FName CargoTag(*FString::Printf(TEXT("Road.%d.Cargo"),RememberedRoads.Save().cargoCity));
+   A->Tags.AddUnique(CargoTag);
+   StyleWorldProp(A,CargoTag,FVector(.45,.45,.35));
+   RoadCargoVisual=A;}
  }
  if(!Carrying&&RoadCargoVisual.IsValid()){RoadCargoVisual->Destroy();RoadCargoVisual.Reset();}
 }
