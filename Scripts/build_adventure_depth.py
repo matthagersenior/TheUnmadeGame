@@ -15,7 +15,7 @@ def build():
     by={row['id']:row for row in canon['records']}
     if len(old)!=9 or [x['realm_index'] for x in old]!=list(range(9)):
         raise ValueError('Personal quest saved indices drift')
-    coords=list(map(int,re.findall(r'-?\\d+', (ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureLayout.h').read_text().split('constexpr int paths[9][6][2]=')[1].split(';')[0])))
+    coords=list(map(int,re.findall(r'-?\d+', (ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureLayout.h').read_text().split('constexpr int paths[9][6][2]=')[1].split(';')[0])))
     expected=[v for x in old for point in x['room_grid'] for v in point]
     if coords!=expected:
         raise ValueError('Personal quest physical dungeon layout drift')
