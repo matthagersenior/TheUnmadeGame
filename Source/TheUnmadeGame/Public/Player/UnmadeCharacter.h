@@ -10,6 +10,7 @@
 #include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeFactionChronicleRules.h"
 #include "World/UnmadeTenfoldChronicle.h"
+#include "World/UnmadeAbilityStudyRules.h"
 class UUnmadePrototypeSave;
 #include "UnmadeCharacter.generated.h"
 
@@ -29,7 +30,7 @@ class THEUNMADEGAME_API AUnmadeCharacter : public ACharacter
     GENERATED_BODY()
 
 public:
-    bool HasRejectedSave()const{return bFractureSaveRejected||bConflictSaveRejected|| bCharacterIdentitySaveRejected;}
+    bool HasRejectedSave()const{return bFractureSaveRejected||bConflictSaveRejected|| bCharacterIdentitySaveRejected||bStudySaveRejected;}
     void CaptureSession(UUnmadePrototypeSave* Save)const;
     bool SaveSessionNow();
     void CraftRecipeSelection(int Recipe);
@@ -71,6 +72,11 @@ public:
     void ReportBrokenOathEvent();
     void ReportRedeemedOathEvent();
     void ReconcileEarnedRewards();
+    UFUNCTION(BlueprintCallable,Category="Unmade|Ability Study") void StudyObserve();
+    UFUNCTION(BlueprintCallable,Category="Unmade|Ability Study") void StudyProgress();
+    UFUNCTION(BlueprintCallable,Category="Unmade|Ability Study") void StudyUse();
+    UFUNCTION(BlueprintCallable,Category="Unmade|Ability Study") void StudyNext();
+    UFUNCTION(BlueprintPure,Category="Unmade|Ability Study") FString GetStudyJournal()const;
 
     /** Persistent identity choices used by the native Character page. */
     UFUNCTION(BlueprintCallable, Category="Unmade|Identity")
@@ -88,6 +94,17 @@ public:
     void ReportIntegrationEvent(FName Event,FName Subject){ReportLocalEvent(Event,Subject);}
     void RecoverIntegrationStrain(double Amount){FractureModel.Recover(Amount/UnmadeCore::FractureModel::RecoveryPerSecond);}
 private:
+    UnmadeCore::AbilityStudy AbilityStudy;
+    bool bStudySaveRejected=false;
+    int32 SelectedStudy=0;
+    double NextStudyTrialAt=0;
+    double NextStudyPowerAt=0;
+    double StudyWardUntil=-1;
+    bool PersistStudy();
+    bool RecordStudyEvidence(UnmadeCore::StudyId Id,int Bit);
+    class AUnmadeEnemyCharacter* FindStudyEnemy(int32 Subject,bool RequireWarning=false)const;
+    bool NearEchoStudySite()const;
+    void TryClaimAtlas();
     UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
     bool bFractureSaveRejected=false,bConflictSaveRejected=false;
     bool bSessionRestored=false;
