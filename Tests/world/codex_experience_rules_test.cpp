@@ -1,3 +1,4 @@
+#include "World/UnmadeExpeditionRegistry.h"
 #include "World/UnmadePlayerExperienceRules.h"
 #include <cassert>
 #include <cstring>
