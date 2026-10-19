@@ -10,6 +10,7 @@
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeProceduralArtRules.h"
+#include "World/UnmadeGamewideGrayboxRules.h"
 #include "World/UnmadeDiscoveryCivicRules.h"
 #include "Save/UnmadeCounterThreatRules.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
@@ -2309,8 +2310,20 @@ void AUnmadePrototypeHub::StyleWorldProp(AStaticMeshActor* Block,FName Label,FVe
     const FTCHARToUTF8 Utf8(*Written);
     const auto Id=UnmadeCore::ClassifyRealmProp(Utf8.Get(),
         WorldScale.X,WorldScale.Y,WorldScale.Z);
-    if(Id.realm<0)return;
-    const auto& Design=UnmadeCore::RealmVisualDesigns[Id.realm];
+    const auto Graybox=UnmadeCore::ClassifyGrayboxArt(Utf8.Get(),
+        WorldScale.X,WorldScale.Y,WorldScale.Z);
+    if(Graybox.realm<0)return;
+    int32 Palette=Graybox.paletteSlot;
+    // Village.Commons/Trades/Housing/Watchpost reuse stable tags in both
+    // settlements. Read the authored scene location, not an invented save ID.
+    const FVector Site=Block->GetActorLocation();
+    if(Written.StartsWith(TEXT("Village."))&&!Written.Contains(TEXT("Village.Bellwold"))&&
+       !Written.Contains(TEXT("Village.Paperhaven"))){
+        if(FMath::Abs(Site.X+18000.f)<8000.f&&FMath::Abs(Site.Y)<8000.f)Palette=9;
+        else if(FMath::Abs(Site.X-18000.f)<8000.f&&FMath::Abs(Site.Y)<8000.f)Palette=10;
+    }
+    Palette=FMath::Clamp(Palette,0,11);
+    const auto& Design=UnmadeCore::RealmVisualDesigns[Graybox.realm];
     // Cookable master is generated in-editor by Scripts/unreal/author_realm_palette.py.
     // The Engine fallback keeps silhouettes visible on unprepared machines,
     // but it may not expose a Color vector parameter; never claim it is tinted.
@@ -2319,17 +2332,23 @@ void AUnmadePrototypeHub::StyleWorldProp(AStaticMeshActor* Block,FName Label,FVe
     if(!Source)Source=LoadObject<UMaterialInterface>(
         nullptr,TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
     if(Source){
-        // Only 18 material instances for thousands of blocks. The hub retains
-        // the UPROPERTY refs across GC; no per-frame material allocations.
-        if(ProceduralPaletteMaterials.Num()<18)ProceduralPaletteMaterials.SetNum(18);
-        const int32 Slot=Id.realm*2;
+        // Twelve zone palettes x two semantic tones. No per-block material
+        // allocation; this cache remains owned by the hub's UPROPERTY.
+        if(ProceduralPaletteMaterials.Num()<24)ProceduralPaletteMaterials.SetNum(24);
+        const int32 Slot=Palette*2;
         auto MaterialFor=[&](bool Accent)->UMaterialInstanceDynamic*{
             const int32 Key=Slot+(Accent?1:0);
             if(!ProceduralPaletteMaterials[Key]){
                 auto* Material=UMaterialInstanceDynamic::Create(
                     Source,this);
                 if(!Material)return nullptr;
-                const auto Rgb=Accent?Design.accent:Design.color;
+                const UnmadeCore::RealmRgb Rgb=Palette==9?
+                    (Accent?UnmadeCore::RealmRgb{222,188,127}:UnmadeCore::RealmRgb{98,100,111}):
+                    Palette==10?
+                    (Accent?UnmadeCore::RealmRgb{220,196,158}:UnmadeCore::RealmRgb{79,90,113}):
+                    Palette==11?
+                    (Accent?UnmadeCore::RealmRgb{190,175,138}:UnmadeCore::RealmRgb{79,83,91}):
+                    (Accent?Design.accent:Design.color);
                 const FLinearColor Color(Rgb.R/255.f,Rgb.G/255.f,Rgb.B/255.f);
                 // The generated master explicitly connects Color to Base Color.
                 // Fallback still renders the distinct structural silhouettes.
@@ -2340,7 +2359,7 @@ void AUnmadePrototypeHub::StyleWorldProp(AStaticMeshActor* Block,FName Label,FVe
             return ProceduralPaletteMaterials[Key].Get();
         };
         if(auto* BaseMaterial=MaterialFor(false))CollisionOwner->SetMaterial(0,BaseMaterial);
-        if(Id.allowDecoration){
+        if(Id.allowDecoration||Graybox.decorate){
             UStaticMesh* Cylinder=LoadObject<UStaticMesh>(
                 nullptr,TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
             UStaticMesh* Sphere=LoadObject<UStaticMesh>(
@@ -2415,6 +2434,74 @@ void AUnmadePrototypeHub::StyleWorldProp(AStaticMeshActor* Block,FName Label,FVe
                         FRotator::ZeroRotator);
                     Decorate(Cylinder,FVector(47,0,H+22),FVector(.32,.32,.66),
                         FRotator::ZeroRotator);break;
+                }
+            }else if(Graybox.decorate&&Graybox.kit!=UnmadeCore::GrayboxKit::Generic){
+                // Two or fewer inexpensive nonblocking semantic silhouette
+                // parts per authored prop. This is visual-only, never a new
+                // checkpoint, collision hull or duplicate world interactable.
+                using UnmadeCore::GrayboxKit;
+                switch(Graybox.kit){
+                case GrayboxKit::BellTower:
+                    Decorate(Cone,FVector(0,0,H+54),FVector(.9,.9,.6),FRotator::ZeroRotator);
+                    Decorate(Sphere,FVector(0,0,H+106),FVector(.30,.30,.36),FRotator::ZeroRotator);break;
+                case GrayboxKit::ArchiveTower:
+                case GrayboxKit::Records:
+                case GrayboxKit::Scriptorium:
+                    Decorate(Cylinder,FVector(0,0,H+16),FVector(1.25,.38,.16),FRotator(90,0,0));
+                    Decorate(Sphere,FVector(0,0,H+53),FVector(.28,.28,.22),FRotator::ZeroRotator);break;
+                case GrayboxKit::Hearth:
+                case GrayboxKit::Forge:
+                    Decorate(Cylinder,FVector(0,0,H+19),FVector(.75,.75,.20),FRotator::ZeroRotator);
+                    Decorate(Cone,FVector(0,0,H+67),FVector(.37,.37,.75),FRotator::ZeroRotator);break;
+                case GrayboxKit::Bed:
+                    Decorate(Cylinder,FVector(-32,0,H+8),FVector(.2,.7,.18),FRotator(0,90,0));
+                    Decorate(Cylinder,FVector(32,0,H+8),FVector(.2,.7,.18),FRotator(0,90,0));break;
+                case GrayboxKit::Table:
+                case GrayboxKit::Bench:
+                case GrayboxKit::Market:
+                    Decorate(Cylinder,FVector(0,0,H+12),FVector(1.1,.65,.16),FRotator::ZeroRotator);
+                    Decorate(Sphere,FVector(28,0,H+42),FVector(.22,.22,.20),FRotator::ZeroRotator);break;
+                case GrayboxKit::Portal:
+                case GrayboxKit::FinalChoice:
+                    Decorate(Cylinder,FVector(-35,0,H+42),FVector(.25,.25,.85),FRotator::ZeroRotator);
+                    Decorate(Cylinder,FVector(35,0,H+42),FVector(.25,.25,.85),FRotator::ZeroRotator);break;
+                case GrayboxKit::Sanctuary:
+                case GrayboxKit::Commons:
+                    Decorate(Cone,FVector(0,0,H+25),FVector(1.6,.85,.32),FRotator(0,0,0));
+                    Decorate(Sphere,FVector(0,0,H+70),FVector(.2,.2,.2),FRotator::ZeroRotator);break;
+                case GrayboxKit::Watch:
+                case GrayboxKit::Signal:
+                    Decorate(Cylinder,FVector(0,0,H+36),FVector(.18,.18,.70),FRotator::ZeroRotator);
+                    Decorate(Sphere,FVector(0,0,H+90),FVector(.27,.27,.27),FRotator::ZeroRotator);break;
+                case GrayboxKit::Ritual:
+                case GrayboxKit::Mechanism:
+                    Decorate(Cylinder,FVector(0,0,H+20),FVector(.66,.66,.20),FRotator(90,0,0));
+                    Decorate(Sphere,FVector(0,0,H+56),FVector(.25,.25,.25),FRotator::ZeroRotator);break;
+                case GrayboxKit::Gate:
+                    Decorate(Cylinder,FVector(-WorldScale.X*32,0,H+12),
+                             FVector(.22,.22,.26),FRotator::ZeroRotator);
+                    Decorate(Cylinder,FVector(WorldScale.X*32,0,H+12),
+                             FVector(.22,.22,.26),FRotator::ZeroRotator);break;
+                case GrayboxKit::Evidence:
+                case GrayboxKit::Civic:
+                case GrayboxKit::Cargo:
+                case GrayboxKit::Workshop:
+                    Decorate(Cylinder,FVector(0,0,H+14),FVector(.68,.58,.18),FRotator::ZeroRotator);
+                    Decorate(Sphere,FVector(0,0,H+52),FVector(.25,.25,.24),FRotator::ZeroRotator);break;
+                case GrayboxKit::Garden:
+                    Decorate(Cone,FVector(-25,0,H+37),FVector(.37,.37,.72),FRotator(0,-25,0));
+                    Decorate(Cone,FVector(25,0,H+37),FVector(.37,.37,.72),FRotator(0,25,0));break;
+                case GrayboxKit::Ruin:
+                case GrayboxKit::Hazard:
+                    Decorate(Cone,FVector(0,0,H+26),FVector(.47,.45,.45),FRotator(12,0,0));
+                    break;
+                case GrayboxKit::Home:
+                    // Furnished walls remain undecorated; only a roof profile is
+                    // safe because domestic thresholds must remain navigable.
+                    if(Written.EndsWith(TEXT(".Roof")))
+                     Decorate(Cone,FVector(0,0,H+25),FVector(1.3,1.0,.37),FRotator::ZeroRotator);
+                    break;
+                default:break;
                 }
             }else if(Id.role==UnmadeCore::VisualRole::Gate){
                 // A tagged gate hides/toggles all its purely visual child trims.
