@@ -153,10 +153,10 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  else if(GrayboxHas(label,"Landmark."))kit=GrayboxKit::Landmark;
  else if(GrayboxHas(label,"Belltower"))kit=GrayboxKit::BellTower;
  else if(GrayboxHas(label,"ArchiveTower"))kit=GrayboxKit::ArchiveTower;
+ else if(GrayboxHas(label,"WitnessBraid."))kit=GrayboxKit::Civic;
  else if(GrayboxHas(label,"Refuge")||GrayboxHas(label,"Shelter")||
          GrayboxHas(label,"Sanctuary"))kit=GrayboxKit::Sanctuary;
  else if(GrayboxHas(label,"CivicWitnessBoard"))kit=GrayboxKit::Evidence;
- else if(GrayboxHas(label,"WitnessBraid."))kit=GrayboxKit::Civic;
  else if(GrayboxHas(label,"Civic")||GrayboxHas(label,"WitnessBraid")||
          GrayboxHas(label,"AccordWork"))kit=GrayboxKit::Civic;
  else if(GrayboxHas(label,"Registry")||GrayboxHas(label,"ServiceCopies")||
