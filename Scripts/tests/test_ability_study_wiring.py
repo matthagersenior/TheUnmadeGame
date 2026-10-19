@@ -49,14 +49,29 @@ class AbilityStudyWiring(unittest.TestCase):
         player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         core=read("Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h")
         equip=read("Source/TheUnmadeGame/Public/Items/UnmadeEquipmentComponent.h")
-        for token in ("AbilityStudy.AtlasReady()","NearEchoStudySite()",
-                      "Equipment->Claim(UnmadeCore::Achievement::AtlasOfAbsenceMastery)"):
+        for token in ("AbilityStudy.CanClaimAtlas(CurrentAtlasRequirements())","NearEchoStudySite()",
+                      "Equipment->Claim(UnmadeCore::Achievement::AtlasOfAbsenceMastery)",
+                      "Save->VerifiedRoadBits>0",
+                      "Save->RiteStages[9]==5",
+                      "Save->ConfluenceStages[5]==2",
+                      "Save->DiscoveredLoreMask&1"):
             self.assertIn(token,player)
         for token in ("case Achievement::AtlasOfAbsenceMastery: okay=add(ItemId::AtlasOfAbsence,1)",
                       "charm==ItemId::AtlasOfAbsence ? 4",
                       "Equipped(GearSlot::Charm)==ItemId::AtlasOfAbsence ? 2"):
             self.assertIn(token,core)
         self.assertIn("Inventory.Equipped(UnmadeCore::GearSlot::Charm)==UnmadeCore::ItemId::AtlasOfAbsence?2:0",equip)
+
+    def test_requirements_are_visible_not_just_implicit(self):
+        player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
+        core=read("Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h")
+        self.assertIn("GetStudyJournal()const",player)
+        self.assertIn("AbilityStudy.Checklist(Id)",player)
+        self.assertIn("AbilityStudy.AtlasChecklist(Atlas)",player)
+        self.assertIn('TEXT("  [%s] %s',player)
+        self.assertIn("CanClaimAtlas(const AtlasStudyContext& ctx)",core)
+        self.assertIn("for(const auto& requirement:AtlasChecklist(ctx))",core)
+        self.assertIn("!FindStudyEnemy(SelectedStudy,true)",player)
 
     def test_keyboard_and_native_controller_menu_are_connected(self):
         config=read("Config/DefaultInput.ini")

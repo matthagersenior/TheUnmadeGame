@@ -58,6 +58,36 @@ int main(){
     assert(fresh.Restore(reloaded.Snapshot()));
     assert(fresh.AtlasReady());
 
+    auto rules=reloaded.Checklist(StudyId::Cinderjaw);
+    for(const auto& requirement:rules)assert(requirement.complete);
+    AbilityStudy none;
+    auto locked=none.Checklist(StudyId::EchoWell);
+    for(const auto& requirement:locked)assert(!requirement.complete);
+    AtlasStudyContext context;
+    assert(!reloaded.CanClaimAtlas(context));
+    context.echoInspected=true;
+    context.cartographyMastered=true;
+    context.routePersonallyVerified=true;
+    context.firstAbsenceWitnessed=true;
+    context.physicallyAtEchoWell=true;
+    context.saveHealthy=true;
+    assert(reloaded.CanClaimAtlas(context));
+    context.routePersonallyVerified=false;
+    assert(!reloaded.CanClaimAtlas(context)); // hearsay alone cannot earn the Atlas
+    context.routePersonallyVerified=true;
+    context.firstAbsenceWitnessed=false;
+    assert(!reloaded.CanClaimAtlas(context)); // cannot bypass credible witnesses
+    context.firstAbsenceWitnessed=true;
+    context.cartographyMastered=false;
+    assert(!reloaded.CanClaimAtlas(context)); // not earned by creature kills alone
+    context.cartographyMastered=true;
+    context.rewardAlreadyClaimed=true;
+    assert(!reloaded.CanClaimAtlas(context)); // one-time reward
+    context.rewardAlreadyClaimed=false;
+    assert(reloaded.CanClaimAtlas(context));
+    auto atlasRequirements=reloaded.AtlasChecklist(context);
+    for(const auto& requirement:atlasRequirements)assert(requirement.complete);
+
     InventoryModel inventory;
     assert(inventory.Claim(Achievement::AtlasOfAbsenceMastery)==RewardResult::Awarded);
     assert(inventory.Quantity(ItemId::AtlasOfAbsence)==1);

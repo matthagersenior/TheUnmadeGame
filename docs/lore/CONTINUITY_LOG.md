@@ -358,3 +358,11 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Main-story witnessed first chapters now provide level 1/2/3/4 atlas attunement for opening/frontier/middle/upper, independent of optional mythic gear, without making skipped chapters count as completed. The same level is used by journal route advice and actual portals, with legacy relic shortcuts preserved.
 - Added portable regression coverage for alternative branches, absent evidence, and relic shortcuts. Saved character identities, NPC witness rules, and endings are not overwritten. Actual Unreal Editor travel/save-load testing remains outstanding.
 - The v20 illustrated artifacts and original SHA-256 receipts are unchanged, not regenerated or rehashed.
+
+## 2026-10-19 — Lore-audited Atlas requirement checklist (source pass)
+
+- Required first-hand Echo Well inspection, Memory Lens and two separate enemy masteries before the Atlas may be claimed.
+- Added the pre-existing Cartography mastery, physical route verification, and double-rite First Absence witnessed resolution to the Atlas reward gate; no new lore shortcut or automatic power absorption.
+- Added authoritative save-derived `[x] / [ ]` requirements for each study technique and the Atlas, displayed in the real Actions page and evidence notebook.
+- Tightened physical field experiments to require fresh enemy telegraphs; remained save-backed and Strain-priced.
+- Added portable C++ and wiring tests for missing evidence, confluence, verified route, place, duplicate reward, and displayed checklist. No Unreal compilation or regenerated illustrated release claimed.

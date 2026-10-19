@@ -14,6 +14,20 @@ inline constexpr std::array<const char*,StudyCount> StudyNames={{
     "Kiln Ward / Cinderjaw", "Seam Step / Pale Strider",
     "Redaction Read / Redaction Eye", "Memory Lens / Echo Well"
 }};
+/** One authoritative requirement and its recorded completion state; never a free unlock. */
+struct StudyRequirement {
+    const char* label;
+    bool complete;
+};
+struct AtlasStudyContext {
+    bool echoInspected=false;
+    bool cartographyMastered=false;
+    bool routePersonallyVerified=false;
+    bool firstAbsenceWitnessed=false;
+    bool physicallyAtEchoWell=false;
+    bool saveHealthy=false;
+    bool rewardAlreadyClaimed=false;
+};
 struct StudySnapshot {
     std::array<int,StudyCount> stages{};
     std::array<int,StudyCount> evidence{};
@@ -79,6 +93,39 @@ public:
     bool HasMastered(StudyId id)const noexcept{return Stage(id)==StudyStage::Mastered;}
     bool CanCombine(StudyId a,StudyId b)const noexcept{
         return a!=b&&HasMastered(a)&&HasMastered(b);
+    }
+    /** Persistent milestones only; real-world availability is checked by the player adapter. */
+    std::array<StudyRequirement,6> Checklist(StudyId id)const noexcept{
+        const bool echo=id==StudyId::EchoWell;
+        return {{
+            {echo?"Personally inspect the physical Echo Well":"Personally witness this living enemy telegraph an attack",(Evidence(id)&1)!=0},
+            {echo?"Measure the Echo Well again at a real Strain cost":"Land real, damaging contact against the observed living species",(Evidence(id)&2)!=0},
+            {"Interpret both firsthand signals",static_cast<int>(Stage(id))>=2},
+            {"Complete first physical, Strain-paid experiment",Trials(id)>=1},
+            {"Complete second separate physical experiment",Trials(id)>=2},
+            {"Master the technique beside its real subject",HasMastered(id)}
+        }};
+    }
+    std::array<StudyRequirement,8> AtlasChecklist(const AtlasStudyContext& ctx)const noexcept{
+        int enemyMasteries=0;
+        for(int i=0;i<3;++i)
+            if(HasMastered(static_cast<StudyId>(i)))++enemyMasteries;
+        return {{
+            {"Personally inspect the Well of Returned Voices",ctx.echoInspected},
+            {"Master Memory Lens through the Echo Well",HasMastered(StudyId::EchoWell)},
+            {"Master two distinct living-enemy principles",enemyMasteries>=2},
+            {"Master the Cartography rite without bypassing its quest",ctx.cartographyMastered},
+            {"Verify at least one route through firsthand travel",ctx.routePersonallyVerified},
+            {"Resolve The Place Before a First Story with two credible witnesses",ctx.firstAbsenceWitnessed},
+            {"Return physically to the Echo Well to claim the Atlas",ctx.physicallyAtEchoWell},
+            {"Have a valid, writable player study/inventory save",ctx.saveHealthy}
+        }};
+    }
+    bool CanClaimAtlas(const AtlasStudyContext& ctx)const noexcept{
+        if(ctx.rewardAlreadyClaimed)return false;
+        for(const auto& requirement:AtlasChecklist(ctx))
+            if(!requirement.complete)return false;
+        return true;
     }
     bool AtlasReady()const noexcept{
         int earned=0;for(int i=0;i<StudyCount;++i)earned+=state_.stages[i]==4;

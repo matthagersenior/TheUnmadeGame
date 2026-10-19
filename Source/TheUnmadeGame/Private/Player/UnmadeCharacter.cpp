@@ -1791,25 +1791,36 @@ bool AUnmadeCharacter::NearEchoStudySite()const
 
 FString AUnmadeCharacter::GetStudyJournal()const
 {
-    FString Out=TEXT("ABILITY STUDY / authored firsthand research (5 Observe, 9 Progress, 0 Use, O Cycle)\n");
-    static const TCHAR* Stages[]={TEXT("unknown"),TEXT("observed"),TEXT("understood"),
-                                  TEXT("experimented"),TEXT("mastered")};
+    FString Out=TEXT("ABILITY STUDY — REQUIREMENT CHECKLIST (5 Observe, 9 Progress, 0 Use, O Cycle)\n");
+    static const TCHAR* StageNames[]={TEXT("unknown"),TEXT("observed"),TEXT("understood"),
+                                      TEXT("experimented"),TEXT("mastered")};
     for(int i=0;i<UnmadeCore::StudyCount;++i)
     {
         const auto Id=static_cast<UnmadeCore::StudyId>(i);
         const int Stage=static_cast<int>(AbilityStudy.Stage(Id));
-        Out+=FString::Printf(TEXT("%s%s: %s | evidence %d/3 | trials %d/2\n"),
+        Out+=FString::Printf(TEXT("\n%s%s | %s | trials %d/2\n"),
             i==SelectedStudy?TEXT("> "):TEXT("  "),
-            UTF8_TO_TCHAR(UnmadeCore::StudyNames[i]),Stages[Stage],
-            AbilityStudy.Evidence(Id),AbilityStudy.Trials(Id));
+            UTF8_TO_TCHAR(UnmadeCore::StudyNames[i]),StageNames[Stage],AbilityStudy.Trials(Id));
+        const auto Requirements=AbilityStudy.Checklist(Id);
+        for(const auto& R:Requirements)
+            Out+=FString::Printf(TEXT("  [%s] %s\n"),R.complete?TEXT("x"):TEXT(" "),
+                UTF8_TO_TCHAR(R.label));
     }
-    Out+=TEXT("Enemy research: record a live warning, then land actual contact; Echo Well: approach site and corroborate via Strain.\n");
-    Out+=TEXT("Understanding requires both signals, then two paid live experiments and physical mastery.\n");
-    Out+=AbilityStudy.AtlasReady()?TEXT("Atlas of Absence ready: return to Echo Well and select Memory Lens, then press 9.\n")
-        :TEXT("Atlas of Absence: master Memory Lens and any two distinct enemy principles.\n");
+    Out+=TEXT("\nATLAS OF ABSENCE — CANON / ACQUISITION CHECKLIST\n");
+    const auto Atlas=CurrentAtlasRequirements();
+    const auto Requirements=AbilityStudy.AtlasChecklist(Atlas);
+    for(const auto& R:Requirements)
+        Out+=FString::Printf(TEXT("  [%s] %s\n"),R.complete?TEXT("x"):TEXT(" "),
+            UTF8_TO_TCHAR(R.label));
+    Out+=FString::Printf(TEXT("  [%s] Reward legitimately claimed and saved\n"),
+        Atlas.rewardAlreadyClaimed?TEXT("x"):TEXT(" "));
+    if(AbilityStudy.CanClaimAtlas(Atlas))
+        Out+=TEXT("All requirements complete: select Memory Lens at Echo Well and press 9 to claim.\n");
+    else Out+=TEXT("Unmet requirements must be earned in the world; rumors, duplicates, and button presses are not substitutes.\n");
+    if(bStudySaveRejected)Out+=TEXT("WARNING: Study save rejected; progression and rewards are disabled to protect the existing profile.\n");
+    Out+=TEXT("Enemy experiments require a new live attack warning, 10 Strain, and 8 seconds recovery. Mastery costs 5 Strain; learned casts cost 9 Strain.\n");
     return Out;
 }
-
 void AUnmadeCharacter::StudyNext()
 {
     if(IsRpgMenuOpen())return;
@@ -1834,12 +1845,31 @@ void AUnmadeCharacter::StudyObserve()
     RecordStudyEvidence(Id,1);
 }
 
+UnmadeCore::AtlasStudyContext AUnmadeCharacter::CurrentAtlasRequirements()const
+{
+    UnmadeCore::AtlasStudyContext Context;
+    const auto* Save=Cast<UUnmadePrototypeSave>(UnmadeSave::LoadGameFromSlot());
+    Context.physicallyAtEchoWell=NearEchoStudySite();
+    Context.saveHealthy=!HasRejectedSave()&&IsValid(Equipment)&&!Equipment->HasRejectedSave();
+    Context.rewardAlreadyClaimed=IsValid(Equipment)&&Equipment->HasEarnedAtlas();
+    if(!Save||Save->SchemaVersion!=1)return Context;
+    Context.echoInspected=(Save->DiscoveredLoreMask&1)!=0;
+    Context.cartographyMastered=Save->bHasTenfoldChronicle&&
+        Save->RiteStages.Num()==10&&Save->RiteStages[9]==5;
+    Context.routePersonallyVerified=Save->bHasTenfoldChronicle&&
+        Save->VerifiedRoadBits>0;
+    Context.firstAbsenceWitnessed=Save->bHasConfluenceSnapshot&&
+        Save->ConfluenceStages.Num()==6&&Save->ConfluenceStages[5]==2;
+    return Context;
+}
+
 void AUnmadeCharacter::TryClaimAtlas()
 {
-    if(!AbilityStudy.AtlasReady()||!NearEchoStudySite()||!IsValid(Equipment))return;
+    if(!IsValid(Equipment)||
+       !AbilityStudy.CanClaimAtlas(CurrentAtlasRequirements()))return;
     if(Equipment->Claim(UnmadeCore::Achievement::AtlasOfAbsenceMastery)&&GEngine)
         UnmadeRpgFeedback(-1,9.f,FColor::Yellow,
-            TEXT("ATLAS OF ABSENCE earned at Echo Well! Equip the charm: -4 Glimpse Strain and +2 Fold seconds."));
+            TEXT("ATLAS OF ABSENCE earned: mastered Cartography, proven road, First Absence witnesses, Echo Well and two creature principles. Equip the charm for -4 Glimpse Strain and +2 Fold seconds."));
 }
 
 void AUnmadeCharacter::StudyProgress()
@@ -1895,6 +1925,14 @@ void AUnmadeCharacter::StudyProgress()
     }
     if(Stage==UnmadeCore::StudyStage::Understood)
     {
+        // Reproduce the studied principle during a fresh live telegraph, not by
+        // standing beside an idle enemy and pressing the experiment key.
+        if(SelectedStudy!=3 && !FindStudyEnemy(SelectedStudy,true))
+        {
+            if(GEngine)UnmadeRpgFeedback(-1,6.f,FColor::Silver,
+                TEXT("Wait for the real creature to demonstrate its attack again before experimenting."));
+            return;
+        }
         if(Now<NextStudyTrialAt||!FractureModel.SpendStrain(10))
         {
             if(GEngine)UnmadeRpgFeedback(-1,5.f,FColor::Silver,TEXT("Trial needs 10 available Strain and 8 seconds recovery."));

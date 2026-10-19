@@ -232,14 +232,14 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
     atlas = by_id.get("item.charm.atlas")
     if atlas:
         check("item.charm.atlas", "implementation", "prototype_handler")
-        check("item.charm.atlas", "acquisition.method", "three_firsthand_masteries_at_echo_well")
+        check("item.charm.atlas", "acquisition.method", "mastered_cartography_verified_road_witnessed_first_absence_and_study")
         expected_effects = ["Equipped charm: Glimpse Strain discount 4",
                             "Equipped charm: Fold duration +2 seconds (even while using regional weapon)"]
         check("item.charm.atlas", "effect.distinct_effects", expected_effects)
     player = source("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
     items = source(ITEMS)
     saves = source("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
-    for token in ("AbilityStudy.AtlasReady()", "NearEchoStudySite()",
+    for token in ("AbilityStudy.CanClaimAtlas(CurrentAtlasRequirements())", "NearEchoStudySite()",
                   "Achievement::AtlasOfAbsenceMastery", "bool AUnmadeCharacter::PersistStudy()",
                   "UnmadeSave::SaveGameToSlot(Save)", "RecordStudyEvidence(Id,1)",
                   "AbilityStudy.Experiment(Id)", "AbilityStudy.Master(Id)",
@@ -252,6 +252,12 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
                   "Equipped(GearSlot::Charm)==ItemId::AtlasOfAbsence ? 2"):
         if token not in items:
             issues.append(f"Atlas award/effect source missing: {token}")
+    for token in ("CurrentAtlasRequirements()", "Save->VerifiedRoadBits>0",
+                  "Save->RiteStages[9]==5", "Save->ConfluenceStages[5]==2",
+                  "Save->DiscoveredLoreMask&1", "AbilityStudy.AtlasChecklist(Atlas)",
+                  "AbilityStudy.Checklist(Id)", "!FindStudyEnemy(SelectedStudy,true)"):
+        if token not in player:
+            issues.append(f"missing lore-gated player requirement or checklist: {token}")
     for token in ("bHasAbilityStudy", "AbilityStudyStages", "AbilityStudyEvidence",
                   "AbilityStudyTrials", "AbilityStudySelection"):
         if token not in saves:

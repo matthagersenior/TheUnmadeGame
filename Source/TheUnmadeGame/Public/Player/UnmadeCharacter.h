@@ -105,6 +105,7 @@ private:
     class AUnmadeEnemyCharacter* FindStudyEnemy(int32 Subject,bool RequireWarning=false)const;
     bool NearEchoStudySite()const;
     void TryClaimAtlas();
+    UnmadeCore::AtlasStudyContext CurrentAtlasRequirements() const;
     UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
     bool bFractureSaveRejected=false,bConflictSaveRejected=false;
     bool bSessionRestored=false;

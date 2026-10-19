@@ -1862,12 +1862,16 @@
       "slot": "Charm",
       "stack_cap": 1,
       "acquisition": {
-        "method": "three_firsthand_masteries_at_echo_well",
+        "method": "mastered_cartography_verified_road_witnessed_first_absence_and_study",
         "requirements": [
-          "Witness and master Memory Lens at the physical Echo Well",
-          "Master two different enemy-derived research techniques",
-          "Return to Echo Well and invoke Study Progress to claim the once-only award",
-          "Claim succeeds only if validated, persisted study evidence exists and charm slot inventory has room"
+          "Personally inspect the Echo Well, and return there physically for the claim",
+          "Master Memory Lens through firsthand Echo Well observations and experiments",
+          "Master two distinct enemy techniques through real telegraphed attacks, demonstrated contact, and paid experiments",
+          "Complete the full Cartography rite through its existing witnessed quest stages",
+          "Physically verify at least one route via the tenfold route-verification record",
+          "Complete the First Absence Confluence: the Unwrite Law + Cartography challenge with two credible witnesses",
+          "Maintain valid writable study and inventory save state",
+          "Claim the one-time Atlas award; a claimed receipt is never duplicated"
         ]
       },
       "effect": {
@@ -1888,7 +1892,9 @@
         "Source/TheUnmadeGame/Public/Items/UnmadeItemRules.h",
         "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h",
         "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
-        "Source/TheUnmadeGame/Public/Items/UnmadeEquipmentComponent.h"
+        "Source/TheUnmadeGame/Public/Items/UnmadeEquipmentComponent.h",
+        "Source/TheUnmadeGame/Private/World/UnmadeTenfoldComponent.cpp",
+        "Source/TheUnmadeGame/Public/World/UnmadeConfluenceRules.h"
       ]
     },
     {
@@ -7031,7 +7037,8 @@
         "requirements": [
           "Observe Cinderjaw warning and land a real hit; understand, complete two paid experiments, master at a live Cinderjaw.",
           "No automatic copying; firsthand provenance required",
-          "Confirmed local target with line of sight"
+          "Confirmed local target with line of sight",
+          "Observe and physically corroborate the subject, then meet all six checklist milestones; field experiments on enemies require another real attack telegraph"
         ]
       },
       "effect": {
@@ -7082,7 +7089,8 @@
         "requirements": [
           "Observe Pale Strider warning and land a real hit; understand, complete two paid experiments, master at a live Pale Strider.",
           "No automatic copying; firsthand provenance required",
-          "Confirmed local target with line of sight"
+          "Confirmed local target with line of sight",
+          "Observe and physically corroborate the subject, then meet all six checklist milestones; field experiments on enemies require another real attack telegraph"
         ]
       },
       "effect": {
@@ -7132,7 +7140,8 @@
         "requirements": [
           "Observe Redaction Eye warning and land a real hit; understand, complete two paid experiments, master at a live Redaction Eye.",
           "No automatic copying; firsthand provenance required",
-          "Confirmed local target with line of sight"
+          "Confirmed local target with line of sight",
+          "Observe and physically corroborate the subject, then meet all six checklist milestones; field experiments on enemies require another real attack telegraph"
         ]
       },
       "effect": {
@@ -7183,7 +7192,8 @@
         "requirements": [
           "Visit the physical Echo Well; record firsthand observation, corroborate for 8 Strain, understand, perform two 10-Strain experiments and master at the well.",
           "No automatic copying; firsthand provenance required",
-          "Confirmed local target with line of sight"
+          "Confirmed local target with line of sight",
+          "Observe and physically corroborate the subject, then meet all six checklist milestones; field experiments on enemies require another real attack telegraph"
         ]
       },
       "effect": {

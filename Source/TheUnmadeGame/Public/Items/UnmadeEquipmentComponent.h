@@ -34,6 +34,7 @@ public:
     UnmadeCore::ItemId EquippedWeapon()const{return Inventory.Equipped(UnmadeCore::GearSlot::Weapon);}
     int32 GetMarks() const { return Economy.Marks(); }
     int32 GetAtlasAttunement() const;
+    bool HasEarnedAtlas()const{return Inventory.HasClaimed(UnmadeCore::Achievement::AtlasOfAbsenceMastery);}
     FString DescribeInventory() const;
     int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount()+ExpeditionGlimpse; }
     int32 FoldBonusSeconds() const { return (Loadout.weapon>=0?0:Inventory.FoldDurationBonus())+ExpeditionFold+(Loadout.weapon>=0 && Inventory.Equipped(UnmadeCore::GearSlot::Charm)==UnmadeCore::ItemId::AtlasOfAbsence?2:0); }
