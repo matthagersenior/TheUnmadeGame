@@ -1,4 +1,4 @@
-# THE UNMADE — Ability Codex (source milestone)
+# THE UNMADE — Canonical Codex (source milestone)
 
 **Canonical index:** [`Authoring/ability_codex.json`](../../Authoring/ability_codex.json)
 
@@ -83,3 +83,11 @@ The Atlas of Absence checklist has **eight prior requirements**, enforced by the
 Every cataloged record now has a stable `requirements_checklist.items` array, indexed alongside its acquisition source. **Static checklist rows never claim completion.** Entries tagged `playable_save_backed` are the four studied gameplay powers plus the Atlas, and their actual `[x] / [ ]` completion comes only from `AbilityStudy` and canonical saved rite/confluence/world records. Entries tagged `source_authored_not_runtime_verified` are guidance for future engine UI integration and must not invent complete acquisition. Items tagged `design_definition_only` are explicitly unearned. The validator rejects missing checklists and fake completed states.
 
 This separation prevents a lore document or Codex UI from silently granting an item. The source-tested initial loop is deliberately finite; observations from other animals, magical phenomena, or other characters remain research candidates until real physical trials, balancing and save-backed completion are authored.
+
+## Unified, source-linked Codex authority — 19 October 2026
+
+The single **243-record** `Authoring/ability_codex.json` includes all prior 186 ability, enemy, item and skill records and adds nine **realms**, nine **expedition journeys**, nine optional **experience wings**, nine **personal quests**, nine **campaign chapters**, nine **aftermath arcs** and three **settlements**. Each expanded entry includes an actual registry source, stable identity, ordered requirements and links to its realm/previous journey. Six workshop recipe records now include typed profession, town, minimum skill, two material inputs with quantities, output quantity and atomicity—without inventing player inventory.
+
+The Codex is the **canonical authoring authority** across abilities, enemies, crafting, skill progression, exploration, quests, worlds and rewards. `Scripts/generate_unmade_codex.py` generates the `UnmadeCodexGenerated.h` C++ header that the Study/Atlas live checklist now reads; it also publishes nine world summaries to native code. CI checks that no one hand-edits generated rules or changes the Codex without regenerating. The remaining individual C++ runtime state machines are still authoritative *executors* and must undergo domain-by-domain Codex-backed migration with parity tests. Do **not** claim that every Unreal actor or calculation reads JSON until that migration and engine compilation actually occur.
+
+A completed checkbox is always derived from the actual player/quest save state, **not** from a static record. Authored-but-unbuilt realms remain marked separately from playable game spaces, and alternate outcomes, witness provenance, consent, costs and progression integrity remain mandatory.

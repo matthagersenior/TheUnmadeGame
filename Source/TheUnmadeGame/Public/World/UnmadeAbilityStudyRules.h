@@ -2,6 +2,7 @@
 // The Unmade - earned research, not a universal enemy-skill theft mechanic.
 // Standalone C++17, deterministic, save-backed through the Unreal adapter.
 #include <array>
+#include "World/UnmadeCodexGenerated.h"
 #include <cstdint>
 
 namespace UnmadeCore {
@@ -10,10 +11,7 @@ enum class StudyStage : int { Unknown=0, Observed=1, Understood=2, Experimented=
 enum class StudyResult { Advanced, EvidenceRecorded, AlreadyRecorded, NeedsEvidence,
                          NeedsUnderstanding, NeedsExperiments, AlreadyMastered, Invalid };
 inline constexpr int StudyCount=static_cast<int>(StudyId::Count);
-inline constexpr std::array<const char*,StudyCount> StudyNames={{
-    "Kiln Ward / Cinderjaw", "Seam Step / Pale Strider",
-    "Redaction Read / Redaction Eye", "Memory Lens / Echo Well"
-}};
+inline constexpr auto StudyNames=CodexStudyNames;
 /** One authoritative requirement and its recorded completion state; never a free unlock. */
 struct StudyRequirement {
     const char* label;
@@ -96,14 +94,13 @@ public:
     }
     /** Persistent milestones only; real-world availability is checked by the player adapter. */
     std::array<StudyRequirement,6> Checklist(StudyId id)const noexcept{
-        const bool echo=id==StudyId::EchoWell;
         return {{
-            {echo?"Personally inspect the physical Echo Well":"Personally witness this living enemy telegraph an attack",(Evidence(id)&1)!=0},
-            {echo?"Measure the Echo Well again at a real Strain cost":"Land real, damaging contact against the observed living species",(Evidence(id)&2)!=0},
-            {"Interpret both firsthand signals",static_cast<int>(Stage(id))>=2},
-            {"Complete first physical, Strain-paid experiment",Trials(id)>=1},
-            {"Complete second separate physical experiment",Trials(id)>=2},
-            {"Master the technique beside its real subject",HasMastered(id)}
+            {CodexStudyRequirements[static_cast<int>(id)][0],(Evidence(id)&1)!=0},
+            {CodexStudyRequirements[static_cast<int>(id)][1],(Evidence(id)&2)!=0},
+            {CodexStudyRequirements[static_cast<int>(id)][2],static_cast<int>(Stage(id))>=2},
+            {CodexStudyRequirements[static_cast<int>(id)][3],Trials(id)>=1},
+            {CodexStudyRequirements[static_cast<int>(id)][4],Trials(id)>=2},
+            {CodexStudyRequirements[static_cast<int>(id)][5],HasMastered(id)}
         }};
     }
     std::array<StudyRequirement,8> AtlasChecklist(const AtlasStudyContext& ctx)const noexcept{
@@ -111,14 +108,14 @@ public:
         for(int i=0;i<3;++i)
             if(HasMastered(static_cast<StudyId>(i)))++enemyMasteries;
         return {{
-            {"Personally inspect the Well of Returned Voices",ctx.echoInspected},
-            {"Master Memory Lens through the Echo Well",HasMastered(StudyId::EchoWell)},
-            {"Master two distinct living-enemy principles",enemyMasteries>=2},
-            {"Master the Cartography rite without bypassing its quest",ctx.cartographyMastered},
-            {"Verify at least one route through firsthand travel",ctx.routePersonallyVerified},
-            {"Resolve The Place Before a First Story with two credible witnesses",ctx.firstAbsenceWitnessed},
-            {"Return physically to the Echo Well to claim the Atlas",ctx.physicallyAtEchoWell},
-            {"Have a valid, writable player study/inventory save",ctx.saveHealthy}
+            {CodexAtlasRequirements[0],ctx.echoInspected},
+            {CodexAtlasRequirements[1],HasMastered(StudyId::EchoWell)},
+            {CodexAtlasRequirements[2],enemyMasteries>=2},
+            {CodexAtlasRequirements[3],ctx.cartographyMastered},
+            {CodexAtlasRequirements[4],ctx.routePersonallyVerified},
+            {CodexAtlasRequirements[5],ctx.firstAbsenceWitnessed},
+            {CodexAtlasRequirements[6],ctx.physicallyAtEchoWell},
+            {CodexAtlasRequirements[7],ctx.saveHealthy}
         }};
     }
     bool CanClaimAtlas(const AtlasStudyContext& ctx)const noexcept{

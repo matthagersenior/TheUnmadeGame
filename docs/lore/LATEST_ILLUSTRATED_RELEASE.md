@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**19 October 2026 (unillustrated source milestone):** The canonical Codex now spans all major game systems with 243 records, and a generated C++ study checklist/realm descriptor header. The downloadable v20 illustrations, documents, and ZIP **have not been rebuilt**; their existing hashes below remain historical.
+
 **19 October 2026 subsequent source-only lore audit:** Added save-backed requirements checklists and stronger Atlas gates (mastered Cartography, physically verified route, first Absence Confluence with witnessed resolution). Existing v20 illustrations/PDFs/DOCXs and their SHA-256 hashes are unchanged; the new checklist is NOT included in those artifacts.
 
 **19 October 2026 subsequent source/canon amendment (not a new illustrated edition):** Tomorrow's Debt rite and Ability Codex now correctly advertise **Tomorrow's Paid Receipt**. Witnessed first chapters unlock Auvren without the optional forge/landmark relic checklist, with one rule for the portals and campaign journal. The archived v20 PDF/DOCX/ZIP and their verified historical SHA-256 hashes have **not** been regenerated or rehashed. Unreal Engine walkthrough and actual gameplay acceptance remain deferred.

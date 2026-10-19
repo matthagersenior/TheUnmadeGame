@@ -141,6 +141,9 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/ability_study_test.cpp -o /tmp/unmade-study
           /tmp/unmade-study
+      - name: Check Codex-generated source rule tables
+        run: |
+          python Scripts/generate_unmade_codex.py --check
       - name: Audit canonical ability codex and source parity
         run: python Scripts/validate_ability_codex.py --report
       - name: Run validator unit tests

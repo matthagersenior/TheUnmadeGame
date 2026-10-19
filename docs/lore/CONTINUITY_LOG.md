@@ -366,3 +366,10 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Added authoritative save-derived `[x] / [ ]` requirements for each study technique and the Atlas, displayed in the real Actions page and evidence notebook.
 - Tightened physical field experiments to require fresh enemy telegraphs; remained save-backed and Strain-priced.
 - Added portable C++ and wiring tests for missing evidence, confluence, verified route, place, duplicate reward, and displayed checklist. No Unreal compilation or regenerated illustrated release claimed.
+
+## 2026-10-19 — Unified 243-record Codex and generated player checklists
+
+- Unified all 186 previously indexed entries with 9 realm specifications, 9 expedition journeys, 9 optional experience wings, 9 personal arcs, 9 campaign chapters, 9 aftermath narratives, and 3 settlements in the **existing** Codex.
+- Added typed workshop recipe costs/workbench/skill/output contracts and explicit realm/journey dependency references without inventing any saved rewards or quest outcomes.
+- Replaced manually authored Study and Atlas checklist words with Codex-generated C++ reference tables. A reproducible generator supplies nine realm summaries; CI checks for drift.
+- Preserved existing runtime models, active player saves, provenance and consent rules; full engine runtime data migration and Unreal compilation remain unverified. No illustrated artifact was regenerated.

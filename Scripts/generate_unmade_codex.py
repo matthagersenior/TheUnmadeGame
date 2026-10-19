@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+"""Generate gameplay-facing C++ display rules from the single canonical Codex."""
+from __future__ import annotations
+import argparse, json
+from pathlib import Path
+
+ROOT=Path(__file__).resolve().parents[1]
+CODEX=ROOT/"Authoring/ability_codex.json"
+OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexGenerated.h"
+STUDIES=("Cinderjaw","PaleStrider","RedactionEye","EchoWell")
+HUMAN=("Cinderjaw","Pale Strider","Redaction Eye","Echo Well")
+REALMS=("ThreefoldReach","WidowedRain","HearthBeneath","TidalLedger","SkyBelow","CinderSpine","HundredUnlived","OrchardOfKings","FirstAbsence")
+
+def quote(value):
+    return json.dumps(value,ensure_ascii=False,separators=(",",":"))
+
+def generate(codex):
+    by={row["id"]:row for row in codex["records"]}
+    out=["#pragma once","// GENERATED FROM Authoring/ability_codex.json. Do not hand-edit.",
+         "// Regenerate with: python Scripts/generate_unmade_codex.py",
+         "#include <array>","namespace UnmadeCore {",
+         "inline constexpr std::array<const char*,4> CodexStudyNames = {{"]
+    for n,key in enumerate(STUDIES):
+        out.append("    "+quote(by["study."+key]["name"]+" / "+HUMAN[n])+("" if n==3 else ","))
+    out.extend(["}};","inline constexpr std::array<std::array<const char*,6>,4> CodexStudyRequirements = {{"])
+    for n,key in enumerate(STUDIES):
+        labels=by["study."+key]["requirements_checklist"]["items"]
+        if len(labels)!=6:raise ValueError("Codex must specify six checkpoints for "+key)
+        out.append("    {{"+",".join(quote(x["text"]) for x in labels)+"}}"+("" if n==3 else ","))
+    out.extend(["}};","inline constexpr std::array<const char*,8> CodexAtlasRequirements = {{"])
+    atlas=by["item.charm.atlas"]["requirements_checklist"]["items"][:8]
+    if len(atlas)!=8:raise ValueError("Codex must specify eight Atlas gates")
+    for n,item in enumerate(atlas):
+        out.append("    "+quote(item["text"])+("" if n==7 else ","))
+    out.extend(["}};","struct CodexRealmSummary {const char* id;const char* name;const char* hub;int stage;bool initialFootholdSource;};",
+                "inline constexpr std::array<CodexRealmSummary,9> CodexRealmSummaries = {{"])
+    for n,key in enumerate(REALMS):
+        entry=by["realm."+key]
+        contract=entry["rule_contract"]
+        args=(quote(entry["id"]),quote(entry["name"]),quote(contract["hub"]),
+              str(contract["stage"]),("true" if n<3 else "false"))
+        out.append("    {"+",".join(args)+"}"+("" if n==8 else ","))
+    out.extend(["}};","} // namespace UnmadeCore"])
+    return "\n".join(out)+"\n"
+
+def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--check",action="store_true")
+    args=parser.parse_args()
+    generated=generate(json.loads(CODEX.read_text(encoding="utf-8")))
+    if args.check:
+        if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
+            print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")
+            return 1
+        print("PASS: generated Codex runtime references match authoring JSON.")
+        return 0
+    OUTPUT.write_text(generated,encoding="utf-8")
+    print("Wrote",OUTPUT.relative_to(ROOT))
+    return 0
+
+if __name__=="__main__":raise SystemExit(main())
