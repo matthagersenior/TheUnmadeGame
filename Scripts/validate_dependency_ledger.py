@@ -210,7 +210,9 @@ def validate(data: dict) -> list[str]:
 
     confluences = rows("World/UnmadeConfluenceRules.h",
                        r'\{ConfluenceId::(\w+),\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*RiteId::(\w+),RiteId::(\w+),(\d+)')
-    aftermath = rows("World/UnmadeRealmAftermathRules.h",
+    if '#include "World/UnmadeCodexAftermathGenerated.inc"' not in read(PUBLIC + "World/UnmadeRealmAftermathRules.h"):
+        errors.append("realm aftermath registry is not Codex-owned")
+    aftermath = rows("World/UnmadeCodexAftermathGenerated.inc",
                      r'\{Realm::(\w+),"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)"')
     echoes = rows("World/UnmadeEchoQuestRules.h", r'\{Realm::(\w+),"([^"]+)","([^"]+)",\s*"([^"]+)"')
     faction = rows("World/UnmadeFactionChronicleRules.h",

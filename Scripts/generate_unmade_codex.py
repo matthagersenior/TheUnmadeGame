@@ -193,6 +193,29 @@ def generate_personal_quests(codex):
     out.append("};")
     return "\n".join(out)+"\n"
 
+
+AFTERMATH_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexAftermathGenerated.inc"
+
+def generate_aftermaths(codex):
+    by={row["id"]:row for row in codex["records"]}
+    out=["// GENERATED FROM Authoring/ability_codex.json. Do not hand-edit.",
+         "// Included inside namespace UnmadeCore after RealmAftermathSpec.",
+         "inline constexpr std::array<RealmAftermathSpec,9> RealmAftermathSpecs={{"]
+    for index,key in enumerate(REALMS):
+        row=by["quest.aftermath."+key]
+        c=row["rule_contract"]
+        if c["source_index"]!=index or c["care_consequence"]==c["truth_consequence"]:
+            raise ValueError("Aftermath witness/choice consistency failed: "+key)
+        string_fields=(row["name"],c["initiating_witness"],c["mechanism"],
+                       c["care_evidence"],c["truth_evidence"],c["care_witness"],
+                       c["truth_witness"],c["care_consequence"],c["truth_consequence"],
+                       c["signature_ability"],c["ethical_dilemma"],c["aftershock"])
+        parts=("Realm::"+key,)+tuple(quote(x) for x in string_fields)+(
+              "true" if c["initial_level_exists"] else "false",)
+        out.append("    {"+",".join(parts)+"}"+("" if index==8 else ","))
+    out.append("}};")
+    return "\n".join(out)+"\n"
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
@@ -205,9 +228,13 @@ def main():
     experience=generate_experience(codex)
     campaign=generate_campaign(codex)
     personal=generate_personal_quests(codex)
+    aftermath=generate_aftermaths(codex)
     if args.check:
         if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
             print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")
+            return 1
+        if not AFTERMATH_OUTPUT.is_file() or AFTERMATH_OUTPUT.read_text(encoding="utf-8")!=aftermath:
+            print("FAIL: Codex-generated realm aftermath witness rules are stale.")
             return 1
         if not DEPTH_OUTPUT.is_file() or DEPTH_OUTPUT.read_text(encoding="utf-8")!=personal:
             print("FAIL: Codex-generated personal choice and witness quest data is stale.")
@@ -236,7 +263,8 @@ def main():
     EXPERIENCE_OUTPUT.write_text(experience,encoding="utf-8")
     CAMPAIGN_OUTPUT.write_text(campaign,encoding="utf-8")
     DEPTH_OUTPUT.write_text(personal,encoding="utf-8")
-    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT),EXPERIENCE_OUTPUT.relative_to(ROOT),CAMPAIGN_OUTPUT.relative_to(ROOT),DEPTH_OUTPUT.relative_to(ROOT))
+    AFTERMATH_OUTPUT.write_text(aftermath,encoding="utf-8")
+    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT),EXPERIENCE_OUTPUT.relative_to(ROOT),CAMPAIGN_OUTPUT.relative_to(ROOT),DEPTH_OUTPUT.relative_to(ROOT),AFTERMATH_OUTPUT.relative_to(ROOT))
     return 0
 
 if __name__=="__main__":raise SystemExit(main())

@@ -108,6 +108,19 @@ class AbilityCodexContract(unittest.TestCase):
         row["rule_contract"]["option_a"]=row["rule_contract"]["option_b"]
         self.assertTrue(any("distinct saved social outcomes" in issue for issue in validate(ROOT,changed)))
 
+    def test_realm_aftermaths_preserve_two_physical_and_witnessed_consequences(self):
+        rows=[x for x in self.codex["records"] if x["id"].startswith("quest.aftermath.")]
+        self.assertEqual(len(rows),9)
+        for row in rows:
+            contract=row["rule_contract"]
+            self.assertNotEqual(contract["care_evidence"],contract["truth_evidence"])
+            self.assertNotEqual(contract["care_consequence"],contract["truth_consequence"])
+            self.assertNotEqual(contract["care_witness"],contract["truth_witness"])
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="quest.aftermath.WidowedRain")
+        row["rule_contract"]["truth_consequence"]=row["rule_contract"]["care_consequence"]
+        self.assertTrue(any("distinct source-backed outcomes required" in msg for msg in validate(ROOT,changed)))
+
     def test_invalid_dependency_rejected(self):
         changed=deepcopy(self.codex)
         row=next(x for x in changed["records"] if x["id"]=="journey.wing.FirstAbsence")

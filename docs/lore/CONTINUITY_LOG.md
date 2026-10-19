@@ -414,3 +414,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Ported complete witness/physical-evidence/two-choice/lasting aftermath/secret/counterparty texts into the nine existing personal quest Codex entries and generated `UnmadeCodexPersonalQuestsGenerated.inc` consumed by runtime C++.
 - Converted the older adventure-depth builder into a Codex-versus-historical-manuscript compatibility verifier, retaining original dungeon positions.
 - Added regression tests for the nine saved ordinals and mutually exclusive social outcomes. No earned milestones, engine build claims or illustrated release bytes were altered.
+
+## 2026-10-19 — Realm aftermath rules become Codex-generated
+
+- Moved all nine realm aftermath source contracts—mechanism sites, attributed witnesses, mutually exclusive evidence/outcome branches and future local world changes—into canonical Codex records and a compiled generated C++ table.
+- Added compiled portable and Codex-validator regression checks for differing consequences, real witnesses and the truth of level availability.
+- Preserved old game saves, original physical quest gates and narrative choice freedom; no new illustrated assets or Engine builds claimed.

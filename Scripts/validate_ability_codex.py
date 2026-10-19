@@ -365,7 +365,16 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
         entry=by_id.get("quest.campaign."+realm)
         if entry and entry["rule_contract"].get("source_index")!=index:
             issues.append("quest.campaign."+realm+": changed the authored road order")
-    aftermath_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h"))
+    if '#include "World/UnmadeCodexAftermathGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h"):
+        issues.append("realm aftermath game rules are not generated from the Codex")
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                  "TidalLedger","SkyBelow","CinderSpine",
+                                  "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        entry=by_id.get("quest.aftermath."+realm)
+        if entry and (entry["rule_contract"].get("source_index")!=index or
+                      entry["rule_contract"].get("care_consequence")==entry["rule_contract"].get("truth_consequence")):
+            issues.append("quest.aftermath."+realm+": distinct source-backed outcomes required")
+    aftermath_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCodexAftermathGenerated.inc"))
     for realm,title in aftermath_rows[:9]:
         check("quest.aftermath."+realm,"name",title)
     if '#include "World/UnmadeCodexPersonalQuestsGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h"):

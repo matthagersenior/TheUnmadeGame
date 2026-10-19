@@ -161,6 +161,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_personal_quest_test.cpp -o /tmp/unmade-codex-personal
           /tmp/unmade-codex-personal
+      - name: Protect Codex-owned realm aftermath choices, evidence and witnesses
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_realm_aftermath_test.cpp -o /tmp/unmade-codex-aftermath
+          /tmp/unmade-codex-aftermath
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check

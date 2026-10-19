@@ -27,7 +27,9 @@ class IllustratedLoreContinuity(unittest.TestCase):
             self.assertIn(term,canon)
     def test_authored_aftermath_and_not_shipped_claim(self):
         canon=read("docs/lore/living-world-continuity.md")
-        model=read("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h")
+        model_source=read("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h")
+        self.assertIn('#include "World/UnmadeCodexAftermathGenerated.inc"',model_source)
+        model=read("Source/TheUnmadeGame/Public/World/UnmadeCodexAftermathGenerated.inc")+model_source
         self.assertIn("RealmAftermathSpecs",model)
         self.assertIn("RealmAftermathResult::Locked",model)
         self.assertIn("nine",canon.lower())

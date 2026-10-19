@@ -516,3 +516,7 @@ The canonical main campaign's nine authored road-beat descriptions and discovery
 ## 2026-10-19 — Codex governs personal moral choices, not player decisions
 
 The nine personal story definitions now originate from the Codex with all their original witnesses, physical clue requirements, actual puzzle goals, exclusive choice language and attributed follow-up. The saved local outcome and testimony must be earned through live agency; no moral resolution, NPC omniscience or entitlement to a reward is automatically inferred from a catalog entry. The previous nine-stage saved IDs, geographic room grids, and authored ways to resolve each personal dilemma are unchanged. Engine-level visual completion remains unverified.
+
+## 2026-10-19 — Aftermath outcomes must never collapse into one narrative
+
+The nine realms' aftermath locations, physical mechanism interactions, named testimony sources, separate care/public-truth evidence, two local outcomes and aftershocks are now source-generated from Codex. The alternatives are distinct and persistent; a witnessed resolution is not interchangeable with a rumor, and no site is declared cleared merely because a Codex record exists. The original three source-backed footholds remain distinct from six unverified Unreal realm levels. The canonical world maintains the player's right to choose without an automatically classified moral winner.

@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**19 October 2026 source-only milestone:** Nine realm aftermath scripts and their distinct witnessed consequences now compile from canonical Codex. Historic illustrated v20 artifact bytes and hashes remain unchanged.
+
 **19 October 2026 source milestone:** Nine complete personal quest scripts and their branching witness outcomes are now Codex-generated. The historical illustrated v20 package has not been rebuilt.
 
 **Codex source milestone (19 October 2026):** Nine main-campaign Unanswered Road chapter definitions now compile from Codex. Historical illustrated v20 documents and hashes remain unchanged.

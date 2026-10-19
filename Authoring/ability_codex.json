@@ -11369,7 +11369,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "The public crossing remains open after dark.",
+        "truth_consequence": "Hidden toll histories become public records.",
+        "signature_ability": "Living Roads + Witnesscraft",
+        "ethical_dilemma": "Can a road serve refugees when evidence about its former owners is concealed?",
+        "aftershock": "A changed road draws displaced residents from a neighboring settlement.",
+        "initial_level_exists": true,
+        "source_index": 0
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -11960,7 +11967,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "Rain is collected into a shared cistern.",
+        "truth_consequence": "The rain broker's false tide prices become public.",
+        "signature_ability": "Unreliable Map + Witnesscraft",
+        "ethical_dilemma": "Does a drought emergency justify postponing the proof of who made it profitable?",
+        "aftershock": "The storm changes which inland roads are passable.",
+        "initial_level_exists": true,
+        "source_index": 1
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -12551,7 +12565,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "Households share a heat-safe communal kiln.",
+        "truth_consequence": "An illegal ownership claim on the eternal ember is exposed.",
+        "signature_ability": "Oathbinding + Legacy Forging",
+        "ethical_dilemma": "Can common warmth survive when revealing its stolen origin risks extinguishing trust?",
+        "aftershock": "The kiln's heat awakens an old passage to the mountain.",
+        "initial_level_exists": true,
+        "source_index": 2
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -13142,7 +13163,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "Future debts are forgiven for the stranded.",
+        "truth_consequence": "The unborn people used as collateral are named.",
+        "signature_ability": "Tomorrow Debt + Oathbinding",
+        "ethical_dilemma": "Forgive real debts or expose the identities of those who never agreed to repay?",
+        "aftershock": "A named debtor appears alive in a different historical account.",
+        "initial_level_exists": false,
+        "source_index": 3
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -13733,7 +13761,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "A choir-supported neighborhood gains stable footing.",
+        "truth_consequence": "Forbidden notes become audible to the public.",
+        "signature_ability": "Unwrite Law + Paradox Convergence",
+        "ethical_dilemma": "Restore a city's gravity, or uncover whose voices were forcibly removed?",
+        "aftershock": "A saved district begins singing a melody from the next realm.",
+        "initial_level_exists": false,
+        "source_index": 4
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -14324,7 +14359,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "Timeline mining is halted near living homes.",
+        "truth_consequence": "The erased lineage of quarry workers is documented.",
+        "signature_ability": "Legacy Forging + Borrowed Lives",
+        "ethical_dilemma": "Preserve today's livelihood or confront the lives erased to make its stone?",
+        "aftershock": "A recovered ancestor remembers the hero's alternate name.",
+        "initial_level_exists": false,
+        "source_index": 5
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -14915,7 +14957,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "A shelter recognizes residents without birth documents.",
+        "truth_consequence": "The city publicly acknowledges its impossible citizens.",
+        "signature_ability": "Witnesscraft + Borrowed Lives",
+        "ethical_dilemma": "Can proof of existence protect people without giving an authority power to erase them?",
+        "aftershock": "A recognized resident inherits a claim to the Orchard's unwritten crown.",
+        "initial_level_exists": false,
+        "source_index": 6
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -15506,7 +15555,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "The untitled courts maintain a public orchard.",
+        "truth_consequence": "The last concealed claim to kingship is revealed.",
+        "signature_ability": "Oathbinding + Living Roads",
+        "ethical_dilemma": "Can refusing a throne be an act of rule—and who consents to the refusal?",
+        "aftershock": "The crown's law exposes a route into the Place Before Place.",
+        "initial_level_exists": false,
+        "source_index": 7
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -16097,7 +16153,14 @@
         "paths": [
           "care",
           "truth"
-        ]
+        ],
+        "care_consequence": "A stable passage remains open for other travelers.",
+        "truth_consequence": "Multiple mutually true beginnings are preserved.",
+        "signature_ability": "Unwrite Law + Unreliable Map",
+        "ethical_dilemma": "Should one history be made safe, or must the universe learn to live with many?",
+        "aftershock": "No state declares the game completed: older realms remember the chosen answer.",
+        "initial_level_exists": false,
+        "source_index": 8
       },
       "requirements_checklist": {
         "verification": "source_authored_not_runtime_verified",
@@ -17283,7 +17346,7 @@
       ]
     },
     "journeys": {
-      "status": "codex_generated_expeditions_wings_campaign_chapters_and_personal_choices_stateful_quests",
+      "status": "codex_generated_expeditions_wings_campaign_personal_quests_and_aftermaths_source_executed",
       "categories": [
         "journey",
         "personal_quest",
