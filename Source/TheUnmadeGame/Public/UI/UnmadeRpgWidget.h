@@ -53,6 +53,10 @@ private:
  void PerformAction(int Index);
  void CycleRecipe(int Direction);
  UFUNCTION() void Actions();
+ UFUNCTION() void StudyObserveAction();
+ UFUNCTION() void StudyProgressAction();
+ UFUNCTION() void StudyUseAction();
+ UFUNCTION() void StudyNextAction();
  UFUNCTION() void Crafting();
  UFUNCTION() void Session();
  UFUNCTION() void PreviousRecipe();
