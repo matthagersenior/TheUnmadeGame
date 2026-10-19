@@ -96,7 +96,8 @@
 **interaction:** Use actual site actor; check line of sight, stage and evidence match  
 **objective:** Choose shelter or research testimony with a clear permanent preview  
 **speaker:** npc.archivist.001  
-**line:** I heard a bell from a road that doesn't exist. Who would carve a road into silence? The the unanswered interval: bell without a last note gives you one chance to change the place responsibly.  
+**line:** The bell's last note is missing. Is that silence part of the road, or proof someone cut it short?  
+**design notes:** The unanswered interval is the bell without a last note.  
 **physical tag:** Reach.CrossingsWitness  
 **failure:** Mechanism blocked, invalid/wrong evidence or missing power prerequisite  
 **recovery:** Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence  
@@ -130,12 +131,33 @@
 
 **trigger:** reenter region after either outcome, optionally after Guardian/Echo/resonance  
 **interaction:** talk to individual NPC by stable ID; inspect saved physical consequence  
-**objective:** A stranger can trace both shelter and archive routes, meeting residents who remember the chosen side.  
+**objective:** Inspect the saved physical consequence and speak with an individual resident.  
 **speaker:** npc.archivist.001  
-**line:** You came back. A stranger can trace both shelter and archive routes, meeting residents who remember the chosen side. I have not forgotten the path you chose.  
+**line:** You came back. Did your choice keep the shelter lantern in use, or make the missing record open to inspection?  
+**design notes:** Return staging note: Local evidence should let a stranger trace shelter and archive route options; residents remember only the side they witnessed.  
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
+
+#### Design notes
+
+**npc.archivist.001 — voice and register**
+Sentence length: measured, mostly short; use questions when evidence remains incomplete.  
+Metaphors: roads, margins, records, and the space between a claim and its witness.  
+Taboos: never state rumor as testimony or claim knowledge of a resident's private choice.  
+Would never say: “The record proves everything.”
+
+**npc.bellwold.matron.001 — voice and register**
+Sentence length: short and practical; lengthen only when weighing what shelter can protect.  
+Metaphors: doors, roofs, lamps, weather, and the work of keeping a place open.  
+Taboos: never treat refuge as a debt or identify someone who sought shelter without consent.  
+Would never say: “A roof matters more than the people under it.”
+
+**npc.paperhaven.registrar.001 — voice and register**
+Sentence length: precise and balanced; clauses distinguish what a record says from what it cannot prove.  
+Metaphors: pages, margins, seals, ledgers, and blank spaces.  
+Taboos: never turn a protected name into public evidence or let paperwork impersonate testimony.  
+Would never say: “If it is written, it must be true.”
 
 ### QUEST_MAIN_WidowedRain — `WidowedRain`
 
