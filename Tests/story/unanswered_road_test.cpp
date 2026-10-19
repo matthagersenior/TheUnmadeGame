@@ -65,6 +65,38 @@ int main(){
     assert(RoadRoute(Realm::ThreefoldReach,Realm::TidalLedger,1).size()==3);
     assert(RoadRoute(Realm::ThreefoldReach,Realm::FirstAbsence,3).empty());
     assert(!RoadRoute(Realm::ThreefoldReach,Realm::FirstAbsence,4).empty());
+    // Main-story crossing attunement must be earnable WITHOUT any optional
+    // relic, landmark checklist, forge or side-quest milestone.
+    // Fresh InventoryModel has no items, confirming zero relic attunement.
+    InventoryModel noRelics;
+    assert(AttunementFromRewards(noRelics)==0);
+    assert(RoadTravelAttunement(With(false,{}),0)==0);
+    assert(RoadTravelAttunement(With(true,{}),0)==1);
+    assert(RoadTravelAttunement(With(true,{Realm::WidowedRain}),0)==2);
+    assert(RoadTravelAttunement(With(true,{Realm::WidowedRain,Realm::TidalLedger}),0)==3);
+    const auto debtRoute=With(true,{Realm::WidowedRain,Realm::TidalLedger,
+                                    Realm::HundredUnlived});
+    assert(RoadTravelAttunement(debtRoute,0)==4);
+    assert(EvaluateUnansweredRoad(debtRoute).act==RoadAct::BeforePlace);
+    assert(!RoadRoute(Realm::ThreefoldReach,Realm::FirstAbsence,
+                      RoadTravelAttunement(debtRoute,0)).empty());
+    const auto choirRoute=With(true,{Realm::HearthBeneath,Realm::SkyBelow,
+                                     Realm::HundredUnlived});
+    assert(RoadTravelAttunement(choirRoute,0)==4);
+    const auto stoneRoute=With(true,{Realm::HearthBeneath,Realm::CinderSpine,
+                                     Realm::OrchardOfKings});
+    assert(RoadTravelAttunement(stoneRoute,0)==4);
+    assert(!RoadRoute(Realm::HearthBeneath,Realm::FirstAbsence,
+                      RoadTravelAttunement(stoneRoute,0)).empty());
+    // No spoofed late-realm completion or final access without preceding acts.
+    assert(RoadTravelAttunement(With(false,{Realm::HundredUnlived}),0)==0);
+    assert(RoadTravelAttunement(With(true,{Realm::HundredUnlived}),0)==1);
+    assert(RoadTravelAttunement(With(true,{Realm::WidowedRain,Realm::HundredUnlived}),0)==2);
+    assert(RoadTravelAttunement(With(true,{Realm::WidowedRain,Realm::TidalLedger}),0)<4);
+    assert(!EvaluateUnansweredRoad(debtRoute).bossAccessible);
+    // Legacy relic progression still assists exploration but never fakes story.
+    assert(RoadTravelAttunement(With(false,{}),4)==4);
+    assert(!EvaluateUnansweredRoad(With(false,{})).bossAccessible);
     // Every realm can be explored and completed without mandatory Echo or
     // guardian status; no new grind currency enters the proof.
     auto whole=With(true,{Realm::WidowedRain,Realm::HearthBeneath,Realm::TidalLedger,
