@@ -54,9 +54,13 @@ inline bool CivicEvidenceReady(int arc,const ExpeditionState* local) noexcept {
 }
 inline bool CivicEvidenceValidOnRestore(const RealmAftermathSnapshot& aftermath,
  const Expeditions& expeditions,bool expeditionPresent) noexcept {
+ // Earlier nine-realm aftershock records intentionally had no expedition
+ // subrecord. These schema-1 saves must remain loadable without retroactively
+ // falsifying or erasing their old physical-civic history.
+ if(!expeditionPresent)return true;
  for(int arc=0;arc<9;++arc)
   if(CivicUsesExpeditionAftermath(arc)&&aftermath.stage[arc]>0&&
-     (!expeditionPresent||!CivicEvidenceReady(arc,expeditions.Arc(arc))))
+     !CivicEvidenceReady(arc,expeditions.Arc(arc)))
    return false;
  return true;
 }

@@ -529,7 +529,8 @@ FString AUnmadePrototypeHub::GetDiscoveryCivicResidentLine(FName Id)const
   const int stage=RealmAftermath.Stage(realm);
   const int ending=RealmAftermath.Ending(realm);
   const int approach=RealmAftermath.Snapshot().approach[a];
-  if(!stage)continue;
+  if(!stage||bExpeditionSaveRejected||
+     !UnmadeCore::CivicEvidenceReady(a,Expeditions.Arc(a)))continue;
   if(Id==FName(UTF8_TO_TCHAR(C->initiator))){
    if(ending)return FString(TEXT(" The local proof was brought home. We now maintain the chosen route: "))+
       UTF8_TO_TCHAR(RealmAftermath.WorldConsequence(realm))+
@@ -562,7 +563,8 @@ bool AUnmadePrototypeHub::GetDiscoveryCivicRoutineTarget(
   const auto realm=static_cast<UnmadeCore::Realm>(a);
   const int stage=RealmAftermath.Stage(realm),ending=RealmAftermath.Ending(realm);
   const int approach=RealmAftermath.Snapshot().approach[a];
-  if(!stage)continue;
+  if(!stage||bExpeditionSaveRejected||
+     !UnmadeCore::CivicEvidenceReady(a,Expeditions.Arc(a)))continue;
   const auto& expedition=UnmadeCore::ExpeditionSpecs[a];
   const FVector home(expedition.x,expedition.y+8000,95);
   if(Id==FName(UTF8_TO_TCHAR(C->initiator))){

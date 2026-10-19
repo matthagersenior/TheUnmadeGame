@@ -1583,7 +1583,8 @@ void AUnmadePrototypeHub::BuildFrontierAftermath()
 void AUnmadePrototypeHub::RefreshRealmAftermathWorld()
 {
     for(int a=0;a<9;++a)if(UnmadeCore::CivicUsesExpeditionAftermath(a)){
-        const int ending=bRealmAftermathSaveRejected||bExpeditionSaveRejected?0:
+        const int ending=bRealmAftermathSaveRejected||bExpeditionSaveRejected||
+            !UnmadeCore::CivicEvidenceReady(a,Expeditions.Arc(a))?0:
             RealmAftermath.Ending(static_cast<UnmadeCore::Realm>(a));
         if(CivicAftermathVisible[a]==ending)continue;
         for(int branch=1;branch<=2;++branch){

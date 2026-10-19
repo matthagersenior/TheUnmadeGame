@@ -64,7 +64,7 @@ int main() {
  for(int a:{0,3,4,5,6,7,8})assert(again.Ending(static_cast<Realm>(a))!=0);
  auto bad=saved;bad.stage[0]=4;bad.ending[0]=0;
  assert(!again.Restore(bad));
- assert(!CivicEvidenceValidOnRestore(saved,e,false));
+ assert(CivicEvidenceValidOnRestore(saved,e,false)); // legacy records retain their old civic state
  Expeditions noProof;
  assert(!CivicEvidenceValidOnRestore(saved,noProof,true));
  assert(!CivicUsesExpeditionAftermath(-1));

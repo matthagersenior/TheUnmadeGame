@@ -1283,3 +1283,5 @@ and evidence choices remain the only source of permanent arena outcomes.
 - 2026-10-19: Wired personal realm testimony and civic work routines for seven real expedition resident identities; enhanced Saltwake's existing aftershock witnesses. No new money, role identity, save slot or remote witness authority.
 
 - 2026-10-19: Added physical Saltwake invoice comparison station, E proximity interaction and evidence-conditional local report, retaining previous storm choice and saved records. Updated source assertions to check formatted physical tag creation rather than fictitious literal strings.
+
+- 2026-10-19: Preserved schema-1 legacy aftermath saves without expedition subrecords, following an existing composed rite/recovery fixture failure. The current writer includes expedition state for new choices; proof-dependent physical gates/NPC shifts are suppressed whenever no actual saved expedition proof exists. Regression updated to distinguish valid legacy and invalid forged new composite records.
