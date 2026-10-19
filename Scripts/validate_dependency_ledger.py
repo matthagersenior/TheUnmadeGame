@@ -215,7 +215,9 @@ def validate(data: dict) -> list[str]:
     echoes = rows("World/UnmadeEchoQuestRules.h", r'\{Realm::(\w+),"([^"]+)","([^"]+)",\s*"([^"]+)"')
     faction = rows("World/UnmadeFactionChronicleRules.h",
                    r'\{Faction::(\w+),"([^"]+)",\s*"([^"]+)","([^"]+)","([^"]+)",\s*"([^"]+)"\}')
-    depth = rows("World/UnmadeAdventureDepthRegistry.h",
+    if '#include "World/UnmadeCodexPersonalQuestsGenerated.inc"' not in read(PUBLIC + "World/UnmadeAdventureDepthRegistry.h"):
+        errors.append("personal quest runtime not Codex-generated")
+    depth = rows("World/UnmadeCodexPersonalQuestsGenerated.inc",
                  r'\{"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
     if '#include "World/UnmadeCodexCampaignGenerated.inc"' not in read(PUBLIC + "World/UnmadeCampaignSpineRules.h"):
         errors.append("main story source not wired to Codex-owned chapters")

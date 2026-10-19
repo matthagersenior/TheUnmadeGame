@@ -512,3 +512,7 @@ The Codex now supplies all nine executable optional `ExperienceSpecs`. Each pres
 ## 2026-10-19 — The Unanswered Road chapters now sourced from Codex
 
 The canonical main campaign's nine authored road-beat descriptions and discovery leads are compiled directly from Codex data; historical questions, first-person evidence and the choice of roads are preserved. No automatic nine-realm completion checklist is introduced, and entering a realm is neither proof of its central answer nor authorization to expose a private witness's story. The campaign's save-backed evidence and boss-access rules remain intact, with the final answer withheld until earned. Unreal engine execution remains unverified.
+
+## 2026-10-19 — Codex governs personal moral choices, not player decisions
+
+The nine personal story definitions now originate from the Codex with all their original witnesses, physical clue requirements, actual puzzle goals, exclusive choice language and attributed follow-up. The saved local outcome and testimony must be earned through live agency; no moral resolution, NPC omniscience or entitlement to a reward is automatically inferred from a catalog entry. The previous nine-stage saved IDs, geographic room grids, and authored ways to resolve each personal dilemma are unchanged. Engine-level visual completion remains unverified.

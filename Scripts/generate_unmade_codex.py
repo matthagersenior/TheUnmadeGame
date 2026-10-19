@@ -172,6 +172,27 @@ def generate_campaign(codex):
     out.append("}};")
     return "\n".join(out)+"\n"
 
+
+DEPTH_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexPersonalQuestsGenerated.inc"
+PERSONAL_FIELDS=("offer","witness","evidence","option_a","option_b","return_a",
+                 "return_b","challenge","secret_name","power","counterparty",
+                 "witness_return_a","witness_return_b")
+
+def generate_personal_quests(codex):
+    by={row["id"]:row for row in codex["records"]}
+    out=["// GENERATED FROM Authoring/ability_codex.json. Do not hand-edit.",
+         "// Included inside namespace UnmadeCore after DepthSpec.",
+         "inline constexpr DepthSpec DepthSpecs[]={"]
+    for index,key in enumerate(REALMS):
+        row=by["quest.personal."+key]
+        contract=row["rule_contract"]
+        if contract["source_order"]!=index or contract["option_a"]==contract["option_b"] or contract["return_a"]==contract["return_b"]:
+            raise ValueError("Personal quest alternatives/ordinal drift: "+key)
+        values=(row["name"],contract["goal"])+tuple(contract[k] for k in PERSONAL_FIELDS)
+        out.append("    {"+",".join(quote(v) for v in values)+"}"+("" if index==8 else ","))
+    out.append("};")
+    return "\n".join(out)+"\n"
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--check",action="store_true")
@@ -183,9 +204,13 @@ def main():
     expeditions=generate_expeditions(codex)
     experience=generate_experience(codex)
     campaign=generate_campaign(codex)
+    personal=generate_personal_quests(codex)
     if args.check:
         if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
             print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")
+            return 1
+        if not DEPTH_OUTPUT.is_file() or DEPTH_OUTPUT.read_text(encoding="utf-8")!=personal:
+            print("FAIL: Codex-generated personal choice and witness quest data is stale.")
             return 1
         if not CAMPAIGN_OUTPUT.is_file() or CAMPAIGN_OUTPUT.read_text(encoding="utf-8")!=campaign:
             print("FAIL: Codex-generated campaign chapter data differs from authored Codex.")
@@ -210,7 +235,8 @@ def main():
     EXPEDITION_OUTPUT.write_text(expeditions,encoding="utf-8")
     EXPERIENCE_OUTPUT.write_text(experience,encoding="utf-8")
     CAMPAIGN_OUTPUT.write_text(campaign,encoding="utf-8")
-    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT),EXPERIENCE_OUTPUT.relative_to(ROOT),CAMPAIGN_OUTPUT.relative_to(ROOT))
+    DEPTH_OUTPUT.write_text(personal,encoding="utf-8")
+    print("Wrote",OUTPUT.relative_to(ROOT),CRAFT_OUTPUT.relative_to(ROOT),ATLAS_OUTPUT.relative_to(ROOT),EXPEDITION_OUTPUT.relative_to(ROOT),EXPERIENCE_OUTPUT.relative_to(ROOT),CAMPAIGN_OUTPUT.relative_to(ROOT),DEPTH_OUTPUT.relative_to(ROOT))
     return 0
 
 if __name__=="__main__":raise SystemExit(main())

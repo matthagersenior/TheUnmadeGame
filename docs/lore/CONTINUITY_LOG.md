@@ -408,3 +408,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Migrated the nine canonical Unanswered Road chapter descriptions, physical discoveries and next-road guidance to the existing Codex and generated `UnmadeCodexCampaignGenerated.inc` consumed by C++.
 - Added C++ and JSON tests for nine ordered chapters, source event IDs and truthful mystery evidence.
 - Preserved the original physically earned campaign, branch alternatives, final-boss gate, save contract and illustrated v20 artifacts.
+
+## 2026-10-19 — Nine authored personal-choice definitions now Codex-owned
+
+- Ported complete witness/physical-evidence/two-choice/lasting aftermath/secret/counterparty texts into the nine existing personal quest Codex entries and generated `UnmadeCodexPersonalQuestsGenerated.inc` consumed by runtime C++.
+- Converted the older adventure-depth builder into a Codex-versus-historical-manuscript compatibility verifier, retaining original dungeon positions.
+- Added regression tests for the nine saved ordinals and mutually exclusive social outcomes. No earned milestones, engine build claims or illustrated release bytes were altered.

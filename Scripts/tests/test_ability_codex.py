@@ -95,6 +95,19 @@ class AbilityCodexContract(unittest.TestCase):
         row["rule_contract"]["source_index"]=0
         self.assertTrue(any("changed the authored road order" in issue for issue in validate(ROOT,changed)))
 
+    def test_personal_quests_have_two_witnessed_and_mutually_exclusive_outcomes(self):
+        records=[x for x in self.codex["records"] if x["id"].startswith("quest.personal.")]
+        self.assertEqual(len(records),9)
+        for row in records:
+            c=row["rule_contract"]
+            self.assertNotEqual(c["option_a"],c["option_b"])
+            self.assertNotEqual(c["return_a"],c["return_b"])
+            self.assertNotEqual(c["witness_return_a"],c["witness_return_b"])
+        changed=deepcopy(self.codex)
+        row=next(x for x in changed["records"] if x["id"]=="quest.personal.ThreefoldReach")
+        row["rule_contract"]["option_a"]=row["rule_contract"]["option_b"]
+        self.assertTrue(any("distinct saved social outcomes" in issue for issue in validate(ROOT,changed)))
+
     def test_invalid_dependency_rejected(self):
         changed=deepcopy(self.codex)
         row=next(x for x in changed["records"] if x["id"]=="journey.wing.FirstAbsence")

@@ -368,10 +368,20 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
     aftermath_rows=re.findall(r'\{Realm::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h"))
     for realm,title in aftermath_rows[:9]:
         check("quest.aftermath."+realm,"name",title)
-    personal_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h"))
+    if '#include "World/UnmadeCodexPersonalQuestsGenerated.inc"' not in source("Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h"):
+        issues.append("personal quest gameplay not compiled from Codex")
+    personal_rows=re.findall(r'\{\s*"([^"]+)","([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeCodexPersonalQuestsGenerated.inc"))
     for realm,(title,goal) in zip(realms,personal_rows[:9]):
         check("quest.personal."+realm,"name",title)
         check("quest.personal."+realm,"rule_contract.goal",goal)
+    for index,realm in enumerate(("ThreefoldReach","WidowedRain","HearthBeneath",
+                                   "TidalLedger","SkyBelow","CinderSpine",
+                                   "HundredUnlived","OrchardOfKings","FirstAbsence")):
+        row=by_id.get("quest.personal."+realm)
+        if not row:continue
+        c=row["rule_contract"]
+        if c["source_order"]!=index or c["option_a"]==c["option_b"] or c["return_a"]==c["return_b"]:
+            issues.append("quest.personal."+realm+": missing distinct saved social outcomes")
     settlement_rows=re.findall(r'\{SettlementId::(\w+),\s*"([^"]+)"',source("Source/TheUnmadeGame/Public/World/UnmadeSettlementRegistry.h"))
     for key,name in settlement_rows[:3]:
         check("settlement."+key,"name",name)

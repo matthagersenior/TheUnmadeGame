@@ -157,6 +157,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_campaign_spine_test.cpp -o /tmp/unmade-codex-campaign
           /tmp/unmade-codex-campaign
+      - name: Enforce nine Codex-owned personal quest witnesses and irreversible choices
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_personal_quest_test.cpp -o /tmp/unmade-codex-personal
+          /tmp/unmade-codex-personal
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check

@@ -111,3 +111,7 @@ Each of the nine optional wings now has its exact realm-linked `ExperienceSpec` 
 ## Codex-owned Unanswered Road chapters (19 October 2026)
 
 The actual `UnansweredRoadBeats` array in `UnmadeCampaignSpineRules.h` is now generated from nine canonical `quest.campaign.<realm>` Codex entries. Each retains its source-authored chapter name, central mystery question, **attributed physical discovery**, next optional region lead and stable `Campaign.Thread.N` public event tag. The saved campaign stage model remains an independent executor that demands completed real evidence and witnessed branches; the Codex does not auto-award threads, remove two-path act choices, or prematurely unlock Nhal-Vey. CI verifies all nine chapters, identifiers and event ordering.
+
+## Codex-owned local personal quests (19 October 2026)
+
+The nine `DepthSpecs` personal quests now compile from the canonical Codex. Each retains the complete original local offer, NPC testimony, physical evidence, **two alternative decisions**, both distinct local outcomes and subsequent witnessed interpretations, its specific hand-operated physical challenge, earned secret and technique, counterparty, and region-linked dungeon geometry. The `AdventureDepth` state machine still enforces firsthand interactions, mutually exclusive choices and atomic save-backed consequences; the Codex never grants them by declaring the entry. The historical `adventure_depth_v16.json` is now verified by a compatibility checker rather than overwriting the live registry. All nine story/realm indices remain stable.

@@ -11162,6 +11162,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "A charter says every traveler is welcome. Last winter we counted beds instead. Jessa kept the names I stopped writing.",
+        "witness": "I kept those names because a missing name becomes an empty bed. Maelin wants the lanterns on the road; I want somebody to admit who was left outside.",
+        "evidence": "The torn charter lists both the abandoned beds and a reserve of lantern oil. Neither claim cancels the other.",
+        "option_a": "Keep the lantern reserve on the refuge road",
+        "option_b": "Publish the excluded names and reserve the archive room",
+        "return_a": "We will keep a bed ready. Jessa still asks why the list is folded shut.",
+        "return_b": "The names are posted. I have moved a lantern indoors; the outer road will need your field kit.",
+        "challenge": "Ring the road bells 1, 3, 2",
+        "secret_name": "A lantern hidden behind the charter panel",
+        "power": "Marked Opening",
+        "counterparty": "Charter Enforcer",
+        "witness_return_a": "I will keep checking the list. A warm bed does not make an excluded name disappear.",
+        "witness_return_b": "Now I can point to the names instead of asking somebody to believe my memory. I still have to find them beds.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "leader": "Maelin",
+        "witness_name": "Jessa",
+        "boss": "The Tollkeeper Without a Road",
+        "dungeon": "The Split Charter Vault",
+        "enemy_roles": [
+          0,
+          1,
+          2,
+          3,
+          0,
+          1,
+          2,
+          3
         ]
       },
       "requirements_checklist": {
@@ -11700,6 +11753,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "The pump schedule is ours again. Havin says the drywake families should hold it. I have watched strangers arrive with nothing but empty cups.",
+        "witness": "An open pump is a promise until somebody drinks it dry. Give the families a protected hour. Leave the rest of the day open.",
+        "evidence": "A soaked schedule shows the pumps stopped before the tanks were empty. A private water hour could preserve a reserve or become another gate.",
+        "option_a": "Guarantee a protected family water hour",
+        "option_b": "Keep access public and post every withdrawal",
+        "return_a": "Havin keeps the protected hour. The provisioner charges less; travelers wait until the bell.",
+        "return_b": "The withdrawal sheet is public. We spend more time checking it, but newcomers can ask for water.",
+        "challenge": "Set pump switches 1 and 3; confirm during the low-water interval",
+        "secret_name": "A saltglass lens beneath the dry walkway",
+        "power": "Pressure Read",
+        "counterparty": "Brine Syndic",
+        "witness_return_a": "My household knows when the pump is ours. I will be the one explaining the wait to the next stranger.",
+        "witness_return_b": "I will bring our cups at the public hour. If the withdrawal sheet is wrong, I want my name beside the correction.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "leader": "Ceryn",
+        "witness_name": "Havin",
+        "boss": "The Undertow Bailiff",
+        "dungeon": "The Hollow Breakwater",
+        "enemy_roles": [
+          2,
+          3,
+          1,
+          2,
+          0,
+          3,
+          2,
+          1
         ]
       },
       "requirements_checklist": {
@@ -12238,6 +12344,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "The holding room had heat while the refuge did not. Ilyet has measured the pipes. We can warm the houses or keep a reserve for the next rescue.",
+        "witness": "A rescue reserve sounds humane until every cold night is called temporary. I can reroute the pipe, but I will not pretend one valve warms everyone.",
+        "evidence": "A service diagram separates the domestic line from a guarded emergency reservoir. Both share the same limited intake.",
+        "option_a": "Warm the refuge houses first",
+        "option_b": "Keep a rescue reserve with a public meter",
+        "return_a": "The houses are warm. Ilyet checks the reserve before agreeing to send a crew underground.",
+        "return_b": "The meter is where everyone can read it. The houses keep their blankets; the rescue crew keeps its heat.",
+        "challenge": "Touch all three cooling relays within eighteen seconds",
+        "secret_name": "An insulated forge grip beyond the cooling panel",
+        "power": "Ember Counter",
+        "counterparty": "Reservoir Keeper",
+        "witness_return_a": "I measured the house line this morning. It is warm. I am also measuring what remains for a rescue.",
+        "witness_return_b": "The rescue meter is honest. It does not make the refuge warmer, and I will not stop saying that.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "leader": "Kerrin",
+        "witness_name": "Ilyet",
+        "boss": "The Ashbound Provost",
+        "dungeon": "The Furnace Below Blackslag",
+        "enemy_roles": [
+          0,
+          3,
+          0,
+          1,
+          0,
+          0,
+          3,
+          1
         ]
       },
       "requirements_checklist": {
@@ -12776,6 +12935,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "Velka is my name. The ledger knows me as a guarantor. Deyra found a margin where the collector wrote that I would pay for strangers I had never met.",
+        "witness": "The margin is real. So is the promise Velka made to two families. Destroying a forced oath must not erase the promise they still rely on.",
+        "evidence": "A copied oath distinguishes the voluntary family promise from the collector's added liability. The ink layers can be read separately.",
+        "option_a": "Keep the family promise and seal the forced margin",
+        "option_b": "Expose the whole oath and renegotiate it publicly",
+        "return_a": "The families still have a guarantor. Deyra keeps the sealed copy so the margin cannot return unnoticed.",
+        "return_b": "The oath is being read aloud. Some people trust us more; others will not wait for the negotiation.",
+        "challenge": "Enable weights 1 and 2 for a total load of five",
+        "secret_name": "A witness clasp in the counterweight recess",
+        "power": "Oath Interrupt",
+        "counterparty": "Margin Collector",
+        "witness_return_a": "The forced margin is sealed separately. I kept a second copy so nobody can quietly join it to the promise again.",
+        "witness_return_b": "People can read the whole oath now. We still need to say which promise we will actually keep.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "leader": "Velka",
+        "witness_name": "Deyra",
+        "boss": "The Interest Warden",
+        "dungeon": "The Foreclosed Anchorage",
+        "enemy_roles": [
+          3,
+          0,
+          2,
+          1,
+          0,
+          3,
+          0,
+          2
         ]
       },
       "requirements_checklist": {
@@ -13314,6 +13526,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "The span can hold workers again. Kelm wants the choir anchor returned to it. The anchor steadies the bridge, but it also decides whose footsteps count.",
+        "witness": "I can hear every crossing in the anchor. That is why I want it restored and why Liora wants the record open. Safety has become a way to listen without asking.",
+        "evidence": "The anchor records footsteps as well as load. Its structural use does not require retaining a named crossing record.",
+        "option_a": "Restore the anchor and limit access to its record",
+        "option_b": "Open the crossing record and use manual load watches",
+        "return_a": "The anchor carries the weight. Kelm answers for the locked record; the watch still counts every load.",
+        "return_b": "The record is open. Liora has asked for another watcher, because reading it does not hold a bridge up.",
+        "challenge": "Reach the upper walkway and ground all three wind anchors",
+        "secret_name": "A choirweight hook on the high ledge",
+        "power": "Grounded Fold",
+        "counterparty": "Anchor Auditor",
+        "witness_return_a": "The anchor is carrying the span. Its locked record is my responsibility, not permission to listen whenever I please.",
+        "witness_return_b": "I have taken a manual load watch. Reading the crossing record will not hold the bridge up for me.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "leader": "Liora",
+        "witness_name": "Kelm",
+        "boss": "The Counterweight Cantor",
+        "dungeon": "The Fallen Choir Engine",
+        "enemy_roles": [
+          2,
+          2,
+          3,
+          1,
+          0,
+          2,
+          3,
+          2
         ]
       },
       "requirements_checklist": {
@@ -13852,6 +14117,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "Seyl's family name is under a seam the claimant called unworked. I can protect their claim by sealing the copy. Seyl wants to know who else was buried beside it.",
+        "witness": "Aren can keep our claim safe. I still want the other names read. I do not want to inherit a house that depends on keeping another family invisible.",
+        "evidence": "The seam copy carries a family claim and several neighboring names. The claimant's stamp covers both, rather than establishing either as false.",
+        "option_a": "Protect the family claim in a sealed local trust",
+        "option_b": "Publish the neighboring names with the claim",
+        "return_a": "The local trust holds the copy. Seyl visits the seam because the other names have not stopped mattering.",
+        "return_b": "The neighboring names are on the wall. Aren has had to defend our claim in front of people it once excluded.",
+        "challenge": "Lock the memory shutters 1, 2, 3",
+        "secret_name": "A seamfinder tooth behind the stopped shutter",
+        "power": "Seam Read",
+        "counterparty": "Seam Evictor",
+        "witness_return_a": "Our claim is protected. I am still asking what happened to the neighboring names under the seal.",
+        "witness_return_b": "I read the neighbors' names aloud. Some families have answered, and we will have to make room for their claims.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            2,
+            3
+          ]
+        ],
+        "leader": "Aren",
+        "witness_name": "Seyl",
+        "boss": "The Last Claimant",
+        "dungeon": "The Buried Yesterday Foundry",
+        "enemy_roles": [
+          1,
+          0,
+          1,
+          3,
+          0,
+          1,
+          0,
+          3
         ]
       },
       "requirements_checklist": {
@@ -14390,6 +14708,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "Ovin can write the people we rescued into the census. That would make their beds visible to the storekeeper. It would also make their names visible to anyone asking.",
+        "witness": "I have a blank page and a real storehouse. An unnamed household can be starved politely. A named household can be found by someone it fears.",
+        "evidence": "The storehouse sheet accepts household totals without personal names. An attached index would identify each person if it were retained.",
+        "option_a": "Register household totals and seal personal names",
+        "option_b": "Register names openly with an appeal witness",
+        "return_a": "The storehouse has the totals. Ovin keeps the name page sealed and has promised to ask before opening it.",
+        "return_b": "The names have a witness beside them. Neris is still making sure nobody mistakes an appeal for permission.",
+        "challenge": "Read all three lamps while unobserved; crouch or clear the patrol",
+        "secret_name": "An unlisted cloak pin under the census stair",
+        "power": "Unlisted Step",
+        "counterparty": "Index Hunter",
+        "witness_return_a": "The storekeeper has a household total. The personal page will stay sealed until somebody gives permission to open it.",
+        "witness_return_b": "I wrote the appeal beside every name. I expect to be called when somebody tries to ignore it.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            -1,
+            0
+          ],
+          [
+            -1,
+            1
+          ],
+          [
+            -2,
+            1
+          ],
+          [
+            -2,
+            2
+          ],
+          [
+            -1,
+            2
+          ]
+        ],
+        "leader": "Neris",
+        "witness_name": "Ovin",
+        "boss": "The Registrar of Empty Beds",
+        "dungeon": "The Unentered Census House",
+        "enemy_roles": [
+          2,
+          1,
+          3,
+          2,
+          0,
+          2,
+          1,
+          3
         ]
       },
       "requirements_checklist": {
@@ -14928,6 +15299,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "The root passage is open. Alva found an old boundary cut through the graft. The old claim would keep the harvest safe for one household.",
+        "witness": "My household has eaten from that root for years. I will not call the claim fair just because it fed us. Sivra thinks a common harvest can survive without a keeper.",
+        "evidence": "A root marker names the household boundary; a later tool mark widens it across the common path. The two cuts were made in different seasons.",
+        "option_a": "Keep the household boundary with a public harvest share",
+        "option_b": "Restore the common path and appoint rotating keepers",
+        "return_a": "The household boundary stays. Alva leaves a share at the common post, where everyone can see whether it arrived.",
+        "return_b": "The path is common again. Sivra takes the first watch and cannot ask Alva to carry every hungry season alone.",
+        "challenge": "Grow the root controls 3, 1, 2",
+        "secret_name": "A commonbark graft charm beyond the root bridge",
+        "power": "Root Counter",
+        "counterparty": "Boundary Hewer",
+        "witness_return_a": "I put the public share at the post myself. My household cannot call it a gift and then take it back unseen.",
+        "witness_return_b": "The common path is open. I have a watch hour, and so does Sivra. That is how I will know we meant it.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            -1
+          ],
+          [
+            2,
+            -1
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            1
+          ]
+        ],
+        "leader": "Sivra",
+        "witness_name": "Alva",
+        "boss": "The Unwritten Castellan",
+        "dungeon": "The Crownroot Keep",
+        "enemy_roles": [
+          0,
+          1,
+          0,
+          3,
+          0,
+          1,
+          1,
+          0
         ]
       },
       "requirements_checklist": {
@@ -15466,6 +15890,59 @@
           "Witness",
           "PersonalEvidence",
           "Accord"
+        ],
+        "offer": "Essel can describe the threshold we have crossed. We can seal that description for the next rescue, or let travelers read it. A description is not an answer to what began this place.",
+        "witness": "I will write where we put our hands and what opened. I will not write that we understand the absence. Thaelin worries people will treat a route as a promise.",
+        "evidence": "The threshold diagram records a working passage and two untested side doors. It explicitly leaves the origin of the first absence unknown.",
+        "option_a": "Keep the working route in a rescue registry",
+        "option_b": "Publish the route with the untested doors marked",
+        "return_a": "The rescue registry holds the route. Essel left the untested doors in the drawing instead of pretending they were gone.",
+        "return_b": "The route is public, with its uncertainty intact. Thaelin asks every traveler to read the warning before choosing.",
+        "challenge": "Enable boundary mirrors 2 and 3; leave mirror 1 dark",
+        "secret_name": "A threshold brace inside the untested alcove",
+        "power": "Nearness Hold",
+        "counterparty": "Registry Sealkeeper",
+        "witness_return_a": "The rescue registry has the working route. The untested doors are still drawn as untested.",
+        "witness_return_b": "The traveler can read the route and its warning together. I have written no answer about where the absence began.",
+        "room_grid": [
+          [
+            0,
+            0
+          ],
+          [
+            -1,
+            0
+          ],
+          [
+            -2,
+            0
+          ],
+          [
+            -2,
+            1
+          ],
+          [
+            -1,
+            1
+          ],
+          [
+            -1,
+            2
+          ]
+        ],
+        "leader": "Thaelin",
+        "witness_name": "Essel",
+        "boss": "The Keeper of the Single Door",
+        "dungeon": "The Unfinished Bastion",
+        "enemy_roles": [
+          3,
+          2,
+          3,
+          0,
+          0,
+          3,
+          2,
+          0
         ]
       },
       "requirements_checklist": {
@@ -16806,7 +17283,7 @@
       ]
     },
     "journeys": {
-      "status": "codex_generated_campaign_chapters_and_expeditions_source_mirrored_quest_execution",
+      "status": "codex_generated_expeditions_wings_campaign_chapters_and_personal_choices_stateful_quests",
       "categories": [
         "journey",
         "personal_quest",
