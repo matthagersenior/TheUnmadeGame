@@ -38,6 +38,7 @@ public:
     int32 GlimpseDiscount() const { return Inventory.GlimpseStrainDiscount()+ExpeditionGlimpse; }
     int32 FoldBonusSeconds() const { return (Loadout.weapon>=0?0:Inventory.FoldDurationBonus())+ExpeditionFold; }
     double StrainRecoveryMultiplier() const { return Inventory.RecoveryMultiplier(); }
+    void SetStudyBonuses(int32 Attack,int32 Armor) { StudyAttack=FMath::Clamp(Attack,0,8);StudyArmor=FMath::Clamp(Armor,0,8);RefreshCombatBonuses(); }
     void SetTemporaryBonuses(int32 Attack,int32 Armor) {
         TemporaryAttack=FMath::Clamp(Attack,-20,80);
         TemporaryArmor=FMath::Clamp(Armor,0,80);
@@ -53,6 +54,8 @@ private:
     bool bSaveRejected = false;
     FIntPoint NativeGearBonuses()const;
     void RefreshCombatBonuses();
+    int32 StudyAttack=0;
+    int32 StudyArmor=0;
     int32 TemporaryAttack=0;
     int32 TemporaryArmor=0;
     UnmadeCore::InventoryModel Inventory;
