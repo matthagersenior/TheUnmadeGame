@@ -135,6 +135,10 @@ jobs:
         run: |
           python Scripts/build_cinderhold_audio.py --check
           python Scripts/unreal_editor/import_cinderhold_audio.py
+      - name: Test persistent observation, mastered combinations and Atlas reward
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/ability_study_test.cpp -o /tmp/unmade-study
+          /tmp/unmade-study
       - name: Audit canonical ability codex and source parity
         run: python Scripts/validate_ability_codex.py --report
       - name: Run validator unit tests
