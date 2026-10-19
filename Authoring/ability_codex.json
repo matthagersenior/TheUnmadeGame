@@ -4951,6 +4951,2071 @@
         "Source/TheUnmadeGame/Private/World/UnmadePlayerExperience.cpp",
         "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h"
       ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.melee",
+      "name": "Weapon Strike",
+      "category": "fundamental_combat",
+      "summary": "Stamina-priced melee swing with bounded arc and one-hit receipt",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Stamina-priced melee swing with bounded arc and one-hit receipt"
+      },
+      "cost": {
+        "stamina": "style-dependent"
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.combo",
+      "name": "Three-Hit Combo",
+      "category": "fundamental_combat",
+      "summary": "Third chained hit gets a 35 percent multiplier",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Third chained hit gets a 35 percent multiplier"
+      },
+      "cost": {
+        "stamina": "stamina per hit"
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.guard",
+      "name": "Guard",
+      "category": "fundamental_combat",
+      "summary": "Block physical attack damage and set up defensive counters",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Block physical attack damage and set up defensive counters"
+      },
+      "cost": {
+        "stamina": "guard resource"
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.parry",
+      "name": "Timed Parry",
+      "category": "fundamental_combat",
+      "summary": "A correctly timed guard can intercept attack damage",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "A correctly timed guard can intercept attack damage"
+      },
+      "cost": {
+        "stamina": 5
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.dodge",
+      "name": "Dodge",
+      "category": "fundamental_combat",
+      "summary": "Directional evasive movement with a short invulnerability window",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Directional evasive movement with a short invulnerability window"
+      },
+      "cost": {
+        "stamina": 22
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.sneak",
+      "name": "Sneak / Crouch",
+      "category": "fundamental_combat",
+      "summary": "Reduces detection range in authored stealth situations",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Reduces detection range in authored stealth situations"
+      },
+      "cost": {
+        "stamina": 0
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.stagger",
+      "name": "Enemy Stagger",
+      "category": "fundamental_combat",
+      "summary": "Interrupt eligible enemies via powers, contact or exposure",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Interrupt eligible enemies via powers, contact or exposure"
+      },
+      "cost": {
+        "stamina": "attack-dependent"
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.projectile",
+      "name": "Non-homing Projectile",
+      "category": "fundamental_combat",
+      "summary": "Fire a ranged shot that can be blocked by world cover",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Fire a ranged shot that can be blocked by world cover"
+      },
+      "cost": {
+        "stamina": "weapon-dependent"
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.field_kit",
+      "name": "Field Kit",
+      "category": "fundamental_combat",
+      "summary": "Suppress eligible danger field for 20 seconds, 30 with earned binding",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Suppress eligible danger field for 20 seconds, 30 with earned binding"
+      },
+      "cost": {
+        "stamina": "one kit"
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": false,
+        "automatically_learnable": false
+      },
+      "id": "combat.healing",
+      "name": "Recovery",
+      "category": "fundamental_combat",
+      "summary": "Restore missing health through a consumable or learned technique",
+      "acquisition": {
+        "method": "base_action_or_owned_gear",
+        "requirements": [
+          "Ability must be available and target valid"
+        ]
+      },
+      "effect": {
+        "kind": "combat",
+        "summary": "Restore missing health through a consumable or learned technique"
+      },
+      "cost": {
+        "stamina": "item/technique-dependent"
+      },
+      "duration": "active action",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp",
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCombatStyleRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.Cinderjaw",
+      "name": "Cinderjaw",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "JAW STRIKE - GUARD OR RETREAT",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Stalker",
+        "health": 85,
+        "damage": 14,
+        "cooldown_seconds": 1.4,
+        "move_speed": 145,
+        "windup_seconds": 0.7,
+        "reach": 2.2
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.PaleStrider",
+      "name": "PaleStrider",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "STRIDER LUNGE - STEP BACK",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Stalker",
+        "health": 65,
+        "damage": 11,
+        "cooldown_seconds": 1.1,
+        "move_speed": 205,
+        "windup_seconds": 0.85,
+        "reach": 2.6
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.Veilwatch",
+      "name": "Veilwatch",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "VEIL PULSE - BREAK SIGHT",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Watcher",
+        "health": 75,
+        "damage": 12,
+        "cooldown_seconds": 2.3,
+        "move_speed": 95,
+        "windup_seconds": 1.15,
+        "reach": 7
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.GleamMoth",
+      "name": "GleamMoth",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "GLEAM FLASH - TAKE COVER",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Watcher",
+        "health": 45,
+        "damage": 8,
+        "cooldown_seconds": 1.5,
+        "move_speed": 170,
+        "windup_seconds": 0.85,
+        "reach": 5.5
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.HollowHound",
+      "name": "HollowHound",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "HOUND BITE - GUARD",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Stalker",
+        "health": 80,
+        "damage": 12,
+        "cooldown_seconds": 1.2,
+        "move_speed": 185,
+        "windup_seconds": 0.75,
+        "reach": 2.1
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.GriefLantern",
+      "name": "GriefLantern",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "GRIEF PEAL - BREAK SIGHT",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Watcher",
+        "health": 90,
+        "damage": 16,
+        "cooldown_seconds": 3,
+        "move_speed": 70,
+        "windup_seconds": 1.5,
+        "reach": 8
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.Inkmaw",
+      "name": "Inkmaw",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "INKMAW CRUSH - RETREAT",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Stalker",
+        "health": 110,
+        "damage": 18,
+        "cooldown_seconds": 2,
+        "move_speed": 100,
+        "windup_seconds": 1.1,
+        "reach": 2.4
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.RedactionEye",
+      "name": "RedactionEye",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "REDACTION - USE THE SHELVES",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Watcher",
+        "health": 60,
+        "damage": 14,
+        "cooldown_seconds": 2.2,
+        "move_speed": 115,
+        "windup_seconds": 1.2,
+        "reach": 6.5
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.SaltglassCrawler",
+      "name": "SaltglassCrawler",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "CRAWLER SNAP - STEP BACK",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Stalker",
+        "health": 125,
+        "damage": 16,
+        "cooldown_seconds": 1.8,
+        "move_speed": 85,
+        "windup_seconds": 1,
+        "reach": 2.3
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.DrownedWatch",
+      "name": "DrownedWatch",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "DROWNED PULSE - TAKE COVER",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Watcher",
+        "health": 85,
+        "damage": 13,
+        "cooldown_seconds": 2.6,
+        "move_speed": 80,
+        "windup_seconds": 1.35,
+        "reach": 7.5
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.Ashmaw",
+      "name": "Ashmaw",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "ASHMAW SLAM - RETREAT",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Stalker",
+        "health": 140,
+        "damage": 22,
+        "cooldown_seconds": 2.5,
+        "move_speed": 105,
+        "windup_seconds": 1.3,
+        "reach": 2.6
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.creature.KilnWisp",
+      "name": "KilnWisp",
+      "category": "enemy_creature_pattern",
+      "region": null,
+      "summary": "KILN FLARE - BREAK SIGHT",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "enemy_attack",
+        "style": "Watcher",
+        "health": 50,
+        "damage": 10,
+        "cooldown_seconds": 1.8,
+        "move_speed": 155,
+        "windup_seconds": 1,
+        "reach": 6
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.boss.HollowBell",
+      "name": "The Bell That Buried Its Keeper",
+      "category": "enemy_boss_pattern",
+      "region": null,
+      "summary": "Fold interrupts the toll",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "boss_attack",
+        "health": 300,
+        "damage": 28,
+        "range_cm": 450,
+        "windup_seconds": 2,
+        "recovery_seconds": 2.5
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.boss.RedactedCurator",
+      "name": "The Curator of Missing Names",
+      "category": "enemy_boss_pattern",
+      "region": null,
+      "summary": "Glimpse reveals the erased signature",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "boss_attack",
+        "health": 260,
+        "damage": 24,
+        "range_cm": 720,
+        "windup_seconds": 1.5,
+        "recovery_seconds": 2.25
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.boss.UnfinishedPilgrim",
+      "name": "The Unfinished Pilgrim",
+      "category": "enemy_boss_pattern",
+      "region": null,
+      "summary": "Fold exposes the path between charges",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "boss_attack",
+        "health": 340,
+        "damage": 32,
+        "range_cm": 300,
+        "windup_seconds": 1.8,
+        "recovery_seconds": 2.75
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeBossRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.guardian.realm.1",
+      "name": "The Collector of Unborn Days",
+      "category": "enemy_realm_guardian",
+      "region": "TidalLedger",
+      "summary": "The collector unwinds a future chain; step beyond the arc or Fold its strike.",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "guardian_strike",
+        "damage": 18,
+        "windup_seconds": 1.8,
+        "recovery_seconds": 2.5,
+        "range_cm": 340
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.guardian.realm.2",
+      "name": "The Missing Chorister",
+      "category": "enemy_realm_guardian",
+      "region": "SkyBelow",
+      "summary": "The invisible note tightens; break sight, guard, or Fold before it falls.",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "guardian_strike",
+        "damage": 14,
+        "windup_seconds": 2.2,
+        "recovery_seconds": 2,
+        "range_cm": 510
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.guardian.realm.3",
+      "name": "The Mortar Ancestor",
+      "category": "enemy_realm_guardian",
+      "region": "CinderSpine",
+      "summary": "The ancestor raises a quarry hammer; retreat behind the seam or interrupt.",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "guardian_strike",
+        "damage": 21,
+        "windup_seconds": 2.4,
+        "recovery_seconds": 3,
+        "range_cm": 350
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.guardian.realm.4",
+      "name": "The Numberless Examiner",
+      "category": "enemy_realm_guardian",
+      "region": "HundredUnlived",
+      "summary": "A numbered pulse narrows; evade or use the covered addressway.",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "guardian_strike",
+        "damage": 15,
+        "windup_seconds": 1.65,
+        "recovery_seconds": 2.75,
+        "range_cm": 440
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.guardian.realm.5",
+      "name": "The Root Bailiff",
+      "category": "enemy_realm_guardian",
+      "region": "OrchardOfKings",
+      "summary": "A law-root points at your feet; cross to the unbound row before impact.",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "guardian_strike",
+        "damage": 19,
+        "windup_seconds": 2,
+        "recovery_seconds": 2.9,
+        "range_cm": 385
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.guardian.realm.6",
+      "name": "The Unfinished Witness",
+      "category": "enemy_realm_guardian",
+      "region": "FirstAbsence",
+      "summary": "Two overlapping silhouettes prepare a strike; retreat into the stable path.",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "guardian_strike",
+        "damage": 20,
+        "windup_seconds": 2.5,
+        "recovery_seconds": 3.1,
+        "range_cm": 420
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeRealmGuardianRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.0",
+      "name": "The Unmeasured Bailiff",
+      "category": "enemy_wing_guardian",
+      "region": "Crossings",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.1",
+      "name": "The Brine Tollkeeper",
+      "category": "enemy_wing_guardian",
+      "region": "Saltwake",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.2",
+      "name": "The Unspent Furnace",
+      "category": "enemy_wing_guardian",
+      "region": "Cinderhold",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.3",
+      "name": "The Unclaimed Duelist",
+      "category": "enemy_wing_guardian",
+      "region": "Drevlach",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.4",
+      "name": "The Falling Cantor",
+      "category": "enemy_wing_guardian",
+      "region": "Orravane",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.5",
+      "name": "The Borrowed Custodian",
+      "category": "enemy_wing_guardian",
+      "region": "Vathless",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.6",
+      "name": "The Unlisted Watcher",
+      "category": "enemy_wing_guardian",
+      "region": "Eillun",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.7",
+      "name": "The Boundary Pruner",
+      "category": "enemy_wing_guardian",
+      "region": "Tharniv",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.wing_guardian.realm.8",
+      "name": "The Closing Registrar",
+      "category": "enemy_wing_guardian",
+      "region": "Auvren",
+      "summary": "Optional fieldwork guardian with physical encounter resolution and save-backed defeat/yield",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "prototype_guardian",
+        "summary": "Shared base combat patterns; no unique transferable spell validated"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadePlayerExperienceRegistry.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.0",
+      "name": "The Tollkeeper Without a Road",
+      "category": "enemy_expedition_boss",
+      "region": "Crossings",
+      "summary": "MILEGLASS RING — CENTER IS SAFE",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "MILEGLASS RING — CENTER IS SAFE"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.1",
+      "name": "The Undertow Bailiff",
+      "category": "enemy_expedition_boss",
+      "region": "Saltwake",
+      "summary": "UNDERTOW LANE — MOVE SIDEWAYS",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "UNDERTOW LANE — MOVE SIDEWAYS"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.2",
+      "name": "The Ashbound Provost",
+      "category": "enemy_expedition_boss",
+      "region": "Cinderhold",
+      "summary": "KILN FAN — SOUTH HALF IS SAFE",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "KILN FAN — SOUTH HALF IS SAFE"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.3",
+      "name": "The Interest Warden",
+      "category": "enemy_expedition_boss",
+      "region": "Drevlach",
+      "summary": "OATH CROSS — DIAGONALS ARE SAFE",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "OATH CROSS — DIAGONALS ARE SAFE"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.4",
+      "name": "The Counterweight Cantor",
+      "category": "enemy_expedition_boss",
+      "region": "Orravane",
+      "summary": "CHOIR QUADRANTS — OPPOSITE SIGNS SAFE",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "CHOIR QUADRANTS — OPPOSITE SIGNS SAFE"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.5",
+      "name": "The Last Claimant",
+      "category": "enemy_expedition_boss",
+      "region": "Vathless",
+      "summary": "SEAM SPLIT — CENTRAL STRIP SAFE",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "SEAM SPLIT — CENTRAL STRIP SAFE"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.6",
+      "name": "The Registrar of Empty Beds",
+      "category": "enemy_expedition_boss",
+      "region": "Eillun",
+      "summary": "ELSEBORN DIVIDE — MIDDLE BAND SAFE",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "ELSEBORN DIVIDE — MIDDLE BAND SAFE"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.7",
+      "name": "The Unwritten Castellan",
+      "category": "enemy_expedition_boss",
+      "region": "Tharniv",
+      "summary": "CROWN SQUARE — LEAVE THE SQUARE",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "CROWN SQUARE — LEAVE THE SQUARE"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.expedition_signature.realm.8",
+      "name": "The Keeper of the Single Door",
+      "category": "enemy_expedition_boss",
+      "region": "Auvren",
+      "summary": "THRESHOLD RIM — CENTER IS SAFE",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "telegraphed_regional_footprint",
+        "safe_hint": "THRESHOLD RIM — CENTER IS SAFE"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRegistry.h",
+        "Source/TheUnmadeGame/Public/World/UnmadeExpeditionRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.final.Bell",
+      "name": "Nhal-Vey: Bell",
+      "category": "enemy_final_boss",
+      "region": null,
+      "summary": "A wide directional forward toll with readable windup",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "final_footprint",
+        "summary": "A wide directional forward toll with readable windup"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.final.Horizon",
+      "name": "Nhal-Vey: Horizon",
+      "category": "enemy_final_boss",
+      "region": null,
+      "summary": "A long thin forward seam avoided sideways",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "final_footprint",
+        "summary": "A long thin forward seam avoided sideways"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.final.Names",
+      "name": "Nhal-Vey: Names",
+      "category": "enemy_final_boss",
+      "region": null,
+      "summary": "An identity-themed close strike with actual visible forward footprint",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "final_footprint",
+        "summary": "An identity-themed close strike with actual visible forward footprint"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
+      ]
+    },
+    {
+      "limitations": [
+        "Observation grants no copied combat power in the current game"
+      ],
+      "modifications": [],
+      "combines_with": [],
+      "observation": {
+        "possible_to_study": true,
+        "automatically_learnable": false,
+        "currently_usable_by_player": false,
+        "study_grants": "readable counterplay",
+        "copying": "design candidate only; would require separate balanced quest, evidence and save-backed mastery"
+      },
+      "id": "enemy.final.Counterfactual",
+      "name": "Nhal-Vey: Counterfactual",
+      "category": "enemy_final_boss",
+      "region": null,
+      "summary": "An asymmetric right-side strike; escape marked strip",
+      "acquisition": {
+        "method": "firsthand_enemy_observation",
+        "requirements": [
+          "Encounter real target and survive/read its attack telegraph",
+          "Investigate a real vulnerability to earn counterplay"
+        ]
+      },
+      "effect": {
+        "kind": "final_footprint",
+        "summary": "An asymmetric right-side strike; escape marked strip"
+      },
+      "cost": {
+        "enemy_only": "source attack timing"
+      },
+      "duration": "individual encounter",
+      "implementation": "prototype_handler",
+      "sources": [
+        "Source/TheUnmadeGame/Public/Combat/UnmadeFinalEncounterRules.h"
+      ]
     }
   ]
 }
