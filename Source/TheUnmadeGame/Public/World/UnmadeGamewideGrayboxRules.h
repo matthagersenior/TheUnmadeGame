@@ -122,6 +122,13 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  else if(cross>=0){out.realm=cross;out.paletteSlot=out.realm;}
  else {
   out.realm=RealmForVisualTag(label);
+  // Canonical stand-alone documents and endgame controls are not named after
+  // a dungeon arc, yet must take the palette of their true physical realm.
+  if(std::strncmp(label,"Final.Control.",14)==0||
+     std::strncmp(label,"Final.Echo.",11)==0)out.realm=8;
+  if(std::strncmp(label,"Bes.",4)==0||
+     std::strncmp(label,"Relay.Cinderhold",16)==0)out.realm=2;
+  if(std::strncmp(label,"Relay.Saltwake",14)==0)out.realm=1;
   if(out.realm<0)out.realm=0;
   out.paletteSlot=out.realm;
  }
