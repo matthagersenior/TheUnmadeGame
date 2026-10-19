@@ -168,6 +168,8 @@ jobs:
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check
+      - name: Validate desired GitHub main protection and required canon check
+        run: python Scripts/protect_main_ruleset.py --validate
       - name: Verify new gameplay assets are registered to the canon
         if: github.event_name == 'pull_request'
         env:
