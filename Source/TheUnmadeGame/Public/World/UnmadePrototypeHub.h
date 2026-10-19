@@ -137,6 +137,8 @@ public:
     bool TryCinderholdAbility(AUnmadeCharacter* Player,int32 Ability,int32 Choice=0);
     bool RecordCinderholdConversation(FName StableId);
     FString GetCinderholdResidentLine(FName StableId) const;
+    /** Local work routine unlocked only after the resident receives the saved report. */
+    bool GetCinderholdAccordRoutineTarget(FName Id,bool bNight,FVector& Out) const;
     FString GetCinderholdJournal() const;
     bool RecordCinderholdElderDefeat(class AUnmadeEnemyCharacter* Elder);
     bool IsCinderholdElderResolved() const { return !bCinderholdSaveRejected&&Cinderhold.Resolved(); }
@@ -378,6 +380,8 @@ private:
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionHazardSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> CrossRealmCombatSigns;
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionEvidenceSigns;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> ExpeditionFractureActors;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionFractureSigns;
     std::array<double,9> ExpeditionHazardQuiet{};
     std::array<double,9> ExpeditionReleaseReady{};
     // The boss counter is transient: no extra rewards, save flags or repeatable farming.

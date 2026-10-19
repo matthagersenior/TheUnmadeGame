@@ -47,7 +47,7 @@ bool Local(UWorld* w,AUnmadeCharacter* p,FVector at,double range=230){if(!w||!Al
 
 }
 void AUnmadePrototypeHub::BuildExpeditions(){
- if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);CrossRealmCombatSigns.SetNum(9);ExpeditionEvidenceSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
+ if(!GetWorld())return;ExpeditionSigns.SetNum(9);ExpeditionHazardSigns.SetNum(9);CrossRealmCombatSigns.SetNum(9);ExpeditionEvidenceSigns.SetNum(9);ExpeditionFractureActors.SetNum(9);ExpeditionFractureSigns.SetNum(9);ExpeditionReturnGates.SetNum(9);ExpeditionBossGates.SetNum(9);
  ArenaShelterVisible.fill(-1);ArenaAftermathVisible.fill(-1);
  ArenaShelterUntil.fill(0);
  for(auto& Counter:ArenaCounters)Counter.Reset();
@@ -56,6 +56,25 @@ void AUnmadePrototypeHub::BuildExpeditions(){
  const auto Gate=[&](FVector at){auto* a=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(a){auto* m=a->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(6,.25,3));}return a;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::ExpeditionSpecs[a];const auto Block=[&](FVector at,FVector scale){SpawnBlock(at,scale,FName(*FString::Printf(TEXT("Expedition.%d.Structure"),a)));};
   Block(FVector(s.x-500,s.y+7500,-25),FVector(100,170,.5)); // connected city/frontier/refuge approach
+  // Canon: this clue is an actual visited-room investigation, not an earned reward.
+  // A revisitable physical clue belongs to the room that was actually entered.
+  // It is never a hidden quest gate, source of NPC omniscience, or free victory.
+  const auto& fracture=UnmadeCore::FirstFracturePhysicals[a];
+  const FVector at=Room(a,0)+FVector(fracture.dx,fracture.dy,-85);
+  auto* relic=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);
+  if(relic){
+   auto* mesh=relic->GetStaticMeshComponent();
+   mesh->SetMobility(EComponentMobility::Movable);
+   mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
+   relic->SetActorScale3D(FVector(fracture.scaleX,fracture.scaleY,fracture.scaleZ));
+   relic->GetStaticMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+   relic->SetActorHiddenInGame(true);
+   ExpeditionFractureActors[a]=relic;
+   ExpeditionFractureSigns[a]=Sign(at+FVector(0,0,175),TEXT("E - EXAMINE FIRSTHAND FRACTURE"));
+   if(ExpeditionFractureSigns[a].IsValid())
+    ExpeditionFractureSigns[a]->SetActorHiddenInGame(true);
+  }
+
   int MinX=0,MaxX=0,MinY=0,MaxY=0;for(int r=0;r<6;++r){auto q=UnmadeCore::DungeonRoom(a,r);MinX=FMath::Min(MinX,q.x);MaxX=FMath::Max(MaxX,q.x);MinY=FMath::Min(MinY,q.y);MaxY=FMath::Max(MaxY,q.y);}Block(Room(a,0)+FVector((MinX+MaxX)/2.,(MinY+MaxY)/2.,-120),FVector((MaxX-MinX+2600)/100.,(MaxY-MinY+2600)/100.,.5));
   Sign(Board(a),FString(UTF8_TO_TCHAR(s.dungeon))+TEXT(" / E accept adventure; J journal"));
   for(int site=0;site<2;++site){FVector h=Site(a,site);Sign(h,UTF8_TO_TCHAR(site?s.refuge:s.frontier));
@@ -177,6 +196,18 @@ void AUnmadePrototypeHub::RefreshExpeditions(){
  // Register actual chamber arrival before its actors can accept combat receipts.
  if(playerReady&&!bExpeditionSaveRejected){auto before=Expeditions;bool changed=false;for(int a=0;a<9;++a)for(int r=0;r<6;++r){auto& spec=UnmadeCore::ExpeditionSpecs[a];FVector at=p->GetActorLocation()-FVector(spec.x,spec.y+15000,95);if(UnmadeCore::InsideRegisteredChamber(a,r,at.X,at.Y,at.Z))changed=Expeditions.Enter(a,r)||changed;}if(changed)CommitExpeditions(before,p);}
  for(int a=0;a<9;++a){auto t=Expeditions.Arc(a);
+  if(ExpeditionFractureActors[a].IsValid()){
+   const bool observed=!bExpeditionSaveRejected&&(t->rooms&1)!=0;
+   ExpeditionFractureActors[a]->SetActorHiddenInGame(!observed);
+   if(ExpeditionFractureSigns[a].IsValid())
+    ExpeditionFractureSigns[a]->SetActorHiddenInGame(!observed);
+   if(observed){
+    const auto& fracture=UnmadeCore::FirstFracturePhysicals[a];
+    const double now=GetWorld()->GetTimeSeconds();
+    ExpeditionFractureActors[a]->SetActorRotation(FRotator(
+      9*FMath::Sin(now*fracture.spin),now*fracture.spin*18,0));
+   }
+  }
   if(t->boss!=0||bExpeditionSaveRejected){
     ArenaCounters[a].Reset();
     ArenaShelterUntil[a]=0;
@@ -268,7 +299,11 @@ bool AUnmadePrototypeHub::TryExpeditionInteraction(AUnmadeCharacter* p,double co
  if(!Alive(p)||!GetWorld())return false;if(TryExperienceInteraction(p,competing))return true;if(TryDepthInteraction(p,0,competing))return true;if(TryIdentityInteraction(p,competing))return true;int arc=-1,kind=-1,index=-1;double best=FMath::Min(230.*230.,competing);FVector at;
  auto Candidate=[&](int a,int k,int n,FVector pos){double d=FVector::DistSquared(p->GetActorLocation(),pos);if(d<best&&Local(GetWorld(),p,pos)){best=d;arc=a;kind=k;index=n;at=pos;}};
  for(int a=0;a<9;++a){Candidate(a,0,0,Board(a));for(int site=0;site<2;++site)Candidate(a,1,site,Site(a,site)+FVector(0,500,0));for(int r=0;r<6;++r)Candidate(a,2,r,Entrance(a,r));for(int c=0;c<3;++c)Candidate(a,3,c,Record(a,c));for(int q=0;q<2;++q)Candidate(a,4,q,Captive(a,q));Candidate(a,5,0,Council(a));Candidate(a,6,0,Truce(a));Candidate(a,7,0,Kit(a));Candidate(a,8,0,Room(a,5)+FVector(650,-650,0));Candidate(a,9,0,Room(a,3)+FVector(-650,-650,0));
- Candidate(a,10,0,ArenaCounterStations(a,0));Candidate(a,10,1,ArenaCounterStations(a,1));Candidate(a,13,0,EvidenceCounterStation(a));}
+ Candidate(a,10,0,ArenaCounterStations(a,0));Candidate(a,10,1,ArenaCounterStations(a,1));Candidate(a,13,0,EvidenceCounterStation(a));
+  if(ExpeditionFractureActors.IsValidIndex(a)&&ExpeditionFractureActors[a].IsValid()
+      &&!ExpeditionFractureActors[a]->IsHidden())
+   Candidate(a,14,0,ExpeditionFractureActors[a]->GetActorLocation());
+ }
  if(arc<0)return false;if(bExpeditionSaveRejected){NotifyRpg(TEXT("This adventure save is invalid; its original record is protected."));return true;}auto before=Expeditions;auto* t=Expeditions.Arc(arc);bool change=false;const auto& s=UnmadeCore::ExpeditionSpecs[arc];FString line;
  switch(kind){case 0:change=Expeditions.Brief(arc);line=FString(UTF8_TO_TCHAR(s.brief))+TEXT(" Visit the frontier north of the city, then enter the six-chamber dungeon. J tracks progress.");break;
  case 1:change=Expeditions.Visit(arc,index);line=FString(UTF8_TO_TCHAR(index?s.refuge:s.frontier))+TEXT(": a real refuge, not a cargo stop. The dungeon lies farther north.");break;
@@ -280,6 +315,20 @@ bool AUnmadePrototypeHub::TryExpeditionInteraction(AUnmadeCharacter* p,double co
  case 7:if(!t->returned){bool Witness=false;for(TActorIterator<AUnmadeNpcCharacter> N(GetWorld());N;++N)if(N->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),arc))&&FVector::DistSquared(N->GetActorLocation(),p->GetActorLocation())<FMath::Square(1800.f)){FCollisionQueryParams sight(SCENE_QUERY_STAT(ExpeditionReturnWitness),false);sight.AddIgnoredActor(p);sight.AddIgnoredActor(*N);Witness=!GetWorld()->LineTraceTestByChannel(p->GetActorLocation()+FVector(0,0,45),N->GetActorLocation()+FVector(0,0,45),ECC_Visibility,sight);}change=Witness&&Expeditions.Return(arc);line=change?TEXT("Your return is witnessed. E again chooses the weapon; F chooses armor. Either includes the named technique."):TEXT("Resolve the boss and walk back to this frontier settlement first.");}else if(!t->reward){if(!ConfirmExpeditionDecision(arc,2,1))return true;change=Expeditions.Claim(arc,1);line=FString(UTF8_TO_TCHAR(s.weapon))+TEXT(" equipped. Technique: ")+UTF8_TO_TCHAR(s.technique);}else{change=Expeditions.Equip(arc);line=TEXT("Your chosen realm equipment and technique are active; previous gear remains owned.");}break;
  case 9:if(t->rooms&8){ExpeditionHazardQuiet[arc]=GetWorld()->GetTimeSeconds()+8;line=TEXT("Danger field vented for eight seconds. The edge route is always safe.");}else line=TEXT("Enter the chamber before operating its vent.");break;
  case 8:if((t->rooms&32)&&GetWorld()->GetTimeSeconds()>=ExpeditionReleaseReady[arc]){if(auto* boss=Enemy(GetWorld(),arc,8)){boss->ExposeToFold(GetWorld()->GetTimeSeconds(),3);ExpeditionReleaseReady[arc]=GetWorld()->GetTimeSeconds()+8;line=TEXT("Grounding lever interrupts the boss for three seconds. Eight-second recovery; no Strain required.");}}if(line.IsEmpty())line=TEXT("Enter the arena first. The grounding lever must recover between uses.");break;
+ case 14:{
+   if(!(t->rooms&1)||!ExpeditionFractureActors[arc].IsValid()
+      ||ExpeditionFractureActors[arc]->IsHidden()){
+    line=TEXT("This unexamined anomaly requires an actually registered chamber entry.");
+    break;
+   }
+   const auto* fracture=UnmadeCore::FirstFracturePhysical(arc);
+   const char* sensory=UnmadeCore::FirstFractureLine(arc);
+   line=FString::Printf(TEXT("FIRSTHAND FRACTURE / %s\n%s\nWHAT TO INVESTIGATE: %s\nThis is a clue seen here, not permission to erase someone or proof of a universal answer."),
+      UTF8_TO_TCHAR(s.city),UTF8_TO_TCHAR(sensory),UTF8_TO_TCHAR(fracture->investigation));
+   UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+   break;
+ }
  case 13:{
    const auto& counter=UnmadeCore::EvidenceCounterplaySpecs[arc];
    auto* boss=Enemy(GetWorld(),arc,8);

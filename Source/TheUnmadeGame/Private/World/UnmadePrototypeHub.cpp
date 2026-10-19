@@ -543,6 +543,14 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
         }
     }
     if(Save->bHasExpeditions){std::vector<int> Data;for(int32 V:Save->ExpeditionState)Data.push_back(V);if(!Expeditions.Restore(Data)){bExpeditionSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Expedition save rejected; original protected"));}}
+    // A route learned from the first physical fracture cannot survive a
+    // fabricated or missing chamber record. Preserve the original slot.
+    if(Cinderhold.Save().route==4 && (bExpeditionSaveRejected||
+        !Save->bHasExpeditions||!(Expeditions.Arc(2)->rooms&1)))
+    {
+        bCinderholdSaveRejected=true;
+        UE_LOG(LogTemp,Error,TEXT("Shared kiln missing its actual Cinderhold discovery; original save protected"));
+    }
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int32 V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bIdentitySaveRejected=true;UE_LOG(LogTemp,Error,TEXT("World identity save rejected; original protected"));}}
     if(Save->bHasAdventureDepth){std::vector<int> Data;for(int32 V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){bDepthSaveRejected=true;UE_LOG(LogTemp,Error,TEXT("Adventure depth save rejected; original protected"));}}
     if(Save->bHasPlayerExperience){std::vector<int> Data;for(int V:Save->PlayerExperienceState)Data.push_back(V);if(!Experience.Restore(Data,Expeditions,Depth,RestoredClock.DayIndex()+1)){bExperienceRejected=true;UE_LOG(LogTemp,Error,TEXT("Player experience save rejected; original protected"));}}

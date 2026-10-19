@@ -1,10 +1,11 @@
 #pragma once
 // Optional local adventure. No wage, inventory, campaign or ending authority.
+// The documented shared route is earned at an actual workstone, witnessed locally.
 #include <cmath>
 #include <cstdint>
 namespace UnmadeCore {
 enum class SlagResolution : int { None=0, Defeated=1, Quieted=2 };
-enum class SlagRoute : int { Undecided=0, Maintained=1, VentOpen=2, VentSealed=3 };
+enum class SlagRoute : int { Undecided=0, Maintained=1, VentOpen=2, VentSealed=3, SharedKiln=4 };
 enum class SlagClue : int { Tracks=1, ServiceLog=2, Cadence=4 };
 enum SlagMemory : int { BesHeard=1, VardaBriefed=2, HomeSeen=4, VardaReported=8,
     ReturnedHome=16, RhevaTold=32, OvennaTold=64, BesReported=128 };
@@ -17,13 +18,17 @@ public:
     CinderholdSnapshot Save() const { return state_; }
     bool Restore(const CinderholdSnapshot& s,int day) {
         if(day<1||s.version!=1||s.memories<0||s.memories>255||s.clues<0||s.clues>7||
-           s.resolution<0||s.resolution>2||s.route<0||s.route>3||s.firstDay<0||s.firstDay>day||
+           s.resolution<0||s.resolution>2||s.route<0||s.route>4||s.firstDay<0||s.firstDay>day||
            s.returnDay<0||s.returnDay>day||s.returnedHeat<0||s.returnedHeat>1000000||
            s.returnedColdDays<0||s.returnedColdDays>day||s.returnedOwed<0||s.returnedOwed>100000000)
             return false;
         const bool active=s.memories!=0||s.clues!=0||s.resolution!=0;
         if(active!=(s.firstDay>0)||(!active&&s.route!=0))return false;
         if(s.route!=0&&s.resolution==0)return false;
+        // The shared-kiln pact is available only after the living elder was quieted
+        // and both locally known people and every Blackslag clue were heard.
+        if(s.route==4&&(s.resolution!=2||s.clues!=7||
+           (s.memories&(BesHeard|VardaBriefed))!=(BesHeard|VardaBriefed)))return false;
         if(s.resolution==2&&s.clues!=7)return false;
         if((s.memories&VardaReported)&&(!(s.memories&VardaBriefed)||s.resolution==0||s.route==0))return false;
         if((s.memories&BesReported)&&(!(s.memories&BesHeard)||!(s.memories&VardaReported)))return false;
@@ -59,6 +64,13 @@ public:
         if(!Resolved()||state_.route!=0||value<1||value>3)return false;
         state_.route=value;return true;
     }
+    bool ChooseSharedAccord(bool firsthandCinderholdFracture) {
+        // Caller verifies the actual saved entry to Cinderhold's first chamber.
+        // The world save rechecks that cross-system fact on load.
+        if(!firsthandCinderholdFracture||state_.route!=0||state_.resolution!=2||
+           state_.clues!=7||!Has(BesHeard)||!Has(VardaBriefed))return false;
+        state_.route=static_cast<int>(SlagRoute::SharedKiln);return true;
+    }
     bool ReturnHome(int day,int heat,int coldDays,int owed) {
         if(day<state_.firstDay||day<1||Has(ReturnedHome)||!Has(HomeSeen)||!Has(BesReported)||
            heat<0||heat>1000000||coldDays<0||coldDays>day||owed<0||owed>100000000)return false;
@@ -84,8 +96,8 @@ public:
     bool GlimpseActive(double now)const{return ValidTime(now)&&now<glimpseUntil_;}
     bool Has(int bit)const{return (state_.memories&bit)!=0;}
     bool Resolved()const{return state_.resolution!=0;}
-    bool KilnPathOpen(bool daylight)const{return state_.route==2||(state_.route==1&&daylight);}
-    bool ArchivePathOpen()const{return state_.route==1||state_.route==3;}
+    bool KilnPathOpen(bool daylight)const{return state_.route==2||state_.route==4||(state_.route==1&&daylight);}
+    bool ArchivePathOpen()const{return state_.route==1||state_.route==3||state_.route==4;}
     const char* Objective()const {
         if(Has(ReturnedHome))return "Cinderhold adventure complete; residents remember your return";
         if(!Has(BesHeard))return "Speak with Bes; fieldwork cannot settle his unpaid wages";
@@ -94,7 +106,7 @@ public:
         if(!Resolved())return state_.clues==7
             ?"Cool the vent, then sound the learned cadence; or face the elder"
             :"Inspect tracks, service log and cadence plate along the covered west path (E or F)";
-        if(state_.route==0)return "At the vent: maintain by hand (E), or preview a permanent Rewrite (R/T)";
+        if(state_.route==0)return "At vent E maintains, R/T rewrites; discover the Cinderhold fracture and inspect the shared-kiln accord stone (E) for another route";
         if(!Has(VardaReported))return "Return to Varda in person with the outcome and route decision";
         if(!Has(BesReported))return "Tell Bes what happened; he remembers which path you chose";
         return "Return to the shelf inside Bes's home (E); warmth and debt remain separate";
