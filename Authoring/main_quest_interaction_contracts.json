@@ -254,11 +254,12 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Commit to public rain access or a protected account of loss",
           "speaker": "npc.saltwake.navigator.001",
-          "line": "I charted a sea yesterday. Tell me why its shore is still wet but its water isn't here. The missing water as an economic and environmental absence gives you one chance to change the place responsibly.",
+          "line": "The chart is dry; the docks are soaked. What can a shoreline remember after its water is gone?",
           "physical_tag": "Saltwake.StormValve",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
-          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+          "saved_as": "Original first-quest mechanism action; its current stage/choice",
+          "design_notes": "Mechanism staging note: Keep the missing water legible as both an economic and an environmental loss. Leave the cause of the empty sea unresolved."
         },
         {
           "id": "care_commit",
@@ -288,12 +289,13 @@
           "id": "return",
           "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
-          "objective": "Storm records update to acknowledge actual Rainward public choice; no generic all-knowing NPC reaction.",
+          "objective": "Inspect the saved local change and speak with a resident who witnessed it.",
           "speaker": "npc.saltwake.navigator.001",
-          "line": "You came back. Storm records update to acknowledge actual Rainward public choice; no generic all-knowing NPC reaction. I have not forgotten the path you chose.",
+          "line": "Did you leave the ferry passage open to families, or the missing-water account open for witnesses?",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "design_notes": "Return staging note: Let the visible ferry passage or public ledger record reflect the saved route. Storm records should acknowledge the Rainward choice; the navigator must speak only to what is visible or witnessed, without an all-knowing reaction."
         }
       ],
       "world_after_save": {
@@ -367,11 +369,12 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Balance immediate warmth for children against truth about inherited fuel costs",
           "speaker": "npc.cinderhold.hearthreader.001",
-          "line": "The kiln casts heat from a sun that has never risen. A family is cold because of that contradiction. The an impossible sun's heat and shared physical obligations gives you one chance to change the place responsibly.",
+          "line": "A sun that never rose still warms this kiln. Who owes for the fuel, and who gets the heat?",
           "physical_tag": "Cinderhold.KilnVent",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
-          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+          "saved_as": "Original first-quest mechanism action; its current stage/choice",
+          "design_notes": "Mechanism staging note: Keep the impossible sun and the shared physical obligations in view. Do not resolve the sun’s origin in dialogue."
         },
         {
           "id": "care_commit",
@@ -401,12 +404,13 @@
           "id": "return",
           "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
-          "objective": "Citizens relight hearths based on the route player actually maintained.",
+          "objective": "Inspect the saved local change and speak with a resident who witnessed it.",
           "speaker": "npc.cinderhold.hearthreader.001",
-          "line": "You came back. Citizens relight hearths based on the route player actually maintained. I have not forgotten the path you chose.",
+          "line": "Do the unregistered homes have heat now, or can the city answer publicly for where the fuel came from?",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "design_notes": "Return staging note: Let relit hearths reflect the route actually maintained: heat for unregistered homes or a public account of fuel provenance and repair. Do not imply both outcomes occurred."
         }
       ],
       "world_after_save": {
@@ -480,11 +484,12 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Return for an Echo investigation and optional two-rite observatory",
           "speaker": "npc.tidal.ledgerkeeper.001",
-          "line": "The ninth debt is dated before its debtor's birth. The ink isn't lying; the law is. The contracts dated before their signers' birth gives you one chance to change the place responsibly.",
+          "line": "This debt predates its debtor. Who keeps collecting, and what would make the record answerable?",
           "physical_tag": "Tidal.Trial.DebtLatch",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
-          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+          "saved_as": "Original first-quest mechanism action; its current stage/choice",
+          "design_notes": "Mechanism staging note: Keep the contracts dated before their signers’ births as the contradiction under examination. The line asks who enforces them without explaining how the dates came to be."
         },
         {
           "id": "care_commit",
@@ -514,12 +519,13 @@
           "id": "return",
           "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
-          "objective": "Local residents remember ferry or archive outcomes, guardian mercy or defeat, and observatory archive.",
+          "objective": "Inspect the saved local change and speak with a resident who witnessed it.",
           "speaker": "npc.tidal.ledgerkeeper.001",
-          "line": "You came back. Local residents remember ferry or archive outcomes, guardian mercy or defeat, and observatory archive. I have not forgotten the path you chose.",
+          "line": "Did you leave tomorrow’s ferry clear of old debt, or the fraudulent contract open for public proof?",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "design_notes": "Return staging note: Local residents may remember the ferry or archive choice, guardian mercy or defeat, and the observatory archive. Keep optional guardian and observatory memories independent of the main story outcome."
         }
       ],
       "world_after_save": {
@@ -593,11 +599,12 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Choose shared meter or public excluded chorus, and see the hanging path respond",
           "speaker": "npc.sky.choirmaster.001",
-          "line": "Count the missing singers: the houses will fall if you remove their support blindly. The songs physically holding inverted architecture aloft gives you one chance to change the place responsibly.",
+          "line": "If the song holds these houses up, whose voice can refuse it without bringing them down?",
           "physical_tag": "Sky.Trial.TuningFork",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
-          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+          "saved_as": "Original first-quest mechanism action; its current stage/choice",
+          "design_notes": "Mechanism staging note: The songs physically support the inverted architecture. Preserve the tension between justice for excluded singers and the safety of occupied homes; do not imply that stopping the song is harmless."
         },
         {
           "id": "care_commit",
@@ -627,12 +634,13 @@
           "id": "return",
           "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
-          "objective": "A household's safety and a dissenting score remain independently inspectable.",
+          "objective": "Inspect the saved local change and speak with a resident who witnessed it.",
           "speaker": "npc.sky.choirmaster.001",
-          "line": "You came back. A household's safety and a dissenting score remain independently inspectable. I have not forgotten the path you chose.",
+          "line": "Do the houses keep time to a willing refrain, or does the score show the names once cut from it?",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "design_notes": "Return staging note: Keep household safety and the dissenting score independently inspectable. The resident may describe only the local change they witnessed."
         }
       ],
       "world_after_save": {
@@ -706,11 +714,12 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Test a dangerous rock lane after its visible fracture warning",
           "speaker": "npc.bones.seamwarden.001",
-          "line": "Each stone has an older maker's mark. Someone called these people rubble. The erased families compressed into history-bearing stone gives you one chance to change the place responsibly.",
+          "line": "These stones bear family marks beneath the quarry cuts. Can we mend the wall without making another family part of it?",
           "physical_tag": "Bones.Trial.SeamClamp",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
-          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+          "saved_as": "Original first-quest mechanism action; its current stage/choice",
+          "design_notes": "Mechanism staging note: The erased families are compressed into history-bearing stone. Keep that image tied to the maker’s marks and the fracture; leave the history open to testimony and contest."
         },
         {
           "id": "care_commit",
@@ -740,12 +749,13 @@
           "id": "return",
           "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
-          "objective": "Repair homes using explicitly sourced materials while keeping the earlier choice visible.",
+          "objective": "Inspect the saved local change and speak with a resident who witnessed it.",
           "speaker": "npc.bones.seamwarden.001",
-          "line": "You came back. Repair homes using explicitly sourced materials while keeping the earlier choice visible. I have not forgotten the path you chose.",
+          "line": "Did the passage spare another ancestor from the quarry, or can descendants now contest the names cut from the record?",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "design_notes": "Return staging note: Show repairs with explicitly sourced materials and keep the earlier choice visible. Do not make the local history appear healed or settled."
         }
       ],
       "world_after_save": {
@@ -819,11 +829,12 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Work an identity latch in the ethical direction supported by the witnesses",
           "speaker": "npc.unlived.censuskeeper.001",
-          "line": "The census says this shelter contains nobody. I can hear the children behind the door. The people without official beginnings whose consent matters gives you one chance to change the place responsibly.",
+          "line": "The register calls this shelter empty. Does a blank entry give anyone leave to close its door?",
           "physical_tag": "Unlived.Trial.NameLatch",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
-          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+          "saved_as": "Original first-quest mechanism action; its current stage/choice",
+          "design_notes": "Mechanism staging note: People without official beginnings still have consent. Keep the distinction between absence from a register and nonexistence clear; do not resolve who has authority over the shelter."
         },
         {
           "id": "care_commit",
@@ -853,12 +864,13 @@
           "id": "return",
           "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
-          "objective": "A previously hidden resident chooses whether to speak; never auto-publish a name.",
+          "objective": "Inspect the saved local change and speak with a resident who witnessed it.",
           "speaker": "npc.unlived.censuskeeper.001",
-          "line": "You came back. A previously hidden resident chooses whether to speak; never auto-publish a name. I have not forgotten the path you chose.",
+          "line": "Did you keep the shelter open without names, or let residents choose what appears on the recognition board?",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "design_notes": "Return staging note: A previously hidden resident decides whether to speak. Never auto-publish a name or imply that the truth route compels recognition."
         }
       ],
       "world_after_save": {
@@ -932,11 +944,12 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Question the untitled court about a legal mandate with no author",
           "speaker": "npc.orchard.untitled.001",
-          "line": "Every crown in this orchard is empty. Yet the roads obey a law we never passed. The unwritten laws growing from living roots gives you one chance to change the place responsibly.",
+          "line": "The roots enforce a law no living hand signed. Who answers for the harvest road while the crown stays empty?",
           "physical_tag": "Orchard.Trial.RootChannel",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
-          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+          "saved_as": "Original first-quest mechanism action; its current stage/choice",
+          "design_notes": "Mechanism staging note: Keep the unwritten law growing from living roots as an unresolved source of authority. The empty crown does not establish who, if anyone, is accountable for stewardship."
         },
         {
           "id": "care_commit",
@@ -966,12 +979,13 @@
           "id": "return",
           "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
-          "objective": "Roots remember elected access and old disputes instead of being magically healed.",
+          "objective": "Inspect the saved local change and speak with a resident who witnessed it.",
           "speaker": "npc.orchard.untitled.001",
-          "line": "You came back. Roots remember elected access and old disputes instead of being magically healed. I have not forgotten the path you chose.",
+          "line": "Did you open the harvest path to those who tend it, or put the unsigned law where neighbors can challenge it?",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "design_notes": "Return staging note: Let the roots retain elected access and old disputes; do not present the place as magically healed or the contested law as settled."
         }
       ],
       "world_after_save": {
@@ -1045,11 +1059,12 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Confront Nhal-Vey's mask, unveiled form, and deliberate future-choice controls",
           "speaker": "npc.absence.firstwitness.001",
-          "line": "I remember your arrival before this threshold existed. I don't know which memory came first. The two truthful beginnings at one usable threshold gives you one chance to change the place responsibly.",
+          "line": "Two memories place a beginning at this door. How do we keep a return open without naming one the only truth?",
           "physical_tag": "Absence.Trial.OriginAnchor",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",
-          "saved_as": "Original first-quest mechanism action; its current stage/choice"
+          "saved_as": "Original first-quest mechanism action; its current stage/choice",
+          "design_notes": "Mechanism staging note: Keep both beginnings truthful at one usable threshold. Do not collapse the contradiction into one universal origin or reveal the final mystery here."
         },
         {
           "id": "care_commit",
@@ -1079,12 +1094,13 @@
           "id": "return",
           "trigger": "reenter region after either outcome, optionally after Guardian/Echo/resonance",
           "interaction": "talk to individual NPC by stable ID; inspect saved physical consequence",
-          "objective": "Held Morning uses bell/names echo attacks; Many Mornings uses horizon/counterfactual echoes.",
+          "objective": "Inspect the saved local change and speak with a resident who witnessed it.",
           "speaker": "npc.absence.firstwitness.001",
-          "line": "You came back. Held Morning uses bell/names echo attacks; Many Mornings uses horizon/counterfactual echoes. I have not forgotten the path you chose.",
+          "line": "Did you leave a sure way back, or preserve both maps for the next traveler to compare?",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "design_notes": "Return staging note: Keep the Held Morning and Many Mornings consequences distinct: the bell and names echo attacks belong to Held Morning; horizon and counterfactual echoes belong to Many Mornings. This shared return line must not imply both modes are active at once."
         }
       ],
       "world_after_save": {
