@@ -2311,7 +2311,12 @@ void AUnmadePrototypeHub::StyleWorldProp(AStaticMeshActor* Block,FName Label,FVe
         WorldScale.X,WorldScale.Y,WorldScale.Z);
     if(Id.realm<0)return;
     const auto& Design=UnmadeCore::RealmVisualDesigns[Id.realm];
-    const UMaterialInterface* Source=LoadObject<UMaterialInterface>(
+    // Cookable master is generated in-editor by Scripts/unreal/author_realm_palette.py.
+    // The Engine fallback keeps silhouettes visible on unprepared machines,
+    // but it may not expose a Color vector parameter; never claim it is tinted.
+    UMaterialInterface* Source=LoadObject<UMaterialInterface>(
+        nullptr,TEXT("/Game/Art/Generated/M_UnmadeRealmPalette.M_UnmadeRealmPalette"));
+    if(!Source)Source=LoadObject<UMaterialInterface>(
         nullptr,TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
     if(Source){
         // Only 18 material instances for thousands of blocks. The hub retains
@@ -2322,12 +2327,12 @@ void AUnmadePrototypeHub::StyleWorldProp(AStaticMeshActor* Block,FName Label,FVe
             const int32 Key=Slot+(Accent?1:0);
             if(!ProceduralPaletteMaterials[Key]){
                 auto* Material=UMaterialInstanceDynamic::Create(
-                    const_cast<UMaterialInterface*>(Source),this);
+                    Source,this);
                 if(!Material)return nullptr;
                 const auto Rgb=Accent?Design.accent:Design.color;
                 const FLinearColor Color(Rgb.R/255.f,Rgb.G/255.f,Rgb.B/255.f);
-                // BasicShapeMaterial exposes Color on stock engine builds.
-                // Tint is also authored for compatible replacement materials.
+                // The generated master explicitly connects Color to Base Color.
+                // Fallback still renders the distinct structural silhouettes.
                 Material->SetVectorParameterValue(TEXT("Color"),Color);
                 Material->SetVectorParameterValue(TEXT("Tint"),Color);
                 ProceduralPaletteMaterials[Key]=Material;
