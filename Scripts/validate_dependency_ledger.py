@@ -217,7 +217,9 @@ def validate(data: dict) -> list[str]:
                    r'\{Faction::(\w+),"([^"]+)",\s*"([^"]+)","([^"]+)","([^"]+)",\s*"([^"]+)"\}')
     depth = rows("World/UnmadeAdventureDepthRegistry.h",
                  r'\{"([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)","([^"]+)"')
-    campaign = rows("World/UnmadeCampaignSpineRules.h",
+    if '#include "World/UnmadeCodexCampaignGenerated.inc"' not in read(PUBLIC + "World/UnmadeCampaignSpineRules.h"):
+        errors.append("main story source not wired to Codex-owned chapters")
+    campaign = rows("World/UnmadeCodexCampaignGenerated.inc",
                     r'\{Realm::(\w+),"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*"([^"]+)"\}')
     error_if((len(confluences),len(aftermath),len(echoes),len(faction),len(depth),len(campaign)) !=
              (6,9,6,3,9,9), "quest registry parser shape changed", errors)
