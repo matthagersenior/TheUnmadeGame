@@ -88,6 +88,14 @@ The home records are **88 homes** with specific occupants, recorded preferences 
 
 **Crossings:** split charter stone, converging roads, secular refuge-versus-accountability signage; central traversal stays unblocked. **Bellwold:** refuge-first chalkstone, an absent bell's framework, patched linen, open hearth and lantern path. **Paperhaven:** oxidized inkstone and tall archive, dual seal, folded-paper eaves, public review desks and privacy-conscious records. Neither town should use the other's generic village building model.
 
+## Unanswered Road, campaign mysteries and the last encounter
+
+**Unanswered Road** markers are physical, readable leads. Each must have an interrupted waypost, weathered local witness marks and a blank space where the missing account belongs. Their silhouettes can prompt inspection, but cannot award a main-story answer, reveal a private witness, or generate a compulsory nine-glyph checklist. The tag in the Campaign Spine remains the actual authority.
+
+**Final Auvren / Nhal-Vey:** two asymmetrical, visibly different response plinths; unequal silver and unfinished glass, no automatic triumph portrait or false-victory reveal before the earned scene. Boss attacks keep their original warning shape, floor projection and hitbox. The ethical difference is evident through architecture and locally supported evidence, not a flashing "good ending" marker.
+
+**Character and equipment continuity:** the 60 item-specific proposed designs have to fit the equipped slot and actual crafting/earned-reward provenance. These are approved art candidates, not new loot or already-existing skinned models. Cues for the player silhouette should read as a character with discoverable professions and no preordained heroic identity.
+
 ## Character / creature placeholder anatomy
 
 Residents: merchant with balance scale, guard with high watch cap, scholar with archival satchel, courier with sealed off-center parcels, and wanderer with patched hood. The source renderer distinguishes these without changing the existing NPC capsule, memory, trust, or animation source.
