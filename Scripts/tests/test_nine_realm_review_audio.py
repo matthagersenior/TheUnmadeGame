@@ -10,14 +10,14 @@ class NineRealmReviewAudio(unittest.TestCase):
    one=identity.build(Path(d1));two=identity.build(Path(d2))
    self.assertEqual(identity.validate(Path(d1)),one)
    self.assertEqual(identity.validate(Path(d2)),two)
-   self.assertEqual(len(one["assets"]),45)
+   self.assertEqual(len(one["assets"]),54)
    expected=["report_review_"+realm for realm in REALMS]
-   self.assertEqual([row["cue"] for row in one["assets"][-9:]],expected)
+   self.assertEqual([row["cue"] for row in one["assets"][36:45]],expected)
    self.assertEqual([row["cue"] for row in one["assets"][:36]],
       identity.EVENTS+["ambience_"+r for r in REALMS])
-   hashes=[row["sha256"] for row in one["assets"][-9:]]
+   hashes=[row["sha256"] for row in one["assets"][36:45]]
    self.assertEqual(len(set(hashes)),9)
-   self.assertEqual(hashes,[row["sha256"] for row in two["assets"][-9:]])
+   self.assertEqual(hashes,[row["sha256"] for row in two["assets"][36:45]])
    for row in one["assets"][-9:]:
     self.assertTrue((Path(d1)/row["file"]).exists())
     self.assertEqual(hashlib.sha256((Path(d1)/row["file"]).read_bytes()).hexdigest(),row["sha256"])
