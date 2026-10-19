@@ -1,0 +1,4554 @@
+{
+  "schema": 1,
+  "edition": "2026-10-19",
+  "authority": "C++ game source; ledger is an enforceable cross-system index, not a compiled/PIE-tested Unreal release.",
+  "policy": {
+    "discovery": "Must be physically earned and sourced; testimony is not omniscience.",
+    "choices": "Exclusive care/truth and defeat/mercy state must never both resolve the same quest.",
+    "rewards": "A story promise is not a catalog item; regional gear and techniques use independent earned ownership.",
+    "aftermath": "Save-backed, local, witnessed, visible after returning; never erase prior quests or chosen player identity.",
+    "open_mysteries": "Open mysteries remain open unless deliberately approved in new canon."
+  },
+  "exceptions": [
+    {
+      "id": "AtlasOfAbsence",
+      "type": "no_acquisition",
+      "description": "Item catalog entry has no milestone, recipe, shop or forge route. Reserved and cannot be marketed as obtainable."
+    },
+    {
+      "id": "TomorrowDebt",
+      "type": "reward_name_conflict",
+      "description": "Rite prose says The Unpaid Sunrise; milestone grants FutureReceipt, Tomorrow's Paid Receipt. Do not silently rewrite story or source."
+    }
+  ],
+  "items": [
+    {
+      "id": "SalvagerBlade",
+      "code": "blade.salvager",
+      "name": "Salvager's Edge",
+      "kind": "Weapon",
+      "rarity": "Common",
+      "slot": "Weapon",
+      "attack": 3,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "Starter",
+          "detail": "1 × via Achievement::Starter"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "TravelerMantle",
+      "code": "armor.traveler",
+      "name": "Traveler's Mantle",
+      "kind": "Armor",
+      "rarity": "Common",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 2,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "Starter",
+          "detail": "1 × via Achievement::Starter"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "HearthSalve",
+      "code": "elixir.hearth",
+      "name": "Hearth Salve",
+      "kind": "Consumable",
+      "rarity": "Common",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 35,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "Starter",
+          "detail": "3 × via Achievement::Starter"
+        },
+        {
+          "method": "milestone",
+          "via": "FirstStalker",
+          "detail": "1 × via Achievement::FirstStalker"
+        },
+        {
+          "method": "workshop",
+          "via": "HerbSalve",
+          "detail": "Bellwold Apothecary skill 0: WildHerbs×2 + IronScrap×1"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Drywake Dressing",
+          "detail": "Region 1: WildHerbs×2 + BlankParchment×1"
+        },
+        {
+          "method": "shop",
+          "via": "RegionalEconomy::Price",
+          "detail": "Finite regional shop at an available settlement, subject to marks/trust."
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "StrainVial",
+      "code": "elixir.strain",
+      "name": "Stillness Vial",
+      "kind": "Consumable",
+      "rarity": "Uncommon",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 24,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "Starter",
+          "detail": "2 × via Achievement::Starter"
+        },
+        {
+          "method": "milestone",
+          "via": "FirstWatcher",
+          "detail": "1 × via Achievement::FirstWatcher"
+        },
+        {
+          "method": "workshop",
+          "via": "ScribedStillness",
+          "detail": "Paperhaven Scribe skill 0: BlankParchment×2 + WildHerbs×1"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Surveyor's Stillness",
+          "detail": "Region 0: BlankParchment×2 + WildHerbs×1"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Unpledged Ink",
+          "detail": "Region 3: BlankParchment×2 + ArchiveInk×1"
+        },
+        {
+          "method": "shop",
+          "via": "RegionalEconomy::Price",
+          "detail": "Finite regional shop at an available settlement, subject to marks/trust."
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "EchoGlass",
+      "code": "mat.echo_glass",
+      "name": "Echo Glass",
+      "kind": "Material",
+      "rarity": "Rare",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "EchoWell",
+          "detail": "1 × via Achievement::EchoWell"
+        },
+        {
+          "method": "milestone",
+          "via": "FirstStalker",
+          "detail": "1 × via Achievement::FirstStalker"
+        },
+        {
+          "method": "milestone",
+          "via": "UnfinishedPilgrim",
+          "detail": "1 × via Achievement::UnfinishedPilgrim"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "BellMetal",
+      "code": "mat.bell_metal",
+      "name": "Hourless Bellmetal",
+      "kind": "Material",
+      "rarity": "Rare",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "BellwoldLanterns",
+          "detail": "1 × via Achievement::BellwoldLanterns"
+        },
+        {
+          "method": "milestone",
+          "via": "HollowBell",
+          "detail": "1 × via Achievement::HollowBell"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "ArchiveInk",
+      "code": "mat.archive_ink",
+      "name": "Unwritten Ink",
+      "kind": "Material",
+      "rarity": "Rare",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "PaperhavenTestimony",
+          "detail": "1 × via Achievement::PaperhavenTestimony"
+        },
+        {
+          "method": "milestone",
+          "via": "RedactedCurator",
+          "detail": "1 × via Achievement::RedactedCurator"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "BellwoldBulwark",
+      "code": "armor.bellwold",
+      "name": "Bellwold's Last Refuge",
+      "kind": "Armor",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 12,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "BellwoldLanterns",
+          "detail": "1 × via Achievement::BellwoldLanterns"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "PaperhavenLens",
+      "code": "charm.paperhaven",
+      "name": "Lens of the Unentered",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 4,
+      "armor": 4,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "PaperhavenTestimony",
+          "detail": "1 × via Achievement::PaperhavenTestimony"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "WayfarerBlade",
+      "code": "blade.wayfarer",
+      "name": "Three Roads, One Name",
+      "kind": "Weapon",
+      "rarity": "Rare",
+      "slot": "Weapon",
+      "attack": 12,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ThreeVillages",
+          "detail": "1 × via Achievement::ThreeVillages"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "LostHourMantle",
+      "code": "armor.lost_hour",
+      "name": "Mantle of the Missing Hour",
+      "kind": "Armor",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 9,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "BellGrave",
+          "detail": "1 × via Achievement::BellGrave"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "OrchardSkin",
+      "code": "armor.orchard",
+      "name": "Bark of the Neverborn",
+      "kind": "Armor",
+      "rarity": "Rare",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 6,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "PaperOrchard",
+          "detail": "1 × via Achievement::PaperOrchard"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "DebtCollector",
+      "code": "blade.debt",
+      "name": "Tomorrow's Debt",
+      "kind": "Weapon",
+      "rarity": "Rare",
+      "slot": "Weapon",
+      "attack": 10,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "DebtMarket",
+          "detail": "1 × via Achievement::DebtMarket"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "ReturnedVoice",
+      "code": "charm.voice",
+      "name": "The Voice Returned",
+      "kind": "Charm",
+      "rarity": "Rare",
+      "slot": "Charm",
+      "attack": 2,
+      "armor": 3,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "EchoWell",
+          "detail": "1 × via Achievement::EchoWell"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "SilentSole",
+      "code": "charm.silent",
+      "name": "Boot-Sigil of the Silent Mile",
+      "kind": "Charm",
+      "rarity": "Rare",
+      "slot": "Charm",
+      "attack": 3,
+      "armor": 2,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "SilentMile",
+          "detail": "1 × via Achievement::SilentMile"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "LanternHeart",
+      "code": "charm.lantern",
+      "name": "Heart of the Communal Flame",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 2,
+      "armor": 7,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ShelterSupplies",
+          "detail": "1 × via Achievement::ShelterSupplies"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "RegistryCloak",
+      "code": "armor.registry",
+      "name": "Cloak of Contradictory Records",
+      "kind": "Armor",
+      "rarity": "Rare",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 7,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ResearchChoice",
+          "detail": "1 × via Achievement::ResearchChoice"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "TalismanOfWitness",
+      "code": "charm.witness",
+      "name": "Witness Stone",
+      "kind": "Charm",
+      "rarity": "Rare",
+      "slot": "Charm",
+      "attack": 5,
+      "armor": 1,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ShelterChoice",
+          "detail": "1 × via Achievement::ShelterChoice"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "RiftSeed",
+      "code": "mat.rift_seed",
+      "name": "Rift Seed",
+      "kind": "Material",
+      "rarity": "Epic",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "AllLandmarks",
+          "detail": "1 × via Achievement::AllLandmarks"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "NightwatchTonic",
+      "code": "elixir.nightwatch",
+      "name": "Nightwatch Tonic",
+      "kind": "Consumable",
+      "rarity": "Uncommon",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 65,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ShelterSupplies",
+          "detail": "2 × via Achievement::ShelterSupplies"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Choir Rest Tonic",
+          "detail": "Region 4: WildHerbs×3 + BlankParchment×1"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "RootboundPoultice",
+      "code": "elixir.rootbound",
+      "name": "Rootbound Poultice",
+      "kind": "Consumable",
+      "rarity": "Rare",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 90,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "PaperOrchard",
+          "detail": "1 × via Achievement::PaperOrchard"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Nursery Poultice",
+          "detail": "Region 7: WildHerbs×3 + RiftSeed×1"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "MapmakersNeedle",
+      "code": "blade.mapmaker",
+      "name": "Needle of Unfinished Maps",
+      "kind": "Weapon",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "attack": 19,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "FirstWatcher",
+          "detail": "1 × via Achievement::FirstWatcher"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "DoorlessKey",
+      "code": "charm.key",
+      "name": "Key of the Doorless",
+      "kind": "Charm",
+      "rarity": "Rare",
+      "slot": "Charm",
+      "attack": 5,
+      "armor": 3,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "LanguageVeyl",
+          "detail": "1 × via Achievement::LanguageVeyl"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "PathOfThree",
+      "code": "charm.threepaths",
+      "name": "Path of Three Settlements",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 6,
+      "armor": 5,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ThreeVillages",
+          "detail": "1 × via Achievement::ThreeVillages"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "Waybreaker",
+      "code": "blade.waybreaker",
+      "name": "Waybreaker, the Impossible Road",
+      "kind": "Weapon",
+      "rarity": "Mythic",
+      "slot": "Weapon",
+      "attack": 32,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "unique_forge",
+          "via": "ForgeWaybreaker",
+          "detail": "Requires Bellwold, Paperhaven, three villages, Echo Glass×2, Bellmetal×1 and Unwritten Ink×1."
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "UnwrittenCrown",
+      "code": "charm.unwritten_crown",
+      "name": "The Unwritten Crown",
+      "kind": "Charm",
+      "rarity": "Mythic",
+      "slot": "Charm",
+      "attack": 12,
+      "armor": 10,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "AllLandmarks",
+          "detail": "1 × via Achievement::AllLandmarks"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "AshOfPossibleLives",
+      "code": "elixir.possible_lives",
+      "name": "Ash of Possible Lives",
+      "kind": "Consumable",
+      "rarity": "Epic",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 100,
+      "strain_recovery": 60,
+      "acquisition": [
+        {
+          "method": "workshop",
+          "via": "LifeAsh",
+          "detail": "Bellwold Apothecary skill 2: RiftSeed×1 + RootboundPoultice×1"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Threshold Ash",
+          "detail": "Region 8: RiftSeed×1 + RootboundPoultice×1"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "AtlasOfAbsence",
+      "code": "charm.atlas",
+      "name": "Atlas of Absence",
+      "kind": "Charm",
+      "rarity": "Mythic",
+      "slot": "Charm",
+      "attack": 8,
+      "armor": 12,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [],
+      "availability": "reserved",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "BellheartAegis",
+      "code": "armor.bellheart",
+      "name": "Aegis of the Hollow Bell",
+      "kind": "Armor",
+      "rarity": "Mythic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 18,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "HollowBell",
+          "detail": "1 × via Achievement::HollowBell"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "RedactedScepter",
+      "code": "weapon.redacted",
+      "name": "Scepter of Missing Names",
+      "kind": "Weapon",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "attack": 23,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RedactedCurator",
+          "detail": "1 × via Achievement::RedactedCurator"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "PilgrimsSignet",
+      "code": "charm.pilgrim",
+      "name": "Signet of the Unfinished Pilgrim",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 6,
+      "armor": 9,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "UnfinishedPilgrim",
+          "detail": "1 × via Achievement::UnfinishedPilgrim"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "IronScrap",
+      "code": "mat.iron_scrap",
+      "name": "Weathered Iron",
+      "kind": "Material",
+      "rarity": "Common",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "CinderholdStory",
+          "detail": "2 × via Achievement::CinderholdStory"
+        },
+        {
+          "method": "shop",
+          "via": "RegionalEconomy::Price",
+          "detail": "Finite regional shop at an available settlement, subject to marks/trust."
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "WildHerbs",
+      "code": "mat.wild_herbs",
+      "name": "Night-Mint",
+      "kind": "Material",
+      "rarity": "Common",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "SaltwakeStory",
+          "detail": "2 × via Achievement::SaltwakeStory"
+        },
+        {
+          "method": "shop",
+          "via": "RegionalEconomy::Price",
+          "detail": "Finite regional shop at an available settlement, subject to marks/trust."
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "BlankParchment",
+      "code": "mat.blank_parchment",
+      "name": "Blank Witness Parchment",
+      "kind": "Material",
+      "rarity": "Common",
+      "slot": "None",
+      "attack": 0,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "shop",
+          "via": "RegionalEconomy::Price",
+          "detail": "Finite regional shop at an available settlement, subject to marks/trust."
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "TemperedEdge",
+      "code": "blade.tempered",
+      "name": "Oath-Tempered Edge",
+      "kind": "Weapon",
+      "rarity": "Rare",
+      "slot": "Weapon",
+      "attack": 14,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "workshop",
+          "via": "TemperedEdge",
+          "detail": "Bellwold Smith skill 0: IronScrap×3 + BellMetal×1"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Cooling Forge Edge",
+          "detail": "Region 2: IronScrap×3 + BellMetal×1"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "LanternMail",
+      "code": "armor.lanternmail",
+      "name": "Lanternwoven Mail",
+      "kind": "Armor",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 14,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "workshop",
+          "via": "LanternMail",
+          "detail": "Bellwold Smith skill 2: IronScrap×6 + BellMetal×1"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Seamkeeper Mail",
+          "detail": "Region 5: IronScrap×6 + BellMetal×1"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "InkboundCharm",
+      "code": "charm.inkbound",
+      "name": "Seal of Kept Testimony",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 7,
+      "armor": 6,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "workshop",
+          "via": "InkboundCharm",
+          "detail": "Paperhaven Scribe skill 2: BlankParchment×5 + ArchiveInk×1"
+        },
+        {
+          "method": "field_recipe",
+          "via": "Quiet Witness Seal",
+          "detail": "Region 6: BlankParchment×5 + ArchiveInk×1"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "StormglassCompass",
+      "code": "charm.stormglass",
+      "name": "Compass of Forgotten Tides",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 9,
+      "armor": 4,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "SaltwakeStory",
+          "detail": "1 × via Achievement::SaltwakeStory"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "EmberheartBlade",
+      "code": "blade.emberheart",
+      "name": "Emberheart of Cinderhold",
+      "kind": "Weapon",
+      "rarity": "Mythic",
+      "slot": "Weapon",
+      "attack": 27,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "CinderholdStory",
+          "detail": "1 × via Achievement::CinderholdStory"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "RefugeOathguard",
+      "code": "armor.refuge_oathguard",
+      "name": "Oathguard of the Open Hearth",
+      "kind": "Armor",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 15,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RefugeCovenant",
+          "detail": "1 × via Achievement::RefugeCovenant"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "ArchivistQuill",
+      "code": "blade.archivist_quill",
+      "name": "The Quill That Will Not Erase",
+      "kind": "Weapon",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "attack": 22,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ArchiveCovenant",
+          "detail": "1 × via Achievement::ArchiveCovenant"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "RoadboundCompass",
+      "code": "charm.roadbound",
+      "name": "Compass of the Common Road",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 7,
+      "armor": 8,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RoadboundCovenant",
+          "detail": "1 × via Achievement::RoadboundCovenant"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "BellmakersVerse",
+      "code": "charm.bellmakers_verse",
+      "name": "The Bellmaker's Unwritten Verse",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 6,
+      "armor": 7,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteUnwriteLaw",
+          "detail": "1 × via Achievement::RiteUnwriteLaw"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "RememberedBridge",
+      "code": "charm.remembered_bridge",
+      "name": "The Bridge That Remembers",
+      "kind": "Charm",
+      "rarity": "Mythic",
+      "slot": "Charm",
+      "attack": 7,
+      "armor": 11,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteWitnesscraft",
+          "detail": "1 × via Achievement::RiteWitnesscraft"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "SecondName",
+      "code": "charm.second_name",
+      "name": "The Second Name",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 11,
+      "armor": 3,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteBorrowedLives",
+          "detail": "1 × via Achievement::RiteBorrowedLives"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "ThreeDeedSteel",
+      "code": "blade.three_deed",
+      "name": "The Three-Deed Temper",
+      "kind": "Weapon",
+      "rarity": "Mythic",
+      "slot": "Weapon",
+      "attack": 28,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteLegacyForging",
+          "detail": "1 × via Achievement::RiteLegacyForging"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "CommonCauseway",
+      "code": "charm.common_causeway",
+      "name": "The Common Causeway",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 5,
+      "armor": 9,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteLivingRoads",
+          "detail": "1 × via Achievement::RiteLivingRoads"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "FutureReceipt",
+      "code": "weapon.future_receipt",
+      "name": "Tomorrow's Paid Receipt",
+      "kind": "Weapon",
+      "rarity": "Epic",
+      "slot": "Weapon",
+      "attack": 21,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteTomorrowDebt",
+          "detail": "1 × via Achievement::RiteTomorrowDebt"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "HollowMercy",
+      "code": "armor.hollow_mercy",
+      "name": "Mercy of the Hollow Keeper",
+      "kind": "Armor",
+      "rarity": "Mythic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 19,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteUnderstandingBosses",
+          "detail": "1 × via Achievement::RiteUnderstandingBosses"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "BetweenHistories",
+      "code": "charm.between_histories",
+      "name": "The Room Between Histories",
+      "kind": "Charm",
+      "rarity": "Mythic",
+      "slot": "Charm",
+      "attack": 10,
+      "armor": 12,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteParadoxConvergence",
+          "detail": "1 × via Achievement::RiteParadoxConvergence"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "UnbrokenLantern",
+      "code": "armor.unbroken_lantern",
+      "name": "The Unbroken Shelter Oath",
+      "kind": "Armor",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 16,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteOathbinding",
+          "detail": "1 × via Achievement::RiteOathbinding"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "CoastTrueAtlas",
+      "code": "charm.coast_true",
+      "name": "Atlas of the Missing Coast",
+      "kind": "Charm",
+      "rarity": "Mythic",
+      "slot": "Charm",
+      "attack": 9,
+      "armor": 10,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "RiteCartography",
+          "detail": "1 × via Achievement::RiteCartography"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "LastWarningAegis",
+      "code": "armor.last_warning",
+      "name": "Aegis of the Last Warning",
+      "kind": "Armor",
+      "rarity": "Mythic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 23,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ConfluenceSilentAlarm",
+          "detail": "1 × via Achievement::ConfluenceSilentAlarm"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "ElsebornSmithEdge",
+      "code": "blade.elseborn_smith",
+      "name": "Edge of the Elseborn Smith",
+      "kind": "Weapon",
+      "rarity": "Mythic",
+      "slot": "Weapon",
+      "attack": 34,
+      "armor": 0,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ConfluenceTwoNames",
+          "detail": "1 × via Achievement::ConfluenceTwoNames"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "CommonPathChart",
+      "code": "charm.common_chart",
+      "name": "Chart of the Common Path",
+      "kind": "Charm",
+      "rarity": "Mythic",
+      "slot": "Charm",
+      "attack": 12,
+      "armor": 11,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ConfluenceUnmappedWay",
+          "detail": "1 × via Achievement::ConfluenceUnmappedWay"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "BorrowedDawnHeart",
+      "code": "charm.borrowed_dawn",
+      "name": "Heart of the Borrowed Dawn",
+      "kind": "Charm",
+      "rarity": "Mythic",
+      "slot": "Charm",
+      "attack": 14,
+      "armor": 8,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ConfluenceTomorrowPromise",
+          "detail": "1 × via Achievement::ConfluenceTomorrowPromise"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "TwoKeepersMirror",
+      "code": "armor.two_keepers",
+      "name": "Mirror of the Two Keepers",
+      "kind": "Armor",
+      "rarity": "Mythic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 26,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ConfluenceTwoKeepers",
+          "detail": "1 × via Achievement::ConfluenceTwoKeepers"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "FirstAbsenceWitness",
+      "code": "charm.first_absence",
+      "name": "Witness of the First Absence",
+      "kind": "Charm",
+      "rarity": "Mythic",
+      "slot": "Charm",
+      "attack": 20,
+      "armor": 17,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "ConfluenceFirstAbsence",
+          "detail": "1 × via Achievement::ConfluenceFirstAbsence"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "AfterlightWard",
+      "code": "armor.afterlight_ward",
+      "name": "Ward of the Second Night",
+      "kind": "Armor",
+      "rarity": "Epic",
+      "slot": "Armor",
+      "attack": 0,
+      "armor": 18,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "AfterlightShelter",
+          "detail": "1 × via Achievement::AfterlightShelter"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    },
+    {
+      "id": "UnredactedLantern",
+      "code": "charm.unredacted_lantern",
+      "name": "Lantern of Unredacted Names",
+      "kind": "Charm",
+      "rarity": "Epic",
+      "slot": "Charm",
+      "attack": 11,
+      "armor": 9,
+      "heal": 0,
+      "strain_recovery": 0,
+      "acquisition": [
+        {
+          "method": "milestone",
+          "via": "AfterlightNames",
+          "detail": "1 × via Achievement::AfterlightNames"
+        }
+      ],
+      "availability": "earnable",
+      "source": "Items/UnmadeItemRules.h"
+    }
+  ],
+  "regional_gear": [
+    {
+      "id": "gear:ThreefoldReach:weapon",
+      "name": "Mileglass Edge",
+      "realm": "ThreefoldReach",
+      "slot": "weapon",
+      "bonus": 7,
+      "acquisition": "quest:expedition:ThreefoldReach",
+      "exclusive_with": "gear:ThreefoldReach:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:ThreefoldReach:armor",
+      "name": "Witness Brace",
+      "realm": "ThreefoldReach",
+      "slot": "armor",
+      "bonus": 5,
+      "acquisition": "quest:expedition:ThreefoldReach",
+      "exclusive_with": "gear:ThreefoldReach:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:WidowedRain:weapon",
+      "name": "Breakwater Spear",
+      "realm": "WidowedRain",
+      "slot": "weapon",
+      "bonus": 9,
+      "acquisition": "quest:expedition:WidowedRain",
+      "exclusive_with": "gear:WidowedRain:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:WidowedRain:armor",
+      "name": "Rainward Mantle",
+      "realm": "WidowedRain",
+      "slot": "armor",
+      "bonus": 6,
+      "acquisition": "quest:expedition:WidowedRain",
+      "exclusive_with": "gear:WidowedRain:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:HearthBeneath:weapon",
+      "name": "Kilnfang Maul",
+      "realm": "HearthBeneath",
+      "slot": "weapon",
+      "bonus": 11,
+      "acquisition": "quest:expedition:HearthBeneath",
+      "exclusive_with": "gear:HearthBeneath:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:HearthBeneath:armor",
+      "name": "Cinderguard Plate",
+      "realm": "HearthBeneath",
+      "slot": "armor",
+      "bonus": 7,
+      "acquisition": "quest:expedition:HearthBeneath",
+      "exclusive_with": "gear:HearthBeneath:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:TidalLedger:weapon",
+      "name": "Undertide Hook",
+      "realm": "TidalLedger",
+      "slot": "weapon",
+      "bonus": 13,
+      "acquisition": "quest:expedition:TidalLedger",
+      "exclusive_with": "gear:TidalLedger:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:TidalLedger:armor",
+      "name": "Oathwake Coat",
+      "realm": "TidalLedger",
+      "slot": "armor",
+      "bonus": 8,
+      "acquisition": "quest:expedition:TidalLedger",
+      "exclusive_with": "gear:TidalLedger:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:SkyBelow:weapon",
+      "name": "Downfall Glaive",
+      "realm": "SkyBelow",
+      "slot": "weapon",
+      "bonus": 15,
+      "acquisition": "quest:expedition:SkyBelow",
+      "exclusive_with": "gear:SkyBelow:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:SkyBelow:armor",
+      "name": "Choirweight Harness",
+      "realm": "SkyBelow",
+      "slot": "armor",
+      "bonus": 9,
+      "acquisition": "quest:expedition:SkyBelow",
+      "exclusive_with": "gear:SkyBelow:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:CinderSpine:weapon",
+      "name": "Yesterday Pickblade",
+      "realm": "CinderSpine",
+      "slot": "weapon",
+      "bonus": 17,
+      "acquisition": "quest:expedition:CinderSpine",
+      "exclusive_with": "gear:CinderSpine:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:CinderSpine:armor",
+      "name": "Seamward Shell",
+      "realm": "CinderSpine",
+      "slot": "armor",
+      "bonus": 10,
+      "acquisition": "quest:expedition:CinderSpine",
+      "exclusive_with": "gear:CinderSpine:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:HundredUnlived:weapon",
+      "name": "Elseborn Saber",
+      "realm": "HundredUnlived",
+      "slot": "weapon",
+      "bonus": 19,
+      "acquisition": "quest:expedition:HundredUnlived",
+      "exclusive_with": "gear:HundredUnlived:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:HundredUnlived:armor",
+      "name": "Unlisted Veil",
+      "realm": "HundredUnlived",
+      "slot": "armor",
+      "bonus": 11,
+      "acquisition": "quest:expedition:HundredUnlived",
+      "exclusive_with": "gear:HundredUnlived:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:OrchardOfKings:weapon",
+      "name": "Crownroot Falchion",
+      "realm": "OrchardOfKings",
+      "slot": "weapon",
+      "bonus": 21,
+      "acquisition": "quest:expedition:OrchardOfKings",
+      "exclusive_with": "gear:OrchardOfKings:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:OrchardOfKings:armor",
+      "name": "Commonbark Guard",
+      "realm": "OrchardOfKings",
+      "slot": "armor",
+      "bonus": 12,
+      "acquisition": "quest:expedition:OrchardOfKings",
+      "exclusive_with": "gear:OrchardOfKings:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:FirstAbsence:weapon",
+      "name": "Nearness Blade",
+      "realm": "FirstAbsence",
+      "slot": "weapon",
+      "bonus": 23,
+      "acquisition": "quest:expedition:FirstAbsence",
+      "exclusive_with": "gear:FirstAbsence:armor",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "gear:FirstAbsence:armor",
+      "name": "Threshold Ward",
+      "realm": "FirstAbsence",
+      "slot": "armor",
+      "bonus": 13,
+      "acquisition": "quest:expedition:FirstAbsence",
+      "exclusive_with": "gear:FirstAbsence:weapon",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill:technique:ThreefoldReach",
+      "name": "Marked Opening",
+      "realm": "ThreefoldReach",
+      "learning_quest": "quest:expedition:ThreefoldReach",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:technique:WidowedRain",
+      "name": "Pressure Read",
+      "realm": "WidowedRain",
+      "learning_quest": "quest:expedition:WidowedRain",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:technique:HearthBeneath",
+      "name": "Ember Counter",
+      "realm": "HearthBeneath",
+      "learning_quest": "quest:expedition:HearthBeneath",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:technique:TidalLedger",
+      "name": "Oath Interrupt",
+      "realm": "TidalLedger",
+      "learning_quest": "quest:expedition:TidalLedger",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:technique:SkyBelow",
+      "name": "Grounded Fold",
+      "realm": "SkyBelow",
+      "learning_quest": "quest:expedition:SkyBelow",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:technique:CinderSpine",
+      "name": "Seam Read",
+      "realm": "CinderSpine",
+      "learning_quest": "quest:expedition:CinderSpine",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:technique:HundredUnlived",
+      "name": "Unlisted Step",
+      "realm": "HundredUnlived",
+      "learning_quest": "quest:expedition:HundredUnlived",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:technique:OrchardOfKings",
+      "name": "Root Counter",
+      "realm": "OrchardOfKings",
+      "learning_quest": "quest:expedition:OrchardOfKings",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:technique:FirstAbsence",
+      "name": "Nearness Hold",
+      "realm": "FirstAbsence",
+      "learning_quest": "quest:expedition:FirstAbsence",
+      "teacher_or_source": "Earn the region's permanent weapon or armor; the associated technique can then be selected.",
+      "source": "World/UnmadeExpeditionRegistry.h"
+    },
+    {
+      "id": "skill:rite:UnwriteLaw",
+      "name": "The Law Beneath the Last Bell",
+      "discipline": "Unmaker",
+      "realm": "Any at physical site Bellgrave",
+      "teacher_or_source": "npc.bellmaker.001",
+      "learning_quest": "quest:rite:UnwriteLaw",
+      "mastery_reward": "item:BellmakersVerse",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:Witnesscraft",
+      "name": "The Bridge of Living Testimony",
+      "discipline": "Witness",
+      "realm": "Any at physical site EchoWell",
+      "teacher_or_source": "npc.welllistener.001",
+      "learning_quest": "quest:rite:Witnesscraft",
+      "mastery_reward": "item:RememberedBridge",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:BorrowedLives",
+      "name": "The Life Not Taken",
+      "discipline": "Elseborn",
+      "realm": "Any at physical site PaperOrchard",
+      "teacher_or_source": "npc.orchardexile.001",
+      "learning_quest": "quest:rite:BorrowedLives",
+      "mastery_reward": "item:SecondName",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:LegacyForging",
+      "name": "A Blade That Was There",
+      "discipline": "Relicwright",
+      "realm": "Any at physical site BellwoldForge",
+      "teacher_or_source": "npc.bellwold.stonewright.001",
+      "learning_quest": "quest:rite:LegacyForging",
+      "mastery_reward": "item:ThreeDeedSteel",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:LivingRoads",
+      "name": "No Road Belongs to One",
+      "discipline": "Pathweaver",
+      "realm": "Any at physical site SilentMile",
+      "teacher_or_source": "npc.roadwarden.001",
+      "learning_quest": "quest:rite:LivingRoads",
+      "mastery_reward": "item:CommonCauseway",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:TomorrowDebt",
+      "name": "The Ledger of Borrowed Dawn",
+      "discipline": "Unmaker",
+      "realm": "Any at physical site DebtMarket",
+      "teacher_or_source": "npc.tollbroker.001",
+      "learning_quest": "quest:rite:TomorrowDebt",
+      "mastery_reward": "item:FutureReceipt",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:UnderstandingBosses",
+      "name": "The Name Beneath the Monster",
+      "discipline": "Witness",
+      "realm": "Any at physical site BellOssuary",
+      "teacher_or_source": "npc.bellwold.matron.001",
+      "learning_quest": "quest:rite:UnderstandingBosses",
+      "mastery_reward": "item:HollowMercy",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:ParadoxConvergence",
+      "name": "The Tower That Fell and Stood",
+      "discipline": "Elseborn",
+      "realm": "Any at physical site PaperhavenScribe",
+      "teacher_or_source": "npc.paperhaven.mapmaker.001",
+      "learning_quest": "quest:rite:ParadoxConvergence",
+      "mastery_reward": "item:BetweenHistories",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:Oathbinding",
+      "name": "The Lantern You Promised",
+      "discipline": "Oathkeeper",
+      "realm": "Any at physical site BellwoldRefuge",
+      "teacher_or_source": "npc.bellwold.guard.001",
+      "learning_quest": "quest:rite:Oathbinding",
+      "mastery_reward": "item:UnbrokenLantern",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    },
+    {
+      "id": "skill:rite:Cartography",
+      "name": "The Map of Disagreeing Shores",
+      "discipline": "Pathweaver",
+      "realm": "Any at physical site SaltwakeHarbor",
+      "teacher_or_source": "npc.saltwake.navigator.001",
+      "learning_quest": "quest:rite:Cartography",
+      "mastery_reward": "item:CoastTrueAtlas",
+      "source": "World/UnmadeTenfoldChronicle.h"
+    }
+  ],
+  "bosses": [
+    {
+      "id": "boss:expedition:ThreefoldReach",
+      "name": "The Tollkeeper Without a Road",
+      "realm": "ThreefoldReach",
+      "location": "The Split Charter Vault",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Mileglass Ring (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:ThreefoldReach:weapon",
+        "gear:ThreefoldReach:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 240,
+      "quest": "quest:expedition:ThreefoldReach"
+    },
+    {
+      "id": "boss:expedition:WidowedRain",
+      "name": "The Undertow Bailiff",
+      "realm": "WidowedRain",
+      "location": "The Hollow Breakwater",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Undertow Lane (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:WidowedRain:weapon",
+        "gear:WidowedRain:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 265,
+      "quest": "quest:expedition:WidowedRain"
+    },
+    {
+      "id": "boss:expedition:HearthBeneath",
+      "name": "The Ashbound Provost",
+      "realm": "HearthBeneath",
+      "location": "The Furnace Below Blackslag",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Kiln Fan (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:HearthBeneath:weapon",
+        "gear:HearthBeneath:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 290,
+      "quest": "quest:expedition:HearthBeneath"
+    },
+    {
+      "id": "boss:expedition:TidalLedger",
+      "name": "The Interest Warden",
+      "realm": "TidalLedger",
+      "location": "The Foreclosed Anchorage",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Oath Cross (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:TidalLedger:weapon",
+        "gear:TidalLedger:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 315,
+      "quest": "quest:expedition:TidalLedger"
+    },
+    {
+      "id": "boss:expedition:SkyBelow",
+      "name": "The Counterweight Cantor",
+      "realm": "SkyBelow",
+      "location": "The Fallen Choir Engine",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Choir Quadrants (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:SkyBelow:weapon",
+        "gear:SkyBelow:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 340,
+      "quest": "quest:expedition:SkyBelow"
+    },
+    {
+      "id": "boss:expedition:CinderSpine",
+      "name": "The Last Claimant",
+      "realm": "CinderSpine",
+      "location": "The Buried Yesterday Foundry",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Seam Split (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:CinderSpine:weapon",
+        "gear:CinderSpine:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 365,
+      "quest": "quest:expedition:CinderSpine"
+    },
+    {
+      "id": "boss:expedition:HundredUnlived",
+      "name": "The Registrar of Empty Beds",
+      "realm": "HundredUnlived",
+      "location": "The Unentered Census House",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Elseborn Divide (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:HundredUnlived:weapon",
+        "gear:HundredUnlived:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 390,
+      "quest": "quest:expedition:HundredUnlived"
+    },
+    {
+      "id": "boss:expedition:OrchardOfKings",
+      "name": "The Unwritten Castellan",
+      "realm": "OrchardOfKings",
+      "location": "The Crownroot Keep",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Crown Square (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:OrchardOfKings:weapon",
+        "gear:OrchardOfKings:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 415,
+      "quest": "quest:expedition:OrchardOfKings"
+    },
+    {
+      "id": "boss:expedition:FirstAbsence",
+      "name": "The Keeper of the Single Door",
+      "realm": "FirstAbsence",
+      "location": "The Unfinished Bastion",
+      "access": "Reach sixth chamber after rescue or evidence choice.",
+      "attacks": [
+        "Crush (26 damage)",
+        "Sweep (22 damage)",
+        "Seal (20 damage)",
+        "Threshold Rim (24 damage)"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Three-clue evidence surrender"
+      ],
+      "aftermath": [
+        "Saved defeated/yielded state",
+        "Return passage opens; released captives return"
+      ],
+      "rewards": [
+        "gear:FirstAbsence:weapon",
+        "gear:FirstAbsence:armor"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "hp": 440,
+      "quest": "quest:expedition:FirstAbsence"
+    },
+    {
+      "id": "boss:original:HollowBell",
+      "name": "The Bell That Buried Its Keeper",
+      "realm": "ThreefoldReach",
+      "location": "Bellwold ossuary",
+      "access": "Travel physically to Bellwold ossuary arena; attacks always have a warning.",
+      "attacks": [
+        "Fold interrupts the toll"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Pacify using learned Understanding Bosses and firsthand evidence"
+      ],
+      "aftermath": [
+        "One-time boss achievement and reward persist through save/load."
+      ],
+      "rewards": [
+        "item:BellheartAegis"
+      ],
+      "source": "Combat/UnmadeBossRules.h",
+      "hp": 300,
+      "damage": 28
+    },
+    {
+      "id": "boss:original:RedactedCurator",
+      "name": "The Curator of Missing Names",
+      "realm": "ThreefoldReach",
+      "location": "Paperhaven black archive",
+      "access": "Travel physically to Paperhaven black archive arena; attacks always have a warning.",
+      "attacks": [
+        "Glimpse reveals the erased signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "One-time boss achievement and reward persist through save/load."
+      ],
+      "rewards": [
+        "item:RedactedScepter"
+      ],
+      "source": "Combat/UnmadeBossRules.h",
+      "hp": 260,
+      "damage": 24
+    },
+    {
+      "id": "boss:original:UnfinishedPilgrim",
+      "name": "The Unfinished Pilgrim",
+      "realm": "ThreefoldReach",
+      "location": "Crossings broken causeway",
+      "access": "Travel physically to Crossings broken causeway arena; attacks always have a warning.",
+      "attacks": [
+        "Fold exposes the path between charges"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "One-time boss achievement and reward persist through save/load."
+      ],
+      "rewards": [
+        "item:PilgrimsSignet"
+      ],
+      "source": "Combat/UnmadeBossRules.h",
+      "hp": 340,
+      "damage": 32
+    },
+    {
+      "id": "boss:guardian:TidalLedger",
+      "name": "The Collector of Unborn Days",
+      "realm": "TidalLedger",
+      "location": "Northern terrace",
+      "access": "Complete quest:echo:TidalLedger and approach the guardian; nonlethal choice requires nearby line of sight.",
+      "attacks": [
+        "The collector unwinds a future chain; step beyond the arc or Fold its strike."
+      ],
+      "resolutions": [
+        "Defeat",
+        "Double-confirm mercy pact after witnessed Echo"
+      ],
+      "aftermath": [
+        "The ferry keeps the collector's chains as proof no child's future may be pledged.",
+        "The published record names those who forged debts in another person's time."
+      ],
+      "rewards": [
+        "world:guardian:TidalLedger"
+      ],
+      "source": "Combat/UnmadeRealmGuardianRules.h",
+      "hp": 140,
+      "damage": 18,
+      "quest": "quest:echo:TidalLedger"
+    },
+    {
+      "id": "boss:guardian:SkyBelow",
+      "name": "The Missing Chorister",
+      "realm": "SkyBelow",
+      "location": "Northern terrace",
+      "access": "Complete quest:echo:SkyBelow and approach the guardian; nonlethal choice requires nearby line of sight.",
+      "attacks": [
+        "The invisible note tightens; break sight, guard, or Fold before it falls."
+      ],
+      "resolutions": [
+        "Defeat",
+        "Double-confirm mercy pact after witnessed Echo"
+      ],
+      "aftermath": [
+        "The new meter counts the erased singer among willing supporters.",
+        "The open stage gives a name to the voice the council denied."
+      ],
+      "rewards": [
+        "world:guardian:SkyBelow"
+      ],
+      "source": "Combat/UnmadeRealmGuardianRules.h",
+      "hp": 110,
+      "damage": 14,
+      "quest": "quest:echo:SkyBelow"
+    },
+    {
+      "id": "boss:guardian:CinderSpine",
+      "name": "The Mortar Ancestor",
+      "realm": "CinderSpine",
+      "location": "Northern terrace",
+      "access": "Complete quest:echo:CinderSpine and approach the guardian; nonlethal choice requires nearby line of sight.",
+      "attacks": [
+        "The ancestor raises a quarry hammer; retreat behind the seam or interrupt."
+      ],
+      "resolutions": [
+        "Defeat",
+        "Double-confirm mercy pact after witnessed Echo"
+      ],
+      "aftermath": [
+        "The protected homes use stone no longer borrowed from erased families.",
+        "The ancestor wall carries the worker's name in daylight."
+      ],
+      "rewards": [
+        "world:guardian:CinderSpine"
+      ],
+      "source": "Combat/UnmadeRealmGuardianRules.h",
+      "hp": 175,
+      "damage": 21,
+      "quest": "quest:echo:CinderSpine"
+    },
+    {
+      "id": "boss:guardian:HundredUnlived",
+      "name": "The Numberless Examiner",
+      "realm": "HundredUnlived",
+      "location": "Northern terrace",
+      "access": "Complete quest:echo:HundredUnlived and approach the guardian; nonlethal choice requires nearby line of sight.",
+      "attacks": [
+        "A numbered pulse narrows; evade or use the covered addressway."
+      ],
+      "resolutions": [
+        "Defeat",
+        "Double-confirm mercy pact after witnessed Echo"
+      ],
+      "aftermath": [
+        "The safe homes no longer ask for a registered beginning.",
+        "The public threshold requires permission before recognizing a name."
+      ],
+      "rewards": [
+        "world:guardian:HundredUnlived"
+      ],
+      "source": "Combat/UnmadeRealmGuardianRules.h",
+      "hp": 115,
+      "damage": 15,
+      "quest": "quest:echo:HundredUnlived"
+    },
+    {
+      "id": "boss:guardian:OrchardOfKings",
+      "name": "The Root Bailiff",
+      "realm": "OrchardOfKings",
+      "location": "Northern terrace",
+      "access": "Complete quest:echo:OrchardOfKings and approach the guardian; nonlethal choice requires nearby line of sight.",
+      "attacks": [
+        "A law-root points at your feet; cross to the unbound row before impact."
+      ],
+      "resolutions": [
+        "Defeat",
+        "Double-confirm mercy pact after witnessed Echo"
+      ],
+      "aftermath": [
+        "The shared harvest never demands an oath to a crown.",
+        "The empty court records every challenge to a stolen title."
+      ],
+      "rewards": [
+        "world:guardian:OrchardOfKings"
+      ],
+      "source": "Combat/UnmadeRealmGuardianRules.h",
+      "hp": 160,
+      "damage": 19,
+      "quest": "quest:echo:OrchardOfKings"
+    },
+    {
+      "id": "boss:guardian:FirstAbsence",
+      "name": "The Unfinished Witness",
+      "realm": "FirstAbsence",
+      "location": "Northern terrace",
+      "access": "Complete quest:echo:FirstAbsence and approach the guardian; nonlethal choice requires nearby line of sight.",
+      "attacks": [
+        "Two overlapping silhouettes prepare a strike; retreat into the stable path."
+      ],
+      "resolutions": [
+        "Defeat",
+        "Double-confirm mercy pact after witnessed Echo"
+      ],
+      "aftermath": [
+        "The harbor holds a gentle doorway open to people who need refuge.",
+        "The hall records different beginnings without calling a witness a liar."
+      ],
+      "rewards": [
+        "world:guardian:FirstAbsence"
+      ],
+      "source": "Combat/UnmadeRealmGuardianRules.h",
+      "hp": 185,
+      "damage": 20,
+      "quest": "quest:echo:FirstAbsence"
+    },
+    {
+      "id": "boss:wing:ThreefoldReach",
+      "name": "The Unmeasured Bailiff",
+      "realm": "ThreefoldReach",
+      "location": "Lantern Survey Gallery",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 150,
+      "damage": 18,
+      "quest": "quest:wing:ThreefoldReach"
+    },
+    {
+      "id": "boss:wing:WidowedRain",
+      "name": "The Brine Tollkeeper",
+      "realm": "WidowedRain",
+      "location": "Drowned Pump Annex",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 162,
+      "damage": 20,
+      "quest": "quest:wing:WidowedRain"
+    },
+    {
+      "id": "boss:wing:HearthBeneath",
+      "name": "The Unspent Furnace",
+      "realm": "HearthBeneath",
+      "location": "Cooling Ledger Foundry",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 174,
+      "damage": 22,
+      "quest": "quest:wing:HearthBeneath"
+    },
+    {
+      "id": "boss:wing:TidalLedger",
+      "name": "The Unclaimed Duelist",
+      "realm": "TidalLedger",
+      "location": "Broken Oath Court",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Yield to oath/guard challenge"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 186,
+      "damage": 24,
+      "quest": "quest:wing:TidalLedger"
+    },
+    {
+      "id": "boss:wing:SkyBelow",
+      "name": "The Falling Cantor",
+      "realm": "SkyBelow",
+      "location": "Choir Lift Observatory",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 198,
+      "damage": 26,
+      "quest": "quest:wing:SkyBelow"
+    },
+    {
+      "id": "boss:wing:CinderSpine",
+      "name": "The Borrowed Custodian",
+      "realm": "CinderSpine",
+      "location": "Seam Memory Archive",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 210,
+      "damage": 28,
+      "quest": "quest:wing:CinderSpine"
+    },
+    {
+      "id": "boss:wing:HundredUnlived",
+      "name": "The Unlisted Watcher",
+      "realm": "HundredUnlived",
+      "location": "Unobserved Index Vault",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 222,
+      "damage": 30,
+      "quest": "quest:wing:HundredUnlived"
+    },
+    {
+      "id": "boss:wing:OrchardOfKings",
+      "name": "The Boundary Pruner",
+      "realm": "OrchardOfKings",
+      "location": "Ungrafted Root Nursery",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 234,
+      "damage": 32,
+      "quest": "quest:wing:OrchardOfKings"
+    },
+    {
+      "id": "boss:wing:FirstAbsence",
+      "name": "The Closing Registrar",
+      "realm": "FirstAbsence",
+      "location": "Threshold Counterweight Hall",
+      "access": "Complete three wing mechanisms in order.",
+      "attacks": [
+        "Crush",
+        "Sweep",
+        "Seal",
+        "Regional signature"
+      ],
+      "resolutions": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Guardian state and 5 total insight are saved, not an inventory drop."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "hp": 246,
+      "damage": 34,
+      "quest": "quest:wing:FirstAbsence"
+    },
+    {
+      "id": "boss:road:Crossings",
+      "name": "Milewatch Elder",
+      "realm": "ThreefoldReach",
+      "location": "Crossings",
+      "access": "Reach the chalk witness post after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Crossings"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "PaleStrider",
+      "quest": "quest:road:Crossings"
+    },
+    {
+      "id": "boss:road:Bellwold",
+      "name": "Uncast Bell Elder",
+      "realm": "ThreefoldReach",
+      "location": "Bellwold",
+      "access": "Reach the bell screen after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Bellwold"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "HollowHound",
+      "quest": "quest:road:Bellwold"
+    },
+    {
+      "id": "boss:road:Paperhaven",
+      "name": "Marginbound Elder",
+      "realm": "ThreefoldReach",
+      "location": "Paperhaven",
+      "access": "Reach the copy press after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Paperhaven"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "Inkmaw",
+      "quest": "quest:road:Paperhaven"
+    },
+    {
+      "id": "boss:road:Saltwake",
+      "name": "Hollow Hull Elder",
+      "realm": "WidowedRain",
+      "location": "Saltwake",
+      "access": "Reach the rain shutter after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Saltwake"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "SaltglassCrawler",
+      "quest": "quest:road:Saltwake"
+    },
+    {
+      "id": "boss:road:Cinderhold",
+      "name": "Bafflewatch Elder",
+      "realm": "HearthBeneath",
+      "location": "Cinderhold",
+      "access": "Reach the kiln baffle after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Cinderhold"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "Ashmaw",
+      "quest": "quest:road:Cinderhold"
+    },
+    {
+      "id": "boss:road:Drevlach",
+      "name": "Unpledged Tide Elder",
+      "realm": "TidalLedger",
+      "location": "Drevlach",
+      "access": "Reach the tide clamp after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Drevlach"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "DrownedWatch",
+      "quest": "quest:road:Drevlach"
+    },
+    {
+      "id": "boss:road:Orravane",
+      "name": "Restweight Elder",
+      "realm": "SkyBelow",
+      "location": "Orravane",
+      "access": "Reach the counterweight brake after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Orravane"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "GleamMoth",
+      "quest": "quest:road:Orravane"
+    },
+    {
+      "id": "boss:road:Vathless",
+      "name": "Last Brace Elder",
+      "realm": "CinderSpine",
+      "location": "Vathless",
+      "access": "Reach the seam brace after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Vathless"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "Cinderjaw",
+      "quest": "quest:road:Vathless"
+    },
+    {
+      "id": "boss:road:Eillun",
+      "name": "Unclaimed Lintel Elder",
+      "realm": "HundredUnlived",
+      "location": "Eillun",
+      "access": "Reach the privacy screen after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Eillun"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "Veilwatch",
+      "quest": "quest:road:Eillun"
+    },
+    {
+      "id": "boss:road:Tharniv",
+      "name": "Crownless Root Elder",
+      "realm": "OrchardOfKings",
+      "location": "Tharniv",
+      "access": "Reach the root sluice after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Tharniv"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "PaleStrider",
+      "quest": "quest:road:Tharniv"
+    },
+    {
+      "id": "boss:road:Auvren",
+      "name": "Near Door Elder",
+      "realm": "FirstAbsence",
+      "location": "Auvren",
+      "access": "Reach the threshold brace after investigating all three clues.",
+      "attacks": [
+        "Ground Slam",
+        "Cinder Sweep"
+      ],
+      "resolutions": [
+        "Defeat",
+        "Quiet after evidence and mechanical cooling"
+      ],
+      "aftermath": [
+        "Saved territorial state, public road access and dated delivery testimony."
+      ],
+      "rewards": [
+        "world:road:Auvren"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "creature": "RedactionEye",
+      "quest": "quest:road:Auvren"
+    },
+    {
+      "id": "boss:final:NhalVey",
+      "name": "Nhal-Vey, The Answer That Ate Its Question",
+      "realm": "FirstAbsence",
+      "location": "Auvren northern terrace",
+      "access": "Finish Auvren first chapter and earn a legitimate Unanswered Road route.",
+      "attacks": [
+        "Bell: frontal wide arc",
+        "Horizon: long thin seam",
+        "Names: frontal thrust",
+        "Counterfactual: offset strip"
+      ],
+      "resolutions": [
+        "Defeat 330 HP Veil",
+        "Defeat 290 HP Unmasked form",
+        "Choose Held Morning or Many Mornings",
+        "Optional 240 HP Echo rematch"
+      ],
+      "aftermath": [
+        "Existing quests, people, equipment and saved consequences persist; Held Morning preserves seams, Many Mornings preserves contradictory histories.",
+        "Rematch patterns vary by chosen morning."
+      ],
+      "rewards": [
+        "world:held_morning",
+        "world:many_mornings"
+      ],
+      "source": "Combat/UnmadeFinalEncounterRules.h",
+      "quest": "quest:campaign:FirstAbsence",
+      "hp": 330
+    }
+  ],
+  "quests": [
+    {
+      "id": "quest:expedition:ThreefoldReach",
+      "name": "The Split Charter Vault",
+      "realm": "ThreefoldReach",
+      "entry": "Take the board at Crossings, travel to Rookstep, enter The Split Charter Vault after passing Lantern Rest.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:ThreefoldReach:weapon",
+        "gear:ThreefoldReach:armor",
+        "skill:technique:ThreefoldReach"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:ThreefoldReach",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:expedition:WidowedRain",
+      "name": "The Hollow Breakwater",
+      "realm": "WidowedRain",
+      "entry": "Take the board at Saltwake, travel to Brinewatch, enter The Hollow Breakwater after passing Drywake.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:WidowedRain:weapon",
+        "gear:WidowedRain:armor",
+        "skill:technique:WidowedRain"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:WidowedRain",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:expedition:HearthBeneath",
+      "name": "The Furnace Below Blackslag",
+      "realm": "HearthBeneath",
+      "entry": "Take the board at Cinderhold, travel to Emberwatch, enter The Furnace Below Blackslag after passing Snowmelt Rest.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:HearthBeneath:weapon",
+        "gear:HearthBeneath:armor",
+        "skill:technique:HearthBeneath"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:HearthBeneath",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:expedition:TidalLedger",
+      "name": "The Foreclosed Anchorage",
+      "realm": "TidalLedger",
+      "entry": "Take the board at Drevlach, travel to Oathshoal, enter The Foreclosed Anchorage after passing Reedwake.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:TidalLedger:weapon",
+        "gear:TidalLedger:armor",
+        "skill:technique:TidalLedger"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:TidalLedger",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:expedition:SkyBelow",
+      "name": "The Fallen Choir Engine",
+      "realm": "SkyBelow",
+      "entry": "Take the board at Orravane, travel to Downsong, enter The Fallen Choir Engine after passing Quiet Span.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:SkyBelow:weapon",
+        "gear:SkyBelow:armor",
+        "skill:technique:SkyBelow"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:SkyBelow",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:expedition:CinderSpine",
+      "name": "The Buried Yesterday Foundry",
+      "realm": "CinderSpine",
+      "entry": "Take the board at Vathless, travel to Seamguard, enter The Buried Yesterday Foundry after passing Kinrest.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:CinderSpine:weapon",
+        "gear:CinderSpine:armor",
+        "skill:technique:CinderSpine"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:CinderSpine",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:expedition:HundredUnlived",
+      "name": "The Unentered Census House",
+      "realm": "HundredUnlived",
+      "entry": "Take the board at Eillun, travel to Elseward, enter The Unentered Census House after passing Unlisted Hearth.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:HundredUnlived:weapon",
+        "gear:HundredUnlived:armor",
+        "skill:technique:HundredUnlived"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:HundredUnlived",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:expedition:OrchardOfKings",
+      "name": "The Crownroot Keep",
+      "realm": "OrchardOfKings",
+      "entry": "Take the board at Tharniv, travel to Rootwatch, enter The Crownroot Keep after passing Graft Rest.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:OrchardOfKings:weapon",
+        "gear:OrchardOfKings:armor",
+        "skill:technique:OrchardOfKings"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:OrchardOfKings",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:expedition:FirstAbsence",
+      "name": "The Unfinished Bastion",
+      "realm": "FirstAbsence",
+      "entry": "Take the board at Auvren, travel to Threshold Watch, enter The Unfinished Bastion after passing Nearrest.",
+      "choices": [
+        "Rescue two captives and face boss",
+        "Inspect three independent records to permit the boss's living surrender"
+      ],
+      "aftermath": [
+        "Return gate opens and patrols stop; individually released captives return, unreleased captives remain in custody",
+        "Boss remains alive and patrols stand down; captivity state is not overwritten"
+      ],
+      "rewards": [
+        "gear:FirstAbsence:weapon",
+        "gear:FirstAbsence:armor",
+        "skill:technique:FirstAbsence"
+      ],
+      "source": "World/UnmadeExpeditionRegistry.h",
+      "boss": "boss:expedition:FirstAbsence",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:rite:UnwriteLaw",
+      "name": "The Law Beneath the Last Bell",
+      "realm": "Bellgrave",
+      "entry": "Find the actual inscription at Bellgrave, speak to npc.bellmaker.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:BellmakersVerse"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:UnwriteLaw",
+      "rite_reward_label": "The Bellmaker's Unwritten Verse",
+      "actual_reward_name": "The Bellmaker's Unwritten Verse"
+    },
+    {
+      "id": "quest:rite:Witnesscraft",
+      "name": "The Bridge of Living Testimony",
+      "realm": "EchoWell",
+      "entry": "Find the actual inscription at EchoWell, speak to npc.welllistener.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:RememberedBridge"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:Witnesscraft",
+      "rite_reward_label": "The Bridge That Remembers",
+      "actual_reward_name": "The Bridge That Remembers"
+    },
+    {
+      "id": "quest:rite:BorrowedLives",
+      "name": "The Life Not Taken",
+      "realm": "PaperOrchard",
+      "entry": "Find the actual inscription at PaperOrchard, speak to npc.orchardexile.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:SecondName"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:BorrowedLives",
+      "rite_reward_label": "The Second Name",
+      "actual_reward_name": "The Second Name"
+    },
+    {
+      "id": "quest:rite:LegacyForging",
+      "name": "A Blade That Was There",
+      "realm": "BellwoldForge",
+      "entry": "Find the actual inscription at BellwoldForge, speak to npc.bellwold.stonewright.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:ThreeDeedSteel"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:LegacyForging",
+      "rite_reward_label": "The Three-Deed Temper",
+      "actual_reward_name": "The Three-Deed Temper"
+    },
+    {
+      "id": "quest:rite:LivingRoads",
+      "name": "No Road Belongs to One",
+      "realm": "SilentMile",
+      "entry": "Find the actual inscription at SilentMile, speak to npc.roadwarden.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:CommonCauseway"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:LivingRoads",
+      "rite_reward_label": "The Common Causeway",
+      "actual_reward_name": "The Common Causeway"
+    },
+    {
+      "id": "quest:rite:TomorrowDebt",
+      "name": "The Ledger of Borrowed Dawn",
+      "realm": "DebtMarket",
+      "entry": "Find the actual inscription at DebtMarket, speak to npc.tollbroker.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:FutureReceipt"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:TomorrowDebt",
+      "rite_reward_label": "The Unpaid Sunrise",
+      "actual_reward_name": "Tomorrow's Paid Receipt"
+    },
+    {
+      "id": "quest:rite:UnderstandingBosses",
+      "name": "The Name Beneath the Monster",
+      "realm": "BellOssuary",
+      "entry": "Find the actual inscription at BellOssuary, speak to npc.bellwold.matron.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:HollowMercy"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:UnderstandingBosses",
+      "rite_reward_label": "Mercy of the Hollow Keeper",
+      "actual_reward_name": "Mercy of the Hollow Keeper"
+    },
+    {
+      "id": "quest:rite:ParadoxConvergence",
+      "name": "The Tower That Fell and Stood",
+      "realm": "PaperhavenScribe",
+      "entry": "Find the actual inscription at PaperhavenScribe, speak to npc.paperhaven.mapmaker.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:BetweenHistories"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:ParadoxConvergence",
+      "rite_reward_label": "The Room Between Histories",
+      "actual_reward_name": "The Room Between Histories"
+    },
+    {
+      "id": "quest:rite:Oathbinding",
+      "name": "The Lantern You Promised",
+      "realm": "BellwoldRefuge",
+      "entry": "Find the actual inscription at BellwoldRefuge, speak to npc.bellwold.guard.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:UnbrokenLantern"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:Oathbinding",
+      "rite_reward_label": "The Unbroken Shelter Oath",
+      "actual_reward_name": "The Unbroken Shelter Oath"
+    },
+    {
+      "id": "quest:rite:Cartography",
+      "name": "The Map of Disagreeing Shores",
+      "realm": "SaltwakeHarbor",
+      "entry": "Find the actual inscription at SaltwakeHarbor, speak to npc.saltwake.navigator.001, cast real trial, then secure firsthand witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "A witnessed civic choice is saved and rite mastery modifies allowable reality actions; effects incur Strain/cooldowns."
+      ],
+      "rewards": [
+        "item:CoastTrueAtlas"
+      ],
+      "source": "World/UnmadeTenfoldChronicle.h",
+      "skill": "skill:rite:Cartography",
+      "rite_reward_label": "Atlas of the Missing Coast",
+      "actual_reward_name": "Atlas of the Missing Coast"
+    },
+    {
+      "id": "quest:confluence:SilentAlarm",
+      "name": "The Alarm Nobody Heard",
+      "realm": "ThreefoldReach",
+      "entry": "Master UnwriteLaw and Witnesscraft, cast each at the chamber within 120 seconds, bring two actual witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "Two-power mastery and witnessed decision persist; single earned mythic relic."
+      ],
+      "rewards": [
+        "item:LastWarningAegis"
+      ],
+      "source": "World/UnmadeConfluenceRules.h",
+      "skills": [
+        "skill:rite:UnwriteLaw",
+        "skill:rite:Witnesscraft"
+      ],
+      "reward_label": "Aegis of the Last Warning"
+    },
+    {
+      "id": "quest:confluence:TwoNames",
+      "name": "A Blade for Both Your Names",
+      "realm": "WidowedRain",
+      "entry": "Master BorrowedLives and LegacyForging, cast each at the chamber within 120 seconds, bring two actual witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "Two-power mastery and witnessed decision persist; single earned mythic relic."
+      ],
+      "rewards": [
+        "item:ElsebornSmithEdge"
+      ],
+      "source": "World/UnmadeConfluenceRules.h",
+      "skills": [
+        "skill:rite:BorrowedLives",
+        "skill:rite:LegacyForging"
+      ],
+      "reward_label": "Edge of the Elseborn Smith"
+    },
+    {
+      "id": "quest:confluence:UnmappedWay",
+      "name": "The Route Nobody Owned",
+      "realm": "HearthBeneath",
+      "entry": "Master LivingRoads and Cartography, cast each at the chamber within 120 seconds, bring two actual witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "Two-power mastery and witnessed decision persist; single earned mythic relic."
+      ],
+      "rewards": [
+        "item:CommonPathChart"
+      ],
+      "source": "World/UnmadeConfluenceRules.h",
+      "skills": [
+        "skill:rite:LivingRoads",
+        "skill:rite:Cartography"
+      ],
+      "reward_label": "Chart of the Common Path"
+    },
+    {
+      "id": "quest:confluence:TomorrowPromise",
+      "name": "Tomorrow Is Not Yours to Spend",
+      "realm": "TidalLedger",
+      "entry": "Master TomorrowDebt and Oathbinding, cast each at the chamber within 120 seconds, bring two actual witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "Two-power mastery and witnessed decision persist; single earned mythic relic."
+      ],
+      "rewards": [
+        "item:BorrowedDawnHeart"
+      ],
+      "source": "World/UnmadeConfluenceRules.h",
+      "skills": [
+        "skill:rite:TomorrowDebt",
+        "skill:rite:Oathbinding"
+      ],
+      "reward_label": "Heart of the Borrowed Dawn"
+    },
+    {
+      "id": "quest:confluence:TwoKeepers",
+      "name": "The Bell Fell and Stood",
+      "realm": "SkyBelow",
+      "entry": "Master UnderstandingBosses and ParadoxConvergence, cast each at the chamber within 120 seconds, bring two actual witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "Two-power mastery and witnessed decision persist; single earned mythic relic."
+      ],
+      "rewards": [
+        "item:TwoKeepersMirror"
+      ],
+      "source": "World/UnmadeConfluenceRules.h",
+      "skills": [
+        "skill:rite:UnderstandingBosses",
+        "skill:rite:ParadoxConvergence"
+      ],
+      "reward_label": "Mirror of the Two Keepers"
+    },
+    {
+      "id": "quest:confluence:FirstAbsence",
+      "name": "The Place Before a First Story",
+      "realm": "CinderSpine",
+      "entry": "Master UnwriteLaw and Cartography, cast each at the chamber within 120 seconds, bring two actual witnesses.",
+      "choices": [
+        "Protect",
+        "Reveal"
+      ],
+      "aftermath": [
+        "Two-power mastery and witnessed decision persist; single earned mythic relic."
+      ],
+      "rewards": [
+        "item:FirstAbsenceWitness"
+      ],
+      "source": "World/UnmadeConfluenceRules.h",
+      "skills": [
+        "skill:rite:UnwriteLaw",
+        "skill:rite:Cartography"
+      ],
+      "reward_label": "Witness of the First Absence"
+    },
+    {
+      "id": "quest:wing:ThreefoldReach",
+      "name": "Lantern Survey Gallery",
+      "realm": "ThreefoldReach",
+      "entry": "Open Lantern Survey Gallery from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:ThreefoldReach"
+    },
+    {
+      "id": "quest:wing:WidowedRain",
+      "name": "Drowned Pump Annex",
+      "realm": "WidowedRain",
+      "entry": "Open Drowned Pump Annex from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:WidowedRain"
+    },
+    {
+      "id": "quest:wing:HearthBeneath",
+      "name": "Cooling Ledger Foundry",
+      "realm": "HearthBeneath",
+      "entry": "Open Cooling Ledger Foundry from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:HearthBeneath"
+    },
+    {
+      "id": "quest:wing:TidalLedger",
+      "name": "Broken Oath Court",
+      "realm": "TidalLedger",
+      "entry": "Open Broken Oath Court from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat",
+        "Earn guard-and-oath surrender"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:TidalLedger"
+    },
+    {
+      "id": "quest:wing:SkyBelow",
+      "name": "Choir Lift Observatory",
+      "realm": "SkyBelow",
+      "entry": "Open Choir Lift Observatory from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:SkyBelow"
+    },
+    {
+      "id": "quest:wing:CinderSpine",
+      "name": "Seam Memory Archive",
+      "realm": "CinderSpine",
+      "entry": "Open Seam Memory Archive from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:CinderSpine"
+    },
+    {
+      "id": "quest:wing:HundredUnlived",
+      "name": "Unobserved Index Vault",
+      "realm": "HundredUnlived",
+      "entry": "Open Unobserved Index Vault from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:HundredUnlived"
+    },
+    {
+      "id": "quest:wing:OrchardOfKings",
+      "name": "Ungrafted Root Nursery",
+      "realm": "OrchardOfKings",
+      "entry": "Open Ungrafted Root Nursery from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:OrchardOfKings"
+    },
+    {
+      "id": "quest:wing:FirstAbsence",
+      "name": "Threshold Counterweight Hall",
+      "realm": "FirstAbsence",
+      "entry": "Open Threshold Counterweight Hall from the expedition and complete three physical mechanisms.",
+      "choices": [
+        "Defeat"
+      ],
+      "aftermath": [
+        "Saved wing completion grants 5 nonrepeatable insight for local build/tool/recipe/service upgrades."
+      ],
+      "rewards": [
+        "resource:insight:5"
+      ],
+      "source": "World/UnmadePlayerExperienceRegistry.h",
+      "boss": "boss:wing:FirstAbsence"
+    },
+    {
+      "id": "quest:road:Crossings",
+      "name": "The Uncounted Kettle",
+      "realm": "ThreefoldReach",
+      "entry": "Speak to npc.marketporter.001, inspect all three roadside records and visit chalk witness post.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite sealed kettle fittings, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Crossings"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Crossings"
+    },
+    {
+      "id": "quest:road:Bellwold",
+      "name": "A Wick Beyond the Bell",
+      "realm": "ThreefoldReach",
+      "entry": "Speak to npc.bellwold.woodcarrier.001, inspect all three roadside records and visit bell screen.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite lantern wick rolls, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Bellwold"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Bellwold"
+    },
+    {
+      "id": "quest:road:Paperhaven",
+      "name": "The Second Copy Arrives",
+      "realm": "ThreefoldReach",
+      "entry": "Speak to npc.paperhaven.lettercarrier.001, inspect all three roadside records and visit copy press.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite blank repair folios, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Paperhaven"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Paperhaven"
+    },
+    {
+      "id": "quest:road:Saltwake",
+      "name": "Dry Bedding, Wet Road",
+      "realm": "WidowedRain",
+      "entry": "Speak to npc.saltwake.courier.001, inspect all three roadside records and visit rain shutter.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite drying cloth bundles, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Saltwake"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Saltwake"
+    },
+    {
+      "id": "quest:road:Cinderhold",
+      "name": "The First Cart Through",
+      "realm": "HearthBeneath",
+      "entry": "Speak to npc.cinderhold.courier.001, inspect all three roadside records and visit kiln baffle.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite kiln patch bricks, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Cinderhold"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Cinderhold"
+    },
+    {
+      "id": "quest:road:Drevlach",
+      "name": "Cargo Without Collateral",
+      "realm": "TidalLedger",
+      "entry": "Speak to npc.tidal.ferryman.001, inspect all three roadside records and visit tide clamp.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite ferry patch boards, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Drevlach"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Drevlach"
+    },
+    {
+      "id": "quest:road:Orravane",
+      "name": "When the Choir Rests",
+      "realm": "SkyBelow",
+      "entry": "Speak to npc.sky.structuralist.001, inspect all three roadside records and visit counterweight brake.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite support pin cases, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Orravane"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Orravane"
+    },
+    {
+      "id": "quest:road:Vathless",
+      "name": "Stone That Keeps Its Kin",
+      "realm": "CinderSpine",
+      "entry": "Speak to npc.bones.mason.001, inspect all three roadside records and visit seam brace.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite plain seam wedges, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Vathless"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Vathless"
+    },
+    {
+      "id": "quest:road:Eillun",
+      "name": "An Unnamed Door Opens",
+      "realm": "HundredUnlived",
+      "entry": "Speak to npc.unlived.caretaker.001, inspect all three roadside records and visit privacy screen.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite unmarked door fittings, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Eillun"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Eillun"
+    },
+    {
+      "id": "quest:road:Tharniv",
+      "name": "The Common Graft Travels",
+      "realm": "OrchardOfKings",
+      "entry": "Speak to npc.orchard.gardener.001, inspect all three roadside records and visit root sluice.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite common graft splints, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Tharniv"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Tharniv"
+    },
+    {
+      "id": "quest:road:Auvren",
+      "name": "A Doorway Still Receives",
+      "realm": "FirstAbsence",
+      "entry": "Speak to npc.absence.caretaker.001, inspect all three roadside records and visit threshold brace.",
+      "choices": [
+        "Defeat resident elder",
+        "Cool nest mechanism and quiet elder with evidence"
+      ],
+      "aftermath": [
+        "Open or maintain the passage, deliver finite threshold anchor pegs, record receipt, then return to people who physically learned the result."
+      ],
+      "rewards": [
+        "world:road:Auvren"
+      ],
+      "source": "World/UnmadeRememberedRoadRegistry.h",
+      "boss": "boss:road:Auvren"
+    },
+    {
+      "id": "quest:campaign:ThreefoldReach",
+      "name": "A Bell That Had No Last Note",
+      "realm": "ThreefoldReach",
+      "entry": "Why does the Crossings bell ring from a road that no one has walked?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "In Bellwold a refugee remembers a bell that has never been cast. In Paperhaven its absence has a signed record. Neither settlement can prove the other wrong."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:campaign:WidowedRain",
+      "name": "The Shore Without Its Water",
+      "realm": "WidowedRain",
+      "entry": "Who can remember a sea that is missing without owning the grief of those left ashore?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "Sella's sea chart is not an error. The rain preserved a record of something intentionally withheld, and the debt dates are written in another city's script."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:campaign:HearthBeneath",
+      "name": "The Heat Lent By No Sun",
+      "realm": "HearthBeneath",
+      "entry": "Who keeps a common flame burning when the sun whose gift it was never existed?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "Tarin reads a fire with the same missing second found in the bell. The city's warmth survives because someone accepted a cost they did not create."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:campaign:TidalLedger",
+      "name": "The Account That Borrowed Tomorrow",
+      "realm": "TidalLedger",
+      "entry": "Can a debt be legitimate when its signatory has not been born?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "Veynu's impossible dates show that the world's missing things were pledged as collateral; a contract is written on the underside of reality itself."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:campaign:SkyBelow",
+      "name": "The Chorus That Holds The Roof",
+      "realm": "SkyBelow",
+      "entry": "How many people were removed from history to keep a single hanging street above the ground?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "Yllesh's missing voice proves that the same absences are doing work in several realms. The common pattern is a decision, not an accident."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:campaign:CinderSpine",
+      "name": "The Stone That Remembered Workers",
+      "realm": "CinderSpine",
+      "entry": "When a family is mined out of time, who gets to call its descendants fictional?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "Ghraet's seams show erased lineages in the mountain's living load. Someone has been converting impossible people into stable places."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:campaign:HundredUnlived",
+      "name": "The Census Of Those Not Born",
+      "realm": "HundredUnlived",
+      "entry": "Can a person be a valid witness without having a beginning recognized by the city?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "Eillun's unentered people are not echoes; they live and disagree. A missing origin is not evidence that someone deserves to be erased."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:campaign:OrchardOfKings",
+      "name": "The Crown Nobody Accepted",
+      "realm": "OrchardOfKings",
+      "entry": "Who has been enforcing the world's oldest rule after every prospective ruler refused it?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "Tharniv's root-court remembers a law signed by nobody. Its force survived because an answering consciousness was made responsible for every unresolved question."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:campaign:FirstAbsence",
+      "name": "The Answer With No Question",
+      "realm": "FirstAbsence",
+      "entry": "Why does the first witness remember a traveler who has not yet arrived?",
+      "choices": [
+        "Resolve eligible chapter and follow one of its supported alternate routes"
+      ],
+      "aftermath": [
+        "Auvren reveals a seam older than either origin. Nhal-Vey did not create the contradictions; it has been eating the questions people were afraid to ask."
+      ],
+      "rewards": [
+        "world:campaign_progress"
+      ],
+      "source": "World/UnmadeCampaignSpineRules.h"
+    },
+    {
+      "id": "quest:aftermath:ThreefoldReach",
+      "name": "The Road After the Rescue",
+      "realm": "ThreefoldReach",
+      "entry": "After the first local arc, meet npc.roadwarden.001, operate Crossings.Aftermath.RoadSwitch, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Crossings.Aftermath.SharedRoute",
+        "Truth at Crossings.Aftermath.TollArchive"
+      ],
+      "aftermath": [
+        "The public crossing remains open after dark.",
+        "Hidden toll histories become public records."
+      ],
+      "rewards": [
+        "world:aftermath:ThreefoldReach"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Crossings.Aftermath.RoadSwitch",
+      "witnesses": [
+        "npc.bridgekeeper.001",
+        "npc.archivist.001"
+      ]
+    },
+    {
+      "id": "quest:aftermath:WidowedRain",
+      "name": "The Storm's Second Invoice",
+      "realm": "WidowedRain",
+      "entry": "After the first local arc, meet npc.saltwake.harborwarden.001, operate Saltwake.Aftermath.StormSluice, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Saltwake.Aftermath.Cistern",
+        "Truth at Saltwake.Aftermath.RainLedger"
+      ],
+      "aftermath": [
+        "Rain is collected into a shared cistern.",
+        "The rain broker's false tide prices become public."
+      ],
+      "rewards": [
+        "world:aftermath:WidowedRain"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Saltwake.Aftermath.StormSluice",
+      "witnesses": [
+        "npc.saltwake.rainkeeper.001",
+        "npc.saltwake.navigator.001"
+      ]
+    },
+    {
+      "id": "quest:aftermath:HearthBeneath",
+      "name": "The Ember That Chose No Heir",
+      "realm": "HearthBeneath",
+      "entry": "After the first local arc, meet npc.cinderhold.emberwarden.001, operate Cinderhold.Aftermath.HeatVent, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Cinderhold.Aftermath.CommonKiln",
+        "Truth at Cinderhold.Aftermath.EmberDeed"
+      ],
+      "aftermath": [
+        "Households share a heat-safe communal kiln.",
+        "An illegal ownership claim on the eternal ember is exposed."
+      ],
+      "rewards": [
+        "world:aftermath:HearthBeneath"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Cinderhold.Aftermath.HeatVent",
+      "witnesses": [
+        "npc.cinderhold.healer.001",
+        "npc.cinderhold.hearthreader.001"
+      ]
+    },
+    {
+      "id": "quest:aftermath:TidalLedger",
+      "name": "The Unpaid Person",
+      "realm": "TidalLedger",
+      "entry": "After the first local arc, meet npc.tidal.ledgerkeeper.001, operate Tidal.Aftermath.DebtLock, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Tidal.Aftermath.RefugeBonds",
+        "Truth at Tidal.Aftermath.MissingDebtor"
+      ],
+      "aftermath": [
+        "Future debts are forgiven for the stranded.",
+        "The unborn people used as collateral are named."
+      ],
+      "rewards": [
+        "world:aftermath:TidalLedger"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Tidal.Aftermath.DebtLock",
+      "witnesses": [
+        "npc.tidal.ferryman.001",
+        "npc.tidal.witness.001"
+      ]
+    },
+    {
+      "id": "quest:aftermath:SkyBelow",
+      "name": "The Note That Held a Home",
+      "realm": "SkyBelow",
+      "entry": "After the first local arc, meet npc.sky.choirmaster.001, operate Sky.Aftermath.HarmonicTuner, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Sky.Aftermath.HarmonicBrace",
+        "Truth at Sky.Aftermath.SilencedVerse"
+      ],
+      "aftermath": [
+        "A choir-supported neighborhood gains stable footing.",
+        "Forbidden notes become audible to the public."
+      ],
+      "rewards": [
+        "world:aftermath:SkyBelow"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Sky.Aftermath.HarmonicTuner",
+      "witnesses": [
+        "npc.sky.structuralist.001",
+        "npc.sky.dissenter.001"
+      ]
+    },
+    {
+      "id": "quest:aftermath:CinderSpine",
+      "name": "The Quarry of Other Yesterdays",
+      "realm": "CinderSpine",
+      "entry": "After the first local arc, meet npc.bones.seamwarden.001, operate Bones.Aftermath.SeamBrace, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Bones.Aftermath.ProtectedSeam",
+        "Truth at Bones.Aftermath.DescendantLedger"
+      ],
+      "aftermath": [
+        "Timeline mining is halted near living homes.",
+        "The erased lineage of quarry workers is documented."
+      ],
+      "rewards": [
+        "world:aftermath:CinderSpine"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Bones.Aftermath.SeamBrace",
+      "witnesses": [
+        "npc.bones.mason.001",
+        "npc.bones.descendant.001"
+      ]
+    },
+    {
+      "id": "quest:aftermath:HundredUnlived",
+      "name": "The Street of Unclaimed Birthdays",
+      "realm": "HundredUnlived",
+      "entry": "After the first local arc, meet npc.unlived.censuskeeper.001, operate Unlived.Aftermath.DoorOfNames, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Unlived.Aftermath.ShelterRegistry",
+        "Truth at Unlived.Aftermath.VoiceLedger"
+      ],
+      "aftermath": [
+        "A shelter recognizes residents without birth documents.",
+        "The city publicly acknowledges its impossible citizens."
+      ],
+      "rewards": [
+        "world:aftermath:HundredUnlived"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Unlived.Aftermath.DoorOfNames",
+      "witnesses": [
+        "npc.unlived.caretaker.001",
+        "npc.unlived.challenger.001"
+      ]
+    },
+    {
+      "id": "quest:aftermath:OrchardOfKings",
+      "name": "The Crown No One Wanted",
+      "realm": "OrchardOfKings",
+      "entry": "After the first local arc, meet npc.orchard.untitled.001, operate Orchard.Aftermath.RootValve, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Orchard.Aftermath.CommonRoots",
+        "Truth at Orchard.Aftermath.UnclaimedThrone"
+      ],
+      "aftermath": [
+        "The untitled courts maintain a public orchard.",
+        "The last concealed claim to kingship is revealed."
+      ],
+      "rewards": [
+        "world:aftermath:OrchardOfKings"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Orchard.Aftermath.RootValve",
+      "witnesses": [
+        "npc.orchard.gardener.001",
+        "npc.orchard.historian.001"
+      ]
+    },
+    {
+      "id": "quest:aftermath:FirstAbsence",
+      "name": "The Place After the Ending",
+      "realm": "FirstAbsence",
+      "entry": "After the first local arc, meet npc.absence.firstwitness.001, operate Absence.Aftermath.OriginDial, inspect evidence and secure a real witness.",
+      "choices": [
+        "Care at Absence.Aftermath.SharedBeginning",
+        "Truth at Absence.Aftermath.ManyOrigins"
+      ],
+      "aftermath": [
+        "A stable passage remains open for other travelers.",
+        "Multiple mutually true beginnings are preserved."
+      ],
+      "rewards": [
+        "world:aftermath:FirstAbsence"
+      ],
+      "source": "World/UnmadeRealmAftermathRules.h",
+      "mechanism": "Absence.Aftermath.OriginDial",
+      "witnesses": [
+        "npc.absence.caretaker.001",
+        "npc.absence.otherwitness.001"
+      ]
+    },
+    {
+      "id": "quest:echo:TidalLedger",
+      "name": "The Child Who Repaid Tomorrow",
+      "realm": "TidalLedger",
+      "entry": "Complete the first arc and aftermath, speak with npc.tidal.ledgerkeeper.001, investigate two distinct physical clues.",
+      "choices": [
+        "Care witnessed resolution",
+        "Truth witnessed resolution"
+      ],
+      "aftermath": [
+        "One of two durable public records/monuments and a localized report to a neighboring realm; optional guardian becomes accessible."
+      ],
+      "rewards": [
+        "world:echo:TidalLedger"
+      ],
+      "source": "World/UnmadeEchoQuestRules.h",
+      "guardian": "boss:guardian:TidalLedger"
+    },
+    {
+      "id": "quest:echo:SkyBelow",
+      "name": "The Silence Between Two Notes",
+      "realm": "SkyBelow",
+      "entry": "Complete the first arc and aftermath, speak with npc.sky.choirmaster.001, investigate two distinct physical clues.",
+      "choices": [
+        "Care witnessed resolution",
+        "Truth witnessed resolution"
+      ],
+      "aftermath": [
+        "One of two durable public records/monuments and a localized report to a neighboring realm; optional guardian becomes accessible."
+      ],
+      "rewards": [
+        "world:echo:SkyBelow"
+      ],
+      "source": "World/UnmadeEchoQuestRules.h",
+      "guardian": "boss:guardian:SkyBelow"
+    },
+    {
+      "id": "quest:echo:CinderSpine",
+      "name": "The Mason's Borrowed Grandmother",
+      "realm": "CinderSpine",
+      "entry": "Complete the first arc and aftermath, speak with npc.bones.seamwarden.001, investigate two distinct physical clues.",
+      "choices": [
+        "Care witnessed resolution",
+        "Truth witnessed resolution"
+      ],
+      "aftermath": [
+        "One of two durable public records/monuments and a localized report to a neighboring realm; optional guardian becomes accessible."
+      ],
+      "rewards": [
+        "world:echo:CinderSpine"
+      ],
+      "source": "World/UnmadeEchoQuestRules.h",
+      "guardian": "boss:guardian:CinderSpine"
+    },
+    {
+      "id": "quest:echo:HundredUnlived",
+      "name": "An Address For Nobody",
+      "realm": "HundredUnlived",
+      "entry": "Complete the first arc and aftermath, speak with npc.unlived.censuskeeper.001, investigate two distinct physical clues.",
+      "choices": [
+        "Care witnessed resolution",
+        "Truth witnessed resolution"
+      ],
+      "aftermath": [
+        "One of two durable public records/monuments and a localized report to a neighboring realm; optional guardian becomes accessible."
+      ],
+      "rewards": [
+        "world:echo:HundredUnlived"
+      ],
+      "source": "World/UnmadeEchoQuestRules.h",
+      "guardian": "boss:guardian:HundredUnlived"
+    },
+    {
+      "id": "quest:echo:OrchardOfKings",
+      "name": "The Coronation of the Soil",
+      "realm": "OrchardOfKings",
+      "entry": "Complete the first arc and aftermath, speak with npc.orchard.untitled.001, investigate two distinct physical clues.",
+      "choices": [
+        "Care witnessed resolution",
+        "Truth witnessed resolution"
+      ],
+      "aftermath": [
+        "One of two durable public records/monuments and a localized report to a neighboring realm; optional guardian becomes accessible."
+      ],
+      "rewards": [
+        "world:echo:OrchardOfKings"
+      ],
+      "source": "World/UnmadeEchoQuestRules.h",
+      "guardian": "boss:guardian:OrchardOfKings"
+    },
+    {
+      "id": "quest:echo:FirstAbsence",
+      "name": "The Witness Who Arrived Before You",
+      "realm": "FirstAbsence",
+      "entry": "Complete the first arc and aftermath, speak with npc.absence.firstwitness.001, investigate two distinct physical clues.",
+      "choices": [
+        "Care witnessed resolution",
+        "Truth witnessed resolution"
+      ],
+      "aftermath": [
+        "One of two durable public records/monuments and a localized report to a neighboring realm; optional guardian becomes accessible."
+      ],
+      "rewards": [
+        "world:echo:FirstAbsence"
+      ],
+      "source": "World/UnmadeEchoQuestRules.h",
+      "guardian": "boss:guardian:FirstAbsence"
+    },
+    {
+      "id": "quest:faction:Refuge",
+      "name": "The Refuge Compact",
+      "realm": "ThreefoldReach",
+      "entry": "Speak in order with npc.bellwold.lamplighter.001, npc.bellwold.matron.001, npc.bellwold.guard.001 and verify local evidence.",
+      "choices": [
+        "Solidarity",
+        "Truth"
+      ],
+      "aftermath": [
+        "Saved faction reputation: solidarity and published truth differ; either outcome enables real faction memory."
+      ],
+      "rewards": [
+        "item:RefugeOathguard"
+      ],
+      "source": "World/UnmadeFactionChronicleRules.h"
+    },
+    {
+      "id": "quest:faction:Archive",
+      "name": "The Redacted Charter",
+      "realm": "ThreefoldReach",
+      "entry": "Speak in order with npc.paperhaven.scribe.001, npc.paperhaven.registrar.001, npc.paperhaven.archivist.001 and verify local evidence.",
+      "choices": [
+        "Solidarity",
+        "Truth"
+      ],
+      "aftermath": [
+        "Saved faction reputation: solidarity and published truth differ; either outcome enables real faction memory."
+      ],
+      "rewards": [
+        "item:ArchivistQuill"
+      ],
+      "source": "World/UnmadeFactionChronicleRules.h"
+    },
+    {
+      "id": "quest:faction:Roadbound",
+      "name": "The Roadbound Assembly",
+      "realm": "ThreefoldReach",
+      "entry": "Speak in order with npc.guard.001, npc.roadwarden.001, npc.welllistener.001 and verify local evidence.",
+      "choices": [
+        "Solidarity",
+        "Truth"
+      ],
+      "aftermath": [
+        "Saved faction reputation: solidarity and published truth differ; either outcome enables real faction memory."
+      ],
+      "rewards": [
+        "item:RoadboundCompass"
+      ],
+      "source": "World/UnmadeFactionChronicleRules.h"
+    },
+    {
+      "id": "quest:depth:ThreefoldReach",
+      "name": "The Last Lantern Charter",
+      "realm": "ThreefoldReach",
+      "entry": "Choose which road the surviving lantern charter will serve.",
+      "choices": [
+        "Keep the lantern reserve on the refuge road",
+        "Publish the excluded names and reserve the archive room"
+      ],
+      "aftermath": [
+        "We will keep a bed ready. Jessa still asks why the list is folded shut.",
+        "The names are posted. I have moved a lantern indoors; the outer road will need your field kit."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "The torn charter lists both the abandoned beds and a reserve of lantern oil. Neither claim cancels the other."
+    },
+    {
+      "id": "quest:identity:ThreefoldReach",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "ThreefoldReach",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:depth:WidowedRain",
+      "name": "Water For Those Still Waiting",
+      "realm": "WidowedRain",
+      "entry": "Decide who controls the recovered pump schedule.",
+      "choices": [
+        "Guarantee a protected family water hour",
+        "Keep access public and post every withdrawal"
+      ],
+      "aftermath": [
+        "Havin keeps the protected hour. The provisioner charges less; travelers wait until the bell.",
+        "The withdrawal sheet is public. We spend more time checking it, but newcomers can ask for water."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "A soaked schedule shows the pumps stopped before the tanks were empty. A private water hour could preserve a reserve or become another gate."
+    },
+    {
+      "id": "quest:identity:WidowedRain",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "WidowedRain",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:depth:HearthBeneath",
+      "name": "The Heat Left Over",
+      "realm": "HearthBeneath",
+      "entry": "Decide where the recovered heat should go.",
+      "choices": [
+        "Warm the refuge houses first",
+        "Keep a rescue reserve with a public meter"
+      ],
+      "aftermath": [
+        "The houses are warm. Ilyet checks the reserve before agreeing to send a crew underground.",
+        "The meter is where everyone can read it. The houses keep their blankets; the rescue crew keeps its heat."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "A service diagram separates the domestic line from a guarded emergency reservoir. Both share the same limited intake."
+    },
+    {
+      "id": "quest:identity:HearthBeneath",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "HearthBeneath",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:depth:TidalLedger",
+      "name": "Whose Oath Remains",
+      "realm": "TidalLedger",
+      "entry": "Decide how the surviving debt oath will be held.",
+      "choices": [
+        "Keep the family promise and seal the forced margin",
+        "Expose the whole oath and renegotiate it publicly"
+      ],
+      "aftermath": [
+        "The families still have a guarantor. Deyra keeps the sealed copy so the margin cannot return unnoticed.",
+        "The oath is being read aloud. Some people trust us more; others will not wait for the negotiation."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "A copied oath distinguishes the voluntary family promise from the collector's added liability. The ink layers can be read separately."
+    },
+    {
+      "id": "quest:identity:TidalLedger",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "TidalLedger",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:depth:SkyBelow",
+      "name": "A Voice On The Bridge",
+      "realm": "SkyBelow",
+      "entry": "Choose the obligation that the restored span will carry.",
+      "choices": [
+        "Restore the anchor and limit access to its record",
+        "Open the crossing record and use manual load watches"
+      ],
+      "aftermath": [
+        "The anchor carries the weight. Kelm answers for the locked record; the watch still counts every load.",
+        "The record is open. Liora has asked for another watcher, because reading it does not hold a bridge up."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "The anchor records footsteps as well as load. Its structural use does not require retaining a named crossing record."
+    },
+    {
+      "id": "quest:identity:SkyBelow",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "SkyBelow",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:depth:CinderSpine",
+      "name": "The Name In The Seam",
+      "realm": "CinderSpine",
+      "entry": "Decide what to do with an ancestor record found in the foundry.",
+      "choices": [
+        "Protect the family claim in a sealed local trust",
+        "Publish the neighboring names with the claim"
+      ],
+      "aftermath": [
+        "The local trust holds the copy. Seyl visits the seam because the other names have not stopped mattering.",
+        "The neighboring names are on the wall. Aren has had to defend our claim in front of people it once excluded."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "The seam copy carries a family claim and several neighboring names. The claimant's stamp covers both, rather than establishing either as false."
+    },
+    {
+      "id": "quest:identity:CinderSpine",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "CinderSpine",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:depth:HundredUnlived",
+      "name": "Names For A Safe House",
+      "realm": "HundredUnlived",
+      "entry": "Decide how rescued people will appear in the local census.",
+      "choices": [
+        "Register household totals and seal personal names",
+        "Register names openly with an appeal witness"
+      ],
+      "aftermath": [
+        "The storehouse has the totals. Ovin keeps the name page sealed and has promised to ask before opening it.",
+        "The names have a witness beside them. Neris is still making sure nobody mistakes an appeal for permission."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "The storehouse sheet accepts household totals without personal names. An attached index would identify each person if it were retained."
+    },
+    {
+      "id": "quest:identity:HundredUnlived",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "HundredUnlived",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:depth:OrchardOfKings",
+      "name": "The Branch They Did Not Graft",
+      "realm": "OrchardOfKings",
+      "entry": "Decide who may harvest the restored root passage.",
+      "choices": [
+        "Keep the household boundary with a public harvest share",
+        "Restore the common path and appoint rotating keepers"
+      ],
+      "aftermath": [
+        "The household boundary stays. Alva leaves a share at the common post, where everyone can see whether it arrived.",
+        "The path is common again. Sivra takes the first watch and cannot ask Alva to carry every hungry season alone."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "A root marker names the household boundary; a later tool mark widens it across the common path. The two cuts were made in different seasons."
+    },
+    {
+      "id": "quest:identity:OrchardOfKings",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "OrchardOfKings",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:depth:FirstAbsence",
+      "name": "The Door We Can Describe",
+      "realm": "FirstAbsence",
+      "entry": "Decide how to record the reopened threshold.",
+      "choices": [
+        "Keep the working route in a rescue registry",
+        "Publish the route with the untested doors marked"
+      ],
+      "aftermath": [
+        "The rescue registry holds the route. Essel left the untested doors in the drawing instead of pretending they were gone.",
+        "The route is public, with its uncertainty intact. Thaelin asks every traveler to read the warning before choosing."
+      ],
+      "rewards": [
+        "resource:regional_favor",
+        "world:community_accord"
+      ],
+      "source": "World/UnmadeAdventureDepthRegistry.h",
+      "evidence": "The threshold diagram records a working passage and two untested side doors. It explicitly leaves the origin of the first absence unknown."
+    },
+    {
+      "id": "quest:identity:FirstAbsence",
+      "name": "Regional Survey, Repairs and Rest",
+      "realm": "FirstAbsence",
+      "entry": "Enter dungeon and discover three coupled-valve controls, clues and repair posts.",
+      "choices": [
+        "Solve reversible puzzle and survey local chart",
+        "Earn finite hunt ration or repair roads and gain bounded rest"
+      ],
+      "aftermath": [
+        "Valves and charts persist; repair changes roads and local dialogue, with day-bounded recovery and no infinite weak-foe loot."
+      ],
+      "rewards": [
+        "world:regional_survey"
+      ],
+      "source": "World/UnmadeIdentityRules.h"
+    },
+    {
+      "id": "quest:local:BellwoldLanterns",
+      "name": "Bellwold Lanterns",
+      "realm": "ThreefoldReach",
+      "entry": "Speak to the lamplighter then refuge matron.",
+      "choices": [
+        "Protect the refuge"
+      ],
+      "aftermath": [
+        "Once-only Bellwold task and shelter material/gear; enables afterlight return."
+      ],
+      "rewards": [
+        "item:BellwoldBulwark"
+      ],
+      "source": "World/UnmadeRegionalTaskRules.h"
+    },
+    {
+      "id": "quest:local:PaperhavenTestimony",
+      "name": "Paperhaven Testimony",
+      "realm": "ThreefoldReach",
+      "entry": "Speak to the scribe and registrar in Paperhaven.",
+      "choices": [
+        "Preserve true testimony"
+      ],
+      "aftermath": [
+        "Once-only evidence, ink and heirloom; unlocks later reality mastery."
+      ],
+      "rewards": [
+        "item:PaperhavenLens"
+      ],
+      "source": "World/UnmadeRegionalTaskRules.h"
+    },
+    {
+      "id": "quest:local:Afterlight",
+      "name": "The Second Night",
+      "realm": "ThreefoldReach",
+      "entry": "Finish Bellwold lanterns and Refuge Compact then return to matron, investigate evidence and speak with relevant witness.",
+      "choices": [
+        "Relief",
+        "Revelation"
+      ],
+      "aftermath": [
+        "A permanent Safe Ward and +2 shelter capacity",
+        "A permanent Open Census and +2 published witness records"
+      ],
+      "rewards": [
+        "item:AfterlightWard",
+        "item:UnredactedLantern"
+      ],
+      "source": "World/UnmadeAfterlightRules.h",
+      "exclusive_reward": true
+    },
+    {
+      "id": "quest:frontier:WidowedRain",
+      "name": "The Shore Without Its Water",
+      "realm": "WidowedRain",
+      "entry": "Visit Saltwake, follow navigator → rain keeper → harbor warden with physical clue.",
+      "choices": [
+        "Care",
+        "Truth"
+      ],
+      "aftermath": [
+        "Durable harbor choice, distinct local response and realm gear milestone."
+      ],
+      "rewards": [
+        "item:StormglassCompass"
+      ],
+      "source": "World/UnmadeFrontierRealmRules.h"
+    },
+    {
+      "id": "quest:frontier:HearthBeneath",
+      "name": "The Heat Lent By No Sun",
+      "realm": "HearthBeneath",
+      "entry": "Visit Cinderhold, follow hearth reader → warmth keeper → ember warden with physical clue.",
+      "choices": [
+        "Care",
+        "Truth"
+      ],
+      "aftermath": [
+        "Durable ember choice, distinct local response and realm gear milestone."
+      ],
+      "rewards": [
+        "item:EmberheartBlade"
+      ],
+      "source": "World/UnmadeFrontierRealmRules.h"
+    }
+  ]
+}
