@@ -130,7 +130,9 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  else if(GrayboxHas(label,"Gateway")||GrayboxHas(label,"Portal"))kit=GrayboxKit::Portal;
  else if(GrayboxHas(label,"Gate")||GrayboxHas(label,"Barrier")||
          GrayboxHas(label,"Door.Seal"))kit=GrayboxKit::Gate;
- else if(GrayboxHas(label,"Ground")||GrayboxHas(label,"Floor")||
+ else if(std::strcmp(label,"Village.Bellwold")==0||
+         std::strcmp(label,"Village.Paperhaven")==0||
+         GrayboxHas(label,"Ground")||GrayboxHas(label,"Floor")||
          GrayboxHas(label,"ConnectedGround")||
          (sx>=10&&sy>=10&&sz<=.8))kit=GrayboxKit::Ground;
  else if(GrayboxHas(label,"Causeway")||GrayboxHas(label,"Walkway")||
@@ -148,6 +150,7 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
          GrayboxHas(label,"Ledger")||GrayboxHas(label,"Relay.")||
          GrayboxHas(label,"Archive")||GrayboxHas(label,"Deed"))kit=GrayboxKit::Records;
  else if(GrayboxHas(label,"Scriptorium"))kit=GrayboxKit::Scriptorium;
+ else if(GrayboxHas(label,"SharedKilnAccord"))kit=GrayboxKit::Mechanism;
  else if(GrayboxHas(label,"Forge")||GrayboxHas(label,"Kiln")||
          GrayboxHas(label,"Furnace"))kit=GrayboxKit::Forge;
  else if(GrayboxHas(label,"Hearth"))kit=GrayboxKit::Hearth;
@@ -160,9 +163,9 @@ inline GrayboxArt ClassifyGrayboxArt(const char* label,double sx,double sy,doubl
  else if(GrayboxHas(label,"Cache")||GrayboxHas(label,"Cargo")||
          GrayboxHas(label,"Receiving")||GrayboxHas(label,"Parcel")||
          GrayboxHas(label,"Cart")||GrayboxHas(label,"Shelf"))kit=GrayboxKit::Cargo;
+ else if(GrayboxHas(label,"Signal"))kit=GrayboxKit::Signal;
  else if(GrayboxHas(label,"Resonance.")||GrayboxHas(label,"Plinth")||
          GrayboxHas(label,"Echo.")||GrayboxHas(label,"Ritual"))kit=GrayboxKit::Ritual;
- else if(GrayboxHas(label,"Signal"))kit=GrayboxKit::Signal;
  else if(GrayboxHas(label,"Crank")||GrayboxHas(label,"Valve")||
          GrayboxHas(label,"Vent")||GrayboxHas(label,"Accord")||
          GrayboxHas(label,"Control")||GrayboxHas(label,"Mechanism")||
