@@ -19,6 +19,8 @@ class QuestAndSceneHandoff(unittest.TestCase):
             self.assertEqual(set(x["outcome"] for x in quest["steps"]
                    if x.get("outcome")),{"care","truth"})
             self.assertIn("recovery",quest["steps"][2])
+            return_step=next(step for step in quest["steps"] if step["id"]=="return")
+            self.assertEqual(set(return_step["outcome_lines"]),{"care","truth"})
         self.assertEqual(len(self.q["final_encounter"]["stages"]),4)
     def test_82_persona_ids_canonically_ordered(self):
         self.assertEqual(len(self.p["residents"]),82)
@@ -73,6 +75,9 @@ class QuestAndSceneHandoff(unittest.TestCase):
         self.assertIn("RecordResidentConversation(Target->GetStableId())",char)
         self.assertIn("RecordResidentAid(Target->GetStableId())",char)
         self.assertIn("FindReturnDialogue(ID.Get())",ret)
+        self.assertIn("FirstStoryReturnLine(Home,ID.Get(),Outcome)",ret)
+        npc=(ROOT/"Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp").read_text()
+        self.assertIn("GetFirstStoryReturnLine(NpcId,CurrentHome)",npc)
     def test_ci_and_first_pc(self):
         ci=(ROOT/".github/workflows/static-checks.yml").read_text()
         pc=(ROOT/"Scripts/first_pc_build_and_test.ps1").read_text()

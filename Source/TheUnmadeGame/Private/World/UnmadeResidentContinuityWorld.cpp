@@ -67,3 +67,18 @@ FString AUnmadePrototypeHub::GetResidentReturnLine(
         Level,Aided,LocallyKnown,OtherMorning);
     return FString(UTF8_TO_TCHAR(Text));
 }
+
+FString AUnmadePrototypeHub::GetFirstStoryReturnLine(
+    FName ResidentId,UnmadeCore::Realm Home)const
+{
+    int Outcome=0;
+    if(Home==UnmadeCore::Realm::ThreefoldReach)
+        Outcome=static_cast<int>(WitnessBraid.Outcome());
+    else if(const int Index=UnmadeCore::FrontierIndex(Home);Index>=0)
+        Outcome=Frontier.Snapshot().endings[Index];
+    else
+        Outcome=LaterRealm.Outcome(Home);
+    const FTCHARToUTF8 ID(*ResidentId.ToString());
+    return FString(UTF8_TO_TCHAR(
+        UnmadeCore::FirstStoryReturnLine(Home,ID.Get(),Outcome)));
+}

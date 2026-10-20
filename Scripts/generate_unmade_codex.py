@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 CODEX=ROOT/"Authoring/ability_codex.json"
+QUESTS=ROOT/"Authoring/main_quest_interaction_contracts.json"
 OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexGenerated.h"
 STUDIES=("Cinderjaw","PaleStrider","RedactionEye","EchoWell")
 HUMAN=("Cinderjaw","Pale Strider","Redaction Eye","Echo Well")
@@ -196,9 +197,9 @@ def generate_personal_quests(codex):
 
 AFTERMATH_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexAftermathGenerated.inc"
 
-def generate_aftermaths(codex):
+def generate_aftermaths(codex, quests):
     by={row["id"]:row for row in codex["records"]}
-    out=["// GENERATED FROM Authoring/ability_codex.json. Do not hand-edit.",
+    out=["// GENERATED FROM Authoring/ability_codex.json and main_quest_interaction_contracts.json. Do not hand-edit.",
          "// Included inside namespace UnmadeCore after RealmAftermathSpec.",
          "inline constexpr std::array<RealmAftermathSpec,9> RealmAftermathSpecs={{"]
     for index,key in enumerate(REALMS):
@@ -214,6 +215,21 @@ def generate_aftermaths(codex):
               "true" if c["initial_level_exists"] else "false",)
         out.append("    {"+",".join(parts)+"}"+("" if index==8 else ","))
     out.append("}};")
+    quest_by={row["id"]:row for row in quests["quests"]}
+    out.append("inline constexpr std::array<FirstStoryReturnDialogueSpec,9> FirstStoryReturnDialogue={{")
+    for index,key in enumerate(REALMS):
+        quest=quest_by.get(key)
+        if not quest:
+            raise ValueError("Missing first-story quest: "+key)
+        beat=next((step for step in quest["steps"] if step.get("id")=="return"),None)
+        if not beat or set(beat.get("outcome_lines",{}))!={"care","truth"}:
+            raise ValueError("First-story return needs care and truth dialogue: "+key)
+        if not beat.get("speaker"):
+            raise ValueError("First-story return needs a stable speaker: "+key)
+        out.append("    {Realm::"+key+","+quote(beat["speaker"])+","+
+                   quote(beat["outcome_lines"]["care"])+","+
+                   quote(beat["outcome_lines"]["truth"])+"}"+("" if index==8 else ","))
+    out.append("}};")
     return "\n".join(out)+"\n"
 
 def main():
@@ -221,6 +237,7 @@ def main():
     parser.add_argument("--check",action="store_true")
     args=parser.parse_args()
     codex=json.loads(CODEX.read_text(encoding="utf-8"))
+    quests=json.loads(QUESTS.read_text(encoding="utf-8"))
     generated=generate(codex)
     crafting=generate_crafting(codex)
     atlas=generate_atlas(codex)
@@ -228,7 +245,7 @@ def main():
     experience=generate_experience(codex)
     campaign=generate_campaign(codex)
     personal=generate_personal_quests(codex)
-    aftermath=generate_aftermaths(codex)
+    aftermath=generate_aftermaths(codex,quests)
     if args.check:
         if not OUTPUT.is_file() or OUTPUT.read_text(encoding="utf-8")!=generated:
             print("FAIL: Codex-generated Unreal header is not identical to the canonical Codex.")

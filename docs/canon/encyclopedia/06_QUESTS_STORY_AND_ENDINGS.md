@@ -134,7 +134,9 @@
 **objective:** Inspect the saved physical consequence and speak with an individual resident.  
 **speaker:** npc.archivist.001  
 **line:** You came back. The bell road carries the mark your choices left. I'll record what it shows and leave the rest to its witnesses.  
-**design notes:** Return staging note: Let the visible change carry the cumulative choices saved for this route. The archivist records what the change shows; residents speak only from what they witnessed or learned.
+**care return line:** The refuge cord now guides unnamed visitors toward shelter. The archive still lacks a public lead.
+**truth return line:** The public docket lets people compare all three objects without naming protected guests. What questions will they bring to it?
+**design notes:** Return staging note: Select the matching line from the saved Witness Braid outcome. Keep the archivist’s knowledge local to the refuge and docket; the larger omission remains unexplained.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
@@ -235,7 +237,9 @@ Would never say: “If it is written, it must be true.”
 **objective:** Inspect the saved local change and speak with a resident who witnessed it.
 **speaker:** npc.saltwake.navigator.001  
 **line:** Did you leave the ferry passage open to families, or the missing-water account open for witnesses?
-**design notes:** Return staging note: Let the visible ferry passage or public ledger record reflect the saved route. Storm records should acknowledge the Rainward choice; the navigator must speak only to what is visible or witnessed, without an all-knowing reaction.
+**care return line:** The ferry passage shelters families without asking for old ownership papers. The missing sea still has no name on the map.
+**truth return line:** The ledger records the missing water and its collateral; survivors are not declared debtors.
+**design notes:** Return staging note: Select the line for the saved care or truth route. Storm records acknowledge the Rainward choice; the navigator speaks only to what is visible or witnessed, without an all-knowing reaction.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
@@ -316,7 +320,9 @@ Would never say: “If it is written, it must be true.”
 **objective:** Inspect the saved local change and speak with a resident who witnessed it.
 **speaker:** npc.cinderhold.hearthreader.001  
 **line:** Do the unregistered homes have heat now, or can the city answer publicly for where the fuel came from?
-**design notes:** Return staging note: Let relit hearths reflect the route actually maintained: heat for unregistered homes or a public account of fuel provenance and repair. Do not imply both outcomes occurred.
+**care return line:** The unregistered homes have heat without signing first. The kiln’s fuel still carries its old cost.
+**truth return line:** The ember’s source is public, with a repair plan the city can answer for.
+**design notes:** Return staging note: Select the line for the saved route: heat for unregistered homes or public fuel provenance and repair. Do not imply both outcomes occurred.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
@@ -397,7 +403,9 @@ Would never say: “If it is written, it must be true.”
 **objective:** Inspect the saved local change and speak with a resident who witnessed it.
 **speaker:** npc.tidal.ledgerkeeper.001  
 **line:** Did you leave tomorrow’s ferry clear of old debt, or the fraudulent contract open for public proof?
-**design notes:** Return staging note: Local residents may remember the ferry or archive choice, guardian mercy or defeat, and the observatory archive. Keep optional guardian and observatory memories independent of the main story outcome.
+**care return line:** Tomorrow’s children can cross without carrying yesterday’s payments.
+**truth return line:** The fraudulent contracts are open to public proof; borrowers’ addresses remain private.
+**design notes:** Return staging note: Select the line for the saved route. Keep optional guardian mercy or defeat and the observatory archive as separate memories, never prerequisites for the main story.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
@@ -478,7 +486,9 @@ Would never say: “If it is written, it must be true.”
 **objective:** Inspect the saved local change and speak with a resident who witnessed it.
 **speaker:** npc.sky.choirmaster.001  
 **line:** Do the houses keep time to a willing refrain, or does the score show the names once cut from it?
-**design notes:** Return staging note: Keep household safety and the dissenting score independently inspectable. The resident may describe only the local change they witnessed.
+**care return line:** The houses stay aloft to a refrain people chose to sing.
+**truth return line:** The forbidden verse and its names are public; the choice to sing remains theirs.
+**design notes:** Return staging note: Select the line for the saved route. Keep household safety and the dissenting score independently inspectable; describe only the local change the resident witnessed.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
@@ -559,7 +569,9 @@ Would never say: “If it is written, it must be true.”
 **objective:** Inspect the saved local change and speak with a resident who witnessed it.
 **speaker:** npc.bones.seamwarden.001  
 **line:** Did the passage spare another ancestor from the quarry, or can descendants now contest the names cut from the record?
-**design notes:** Return staging note: Show repairs with explicitly sourced materials and keep the earlier choice visible. Do not make the local history appear healed or settled.
+**care return line:** The passage is braced without quarrying another remembered ancestor.
+**truth return line:** The carved lineages are open for descendants to contest.
+**design notes:** Return staging note: Select the line for the saved route. Show repairs with explicitly sourced materials and keep the earlier choice visible; do not make the local history appear healed or settled.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
@@ -640,7 +652,9 @@ Would never say: “If it is written, it must be true.”
 **objective:** Inspect the saved local change and speak with a resident who witnessed it.
 **speaker:** npc.unlived.censuskeeper.001  
 **line:** Did you keep the shelter open without names, or let residents choose what appears on the recognition board?
-**design notes:** Return staging note: A previously hidden resident decides whether to speak. Never auto-publish a name or imply that the truth route compels recognition.
+**care return line:** The refuge stays open without asking anyone’s name.
+**truth return line:** The recognition board waits for each resident to choose whether to speak.
+**design notes:** Return staging note: Select the line for the saved route. A previously hidden resident decides whether to speak; never auto-publish a name or imply the truth route compels recognition.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
@@ -721,7 +735,9 @@ Would never say: “If it is written, it must be true.”
 **objective:** Inspect the saved local change and speak with a resident who witnessed it.
 **speaker:** npc.orchard.untitled.001  
 **line:** Did you open the harvest path to those who tend it, or put the unsigned law where neighbors can challenge it?
-**design notes:** Return staging note: Let the roots retain elected access and old disputes; do not present the place as magically healed or the contested law as settled.
+**care return line:** The harvest paths are open to those who tend them; the crown remains empty.
+**truth return line:** The unsigned law is public, with room for neighbors to challenge it.
+**design notes:** Return staging note: Select the line for the saved route. Let roots retain elected access and old disputes; do not present the place as magically healed or the contested law as settled.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
@@ -802,7 +818,9 @@ Would never say: “If it is written, it must be true.”
 **objective:** Inspect the saved local change and speak with a resident who witnessed it.
 **speaker:** npc.absence.firstwitness.001  
 **line:** Did you leave a sure way back, or preserve both maps for the next traveler to compare?
-**design notes:** Return staging note: Keep the Held Morning and Many Mornings consequences distinct: the bell and names echo attacks belong to Held Morning; horizon and counterfactual echoes belong to Many Mornings. This shared return line must not imply both modes are active at once.
+**care return line:** Every traveler has a reliable way back, whatever their origin.
+**truth return line:** Both maps remain open to inspection; neither is the required history.
+**design notes:** Return staging note: Select the line for the saved route. Keep Held Morning and Many Mornings consequences distinct; neither state implies the other is active.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  

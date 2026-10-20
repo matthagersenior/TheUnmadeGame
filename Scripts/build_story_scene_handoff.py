@@ -30,7 +30,8 @@ QUEST_COLS={"realm":"Realm","chapter":"Chapter","step":"StepId",
  "trigger":"Trigger","interaction":"Interaction","objective":"Objective",
  "speaker":"SpeakerId","line":"ExactDialogue","failure":"Failure",
  "recovery":"Recovery","saved_as":"SavedState",
- "outcome":"Outcome","physical_tag":"PhysicalTag"}
+ "outcome":"Outcome","physical_tag":"PhysicalTag",
+ "care_return_line":"CareReturnLine","truth_return_line":"TruthReturnLine"}
 RETURN_COLS={"id":"StableId","name":"DisplayName","realm":"Realm",
  "recognize_line":"ReturnLine","aid_line":"AidLine",
  "public_line":"LocalPublicLine","post_morning":"NewMorningLine",
@@ -114,6 +115,8 @@ def quest_rows(q):
                          "line":s["line"],"failure":s["failure"],
                          "recovery":s["recovery"],"saved_as":s["saved_as"],
                          "outcome":s.get("outcome",""),
+                         "care_return_line":s.get("outcome_lines",{}).get("care",""),
+                         "truth_return_line":s.get("outcome_lines",{}).get("truth",""),
                          "physical_tag":s.get("physical_tag",
                               ";".join(quest["real_source_tags"]["evidence"])
                                if s["id"]=="investigation" else "")})

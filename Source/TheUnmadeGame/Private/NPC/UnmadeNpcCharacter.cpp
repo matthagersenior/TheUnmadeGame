@@ -349,7 +349,22 @@ bool AUnmadeNpcCharacter::CanTradeWithPlayer() const
 
 FString AUnmadeNpcCharacter::GetReactionText() const
 {
-    if(CachedHub.IsValid()){const FString Expedition=CachedHub->GetExpeditionReaction(NpcId);if(!Expedition.IsEmpty())return Expedition;}
+    if(CachedHub.IsValid())
+    {
+        FString Expedition=CachedHub->GetExpeditionReaction(NpcId);
+        if(!Expedition.IsEmpty())
+        {
+            UnmadeCore::Realm Home=UnmadeCore::Realm::ThreefoldReach;
+            if(bLaterRealmResident)Home=LaterHome;
+            else if(bFrontierResident)
+                Home=NpcId.ToString().StartsWith(TEXT("npc.saltwake."))
+                    ?UnmadeCore::Realm::WidowedRain
+                    :UnmadeCore::Realm::HearthBeneath;
+            const FString FirstStoryReply=CachedHub->GetFirstStoryReturnLine(NpcId,Home);
+            if(!FirstStoryReply.IsEmpty())Expedition+=TEXT(" ")+FirstStoryReply;
+            return Expedition;
+        }
+    }
     // Canonical authored dialogue never requires a model. AI can paraphrase,
     // but it cannot overwrite these deterministic permissions/choices.
     using UnmadeCore::NpcAction;
@@ -382,6 +397,12 @@ FString AUnmadeNpcCharacter::GetReactionText() const
                 :UnmadeCore::Realm::HearthBeneath;
         CharacterLine+=TEXT(" ");
         CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
+        const FString FirstStoryReply=CachedHub->GetFirstStoryReturnLine(NpcId,CurrentHome);
+        if(!FirstStoryReply.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=FirstStoryReply;
+        }
         // Only the named person who actually received the carried packet gets
         // delivery knowledge; other residents need witnessed local testimony.
         const FString ReturnReply=CachedHub->GetWitnessReturnLine(NpcId);

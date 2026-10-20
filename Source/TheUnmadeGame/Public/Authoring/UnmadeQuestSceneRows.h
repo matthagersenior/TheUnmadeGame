@@ -21,6 +21,8 @@ struct THEUNMADEGAME_API FUnmadeQuestStepAuthoringRow : public FTableRowBase
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString SavedState;
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString Outcome;
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString PhysicalTag;
+    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString CareReturnLine;
+    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString TruthReturnLine;
 };
 USTRUCT(BlueprintType)
 struct THEUNMADEGAME_API FUnmadeResidentReturnAuthoringRow : public FTableRowBase

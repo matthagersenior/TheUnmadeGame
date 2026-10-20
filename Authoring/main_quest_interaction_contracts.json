@@ -177,10 +177,14 @@
           "objective": "Inspect the saved physical consequence and speak with an individual resident.",
           "speaker": "npc.archivist.001",
           "line": "You came back. The bell road carries the mark your choices left. I'll record what it shows and leave the rest to its witnesses.",
-          "design_notes": "Return staging note: Let the visible change carry the cumulative choices saved for this route. The archivist records what the change shows; residents speak only from what they witnessed or learned.",
+          "design_notes": "Return staging note: Select the matching line from the saved Witness Braid outcome. Keep the archivist’s knowledge local to the refuge and docket; the larger omission remains unexplained.",
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
-          "saved_as": "One-time local first story outcome plus optional separate relationship visits"
+          "saved_as": "One-time local first story outcome plus optional separate relationship visits",
+          "outcome_lines": {
+            "care": "The refuge cord now guides unnamed visitors toward shelter. The archive still lacks a public lead.",
+            "truth": "The public docket lets people compare all three objects without naming protected guests. What questions will they bring to it?"
+          }
         }
       ],
       "world_after_save": {
@@ -295,7 +299,11 @@
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits",
-          "design_notes": "Return staging note: Let the visible ferry passage or public ledger record reflect the saved route. Storm records should acknowledge the Rainward choice; the navigator must speak only to what is visible or witnessed, without an all-knowing reaction."
+          "design_notes": "Return staging note: Select the line for the saved care or truth route. Storm records acknowledge the Rainward choice; the navigator speaks only to what is visible or witnessed, without an all-knowing reaction.",
+          "outcome_lines": {
+            "care": "The ferry passage shelters families without asking for old ownership papers. The missing sea still has no name on the map.",
+            "truth": "The ledger records the missing water and its collateral; survivors are not declared debtors."
+          }
         }
       ],
       "world_after_save": {
@@ -410,7 +418,11 @@
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits",
-          "design_notes": "Return staging note: Let relit hearths reflect the route actually maintained: heat for unregistered homes or a public account of fuel provenance and repair. Do not imply both outcomes occurred."
+          "design_notes": "Return staging note: Select the line for the saved route: heat for unregistered homes or public fuel provenance and repair. Do not imply both outcomes occurred.",
+          "outcome_lines": {
+            "care": "The unregistered homes have heat without signing first. The kiln’s fuel still carries its old cost.",
+            "truth": "The ember’s source is public, with a repair plan the city can answer for."
+          }
         }
       ],
       "world_after_save": {
@@ -525,7 +537,11 @@
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits",
-          "design_notes": "Return staging note: Local residents may remember the ferry or archive choice, guardian mercy or defeat, and the observatory archive. Keep optional guardian and observatory memories independent of the main story outcome."
+          "design_notes": "Return staging note: Select the line for the saved route. Keep optional guardian mercy or defeat and the observatory archive as separate memories, never prerequisites for the main story.",
+          "outcome_lines": {
+            "care": "Tomorrow’s children can cross without carrying yesterday’s payments.",
+            "truth": "The fraudulent contracts are open to public proof; borrowers’ addresses remain private."
+          }
         }
       ],
       "world_after_save": {
@@ -640,7 +656,11 @@
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits",
-          "design_notes": "Return staging note: Keep household safety and the dissenting score independently inspectable. The resident may describe only the local change they witnessed."
+          "design_notes": "Return staging note: Select the line for the saved route. Keep household safety and the dissenting score independently inspectable; describe only the local change the resident witnessed.",
+          "outcome_lines": {
+            "care": "The houses stay aloft to a refrain people chose to sing.",
+            "truth": "The forbidden verse and its names are public; the choice to sing remains theirs."
+          }
         }
       ],
       "world_after_save": {
@@ -755,7 +775,11 @@
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits",
-          "design_notes": "Return staging note: Show repairs with explicitly sourced materials and keep the earlier choice visible. Do not make the local history appear healed or settled."
+          "design_notes": "Return staging note: Select the line for the saved route. Show repairs with explicitly sourced materials and keep the earlier choice visible; do not make the local history appear healed or settled.",
+          "outcome_lines": {
+            "care": "The passage is braced without quarrying another remembered ancestor.",
+            "truth": "The carved lineages are open for descendants to contest."
+          }
         }
       ],
       "world_after_save": {
@@ -870,7 +894,11 @@
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits",
-          "design_notes": "Return staging note: A previously hidden resident decides whether to speak. Never auto-publish a name or imply that the truth route compels recognition."
+          "design_notes": "Return staging note: Select the line for the saved route. A previously hidden resident decides whether to speak; never auto-publish a name or imply the truth route compels recognition.",
+          "outcome_lines": {
+            "care": "The refuge stays open without asking anyone’s name.",
+            "truth": "The recognition board waits for each resident to choose whether to speak."
+          }
         }
       ],
       "world_after_save": {
@@ -985,7 +1013,11 @@
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits",
-          "design_notes": "Return staging note: Let the roots retain elected access and old disputes; do not present the place as magically healed or the contested law as settled."
+          "design_notes": "Return staging note: Select the line for the saved route. Let roots retain elected access and old disputes; do not present the place as magically healed or the contested law as settled.",
+          "outcome_lines": {
+            "care": "The harvest paths are open to those who tend them; the crown remains empty.",
+            "truth": "The unsigned law is public, with room for neighbors to challenge it."
+          }
         }
       ],
       "world_after_save": {
@@ -1100,7 +1132,11 @@
           "failure": "Area unloaded or a followup system still dormant",
           "recovery": "Core first story remains complete; later optional chapters appear only when their own prerequisites hold",
           "saved_as": "One-time local first story outcome plus optional separate relationship visits",
-          "design_notes": "Return staging note: Keep the Held Morning and Many Mornings consequences distinct: the bell and names echo attacks belong to Held Morning; horizon and counterfactual echoes belong to Many Mornings. This shared return line must not imply both modes are active at once."
+          "design_notes": "Return staging note: Select the line for the saved route. Keep Held Morning and Many Mornings consequences distinct; neither state implies the other is active.",
+          "outcome_lines": {
+            "care": "Every traveler has a reliable way back, whatever their origin.",
+            "truth": "Both maps remain open to inspection; neither is the required history."
+          }
         }
       ],
       "world_after_save": {

@@ -229,6 +229,7 @@ public:
     bool RecordResidentConversation(FName ResidentId);
     bool RecordResidentAid(FName ResidentId);
     FString GetResidentReturnLine(FName ResidentId,UnmadeCore::Realm Home) const;
+    FString GetFirstStoryReturnLine(FName ResidentId,UnmadeCore::Realm Home) const;
     bool CommitFinalMorning(AUnmadeCharacter* Player,UnmadeCore::Morning Choice);
     bool WakeFinalEcho();
     int32 GetLaterRealmStage(UnmadeCore::Realm Id) const {return LaterRealm.Stage(Id);}

@@ -165,6 +165,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/codex_realm_aftermath_test.cpp -o /tmp/unmade-codex-aftermath
           /tmp/unmade-codex-aftermath
+      - name: Test saved first-story route return dialogue across all nine realms
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/main_quest_return_dialogue_test.cpp -o /tmp/unmade-main-returns
+          /tmp/unmade-main-returns
       - name: Check Codex-generated source rule tables
         run: |
           python Scripts/generate_unmade_codex.py --check

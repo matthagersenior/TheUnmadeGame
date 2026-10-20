@@ -27,7 +27,22 @@ struct RealmAftermathSpec {
     const char* aftershock;
     bool initialLevelExists;
 };
+struct FirstStoryReturnDialogueSpec {
+    Realm realm;
+    const char* speaker;
+    const char* careLine;
+    const char* truthLine;
+};
 #include "World/UnmadeCodexAftermathGenerated.inc"
+inline const char* FirstStoryReturnLine(Realm realm,const char* speaker,
+                                       int outcome) noexcept {
+    if(!speaker || (outcome!=1 && outcome!=2))return "";
+    for(const auto& row:FirstStoryReturnDialogue) {
+        if(row.realm==realm && std::strcmp(row.speaker,speaker)==0)
+            return outcome==1?row.careLine:row.truthLine;
+    }
+    return "";
+}
 struct RealmAftermathSnapshot {
     std::array<int,9> stage{}; // 0 dormant, 1 evidence, 2 testimony, 3 choice, 4 resolved
     std::array<int,9> prepared{}; // 0 mechanism untouched, 1 route physically opened
