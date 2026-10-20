@@ -2,5 +2,15 @@
   "schema": 1,
   "title": "THE UNMADE — Source-to-Canon Registration",
   "purpose": "All new permanent gameplay and story assets must trace to an established codex identity, or introduce a new reviewed identity in the same PR.",
-  "entries": []
+  "entries": [
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeThreefoldObjectiveGuide.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:quest.campaign.ThreefoldReach",
+        "codex:quest.aftermath.ThreefoldReach"
+      ]
+    }
+  ]
 }
