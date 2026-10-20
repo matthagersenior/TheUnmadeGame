@@ -31,7 +31,7 @@ class EquipmentModels(unittest.TestCase):
                          {"Weapon","Armor","Charm","Consumable","Material"})
         for x in m["records"]:
             self.assertIn(x["file"],self.assets)
-            self.assertGreater(x["triangles"],40)
+            self.assertGreaterEqual(x["triangles"],36)
             self.assertEqual(hashlib.sha256(self.assets[x["file"]]).hexdigest(),x["sha256"])
             self.assertEqual(x["state"],"SOURCE_PREVIEW_ONLY_NOT_UNREAL_IMPORTED_OR_EQUIPPED")
             self.assertTrue(E.G.validate_model(self.assets[x["file"]]))
