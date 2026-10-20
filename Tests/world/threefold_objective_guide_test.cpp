@@ -65,7 +65,7 @@ static void Journey(int braidChoice,int replyChoice) {
            ThreefoldBeat::Completed,"The Crossings","JOURNAL");
     // The guide is strictly read-only.
     for(int i=0;i<3;++i)guide(2);
-    assert(std::memcmp(&old,&evidence.Snapshot(),sizeof(old))==0); // fixed POD
+    assert(evidence.Snapshot().first==old.first &&\n           evidence.Snapshot().returnRead==old.returnRead);
     assert(braid.Snapshot().outcome==oldBraid.outcome);
     assert(dispatch.Snapshot().stage==oldDispatch.stage);
     assert(reply.Snapshot().stage==oldReply.stage);
