@@ -75,6 +75,13 @@ try{
         Tee-Object -FilePath (Join-Path $report "prototype-equipment-validation.log")
     if($LASTEXITCODE -ne 0){throw "PROTOTYPE_EQUIPMENT_INVALID: inspect equipment generation log"}
     Write-Host "Prototype equipment meshes ready for later import: $equipmentDir"
+    # Actual skinned glTF rigs and 19 original keyed animation clips per archetype.
+    # These are reference performances, not retargeted Unreal animations.
+    $rigDir=Join-Path $repo "Build/UnmadePrototypeRigs"
+    & $pythonExe.Source (Join-Path $PSScriptRoot "build_skeletal_performance_kit.py") --out $rigDir 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "prototype-skeletal-assets-validation.log")
+    if($LASTEXITCODE -ne 0){throw "PROTOTYPE_SKELETAL_ASSETS_INVALID: see rig generation log"}
+    Write-Host "Prototype rigs/animations ready for import: $rigDir"
     & $pythonExe.Source (Join-Path $PSScriptRoot "unreal_editor/first_pc_editor_batch.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $report "staging-dry-run.log")
     if($LASTEXITCODE -ne 0){throw "STAGING_PLAN_INVALID"}
