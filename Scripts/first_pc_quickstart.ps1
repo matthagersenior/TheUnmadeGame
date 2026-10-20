@@ -82,6 +82,12 @@ try{
         Tee-Object -FilePath (Join-Path $report "prototype-skeletal-assets-validation.log")
     if($LASTEXITCODE -ne 0){throw "PROTOTYPE_SKELETAL_ASSETS_INVALID: see rig generation log"}
     Write-Host "Prototype rigs/animations ready for import: $rigDir"
+    # Check every generated glTF byte and canonical 88-city preview plan
+    # before the engine compilation or any editor mutations.
+    $prototypeImportScript=Join-Path $PSScriptRoot "unreal_editor/import_prototype_geometry.py"
+    & $pythonExe.Source $prototypeImportScript 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "prototype-import-preflight.log")
+    if($LASTEXITCODE -ne 0){throw "PROTOTYPE_IMPORT_SOURCE_PREFLIGHT_FAILED"}
     & $pythonExe.Source (Join-Path $PSScriptRoot "unreal_editor/first_pc_editor_batch.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $report "staging-dry-run.log")
     if($LASTEXITCODE -ne 0){throw "STAGING_PLAN_INVALID"}
@@ -119,6 +125,29 @@ try{
                $result.lived_staging.created+$result.lived_staging.skipped -ne 90 -or
                $result.city_assembly.created+$result.city_assembly.skipped -ne 402){
                 throw "EDITOR_REFERENCE_IMPORT_INCOMPLETE"
+            }
+            # Import actual 193 standalone static prototype meshes into their
+            # own content paths, then stage 88 noncolliding city guides in a
+            # dedicated preview map. No production game map or quest flags touched.
+            $env:UNMADE_PROTO_IMPORT_APPROVED="1"
+            $prototypeReceipt=Join-Path $report "prototype-import-receipt.json"
+            $env:UNMADE_PROTO_IMPORT_RECEIPT=$prototypeReceipt
+            try {
+                & $cmdEditor $project "-unattended" "-nop4" "-nosplash" "-run=pythonscript" "-script=$prototypeImportScript" 2>&1 |
+                    Tee-Object -FilePath (Join-Path $report "prototype-editor-import.log")
+                if($LASTEXITCODE -ne 0){throw "PROTOTYPE_EDITOR_IMPORT_FAILED: see prototype-editor-import.log"}
+                if(!(Test-Path $prototypeReceipt)){throw "PROTOTYPE_EDITOR_RECEIPT_MISSING"}
+                $pr=Get-Content $prototypeReceipt -Raw | ConvertFrom-Json
+                if($pr.status -ne "PROTOTYPE_ASSETS_IMPORTED_STAGING_COMPLETE" -or
+                   $pr.imports.total -ne 193 -or
+                   $pr.preview.markers -ne 88 -or
+                   ($pr.imports.created+$pr.imports.existing) -ne 193 -or
+                   ($pr.preview.created+$pr.preview.existing) -ne 88){
+                    throw "PROTOTYPE_EDITOR_IMPORT_INCOMPLETE"
+                }
+            }finally{
+                Remove-Item Env:UNMADE_PROTO_IMPORT_APPROVED -ErrorAction SilentlyContinue
+                Remove-Item Env:UNMADE_PROTO_IMPORT_RECEIPT -ErrorAction SilentlyContinue
             }
             # Install only original, generated prototype Foley (never overwrite
             # user-recorded voices or replaced SoundWaves).
