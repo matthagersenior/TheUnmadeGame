@@ -37,9 +37,9 @@
 - [x] Step 1: Add tests for 9 realm dossiers, 11 city guides, 54 real main-story steps, 27 authored evidence clues, 9 optional side stories, 82 registered returning residents, 99 quest ledger rows, 39 boss rows, 60 item rows, 23 learned skills and 256 Ability Codex entries.
 - [x] Step 2: Refuse duplicate record IDs, unknown referenced quest bosses, out-of-order realm chapters and missing physical failure/recovery/saved-state contracts.
 - [x] Step 3: Create deterministic work-orders.csv, canon-index.md, README.md and realm-*.md content from source without claiming assets were created.
-- [ ] Step 4: Confirm the focused tests actually pass in GitHub Actions. Run: python -m unittest discover -s Scripts/tests -p test_first_pc_production_pack.py -v. Expected: all seven tests pass.
-- [ ] Step 5: Run the complete Python suite and dependency/source checks. Expected: no regression; never substitute these for UE gameplay verification.
-- [ ] Step 6: Merge a verified change to main, retaining the source commit in the PR record.
+- [x] Step 4: Confirm the focused tests actually pass in GitHub Actions. Run: python -m unittest discover -s Scripts/tests -p test_first_pc_production_pack.py -v. The current suite has eight focused tests; source checks passed on PR #118.
+- [x] Step 5: Run the complete Python suite and dependency/source checks. The 373-test Python suite and dependency/source checks passed locally and in GitHub Actions; these are not UE gameplay verification.
+- [x] Step 6: Merge a verified change to main, retaining the source commit in the PR record. Production package PR #117 was squash-merged as `8611e5d8da04c0e3ae99e16f16500b447ae7161f`; its source checks passed.
 
 ### Task 2: Make the package appear automatically on the first PC
 
