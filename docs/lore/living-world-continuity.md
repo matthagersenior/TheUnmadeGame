@@ -1,4 +1,8 @@
 # THE UNMADE — Living Canon and Realm Continuity
+
+## 2026-10-20 — Threefold Reach contextual objective guidance (source-only)
+The existing player-earned chain (Bellwold refuge, Paperhaven Index Hall, the Crossings bridge nail, a genuine second reading, the witnessed F7/F8 civic decision, physical folded record handoff and next-day returned testimony) gains a read-only, step-specific journal guide. It identifies the next legitimate city or actor without revealing unvisited observations, private refugee identities, OPEN explanations or outcomes not earned. All four braid/return choice combinations and invalid cross-snapshot states must pass native C++ tests. No location teleports, automatic player credits, new rewards or quest rules are permitted. **Unreal 5.8 integration and actual playtests are not verified.**
+
 **Volume IV / October 10, 2026 | Source-aligned narrative guide and expansion standard**
 
 ## Four non-negotiable RPG pillars

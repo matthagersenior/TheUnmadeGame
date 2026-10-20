@@ -7,6 +7,7 @@
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
+#include "World/UnmadeThreefoldObjectiveGuide.h"
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "Save/UnmadePrototypeSave.h"
@@ -1874,9 +1875,14 @@ FString AUnmadePrototypeHub::GetEvidenceNotebook() const
 {
     // Read only the existing, persisted firsthand notebook state. Local
     // accounts are not facts about the nine cosmological OPEN questions.
+    const auto Next=UnmadeCore::NextThreefoldGuide(
+        WitnessEchoes,WitnessBraid,Dispatch,ReturnWitness,GetGameDay());
     FString Notebook=FString::Printf(
         TEXT("THE WITNESS BRAID | %d/3 personal objects, %d second readings"),
         WitnessEchoes.FirstCount(),WitnessEchoes.ReturnCount());
+    Notebook+=FString::Printf(TEXT(" | NEXT: %s | %s | %s | %s"),
+        UTF8_TO_TCHAR(Next.city),UTF8_TO_TCHAR(Next.actor),
+        UTF8_TO_TCHAR(Next.control),UTF8_TO_TCHAR(Next.prompt));
     for(const auto& Node:UnmadeCore::EvidenceNotebook)
     {
         const auto* Seen=UnmadeCore::KnownNotebookNode(WitnessEchoes,Node.id);
@@ -1902,6 +1908,8 @@ FString AUnmadePrototypeHub::GetEvidenceNotebook() const
 
 FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
 {
+    const auto Next=UnmadeCore::NextThreefoldGuide(
+        WitnessEchoes,WitnessBraid,Dispatch,ReturnWitness,GetGameDay());
     FString Text=FString::Printf(TEXT("WITNESS ECHOES | discovered %d/3 | changed meanings %d/3"),
         WitnessEchoes.FirstCount(),WitnessEchoes.ReturnCount());
     for(const auto& Spec:UnmadeCore::WitnessEchoSites)
@@ -1925,6 +1933,9 @@ FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
     if(Dispatch.Stage()==UnmadeCore::WitnessDispatchStage::HandDelivered)
         Text+=FString::Printf(TEXT(" | RETURN: %s"),
             UTF8_TO_TCHAR(ReturnWitness.Journal(Dispatch,WitnessBraid.Outcome(),GetGameDay())));
+    Text+=FString::Printf(TEXT(" | CURRENT THREEFOLD OBJECTIVE: %s, %s — %s"),
+        UTF8_TO_TCHAR(Next.city),UTF8_TO_TCHAR(Next.control),
+        UTF8_TO_TCHAR(Next.prompt));
     return Text;
 }
 
