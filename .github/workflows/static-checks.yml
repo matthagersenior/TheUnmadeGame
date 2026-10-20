@@ -433,6 +433,10 @@ jobs:
         run: python Scripts/build_realm_crowns.py --check
       - name: Validate original skinned glTF rigs and animations without Unreal
         run: python Scripts/build_skeletal_performance_kit.py --out /tmp/unmade-prototype-rigs
+      - name: Verify source-defined skeletal import paths before real UE editor
+        run: |
+          python Scripts/build_skeletal_performance_kit.py --out Build/UnmadePrototypeRigs
+          python Scripts/unreal_editor/import_skeletal_performance.py
       - name: Verify source meshes and Unreal prototype import preflight
         run: |
           python Scripts/build_realm_geometry.py --out-dir Build/UnmadePrototypeGeometry
