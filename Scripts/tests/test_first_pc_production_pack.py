@@ -33,7 +33,7 @@ class FirstPCProductionPackTests(unittest.TestCase):
         self.assertEqual(receipt["total_work_orders"], 669)
         self.assertEqual(len(files), 12)
         self.assertIn("UNREAL_NOT_VERIFIED", files["work-orders.csv"])
-        self.assertIn("No Unreal", files["README.md"].replace("no Unreal", "No Unreal"))
+        self.assertIn("no game assets, Unreal compilation", files["README.md"])
 
     def test_nine_realm_dossiers_have_recoveries_and_saved_aftermath(self):
         _, files = PACK.build(ROOT)
