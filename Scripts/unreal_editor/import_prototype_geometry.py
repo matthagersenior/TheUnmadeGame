@@ -128,16 +128,17 @@ def import_assets(unreal, plan: dict) -> dict:
         if not folder.startswith(IMPORT_ROOT+"/") or (
                 item["asset_name"] not in folder or ".." in folder):
             raise RuntimeError("Refusing non-prototype import target")
-        if library.does_directory_exist(folder):
-            prior=_existing_mesh(unreal,folder)
-            if prior:
-                paths[item["asset_key"]]=prior
-                existing+=1
-                continue
-            # Never import over orphan nonmesh assets or partially created material.
-            if library.list_assets(folder,recursive=False):
-                raise RuntimeError("Incomplete existing prototype import in "+folder)
-        elif not library.make_directory(folder):
+        # Some editor providers expose assets before folder metadata is
+        # refreshed. Always inspect asset paths FIRST; never rely on the
+        # directory-exists bit to decide it is safe to import.
+        prior=_existing_mesh(unreal,folder)
+        if prior:
+            paths[item["asset_key"]]=prior
+            existing+=1
+            continue
+        if library.list_assets(folder,recursive=False):
+            raise RuntimeError("Incomplete existing prototype import in "+folder)
+        if not library.does_directory_exist(folder) and not library.make_directory(folder):
             raise RuntimeError("Cannot create isolated asset folder "+folder)
         task=unreal.AssetImportTask()
         for field,value in (
