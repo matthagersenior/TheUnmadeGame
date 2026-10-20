@@ -17,11 +17,11 @@ P=load("first_pc_prod_contract","Scripts/prepare_unreal_authoring.py")
 E=load("first_pc_editor_batch","Scripts/unreal_editor/first_pc_editor_batch.py")
 
 class PcProductionQuickstart(unittest.TestCase):
-    def test_198_rows_seven_real_source_tables(self):
+    def test_204_rows_seven_real_source_tables(self):
         plan=P.authoring_plan()
-        self.assertEqual(plan["total_rows"],198)
+        self.assertEqual(plan["total_rows"],204)
         self.assertEqual(len(plan["tables"]),7)
-        self.assertEqual([x["rows"] for x in plan["tables"]],[18,9,10,16,9,54,82])
+        self.assertEqual([x["rows"] for x in plan["tables"]],[18,9,10,16,9,54,88])
         self.assertEqual(plan["staging_map"],"/Game/UnmadeProduction/Maps/Unmade_AuthoringStaging")
         self.assertEqual(len({x["asset"] for x in plan["tables"]}),7)
         self.assertTrue(all(len(x["sha256"])==64 for x in plan["tables"]))

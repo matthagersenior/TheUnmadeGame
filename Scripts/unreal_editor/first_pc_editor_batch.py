@@ -38,7 +38,7 @@ def validate():
     if len(lived["work_orders"])!=90:
         raise ValueError("Nine-realm world work orders changed")
     city=CITY.read_plan()
-    if city["actor_count"]!=402 or city["cities"]!=11:
+    if city["actor_count"]!=408 or city["cities"]!=11:
         raise ValueError("City assembly actor plan incomplete")
     return plan,stage,lived,city
 
@@ -117,10 +117,10 @@ def put_city_assembly(unreal,city):
     elif not unreal.EditorLevelLibrary.new_level(map_path):
         raise RuntimeError("Cannot create isolated city assembly map")
     created,skipped=CITY.apply_in_editor(city)
-    if created+skipped!=402:
+    if created+skipped!=408:
         raise RuntimeError("City assembly scene incomplete")
     return {"map":map_path,"created":created,"skipped":skipped,
-            "source_actor_total":402,"city_count":11}
+            "source_actor_total":408,"city_count":11}
 
 def apply(plan,stage,lived,city):
     if os.environ.get("UNMADE_EDITOR_APPROVED")!="1":
@@ -142,7 +142,7 @@ def apply(plan,stage,lived,city):
     if not path.parent.is_dir():
         raise RuntimeError("Receipt directory does not exist")
     path.write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
-    unreal.log("UNMADE EDITOR BATCH PASSED: 7 tables / 198 rows / 52+90+402 source markers")
+    unreal.log("UNMADE EDITOR BATCH PASSED: 7 tables / 204 rows / 52+90+408 source markers")
     return receipt
 
 def main():

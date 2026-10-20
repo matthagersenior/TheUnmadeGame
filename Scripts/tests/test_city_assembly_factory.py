@@ -35,14 +35,14 @@ class CityAssemblyCoverage(unittest.TestCase):
         self.assertEqual(len({tuple(c["origin_cm"]) for c in kits["cities"]}),11)
         self.assertEqual(self.plan["cities"],11)
 
-    def test_402_real_canon_source_references_and_proxies(self):
+    def test_408_real_canon_source_references_and_proxies(self):
         count=self.plan["counts"]
         self.assertEqual(count,{"SIGNATURE":88,"STREET":44,"SHELL":88,
-                                "RESIDENT":82,"QUEST":54,"RITE":10,"CLUE":27,
+                                "RESIDENT":88,"QUEST":54,"RITE":10,"CLUE":27,
                                 "SIDEQUEST":9})
-        self.assertEqual(sum(count.values()),402)
-        self.assertEqual(len(self.plan["actors"]),402)
-        self.assertEqual(len({a["label"] for a in self.plan["actors"]}),402)
+        self.assertEqual(sum(count.values()),408)
+        self.assertEqual(len(self.plan["actors"]),408)
+        self.assertEqual(len({a["label"] for a in self.plan["actors"]}),408)
         self.assertTrue(all(a["collision"] is False and
                             a["gameplay_authority"] is False for a in self.plan["actors"]))
         self.assertEqual({a["city"] for a in self.plan["actors"]},
@@ -63,7 +63,7 @@ class CityAssemblyCoverage(unittest.TestCase):
         self.assertEqual({a["source_id"] for a in self.plan["actors"]
                          if a["kind"]=="RITE"},rites)
         self.assertEqual(sum(a["kind"]=="RESIDENT" and a["city"]=="Bellwold"
-                             for a in self.plan["actors"]),16)
+                             for a in self.plan["actors"]),17)
 
     def test_corrupt_city_kit_is_rejected_before_editor(self):
         original=CITY.KITS
@@ -79,13 +79,13 @@ class CityAssemblyCoverage(unittest.TestCase):
             CITY.KITS=original
 
     def test_offline_scene_validation(self):
-        self.assertEqual(STAGE.read_plan()["actor_count"],402)
-        self.assertEqual(BATCH.validate()[3]["actor_count"],402)
+        self.assertEqual(STAGE.read_plan()["actor_count"],408)
+        self.assertEqual(BATCH.validate()[3]["actor_count"],408)
         proc=subprocess.run([sys.executable,
             str(ROOT/"Scripts/unreal_editor/stage_city_assembly.py")],
             capture_output=True,text=True,check=True,timeout=20)
         self.assertIn("DRY RUN ONLY",proc.stdout)
-        self.assertIn("402",proc.stdout)
+        self.assertIn("408",proc.stdout)
 
     def test_first_pc_and_ci_require_all_cities(self):
         scripts=(ROOT/"Scripts/unreal_editor/first_pc_editor_batch.py").read_text()
@@ -94,7 +94,7 @@ class CityAssemblyCoverage(unittest.TestCase):
         self.assertIn("put_city_assembly",scripts)
         self.assertIn("CITY.apply_in_editor(city)",scripts)
         self.assertIn('"city_assembly":city_stage',scripts)
-        self.assertIn("city_assembly.created+$result.city_assembly.skipped -ne 402",ps)
+        self.assertIn("city_assembly.created+$result.city_assembly.skipped -ne 408",ps)
         self.assertIn("build_city_assembly.py --check",ci)
         self.assertIn("stage_city_assembly.py",ci)
 

@@ -41,11 +41,11 @@ try {
     & python (Join-Path $PSScriptRoot "validate_cpp_literals.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "cpp-literals-validation.log")
     if($LASTEXITCODE -ne 0){throw "CPP_LITERAL_FAILED"}
-    Write-Host "Validating quest branches, 82-person memory and repeatable scene build plan."
+    Write-Host "Validating quest branches, 88-person memory and repeatable scene build plan."
     & python (Join-Path $PSScriptRoot "build_story_scene_handoff.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "story-scene-handoff-validation.log")
     if($LASTEXITCODE -ne 0){throw "QUEST_SCENE_CONTENT_OUT_OF_SYNC: run generator and commit outputs"}
-    Write-Host "Validating 11 canonical city assembly kits, 82 residents, 54 quest beats and 10 rites."
+    Write-Host "Validating 11 canonical city assembly kits, 88 residents, 54 quest beats and 10 rites."
     & python (Join-Path $PSScriptRoot "build_city_assembly.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $reportDir "city-assembly-source-check.log")
     if($LASTEXITCODE -ne 0){throw "CITY_ASSEMBLY_SOURCE_DRIFT"}

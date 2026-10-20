@@ -21,7 +21,7 @@ def builder():
 
 def read_plan():
     plan=builder().build()
-    if plan["editor_map"]!=MAP or plan["actor_count"]!=402:
+    if plan["editor_map"]!=MAP or plan["actor_count"]!=408:
         raise ValueError("City assembly staging plan drift")
     return plan
 

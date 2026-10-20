@@ -68,7 +68,7 @@ Four authored subjects: **Cinderjaw, Pale Strider, Redaction Eye, Echo Well**. E
 
 **Controls:** `5` record physical observation, `9` advance understanding/trial/mastery, `0` use mastered technique, `O` select subject; the native Actions page exposes four clickable controls and the journal for mouse/controller accessibility. These operations do not bypass costs, line of sight, mastery, location or save protection.
 
-**Verification:** portable C++ state-machine and reward tests, source-wiring contracts, 186-entry codex parity, and CI. Full Unreal Header Tool compilation, real save/load in-engine, NPC/animation/VFX presentation and extended balance testing are still pending a supported Unreal host.
+**Verification:** portable C++ state-machine and reward tests, source-wiring contracts, 256-entry codex parity, and CI. Full Unreal Header Tool compilation, real save/load in-engine, NPC/animation/VFX presentation and extended balance testing are still pending a supported Unreal host.
 
 ## Canon-locked requirement checklist (19 October 2026)
 
@@ -78,7 +78,7 @@ The Atlas of Absence checklist has **eight prior requirements**, enforced by the
 
 **Do not confuse:** studying an enemy species is not owning its physiology, acquiring a quest witness, reading another character's private memory, or learning without consent. Unverified rumor, scripted kills with no telegraph, an unread site, repeated dialogue, a forged map or a learned technique from a different save slot cannot satisfy the checklist. The engine host has not yet been compiled/playtested.
 
-## Checklist coverage of all 186 Codex records
+## Checklist coverage of all 256 Codex records
 
 Every cataloged record now has a stable `requirements_checklist.items` array, indexed alongside its acquisition source. **Static checklist rows never claim completion.** Entries tagged `playable_save_backed` are the four studied gameplay powers plus the Atlas, and their actual `[x] / [ ]` completion comes only from `AbilityStudy` and canonical saved rite/confluence/world records. Entries tagged `source_authored_not_runtime_verified` are guidance for future engine UI integration and must not invent complete acquisition. Items tagged `design_definition_only` are explicitly unearned. The validator rejects missing checklists and fake completed states.
 
@@ -86,7 +86,7 @@ This separation prevents a lore document or Codex UI from silently granting an i
 
 ## Unified, source-linked Codex authority — 19 October 2026
 
-The single **243-record** `Authoring/ability_codex.json` includes all prior 186 ability, enemy, item and skill records and adds nine **realms**, nine **expedition journeys**, nine optional **experience wings**, nine **personal quests**, nine **campaign chapters**, nine **aftermath arcs** and three **settlements**. Each expanded entry includes an actual registry source, stable identity, ordered requirements and links to its realm/previous journey. Six workshop recipe records now include typed profession, town, minimum skill, two material inputs with quantities, output quantity and atomicity—without inventing player inventory.
+The 19 October milestone introduced a **243-record** `Authoring/ability_codex.json` by unifying the earlier 186 ability, enemy, item and skill records with nine **realms**, nine **expedition journeys**, nine optional **experience wings**, nine **personal quests**, nine **campaign chapters**, nine **aftermath arcs** and three **settlements**. The current source contains **256 records**. Each expanded entry includes an actual registry source, stable identity, ordered requirements and links to its realm/previous journey. Six workshop recipe records now include typed profession, town, minimum skill, two material inputs with quantities, output quantity and atomicity—without inventing player inventory.
 
 The Codex is the **canonical authoring authority** across abilities, enemies, crafting, skill progression, exploration, quests, worlds and rewards. `Scripts/generate_unmade_codex.py` generates the `UnmadeCodexGenerated.h` C++ header that the Study/Atlas live checklist now reads; it also publishes nine world summaries to native code. CI checks that no one hand-edits generated rules or changes the Codex without regenerating. The remaining individual C++ runtime state machines are still authoritative *executors* and must undergo domain-by-domain Codex-backed migration with parity tests. Do **not** claim that every Unreal actor or calculation reads JSON until that migration and engine compilation actually occur.
 

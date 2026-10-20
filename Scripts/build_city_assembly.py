@@ -80,7 +80,7 @@ def build():
     if len({c["profile"] for c in cities})!=11:raise ValueError("City silhouettes reused")
     if len({tuple(c["origin_cm"]) for c in cities})!=11:
         raise ValueError("City layout origins overlap")
-    if len(people["residents"])!=82 or len(quests["quests"])!=9 or len(world["abilities"])!=10:
+    if len(people["residents"])!=88 or len(quests["quests"])!=9 or len(world["abilities"])!=10:
         raise ValueError("Resident, quest, rite scope drift")
     if [x["id"] for x in quests["quests"]]!=CITY_REALMS:
         raise ValueError("Canonical nine-realm quest order drift")
@@ -157,11 +157,11 @@ def build():
         add(actors,ids,city,"SIDEQUEST","01",[980,980,110],[.9,.9,2.2],
             r["side"]["id"],r["side"]["name"]+" | "+r["side"]["objective"])
     tally=Counter(a["kind"] for a in actors)
-    expected={"SIGNATURE":88,"STREET":44,"SHELL":88,"RESIDENT":82,
+    expected={"SIGNATURE":88,"STREET":44,"SHELL":88,"RESIDENT":88,
               "QUEST":54,"RITE":10,"CLUE":27,"SIDEQUEST":9}
     if dict(tally)!=expected:
         raise ValueError(f"Unexpected nine-realm assembly counts {tally}")
-    if len(actors)!=402 or len(ids)!=402:
+    if len(actors)!=408 or len(ids)!=408:
         raise ValueError("City assembly lost source actors")
     return {"schema_version":1,"mode":"NONAUTHORITATIVE_CITY_REHEARSAL",
       "editor_map":STAGING_MAP,

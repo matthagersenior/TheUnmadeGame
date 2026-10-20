@@ -4,7 +4,7 @@
 
 [Browse the ledger](dependency-ledger.json).
 
-**Complete universe reference:** [The Definitive Canon Encyclopedia](encyclopedia/README.md) now indexes realms, cities, 88 distinct resident identities, 39 bosses, 60 inventory items, 18 regional gear variants, 99 quest groups, factions, economics, Volume X literary canon, and the current 243-entry Ability Codex. The original dependency ledger remains the cross-system gameplay reference, not an encyclopedia of every NPC and lore claim.
+**Complete universe reference:** [The Definitive Canon Encyclopedia](encyclopedia/README.md) now indexes realms, cities, 88 distinct resident identities and return profiles, 39 bosses, 60 inventory items, 18 regional gear variants, 99 quest groups, factions, economics, Volume X literary canon, and the current 256-entry Ability Codex. The original dependency ledger remains the cross-system gameplay reference, not an encyclopedia of every NPC and lore claim.
 
 The ledger ties five otherwise independent registries together: **60 ordinary inventory items, 18 separately owned regional weapon/armor choices, 23 learned disciplines/techniques/studies, 39 named encounters, and 99 grouped quests**. Content is grouped by source family rather than by every NPC interaction; the latter remain tracked by the C++ encounter code.
 

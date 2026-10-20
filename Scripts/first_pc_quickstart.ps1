@@ -91,7 +91,7 @@ try{
                @($result.tables).Count -ne 7 -or
                $result.staging.created+$result.staging.skipped -ne 52 -or
                $result.lived_staging.created+$result.lived_staging.skipped -ne 90 -or
-               $result.city_assembly.created+$result.city_assembly.skipped -ne 402){
+               $result.city_assembly.created+$result.city_assembly.skipped -ne 408){
                 throw "EDITOR_REFERENCE_IMPORT_INCOMPLETE"
             }
             # Install only original, generated prototype Foley (never overwrite
