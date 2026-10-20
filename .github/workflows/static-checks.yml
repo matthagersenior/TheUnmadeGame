@@ -413,3 +413,5 @@ jobs:
           /tmp/unmade-player-facing
       - name: Validate original realm mesh geometry generated without Unreal
         run: python Scripts/build_realm_geometry.py --check
+      - name: Validate canonical equipment mesh generation without Unreal
+        run: python Scripts/build_equipment_geometry.py --check
