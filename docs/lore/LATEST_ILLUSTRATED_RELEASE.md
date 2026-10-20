@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**20 October 2026 source-only visual milestone:** Three purely visual, collision-free skyline silhouettes per established expedition realm are written into current Unreal C++ source. Previously published v20 illustrated files, hashes and source base are unchanged; no newly verified Unreal renders or illustrated edition have been issued.
+
+
 **20 October 2026 source-only HUD refinement:** The selected Threefold objective now includes a short, read-only witness route hint and an F9 evidence prompt. The v20 illustrated files and original verified hashes remain unchanged; no newly illustrated edition or engine screenshot was produced.
 
 

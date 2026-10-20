@@ -1,6 +1,7 @@
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeRealmJourneyRules.h"
+#include "World/UnmadeProceduralArtRules.h"
 #include "Combat/UnmadePresentation.h"
 #include "Player/UnmadeCharacter.h"
 #include "Combat/UnmadeEnemyCharacter.h"
@@ -40,6 +41,38 @@ void AUnmadePrototypeHub::BuildExpeditions(){
  const auto Gate=[&](FVector at){auto* a=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(a){auto* m=a->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(6,.25,3));}return a;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::ExpeditionSpecs[a];const auto Block=[&](FVector at,FVector scale){SpawnBlock(at,scale,FName(*FString::Printf(TEXT("Expedition.%d.Structure"),a)));};
   Block(FVector(s.x-500,s.y+7500,-25),FVector(100,170,.5)); // connected city/frontier/refuge approach
+  // Purely cosmetic native skyline silhouettes; no quest, damage, save,
+  // navigation, overlap, shadow or LOS authority. Source-authored realm data.
+  const auto& Design=UnmadeCore::RealmVisualDesigns[a];
+  const FVector FrontierMarker=Site(a,0);
+  UStaticMesh* VisualCube=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube"));
+  UStaticMesh* VisualCylinder=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
+  UStaticMesh* VisualCone=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cone.Cone"));
+  for(int j=0;j<3;++j){
+   const auto& Piece=Design.silhouette[j];
+   const FVector At=FrontierMarker+FVector(Piece.dx,Piece.dy,Piece.dz);
+   UStaticMesh* Shape=VisualCube;
+   if((j==1&&Design.crown!=UnmadeCore::RealmCrown::SplitSeam)||
+      Design.crown==UnmadeCore::RealmCrown::TideGauge||
+      Design.crown==UnmadeCore::RealmCrown::ChoirWeight)Shape=VisualCylinder;
+   if((Design.crown==UnmadeCore::RealmCrown::RootGraft && j!=1)||
+      (Design.crown==UnmadeCore::RealmCrown::EmberFlue && j==2))
+       Shape=VisualCone;
+   if(!Shape)continue;
+   auto* Ornament=GetWorld()->SpawnActor<AStaticMeshActor>(At,FRotator::ZeroRotator);
+   if(!Ornament)continue;
+   auto* DecorativeMesh=Ornament->GetStaticMeshComponent();
+   DecorativeMesh->SetMobility(EComponentMobility::Movable);
+   DecorativeMesh->SetStaticMesh(Shape);
+   DecorativeMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+   DecorativeMesh->SetGenerateOverlapEvents(false);
+   DecorativeMesh->SetCanEverAffectNavigation(false);
+   DecorativeMesh->SetCastShadow(false);
+   Ornament->SetActorEnableCollision(false);
+   Ornament->SetActorScale3D(FVector(Piece.sx,Piece.sy,Piece.sz));
+   Ornament->Tags.AddUnique(
+     FName(*FString::Printf(TEXT("UnmadeVisualGuide.%d.%d"),a,j)));
+  }
   int MinX=0,MaxX=0,MinY=0,MaxY=0;for(int r=0;r<6;++r){auto q=UnmadeCore::DungeonRoom(a,r);MinX=FMath::Min(MinX,q.x);MaxX=FMath::Max(MaxX,q.x);MinY=FMath::Min(MinY,q.y);MaxY=FMath::Max(MaxY,q.y);}Block(Room(a,0)+FVector((MinX+MaxX)/2.,(MinY+MaxY)/2.,-120),FVector((MaxX-MinX+2600)/100.,(MaxY-MinY+2600)/100.,.5));
   Sign(Board(a),FString(UTF8_TO_TCHAR(s.dungeon))+TEXT(" / E accept adventure; J journal"));
   for(int site=0;site<2;++site){FVector h=Site(a,site);Sign(h,UTF8_TO_TCHAR(site?s.refuge:s.frontier));
