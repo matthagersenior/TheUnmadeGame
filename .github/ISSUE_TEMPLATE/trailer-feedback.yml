@@ -1,7 +1,6 @@
 name: Cinematic trailer feedback
 description: Share specific, public feedback on The Unmade cinematic concept trailer.
 title: "[Trailer feedback] "
-labels: ["trailer-feedback"]
 body:
   - type: markdown
     attributes:
