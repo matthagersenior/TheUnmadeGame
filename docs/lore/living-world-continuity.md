@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-20 — Nine source-authored native skyline cues
+Nine expedition frontier scenes now spawn three *noncolliding*, per-realm silhouette props tied to existing realm identifiers, so travelers recognize the geography without depending on color. Motifs originate in the proposed graybox art direction; no save identity, approach route, NPC memory, player item, quest evidence or boss interaction is changed. Decorative actors have no collision, overlap events, navigation effect or shadow-casting and are not gameplay authority. Nine independently generated glTF crown models remain available as Unreal preview alternatives. **Native Unreal compilation, render acceptance, target performance and real integration remain unverified**.
+
+
 ## 2026-10-20 — The witness route in the existing tracked HUD (source-only)
 When The Threefold Reach is the player's chosen adventure track, the current objective display retains its expedition instructions and adds a single compact city/control cue from the existing read-only Threefold witness guide. The clue text, consent limits, physical custody, next-day deliberation and branching resolution remain unchanged; no HUD overlay automatically completes an action or substitutes for the evidence notebook. Other eight tracked realms are not replaced. Actual Unreal render, text-scale fit, controller and line-wrap acceptance remain to be tested.
 

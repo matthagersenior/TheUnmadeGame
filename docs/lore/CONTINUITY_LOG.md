@@ -1,5 +1,12 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-20 — Native visual source port without recovery branch ancestry
+- Ported nine distinctive crown motifs to current Unreal source and spawned three purely decorative noncolliding silhouettes per expedition frontier.
+- Neither original cube collision owners nor player decisions, witness, journal, gear, map discoveries or save fields were replaced.
+- Old PR #110 remains available for review; it targets an obsolete draft and was not merged or used to resurrect the recovery branch.
+- Added C++ source rules and Python wiring regression checks; no actual UE5.8 rendering or animation QA was performed.
+
+
 ## 2026-10-20 — Threefold HUD source wiring
 - Added a compact optional witness-route cue under the existing selected Threefold expedition objective, keeping tracked realm choice and full F9 evidence journal intact.
 - Nothing automatically reveals objects, overrides saved choices, grants gear or changes the story. Other realms retain their original tracker and the v20 illustrated package has not been rebuilt.
