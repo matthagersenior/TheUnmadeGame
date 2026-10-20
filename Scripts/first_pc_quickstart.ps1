@@ -56,6 +56,11 @@ try{
     & $pythonExe.Source (Join-Path $PSScriptRoot "prepare_unreal_authoring.py") --check 2>&1 |
         Tee-Object -FilePath (Join-Path $report "authoring-plan.log")
     if($LASTEXITCODE -ne 0){throw "AUTHORING_PLAN_DRIFT: source Unreal CSVs invalid"}
+    # Produce source-linked dossiers before any editor build or mutation.
+    $productionPack=Join-Path $report "production-pack"
+    & $pythonExe.Source (Join-Path $PSScriptRoot "build_first_pc_production_pack.py") --out-dir $productionPack 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "production-pack-validation.log")
+    if($LASTEXITCODE -ne 0){throw "CANONICAL_PRODUCTION_PACK_INVALID: repair IDs or authoring contracts"}
     & $pythonExe.Source (Join-Path $PSScriptRoot "unreal_editor/first_pc_editor_batch.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $report "staging-dry-run.log")
     if($LASTEXITCODE -ne 0){throw "STAGING_PLAN_INVALID"}
