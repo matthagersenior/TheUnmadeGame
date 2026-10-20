@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-20 — Readable graybox residents and creatures
+The five existing resident professions and 12 registered creature species now have source-defined silhouette proportions and visual accessories for the no-rig fallback. These use basic original Unreal primitives attached to existing NPC components and do not introduce a combat collider, new character identity, new species, learned power, NPC memory or social outcome. If the actual skinned character performance asset is loaded, the fallback accessory is hidden. Source C++ and structural wiring checks cover the identifiers; **no real Unreal compile, rendering, animation retargeting or gameplay QA is claimed**.
+
+
 ## 2026-10-20 — Nine source-authored native skyline cues
 Nine expedition frontier scenes now spawn three *noncolliding*, per-realm silhouette props tied to existing realm identifiers, so travelers recognize the geography without depending on color. Motifs originate in the proposed graybox art direction; no save identity, approach route, NPC memory, player item, quest evidence or boss interaction is changed. Decorative actors have no collision, overlap events, navigation effect or shadow-casting and are not gameplay authority. Nine independently generated glTF crown models remain available as Unreal preview alternatives. **Native Unreal compilation, render acceptance, target performance and real integration remain unverified**.
 

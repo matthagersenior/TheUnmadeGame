@@ -61,6 +61,8 @@ private:
 
     UPROPERTY(VisibleAnywhere, Category="Unmade|Visual")
     TObjectPtr<UStaticMeshComponent> PlaceholderVisual;
+    UPROPERTY(VisibleAnywhere,Category="Unmade|Visual")
+    TObjectPtr<UStaticMeshComponent> AccessoryVisual;
 
     UPROPERTY()
     FName NpcId = NAME_None;
