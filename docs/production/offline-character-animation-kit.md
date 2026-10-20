@@ -23,12 +23,54 @@ You can run this independently:
     python Scripts/build_skeletal_performance_kit.py --out Build/UnmadePrototypeRigs
     python -m unittest discover -s Scripts/tests -p test_skeletal_performance_kit.py -v
 
-When Unreal is available, import these into a separate
-/Game/UnmadeProduction/PrototypeRigs folder first. Verify Interchange skin and
-skeleton import, clips, animation retargeting, root orientation, bone weighting,
-actual playback, hit timing, material fidelity and collision before using
-them in a playable level. Do not overwrite final artist rigs or bind enemy
-attack damage to visual keyframes until tested.
+## Source-validated and first-PC Unreal import
+
+The launcher now also runs this strict offline preflight:
+
+    python Scripts/unreal_editor/import_skeletal_performance.py
+
+After a successful native Editor build and automation run, it invokes the
+same importer inside Unreal Editor with a transient import approval and a
+dated receipt path.
+
+Each imported asset must have the **exact names and types already used by
+the actual C++ characters**, under:
+
+- `/Game/UnmadeProduction/Characters/Resident/`
+- `/Game/UnmadeProduction/Characters/Beast/`
+- `/Game/UnmadeProduction/Characters/Wraith/`
+
+For each folder the actual Editor must produce one `SkeletalMesh`, named
+`SK_Unmade<Kind>`, and 19 `AnimSequence` assets named
+`AN_Unmade<Kind>_<Motion>`, all targeting that mesh's `Skeleton`. A
+successful receipt is stored under
+`TestReports/quickstart-<timestamp>/skeletal-import-receipt.json`,
+with separate numbers for imported versus already existing meshes and the
+verified **57** clips. The accompanying `skeletal-editor-import.log` holds
+raw Interchange output.
+
+All three conditions are required:
+
+1. All four source glTF files must exactly match the deterministic generator,
+   with three skinned rigs and 19 authored animation sequences each.
+2. Imported `SkeletalMesh` and `AnimSequence` assets must appear at those
+   exact runtime paths with compatible `Skeleton` references; just importing
+   glTF as an ordinary static mesh is a failure.
+3. A repeat run must leave all existing complete rigs and animations unchanged.
+   Conflicting, partly imported, artist-modified or wrong-class assets are
+   not overwritten, renamed or deleted automatically.
+
+If the UE 5.8 Interchange importer creates unexpected asset names, omits the
+animations, or requires a different skeletal pipeline configuration, the
+launcher reports a failure and preserves the import log. It must not claim
+a successful playable rig. The six-region PBR atlas is validated as a source
+study but **is not automatically imported**.
+
+Actual Unreal skeleton import, retargeting, root orientation, bone weighting,
+loop playback, contact timing, materials, face/voice synchronization and
+collision **remain real-PC acceptance tests** even after a successful import
+receipt. Do not overwrite final artist rigs or bind gameplay damage to
+unverified visual animation keyframes.
 
 This pipeline does not change any NPC's identity, player appearance, SaveGame,
 quest rewards or canonical lore. It will not resolve OPEN, DISPUTED or SEALED
