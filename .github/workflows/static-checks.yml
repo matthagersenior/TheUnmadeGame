@@ -415,3 +415,5 @@ jobs:
         run: python Scripts/build_realm_geometry.py --check
       - name: Validate canonical equipment mesh generation without Unreal
         run: python Scripts/build_equipment_geometry.py --check
+      - name: Validate original skinned glTF rigs and animations without Unreal
+        run: python Scripts/build_skeletal_performance_kit.py --out /tmp/unmade-prototype-rigs
