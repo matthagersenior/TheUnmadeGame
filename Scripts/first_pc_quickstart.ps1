@@ -68,6 +68,13 @@ try{
         Tee-Object -FilePath (Join-Path $report "prototype-geometry-validation.log")
     if($LASTEXITCODE -ne 0){throw "PROTOTYPE_GEOMETRY_INVALID: inspect geometry generation log"}
     Write-Host "Prototype models ready for later Unreal import: $geometryDir"
+    # Every canonical item and regional reward gets a real, independent
+    # prototype mesh before Unreal import, with no loot/progression side effect.
+    $equipmentDir=Join-Path $repo "Build/UnmadePrototypeEquipment"
+    & $pythonExe.Source (Join-Path $PSScriptRoot "build_equipment_geometry.py") --out-dir $equipmentDir 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "prototype-equipment-validation.log")
+    if($LASTEXITCODE -ne 0){throw "PROTOTYPE_EQUIPMENT_INVALID: inspect equipment generation log"}
+    Write-Host "Prototype equipment meshes ready for later import: $equipmentDir"
     & $pythonExe.Source (Join-Path $PSScriptRoot "unreal_editor/first_pc_editor_batch.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $report "staging-dry-run.log")
     if($LASTEXITCODE -ne 0){throw "STAGING_PLAN_INVALID"}
