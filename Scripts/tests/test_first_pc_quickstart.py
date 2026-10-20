@@ -76,6 +76,22 @@ class PcProductionQuickstart(unittest.TestCase):
         self.assertIn("lived_staging",body)
         self.assertIn("UNMADE_EDITOR_RECEIPT",body)
 
+    def test_real_prototype_import_wiring_is_guarded_and_receipted(self):
+        script=(ROOT/"Scripts/first_pc_quickstart.ps1").read_text()
+        self.assertIn("import_prototype_geometry.py",script)
+        self.assertIn("PROTOTYPE_IMPORT_SOURCE_PREFLIGHT_FAILED",script)
+        self.assertIn('UNMADE_PROTO_IMPORT_APPROVED="1"',script)
+        self.assertIn('UNMADE_PROTO_IMPORT_RECEIPT',script)
+        self.assertIn('prototype-import-receipt.json',script)
+        self.assertIn('PROTOTYPE_EDITOR_RECEIPT_MISSING',script)
+        self.assertIn('PROTOTYPE_EDITOR_IMPORT_INCOMPLETE',script)
+        self.assertIn('$pr.imports.total -ne 193',script)
+        self.assertIn('$pr.preview.markers -ne 88',script)
+        self.assertIn('Remove-Item Env:UNMADE_PROTO_IMPORT_APPROVED',script)
+        # The import must not run with BuildOnly or SkipStage.
+        self.assertLess(script.index('if(!$SkipStage -and !$BuildOnly)'),
+                        script.index('$env:UNMADE_PROTO_IMPORT_APPROVED="1"'))
+
     def test_ninety_nine_realm_work_orders_are_non_authoritative(self):
         L=load("unmade_nine_realm_stager","Scripts/unreal_editor/stage_lived_world_manifest.py")
         source=L.read_plan()
