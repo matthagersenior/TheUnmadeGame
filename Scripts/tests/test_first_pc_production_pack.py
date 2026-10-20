@@ -46,6 +46,24 @@ class FirstPCProductionPackTests(unittest.TestCase):
                 self.assertIn("## Saved outcomes", dossier)
                 self.assertIn("## Required Unreal acceptance", dossier)
 
+    def test_auvren_first_trial_does_not_leak_finale_or_endings(self):
+        first_absence = next(
+            quest for quest in self.sources["campaign"]["quests"]
+            if quest["id"] == "FirstAbsence"
+        )
+        steps = {step["id"]: step for step in first_absence["steps"]}
+        mechanism = steps["mechanism"]
+        return_step = steps["return"]
+
+        self.assertEqual(mechanism["physical_tag"], "Absence.Trial.OriginAnchor")
+        for text in (mechanism["objective"], return_step["objective"], return_step["line"]):
+            lowered = text.lower()
+            self.assertNotIn("nhal-vey", lowered)
+            self.assertNotIn("held morning", lowered)
+            self.assertNotIn("many mornings", lowered)
+        self.assertIn("threshold", mechanism["objective"].lower())
+        self.assertIn("threshold", return_step["objective"].lower())
+
     def test_source_only_determinism(self):
         a, files_a = PACK.build(ROOT)
         b, files_b = PACK.build(ROOT)
