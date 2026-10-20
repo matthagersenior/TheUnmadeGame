@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-20 — The witness route in the existing tracked HUD (source-only)
+When The Threefold Reach is the player's chosen adventure track, the current objective display retains its expedition instructions and adds a single compact city/control cue from the existing read-only Threefold witness guide. The clue text, consent limits, physical custody, next-day deliberation and branching resolution remain unchanged; no HUD overlay automatically completes an action or substitutes for the evidence notebook. Other eight tracked realms are not replaced. Actual Unreal render, text-scale fit, controller and line-wrap acceptance remain to be tested.
+
+
 ## 2026-10-20 — Threefold Reach contextual objective guidance (source-only)
 The existing player-earned chain (Bellwold refuge, Paperhaven Index Hall, the Crossings bridge nail, a genuine second reading, the witnessed F7/F8 civic decision, physical folded record handoff and next-day returned testimony) gains a read-only, step-specific journal guide. It identifies the next legitimate city or actor without revealing unvisited observations, private refugee identities, OPEN explanations or outcomes not earned. All four braid/return choice combinations and invalid cross-snapshot states must pass native C++ tests. No location teleports, automatic player credits, new rewards or quest rules are permitted. **Unreal 5.8 integration and actual playtests are not verified.**
 

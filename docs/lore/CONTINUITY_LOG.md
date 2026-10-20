@@ -1,5 +1,11 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-20 — Threefold HUD source wiring
+- Added a compact optional witness-route cue under the existing selected Threefold expedition objective, keeping tracked realm choice and full F9 evidence journal intact.
+- Nothing automatically reveals objects, overrides saved choices, grants gear or changes the story. Other realms retain their original tracker and the v20 illustrated package has not been rebuilt.
+- Native/source CI is not Unreal gameplay QA; confirm small-screen wrapping, readable controls and correct source-state text in the real Editor.
+
+
 ## 2026-10-20 — Source-only guided Threefold witness journey
 - Expose one next-action prompt from canonical witnessed evidence, saved braid decision, player-held letter, valid next-day Hessa reply and second physical delivery to Orrel.
 - Preserve all three clue ID gates, four distinct moral choice combinations and save-failure protections. No unvisited evidence, refuge names or sealed answers appear in the guidance.

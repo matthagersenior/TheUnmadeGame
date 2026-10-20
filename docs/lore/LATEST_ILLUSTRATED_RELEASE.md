@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**20 October 2026 source-only HUD refinement:** The selected Threefold objective now includes a short, read-only witness route hint and an F9 evidence prompt. The v20 illustrated files and original verified hashes remain unchanged; no newly illustrated edition or engine screenshot was produced.
+
+
 **20 October 2026 source-only milestone:** The Threefold Reach source journal adds phase-aware physical objective text, based on existing saved witness records. The historical illustrated v20 files, file hashes and package remain unchanged; no new illustrated edition has been issued and no Unreal compilation or playtest is claimed.
 
 
