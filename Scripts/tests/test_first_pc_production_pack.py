@@ -54,15 +54,21 @@ class FirstPCProductionPackTests(unittest.TestCase):
         steps = {step["id"]: step for step in first_absence["steps"]}
         mechanism = steps["mechanism"]
         return_step = steps["return"]
+        canonical = (ROOT / "docs/canon/encyclopedia/06_QUESTS_STORY_AND_ENDINGS.md").read_text()
 
         self.assertEqual(mechanism["physical_tag"], "Absence.Trial.OriginAnchor")
-        for text in (mechanism["objective"], return_step["objective"], return_step["line"]):
+        texts = [*first_absence["player_verbs"], mechanism["objective"],
+                 return_step["objective"], return_step["line"]]
+        for text in texts:
             lowered = text.lower()
             self.assertNotIn("nhal-vey", lowered)
             self.assertNotIn("held morning", lowered)
             self.assertNotIn("many mornings", lowered)
         self.assertIn("threshold", mechanism["objective"].lower())
         self.assertIn("threshold", return_step["objective"].lower())
+        self.assertIn("**objective:** Open one real threshold with stable fallback travel", canonical)
+        self.assertIn("The Held Morning", canonical)
+        self.assertIn("The Many Mornings", canonical)
 
     def test_source_only_determinism(self):
         a, files_a = PACK.build(ROOT)
