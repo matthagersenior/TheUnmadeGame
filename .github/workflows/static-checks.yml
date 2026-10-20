@@ -401,6 +401,11 @@ jobs:
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/unanswered_road_test.cpp -o /tmp/unmade-unanswered-road
           /tmp/unmade-unanswered-road
 
+      - name: Exhaustively walk the Unanswered Road and verify both persistent mornings
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/campaign_exhaustive_walkthrough_test.cpp -o /tmp/unmade-exhaustive-road
+          /tmp/unmade-exhaustive-road
+
       - name: Test stable 82-person relationship snapshots, real returning identity and bounded aid
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/resident_continuity_test.cpp -o /tmp/unmade-resident-continuity
