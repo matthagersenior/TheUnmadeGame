@@ -1,6 +1,6 @@
 # THE UNMADE — First playable milestone tracker
 
-**Tracked revision:** 2026-10-12. Source of truth: GitHub `main`. This file records **source readiness**, not an engine-tested playable game. Older milestone rows below are historical snapshots; current source scope is summarized here and in the [PC-independent readiness ledger](pre-pc-readiness.md).
+**Tracked revision:** 2026-10-20. Source of truth: GitHub `main`. This file records **source readiness**, not an engine-tested playable game. Older milestone rows below are historical snapshots; current source scope is summarized here and in the [PC-independent readiness ledger](pre-pc-readiness.md).
 
 | Milestone | Source | Evidence / missing verification |
 |---|---|---|
@@ -23,7 +23,11 @@
 | Append-only inventory catalog save migration | Source implementation | Previous save files must still be tested in Unreal |
 | Android remote playtest | Not provisioned | Approved, cost-capped GPU host and authenticated Pixel Streaming required |
 
-## Current source milestone — v21 parity gate (12 October 2026)\n\nNine-realm source contracts now share a CI-enforced parity floor for identity, evidence, choices, consequences, optional return arcs, sensory/access cues and production handoffs. The gate is `Scripts/tests/test_gameplay_parity.py`; its limits and the shared standards for menus, cinematics, abilities, enemies, economies, relationships, saves, accessibility and performance are recorded in [gameplay parity and completion](gameplay-parity-v21.md). This adds source validation and acceptance criteria. It does not change the engine status below.\n\n## Verification procedure
+## Current source milestone — v21 parity and first-PC handoff (20 October 2026)
+
+Nine-realm source contracts share a CI-enforced parity floor for identity, evidence, choices, consequences, optional return arcs, sensory/access cues and production handoffs. The first-PC package adds nine realm dossiers and 669 source-linked work orders. Both are source organization and validation aids; they do not certify playable Unreal scenes. The gate is `Scripts/tests/test_gameplay_parity.py`; the shared standards for menus, cinematics, abilities, enemies, economies, relationships, saves, accessibility and performance are recorded in [gameplay parity and completion](gameplay-parity-v21.md).
+
+## Verification procedure
 
 GitHub Actions compiles native C++17 tests covering fracture rules, NPC decisions and movement, combat/bosses, crafting, economies, factions, frontier stories, language discovery, the branching story, and a combined no-AI scenario. It also runs Python source-contract tests. Those are valid source-level results, **not an Unreal build pass**.
 
