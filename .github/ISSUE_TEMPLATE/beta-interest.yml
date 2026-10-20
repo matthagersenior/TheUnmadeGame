@@ -1,0 +1,43 @@
+name: Beta testing interest
+description: Register interest in helping test The Unmade when a verified build becomes available.
+title: "[Beta interest] "
+labels: ["beta-interest"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in The Unmade. There is **no downloadable beta yet** and applying does not guarantee access. This issue will be **public**. Your GitHub handle is already attached automatically: **do not post email, phone, address, legal name, private medical/accessibility details, or other personal information here.**
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform you could test on
+      options:
+        - Windows PC
+        - Linux PC (if supported later)
+        - Steam Deck (if supported later)
+        - Other / not sure
+    validations:
+      required: true
+  - type: checkboxes
+    id: interest
+    attributes:
+      label: Which types of feedback would you enjoy providing?
+      options:
+        - label: Exploration, environment and clues
+        - label: Combat readability and abilities
+        - label: Quests, choices and NPC reactions
+        - label: Captions, controls and accessibility usability
+        - label: Bugs, performance and save/reload reliability
+  - type: textarea
+    id: note
+    attributes:
+      label: Anything else? (optional and non-sensitive)
+      description: Do not share personal contact or confidential information.
+      placeholder: The part of the game I would most like to test is...
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Confirm public submission
+      options:
+        - label: I understand this interest submission is public and is not a beta invitation.
+          required: true

@@ -1,0 +1,43 @@
+name: Cinematic trailer feedback
+description: Share specific, public feedback on The Unmade cinematic concept trailer.
+title: "[Trailer feedback] "
+labels: ["trailer-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking a look at The Unmade. This is a **cinematic concept trailer, not captured gameplay footage**. Feedback submissions are public; please do not include personal contact details or story spoilers.
+  - type: dropdown
+    id: feeling
+    attributes:
+      label: What was your first impression?
+      options:
+        - Intrigued — I want to know more
+        - Moved by the world and atmosphere
+        - Visually interesting but unclear
+        - I expected gameplay footage
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: memorable
+    attributes:
+      label: Which moment stayed with you?
+      placeholder: A specific scene, sound, mood or line...
+    validations:
+      required: true
+  - type: textarea
+    id: unclear
+    attributes:
+      label: What could be clearer or better?
+      placeholder: Pacing, tone, accessibility, premise, music, readability...
+  - type: dropdown
+    id: explore
+    attributes:
+      label: What would you most like to see next?
+      options:
+        - Actual in-engine gameplay after it's verified
+        - Combat and ability demonstrations
+        - Exploration of a particular realm
+        - Choices, characters and consequences
+        - Development progress updates
