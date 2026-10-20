@@ -154,6 +154,19 @@ def line(value: object) -> str:
 def bullet(label: str, content: object) -> str:
     return "- **" + label + ":** " + line(content) + "\n"
 
+def detailed_fields(record: dict, skip: tuple[str, ...] = ("id", "name")) -> list[str]:
+    """Retain every authored field while keeping it searchable and source-traceable."""
+    result = []
+    for field, value in record.items():
+        if field in skip:
+            continue
+        if isinstance(value, (dict, list)):
+            shown = json.dumps(value, ensure_ascii=False, sort_keys=True)
+        else:
+            shown = str(value)
+        result.append(bullet(field.replace("_", " ").title(), shown).rstrip())
+    return result
+
 def realm_dossier(world: dict, campaign: dict, data: dict) -> str:
     realm = world["id"]
     out = ["# " + line(world["title"]), "",
@@ -165,13 +178,35 @@ def realm_dossier(world: dict, campaign: dict, data: dict) -> str:
     out += ["", "## Sensory and accessibility", ""]
     for label, value in world["sensory"].items():
         out.append(bullet(label.title(), value).rstrip())
-    out += ["", "## Firsthand investigation and physical clues", "",
-            bullet("Question", world["mystery"]["question"]).rstrip(),
-            bullet("Do not reveal early", world["mystery"]["do_not_reveal"]).rstrip()]
+    out += ["", "## Settlements and staging geometry", "",
+            "These are preliminary noncolliding guides, not walkable world geometry.", ""]
+    for city in data["cities"]["cities"]:
+        if city["realm"] != realm:
+            continue
+        out += ["", "### " + line(city["name"]) + " (" + line(city["id"]) + ")", ""]
+        out.extend(detailed_fields(city, skip=("id", "name", "modules")))
+        for module in city["modules"]:
+            out.append("- Module " + line(module["slug"]) +
+                       " (" + line(module["kind"]) + "): " +
+                       line(module["local_cm"]) + " cm, proxy scale " +
+                       line(module["scale"]))
+    out += ["", "## Returning inhabitants", ""]
+    for resident in data["residents"]["residents"]:
+        if resident["realm"] == realm:
+            out += ["", "### " + line(resident["name"]) + " (" + line(resident["id"]) + ")", ""]
+            out.extend(detailed_fields(resident))
+    out += ["", "## Firsthand investigation and physical clues", ""]
+    out.extend(detailed_fields(world["mystery"], skip=("evidence",)))
     for clue in world["mystery"]["evidence"]:
         out += ["", "### " + line(clue["id"]) + " — " + line(clue["site"]), "",
                 bullet("Player action", clue["verb"]).rstrip(),
                 bullet("Observed result", clue["discovery"]).rstrip()]
+    out += ["", "## Ordinary daily-life encounters", ""]
+    for scene in world["routine"]:
+        out += ["", "### " + line(scene["id"]), ""]
+        out.extend(detailed_fields(scene))
+    out += ["", "## Main chapter direction", ""]
+    out.extend(detailed_fields(campaign, skip=("id", "steps", "world_after_save")))
     out += ["", "## Main chapter: six physically staged beats", ""]
     for number, step in enumerate(campaign["steps"], 1):
         out += ["", "### " + str(number) + ". " + line(step["id"]), "",
@@ -194,8 +229,11 @@ def realm_dossier(world: dict, campaign: dict, data: dict) -> str:
             bullet("Save authority", side["save"]).rstrip()]
     for n, step in enumerate(side["steps"], 1):
         out.append(str(n) + ". " + line(step))
+    out.extend(detailed_fields(side, skip=("id", "name", "steps", "branches")))
     for key, value in side["branches"].items():
         out.append(bullet("Outcome " + key, value).rstrip())
+    out += ["", "## Lasting post-finale world variants", ""]
+    out.extend(detailed_fields(world["post"], skip=()))
     out += ["", "## Art, sound and environment source briefs", ""]
     for asset in world["asset"]:
         out.append("- " + line(asset))
@@ -250,18 +288,19 @@ def build(root: Path = ROOT) -> tuple[dict, dict[str, str]]:
     writer.writerows(orders)
     files["work-orders.csv"] = buffer.getvalue()
     index = ["# Canonical implementation index", "",
-             "These are authoring records. Neither registry membership nor source-rule status proves playable content.", ""]
+             "Full source-derived catalog, including conditions and limitations.",
+             "A registered record is NOT a verified Unreal player interaction.", ""]
     for kind, key in (("QUEST", "quests"), ("BOSS", "bosses"),
                       ("ITEM", "items"), ("SKILL", "skills")):
         records = data["ledger"][key]
         index += ["", "## " + kind + " (" + str(len(records)) + ")", ""]
-        index.extend("- " + line(r["id"]) + " — " + line(r["name"]) +
-                     " [source: " + line(r.get("source", SOURCES["ledger"])) + "]"
-                     for r in records)
+        for record in records:
+            index += ["", "### " + line(record["id"]) + " — " + line(record["name"]), ""]
+            index.extend(detailed_fields(record))
     index += ["", "## ABILITY CODEX (" + str(len(data["codex"]["records"])) + ")", ""]
-    index.extend("- " + line(r["id"]) + " — " + line(r["name"]) +
-                 " [definition status: " + line(r.get("implementation", "unknown")) + "]"
-                 for r in data["codex"]["records"])
+    for record in data["codex"]["records"]:
+        index += ["", "### " + line(record["id"]) + " — " + line(record["name"]), ""]
+        index.extend(detailed_fields(record))
     files["canon-index.md"] = "\n".join(index) + "\n"
     for world, main in zip(data["atlas"]["worlds"], data["campaign"]["quests"]):
         files["realm-" + world["id"] + ".md"] = realm_dossier(world, main, data)
