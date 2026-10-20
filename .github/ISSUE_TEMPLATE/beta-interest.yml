@@ -1,7 +1,6 @@
 name: Beta testing interest
 description: Register interest in helping test The Unmade when a verified build becomes available.
 title: "[Beta interest] "
-labels: ["beta-interest"]
 body:
   - type: markdown
     attributes:
