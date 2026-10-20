@@ -2,7 +2,7 @@
 
 **Canon rules:** The playable protagonist has a customizable identity, not an obligatory chosen lineage. Named residents have individual memories and interests, but no shared omniscient knowledge. Firsthand observation, rumor, institutional record, personal belief and inference must remain distinct. A literary character dossier does **not** establish that voice, animation, scenes or gameplay dialogue have been imported into Unreal.
 
-**Registry reconciliation:** 88 stable NPC identities in Remembered Roads; 82 have dedicated resident-return records, 6 additional scout characters have no corresponding return dossier; 18 outer-character performance briefs and 13 Volume X literary dossiers overlap these same identities.
+**Registry reconciliation:** All 88 stable NPC identities in Remembered Roads have dedicated resident-return records. The original 82 profiles retain their established order; six existing field scouts follow them. The 18 outer-character performance briefs and 13 Volume X literary dossiers overlap these same identities.
 
 ## The playable traveler
 
@@ -2629,15 +2629,26 @@ A wandering outcast from an impossible history. Character identity is selected i
 **role:** Guard  
 **city:** Crossings  
 **realm:** ThreefoldReach  
-**personal concern:** Keep field observation separate from secondhand delivery news.  
-**work line:** Orren the ash-runner: I still keep the field account apart from the street account.  
-**agrees:** Orren the ash-runner: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.  
-**disagrees:** Orren the ash-runner: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.  
-**home line:** Orren the ash-runner: You came back to this threshold. I remember the day you brought the receiving account.  
+**personal concern:** Keep field observation separate from secondhand delivery news.
+**work line:** Orren the ash-runner: I still keep the field account apart from the street account.
+**agrees:** Orren the ash-runner: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.
+**disagrees:** Orren the ash-runner: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.
+**home line:** Orren the ash-runner: You came back to this threshold. I remember the day you brought the receiving account.
 
-**Open production gap:** This scout exists in the 88-resident identity registry but not the 82-person return-dialogue registry. Do not synthesize return speech or claim a complete actor interaction from this identity alone.
 
-**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json)
+### Source-saved resident return and local public knowledge
+
+**settlement:** Crossings
+**recognize line:** Orren: “I saw your tracks return along the ash road. I keep field sightings apart from what reaches the receiving shelf.”
+**aid line:** Orren: “You lent a hand on the route. I logged the help as something I witnessed, not a favor the road can collect.”
+**public line:** Orren: “The bell road carries the mark of the choice made here. I can map what I saw; the shelf only proves the bundle arrived.”
+**post morning:** Orren: “The light has moved across the ash road. I remember which track I took before the sky changed.”
+**personal concern:** Keep field sightings separate from reports carried back to the Crossings.
+**next visit hook:** Ask which marks Orren saw on the ash road; he will separate them from any account delivered later.
+**care return:** The refuge cord points new visitors toward shelter. I can mark its path without recording who follows it.
+**truth return:** The public docket gives us three objects to compare. I can verify the marks; I will leave protected guests unnamed.
+
+**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json) · [Return interactions](../../../Authoring/resident_return_encounters.json)
 
 ---
 
@@ -2646,15 +2657,26 @@ A wandering outcast from an impossible history. Character identity is selected i
 **role:** Guard  
 **city:** Crossings  
 **realm:** ThreefoldReach  
-**personal concern:** Keep field observation separate from secondhand delivery news.  
-**work line:** Vesh the glass warden: I still keep the field account apart from the street account.  
-**agrees:** Vesh the glass warden: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.  
-**disagrees:** Vesh the glass warden: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.  
-**home line:** Vesh the glass warden: You came back to this threshold. I remember the day you brought the receiving account.  
+**personal concern:** Keep field observation separate from secondhand delivery news.
+**work line:** Vesh the glass warden: I still keep the field account apart from the street account.
+**agrees:** Vesh the glass warden: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.
+**disagrees:** Vesh the glass warden: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.
+**home line:** Vesh the glass warden: You came back to this threshold. I remember the day you brought the receiving account.
 
-**Open production gap:** This scout exists in the 88-resident identity registry but not the 82-person return-dialogue registry. Do not synthesize return speech or claim a complete actor interaction from this identity alone.
 
-**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json)
+### Source-saved resident return and local public knowledge
+
+**settlement:** Crossings
+**recognize line:** Vesh: “You came back to the glass cut. I remember the line of sight we checked, not every story carried from town.”
+**aid line:** Vesh: “You helped hold the watch. I will remember the act without turning it into a claim about what you owe.”
+**public line:** Vesh: “The road bears a visible change. My glass notes cover this ridge; the receiving mark proves only that a parcel arrived.”
+**post morning:** Vesh: “The skyline has shifted again. I remember the old angle through the glass, though I will not call one morning the true one.”
+**personal concern:** Record what the glass cut shows without treating a distant delivery as firsthand evidence.
+**next visit hook:** Ask Vesh to compare the present view with the field mark; a receiving date cannot replace the sighting.
+**care return:** From this cut I can trace the refuge cord toward shelter, but I cannot know who used it.
+**truth return:** The docket lets the three objects be compared in public. The names of people sheltered there stay outside my notes.
+
+**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json) · [Return interactions](../../../Authoring/resident_return_encounters.json)
 
 ---
 
@@ -2663,15 +2685,26 @@ A wandering outcast from an impossible history. Character identity is selected i
 **role:** Guard  
 **city:** Bellwold  
 **realm:** ThreefoldReach  
-**personal concern:** Keep field observation separate from secondhand delivery news.  
-**work line:** Deryn the bell seeker: I still keep the field account apart from the street account.  
-**agrees:** Deryn the bell seeker: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.  
-**disagrees:** Deryn the bell seeker: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.  
-**home line:** Deryn the bell seeker: You came back to this threshold. I remember the day you brought the receiving account.  
+**personal concern:** Keep field observation separate from secondhand delivery news.
+**work line:** Deryn the bell seeker: I still keep the field account apart from the street account.
+**agrees:** Deryn the bell seeker: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.
+**disagrees:** Deryn the bell seeker: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.
+**home line:** Deryn the bell seeker: You came back to this threshold. I remember the day you brought the receiving account.
 
-**Open production gap:** This scout exists in the 88-resident identity registry but not the 82-person return-dialogue registry. Do not synthesize return speech or claim a complete actor interaction from this identity alone.
 
-**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json)
+### Source-saved resident return and local public knowledge
+
+**settlement:** Bellwold
+**recognize line:** Deryn: “You found the Bellwold steps again. I remember the search marks, not a bell anyone has yet heard.”
+**aid line:** Deryn: “You helped me keep the search path open. I will not make that help a debt against you.”
+**public line:** Deryn: “The refuge road changed here. I can speak for these steps and their marks, not for what Paperhaven says from afar.”
+**post morning:** Deryn: “The bell-shaped space catches a different light now. I remember the steps we stood on before it changed.”
+**personal concern:** Search for the missing bell without letting a route report become proof that it exists.
+**next visit hook:** Ask which Bellwold marks Deryn checked in person and which claims still need another witness.
+**care return:** The refuge cord can guide visitors toward shelter without asking me to name them.
+**truth return:** The public docket offers a way to compare the bell’s three objects. The bell itself is still unaccounted for.
+
+**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json) · [Return interactions](../../../Authoring/resident_return_encounters.json)
 
 ---
 
@@ -2680,15 +2713,26 @@ A wandering outcast from an impossible history. Character identity is selected i
 **role:** Guard  
 **city:** Paperhaven  
 **realm:** ThreefoldReach  
-**personal concern:** Keep field observation separate from secondhand delivery news.  
-**work line:** Isti the torn-page keeper: I still keep the field account apart from the street account.  
-**agrees:** Isti the torn-page keeper: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.  
-**disagrees:** Isti the torn-page keeper: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.  
-**home line:** Isti the torn-page keeper: You came back to this threshold. I remember the day you brought the receiving account.  
+**personal concern:** Keep field observation separate from secondhand delivery news.
+**work line:** Isti the torn-page keeper: I still keep the field account apart from the street account.
+**agrees:** Isti the torn-page keeper: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.
+**disagrees:** Isti the torn-page keeper: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.
+**home line:** Isti the torn-page keeper: You came back to this threshold. I remember the day you brought the receiving account.
 
-**Open production gap:** This scout exists in the 88-resident identity registry but not the 82-person return-dialogue registry. Do not synthesize return speech or claim a complete actor interaction from this identity alone.
 
-**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json)
+### Source-saved resident return and local public knowledge
+
+**settlement:** Paperhaven
+**recognize line:** Isti: “You returned to the torn-page vault. I kept the missing leaf separate from the account someone brought back.”
+**aid line:** Isti: “You helped keep the torn record legible. I noted what I saw, and left the unrecorded names private.”
+**public line:** Isti: “The archive can show what changed in Paperhaven. A parcel receipt does not tell me what its distant witnesses saw.”
+**post morning:** Isti: “The dry garden has a second morning shadow. I remember the page we were reading before it appeared.”
+**personal concern:** Protect private refuge names while keeping physical archive evidence open to comparison.
+**next visit hook:** Ask Isti to compare the page, seal and ledger marks without filling in the torn names.
+**care return:** The refuge cord points toward shelter; the archive still offers no public lead to follow.
+**truth return:** The docket makes the three objects available for comparison while protected guests remain unnamed.
+
+**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json) · [Return interactions](../../../Authoring/resident_return_encounters.json)
 
 ---
 
@@ -2697,15 +2741,26 @@ A wandering outcast from an impossible history. Character identity is selected i
 **role:** Guard  
 **city:** Saltwake  
 **realm:** WidowedRain  
-**personal concern:** Keep field observation separate from secondhand delivery news.  
-**work line:** Halven the net seeker: I still keep the field account apart from the street account.  
-**agrees:** Halven the net seeker: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.  
-**disagrees:** Halven the net seeker: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.  
-**home line:** Halven the net seeker: You came back to this threshold. I remember the day you brought the receiving account.  
+**personal concern:** Keep field observation separate from secondhand delivery news.
+**work line:** Halven the net seeker: I still keep the field account apart from the street account.
+**agrees:** Halven the net seeker: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.
+**disagrees:** Halven the net seeker: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.
+**home line:** Halven the net seeker: You came back to this threshold. I remember the day you brought the receiving account.
 
-**Open production gap:** This scout exists in the 88-resident identity registry but not the 82-person return-dialogue registry. Do not synthesize return speech or claim a complete actor interaction from this identity alone.
 
-**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json)
+### Source-saved resident return and local public knowledge
+
+**settlement:** Saltwake
+**recognize line:** Halven: “You came back to the saltglass shore. I remember the dry net and the track we checked beside it.”
+**aid line:** Halven: “You helped me mend the net. I remember the work, not a promise that you must repay it.”
+**public line:** Halven: “The waterline here has changed. My field chart records Saltwake; a delivered account cannot tell me what another shore saw.”
+**post morning:** Halven: “The saltglass catches a different dawn. I remember the shore before its light changed.”
+**personal concern:** Keep shoreline observations distinct from debts and reports brought in by ferry.
+**next visit hook:** Ask Halven to show the saltglass mark and distinguish it from the account carried back to port.
+**care return:** Families can use the ferry passage without old ownership papers. The empty sea still has no name on my chart.
+**truth return:** The water-loss account leaves borrower addresses private. Is the public proof enough to compare what was owed?
+
+**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json) · [Return interactions](../../../Authoring/resident_return_encounters.json)
 
 ---
 
@@ -2714,15 +2769,25 @@ A wandering outcast from an impossible history. Character identity is selected i
 **role:** Guard  
 **city:** Cinderhold  
 **realm:** HearthBeneath  
-**personal concern:** Keep field observation separate from secondhand delivery news.  
-**work line:** Varda the slag scout: I still keep the field account apart from the street account.  
-**agrees:** Varda the slag scout: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.  
-**disagrees:** Varda the slag scout: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.  
-**home line:** Varda the slag scout: You came back to this threshold. I remember the day you brought the receiving account.  
+**personal concern:** Keep field observation separate from secondhand delivery news.
+**work line:** Varda the slag scout: I still keep the field account apart from the street account.
+**agrees:** Varda the slag scout: That route fits the work I protect. Your receiving date tells me a bundle arrived; it does not tell me what every witness saw.
+**disagrees:** Varda the slag scout: I would have kept a different lane. I can accept your dated receipt and still disagree about the road.
+**home line:** Varda the slag scout: You came back to this threshold. I remember the day you brought the receiving account.
 
-**Open production gap:** This scout exists in the 88-resident identity registry but not the 82-person return-dialogue registry. Do not synthesize return speech or claim a complete actor interaction from this identity alone.
 
-**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json)
+### Source-saved resident return and local public knowledge
 
+**settlement:** Cinderhold
+**recognize line:** Varda: “You returned to the black-slag cut. I remember the heat mark we measured, not a story the furnace told for us.”
+**aid line:** Varda: “You helped carry the brace. I recorded the lift we shared; it is not a debt against your name.”
+**public line:** Varda: “The kiln shows a change in Cinderhold. My notes cover this vent; the receiving shelf only dates a delivery.”
+**post morning:** Varda: “The slag cooled under a different light. I remember where the brace stood before dawn split.”
+**personal concern:** Keep the kiln’s visible effects separate from guesses about where its impossible fuel began.
+**next visit hook:** Ask Varda what the vent and slag show directly, then compare that with the public fuel record.
+**care return:** The unregistered homes have heat without signing first. I still see the kiln’s old fuel cost on the tally.
+**truth return:** The ember’s source is public now. Has the city begun the repair the plan asks it to answer for?
+
+**Authoritative registers:** [Resident and location identity](../../../Authoring/remembered_roads_v13.json) · [Return interactions](../../../Authoring/resident_return_encounters.json)
 ---
 

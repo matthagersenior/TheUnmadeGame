@@ -6,7 +6,8 @@
 #include <string>
 using namespace UnmadeCore;
 int main(){
-    static_assert(ResidentContinuityCount==82,"48+16+18 stable residents required");
+    static_assert(ResidentContinuityLegacyCount==82,"Old 48+16+18 save ordering must remain migratable");
+    static_assert(ResidentContinuityCount==88,"82 residents plus six appended scouts");
     std::set<std::string> names;
     for(int i=0;i<ResidentContinuityCount;++i){
         const char* id=ResidentContinuityId(i);
@@ -16,7 +17,24 @@ int main(){
     }
     assert(ResidentContinuityIndex(nullptr)==-1);
     assert(ResidentContinuityIndex("npc.fake.return.001")==-1);
-    assert(ResidentContinuityId(82)==nullptr);
+    assert(ResidentContinuityId(82)!=nullptr);
+    assert(ResidentContinuityId(88)==nullptr);
+    int oldVisits[ResidentContinuityLegacyCount]{};
+    int oldDays[ResidentContinuityLegacyCount]{};
+    int oldAids[ResidentContinuityLegacyCount]{};
+    oldVisits[0]=2;oldDays[0]=7;oldAids[0]=1;
+    ResidentContinuitySnapshot migrated;
+    assert(BuildResidentContinuitySnapshot(
+        oldVisits,ResidentContinuityLegacyCount,
+        oldDays,ResidentContinuityLegacyCount,
+        oldAids,ResidentContinuityLegacyCount,migrated));
+    assert(migrated.visits[0]==2&&migrated.lastDay[0]==7&&migrated.aids[0]==1);
+    for(int i=ResidentContinuityLegacyCount;i<ResidentContinuityCount;++i)
+        assert(migrated.visits[i]==0&&migrated.lastDay[i]==0&&migrated.aids[i]==0);
+    assert(!BuildResidentContinuitySnapshot(
+        oldVisits,ResidentContinuityLegacyCount,
+        oldDays,ResidentContinuityLegacyCount-1,
+        oldAids,ResidentContinuityLegacyCount,migrated));
     ResidentContinuity journal;
     assert(journal.Talk(Residents[0].id,1)==EncounterEvent::FirstHello);
     assert(journal.Level(Residents[0].id)==Familiarity::Recognized);
@@ -60,5 +78,5 @@ int main(){
     ResidentContinuity oldSlot;
     assert(oldSlot.Restore({}));
     assert(oldSlot.Level(later)==Familiarity::Stranger);
-    std::cout<<"PASS: 82 individually saved identities, visit/day limits, aid, local returns, corrupt-state refusal\n";
+    std::cout<<"PASS: 88 resident profiles, legacy 82-slot migration, visit/day limits, aid, local returns, corrupt-state refusal\n";
 }

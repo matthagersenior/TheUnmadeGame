@@ -360,6 +360,10 @@ FString AUnmadeNpcCharacter::GetReactionText() const
                 Home=NpcId.ToString().StartsWith(TEXT("npc.saltwake."))
                     ?UnmadeCore::Realm::WidowedRain
                     :UnmadeCore::Realm::HearthBeneath;
+            else if(NpcId.ToString().StartsWith(TEXT("npc.saltwake.")))
+                Home=UnmadeCore::Realm::WidowedRain;
+            else if(NpcId.ToString().StartsWith(TEXT("npc.cinderhold.")))
+                Home=UnmadeCore::Realm::HearthBeneath;
             const FString FirstStoryReply=CachedHub->GetFirstStoryReturnLine(NpcId,Home);
             if(!FirstStoryReply.IsEmpty())Expedition+=TEXT(" ")+FirstStoryReply;
             return Expedition;
@@ -395,6 +399,10 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             CurrentHome=NpcId.ToString().StartsWith(TEXT("npc.saltwake."))
                 ?UnmadeCore::Realm::WidowedRain
                 :UnmadeCore::Realm::HearthBeneath;
+        else if(NpcId.ToString().StartsWith(TEXT("npc.saltwake.")))
+            CurrentHome=UnmadeCore::Realm::WidowedRain;
+        else if(NpcId.ToString().StartsWith(TEXT("npc.cinderhold.")))
+            CurrentHome=UnmadeCore::Realm::HearthBeneath;
         CharacterLine+=TEXT(" ");
         CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
         const FString FirstStoryReply=CachedHub->GetFirstStoryReturnLine(NpcId,CurrentHome);

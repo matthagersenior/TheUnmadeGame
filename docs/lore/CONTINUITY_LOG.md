@@ -2,6 +2,12 @@
 
 Every substantial gameplay addition needs a companion canon update and a regenerated illustrated package edition. This history describes what was actually updated; it is not a claim that engine content was playtested.
 
+## 2026-10-20 — Complete the 88-resident return register
+- Added return dialogue profiles for the six already registered field scouts, retaining each stable ID and appending their records after the original 82.
+- Added care/truth-specific scout return lines selected from the already saved outcome. Return lines stay within each route's established local effects and preserve private names and unresolved mysteries.
+- Migrated old 82-slot resident-continuity snapshots by keeping their existing order and initializing six appended profiles to zero. No SaveGame fields or stable IDs changed.
+- Updated the generated native dialogue table, Unreal CSV, readable character volume, source count checks, and current documentation. Unreal Editor compilation and in-engine load verification remain pending.
+
 ## 2026-10-10 — Volume II: The World Remembers
 - Codified the four player-first standards and ten signature mechanics as required narrative and interaction checks.
 - Added fully authored follow-up adventures for the **nine** established realms. The rules are implemented in a deterministic C++17 source model with identity-specific evidence, witness and choice gates. Six realms are still conceptual for Unreal runtime.

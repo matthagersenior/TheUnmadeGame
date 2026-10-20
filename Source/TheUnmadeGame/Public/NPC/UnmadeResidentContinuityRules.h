@@ -5,23 +5,21 @@
 #include "World/UnmadeSettlementRegistry.h"
 #include "World/UnmadeFrontierRealmRules.h"
 #include "Authoring/UnmadeOuterPeopleData.h"
+#include "Authoring/UnmadeResidentReturnData.h"
 #include <array>
 #include <cstring>
 namespace UnmadeCore {
-inline constexpr int ResidentContinuityCount=static_cast<int>(
+inline constexpr int ResidentContinuityLegacyCount=static_cast<int>(
     Residents.size()+FrontierResidents.size()+OuterPeople.size());
+inline constexpr int ResidentContinuityCount=static_cast<int>(ReturnDialogue.size());
 inline const char* ResidentContinuityId(int i) noexcept {
     if(i<0||i>=ResidentContinuityCount)return nullptr;
-    if(i<static_cast<int>(Residents.size()))return Residents[i].id;
-    i-=static_cast<int>(Residents.size());
-    if(i<static_cast<int>(FrontierResidents.size()))return FrontierResidents[i].id;
-    i-=static_cast<int>(FrontierResidents.size());
-    return OuterPeople[i].id;
+    return ReturnDialogue[i].id;
 }
 inline int ResidentContinuityIndex(const char* id) noexcept {
     if(!id)return -1;
     for(int i=0;i<ResidentContinuityCount;++i)
-        if(std::strcmp(id,ResidentContinuityId(i))==0)return i;
+        if(std::strcmp(id,ReturnDialogue[i].id)==0)return i;
     return -1;
 }
 enum class Familiarity:int { Stranger=0, Recognized=1, Acquainted=2,
@@ -77,6 +75,24 @@ public:
     }
 private:ResidentContinuitySnapshot state_{};
 };
+inline bool BuildResidentContinuitySnapshot(
+    const int* visits,int visitCount,const int* lastDays,int lastDayCount,
+    const int* aids,int aidCount,ResidentContinuitySnapshot& out) noexcept {
+    if(visitCount!=lastDayCount || visitCount!=aidCount ||
+       (visitCount!=ResidentContinuityLegacyCount &&
+        visitCount!=ResidentContinuityCount) ||
+       (visitCount>0 && (!visits || !lastDays || !aids)))return false;
+    ResidentContinuitySnapshot candidate{};
+    for(int i=0;i<visitCount;++i) {
+        candidate.visits[i]=visits[i];
+        candidate.lastDay[i]=lastDays[i];
+        candidate.aids[i]=aids[i];
+    }
+    ResidentContinuity verifier;
+    if(!verifier.Restore(candidate))return false;
+    out=candidate;
+    return true;
+}
 inline const char* ResidentContinuityLine(Familiarity level,bool aided,
                                            bool localStoryKnown,
                                            bool newMorning)noexcept {

@@ -37,4 +37,6 @@ struct THEUNMADEGAME_API FUnmadeResidentReturnAuthoringRow : public FTableRowBas
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString NewMorningLine;
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString PersonalConcern;
     UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString NextVisitHook;
+    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString CareReturnLine;
+    UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="Unmade|Story") FString TruthReturnLine;
 };

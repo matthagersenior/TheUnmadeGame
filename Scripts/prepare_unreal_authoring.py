@@ -24,7 +24,7 @@ TABLES = (
     ("cinematic_shots_unreal.csv", "DT_UnmadeCinematicShots", "UnmadeCinematicShotAuthoringRow", 16),
     ("cinematic_realms_unreal.csv", "DT_UnmadeCinematicRealms", "UnmadeCinematicRealmAuthoringRow", 9),
     ("main_quest_steps_unreal.csv", "DT_UnmadeMainQuestSteps", "UnmadeQuestStepAuthoringRow", 54),
-    ("resident_returns_unreal.csv", "DT_UnmadeResidentReturns", "UnmadeResidentReturnAuthoringRow", 82),
+    ("resident_returns_unreal.csv", "DT_UnmadeResidentReturns", "UnmadeResidentReturnAuthoringRow", 88),
 )
 
 HEADER_FOR = {

@@ -6,9 +6,10 @@ import build_remembered_roads
 class RememberedRoadCoverage(unittest.TestCase):
  def setUp(self):self.d=json.loads((ROOT/'Authoring/remembered_roads_v13.json').read_text())
  def test_every_canonical_person_and_scout_once(self):
-  old=json.loads((ROOT/'Authoring/resident_return_encounters.json').read_text())['residents'];new=self.d['residents'];ids={p['id'] for p in new}
-  self.assertEqual(len(new),88);self.assertEqual(len(ids),88);self.assertTrue({p['id'] for p in old}<=ids)
-  self.assertEqual(len(ids-{p['id'] for p in old}),6)
+  profiles=json.loads((ROOT/'Authoring/resident_return_encounters.json').read_text())['residents'];new=self.d['residents'];ids={p['id'] for p in new}
+  self.assertEqual(len(new),88);self.assertEqual(len(ids),88);self.assertEqual(len(profiles),88)
+  self.assertEqual([p['id'] for p in profiles[:82]],[p['id'] for p in new[:82]])
+  self.assertEqual({p['id'] for p in profiles[82:]},{p['id'] for p in new if '.scout.' in p['id']})
  def test_all_realms_cities_and_distinct_adventures(self):
   cities=self.d['cities'];realms=json.loads((ROOT/'Authoring/world_content_pack.json').read_text())['realms'];self.assertEqual({c['realm'] for c in cities},{r['id'] for r in realms});self.assertEqual(len(cities),11)
   for key in ['title','cargo','elder']:self.assertEqual(len({c[key] for c in cities}),11)

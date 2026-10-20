@@ -4,8 +4,8 @@
 - Nine canonical regional main-quest contracts contain exactly six labeled beats each, including 2 distinct deliberate commitment resolutions, a physical objective, exact speaker/dialogue, trigger, failure/recovery and persisted-state directions
 - Four finale stages represent Nhal-Vey's false mask break, actual core victory, deliberate new morning, postgame return
 - Every later first-quest evidence + mechanism token originates from `UnmadeLaterRealmRules.h`; early symbolic references are explicitly marked as **not yet bound**
-- All 82 stable resident ids remain in native registry order (48/16/18), and individual first-return, aid, local-story and post-morning lines appear in the generated lookup and CSV
-- Native `ResidentContinuity` enforces one familiarity increment per in-game day, rejects day reversal, caps level at five, records aid once, refuses corrupt snapshots and leaves 82 residents isolated from each other's state
+- The original 82 stable resident IDs remain in native order (48/16/18), with six existing scout IDs appended; all 88 profiles have individual first-return, aid, local-story and post-morning lines in the generated lookup and CSV
+- Native `ResidentContinuity` enforces one familiarity increment per in-game day, rejects day reversal, caps level at five, records aid once, refuses corrupt snapshots and leaves all 88 resident profiles isolated from each other's state; old 82-slot saves retain their ordering
 - Game runtime E interaction records actual conversations; OfferAid records aid; `WriteWorldSnapshot` stores the exact arrays and rejects malformed data, restores on save failure
 - Source scene manifest contains exactly 36 realm references and 16 cinematic guides, with stable unique labels, no collision and no existing quest-control tags
 - Offline Editor script defaults to dry-run; `--apply` is only accepted in a level actually named `Unmade_AuthoringStaging`; existing labels skipped, original live levels remain untouched

@@ -79,6 +79,15 @@ FString AUnmadePrototypeHub::GetFirstStoryReturnLine(
     else
         Outcome=LaterRealm.Outcome(Home);
     const FTCHARToUTF8 ID(*ResidentId.ToString());
+    if(Outcome==1 || Outcome==2)
+    {
+        if(const auto* Profile=UnmadeCore::FindReturnDialogue(ID.Get()))
+        {
+            const char* RouteLine=Outcome==1?Profile->careLine:Profile->truthLine;
+            if(RouteLine && RouteLine[0]!='\0')
+                return FString(UTF8_TO_TCHAR(RouteLine));
+        }
+    }
     return FString(UTF8_TO_TCHAR(
         UnmadeCore::FirstStoryReturnLine(Home,ID.Get(),Outcome)));
 }

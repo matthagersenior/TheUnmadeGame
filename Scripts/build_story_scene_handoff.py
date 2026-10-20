@@ -35,7 +35,9 @@ QUEST_COLS={"realm":"Realm","chapter":"Chapter","step":"StepId",
 RETURN_COLS={"id":"StableId","name":"DisplayName","realm":"Realm",
  "recognize_line":"ReturnLine","aid_line":"AidLine",
  "public_line":"LocalPublicLine","post_morning":"NewMorningLine",
- "personal_concern":"PersonalConcern","next_visit_hook":"NextVisitHook"}
+ "personal_concern":"PersonalConcern","next_visit_hook":"NextVisitHook",
+ "care_return_line":"CareReturnLine","truth_return_line":"TruthReturnLine"}
+RETURN_HEADER=ROOT/"Source/TheUnmadeGame/Public/Authoring/UnmadeResidentReturnData.h"
 def load():
     return [json.loads(p.read_text(encoding="utf-8")) for p in
             (QUESTS,RESIDENTS,REALMS,SHOTS)]
@@ -45,8 +47,8 @@ def verify(q,p,w,c):
     ids=[r["id"] for r in w["realms"]]
     if ids!=list(COORDS) or [r["id"] for r in q["quests"]]!=ids:
         raise ValueError("Quest/realm enum order drift")
-    if len(p["residents"])!=82 or p["registered_count"]!=82:
-        raise ValueError("82 registered person profiles required")
+    if len(p["residents"])!=88 or p["registered_count"]!=88:
+        raise ValueError("88 registered person profiles required")
     if len(c["shots"])!=16 or len(q["act_gates"])!=7:
         raise ValueError("Expected 16 shots and 7 act gates")
     hdr=(ROOT/"Source/TheUnmadeGame/Public/World/UnmadeLaterRealmRules.h").read_text()
@@ -77,7 +79,7 @@ def verify(q,p,w,c):
                for n in quest["npc_ids"]):
             raise ValueError("Unknown speaker in "+ids[idx])
     ids_person=[r["id"] for r in p["residents"]]
-    if len(set(ids_person))!=82:raise ValueError("Duplicate stable resident")
+    if len(set(ids_person))!=88:raise ValueError("Duplicate stable resident")
     for resident in p["residents"]:
         if resident["realm"] not in COORDS:raise ValueError("Resident lacks home")
         for k in ("recognize_line","aid_line","public_line","post_morning",
@@ -100,9 +102,38 @@ def verify(q,p,w,c):
         else:
             content=text.split("inline constexpr std::array<OuterPersonSpec,18> OuterPeople",1)[1].split("}};",1)[0]
         expected += re.findall(r'\{\s*"(npc\.[^"]+)"',content)
+    roads=json.loads((AUTHOR/"remembered_roads_v13.json").read_text(encoding="utf-8"))
+    scouts=[person["id"] for person in roads["residents"] if person["index"]>=82]
+    if len(scouts)!=6 or any(".scout." not in scout for scout in scouts):
+        raise ValueError("Expected six already registered remembered-road scouts")
+    expected+=scouts
     if ids_person!=expected:
         raise ValueError("Resident indices could corrupt existing saves: stable order differs")
+    for resident in p["residents"]:
+        if resident["id"] in scouts and set(resident.get("outcome_lines",{}))!={"care","truth"}:
+            raise ValueError("Each field scout needs saved-route return dialogue: "+resident["id"])
     return True
+
+def return_header(p):
+    q=lambda value:json.dumps(value,ensure_ascii=True,separators=(",",":"))
+    lines=["#pragma once","// GENERATED from Authoring/resident_return_encounters.json. DO NOT EDIT.",
+           "// Original 82 continuity slots retain their order; six scouts are appended.",
+           "#include <array>","#include <cstring>","namespace UnmadeCore {",
+           "struct ReturnDialogueSpec {",
+           " const char* id; const char* recognize; const char* aid;",
+           " const char* publicLine; const char* newMorning;",
+           " const char* careLine; const char* truthLine;","};",
+           "inline constexpr std::array<ReturnDialogueSpec,88> ReturnDialogue = {{"]
+    for row in p["residents"]:
+        route=row.get("outcome_lines",{})
+        fields=(row["id"],row["recognize_line"],row["aid_line"],row["public_line"],
+                row["post_morning"],route.get("care",""),route.get("truth",""))
+        lines.append("    {"+",".join(q(field) for field in fields)+"},")
+    lines.extend(["}};","inline const ReturnDialogueSpec* FindReturnDialogue(const char* id) noexcept {",
+                  " if(!id)return nullptr;",
+                  " for(const auto& p:ReturnDialogue)if(std::strcmp(p.id,id)==0)return &p;",
+                  " return nullptr;","}","} // namespace UnmadeCore"])
+    return "\n".join(lines)+"\n"
 
 def quest_rows(q):
     rows=[]
@@ -155,11 +186,18 @@ def scene_manifest(w,c):
       "actors":actors,"expected_actor_count":len(actors)}
 
 def outputs(q,p,w,c):
+    resident_rows=[]
+    for resident in p["residents"]:
+        row=dict(resident)
+        row["care_return_line"]=resident.get("outcome_lines",{}).get("care","")
+        row["truth_return_line"]=resident.get("outcome_lines",{}).get("truth","")
+        resident_rows.append(row)
     return {
      OUTPUT/"main_quest_steps_unreal.csv":
        csv_rows(quest_rows(q),QUEST_COLS,"id"),
      OUTPUT/"resident_returns_unreal.csv":
-       csv_rows(p["residents"],RETURN_COLS,"id"),
+       csv_rows(resident_rows,RETURN_COLS,"id"),
+     RETURN_HEADER:return_header(p),
      OUTPUT/"scene_build_manifest.json":
        json.dumps(scene_manifest(w,c),ensure_ascii=False,indent=2)+"\n"
     }
@@ -188,6 +226,6 @@ def main():
     if bad:
         print("Quest/scene data out of sync; run --write:",*bad,sep="\n  ")
         return 1
-    print("PASS: 9 quests / 54 authored beats / 82 returning residents / 52 idempotent staging guides")
+    print("PASS: 9 quests / 54 authored beats / 88 returning residents / 52 idempotent staging guides")
     return 0
 if __name__=="__main__":sys.exit(main())

@@ -57,7 +57,7 @@ The repository has one **unified directory to the entire established game univer
 ## Current source gaps and reconciliations
 
 - **256 codex entries:** Earlier static descriptions mention 182 or 186 entries; those are historical snapshots. Only the current Ability Codex file defines the present count, and not all entries are castable powers.
-- **88 resident identities, 82 return dossiers:** The six newer scouts have source identity records but not the independent 82-person resident-return dialogue. The characters are preserved and their missing expansion is visible.
+- **88 resident identities and 88 return profiles:** Six scout profiles were appended without changing the original 82 IDs or their order. Existing saves with 82 relationship slots migrate by preserving those slots and initializing the six appended profiles to zero familiarity.
 - **Eleven literary cities, three original playable-settlement source definitions:** Additional cities are real world-building and production contracts, not yet verified explorable Unreal levels.
 - **Source evidence versus gameplay:** Real compiled behavior, character animations, VO/music, full accessibility, pathfinding, collision, packaging, all-save migrations and human playtesting remain explicit Unreal/production gates.
 - **Illustrated novels and guides:** Historical publication files are dated artifacts. Updating this source index is not an assertion that the full illustrated book has been regenerated and visually approved.

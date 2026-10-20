@@ -294,7 +294,7 @@ public:
 
 
 
-    /** Optional stable-ID 82-resident return recognition; version1 compatible. */
+    /** Optional stable-ID resident return recognition; legacy 82-slot snapshots migrate to 88. */
     UPROPERTY(SaveGame)
     bool bHasResidentContinuitySnapshot=false;
     UPROPERTY(SaveGame)

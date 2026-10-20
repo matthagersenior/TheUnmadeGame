@@ -59,7 +59,7 @@ Our nine-realm lived-universe atlas covers 27 physical clues, 18 ordinary reside
 
 ## Next pre-PC content contract
 
-1. Every one of 82 residents needs a multi-session narrative card: stable ID, home/work/sleep locations, personal fear and desire, conflicting loyalty, known/unknown events, relationship limits, five unique dialogue moves and at least one consequence-aware return. Mark **missing** until individually reviewed.
+1. Every one of 88 residents needs a multi-session narrative card: stable ID, home/work/sleep locations, personal fear and desire, conflicting loyalty, known/unknown events, relationship limits, five unique dialogue moves and at least one consequence-aware return. Mark **missing** until individually reviewed.
 2. Each of nine regions needs a topological traversal plan with landmarks, local route length estimates, safe bypass, geography-dependent hazard and world-state variants. Plans are *provisional* until verified on a real UE host.
 3. Each full dialogue branch requires exact player response, actor gesture, interruption point, subtitle/voice variant, trigger, ineligible reason, no-dead-end recovery and effect on genuine canonical save state.
 4. Every enemy and guardian needs animation beats, anticipation duration, hit geometry, accessible telegraph, non-cheating AI decision rule, recovery window, movement/obstruction interaction and tuning fixture.

@@ -304,20 +304,18 @@ void AUnmadePrototypeHub::RestoreLivingWorld()
     }
     if(Save->bHasResidentContinuitySnapshot)
     {
-        if(Save->ResidentEncounterVisits.Num()!=UnmadeCore::ResidentContinuityCount ||
-           Save->ResidentEncounterLastDays.Num()!=UnmadeCore::ResidentContinuityCount ||
-           Save->ResidentEncounterAidFlags.Num()!=UnmadeCore::ResidentContinuityCount)
+        UnmadeCore::ResidentContinuitySnapshot RS;
+        if(!UnmadeCore::BuildResidentContinuitySnapshot(
+            Save->ResidentEncounterVisits.GetData(),
+            Save->ResidentEncounterVisits.Num(),
+            Save->ResidentEncounterLastDays.GetData(),
+            Save->ResidentEncounterLastDays.Num(),
+            Save->ResidentEncounterAidFlags.GetData(),
+            Save->ResidentEncounterAidFlags.Num(),RS))
         {
             bResidentContinuityRejected=true;
             UE_LOG(LogTemp,Error,TEXT("Malformed resident continuity save arrays; writes blocked"));
             return;
-        }
-        UnmadeCore::ResidentContinuitySnapshot RS;
-        for(int i=0;i<UnmadeCore::ResidentContinuityCount;++i)
-        {
-            RS.visits[i]=Save->ResidentEncounterVisits[i];
-            RS.lastDay[i]=Save->ResidentEncounterLastDays[i];
-            RS.aids[i]=Save->ResidentEncounterAidFlags[i];
         }
         if(!RestoredResidentContinuity.Restore(RS))
         {

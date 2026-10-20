@@ -22,12 +22,16 @@ class QuestAndSceneHandoff(unittest.TestCase):
             return_step=next(step for step in quest["steps"] if step["id"]=="return")
             self.assertEqual(set(return_step["outcome_lines"]),{"care","truth"})
         self.assertEqual(len(self.q["final_encounter"]["stages"]),4)
-    def test_82_persona_ids_canonically_ordered(self):
-        self.assertEqual(len(self.p["residents"]),82)
-        self.assertEqual(len(set(p["id"] for p in self.p["residents"])),82)
+    def test_88_persona_ids_canonically_ordered(self):
+        self.assertEqual(len(self.p["residents"]),88)
+        self.assertEqual(len(set(p["id"] for p in self.p["residents"])),88)
         native=(ROOT/"Source/TheUnmadeGame/Public/Authoring/UnmadeResidentReturnData.h").read_text()
         for entry in self.p["residents"]:
             self.assertIn(entry["id"],native)
+        for entry in self.p["residents"][-6:]:
+            self.assertEqual(set(entry["outcome_lines"]),{"care","truth"})
+            for line in entry["outcome_lines"].values():
+                self.assertGreater(len(line),24)
         self.assertIn("ReturnDialogue",native)
     def test_generated_scene_manifest_and_import_contract(self):
         m=S.scene_manifest(self.w,self.c)
@@ -76,6 +80,7 @@ class QuestAndSceneHandoff(unittest.TestCase):
         self.assertIn("RecordResidentAid(Target->GetStableId())",char)
         self.assertIn("FindReturnDialogue(ID.Get())",ret)
         self.assertIn("FirstStoryReturnLine(Home,ID.Get(),Outcome)",ret)
+        self.assertIn("FindReturnDialogue(ID.Get())",ret)
         npc=(ROOT/"Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp").read_text()
         self.assertIn("GetFirstStoryReturnLine(NpcId,CurrentHome)",npc)
     def test_ci_and_first_pc(self):

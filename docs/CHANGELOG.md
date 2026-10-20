@@ -6,6 +6,10 @@ Physical chamber arrival and encounter receipts now agree across nine realms. Ad
 
 Historical milestones describe their dated baseline. Consult the root README for current status.
 
+## 2026-10-20 — Complete the source-backed return profiles
+
+The six existing field scouts now have authored recognition, aid, local knowledge, new-morning, concern, visit-hook and care/truth return lines. Their records append after the original 82 resident profiles, keeping all existing stable IDs and save indices intact. Old 82-slot relationship snapshots preserve their data and receive six empty appended slots on load. Updated the generated C++ dialogue table, Unreal CSV, readable NPC volume, test gates and current Ability Codex count (256). Full Unreal Editor compilation and in-engine old-save restoration remain to be verified on a supported UE host.
+
 ## Player Experience v17 — 12 October 2026
 
 Timed contact and traveling shots, unified equipment, optional dungeon wings and guardians, furnished settlement services, conditional relationships, earned builds, objectives/maps, accessibility settings and input rebinding. [Acceptance](design/player-experience-v17-acceptance.md).

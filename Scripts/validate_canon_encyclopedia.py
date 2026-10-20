@@ -80,15 +80,21 @@ def expected_records(root: Path) -> dict[str, tuple[str, str, str]]:
     for trade_id in trade_ids:
         out[f"trade_contract:trade.{trade_id}"] = ("", page, trade_source)
 
-    # 88 source residents versus 82 authored return records: a covered
-    # distinction, not an invitation to silently invent return dialogue.
+    # Every registered resident now has a source-authored return profile.
     returned = read_json(root, "Authoring/resident_return_encounters.json")
     resident_ids = {x["id"] for x in npc["residents"]}
-    return_ids = {x["id"] for x in returned["residents"]}
+    return_rows = returned["residents"]
+    return_ids = {x["id"] for x in return_rows}
     if not return_ids.issubset(resident_ids):
         raise ValueError("resident-return register contains unknown stable NPC IDs")
     if len(return_ids) != returned["registered_count"]:
         raise ValueError("resident-return registered_count is stale")
+    if return_ids != resident_ids or returned["registered_count"] != len(resident_ids):
+        raise ValueError("every registered resident needs a return profile")
+    scout_ids = {row["id"] for row in npc["residents"] if ".scout." in row["id"]}
+    for row in return_rows:
+        if row["id"] in scout_ids and set(row.get("outcome_lines", {})) != {"care", "truth"}:
+            raise ValueError("field scout return profile needs both saved-route lines: " + row["id"])
     return out
 
 

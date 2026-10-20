@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "edition": "2026-10-10",
-  "registered_count": 82,
-  "format_note": "Every stable NPC ID carries authored return/aid/local world text; persistent counters are saved by ResidentContinuity. Avoid treating community effects as direct eyewitness reports.",
+  "edition": "2026-10-20",
+  "registered_count": 88,
+  "format_note": "All 88 stable NPC IDs carry authored recognition, aid, local-story and post-morning text; the first 82 preserve their established continuity order, with six field scouts appended. Scout route replies are local to their saved city outcome.",
   "residents": [
     {
       "id": "npc.merchant.001",
@@ -1141,6 +1141,102 @@
       "post_morning": "Veilune Both-Mornings: \"The morning looks different above the threshold before every map. I remember who I was before the light changed.\"",
       "personal_concern": "Official order will call testimony dishonest unless it can be simplified.",
       "next_visit_hook": "Preserve mutually true beginnings without forcing others into confusion."
+    },
+    {
+      "id": "npc.reach.ashroad.scout.001",
+      "name": "Orren the ash-runner",
+      "settlement": "Crossings",
+      "realm": "ThreefoldReach",
+      "recognize_line": "Orren: “I saw your tracks return along the ash road. I keep field sightings apart from what reaches the receiving shelf.”",
+      "aid_line": "Orren: “You lent a hand on the route. I logged the help as something I witnessed, not a favor the road can collect.”",
+      "public_line": "Orren: “The bell road carries the mark of the choice made here. I can map what I saw; the shelf only proves the bundle arrived.”",
+      "post_morning": "Orren: “The light has moved across the ash road. I remember which track I took before the sky changed.”",
+      "personal_concern": "Keep field sightings separate from reports carried back to the Crossings.",
+      "next_visit_hook": "Ask which marks Orren saw on the ash road; he will separate them from any account delivered later.",
+      "outcome_lines": {
+        "care": "The refuge cord points new visitors toward shelter. I can mark its path without recording who follows it.",
+        "truth": "The public docket gives us three objects to compare. I can verify the marks; I will leave protected guests unnamed."
+      }
+    },
+    {
+      "id": "npc.reach.glasscut.scout.001",
+      "name": "Vesh the glass warden",
+      "settlement": "Crossings",
+      "realm": "ThreefoldReach",
+      "recognize_line": "Vesh: “You came back to the glass cut. I remember the line of sight we checked, not every story carried from town.”",
+      "aid_line": "Vesh: “You helped hold the watch. I will remember the act without turning it into a claim about what you owe.”",
+      "public_line": "Vesh: “The road bears a visible change. My glass notes cover this ridge; the receiving mark proves only that a parcel arrived.”",
+      "post_morning": "Vesh: “The skyline has shifted again. I remember the old angle through the glass, though I will not call one morning the true one.”",
+      "personal_concern": "Record what the glass cut shows without treating a distant delivery as firsthand evidence.",
+      "next_visit_hook": "Ask Vesh to compare the present view with the field mark; a receiving date cannot replace the sighting.",
+      "outcome_lines": {
+        "care": "From this cut I can trace the refuge cord toward shelter, but I cannot know who used it.",
+        "truth": "The docket lets the three objects be compared in public. The names of people sheltered there stay outside my notes."
+      }
+    },
+    {
+      "id": "npc.bellwold.forgotten.scout.001",
+      "name": "Deryn the bell seeker",
+      "settlement": "Bellwold",
+      "realm": "ThreefoldReach",
+      "recognize_line": "Deryn: “You found the Bellwold steps again. I remember the search marks, not a bell anyone has yet heard.”",
+      "aid_line": "Deryn: “You helped me keep the search path open. I will not make that help a debt against you.”",
+      "public_line": "Deryn: “The refuge road changed here. I can speak for these steps and their marks, not for what Paperhaven says from afar.”",
+      "post_morning": "Deryn: “The bell-shaped space catches a different light now. I remember the steps we stood on before it changed.”",
+      "personal_concern": "Search for the missing bell without letting a route report become proof that it exists.",
+      "next_visit_hook": "Ask which Bellwold marks Deryn checked in person and which claims still need another witness.",
+      "outcome_lines": {
+        "care": "The refuge cord can guide visitors toward shelter without asking me to name them.",
+        "truth": "The public docket offers a way to compare the bell’s three objects. The bell itself is still unaccounted for."
+      }
+    },
+    {
+      "id": "npc.paperhaven.torn.scout.001",
+      "name": "Isti the torn-page keeper",
+      "settlement": "Paperhaven",
+      "realm": "ThreefoldReach",
+      "recognize_line": "Isti: “You returned to the torn-page vault. I kept the missing leaf separate from the account someone brought back.”",
+      "aid_line": "Isti: “You helped keep the torn record legible. I noted what I saw, and left the unrecorded names private.”",
+      "public_line": "Isti: “The archive can show what changed in Paperhaven. A parcel receipt does not tell me what its distant witnesses saw.”",
+      "post_morning": "Isti: “The dry garden has a second morning shadow. I remember the page we were reading before it appeared.”",
+      "personal_concern": "Protect private refuge names while keeping physical archive evidence open to comparison.",
+      "next_visit_hook": "Ask Isti to compare the page, seal and ledger marks without filling in the torn names.",
+      "outcome_lines": {
+        "care": "The refuge cord points toward shelter; the archive still offers no public lead to follow.",
+        "truth": "The docket makes the three objects available for comparison while protected guests remain unnamed."
+      }
+    },
+    {
+      "id": "npc.saltwake.saltglass.scout.001",
+      "name": "Halven the net seeker",
+      "settlement": "Saltwake",
+      "realm": "WidowedRain",
+      "recognize_line": "Halven: “You came back to the saltglass shore. I remember the dry net and the track we checked beside it.”",
+      "aid_line": "Halven: “You helped me mend the net. I remember the work, not a promise that you must repay it.”",
+      "public_line": "Halven: “The waterline here has changed. My field chart records Saltwake; a delivered account cannot tell me what another shore saw.”",
+      "post_morning": "Halven: “The saltglass catches a different dawn. I remember the shore before its light changed.”",
+      "personal_concern": "Keep shoreline observations distinct from debts and reports brought in by ferry.",
+      "next_visit_hook": "Ask Halven to show the saltglass mark and distinguish it from the account carried back to port.",
+      "outcome_lines": {
+        "care": "Families can use the ferry passage without old ownership papers. The empty sea still has no name on my chart.",
+        "truth": "The water-loss account leaves borrower addresses private. Is the public proof enough to compare what was owed?"
+      }
+    },
+    {
+      "id": "npc.cinderhold.blackslag.scout.001",
+      "name": "Varda the slag scout",
+      "settlement": "Cinderhold",
+      "realm": "HearthBeneath",
+      "recognize_line": "Varda: “You returned to the black-slag cut. I remember the heat mark we measured, not a story the furnace told for us.”",
+      "aid_line": "Varda: “You helped carry the brace. I recorded the lift we shared; it is not a debt against your name.”",
+      "public_line": "Varda: “The kiln shows a change in Cinderhold. My notes cover this vent; the receiving shelf only dates a delivery.”",
+      "post_morning": "Varda: “The slag cooled under a different light. I remember where the brace stood before dawn split.”",
+      "personal_concern": "Keep the kiln’s visible effects separate from guesses about where its impossible fuel began.",
+      "next_visit_hook": "Ask Varda what the vent and slag show directly, then compare that with the public fuel record.",
+      "outcome_lines": {
+        "care": "The unregistered homes have heat without signing first. I still see the kiln’s old fuel cost on the tally.",
+        "truth": "The ember’s source is public now. Has the city begun the repair the plan asks it to answer for?"
+      }
     }
   ]
 }
