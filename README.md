@@ -10,15 +10,16 @@ Explore nine authored realms through combat, investigation, rescue and reality-c
 
 ## Current status
 
-Current source milestone: **Player Facing Reliability v20, with the v21 cross-realm parity gate**. The repository contains Unreal C++ gameplay, generated graybox world assembly, portable rules, authored narrative data and prototype asset generators. No packaged playable release is available.
+Current source milestone: **v21 cross-realm parity plus the first-PC production handoff** (20 October 2026). The repository contains Unreal C++ gameplay, generated graybox world assembly, portable rules, authored narrative data and prototype asset generators. The source-linked handoff currently indexes 669 work orders across nine realms; this is an authoring and production aid, not evidence that those rows are playable. No packaged playable release is available.
 
 | Evidence | Scope |
 | --- | --- |
 | Verified in CI | Python validators and tests, portable C++17 gameplay rules, authored-data/output consistency |
+| Source handoff | 9 realm dossiers and 669 source-linked work orders; generated output labels Unreal work `UNREAL_NOT_VERIFIED` |
 | Source-only | Unreal gameplay integration, graybox settlements/dungeons, native menus, animation/audio import plans |
 | Untested in engine | UHT/Editor compilation, imported assets, movement/navigation/collision, rendered UI, campaign playtests and packaging |
 
-Detailed checks: [gameplay parity and completion standard](docs/qa/gameplay-parity-v21.md), [PC-independent readiness](docs/qa/pre-pc-readiness.md), [Windows host setup](docs/qa/windows-unreal-host.md), [Unreal CI](docs/qa/unreal-ci.md).
+Detailed checks: [gameplay parity and completion standard](docs/qa/gameplay-parity-v21.md), [PC-independent readiness](docs/qa/pre-pc-readiness.md), [first-PC production readiness plan](docs/plans/2026-10-19-unreal-arrival-production-readiness.md), [Windows host setup](docs/qa/windows-unreal-host.md), [Unreal CI](docs/qa/unreal-ci.md).
 
 ## Quick start
 

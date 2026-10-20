@@ -6,6 +6,10 @@ Physical chamber arrival and encounter receipts now agree across nine realms. Ad
 
 Historical milestones describe their dated baseline. Consult the root README for current status.
 
+## Auvren handoff correction — 20 October 2026
+
+The `FirstAbsence` interaction handoff now keeps Auvren's origin-anchor objective focused on the physical threshold and removes Nhal-Vey and both future-morning names from the pre-finale return beat. Existing stable dialogue, ending IDs, outcome rules and save owners are unchanged. A source regression test protects this boundary. The first-PC handoff indexes nine realm dossiers and 669 source-linked work orders; that package is not Unreal build or playtest evidence.
+
 ## Player Experience v17 — 12 October 2026
 
 Timed contact and traveling shots, unified equipment, optional dungeon wings and guardians, furnished settlement services, conditional relationships, earned builds, objectives/maps, accessibility settings and input rebinding. [Acceptance](design/player-experience-v17-acceptance.md).

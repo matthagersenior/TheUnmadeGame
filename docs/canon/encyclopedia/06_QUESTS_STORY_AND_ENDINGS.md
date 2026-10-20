@@ -695,7 +695,7 @@
 **realm:** FirstAbsence  
 **director note:** Reveal that Nhal-Vey suppresses questions; don't reveal false-victory twist during ordinary traversal.  
 **environment:** Doorways without foundations, contradictory source maps, stable return line and northern final arena.  
-**player verbs:** Read both stable-memory and contradictory-map evidence before choosing an origin anchor; Open one real threshold with stable fallback travel; Confront Nhal-Vey's mask, unveiled form, and deliberate future-choice controls  
+**player verbs:** Read both stable-memory and contradictory-map evidence before choosing an origin anchor; Open one real threshold with stable fallback travel
 **npc ids:** npc.absence.firstwitness.001; npc.absence.caretaker.001; npc.absence.otherwitness.001  
 **real source tags:** {"evidence":["Absence.Trial.StableMemory","Absence.Trial.ContradictoryMap"],"mechanism":"Absence.Trial.OriginAnchor","contract_status":"authoritative tags checked against LaterRealms source"}  
 **chapter level:** 4  
@@ -705,7 +705,7 @@
 **interaction:** Inspect the real realm public Campaign.Thread marker or speak to a resident  
 **objective:** Read both stable-memory and contradictory-map evidence before choosing an origin anchor  
 **speaker:** npc.absence.firstwitness.001  
-**line:** I remember your arrival before this threshold existed. I don't know which memory came first.  
+**line:** I remember your arrival before this threshold existed. I don't know which memory came first.
 **failure:** No valid sightline or current quest not started  
 **recovery:** Return to safe arrival path; map marker remains readable without taking rewards  
 **saved as:** world visit/initial dialogue; no new required quest flag  
@@ -714,7 +714,7 @@
 
 **trigger:** local first quest begun by actual relevant NPC  
 **interaction:** Inspect either physical evidence object, never resolve by dialogue text alone  
-**objective:** Open one real threshold with stable fallback travel  
+**objective:** Open one real threshold with stable fallback travel
 **speaker:** npc.absence.caretaker.001  
 **line:** A safe door is more useful than deciding whose beginning is true.  
 **evidence tags:** Absence.Trial.StableMemory; Absence.Trial.ContradictoryMap  
@@ -726,7 +726,7 @@
 
 **trigger:** matching locally saved evidence acquired; mechanism is interactable  
 **interaction:** Use actual site actor; check line of sight, stage and evidence match  
-**objective:** Confront Nhal-Vey's mask, unveiled form, and deliberate future-choice controls  
+**objective:** Open one real threshold with stable fallback travel
 **speaker:** npc.absence.firstwitness.001  
 **line:** I remember your arrival before this threshold existed. I don't know which memory came first. The two truthful beginnings at one usable threshold gives you one chance to change the place responsibly.  
 **physical tag:** Absence.Trial.OriginAnchor  
@@ -762,9 +762,9 @@
 
 **trigger:** reenter region after either outcome, optionally after Guardian/Echo/resonance  
 **interaction:** talk to individual NPC by stable ID; inspect saved physical consequence  
-**objective:** Held Morning uses bell/names echo attacks; Many Mornings uses horizon/counterfactual echoes.  
+**objective:** Inspect the saved threshold and speak with a resident about the path you chose.
 **speaker:** npc.absence.firstwitness.001  
-**line:** You came back. Held Morning uses bell/names echo attacks; Many Mornings uses horizon/counterfactual echoes. I have not forgotten the path you chose.  
+**line:** I remember your arrival before this threshold existed. I don't know which memory came first.
 **failure:** Area unloaded or a followup system still dormant  
 **recovery:** Core first story remains complete; later optional chapters appear only when their own prerequisites hold  
 **saved as:** One-time local first story outcome plus optional separate relationship visits  
