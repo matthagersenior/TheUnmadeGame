@@ -26,6 +26,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** The stallkeeper: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** The stallkeeper: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** The stallkeeper: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** At my counter, I can point to this change: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** At my counter, I can tell people what the public record actually says: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -51,6 +54,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** A gate watchkeeper: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** A gate watchkeeper: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** A gate watchkeeper: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I keep my report to what the crossing shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can confirm what was made public and keep the rest out of the patrol log: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -76,6 +82,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** A passing stranger: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** A passing stranger: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** A passing stranger: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I can speak for the ground under my feet: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can follow the evidence and leave each person room to answer: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -126,6 +135,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** A courier: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** A courier: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** A courier: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I will carry the local account as it stands: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can deliver the public account with its limits intact: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -151,6 +163,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** The well listener: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** The well listener: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** The well listener: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** My notes record the local change this way: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** My notes distinguish the public finding from what remains unproved: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -176,6 +191,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** The displaced orchard keeper: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** The displaced orchard keeper: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** The displaced orchard keeper: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I walked the place after your choice and found this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can look at the public proof without deciding anyone’s private account for them: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -201,6 +219,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** The keeper of future debts: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** The keeper of future debts: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** The keeper of future debts: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** When someone asks what changed here, I tell them: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** When a buyer asks what was proved, I point to this: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -226,6 +247,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** The road warden: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** The road warden: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** The road warden: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I keep my report to what the crossing shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can confirm what was made public and keep the rest out of the patrol log: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -251,6 +275,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** The bell maker: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** The bell maker: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** The bell maker: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The market feels the choice in this detail: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The market can inspect this proof without buying anyone’s private story: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -276,6 +303,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** The night courier: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** The night courier: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** The night courier: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I can report what this road shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The message can travel; private names do not have to travel with it: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -301,6 +331,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Mara the metalworker: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Mara the metalworker: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Mara the metalworker: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I have one honest answer for a buyer asking about the road: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I keep the public finding separate from private names: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -326,6 +359,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Tovin the ink mender: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Tovin the ink mender: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Tovin the ink mender: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I keep the observed change separate from rumor: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** This evidence is available for comparison; it is not a final answer to everything: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -351,6 +387,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Nira of the hearth: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** Nira of the hearth: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Nira of the hearth: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The path tells me one thing plainly: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** This is open to see; what a person shares is still theirs: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -376,6 +415,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Orrel the bridge keeper: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Orrel the bridge keeper: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Orrel the bridge keeper: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** On patrol, I can point to this and no farther: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can guard the public evidence without treating it as a warrant: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -421,6 +463,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Kesta the porter: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Kesta the porter: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Kesta the porter: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -446,6 +491,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Hessa the refuge matron: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** Hessa the refuge matron: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Hessa the refuge matron: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I can speak for the ground under my feet: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can follow the evidence and leave each person room to answer: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -491,6 +539,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Corvin the stonewright: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Corvin the stonewright: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Corvin the stonewright: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I have one honest answer for a buyer asking about the road: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I keep the public finding separate from private names: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -516,6 +567,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Bram the watch captain: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Bram the watch captain: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Bram the watch captain: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** From the watch post, the change I can confirm is this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The watch can protect the choice to publish this, not expose anyone beyond it: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -541,6 +595,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Sorin the healer: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Sorin the healer: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Sorin the healer: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The record supports this much, and no more: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can cite what was published and leave private testimony private: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -566,6 +623,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Elsa the message runner: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Elsa the message runner: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Elsa the message runner: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -591,6 +651,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Anwen the shepherd: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** Anwen the shepherd: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Anwen the shepherd: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I walked the place after your choice and found this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can look at the public proof without deciding anyone’s private account for them: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -616,6 +679,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Perrin the tanner: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Perrin the tanner: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Perrin the tanner: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The market feels the choice in this detail: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The market can inspect this proof without buying anyone’s private story: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -641,6 +707,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Dessa of the night vigil: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Dessa of the night vigil: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Dessa of the night vigil: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** From the watch post, the change I can confirm is this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The watch can protect the choice to publish this, not expose anyone beyond it: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -666,6 +735,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Ivera the tutor: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Ivera the tutor: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Ivera the tutor: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I keep the observed change separate from rumor: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** This evidence is available for comparison; it is not a final answer to everything: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -711,6 +783,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Tessa the baker: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Tessa the baker: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Tessa the baker: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** When someone asks what changed here, I tell them: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** When a buyer asks what was proved, I point to this: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -736,6 +811,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Rook the lamplighter: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Rook the lamplighter: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Rook the lamplighter: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -761,6 +839,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Vale the millhand: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** Vale the millhand: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Vale the millhand: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I can speak for the ground under my feet: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can follow the evidence and leave each person room to answer: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -786,6 +867,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Oren the pathfinder: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Oren the pathfinder: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Oren the pathfinder: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The watch can answer for this local fact: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** This proof is open; that does not make every person an open record: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -811,6 +895,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Isma the relic keeper: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Isma the relic keeper: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Isma the relic keeper: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** My notes record the local change this way: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** My notes distinguish the public finding from what remains unproved: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -836,6 +923,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Fen the fletcher: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Fen the fletcher: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Fen the fletcher: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** When someone asks what changed here, I tell them: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** When a buyer asks what was proved, I point to this: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -861,6 +951,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Belyn the wood carrier: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Belyn the wood carrier: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Belyn the wood carrier: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -886,6 +979,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Sevrin the registrar: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Sevrin the registrar: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Sevrin the registrar: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I have checked the evidence here; it shows this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The record supports this claim, not every story attached to it: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -931,6 +1027,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Alis the archive sentinel: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Alis the archive sentinel: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Alis the archive sentinel: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I keep my report to what the crossing shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can confirm what was made public and keep the rest out of the patrol log: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -956,6 +1055,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Toma the copyist: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Toma the copyist: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Toma the copyist: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The record supports this much, and no more: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can cite what was published and leave private testimony private: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -981,6 +1083,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Myra the book trader: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Myra the book trader: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Myra the book trader: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** At my counter, I can point to this change: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** At my counter, I can tell people what the public record actually says: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1006,6 +1111,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Rell the paper runner: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Rell the paper runner: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Rell the paper runner: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I will carry the local account as it stands: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can deliver the public account with its limits intact: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1031,6 +1139,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Edris of the index: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** Edris of the index: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Edris of the index: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** When I pass through, this is what I can see: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The public record does not tell me what every neighbor believes: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1056,6 +1167,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Calder the keeper of hours: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Calder the keeper of hours: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Calder the keeper of hours: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I keep the observed change separate from rumor: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** This evidence is available for comparison; it is not a final answer to everything: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1081,6 +1195,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Yara of the seal: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Yara of the seal: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Yara of the seal: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** On patrol, I can point to this and no farther: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can guard the public evidence without treating it as a warrant: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1106,6 +1223,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Ilen the bookbinder: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Ilen the bookbinder: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Ilen the bookbinder: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The market feels the choice in this detail: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The market can inspect this proof without buying anyone’s private story: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1131,6 +1251,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Voss the mapmaker: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Voss the mapmaker: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Voss the mapmaker: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** My notes record the local change this way: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** My notes distinguish the public finding from what remains unproved: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1156,6 +1279,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Dara the surveyor: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Dara the surveyor: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Dara the surveyor: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I can report what this road shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The message can travel; private names do not have to travel with it: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1181,6 +1307,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Linn the dry gardener: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** Linn the dry gardener: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Linn the dry gardener: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I can speak for the ground under my feet: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can follow the evidence and leave each person room to answer: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1206,6 +1335,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Bret the last watchman: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Bret the last watchman: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Bret the last watchman: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I keep my report to what the crossing shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I can confirm what was made public and keep the rest out of the patrol log: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1231,6 +1363,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Meri the glassworker: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Meri the glassworker: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Meri the glassworker: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** When someone asks what changed here, I tell them: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** When a buyer asks what was proved, I point to this: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1256,6 +1391,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Otho the cataloguer: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Otho the cataloguer: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Otho the cataloguer: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** I have checked the evidence here; it shows this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** The record supports this claim, not every story attached to it: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1281,6 +1419,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Sela the letter carrier: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Sela the letter carrier: "Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Sela the letter carrier: "The morning looks different above the road between shelter and records. I remember who I was before the light changed."  
+**care route return:** The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.
+
+**truth route return:** I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests.
 **personal concern:** Keep the road between shelter and records safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1351,6 +1492,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Harrow the harbor warden: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Harrow the harbor warden: "Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Harrow the harbor warden: "The morning looks different above the wet harbor with no sea. I remember who I was before the light changed."  
+**care route return:** On patrol, I can point to this and no farther: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.
+
+**truth route return:** I can guard the public evidence without treating it as a warrant: the ledger records missing water and collateral without declaring survivors debtors.
 **personal concern:** Keep the wet harbor with no sea safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1396,6 +1540,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Olsa the net mender: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Olsa the net mender: "Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Olsa the net mender: "The morning looks different above the wet harbor with no sea. I remember who I was before the light changed."  
+**care route return:** When someone asks what changed here, I tell them: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.
+
+**truth route return:** When a buyer asks what was proved, I point to this: the ledger records missing water and collateral without declaring survivors debtors.
 **personal concern:** Keep the wet harbor with no sea safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1421,6 +1568,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Thenn the rain keeper: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Thenn the rain keeper: "Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Thenn the rain keeper: "The morning looks different above the wet harbor with no sea. I remember who I was before the light changed."  
+**care route return:** The record supports this much, and no more: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.
+
+**truth route return:** I can cite what was published and leave private testimony private: the ledger records missing water and collateral without declaring survivors debtors.
 **personal concern:** Keep the wet harbor with no sea safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1446,6 +1596,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Mera the tide courier: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Mera the tide courier: "Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Mera the tide courier: "The morning looks different above the wet harbor with no sea. I remember who I was before the light changed."  
+**care route return:** I can report what this road shows: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.
+
+**truth route return:** The message can travel; private names do not have to travel with it: the ledger records missing water and collateral without declaring survivors debtors.
 **personal concern:** Keep the wet harbor with no sea safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1471,6 +1624,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Donn the salt gatherer: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** Donn the salt gatherer: "Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Donn the salt gatherer: "The morning looks different above the wet harbor with no sea. I remember who I was before the light changed."  
+**care route return:** I can speak for the ground under my feet: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.
+
+**truth route return:** I can follow the evidence and leave each person room to answer: the ledger records missing water and collateral without declaring survivors debtors.
 **personal concern:** Keep the wet harbor with no sea safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1496,6 +1652,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Iva the water broker: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Iva the water broker: "Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Iva the water broker: "The morning looks different above the wet harbor with no sea. I remember who I was before the light changed."  
+**care route return:** The market feels the choice in this detail: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.
+
+**truth route return:** The market can inspect this proof without buying anyone’s private story: the ledger records missing water and collateral without declaring survivors debtors.
 **personal concern:** Keep the wet harbor with no sea safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1521,6 +1680,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Lorn the wave watcher: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Lorn the wave watcher: "Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Lorn the wave watcher: "The morning looks different above the wet harbor with no sea. I remember who I was before the light changed."  
+**care route return:** The watch can answer for this local fact: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.
+
+**truth route return:** This proof is open; that does not make every person an open record: the ledger records missing water and collateral without declaring survivors debtors.
 **personal concern:** Keep the wet harbor with no sea safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1546,6 +1708,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Rheva the ember warden: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Rheva the ember warden: "Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Rheva the ember warden: "The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed."  
+**care route return:** From the watch post, the change I can confirm is this: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.
+
+**truth route return:** The watch can protect the choice to publish this, not expose anyone beyond it: the ember’s source is public, with a repair plan the city can answer for.
 **personal concern:** Keep the shared hearth beneath the stone safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1571,6 +1736,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Garn the stonecarver: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Garn the stonecarver: "Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Garn the stonecarver: "The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed."  
+**care route return:** At my counter, I can point to this change: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.
+
+**truth route return:** At my counter, I can tell people what the public record actually says: the ember’s source is public, with a repair plan the city can answer for.
 **personal concern:** Keep the shared hearth beneath the stone safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1641,6 +1809,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Bes the coal runner: "You helped me deliver what mattered. I remember who was there when the road turned."  
 **public line:** Bes the coal runner: "Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Bes the coal runner: "The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed."  
+**care route return:** I can report what this road shows: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.
+
+**truth route return:** The message can travel; private names do not have to travel with it: the ember’s source is public, with a repair plan the city can answer for.
 **personal concern:** Keep the shared hearth beneath the stone safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1666,6 +1837,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Irel the ash gardener: "You helped me find a way through; I can sit beside you without asking where you came from."  
 **public line:** Irel the ash gardener: "Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Irel the ash gardener: "The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed."  
+**care route return:** I walked the place after your choice and found this: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.
+
+**truth route return:** I can look at the public proof without deciding anyone’s private account for them: the ember’s source is public, with a repair plan the city can answer for.
 **personal concern:** Keep the shared hearth beneath the stone safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1691,6 +1865,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Ovenna the warmth keeper: "I wrote down your aid as something I witnessed, not an extraordinary rumor."  
 **public line:** Ovenna the warmth keeper: "Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Ovenna the warmth keeper: "The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed."  
+**care route return:** I have checked the evidence here; it shows this: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.
+
+**truth route return:** The record supports this claim, not every story attached to it: the ember’s source is public, with a repair plan the city can answer for.
 **personal concern:** Keep the shared hearth beneath the stone safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1716,6 +1893,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Orven the shieldsmith: "When you helped, I kept a spare supply aside for the next stranger, not a debt against you."  
 **public line:** Orven the shieldsmith: "Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Orven the shieldsmith: "The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed."  
+**care route return:** When someone asks what changed here, I tell them: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.
+
+**truth route return:** When a buyer asks what was proved, I point to this: the ember’s source is public, with a repair plan the city can answer for.
 **personal concern:** Keep the shared hearth beneath the stone safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1741,6 +1921,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Kael the deep sentry: "You helped while I was on watch. I won't treat that like a favor someone must repay."  
 **public line:** Kael the deep sentry: "Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Kael the deep sentry: "The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed."  
+**care route return:** I keep my report to what the crossing shows: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.
+
+**truth route return:** I can confirm what was made public and keep the rest out of the patrol log: the ember’s source is public, with a repair plan the city can answer for.
 **personal concern:** Keep the shared hearth beneath the stone safe while allowing its residents to disagree.  
 **next visit hook:** Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.  
 
@@ -1832,6 +2015,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Orshel Drywake: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Orshel Drywake: "Our ferry that cannot count tomorrow has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Orshel Drywake: "The morning looks different above the ferry that cannot count tomorrow. I remember who I was before the light changed."  
+**care route return:** My account begins and ends with this: tomorrow’s children can cross without carrying yesterday’s payments.
+
+**truth route return:** I can confirm what was published, not how every neighbor must read it: fraudulent contracts are open to public proof while borrowers’ addresses stay private.
 **personal concern:** Public exposure may let creditors find an unregistered child.  
 **next visit hook:** Keep a private safe crossing for a dependent who never agreed to a lender's bargain.  
 
@@ -1874,6 +2060,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Ezzun Aftermark: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Ezzun Aftermark: "Our ferry that cannot count tomorrow has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Ezzun Aftermark: "The morning looks different above the ferry that cannot count tomorrow. I remember who I was before the light changed."  
+**care route return:** I will not claim more than this witnessed change: tomorrow’s children can cross without carrying yesterday’s payments.
+
+**truth route return:** This is the account I witnessed; the people in it keep their own voices: fraudulent contracts are open to public proof while borrowers’ addresses stay private.
 **personal concern:** A corrected record might expose someone still in danger.  
 **next visit hook:** Publish traceable fraud without turning borrowers into exhibits.  
 
@@ -1978,6 +2167,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Vhaurn Counterweight: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Vhaurn Counterweight: "Our chorus holding the streets has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Vhaurn Counterweight: "The morning looks different above the chorus holding the streets. I remember who I was before the light changed."  
+**care route return:** I can testify only to what changed here: the houses stay aloft to a refrain people chose to sing.
+
+**truth route return:** I will stand by the public proof and leave the private choice with each person: the forbidden verse and its names are public; the choice to sing remains theirs.
 **personal concern:** Rescue efforts may overlook the households that cannot move.  
 **next visit hook:** Design a fair structural cadence shared by capable volunteers.  
 
@@ -2020,6 +2212,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Orru of the Removed Rest: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Orru of the Removed Rest: "Our chorus holding the streets has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Orru of the Removed Rest: "The morning looks different above the chorus holding the streets. I remember who I was before the light changed."  
+**care route return:** I can testify only to what changed here: the houses stay aloft to a refrain people chose to sing.
+
+**truth route return:** I will stand by the public proof and leave the private choice with each person: the forbidden verse and its names are public; the choice to sing remains theirs.
 **personal concern:** An open performance may attract coercive wardens.  
 **next visit hook:** Restore identity and voluntary participation to erased choir members.  
 
@@ -2104,6 +2299,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Torrun-Mortar: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Torrun-Mortar: "Our quarry of buried names has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Torrun-Mortar: "The morning looks different above the quarry of buried names. I remember who I was before the light changed."  
+**care route return:** I saw this local consequence for myself: the passage is braced without quarrying another remembered ancestor.
+
+**truth route return:** The evidence is open; I will not speak for anyone it names: the carved lineages are open for descendants to contest.
 **personal concern:** A public ancestry inquiry may condemn the last standing homes.  
 **next visit hook:** Rebuild a safe communal housing row with documented materials.  
 
@@ -2146,6 +2344,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Issil Againborn: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Issil Againborn: "Our quarry of buried names has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Issil Againborn: "The morning looks different above the quarry of buried names. I remember who I was before the light changed."  
+**care route return:** I can testify only to what changed here: the passage is braced without quarrying another remembered ancestor.
+
+**truth route return:** I will stand by the public proof and leave the private choice with each person: the carved lineages are open for descendants to contest.
 **personal concern:** An official record could dismiss living family accounts as delusion.  
 **next visit hook:** Recover names without letting the mine claim ownership of them.  
 
@@ -2250,6 +2451,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Auvet Keep-Quiet: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Auvet Keep-Quiet: "Our shelter without an address has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Auvet Keep-Quiet: "The morning looks different above the shelter without an address. I remember who I was before the light changed."  
+**care route return:** I saw this local consequence for myself: the refuge stays open without asking anyone’s name.
+
+**truth route return:** The evidence is open; I will not speak for anyone it names: the recognition board waits for each resident to choose whether to speak.
 **personal concern:** A public registry may reveal the people who chose obscurity.  
 **next visit hook:** Maintain unconditional shelter and let every guest control disclosure.  
 
@@ -2312,6 +2516,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Veysha Never-Signed: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Veysha Never-Signed: "Our shelter without an address has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Veysha Never-Signed: "The morning looks different above the shelter without an address. I remember who I was before the light changed."  
+**care route return:** I can testify only to what changed here: the refuge stays open without asking anyone’s name.
+
+**truth route return:** I will stand by the public proof and leave the private choice with each person: the recognition board waits for each resident to choose whether to speak.
 **personal concern:** Private shelter alone may preserve structural exclusion.  
 **next visit hook:** Win recognition with an explicit right to refuse and revoke visibility.  
 
@@ -2416,6 +2623,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Imro Root-Vote: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Imro Root-Vote: "Our orchard court without a crown has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Imro Root-Vote: "The morning looks different above the orchard court without a crown. I remember who I was before the light changed."  
+**care route return:** I will not claim more than this witnessed change: the harvest paths are open to those who tend them, and the crown remains empty.
+
+**truth route return:** This is the account I witnessed; the people in it keep their own voices: the unsigned law is public, with room for neighbors to challenge it.
 **personal concern:** Legal debates may starve families before a compromise is reached.  
 **next visit hook:** Keep harvest and routes accessible regardless of political allegiance.  
 
@@ -2458,6 +2668,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Eliun No-Coronation: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Eliun No-Coronation: "Our orchard court without a crown has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Eliun No-Coronation: "The morning looks different above the orchard court without a crown. I remember who I was before the light changed."  
+**care route return:** I can testify only to what changed here: the harvest paths are open to those who tend them, and the crown remains empty.
+
+**truth route return:** I will stand by the public proof and leave the private choice with each person: the unsigned law is public, with room for neighbors to challenge it.
 **personal concern:** Archiving an unclaimed right may let claimants abuse it later.  
 **next visit hook:** Record disputed titles without converting dissent into hereditary rule.  
 
@@ -2562,6 +2775,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Thae of the Near Door: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Thae of the Near Door: "Our threshold before every map has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Thae of the Near Door: "The morning looks different above the threshold before every map. I remember who I was before the light changed."  
+**care route return:** I will not claim more than this witnessed change: every traveler has a reliable way back, whatever their origin.
+
+**truth route return:** This is the account I witnessed; the people in it keep their own voices: both maps remain open to inspection; neither is the required history.
 **personal concern:** Celebrating paradox may strand travelers needing ordinary ground.  
 **next visit hook:** Give arrivals a stable place to rest and choose their next story.  
 
@@ -2604,6 +2820,9 @@ A wandering outcast from an impossible history. Character identity is selected i
 **aid line:** Veilune Both-Mornings: "When you helped me, I heard the difference between a story people tell and a person who stays."  
 **public line:** Veilune Both-Mornings: "Our threshold before every map has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw."  
 **post morning:** Veilune Both-Mornings: "The morning looks different above the threshold before every map. I remember who I was before the light changed."  
+**care route return:** I can testify only to what changed here: every traveler has a reliable way back, whatever their origin.
+
+**truth route return:** I will stand by the public proof and leave the private choice with each person: both maps remain open to inspection; neither is the required history.
 **personal concern:** Official order will call testimony dishonest unless it can be simplified.  
 **next visit hook:** Preserve mutually true beginnings without forcing others into confusion.  
 

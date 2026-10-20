@@ -109,9 +109,20 @@ def verify(q,p,w,c):
     expected+=scouts
     if ids_person!=expected:
         raise ValueError("Resident indices could corrupt existing saves: stable order differs")
+    primary_return_speakers={
+        "npc.archivist.001","npc.saltwake.navigator.001",
+        "npc.cinderhold.hearthreader.001","npc.tidal.ledgerkeeper.001",
+        "npc.sky.choirmaster.001","npc.bones.seamwarden.001",
+        "npc.unlived.censuskeeper.001","npc.orchard.untitled.001",
+        "npc.absence.firstwitness.001"}
     for resident in p["residents"]:
-        if resident["id"] in scouts and set(resident.get("outcome_lines",{}))!={"care","truth"}:
-            raise ValueError("Each field scout needs saved-route return dialogue: "+resident["id"])
+        if resident["id"] in primary_return_speakers:
+            continue # Their two route lines remain authored in the main-story contract.
+        route=resident.get("outcome_lines",{})
+        if set(route)!={"care","truth"} or any(
+                not isinstance(route[key],str) or len(route[key])<24
+                for key in ("care","truth")):
+            raise ValueError("Each resident needs both saved-route return lines: "+resident["id"])
     return True
 
 def return_header(p):

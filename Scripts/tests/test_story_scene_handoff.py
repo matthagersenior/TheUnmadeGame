@@ -28,10 +28,26 @@ class QuestAndSceneHandoff(unittest.TestCase):
         native=(ROOT/"Source/TheUnmadeGame/Public/Authoring/UnmadeResidentReturnData.h").read_text()
         for entry in self.p["residents"]:
             self.assertIn(entry["id"],native)
-        for entry in self.p["residents"][-6:]:
+        primary={"npc.archivist.001","npc.saltwake.navigator.001",
+            "npc.cinderhold.hearthreader.001","npc.tidal.ledgerkeeper.001",
+            "npc.sky.choirmaster.001","npc.bones.seamwarden.001",
+            "npc.unlived.censuskeeper.001","npc.orchard.untitled.001",
+            "npc.absence.firstwitness.001"}
+        routed=[entry for entry in self.p["residents"] if entry["id"] not in primary]
+        self.assertEqual(len(routed),79)
+        for entry in routed:
             self.assertEqual(set(entry["outcome_lines"]),{"care","truth"})
+            self.assertNotEqual(entry["outcome_lines"]["care"],entry["outcome_lines"]["truth"])
             for line in entry["outcome_lines"].values():
                 self.assertGreater(len(line),24)
+            encyclopedia=(ROOT/"docs/canon/encyclopedia/02_CHARACTERS_NPCS_AND_RELATIONSHIPS.md").read_text()
+            start=encyclopedia.index(f'## {entry["name"]} — `{entry["id"]}`')
+            end=encyclopedia.find("\n## ",start+1)
+            section=encyclopedia[start:end if end>=0 else len(encyclopedia)]
+            care_label="care return" if entry["id"].endswith(".scout.001") else "care route return"
+            truth_label="truth return" if entry["id"].endswith(".scout.001") else "truth route return"
+            self.assertIn(f'**{care_label}:** {entry["outcome_lines"]["care"]}',section)
+            self.assertIn(f'**{truth_label}:** {entry["outcome_lines"]["truth"]}',section)
         self.assertIn("ReturnDialogue",native)
     def test_generated_scene_manifest_and_import_contract(self):
         m=S.scene_manifest(self.w,self.c)

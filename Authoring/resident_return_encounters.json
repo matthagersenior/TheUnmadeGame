@@ -15,7 +15,11 @@
       "public_line": "The stallkeeper: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "The stallkeeper: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "At my counter, I can point to this change: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "At my counter, I can tell people what the public record actually says: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.guard.001",
@@ -28,7 +32,11 @@
       "public_line": "A gate watchkeeper: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "A gate watchkeeper: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I keep my report to what the crossing shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can confirm what was made public and keep the rest out of the patrol log: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.wanderer.001",
@@ -41,7 +49,11 @@
       "public_line": "A passing stranger: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "A passing stranger: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can speak for the ground under my feet: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can follow the evidence and leave each person room to answer: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.archivist.001",
@@ -67,7 +79,11 @@
       "public_line": "A courier: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "A courier: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I will carry the local account as it stands: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can deliver the public account with its limits intact: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.welllistener.001",
@@ -80,7 +96,11 @@
       "public_line": "The well listener: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "The well listener: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "My notes record the local change this way: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "My notes distinguish the public finding from what remains unproved: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.orchardexile.001",
@@ -93,7 +113,11 @@
       "public_line": "The displaced orchard keeper: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "The displaced orchard keeper: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I walked the place after your choice and found this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can look at the public proof without deciding anyone’s private account for them: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.tollbroker.001",
@@ -106,7 +130,11 @@
       "public_line": "The keeper of future debts: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "The keeper of future debts: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "When someone asks what changed here, I tell them: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "When a buyer asks what was proved, I point to this: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.roadwarden.001",
@@ -119,7 +147,11 @@
       "public_line": "The road warden: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "The road warden: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I keep my report to what the crossing shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can confirm what was made public and keep the rest out of the patrol log: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellmaker.001",
@@ -132,7 +164,11 @@
       "public_line": "The bell maker: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "The bell maker: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The market feels the choice in this detail: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The market can inspect this proof without buying anyone’s private story: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.nightcourier.001",
@@ -145,7 +181,11 @@
       "public_line": "The night courier: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "The night courier: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can report what this road shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The message can travel; private names do not have to travel with it: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.metalworker.001",
@@ -158,7 +198,11 @@
       "public_line": "Mara the metalworker: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Mara the metalworker: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I have one honest answer for a buyer asking about the road: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I keep the public finding separate from private names: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.inkmender.001",
@@ -171,7 +215,11 @@
       "public_line": "Tovin the ink mender: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Tovin the ink mender: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I keep the observed change separate from rumor: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "This evidence is available for comparison; it is not a final answer to everything: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.hearthwatch.001",
@@ -184,7 +232,11 @@
       "public_line": "Nira of the hearth: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Nira of the hearth: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The path tells me one thing plainly: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "This is open to see; what a person shares is still theirs: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bridgekeeper.001",
@@ -197,7 +249,11 @@
       "public_line": "Orrel the bridge keeper: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Orrel the bridge keeper: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "On patrol, I can point to this and no farther: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can guard the public evidence without treating it as a warrant: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.marketporter.001",
@@ -210,7 +266,11 @@
       "public_line": "Kesta the porter: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Kesta the porter: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.matron.001",
@@ -223,7 +283,11 @@
       "public_line": "Hessa the refuge matron: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Hessa the refuge matron: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can speak for the ground under my feet: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can follow the evidence and leave each person room to answer: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.stonewright.001",
@@ -236,7 +300,11 @@
       "public_line": "Corvin the stonewright: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Corvin the stonewright: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I have one honest answer for a buyer asking about the road: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I keep the public finding separate from private names: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.guard.001",
@@ -249,7 +317,11 @@
       "public_line": "Bram the watch captain: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Bram the watch captain: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "From the watch post, the change I can confirm is this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The watch can protect the choice to publish this, not expose anyone beyond it: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.healer.001",
@@ -262,7 +334,11 @@
       "public_line": "Sorin the healer: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Sorin the healer: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The record supports this much, and no more: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can cite what was published and leave private testimony private: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.courier.001",
@@ -275,7 +351,11 @@
       "public_line": "Elsa the message runner: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Elsa the message runner: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.shepherd.001",
@@ -288,7 +368,11 @@
       "public_line": "Anwen the shepherd: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Anwen the shepherd: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I walked the place after your choice and found this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can look at the public proof without deciding anyone’s private account for them: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.tanner.001",
@@ -301,7 +385,11 @@
       "public_line": "Perrin the tanner: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Perrin the tanner: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The market feels the choice in this detail: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The market can inspect this proof without buying anyone’s private story: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.vigil.001",
@@ -314,7 +402,11 @@
       "public_line": "Dessa of the night vigil: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Dessa of the night vigil: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "From the watch post, the change I can confirm is this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The watch can protect the choice to publish this, not expose anyone beyond it: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.childtutor.001",
@@ -327,7 +419,11 @@
       "public_line": "Ivera the tutor: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Ivera the tutor: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I keep the observed change separate from rumor: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "This evidence is available for comparison; it is not a final answer to everything: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.baker.001",
@@ -340,7 +436,11 @@
       "public_line": "Tessa the baker: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Tessa the baker: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "When someone asks what changed here, I tell them: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "When a buyer asks what was proved, I point to this: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.lamplighter.001",
@@ -353,7 +453,11 @@
       "public_line": "Rook the lamplighter: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Rook the lamplighter: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.millhand.001",
@@ -366,7 +470,11 @@
       "public_line": "Vale the millhand: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Vale the millhand: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can speak for the ground under my feet: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can follow the evidence and leave each person room to answer: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.pathfinder.001",
@@ -379,7 +487,11 @@
       "public_line": "Oren the pathfinder: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Oren the pathfinder: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The watch can answer for this local fact: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "This proof is open; that does not make every person an open record: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.relickeeper.001",
@@ -392,7 +504,11 @@
       "public_line": "Isma the relic keeper: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Isma the relic keeper: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "My notes record the local change this way: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "My notes distinguish the public finding from what remains unproved: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.fletcher.001",
@@ -405,7 +521,11 @@
       "public_line": "Fen the fletcher: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Fen the fletcher: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "When someone asks what changed here, I tell them: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "When a buyer asks what was proved, I point to this: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.bellwold.woodcarrier.001",
@@ -418,7 +538,11 @@
       "public_line": "Belyn the wood carrier: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Belyn the wood carrier: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.registrar.001",
@@ -431,7 +555,11 @@
       "public_line": "Sevrin the registrar: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Sevrin the registrar: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I have checked the evidence here; it shows this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The record supports this claim, not every story attached to it: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.guard.001",
@@ -444,7 +572,11 @@
       "public_line": "Alis the archive sentinel: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Alis the archive sentinel: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I keep my report to what the crossing shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can confirm what was made public and keep the rest out of the patrol log: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.scribe.001",
@@ -457,7 +589,11 @@
       "public_line": "Toma the copyist: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Toma the copyist: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The record supports this much, and no more: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can cite what was published and leave private testimony private: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.merchant.001",
@@ -470,7 +606,11 @@
       "public_line": "Myra the book trader: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Myra the book trader: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "At my counter, I can point to this change: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "At my counter, I can tell people what the public record actually says: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.courier.001",
@@ -483,7 +623,11 @@
       "public_line": "Rell the paper runner: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Rell the paper runner: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I will carry the local account as it stands: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can deliver the public account with its limits intact: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.votary.001",
@@ -496,7 +640,11 @@
       "public_line": "Edris of the index: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Edris of the index: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "When I pass through, this is what I can see: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The public record does not tell me what every neighbor believes: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.archivist.001",
@@ -509,7 +657,11 @@
       "public_line": "Calder the keeper of hours: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Calder the keeper of hours: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I keep the observed change separate from rumor: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "This evidence is available for comparison; it is not a final answer to everything: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.guard2.001",
@@ -522,7 +674,11 @@
       "public_line": "Yara of the seal: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Yara of the seal: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "On patrol, I can point to this and no farther: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can guard the public evidence without treating it as a warrant: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.binding.001",
@@ -535,7 +691,11 @@
       "public_line": "Ilen the bookbinder: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Ilen the bookbinder: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The market feels the choice in this detail: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The market can inspect this proof without buying anyone’s private story: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.mapmaker.001",
@@ -548,7 +708,11 @@
       "public_line": "Voss the mapmaker: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Voss the mapmaker: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "My notes record the local change this way: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "My notes distinguish the public finding from what remains unproved: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.surveyor.001",
@@ -561,7 +725,11 @@
       "public_line": "Dara the surveyor: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Dara the surveyor: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can report what this road shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The message can travel; private names do not have to travel with it: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.gardener.001",
@@ -574,7 +742,11 @@
       "public_line": "Linn the dry gardener: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Linn the dry gardener: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can speak for the ground under my feet: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can follow the evidence and leave each person room to answer: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.watchman.001",
@@ -587,7 +759,11 @@
       "public_line": "Bret the last watchman: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Bret the last watchman: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I keep my report to what the crossing shows: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I can confirm what was made public and keep the rest out of the patrol log: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.glassworker.001",
@@ -600,7 +776,11 @@
       "public_line": "Meri the glassworker: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Meri the glassworker: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "When someone asks what changed here, I tell them: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "When a buyer asks what was proved, I point to this: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.cataloguer.001",
@@ -613,7 +793,11 @@
       "public_line": "Otho the cataloguer: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Otho the cataloguer: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I have checked the evidence here; it shows this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "The record supports this claim, not every story attached to it: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.paperhaven.lettercarrier.001",
@@ -626,7 +810,11 @@
       "public_line": "Sela the letter carrier: \"Our road between shelter and records has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Sela the letter carrier: \"The morning looks different above the road between shelter and records. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the road between shelter and records safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the road between shelter and records on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The receiving mark proves delivery; here, I saw this: the refuge cord guides unnamed visitors toward shelter, while the archive still has no public lead.",
+        "truth": "I know what the docket says, not what every distant reader will decide: the public docket lets people compare all three objects without naming protected guests."
+      }
     },
     {
       "id": "npc.saltwake.navigator.001",
@@ -652,7 +840,11 @@
       "public_line": "Harrow the harbor warden: \"Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Harrow the harbor warden: \"The morning looks different above the wet harbor with no sea. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the wet harbor with no sea safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "On patrol, I can point to this and no farther: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.",
+        "truth": "I can guard the public evidence without treating it as a warrant: the ledger records missing water and collateral without declaring survivors debtors."
+      }
     },
     {
       "id": "npc.saltwake.netmender.001",
@@ -665,7 +857,11 @@
       "public_line": "Olsa the net mender: \"Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Olsa the net mender: \"The morning looks different above the wet harbor with no sea. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the wet harbor with no sea safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "When someone asks what changed here, I tell them: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.",
+        "truth": "When a buyer asks what was proved, I point to this: the ledger records missing water and collateral without declaring survivors debtors."
+      }
     },
     {
       "id": "npc.saltwake.rainkeeper.001",
@@ -678,7 +874,11 @@
       "public_line": "Thenn the rain keeper: \"Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Thenn the rain keeper: \"The morning looks different above the wet harbor with no sea. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the wet harbor with no sea safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The record supports this much, and no more: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.",
+        "truth": "I can cite what was published and leave private testimony private: the ledger records missing water and collateral without declaring survivors debtors."
+      }
     },
     {
       "id": "npc.saltwake.courier.001",
@@ -691,7 +891,11 @@
       "public_line": "Mera the tide courier: \"Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Mera the tide courier: \"The morning looks different above the wet harbor with no sea. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the wet harbor with no sea safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can report what this road shows: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.",
+        "truth": "The message can travel; private names do not have to travel with it: the ledger records missing water and collateral without declaring survivors debtors."
+      }
     },
     {
       "id": "npc.saltwake.gatherer.001",
@@ -704,7 +908,11 @@
       "public_line": "Donn the salt gatherer: \"Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Donn the salt gatherer: \"The morning looks different above the wet harbor with no sea. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the wet harbor with no sea safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can speak for the ground under my feet: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.",
+        "truth": "I can follow the evidence and leave each person room to answer: the ledger records missing water and collateral without declaring survivors debtors."
+      }
     },
     {
       "id": "npc.saltwake.broker.001",
@@ -717,7 +925,11 @@
       "public_line": "Iva the water broker: \"Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Iva the water broker: \"The morning looks different above the wet harbor with no sea. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the wet harbor with no sea safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The market feels the choice in this detail: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.",
+        "truth": "The market can inspect this proof without buying anyone’s private story: the ledger records missing water and collateral without declaring survivors debtors."
+      }
     },
     {
       "id": "npc.saltwake.watcher.001",
@@ -730,7 +942,11 @@
       "public_line": "Lorn the wave watcher: \"Our wet harbor with no sea has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Lorn the wave watcher: \"The morning looks different above the wet harbor with no sea. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the wet harbor with no sea safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the wet harbor with no sea on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "The watch can answer for this local fact: the ferry passage shelters families without old ownership papers, while the missing sea remains unnamed.",
+        "truth": "This proof is open; that does not make every person an open record: the ledger records missing water and collateral without declaring survivors debtors."
+      }
     },
     {
       "id": "npc.cinderhold.emberwarden.001",
@@ -743,7 +959,11 @@
       "public_line": "Rheva the ember warden: \"Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Rheva the ember warden: \"The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the shared hearth beneath the stone safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "From the watch post, the change I can confirm is this: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.",
+        "truth": "The watch can protect the choice to publish this, not expose anyone beyond it: the ember’s source is public, with a repair plan the city can answer for."
+      }
     },
     {
       "id": "npc.cinderhold.stonecarver.001",
@@ -756,7 +976,11 @@
       "public_line": "Garn the stonecarver: \"Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Garn the stonecarver: \"The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the shared hearth beneath the stone safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "At my counter, I can point to this change: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.",
+        "truth": "At my counter, I can tell people what the public record actually says: the ember’s source is public, with a repair plan the city can answer for."
+      }
     },
     {
       "id": "npc.cinderhold.hearthreader.001",
@@ -782,7 +1006,11 @@
       "public_line": "Bes the coal runner: \"Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Bes the coal runner: \"The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the shared hearth beneath the stone safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I can report what this road shows: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.",
+        "truth": "The message can travel; private names do not have to travel with it: the ember’s source is public, with a repair plan the city can answer for."
+      }
     },
     {
       "id": "npc.cinderhold.gardener.001",
@@ -795,7 +1023,11 @@
       "public_line": "Irel the ash gardener: \"Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Irel the ash gardener: \"The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the shared hearth beneath the stone safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I walked the place after your choice and found this: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.",
+        "truth": "I can look at the public proof without deciding anyone’s private account for them: the ember’s source is public, with a repair plan the city can answer for."
+      }
     },
     {
       "id": "npc.cinderhold.healer.001",
@@ -808,7 +1040,11 @@
       "public_line": "Ovenna the warmth keeper: \"Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Ovenna the warmth keeper: \"The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the shared hearth beneath the stone safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I have checked the evidence here; it shows this: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.",
+        "truth": "The record supports this claim, not every story attached to it: the ember’s source is public, with a repair plan the city can answer for."
+      }
     },
     {
       "id": "npc.cinderhold.shieldsmith.001",
@@ -821,7 +1057,11 @@
       "public_line": "Orven the shieldsmith: \"Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Orven the shieldsmith: \"The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the shared hearth beneath the stone safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "When someone asks what changed here, I tell them: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.",
+        "truth": "When a buyer asks what was proved, I point to this: the ember’s source is public, with a repair plan the city can answer for."
+      }
     },
     {
       "id": "npc.cinderhold.sentry.001",
@@ -834,7 +1074,11 @@
       "public_line": "Kael the deep sentry: \"Our shared hearth beneath the stone has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Kael the deep sentry: \"The morning looks different above the shared hearth beneath the stone. I remember who I was before the light changed.\"",
       "personal_concern": "Keep the shared hearth beneath the stone safe while allowing its residents to disagree.",
-      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought."
+      "next_visit_hook": "Ask about the shared hearth beneath the stone on a later day; do not assume a stranger's loyalty is bought.",
+      "outcome_lines": {
+        "care": "I keep my report to what the crossing shows: unregistered homes have heat without signing first, though the kiln keeps its old fuel cost.",
+        "truth": "I can confirm what was made public and keep the rest out of the patrol log: the ember’s source is public, with a repair plan the city can answer for."
+      }
     },
     {
       "id": "npc.tidal.ledgerkeeper.001",
@@ -868,7 +1112,11 @@
       "public_line": "Orshel Drywake: \"Our ferry that cannot count tomorrow has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Orshel Drywake: \"The morning looks different above the ferry that cannot count tomorrow. I remember who I was before the light changed.\"",
       "personal_concern": "Public exposure may let creditors find an unregistered child.",
-      "next_visit_hook": "Keep a private safe crossing for a dependent who never agreed to a lender's bargain."
+      "next_visit_hook": "Keep a private safe crossing for a dependent who never agreed to a lender's bargain.",
+      "outcome_lines": {
+        "care": "My account begins and ends with this: tomorrow’s children can cross without carrying yesterday’s payments.",
+        "truth": "I can confirm what was published, not how every neighbor must read it: fraudulent contracts are open to public proof while borrowers’ addresses stay private."
+      }
     },
     {
       "id": "npc.tidal.witness.001",
@@ -885,7 +1133,11 @@
       "public_line": "Ezzun Aftermark: \"Our ferry that cannot count tomorrow has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Ezzun Aftermark: \"The morning looks different above the ferry that cannot count tomorrow. I remember who I was before the light changed.\"",
       "personal_concern": "A corrected record might expose someone still in danger.",
-      "next_visit_hook": "Publish traceable fraud without turning borrowers into exhibits."
+      "next_visit_hook": "Publish traceable fraud without turning borrowers into exhibits.",
+      "outcome_lines": {
+        "care": "I will not claim more than this witnessed change: tomorrow’s children can cross without carrying yesterday’s payments.",
+        "truth": "This is the account I witnessed; the people in it keep their own voices: fraudulent contracts are open to public proof while borrowers’ addresses stay private."
+      }
     },
     {
       "id": "npc.sky.choirmaster.001",
@@ -919,7 +1171,11 @@
       "public_line": "Vhaurn Counterweight: \"Our chorus holding the streets has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Vhaurn Counterweight: \"The morning looks different above the chorus holding the streets. I remember who I was before the light changed.\"",
       "personal_concern": "Rescue efforts may overlook the households that cannot move.",
-      "next_visit_hook": "Design a fair structural cadence shared by capable volunteers."
+      "next_visit_hook": "Design a fair structural cadence shared by capable volunteers.",
+      "outcome_lines": {
+        "care": "I can testify only to what changed here: the houses stay aloft to a refrain people chose to sing.",
+        "truth": "I will stand by the public proof and leave the private choice with each person: the forbidden verse and its names are public; the choice to sing remains theirs."
+      }
     },
     {
       "id": "npc.sky.dissenter.001",
@@ -936,7 +1192,11 @@
       "public_line": "Orru of the Removed Rest: \"Our chorus holding the streets has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Orru of the Removed Rest: \"The morning looks different above the chorus holding the streets. I remember who I was before the light changed.\"",
       "personal_concern": "An open performance may attract coercive wardens.",
-      "next_visit_hook": "Restore identity and voluntary participation to erased choir members."
+      "next_visit_hook": "Restore identity and voluntary participation to erased choir members.",
+      "outcome_lines": {
+        "care": "I can testify only to what changed here: the houses stay aloft to a refrain people chose to sing.",
+        "truth": "I will stand by the public proof and leave the private choice with each person: the forbidden verse and its names are public; the choice to sing remains theirs."
+      }
     },
     {
       "id": "npc.bones.seamwarden.001",
@@ -970,7 +1230,11 @@
       "public_line": "Torrun-Mortar: \"Our quarry of buried names has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Torrun-Mortar: \"The morning looks different above the quarry of buried names. I remember who I was before the light changed.\"",
       "personal_concern": "A public ancestry inquiry may condemn the last standing homes.",
-      "next_visit_hook": "Rebuild a safe communal housing row with documented materials."
+      "next_visit_hook": "Rebuild a safe communal housing row with documented materials.",
+      "outcome_lines": {
+        "care": "I saw this local consequence for myself: the passage is braced without quarrying another remembered ancestor.",
+        "truth": "The evidence is open; I will not speak for anyone it names: the carved lineages are open for descendants to contest."
+      }
     },
     {
       "id": "npc.bones.descendant.001",
@@ -987,7 +1251,11 @@
       "public_line": "Issil Againborn: \"Our quarry of buried names has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Issil Againborn: \"The morning looks different above the quarry of buried names. I remember who I was before the light changed.\"",
       "personal_concern": "An official record could dismiss living family accounts as delusion.",
-      "next_visit_hook": "Recover names without letting the mine claim ownership of them."
+      "next_visit_hook": "Recover names without letting the mine claim ownership of them.",
+      "outcome_lines": {
+        "care": "I can testify only to what changed here: the passage is braced without quarrying another remembered ancestor.",
+        "truth": "I will stand by the public proof and leave the private choice with each person: the carved lineages are open for descendants to contest."
+      }
     },
     {
       "id": "npc.unlived.censuskeeper.001",
@@ -1021,7 +1289,11 @@
       "public_line": "Auvet Keep-Quiet: \"Our shelter without an address has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Auvet Keep-Quiet: \"The morning looks different above the shelter without an address. I remember who I was before the light changed.\"",
       "personal_concern": "A public registry may reveal the people who chose obscurity.",
-      "next_visit_hook": "Maintain unconditional shelter and let every guest control disclosure."
+      "next_visit_hook": "Maintain unconditional shelter and let every guest control disclosure.",
+      "outcome_lines": {
+        "care": "I saw this local consequence for myself: the refuge stays open without asking anyone’s name.",
+        "truth": "The evidence is open; I will not speak for anyone it names: the recognition board waits for each resident to choose whether to speak."
+      }
     },
     {
       "id": "npc.unlived.challenger.001",
@@ -1038,7 +1310,11 @@
       "public_line": "Veysha Never-Signed: \"Our shelter without an address has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Veysha Never-Signed: \"The morning looks different above the shelter without an address. I remember who I was before the light changed.\"",
       "personal_concern": "Private shelter alone may preserve structural exclusion.",
-      "next_visit_hook": "Win recognition with an explicit right to refuse and revoke visibility."
+      "next_visit_hook": "Win recognition with an explicit right to refuse and revoke visibility.",
+      "outcome_lines": {
+        "care": "I can testify only to what changed here: the refuge stays open without asking anyone’s name.",
+        "truth": "I will stand by the public proof and leave the private choice with each person: the recognition board waits for each resident to choose whether to speak."
+      }
     },
     {
       "id": "npc.orchard.untitled.001",
@@ -1072,7 +1348,11 @@
       "public_line": "Imro Root-Vote: \"Our orchard court without a crown has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Imro Root-Vote: \"The morning looks different above the orchard court without a crown. I remember who I was before the light changed.\"",
       "personal_concern": "Legal debates may starve families before a compromise is reached.",
-      "next_visit_hook": "Keep harvest and routes accessible regardless of political allegiance."
+      "next_visit_hook": "Keep harvest and routes accessible regardless of political allegiance.",
+      "outcome_lines": {
+        "care": "I will not claim more than this witnessed change: the harvest paths are open to those who tend them, and the crown remains empty.",
+        "truth": "This is the account I witnessed; the people in it keep their own voices: the unsigned law is public, with room for neighbors to challenge it."
+      }
     },
     {
       "id": "npc.orchard.historian.001",
@@ -1089,7 +1369,11 @@
       "public_line": "Eliun No-Coronation: \"Our orchard court without a crown has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Eliun No-Coronation: \"The morning looks different above the orchard court without a crown. I remember who I was before the light changed.\"",
       "personal_concern": "Archiving an unclaimed right may let claimants abuse it later.",
-      "next_visit_hook": "Record disputed titles without converting dissent into hereditary rule."
+      "next_visit_hook": "Record disputed titles without converting dissent into hereditary rule.",
+      "outcome_lines": {
+        "care": "I can testify only to what changed here: the harvest paths are open to those who tend them, and the crown remains empty.",
+        "truth": "I will stand by the public proof and leave the private choice with each person: the unsigned law is public, with room for neighbors to challenge it."
+      }
     },
     {
       "id": "npc.absence.firstwitness.001",
@@ -1123,7 +1407,11 @@
       "public_line": "Thae of the Near Door: \"Our threshold before every map has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Thae of the Near Door: \"The morning looks different above the threshold before every map. I remember who I was before the light changed.\"",
       "personal_concern": "Celebrating paradox may strand travelers needing ordinary ground.",
-      "next_visit_hook": "Give arrivals a stable place to rest and choose their next story."
+      "next_visit_hook": "Give arrivals a stable place to rest and choose their next story.",
+      "outcome_lines": {
+        "care": "I will not claim more than this witnessed change: every traveler has a reliable way back, whatever their origin.",
+        "truth": "This is the account I witnessed; the people in it keep their own voices: both maps remain open to inspection; neither is the required history."
+      }
     },
     {
       "id": "npc.absence.otherwitness.001",
@@ -1140,7 +1428,11 @@
       "public_line": "Veilune Both-Mornings: \"Our threshold before every map has changed, and I can speak about what happened here. I cannot swear to what a far-off witness saw.\"",
       "post_morning": "Veilune Both-Mornings: \"The morning looks different above the threshold before every map. I remember who I was before the light changed.\"",
       "personal_concern": "Official order will call testimony dishonest unless it can be simplified.",
-      "next_visit_hook": "Preserve mutually true beginnings without forcing others into confusion."
+      "next_visit_hook": "Preserve mutually true beginnings without forcing others into confusion.",
+      "outcome_lines": {
+        "care": "I can testify only to what changed here: every traveler has a reliable way back, whatever their origin.",
+        "truth": "I will stand by the public proof and leave the private choice with each person: both maps remain open to inspection; neither is the required history."
+      }
     },
     {
       "id": "npc.reach.ashroad.scout.001",

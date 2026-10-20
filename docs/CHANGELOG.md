@@ -6,6 +6,10 @@ Physical chamber arrival and encounter receipts now agree across nine realms. Ad
 
 Historical milestones describe their dated baseline. Consult the root README for current status.
 
+## 2026-10-20 — Saved choices reach every resident return
+
+Seventy-nine of the 88 existing resident profiles now have direct care/truth return dialogue. The nine main-story return speakers continue to use their authored route lines in the quest contracts; the six scout reactions retain their route-specific local evidence. The generated C++ table and Unreal authoring CSV carry the lines, and Volume II mirrors them under each resident. Stable identities, save slots, outcome values, and realm availability are unchanged. The text reflects existing saved outcomes only; it does not create gameplay effects. Unreal compilation and in-engine dialogue/save-load testing remain outstanding.
+
 ## 2026-10-20 — Complete the source-backed return profiles
 
 The six existing field scouts now have authored recognition, aid, local knowledge, new-morning, concern, visit-hook and care/truth return lines. Their records append after the original 82 resident profiles, keeping all existing stable IDs and save indices intact. Old 82-slot relationship snapshots preserve their data and receive six empty appended slots on load. Updated the generated C++ dialogue table, Unreal CSV, readable NPC volume, test gates and current Ability Codex count (256). Full Unreal Editor compilation and in-engine old-save restoration remain to be verified on a supported UE host.

@@ -520,3 +520,7 @@ The nine personal story definitions now originate from the Codex with all their 
 ## 2026-10-19 — Aftermath outcomes must never collapse into one narrative
 
 The nine realms' aftermath locations, physical mechanism interactions, named testimony sources, separate care/public-truth evidence, two local outcomes and aftershocks are now source-generated from Codex. The alternatives are distinct and persistent; a witnessed resolution is not interchangeable with a rumor, and no site is declared cleared merely because a Codex record exists. The original three source-backed footholds remain distinct from six unverified Unreal realm levels. The canonical world maintains the player's right to choose without an automatically classified moral winner.
+
+## Choice-aware resident returns — 2026-10-20
+
+After a realm's first-story choice resolves, existing residents now have care- or truth-specific return dialogue grounded in that realm's recorded visible consequence. The 79 direct resident profiles preserve local knowledge boundaries: each line describes the resident's home change, while the nine first-story speakers retain their separately authored return lines and six scouts keep their firsthand field evidence. These are reactions to existing saved outcomes; they add no rewards, flags, NPCs, or mechanics. The 88 stable resident IDs and the original 82 save indices remain unchanged. The readable mirror is Volume II, *Characters, NPCs, and Relationships*, under each resident's source-saved return section.

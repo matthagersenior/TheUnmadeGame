@@ -426,3 +426,7 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Moved all nine realm aftermath source contracts—mechanism sites, attributed witnesses, mutually exclusive evidence/outcome branches and future local world changes—into canonical Codex records and a compiled generated C++ table.
 - Added compiled portable and Codex-validator regression checks for differing consequences, real witnesses and the truth of level availability.
 - Preserved old game saves, original physical quest gates and narrative choice freedom; no new illustrated assets or Engine builds claimed.
+
+## 2026-10-20 — Resident returns follow the saved local route
+
+Filled the choice-reactivity gap in the existing return dialogue table: 79 resident profiles now have distinct care and public-truth lines grounded in their realm's authored consequence. Nine main-story speakers keep their existing quest-contract return text, and six scout profiles keep their direct field-evidence reactions. Generated source and readable resident volume are synchronized; no IDs, save fields, outcome codes, realm statuses, or gameplay rules changed. Portable validation is required; Unreal compilation and in-engine dialogue/save-load checks remain outstanding.
