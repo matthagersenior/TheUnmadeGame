@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**20 October 2026 source-only milestone:** The Threefold Reach source journal adds phase-aware physical objective text, based on existing saved witness records. The historical illustrated v20 files, file hashes and package remain unchanged; no new illustrated edition has been issued and no Unreal compilation or playtest is claimed.
+
+
 **19 October 2026 source-only milestone:** Nine realm aftermath scripts and their distinct witnessed consequences now compile from canonical Codex. Historic illustrated v20 artifact bytes and hashes remain unchanged.
 
 **19 October 2026 source milestone:** Nine complete personal quest scripts and their branching witness outcomes are now Codex-generated. The historical illustrated v20 package has not been rebuilt.

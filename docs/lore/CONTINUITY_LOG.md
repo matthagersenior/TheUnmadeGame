@@ -1,5 +1,11 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-20 — Source-only guided Threefold witness journey
+- Expose one next-action prompt from canonical witnessed evidence, saved braid decision, player-held letter, valid next-day Hessa reply and second physical delivery to Orrel.
+- Preserve all three clue ID gates, four distinct moral choice combinations and save-failure protections. No unvisited evidence, refuge names or sealed answers appear in the guidance.
+- This is a new player-readable hint and source test, not a completed map, UI screen, cinematic, Unreal-compiled feature or new illustrated release.
+
+
 Every substantial gameplay addition needs a companion canon update and a regenerated illustrated package edition. This history describes what was actually updated; it is not a claim that engine content was playtested.
 
 ## 2026-10-10 — Volume II: The World Remembers
