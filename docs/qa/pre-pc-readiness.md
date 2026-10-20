@@ -1,5 +1,9 @@
 # THE UNMADE — PC-independent readiness ledger
-**Updated 2026-10-12 | Live engineering backlog; this is not a release-complete certification. Historical entries below retain their original dates.**
+**Updated 2026-10-20 | Live engineering backlog; this is not a release-complete certification. Historical entries below retain their original dates.**
+
+## Current source handoff status (20 October 2026)
+
+Main at the start of this status refresh was `8611e5d8da04c0e3ae99e16f16500b447ae7161f` (first-PC production package, PR #117). Its source CI passed; the Unreal Editor job was skipped, so there is no engine compilation or playable-game claim. The handoff generator produces nine realm dossiers and 669 source-linked work orders for main steps, clues, optional side stories, return residents and cataloged content. These rows identify production work; they do not certify runtime handlers, Unreal assets or playable scenes. The first-PC implementation plan tracks the remaining source, engine and content gates.
 
 ## Evidence codes
 - **NATIVE TESTED** — deterministic C++17 tests run under GitHub Actions (not Unreal).
