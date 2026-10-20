@@ -41,7 +41,8 @@ class FirstPCProductionPackTests(unittest.TestCase):
             with self.subTest(realm=realm):
                 dossier = files["realm-" + realm + ".md"]
                 self.assertIn("## Main chapter: six physically staged beats", dossier)
-                self.assertEqual(dossier.count("**Recovery:**"), 6)
+                main_chapter = dossier.split("## Main chapter: six physically staged beats", 1)[1].split("## Saved outcomes", 1)[0]
+                self.assertEqual(main_chapter.count("**Recovery:**"), 6)
                 self.assertIn("## Saved outcomes", dossier)
                 self.assertIn("## Required Unreal acceptance", dossier)
 
