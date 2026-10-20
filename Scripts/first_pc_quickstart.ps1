@@ -68,6 +68,13 @@ try{
         Tee-Object -FilePath (Join-Path $report "prototype-geometry-validation.log")
     if($LASTEXITCODE -ne 0){throw "PROTOTYPE_GEOMETRY_INVALID: inspect geometry generation log"}
     Write-Host "Prototype models ready for later Unreal import: $geometryDir"
+    # Nine distinctive skyline crowns: separate, noncolliding, source-backed
+    # visuals. Their real navmesh/art acceptance still belongs to Unreal QA.
+    $crownsDir=Join-Path $repo "Build/UnmadePrototypeCrowns"
+    & $pythonExe.Source (Join-Path $PSScriptRoot "build_realm_crowns.py") --out-dir $crownsDir 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "realm-crown-mesh-validation.log")
+    if($LASTEXITCODE -ne 0){throw "REALM_CROWN_SOURCE_BUILD_FAILED"}
+    Write-Host "Nine source-authored realm skyline models ready: $crownsDir"
     # Every canonical item and regional reward gets a real, independent
     # prototype mesh before Unreal import, with no loot/progression side effect.
     $equipmentDir=Join-Path $repo "Build/UnmadePrototypeEquipment"
@@ -88,6 +95,10 @@ try{
     & $pythonExe.Source $prototypeImportScript 2>&1 |
         Tee-Object -FilePath (Join-Path $report "prototype-import-preflight.log")
     if($LASTEXITCODE -ne 0){throw "PROTOTYPE_IMPORT_SOURCE_PREFLIGHT_FAILED"}
+    $crownEditorScript=Join-Path $PSScriptRoot "unreal_editor/import_realm_crowns.py"
+    & $pythonExe.Source $crownEditorScript 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "realm-crown-source-preflight.log")
+    if($LASTEXITCODE -ne 0){throw "REALM_CROWN_IMPORT_PREFLIGHT_FAILED"}
     & $pythonExe.Source (Join-Path $PSScriptRoot "unreal_editor/first_pc_editor_batch.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $report "staging-dry-run.log")
     if($LASTEXITCODE -ne 0){throw "STAGING_PLAN_INVALID"}
@@ -146,6 +157,28 @@ try{
                     throw "PROTOTYPE_EDITOR_IMPORT_INCOMPLETE"
                 }
             }finally{
+                Remove-Item Env:UNMADE_PROTO_IMPORT_APPROVED -ErrorAction SilentlyContinue
+                Remove-Item Env:UNMADE_PROTO_IMPORT_RECEIPT -ErrorAction SilentlyContinue
+            }
+            # Stage nine distinct noncolliding realm skyline previews into the
+            # *same* prototype-only level, never production/collision owners.
+            $env:UNMADE_PROTO_IMPORT_APPROVED="1"
+            $crownReceipt=Join-Path $report "realm-crown-import-receipt.json"
+            $env:UNMADE_PROTO_IMPORT_RECEIPT=$crownReceipt
+            try {
+                & $cmdEditor $project "-unattended" "-nop4" "-nosplash" "-run=pythonscript" "-script=$crownEditorScript" 2>&1 |
+                    Tee-Object -FilePath (Join-Path $report "realm-crown-editor-import.log")
+                if($LASTEXITCODE -ne 0){throw "CROWN_EDITOR_IMPORT_FAILED"}
+                if(!(Test-Path $crownReceipt)){throw "CROWN_EDITOR_IMPORT_RECEIPT_MISSING"}
+                $crownProof=Get-Content $crownReceipt -Raw | ConvertFrom-Json
+                if($crownProof.status -ne "REALM_CROWNS_STAGED_NOT_GAMEPLAY_VERIFIED" -or
+                   $crownProof.imports.total -ne 9 -or
+                   $crownProof.preview.markers -ne 9 -or
+                   ($crownProof.imports.created+$crownProof.imports.existing) -ne 9 -or
+                   ($crownProof.preview.created+$crownProof.preview.existing) -ne 9){
+                    throw "CROWN_EDITOR_IMPORT_INCOMPLETE"
+                }
+            } finally {
                 Remove-Item Env:UNMADE_PROTO_IMPORT_APPROVED -ErrorAction SilentlyContinue
                 Remove-Item Env:UNMADE_PROTO_IMPORT_RECEIPT -ErrorAction SilentlyContinue
             }
