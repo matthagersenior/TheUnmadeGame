@@ -89,6 +89,10 @@ try{
         Tee-Object -FilePath (Join-Path $report "prototype-skeletal-assets-validation.log")
     if($LASTEXITCODE -ne 0){throw "PROTOTYPE_SKELETAL_ASSETS_INVALID: see rig generation log"}
     Write-Host "Prototype rigs/animations ready for import: $rigDir"
+    $skinImportScript=Join-Path $PSScriptRoot "unreal_editor/import_skeletal_performance.py"
+    & $pythonExe.Source $skinImportScript 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "skeletal-import-preflight.log")
+    if($LASTEXITCODE -ne 0){throw "SKELETAL_ASSETS_SOURCE_PREFLIGHT_FAILED"}
     # Check every generated glTF byte and canonical 88-city preview plan
     # before the engine compilation or any editor mutations.
     $prototypeImportScript=Join-Path $PSScriptRoot "unreal_editor/import_prototype_geometry.py"
@@ -181,6 +185,28 @@ try{
             } finally {
                 Remove-Item Env:UNMADE_PROTO_IMPORT_APPROVED -ErrorAction SilentlyContinue
                 Remove-Item Env:UNMADE_PROTO_IMPORT_RECEIPT -ErrorAction SilentlyContinue
+            }
+            # Import 3 rig prototypes plus 19 explicitly named animation clips
+            # each. Existing artist assets are never overwritten. The glTF
+            # Interchange pipeline MUST prove the expected class/skeleton paths.
+            $env:UNMADE_SKIN_IMPORT_APPROVED="1"
+            $skinReceipt=Join-Path $report "skeletal-import-receipt.json"
+            $env:UNMADE_SKIN_IMPORT_RECEIPT=$skinReceipt
+            try {
+                & $cmdEditor $project "-unattended" "-nop4" "-nosplash" "-run=pythonscript" "-script=$skinImportScript" 2>&1 |
+                    Tee-Object -FilePath (Join-Path $report "skeletal-editor-import.log")
+                if($LASTEXITCODE -ne 0){throw "SKELETAL_ASSETS_EDITOR_IMPORT_FAILED"}
+                if(!(Test-Path $skinReceipt)){throw "SKELETAL_ASSETS_IMPORT_RECEIPT_MISSING"}
+                $sr=Get-Content $skinReceipt -Raw | ConvertFrom-Json
+                if($sr.status -ne "SKINNED_PROTOTYPE_ASSETS_PRESENT_NOT_GAMEPLAY_VERIFIED" -or
+                   $sr.meshes.total -ne 3 -or
+                   $sr.animations.total -ne 57 -or
+                   ($sr.meshes.created+$sr.meshes.existing) -ne 3){
+                    throw "SKELETAL_ASSETS_IMPORT_INCOMPLETE"
+                }
+            }finally{
+                Remove-Item Env:UNMADE_SKIN_IMPORT_APPROVED -ErrorAction SilentlyContinue
+                Remove-Item Env:UNMADE_SKIN_IMPORT_RECEIPT -ErrorAction SilentlyContinue
             }
             # Install only original, generated prototype Foley (never overwrite
             # user-recorded voices or replaced SoundWaves).
