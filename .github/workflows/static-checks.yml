@@ -255,6 +255,10 @@ jobs:
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/witness_return_test.cpp -o /tmp/unmade-witness-return
           /tmp/unmade-witness-return
 
+      - name: Guide the actual Threefold evidence-to-witness story in all four endings
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/threefold_objective_guide_test.cpp -o /tmp/unmade-threefold-objective
+          /tmp/unmade-threefold-objective
       - name: Verify three offline settlements and all resident identities
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/settlement_registry_test.cpp -o /tmp/unmade-settlement-test
