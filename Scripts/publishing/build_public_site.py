@@ -131,10 +131,72 @@ def film():
  (media/"trailer-captions.vtt").write_text("\n".join(captions))
  shutil.rmtree(temp)
  print("Built original film",output,output.stat().st_size,"bytes")
+
+def full_encyclopedia():
+ """Print all eight canonical source volumes verbatim as an optional spoiler-heavy PDF."""
+ import hashlib,textwrap
+ from reportlab.pdfgen import canvas
+ from reportlab.lib.pagesizes import letter
+ from reportlab.pdfbase import pdfmetrics
+ from reportlab.pdfbase.ttfonts import TTFont
+ canonical=R/"docs"/"canon"/"encyclopedia"
+ volumes=sorted(canonical.glob("0?_*.md"))
+ if len(volumes)!=8:raise RuntimeError("Expected eight canonical source volumes; got "+str(len(volumes)))
+ output=O/"downloads"/"the-unmade-definitive-canon-encyclopedia.pdf"
+ pdf=canvas.Canvas(str(output),pagesize=letter,pageCompression=1)
+ pdf.setTitle("THE UNMADE — Definitive Canon Encyclopedia, Eight Volumes")
+ pdf.setAuthor("Matthew Hager")
+ mono="/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
+ font="Courier"
+ if Path(mono).exists():
+  pdfmetrics.registerFont(TTFont("CanonMono",mono));font="CanonMono"
+ def new_page():
+  pdf.showPage();pdf.setFont(font,8)
+  pdf.setFillColorRGB(.44,.39,.45)
+  pdf.drawString(43,25,"THE UNMADE · COMPLETE SOURCE ENCYCLOPEDIA · FULL SPOILERS · NOT GAMEPLAY")
+  pdf.setFillColorRGB(.14,.12,.18)
+  return 745
+ pdf.setFont("Helvetica-Bold",25)
+ pdf.drawString(52,660,"THE UNMADE")
+ pdf.setFont("Helvetica",16)
+ pdf.drawString(52,624,"Definitive Canon Encyclopedia")
+ pdf.setFont("Helvetica",11)
+ pdf.drawString(52,596,"Eight source volumes · 20 October 2026")
+ pdf.setFillColorRGB(.54,.23,.25)
+ pdf.drawString(52,546,"FULL SPOILERS — includes unfinished story design and unresolved mysteries")
+ pdf.setFillColorRGB(.15,.15,.17)
+ pdf.setFont("Helvetica",10)
+ pdf.drawString(52,512,"Faithful text reproduction of repository source files in their canonical order.")
+ pdf.drawString(52,492,"OPEN, DISPUTED and SEALED mysteries remain unresolved in this edition.")
+ pdf.drawString(52,472,"Unreal game completion and beta availability are not implied.")
+ pdf.drawString(52,412,"Source: docs/canon/encyclopedia/01–08 on GitHub main.")
+ y=new_page()
+ for volume in volumes:
+  content=volume.read_text(encoding="utf-8")
+  digest=hashlib.sha256(content.encode("utf-8")).hexdigest()
+  if y<690:y=new_page()
+  pdf.setFont("Helvetica-Bold",11)
+  pdf.drawString(43,y,"SOURCE VOLUME: "+volume.name)
+  y-=18;pdf.setFont("Helvetica",8)
+  pdf.drawString(43,y,"SHA-256: "+digest);y-=20
+  pdf.setFont(font,8)
+  for original in content.splitlines():
+   # Do not skip tables, stable IDs, disclaimers or source annotations.
+   row=original.expandtabs(2)
+   wrapped=textwrap.wrap(row,width=106,break_long_words=True,break_on_hyphens=False,drop_whitespace=False,replace_whitespace=False) or [""]
+   for line in wrapped:
+    if y<42:y=new_page()
+    pdf.drawString(43,y,line)
+    y-=10.7
+  y-=22
+ pdf.save()
+ print("Published complete canonical encyclopedia",output.stat().st_size,"bytes across eight source volumes")
+
 def verify():
  for fn in ["index.html","main.js","styles.css","field-codex.html","gameplay-guide.html","trailer-storyboard.html","downloads/the-unmade-field-codex.pdf","downloads/the-unmade-gameplay-guide.pdf","media/the-unmade-concept-trailer.mp4","media/trailer-captions.vtt"]:
   p=O/fn
   if not p.is_file() or p.stat().st_size<30:raise RuntimeError("Missing "+str(p))
+ if not (O/"downloads/the-unmade-definitive-canon-encyclopedia.pdf").is_file():raise RuntimeError("Missing canonical full PDF")
  for pdf in (O/"downloads").glob("*.pdf"):
   if not pdf.read_bytes().startswith(b"%PDF"):raise RuntimeError("Invalid PDF "+str(pdf))
  if b"ftyp" not in (O/"media/the-unmade-concept-trailer.mp4").read_bytes()[:64]:raise RuntimeError("Invalid MP4")
@@ -146,5 +208,5 @@ def main():
  O.mkdir();shutil.copytree(S/"art",O/"art")
  for fn in ("index.html","styles.css","main.js"):shutil.copyfile(S/fn,O/fn)
  (O/".nojekyll").write_text("")
- books();film();verify()
+ books();full_encyclopedia();film();verify()
 if __name__=="__main__":main()
