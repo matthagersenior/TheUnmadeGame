@@ -61,6 +61,13 @@ try{
     & $pythonExe.Source (Join-Path $PSScriptRoot "build_first_pc_production_pack.py") --out-dir $productionPack 2>&1 |
         Tee-Object -FilePath (Join-Path $report "production-pack-validation.log")
     if($LASTEXITCODE -ne 0){throw "CANONICAL_PRODUCTION_PACK_INVALID: repair IDs or authoring contracts"}
+    # Build actual importable, source-authored low-poly static models. These are
+    # separate prototype assets; never overwrite the user's Unreal game worlds.
+    $geometryDir=Join-Path $repo "Build/UnmadePrototypeGeometry"
+    & $pythonExe.Source (Join-Path $PSScriptRoot "build_realm_geometry.py") --out-dir $geometryDir 2>&1 |
+        Tee-Object -FilePath (Join-Path $report "prototype-geometry-validation.log")
+    if($LASTEXITCODE -ne 0){throw "PROTOTYPE_GEOMETRY_INVALID: inspect geometry generation log"}
+    Write-Host "Prototype models ready for later Unreal import: $geometryDir"
     & $pythonExe.Source (Join-Path $PSScriptRoot "unreal_editor/first_pc_editor_batch.py") 2>&1 |
         Tee-Object -FilePath (Join-Path $report "staging-dry-run.log")
     if($LASTEXITCODE -ne 0){throw "STAGING_PLAN_INVALID"}
