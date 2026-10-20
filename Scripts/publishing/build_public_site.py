@@ -118,7 +118,7 @@ def film():
  for i in range(len(SHOTS)):
   still=temp/("scene%02d.png"%i);clip=temp/("clip%02d.mp4"%i)
   art(still,i)
-  zoom="zoompan=z='min(zoom+0.00035,1.08)':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d=144:s=1280x720:fps=24,fade=t=in:st=0:d=.4,fade=t=out:st=5.6:d=.4,format=yuv420p"
+  zoom="zoompan=z='min(zoom+0.00035,1.08)':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d=144:s=1280x720:fps=24,fade=t=in:st=0:d=0.4,fade=t=out:st=5.6:d=0.4,format=yuv420p"
   subprocess.run(["ffmpeg","-loglevel","error","-y","-loop","1","-framerate","24","-i",str(still),"-vf",zoom,"-frames:v","144","-an","-c:v","libx264","-preset","veryfast","-crf","27","-pix_fmt","yuv420p",str(clip)],check=True)
   clips.append(clip)
  listing=temp/"playlist.txt";listing.write_text("\n".join("file '"+str(p.resolve())+"'" for p in clips)+"\n")
