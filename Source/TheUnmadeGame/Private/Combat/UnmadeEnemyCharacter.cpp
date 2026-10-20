@@ -3,6 +3,7 @@
 #include "UI/UnmadePlayerPreferences.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Combat/UnmadeEnemyCharacter.h"
+#include "World/UnmadeCharacterGrayboxRules.h"
 #include "Combat/UnmadeTravelingProjectile.h"
 #include "Combat/UnmadePresentation.h"
 #include "World/UnmadeIdentityRules.h"
@@ -104,6 +105,28 @@ void AUnmadeEnemyCharacter::ConfigureCreature(UnmadeCore::CreatureKind Kind,bool
     ConfigureStyle(Profile.style);
     Combat->Configure(Profile.health,Profile.damage,Profile.cooldown);
     bSpeciesConfigured=true;
+    // Species silhouettes are a fallback only; imported skeletal performances
+    // continue to own actual animation and combat collision/capsule.
+    const auto& Visual=UnmadeCore::CreatureGraybox(Kind);
+    if(!bSkeletalRigLoaded&&IsValid(TemporaryEnemyVisual)&&IsValid(EncounterCrest)){
+        const FString BodyPath=FString::Printf(TEXT("/Engine/BasicShapes/%s.%s"),
+            UTF8_TO_TCHAR(Visual.bodyShape),UTF8_TO_TCHAR(Visual.bodyShape));
+        const FString CrestPath=FString::Printf(TEXT("/Engine/BasicShapes/%s.%s"),
+            UTF8_TO_TCHAR(Visual.crestShape),UTF8_TO_TCHAR(Visual.crestShape));
+        if(UStaticMesh* Shape=LoadObject<UStaticMesh>(nullptr,*BodyPath))
+            TemporaryEnemyVisual->SetStaticMesh(Shape);
+        if(UStaticMesh* Shape=LoadObject<UStaticMesh>(nullptr,*CrestPath))
+            EncounterCrest->SetStaticMesh(Shape);
+        const float Scale=bChampion?1.13f:1.f;
+        TemporaryEnemyVisual->SetRelativeScale3D(
+            FVector(Visual.sx,Visual.sy,Visual.sz)*Scale);
+        EncounterCrest->SetRelativeLocation(FVector(18,0,Visual.crestHeight));
+        EncounterCrest->SetRelativeScale3D(FVector(
+            Visual.crestScale,Visual.crestScale,Visual.crestScale)*Scale);
+        EncounterCrest->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        EncounterCrest->SetGenerateOverlapEvents(false);
+        EncounterCrest->SetCanEverAffectNavigation(false);
+    }
 }
 
 void AUnmadeEnemyCharacter::ConfigureEncounter(FName Identity,const FString& Name,
@@ -116,8 +139,16 @@ void AUnmadeEnemyCharacter::ConfigureEncounter(FName Identity,const FString& Nam
     EncounterLabel->SetText(FText::FromString(Name));
     EncounterLabel->SetTextRenderColor(Accent.ToFColor(true));
     const bool bWatch=Style==UnmadeCore::EnemyStyle::Watcher;
-    EncounterCrest->SetRelativeLocation(bWatch?FVector(0,0,95):FVector(38,0,45));
-    EncounterCrest->SetRelativeScale3D(bWatch?FVector(.18,.5,.55):FVector(.48,.43,.3));
+    if(bSpeciesConfigured&&!bSkeletalRigLoaded){
+        const auto& Visual=UnmadeCore::CreatureGraybox(SpeciesKind);
+        const float Scale=bElderEncounter?1.13f:1.f;
+        EncounterCrest->SetRelativeLocation(FVector(18,0,Visual.crestHeight));
+        EncounterCrest->SetRelativeScale3D(
+            FVector(Visual.crestScale,Visual.crestScale,Visual.crestScale)*Scale);
+    }else if(!bSkeletalRigLoaded){
+        EncounterCrest->SetRelativeLocation(bWatch?FVector(0,0,95):FVector(38,0,45));
+        EncounterCrest->SetRelativeScale3D(bWatch?FVector(.18,.5,.55):FVector(.48,.43,.3));
+    }
     if(UMaterialInstanceDynamic* Body=TemporaryEnemyVisual->CreateAndSetMaterialInstanceDynamic(0))
         Body->SetVectorParameterValue(TEXT("Color"),Accent);
 }

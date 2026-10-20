@@ -1,5 +1,11 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-20 — Fallback character silhouettes
+- Added source-defined but visually distinct fallback proportions/crest profiles for five roles and twelve creature species. No new inhabitants or enemies were spawned.
+- The existing game-collision capsules, AI, combat profile, witness memory, skeletal assets and narrative decisions are unchanged. An imported rig hides the fallback rather than showing both.
+- This is source-only; hardware/lighting/accessibility, actual model quality and Unreal compilation remain unverified.
+
+
 ## 2026-10-20 — Native visual source port without recovery branch ancestry
 - Ported nine distinctive crown motifs to current Unreal source and spawned three purely decorative noncolliding silhouettes per expedition frontier.
 - Neither original cube collision owners nor player decisions, witness, journal, gear, map discoveries or save fields were replaced.

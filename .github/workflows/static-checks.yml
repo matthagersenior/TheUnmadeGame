@@ -391,6 +391,11 @@ jobs:
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/realm_visual_guides_test.cpp -o /tmp/unmade-realm-visuals
           /tmp/unmade-realm-visuals
 
+      - name: Verify five resident professions and twelve distinctive creature silhouettes
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/visual_archetypes_test.cpp -o /tmp/unmade-visual-archetypes
+          /tmp/unmade-visual-archetypes
+
       - name: Verify the nine-realm branching main campaign and story-to-boss access
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/story/unanswered_road_test.cpp -o /tmp/unmade-unanswered-road
