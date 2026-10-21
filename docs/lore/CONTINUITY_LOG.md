@@ -1,5 +1,10 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-21 — Critical save preflight before restore and overwrite
+- Existing schema-1 save fields are checked for invalid player resume values, inventory/equipment array shapes, finite world clock, economy values, one-of-nine loadout indices, witnessed echo masks and chronology of carried testimony.
+- Invalid records are refused on read or before overwriting primary/backup; the previous disk records remain untouched. Disabled optional flags retain the old empty-state compatibility. Actual subsystem Restore continues to enforce deeper rules; this preflight is not a full-save migration or Unreal-verified disk-fault test.
+
+
 ## 2026-10-21 — Transaction-safe player healing
 - Potions now stage health recovery before the combined profile save captures the combatant, not afterward. A synchronous failed save restores the exact prior combatant (hit receipts/cooldowns included) and potion inventory; it cannot silently promote the next potion in the preference list.
 - Zero-health-restore Strain consumables still write a synchronous combined save; the already existing fracture recovery follows that successful save. No new item, species, ending, save field or lore answer was introduced.

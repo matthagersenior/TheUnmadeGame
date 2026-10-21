@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-21 — Save integrity, no retroactive lore
+The source now validates critical persisted record shapes before actor restoration or profile writes. It does not grant retroactive quest evidence, resolve an OPEN mystery, identify unnamed refugees, transform an unavailable backup into a valid record or alter old save fields. A failed structural check preserves existing data and signals refusal; native fixtures cover legacy optional absence and malformed testimony chronology, with actual UE load acceptance pending.
+
+
 ## 2026-10-21 — Source-only potion save integrity
 The game's preexisting consumables retain their original acquisition, costs, health/Strain effects and preferred order. A failed combined save no longer silently loses recorded healing on reload or advances to another item. Native source tests validate transaction order, inventory rollback, player-facing save failure and preservation of combat hit receipts; this does not invent lore, an item, an irreversible choice, or new player progress. Real Unreal gameplay and storage-failure testing remain unverified.
 
