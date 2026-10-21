@@ -1,4 +1,6 @@
 #include "Save/UnmadeCriticalSavePreflight.h"
+#include "World/UnmadeExpeditionRules.h"
+#include "World/UnmadeAbilityStudyRules.h"
 #include "Items/UnmadeItemRules.h"
 #include <cassert>
 #include <cmath>
