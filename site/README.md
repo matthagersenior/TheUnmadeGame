@@ -19,3 +19,9 @@ python Scripts/publishing/build_public_site.py --check
 No FFmpeg or placeholder film generation is part of public site publishing. A finished cinematic must pass separate visual-quality and canon review before a new media link is introduced. The Python build does not change the canon encyclopedia or source code. Outputs in `site/dist/` are generated and should not be committed as source.
 
 **Publicity safety:** Never claim playable Unreal completion or call a rendered concept frame gameplay. Do not spoil OPEN, DISPUTED, SEALED or final-ending mysteries.
+
+## Interactive source-authored 3D preview
+
+`site/real-models.html` is a source-accurate model inspection surface linked from the landing-page hero. The Pages workflow **generates** 39 real original `.glb` meshes into `site/dist/models/` from `Scripts/build_hero_models.py`, and verifies them against `models/manifest.json`. This includes nine small environment dioramas, twelve unrigged creature meshes, and eighteen unrigged NPC character meshes. The page reads their manifest dimensions, parts and triangle counts and uses Three.js to orbit the GLB files in the browser; Three.js modules are loaded from a pinned jsDelivr CDN version. The page also includes a source-grounded Bellwold Afterlight example explaining evidence, witness, choice and aftermath. This is neither playable Unreal content nor a simulation of the actual final UI.
+
+Publishing must not imply the GLBs are final hero art, physical levels, rigged animation, Unreal captures, or an installable beta. The actual source and production status are explained in `docs/art/actual-3d-models.md` and `docs/design/2026-10-09-bellwold-afterlight.md`.
