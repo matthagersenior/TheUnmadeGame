@@ -5,6 +5,8 @@ on:
     paths:
       - 'site/**'
       - 'Scripts/publishing/build_public_site.py'
+      - 'Scripts/build_hero_models.py'
+      - 'Authoring/world_content_pack.json'
       - '.github/workflows/pages.yml'
   pull_request:
     paths:
@@ -28,12 +30,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install publishing libraries
-        run: python -m pip install 'reportlab==4.4.4' 'markdown==3.9'
+      - name: Install publishing and actual 3D model libraries
+        run: python -m pip install 'reportlab==4.4.4' 'markdown==3.9' 'numpy==2.3.5' 'trimesh==4.11.1' 'pillow==12.3.0'
       - name: Render public reading editions
         run: python Scripts/publishing/build_public_site.py
-      - name: Validate generated artifacts
-        run: python Scripts/publishing/build_public_site.py --check
+      - name: Generate real source-authored realm, creature and resident meshes
+        run: python Scripts/build_hero_models.py --out-dir site/dist/models
+      - name: Validate published artifact and all 39 authentic GLB assets
+        run: |
+          python Scripts/publishing/build_public_site.py --check
+          python Scripts/build_hero_models.py --out-dir site/dist/models --verify-output
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
