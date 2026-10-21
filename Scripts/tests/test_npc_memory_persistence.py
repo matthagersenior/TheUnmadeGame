@@ -20,4 +20,7 @@ class NpcMemoryPersistence(unittest.TestCase):
   self.assertIn("ValidNpcSnapshots(Merged)",section)
   self.assertIn("Save->NpcSnapshots=MoveTemp(Merged)",section)
   self.assertIn("if (!UnmadeSave::SaveGameToSlot(Save))",section)
+  player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
+  self.assertNotIn("Save->NpcSnapshots.Reset()",player)
+  self.assertIn("MergeNpcSnapshot(Merged",player)
 if __name__=="__main__":unittest.main()
