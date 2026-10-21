@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-21 — Player-directed safe restoration
+With two explicit confirmations a user may copy a known-compatible historical backup into an unused save profile, keeping both original primary and backup data untouched. This restores exactly recorded state, not retrospective unobserved witness knowledge, unearned gear, fabricated shipments or an alternate ending. The duplicated profile has new storage ownership only, with no changes to established story/canon IDs. Real UE file-system and rollback playtesting is pending.
+
+
 ## 2026-10-21 — Explicit profile recovery does not invent progress
 User-selected, structurally validated backup records now take precedence over an incompatible primary during a deliberate restore. The original primary file remains protected from silent replacement. The operation uses recorded past state only: no new witness testimony, restored unearned mastery, extra inventory or retrospective physical deliveries may be invented. Tested by native source policy, not an Unreal recovery-session playthrough.
 

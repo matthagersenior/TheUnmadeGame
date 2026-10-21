@@ -8,6 +8,7 @@ namespace UnmadeSave {
  THEUNMADEGAME_API bool SaveGameToSlot(USaveGame* Save);
  THEUNMADEGAME_API bool HasRecord();
  THEUNMADEGAME_API bool SelectProfile(UObject* Context,int Profile,bool Backup=false);
+ THEUNMADEGAME_API bool RecoverBackupIntoNewProfile(UObject* Context,int Profile);
  THEUNMADEGAME_API bool CreateUnusedProfile(UObject* Context);
  THEUNMADEGAME_API FString DescribeProfiles();
 }

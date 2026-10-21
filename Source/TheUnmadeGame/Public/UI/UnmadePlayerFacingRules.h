@@ -12,10 +12,10 @@ inline std::string FormatControlLabels(const std::string& input,const std::vecto
  if(!best||n>best->key.size())best=&label;}
  if(best){out+=best->display;i+=best->key.size();}else out+=input[i++];}return out;
 }
-enum class SessionIntent {None,Load,Recover,New};
+enum class SessionIntent {None,Load,Recover,RecoverCopy,New};
 class SessionConfirmation final {SessionIntent intent_=SessionIntent::None;int profile_=-1;public:
  void Clear(){intent_=SessionIntent::None;profile_=-1;}
- bool Request(SessionIntent intent,int profile,bool saved){if(intent==SessionIntent::None||profile<0||profile>3){Clear();return false;}if(saved&&intent!=SessionIntent::Recover){Clear();return true;}if(intent_==intent&&profile_==profile){Clear();return true;}intent_=intent;profile_=profile;return false;}
+ bool Request(SessionIntent intent,int profile,bool saved){if(intent==SessionIntent::None||profile<0||profile>3){Clear();return false;}if(saved&&intent!=SessionIntent::Recover&&intent!=SessionIntent::RecoverCopy){Clear();return true;}if(intent_==intent&&profile_==profile){Clear();return true;}intent_=intent;profile_=profile;return false;}
 };
 inline bool PhysicalTradeAllowed(bool alive,bool consenting,double distanceSq,bool unobstructed){return alive&&consenting&&std::isfinite(distanceSq)&&distanceSq>=0&&distanceSq<=340.0*340.0&&unobstructed;}
 inline bool MotionMayReplace(bool defeated,bool deathPlaying,bool staggerHeld,bool actionHeld,bool incomingDeath,bool incomingStagger,bool incomingLocomotion){if(incomingDeath)return true;if(defeated||deathPlaying)return false;if(incomingStagger)return true;if(staggerHeld)return false;if(actionHeld&&incomingLocomotion)return false;return true;}

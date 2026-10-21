@@ -1,7 +1,15 @@
 #pragma once
 #include <cmath>
+#include <array>
 namespace UnmadeCore {
 inline bool ValidProfile(int n){return n>=0&&n<=3;}
+/** Never clone a backup over its own source or an occupied primary/backup. */
+inline int FirstAvailableRecoveryProfile(int source,const std::array<bool,4>& occupied){
+ if(!ValidProfile(source))return -1;
+ for(int target=1;target<=3;++target)
+  if(target!=source&&!occupied[target])return target;
+ return -1;
+}
 inline bool ValidResume(double x,double y,double z,double health,double stamina){return std::isfinite(x)&&std::isfinite(y)&&std::isfinite(z)&&std::abs(x)<=500000&&std::abs(y)<=150000&&z>=0&&z<=1000&&std::isfinite(health)&&health>=0&&health<=100&&std::isfinite(stamina)&&stamina>=0&&stamina<=100;}
 inline double SimulationInterval(double distance,bool combat){if(!std::isfinite(distance)||distance<0)return 2;return distance<3500?combat?0:.05:distance<18000?.25:2;}
 inline int WorkMotion(int realm,int person){return realm>=0&&realm<9&&person>=0&&person<5?(realm+person)%3:-1;}

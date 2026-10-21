@@ -68,6 +68,7 @@ private:
  UFUNCTION() void NextProfile();
  UFUNCTION() void LoadProfile();
  UFUNCTION() void LoadBackup();
+ UFUNCTION() void RecoverToNewProfile();
  UFUNCTION() void NewProfile();
  UFUNCTION() void SaveNow();
  UFUNCTION() void ContinueGame();
