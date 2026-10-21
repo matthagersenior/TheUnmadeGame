@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**21 October 2026 source-only recovery milestone:** Explicitly selected compatible backups can be loaded despite an incompatible primary record, while unattended loads still fail closed. Previously published illustrated v20 files, hashes and release status remain unchanged; real engine disk-corruption QA remains pending.
+
+
 **21 October 2026 source-only resident-memory persistence milestone:** Saved observation identities and rumor provenance survive off-screen resident refreshes and malformed duplicates are refused before profile write. No historical illustrated v20 source hash or final release status has changed. UE compilation and streamed-resident acceptance remain pending.
 
 

@@ -8,6 +8,8 @@ inline int WorkMotion(int realm,int person){return realm>=0&&realm<9&&person>=0&
 }
 namespace UnmadeCore {
 enum class StoredRecord {Primary,Backup,Missing,Incompatible};
-inline StoredRecord ChooseStoredRecord(bool primaryExists,bool compatible,bool readable,bool backupReadable,bool preferBackup){if(primaryExists&&!compatible)return StoredRecord::Incompatible;if(preferBackup)return backupReadable?StoredRecord::Backup:StoredRecord::Missing;if(readable)return StoredRecord::Primary;return backupReadable?StoredRecord::Backup:StoredRecord::Missing;}
+// A deliberately selected, validated backup may bypass an unreadable primary;
+// automatic loading still protects unknown/newer-format primary files.
+inline StoredRecord ChooseStoredRecord(bool primaryExists,bool compatible,bool readable,bool backupReadable,bool preferBackup){if(preferBackup)return backupReadable?StoredRecord::Backup:StoredRecord::Missing;if(primaryExists&&!compatible)return StoredRecord::Incompatible;if(readable)return StoredRecord::Primary;return backupReadable?StoredRecord::Backup:StoredRecord::Missing;}
 template<class Record,class Writer> bool CommitWithPrevious(const Record& next,const Record* previous,Writer write){if(previous&&!write(*previous,true))return false;return write(next,false);}
 }
