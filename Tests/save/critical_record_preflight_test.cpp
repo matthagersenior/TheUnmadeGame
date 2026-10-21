@@ -81,6 +81,7 @@ int main(){
  s.WitnessReturnStage=2;s.WitnessReturnCollectedDay=3;assert(ValidCriticalSaveShape(s));
  s.WitnessReturnStage=3;s.WitnessReturnDeliveredDay=4;assert(ValidCriticalSaveShape(s));
  s.WitnessReturnDeliveredDay=2;assert(!ValidCriticalSaveShape(s));
+ s.WitnessReturnDeliveredDay=4;assert(ValidCriticalSaveShape(s));
  // A saved expedition must satisfy the *real* domain Restore, not merely
  // consist of ints; the first pack int is the append-only format revision.
  s.bHasExpeditions=true;
