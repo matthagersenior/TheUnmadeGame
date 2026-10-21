@@ -13,6 +13,7 @@ using namespace UnmadeCore;
 template<class T> struct Array:std::vector<T>{
     using std::vector<T>::vector;
     int Num()const{return static_cast<int>(this->size());}
+    void Add(const T& value){this->push_back(value);}
 };
 struct Name{
  std::string value;
@@ -205,6 +206,21 @@ int main(){
  s.NpcSnapshots[0].Observations[0].EventId.value=0;
  assert(!ValidCriticalSaveShape(s)); // invalid event ID
  s.NpcSnapshots[0].Observations[0].EventId.value=10;
+ assert(ValidCriticalSaveShape(s));
+ // Offline residents must survive the live population's next write.
+ NpcSnapshot hessa;hessa.NpcId={"npc.hessa"};hessa.Observations.push_back(
+     {{21},{"Player.Helped"},{},0,{}});
+ assert(MergeNpcSnapshot(s.NpcSnapshots,hessa));
+ assert(s.NpcSnapshots.Num()==2);
+ NpcSnapshot orrelUpdated=orrel;
+ orrelUpdated.Observations.push_back({{12},{"World.WitnessBraidDocket"},{},0,{}});
+ assert(MergeNpcSnapshot(s.NpcSnapshots,orrelUpdated));
+ assert(s.NpcSnapshots.Num()==2);
+ assert(s.NpcSnapshots[0].Observations.Num()==2);
+ assert(s.NpcSnapshots[1].Observations[0].EventId.value==21);
+ NpcSnapshot tampered=orrelUpdated;tampered.Observations[0].Evidence=1;
+ assert(!MergeNpcSnapshot(s.NpcSnapshots,tampered));
+ assert(s.NpcSnapshots[0].Observations[0].Evidence==0);
  assert(ValidCriticalSaveShape(s));
  // Disabled optional fields must be ignored for legacy/earlier save slots.
  Record legacy;legacy.WitnessBraidOutcome=999;legacy.TradeMarks=-7;
