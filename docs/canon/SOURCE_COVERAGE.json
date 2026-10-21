@@ -48,6 +48,21 @@
       "codex_keys": [
         "codex:realm.ThreefoldReach"
       ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeCriticalSavePreflight.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
     }
   ]
 }

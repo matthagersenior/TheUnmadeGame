@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**21 October 2026 source-only profile integrity:** Added additive, read-only structural checks for critical schema-1 save fields before restore/write. Canonical illustrated v20 release source and checksums remain unchanged; no in-engine persistence tests or new illustrated edition have been issued.
+
+
 **21 October 2026 source-only save integrity milestone:** Existing potion recovery now occurs before synchronous profile serialization and rolls back combat/inventory on failure. This has no effect on the previously verified illustrated edition v20 files, their hashes or its canonical source and is not an Unreal-runtime playtest.
 
 
