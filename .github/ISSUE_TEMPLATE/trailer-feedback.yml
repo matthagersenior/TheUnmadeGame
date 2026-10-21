@@ -1,11 +1,11 @@
-name: Cinematic trailer feedback
-description: Share specific, public feedback on The Unmade cinematic concept trailer.
-title: "[Trailer feedback] "
+name: Cinematic direction feedback
+description: Share specific, public feedback on the proposed cinematic direction for The Unmade.
+title: "[Film direction] "
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking a look at The Unmade. This is a **cinematic concept trailer, not captured gameplay footage**. Feedback submissions are public; please do not include personal contact details or story spoilers.
+        Thanks for taking a look at The Unmade. The finished cinematic has not yet been published; this feedback relates to the **director's treatment, not footage or gameplay**. Feedback submissions are public; please do not include personal contact details or story spoilers.
   - type: dropdown
     id: feeling
     attributes:
@@ -21,15 +21,15 @@ body:
   - type: textarea
     id: memorable
     attributes:
-      label: Which moment stayed with you?
-      placeholder: A specific scene, sound, mood or line...
+      label: Which proposed moment interests you most?
+      placeholder: A particular proposed scene, character moment, visual effect or reaction...
     validations:
       required: true
   - type: textarea
     id: unclear
     attributes:
       label: What could be clearer or better?
-      placeholder: Pacing, tone, accessibility, premise, music, readability...
+      placeholder: Shot priorities, character action, tone, accessibility, emotional arc...
   - type: dropdown
     id: explore
     attributes:
