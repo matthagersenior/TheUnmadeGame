@@ -1,19 +1,8 @@
 #!/usr/bin/env python3
-"""Build original Unmade cinematic concept film and spoiler-light reader editions."""
+"""Build spoiler-light public reader editions and the full-source encyclopedia."""
 from pathlib import Path
-import argparse,html,math,random,re,shutil,struct,subprocess,wave
+import argparse,html,re,shutil
 R=Path(__file__).resolve().parents[2];S=R/"site";O=S/"dist"
-SHOTS=[
-("THE UNMADE","SOME WORLDS ARE BROKEN","THIS ONE REMEMBERS BEING WHOLE","void"),
-("THE THREEFOLD REACH","A BELL WITH NO LAST NOTE","TWO ROADS. TWO WITNESSES.","bell"),
-("THE WIDOWED RAIN","A SHORE WITHOUT WATER","THE RAIN REMEMBERS THE SEA","rain"),
-("THE HEARTH BENEATH","A FIRE WITHOUT A SUN","WHO KEEPS THE HOMES WARM?","fire"),
-("THE INVERTED CHOIR","A CITY HELD BY A SONG","THE MISSING NOTE HAS WEIGHT","choir"),
-("THE YESTERDAY QUARRY","A HISTORY BURIED IN STONE","SOME NAMES BECOME FOUNDATIONS","stone"),
-("THE UNCLAIMED CITY","NOT ALL LIVES HAVE A RECORD","EVERYONE DESERVES A DOOR","door"),
-("THE UNTITLED ORCHARD","A LAW WITHOUT A RULER","WHO AGREED TO THE EMPTY THRONE?","tree"),
-("THE WORLD REMEMBERS","DISCOVER. CHOOSE. RETURN.","REGISTER BETA INTEREST · NOT GAMEPLAY","void")]
-D=6;TOTAL=D*len(SHOTS)
 def books():
  import markdown
  from reportlab.platypus import SimpleDocTemplate,Paragraph,Spacer
@@ -46,92 +35,6 @@ def books():
   def footer(c,d):
    c.saveState();c.setFont("Helvetica",8);c.drawString(50,28,"THE UNMADE · PUBLIC CONCEPT EDITION · NOT A PLAYABLE RELEASE");c.drawRightString(550,28,str(d.page));c.restoreState()
   SimpleDocTemplate(str(O/"downloads"/pdf),pagesize=(8.5*inch,11*inch),rightMargin=50,leftMargin=50,topMargin=54,bottomMargin=54,title="THE UNMADE "+label,author="Matthew Hager").build(content,onFirstPage=footer,onLaterPages=footer)
-def art(path,n):
- from PIL import Image,ImageDraw,ImageFont
- title,hook,sub,kind=SHOTS[n];W=1600;H=900
- palettes={"void":((10,10,26),(77,49,72)),"bell":((19,19,36),(91,68,78)),"rain":((10,26,40),(59,83,94)),"fire":((37,18,27),(129,63,49)),"choir":((18,24,46),(83,76,111)),"stone":((29,30,46),(99,81,93)),"door":((17,30,42),(78,86,104)),"tree":((17,36,31),(79,100,71))}
- a,b=palettes[kind];im=Image.new("RGB",(W,H));p=ImageDraw.Draw(im)
- for y in range(H):
-  t=(y/H)**1.2;p.line((0,y,W,y),fill=tuple(int(x*(1-t)+z*t) for x,z in zip(a,b)))
- rng=random.Random(n+115)
- for j in range(130):
-  x=rng.randrange(W);y=rng.randrange(H);p.point((x,y),fill=(164,149,165))
- bright=(211,167,149);black=(12,13,24)
- if kind=="void":
-  for r in (230,300,380):p.ellipse((1130-r,420-r,1130+r,420+r),outline=bright,width=2)
-  p.polygon([(1030,795),(1100,95),(1154,95),(1250,795)],fill=black);p.line((1126,100,1126,785),fill=bright,width=5)
- elif kind=="bell":
-  p.polygon([(830,795),(950,135),(1140,135),(1280,795)],fill=black);p.rectangle((993,210,1092,330),outline=bright,width=8)
-  for x in (720,1370):p.polygon([(x-140,790),(x,440),(x+140,790)],fill=black)
- elif kind=="rain":
-  for x in range(650,1600,120):
-   p.polygon([(x,795),(x+35,465),(x+58,795)],fill=black)
-  for j in range(210):
-   x=rng.randrange(660,1600);y=rng.randrange(70,795);p.line((x,y,x-20,y+65),fill=(153,177,186),width=2)
- elif kind=="fire":
-  p.polygon([(580,790),(950,320),(1050,290),(1580,790)],fill=black)
-  for x in (850,1090,1310):
-   p.ellipse((x-50,360,x+60,650),fill=(191,107,62));p.polygon([(x-40,640),(x,330),(x+40,640)],fill=black)
- elif kind=="choir":
-  for x in (680,900,1110,1360,1530):
-   y=rng.randrange(160,300);p.line((x,0,x,y),fill=bright,width=4)
-   p.polygon([(x-95,y),(x+85,y),(x+69,y+172),(x-85,y+172)],fill=black)
- elif kind=="stone":
-  for x in range(650,1590,166):
-   p.polygon([(x,360),(x+140,315),(x+154,795),(x,795)],fill=black);p.line((x+25,360,x+109,732),fill=bright,width=3)
- elif kind=="door":
-  for x in (680,920,1190,1450):
-   p.rounded_rectangle((x,305,x+150,795),radius=65,outline=bright,width=6)
-   p.rectangle((x+20,425,x+130,790),fill=black)
- elif kind=="tree":
-  for x in (730,1010,1310,1540):
-   p.line((x,795,x,240),fill=(44,64,40),width=45)
-   p.arc((x-180,110,x+180,560),180,365,fill=(140,138,99),width=24)
- p.polygon([(0,825),(320,770),(620,846),(1100,783),(1600,820),(1600,900),(0,900)],fill=(8,10,17))
- p.rectangle((0,0,W,80),fill=(7,8,16));p.rectangle((0,820,W,900),fill=(7,8,16))
- try:
-  font=lambda f,s:ImageFont.truetype("/usr/share/fonts/truetype/dejavu/"+f,s)
-  big=font("DejaVuSerif.ttf",49 if len(title)>22 else 64);med=font("DejaVuSans.ttf",29);small=font("DejaVuSans.ttf",18)
- except OSError:big=med=small=ImageFont.load_default()
- p.text((100,290),title,font=big,fill=(248,231,218))
- p.line((104,402,300,402),fill=bright,width=4)
- p.text((105,449),hook,font=med,fill=(233,199,173))
- p.text((105,505),sub,font=small,fill=(234,222,215))
- p.text((105,849),"THE UNMADE / ORIGINAL CINEMATIC CONCEPT / NOT GAMEPLAY",font=small,fill=(183,173,183))
- im.save(path)
-def score(path):
- rate=22050;notes=[110,130.81,146.83,98,164.81,123.47,110,146.83,98]
- with wave.open(str(path),"wb") as w:
-  w.setnchannels(1);w.setsampwidth(2);w.setframerate(rate);data=bytearray()
-  for i in range(rate*TOTAL):
-   t=i/rate;section=min(len(notes)-1,int(t/D));phase=t%D;f=notes[section]
-   envelope=min(1,phase/.7,max(0,(D-phase)/.65),t/1.5,(TOTAL-t)/1.5)
-   s=(math.sin(2*math.pi*f*t)+.45*math.sin(3*math.pi*f*t)+.22*math.sin(4*math.pi*f*t))*.17
-   s+=math.sin(2*math.pi*659.25*phase)*math.exp(-3*phase)*.09
-   data.extend(struct.pack("<h",int(max(-1,min(1,s*envelope))*27000)))
-   if len(data)>32768:w.writeframes(data);data.clear()
-  if data:w.writeframes(data)
-def film():
- if not shutil.which("ffmpeg"):raise RuntimeError("FFmpeg missing; cannot make playable trailer")
- temp=O/"_film";temp.mkdir();media=O/"media";media.mkdir()
- clips=[]
- for i in range(len(SHOTS)):
-  still=temp/("scene%02d.png"%i);clip=temp/("clip%02d.mp4"%i)
-  art(still,i)
-  zoom="zoompan=z='min(zoom+0.00035,1.08)':x='iw/2-iw/zoom/2':y='ih/2-ih/zoom/2':d=144:s=1280x720:fps=24,fade=t=in:st=0:d=0.4,fade=t=out:st=5.6:d=0.4,format=yuv420p"
-  subprocess.run(["ffmpeg","-loglevel","error","-y","-loop","1","-framerate","24","-i",str(still),"-vf",zoom,"-frames:v","144","-an","-c:v","libx264","-preset","veryfast","-crf","27","-pix_fmt","yuv420p",str(clip)],check=True)
-  clips.append(clip)
- listing=temp/"playlist.txt";listing.write_text("\n".join("file '"+str(p.resolve())+"'" for p in clips)+"\n")
- soundtrack=temp/"music.wav";score(soundtrack)
- output=media/"the-unmade-concept-trailer.mp4"
- subprocess.run(["ffmpeg","-loglevel","error","-y","-f","concat","-safe","0","-i",str(listing),"-i",str(soundtrack),"-c:v","copy","-c:a","aac","-b:a","128k","-movflags","+faststart","-shortest",str(output)],check=True)
- def t(s):return "%02d:%02d:%06.3f"%(s//3600,(s//60)%60,s%60)
- captions=["WEBVTT",""]
- for i,(title,line,sub,kind) in enumerate(SHOTS):captions.extend([t(i*D)+" --> "+t((i+1)*D),title+". "+line+". "+sub+".",""])
- (media/"trailer-captions.vtt").write_text("\n".join(captions))
- shutil.rmtree(temp)
- print("Built original film",output,output.stat().st_size,"bytes")
-
 def full_encyclopedia():
  """Print all eight canonical source volumes verbatim as an optional spoiler-heavy PDF."""
  import hashlib,textwrap
@@ -193,14 +96,13 @@ def full_encyclopedia():
  print("Published complete canonical encyclopedia",output.stat().st_size,"bytes across eight source volumes")
 
 def verify():
- for fn in ["index.html","main.js","styles.css","field-codex.html","gameplay-guide.html","trailer-storyboard.html","downloads/the-unmade-field-codex.pdf","downloads/the-unmade-gameplay-guide.pdf","media/the-unmade-concept-trailer.mp4","media/trailer-captions.vtt"]:
+ for fn in ["index.html","main.js","styles.css","field-codex.html","gameplay-guide.html","trailer-storyboard.html","downloads/the-unmade-field-codex.pdf","downloads/the-unmade-gameplay-guide.pdf"checklist]:
   p=O/fn
   if not p.is_file() or p.stat().st_size<30:raise RuntimeError("Missing "+str(p))
  if not (O/"downloads/the-unmade-definitive-canon-encyclopedia.pdf").is_file():raise RuntimeError("Missing canonical full PDF")
  for pdf in (O/"downloads").glob("*.pdf"):
   if not pdf.read_bytes().startswith(b"%PDF"):raise RuntimeError("Invalid PDF "+str(pdf))
- if b"ftyp" not in (O/"media/the-unmade-concept-trailer.mp4").read_bytes()[:64]:raise RuntimeError("Invalid MP4")
- print("PASS: HTML, 2 PDF downloads, 54-second MP4 and VTT")
+ print("PASS: HTML, accessible reader editions, 3 PDF downloads, no prototype trailer")
 def main():
  p=argparse.ArgumentParser();p.add_argument("--check",action="store_true");a=p.parse_args()
  if a.check:verify();return
@@ -208,5 +110,5 @@ def main():
  O.mkdir();shutil.copytree(S/"art",O/"art")
  for fn in ("index.html","styles.css","main.js"):shutil.copyfile(S/fn,O/fn)
  (O/".nojekyll").write_text("")
- books();full_encyclopedia();film();verify()
+ books();full_encyclopedia();verify()
 if __name__=="__main__":main()
