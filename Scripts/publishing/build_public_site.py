@@ -96,7 +96,7 @@ def full_encyclopedia():
  print("Published complete canonical encyclopedia",output.stat().st_size,"bytes across eight source volumes")
 
 def verify():
- for fn in ["index.html","main.js","styles.css","real-models.html","field-codex.html","gameplay-guide.html","trailer-storyboard.html","downloads/the-unmade-field-codex.pdf","downloads/the-unmade-gameplay-guide.pdf"]:
+ for fn in ["index.html","main.js","styles.css","real-models.html","play-bellwold.html","field-codex.html","gameplay-guide.html","trailer-storyboard.html","downloads/the-unmade-field-codex.pdf","downloads/the-unmade-gameplay-guide.pdf"]:
   p=O/fn
   if not p.is_file() or p.stat().st_size<30:raise RuntimeError("Missing "+str(p))
  if not (O/"downloads/the-unmade-definitive-canon-encyclopedia.pdf").is_file():raise RuntimeError("Missing canonical full PDF")
@@ -108,7 +108,7 @@ def main():
  if a.check:verify();return
  if O.exists():shutil.rmtree(O)
  O.mkdir();shutil.copytree(S/"art",O/"art")
- for fn in ("index.html","styles.css","main.js","real-models.html"):shutil.copyfile(S/fn,O/fn)
+ for fn in ("index.html","styles.css","main.js","real-models.html","play-bellwold.html"):shutil.copyfile(S/fn,O/fn)
  (O/".nojekyll").write_text("")
  books();full_encyclopedia();verify()
 if __name__=="__main__":main()
