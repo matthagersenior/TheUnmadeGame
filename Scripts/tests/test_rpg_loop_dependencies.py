@@ -11,7 +11,7 @@ class CompleteLoopDependencies(unittest.TestCase):
   survey=source('Private/World/UnmadePlayableEncounters.cpp');self.assertIn('SlotName()==TEXT("UnmadePrototypeNPC")',survey);self.assertIn('FieldSurveyStages=Save->FieldSurveyStages',survey);self.assertIn('UnmadeSave::SaveGameToSlot(Save)',survey)
   self.assertIn('Save->FieldSurveyStages=FieldSurveyStages',source('Private/World/UnmadePrototypeHub.cpp'))
   s=source('Private/Save/UnmadeSaveSession.cpp')
-  for v in ['CommitWithPrevious','Switching','existing->SchemaVersion!=1','HasRejectedWorld','HasRejectedSave','_Backup']:self.assertIn(v,s)
+  for v in ['CommitWithPrevious','Switching','!ValidStored(*existing)','HasRejectedWorld','HasRejectedSave','_Backup']:self.assertIn(v,s)
  def test_profile_changes_preserve_existing_records(self):
   s=source('Private/Save/UnmadeSaveSession.cpp');self.assertNotIn('DeleteGameInSlot',s)
   self.assertIn('for(int p=1;p<=3;++p)',s);self.assertIn('DoesSaveGameExist(slot+TEXT("_Backup")',s)
