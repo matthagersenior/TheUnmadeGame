@@ -35,7 +35,7 @@ class BellwoldWebPrototypeTests(unittest.TestCase):
         self.assertIn("localStorage.removeItem",self.html)
         self.assertIn("not the Unreal executable",self.html)
         self.assertIn("not in the game's canonical saved data",self.html)
-        self.assertIn("not a verified complete Unreal playthrough",self.html)
+        self.assertIn("not the final Bellwold map",self.html)
 
     def test_inline_js_syntax_when_node_available(self):
         node=shutil.which("node")
