@@ -1,5 +1,10 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-21 — Cross-realm finite warehouse, wage and cargo save integrity
+- Added a source-only preflight that reuses the existing nine-realm MaterialWorld and LivingEconomy validators *together*, using the original saved in-world clock. Partial warehouse/worker array snapshots, illegal negative stock, nonconserved municipal payroll and simultaneous incompatible carried cargo are rejected before restore or overwrite.
+- Accepted schema-1 saves with the optional snapshots absent continue using their previous defaults. This adds no resources, wages, shipments, item grants, quest progression, or new canonical IDs. Real Unreal restore, power-loss and crash recovery remain unverified.
+
+
 ## 2026-10-21 — Prove earned expedition gear and physical Ability Study before restoring profiles
 - Strengthened the existing source-only save preflight to call the authoritative nine-realm `Expeditions::Restore` before accepting packed expedition progress or selected realm rewards. In-range equipment slots alone no longer permit forged reward ownership.
 - Saved Observation → Understanding → Experimentation → Mastery must pass the existing `AbilityStudy::Restore` requirements, including firsthand evidence, an independent signal and paid experiments, before the profile is made available.

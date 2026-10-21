@@ -8,6 +8,7 @@
 #include "World/UnmadeWitnessEchoRules.h"
 #include "Items/UnmadeUnifiedLoadoutRules.h"
 #include "World/UnmadeAbilityStudyRules.h"
+#include "World/UnmadeLivingEconomyRules.h"
 #include <vector>
 #include <cmath>
 
@@ -65,6 +66,58 @@ bool ValidCriticalSaveShape(const Record& save) {
         }
         AbilityStudy research;
         if(!research.Restore(snapshot))return false;
+    }
+    // Validated *as one system*: warehouse quantities, workdays, payroll
+    // conservation and physically carried goods all refer to the same clock.
+    // Earlier saves lacking these optional fields keep their original defaults.
+    if(save.bHasMaterialWorld || save.bHasLivingEconomy) {
+        if(!save.bHasLivingWorldSnapshot)return false;
+        LivingWorldClock clock;
+        if(!clock.Restore(save.LivingWorldSeconds))return false;
+        const int currentDay=clock.DayIndex()+1;
+        MaterialWorld material;
+        if(save.bHasMaterialWorld) {
+            if(save.MaterialDays.Num()!=9 || save.MaterialStores.Num()!=9 ||
+               save.MaterialHouseholds.Num()!=9 || save.MaterialIntegrity.Num()!=9 ||
+               save.MaterialProduced.Num()!=9 || save.MaterialConsumed.Num()!=9 ||
+               save.MaterialShortageDays.Num()!=9 || save.MaterialLaborHours.Num()!=9 ||
+               save.MaterialDeliveries.Num()!=9 || save.MaterialRepairs.Num()!=9)
+                return false;
+            MaterialWorld::Towns towns{};
+            for(int i=0;i<9;++i) {
+                towns[i]={save.MaterialDays[i],save.MaterialStores[i],
+                          save.MaterialHouseholds[i],save.MaterialIntegrity[i],
+                          save.MaterialProduced[i],save.MaterialConsumed[i],
+                          save.MaterialShortageDays[i],save.MaterialLaborHours[i],
+                          save.MaterialDeliveries[i],save.MaterialRepairs[i]};
+            }
+            if(!material.Restore(towns,{save.MaterialCargoRealm,
+                 save.MaterialCargoUnits,save.MaterialCargoDay},currentDay))
+                return false;
+        } else if(!material.InitializeAtDay(currentDay))return false;
+        if(save.bHasLivingEconomy) {
+            if(save.LivingEmployerMarks.Num()!=9 || save.LivingEarnedMarks.Num()!=9 ||
+               save.LivingOwedMarks.Num()!=9 || save.LivingPaidShifts.Num()!=9 ||
+               save.LivingPaidDays.Num()!=9 || save.LivingWorkerReceipts.Num()!=9 ||
+               save.LivingForeignStock.Num()!=2 || save.LivingRouteReceipts.Num()!=2 ||
+               save.LivingTradePayments.Num()!=2 || save.LivingConsumedSupport.Num()!=2)
+                return false;
+            LivingEconomy::Snapshot economy=LivingEconomy{}.Save();
+            for(int i=0;i<9;++i) {
+                economy.workers[i]={save.LivingEmployerMarks[i],
+                    save.LivingEarnedMarks[i],save.LivingOwedMarks[i],
+                    save.LivingPaidShifts[i],save.LivingPaidDays[i],
+                    save.LivingWorkerReceipts[i]};
+            }
+            for(int i=0;i<2;++i) {
+                economy.routes[i]={save.LivingForeignStock[i],
+                    save.LivingRouteReceipts[i],save.LivingTradePayments[i],
+                    save.LivingConsumedSupport[i]};
+            }
+            economy.cargo={save.LivingTradeCargoRoute,save.LivingTradeCargoDay};
+            LivingEconomy ledgers;
+            if(!ledgers.Restore(economy,material,currentDay))return false;
+        }
     }
     if(save.bHasWitnessEchoSnapshot) {
         const int first=save.WitnessEchoFirstMask;
