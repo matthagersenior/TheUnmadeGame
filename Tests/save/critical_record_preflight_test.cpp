@@ -21,6 +21,9 @@ struct Record{
  long long AwardedMilestoneBits=0;
  bool bHasEconomySnapshot=false;Array<int> ProfessionSkills;int TradeMarks=45,PaidContractMask=0;
  bool bHasUnifiedLoadout=false;Array<int> UnifiedRealmLoadout;
+ bool bHasExpeditions=false;Array<int> ExpeditionState;
+ bool bHasAbilityStudy=false;Array<int> AbilityStudyStages,AbilityStudyEvidence,AbilityStudyTrials;
+ int AbilityStudySelection=0;
  bool bHasWitnessEchoSnapshot=false;int WitnessEchoFirstMask=0,WitnessEchoReturnMask=0;
  bool bHasWitnessBraidSnapshot=false;int WitnessBraidOutcome=0;
  bool bHasWitnessDispatchSnapshot=false;
@@ -76,6 +79,41 @@ int main(){
  s.WitnessReturnStage=2;s.WitnessReturnCollectedDay=3;assert(ValidCriticalSaveShape(s));
  s.WitnessReturnStage=3;s.WitnessReturnDeliveredDay=4;assert(ValidCriticalSaveShape(s));
  s.WitnessReturnDeliveredDay=2;assert(!ValidCriticalSaveShape(s));
+ // A saved expedition must satisfy the *real* domain Restore, not merely
+ // consist of ints; the first pack int is the append-only format revision.
+ s.bHasExpeditions=true;
+ s.ExpeditionState=Array<int>(93,0);
+ assert(!ValidCriticalSaveShape(s)); // unrecognized pack revision
+ const auto basePack=Expeditions{}.Pack();
+ s.ExpeditionState.assign(basePack.begin(),basePack.end());
+ assert(ValidCriticalSaveShape(s));
+ s.ExpeditionState[2]=1; // visited without briefing is impossible
+ assert(!ValidCriticalSaveShape(s));
+ s.ExpeditionState.assign(basePack.begin(),basePack.end());
+ assert(ValidCriticalSaveShape(s));
+ s.UnifiedRealmLoadout[0]=0; // valid index, but unearned reward
+ assert(!ValidCriticalSaveShape(s));
+ s.UnifiedRealmLoadout[0]=-1;
+ assert(ValidCriticalSaveShape(s));
+ // Firsthand ability research also has required stage/evidence/trial
+ // dependencies; a forged mastery cannot bypass Observation -> Mastery.
+ s.bHasAbilityStudy=true;
+ s.AbilityStudyStages=Array<int>(StudyCount,0);
+ s.AbilityStudyEvidence=Array<int>(StudyCount,0);
+ s.AbilityStudyTrials=Array<int>(StudyCount,0);
+ s.AbilityStudySelection=0;
+ assert(ValidCriticalSaveShape(s));
+ s.AbilityStudyStages[0]=4; // bogus mastered study, no firsthand evidence
+ assert(!ValidCriticalSaveShape(s));
+ s.AbilityStudyStages[0]=1;s.AbilityStudyEvidence[0]=1;
+ assert(ValidCriticalSaveShape(s));
+ s.AbilityStudySelection=StudyCount;
+ assert(!ValidCriticalSaveShape(s));
+ s.AbilityStudySelection=0;
+ s.AbilityStudyEvidence[0]=2; // secondhand signal without first encounter
+ assert(!ValidCriticalSaveShape(s));
+ s.AbilityStudyEvidence[0]=1;
+ assert(ValidCriticalSaveShape(s));
  // Disabled optional fields must be ignored for legacy/earlier save slots.
  Record legacy;legacy.WitnessBraidOutcome=999;legacy.TradeMarks=-7;
  assert(ValidCriticalSaveShape(legacy));
