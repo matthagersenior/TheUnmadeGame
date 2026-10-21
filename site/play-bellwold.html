@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101722"><meta name="description" content="Interactive browser prototype illustrating Bellwold's canonical evidence, witness, decision and return loop. Not verified Unreal gameplay.">
+<title>THE UNMADE — Bellwold Interactive Prototype</title>
+<style>
+:root{color-scheme:dark;--bg:#0e131d;--ink:#f1ede5;--muted:#bac5cf;--gold:#d9bc8f;--edge:#595c68;--panel:rgba(14,18,29,.91)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Arial,sans-serif}body{min-height:100svh}button{font:inherit;cursor:pointer}a{color:var(--gold)}button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+header{display:flex;gap:16px;justify-content:space-between;align-items:center;padding:12px clamp(14px,3vw,40px);background:#0e141e;border-bottom:1px solid #4a4450}header b{font-family:Georgia,serif;letter-spacing:.23em;font-size:18px}header a{font-size:12px;text-decoration:none}
+.topline{padding:13px clamp(14px,3vw,40px);display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid #2b3744;background:#1c2330;font-size:12px}.topline span:first-child{color:var(--gold);font-weight:700;letter-spacing:.08em}.topline span:last-child{color:#bbc6cf}
+.playfield{position:relative;height:min(78svh,740px);min-height:500px;overflow:hidden;background:radial-gradient(ellipse at 30% 40%,#61565c 0%,#2c3b48 45%,#121a29 95%);isolation:isolate}
+#render{position:absolute;inset:0;touch-action:none}#render canvas{display:block;width:100%;height:100%}
+#left{position:absolute;top:17px;left:17px;pointer-events:none;max-width:min(360px,48%);background:var(--panel);border:1px solid #81735e;padding:20px 22px;box-shadow:0 10px 30px #0006}#left small,.marker{font-size:10px;letter-spacing:.18em;color:var(--gold);font-weight:700}#left h1{font:400 42px/.95 Georgia,serif;margin:12px 0 9px}#left p{font-size:13px;line-height:1.6;color:#ccd1d3;margin:7px 0}#mission{font-weight:650;color:#f1e0c3!important}#progress{margin-top:15px;border-top:1px solid #61505a;padding-top:12px;color:#cfb99f}
+#right{position:absolute;right:15px;top:17px;display:flex;flex-direction:column;gap:6px;align-items:flex-end;pointer-events:none}#right span{background:#171d29d9;border:1px solid #53616b;padding:7px 10px;font-size:10px;color:#d3c6b9}
+#prompt{position:absolute;bottom:25px;left:50%;transform:translateX(-50%);min-width:270px;width:min(440px,90%);border:1px solid #bd9f7a;background:rgba(14,18,27,.92);padding:12px 18px;text-align:center;font-size:14px;pointer-events:none}#prompt strong{color:var(--gold)}#prompt small{display:block;color:#bec6ce;margin-top:3px;font-size:11px}
+#messages{position:absolute;left:50%;top:45%;transform:translate(-50%,-50%);width:min(600px,90%);border:1px solid #a68f73;background:#141821ed;box-shadow:0 30px 95px #000c;padding:32px;z-index:7;display:none;max-height:80%;overflow-y:auto}
+#messages.show{display:block}#messages h2{font:normal 37px/1 Georgia,serif;margin:10px 0 17px}#messages p{color:#ded5cd;font-size:14px;line-height:1.85}#messages .actions{display:flex;flex-direction:column;gap:8px;margin-top:22px}.actions button,.close{background:#3c3440;color:#f3e5d4;border:1px solid #a88e6d;padding:11px 16px;text-align:left}.actions button:hover{background:#62505b}.actions button:disabled{cursor:not-allowed;opacity:.38}.actions small{font-size:12px;color:#ddc6a8}.dialog-footer{margin-top:20px;display:flex;justify-content:flex-end}
+#bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:#171e2b;padding:12px clamp(14px,3vw,40px);font-size:12px}#bottom p{margin:0;color:#c0c8d2}#bottom button{border:1px solid #726459;background:transparent;color:#efd5ad;padding:9px 15px}
+#touch{display:none;position:absolute;inset:auto 14px 76px 14px;justify-content:space-between;align-items:flex-end;pointer-events:none}
+.dpad{display:grid;grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,48px);gap:3px;pointer-events:auto}.dpad button{border-radius:12px;background:#181c2cb8;border:1px solid #9d8a71;color:white;font-size:22px;touch-action:none;user-select:none}.dpad button.pressed{background:#75645f}#tap{pointer-events:auto;touch-action:manipulation;border:2px solid #e2c49a;border-radius:50%;height:82px;width:82px;background:#1b1d2fdf;color:#f4e5c5;font-size:14px;font-weight:700}
+#status{color:#bfc6ca}.afterword{margin:0 auto;max-width:1180px;padding:50px 22px 70px;line-height:1.8}.afterword h2{font:normal clamp(31px,4vw,52px) Georgia,serif}.afterword p{color:#c5cbd4}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.facts article{background:#202636;border:1px solid #515561;padding:20px}.facts b{color:var(--gold)}
+@media(max-width:770px){.playfield{height:78svh;min-height:620px}#touch{display:flex}#left{top:10px;left:10px;padding:12px;max-width:min(270px,65%)}#left h1{font-size:27px}#left p{font-size:11px;line-height:1.4}#left #progress{font-size:10px}#right{top:10px;right:10px}#right span{font-size:8px;padding:4px;max-width:130px}#prompt{bottom:14px;padding:8px 12px;font-size:12px}#messages{padding:22px;max-height:68svh}#messages h2{font-size:29px}.facts{grid-template-columns:1fr}.topline{font-size:10px}.topline span:last-child{max-width:48%;text-align:right}}
+@media(max-height:740px) and (min-width:771px){.playfield{height:85svh}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"}}</script>
+</head><body>
+<header><b>THE UNMADE</b><a href="real-models.html">Inspect original 3D meshes ↗</a></header>
+<div class="topline"><span>BELLWOLD · THE SECON​D NIGHT</span><span>INTERACTIVE SOURCE-BASED WEB PROTOTYPE · NOT UNREAL GAMEPLAY</span></div>
+<main><div class="playfield" id="field">
+<div id="render" aria-label="Interactive third-person browser 3D environment"></div>
+<div id="left"><small>AFTERLIGHT / RETURN VISIT</small><h1>What the world remembers</h1><p id="mission">Find the relief cache or the altered census.</p><p id="details">Follow the lantern markers to physical evidence in Bellwold.</p><p id="progress">Evidence: none · Witness: none</p></div>
+<div id="right"><span>THE THREEFOLD REACH</span><span id="status">Loading original 3D environment…</span><span>Prototype avatar and markers are illustrative</span></div>
+<div id="prompt"><strong id="prompttext">Walk toward an illuminated marker</strong><small>WASD / arrow keys move · E or Space interacts</small></div>
+<div id="messages" role="dialog" aria-modal="true" aria-label="Quest interaction" tabindex="-1"><small class="marker" id="dialog-kicker">WITNESS</small><h2 id="dialog-title">The Second Night</h2><p id="dialog-copy"></p><div class="actions" id="options"></div><div class="dialog-footer"><button class="close" id="dismiss">Return to scene</button></div></div>
+<div id="touch"><div class="dpad" aria-label="Movement buttons">
+<span></span><button data-move="up" aria-label="Move forward">↑</button><span></span>
+<button data-move="left" aria-label="Move left">←</button><span></span><button data-move="right" aria-label="Move right">→</button>
+<span></span><button data-move="down" aria-label="Move backward">↓</button><span></span></div>
+<button id="tap" aria-label="Inspect or speak">INTERACT</button></div>
+</div>
+<div id="bottom"><p><strong>Desktop:</strong> WASD / arrows move, E interacts, Shift to hurry. <strong>Phone:</strong> use the directional pad and INTERACT.</p><button id="return">Return to the refuge</button><button id="newrun">Restart prototype story</button></div>
+<section class="afterword"><small class="marker">WHAT THIS REALLY IS</small><h2>A small interactive demonstration of a <em>source-authored choice</em></h2>
+<div class="facts">
+<article><b>Authentic foundation</b><p>The central 3D diorama is a real mesh generated by The Unmade's source code for the Threefold Reach. Bellwold belongs to that realm.</p></article>
+<article><b>Accurate narrative dependency</b><p>Afterlight requires physical evidence, its matching witness, then Hessa's presence for a persistent choice. The two resolutions are mutually exclusive.</p></article>
+<article><b>Clear limitations</b><p>This web prototype approximates walking and talking. It is not the Unreal executable, not the final Bellwold map, and not a demonstration of finished animation, combat AI, saves or UI.</p></article>
+</div><p>This scene starts after the earlier lantern and Refuge Compact arcs for demonstration purposes. The browser remembers your illustrative choice locally, not in the game's canonical saved data. The Threefold Reach map is a miniature realm diorama, so character placement, distances, and the buildings shown are not the final level layout.</p><p>Source: <a href="https://github.com/matthagersenior/TheUnmadeGame/blob/main/docs/design/2026-10-09-bellwold-afterlight.md">Bellwold Afterlight source contract</a> · <a href="https://github.com/matthagersenior/TheUnmadeGame/blob/main/docs/art/actual-3d-models.md">Original 3D models and remaining art requirements</a>.</p></section></main>
+<script type="module">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+const $=id=>document.getElementById(id);
+const ui={mission:$('mission'),details:$('details'),progress:$('progress'),prompt:$('prompttext'),status:$('status')};
+const storageKey='unmade-web-afterlight-demo-v2';
+const stored=(()=>{try{return localStorage.getItem(storageKey)}catch(e){return null}})();
+let outcome=(stored==='ward'||stored==='census')?stored:null,evidence=null,witness=false,dialogOpen=false;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x1a2534);scene.fog=new THREE.FogExp2(0x1a2534,.017);
+const field=$('render'),camera=new THREE.PerspectiveCamera(55,1,.1,200),renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.8));field.appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xffe1c1,0x3c4868,2.1));
+const sunset=new THREE.DirectionalLight(0xffc895,3.3);sunset.position.set(-12,27,-7);scene.add(sunset);
+const fill=new THREE.DirectionalLight(0x9dbce3,1.2);fill.position.set(9,11,15);scene.add(fill);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(140,140),new THREE.MeshStandardMaterial({color:0x333b43,roughness:.98}));ground.rotation.x=-Math.PI/2;ground.position.y=-.5;scene.add(ground);
+const paths=new THREE.Mesh(new THREE.PlaneGeometry(5,30),new THREE.MeshStandardMaterial({color:0x706659,roughness:1,transparent:true,opacity:.65}));paths.rotation.x=-Math.PI/2;paths.position.y=-.47;scene.add(paths);
+const deco=new THREE.Group();scene.add(deco);
+const mat=(color,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness:.8,metalness});
+const stone=mat(0x69717b),dark=mat(0x282634),cloakMat=mat(0x27202b),metal=mat(0xa08a69,.45),lamp=mat(0xf2a968);
+function addMesh(parent,geo,material,x,y,z){const m=new THREE.Mesh(geo,material);m.position.set(x,y,z);parent.add(m);return m}
+const avatar=new THREE.Group();
+addMesh(avatar,new THREE.CylinderGeometry(.25,.39,1.15,9),cloakMat,0,.75,0);
+addMesh(avatar,new THREE.SphereGeometry(.24,12,10),dark,0,1.51,-.02);
+addMesh(avatar,new THREE.ConeGeometry(.39,.62,8),cloakMat,0,1.48,-.03);
+addMesh(avatar,new THREE.BoxGeometry(.6,.18,.24),dark,0,1.28,0);
+addMesh(avatar,new THREE.BoxGeometry(.1,1.6,.09),metal,.28,1.02,.26).rotation.z=.14;
+addMesh(avatar,new THREE.ConeGeometry(.42,.92,7),mat(0x49333b),0,.58,.23);
+avatar.position.set(0,0,9);scene.add(avatar);
+const spots=[
+{id:'cache',name:'Relief cache',x:-8,z:3,color:0xe8b47d,desc:'Physical supplies for families who need beds tonight.'},
+{id:'census',name:'Altered census',x:7,z:-3,color:0x8abfd0,desc:'Official records with erased names.'},
+{id:'sorin',name:'Sorin · healer',x:-7,z:-3,color:0xe0b484,desc:'Matching first-hand witness for the relief cache.'},
+{id:'ivera',name:'Ivera · tutor',x:7,z:3,color:0x92bace,desc:'Matching first-hand witness for the altered census.'},
+{id:'hessa',name:'Hessa · refuge matron',x:0,z:-8,color:0xf1cb96,desc:'Decide in Hessa’s presence after establishing a proper witness.'}
+];
+const visual=new Map();
+function lantern(x,z){const g=new THREE.Group();addMesh(g,new THREE.CylinderGeometry(.06,.08,2.2,8),dark,0,1.1,0);addMesh(g,new THREE.BoxGeometry(.33,.34,.33),lamp,0,2.15,0);const l=new THREE.PointLight(0xffb97e,3.2,6);l.position.set(0,2.15,0);g.add(l);g.position.set(x,0,z);scene.add(g)}
+for(const p of spots){
+const g=new THREE.Group(),c=new THREE.Color(p.color);
+if(p.id==='cache'){addMesh(g,new THREE.BoxGeometry(1.1,.52,.82),mat(0x71513a),0,.26,0);addMesh(g,new THREE.BoxGeometry(.78,.07,.91),metal,0,.59,0)}
+else if(p.id==='census'){addMesh(g,new THREE.BoxGeometry(1.15,.75,.12),mat(0xc6ba9f),0,1.08,0);addMesh(g,new THREE.BoxGeometry(1.3,.08,.7),dark,0,.66,0)}
+else{const npcMat=mat(p.id==='hessa'?0x795a60:0x57727a);addMesh(g,new THREE.CylinderGeometry(.25,.38,1.4,9),npcMat,0,.72,0);addMesh(g,new THREE.SphereGeometry(.25,12,10),mat(0xbb9b80),0,1.55,0)}
+const ring=new THREE.Mesh(new THREE.TorusGeometry(.72,.034,6,36),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.8}));ring.rotation.x=-Math.PI/2;ring.position.y=.10;g.add(ring);
+const orb=new THREE.Mesh(new THREE.OctahedronGeometry(.18,0),new THREE.MeshBasicMaterial({color:c}));orb.position.y=p.id==='cache'||p.id==='census'?1.9:2.4;g.add(orb);g.userData.orb=orb;
+g.position.set(p.x,0,p.z);scene.add(g);visual.set(p.id,g);lantern(p.x+1.8,p.z+1.1);
+}
+let changed=null;
+function aftermath(){if(changed)scene.remove(changed);changed=new THREE.Group();if(outcome==='ward'){for(let i=0;i<3;i++){addMesh(changed,new THREE.BoxGeometry(.14,2.1,.14),metal,-2+i*2,1.05,-11);addMesh(changed,new THREE.BoxGeometry(2,.22,1.9),mat(0x675b4b),-1+i,2.1,-11);addMesh(changed,new THREE.BoxGeometry(.42,.8,1.3),mat(0x7e6554),-2+i, .4,-10.5)}}else if(outcome==='census'){addMesh(changed,new THREE.BoxGeometry(2.4,2.4,.44),stone,0,1.4,-11);addMesh(changed,new THREE.BoxGeometry(2.8,.32,1.1),metal,0,.21,-11);for(let y=1;y<2.4;y+=.3)addMesh(changed,new THREE.BoxGeometry(1.5,.035,.46),mat(0xc7aa7e),0,y,-11)}changed.visible=!!outcome;scene.add(changed)}
+aftermath();
+function objective(){if(outcome){ui.mission.textContent=outcome==='ward'?'Return to the Safe Ward.':'Return to the Open Census.';ui.details.textContent=outcome==='ward'?'The refuge has a new ward; the erased records remain a concern.':'The erased names are publicly recorded; families still need beds.';ui.progress.textContent='Aftermath: saved to this browser · Return to Hessa';return}
+if(!evidence){ui.mission.textContent='Find the relief cache or the altered census.';ui.details.textContent='Follow the illuminated markers. Physical evidence comes first.'}
+else if(!witness){ui.mission.textContent='Speak to '+(evidence==='relief'?'Sorin the healer.':'Ivera the tutor.');ui.details.textContent='The matching witness must personally verify what you found.'}
+else{ui.mission.textContent='Return to Hessa with your evidence and witness.';ui.details.textContent='A decision with lasting consequences now becomes possible.'}
+ui.progress.textContent='Evidence: '+(evidence?evidence==='relief'?'relief cache':'altered census':'none')+' · Witness: '+(witness?'verified':'none');
+}
+objective();
+function openDialog(title,body,options=[],kicker='FIELD NOTE'){
+dialogOpen=true;$('dialog-kicker').textContent=kicker;$('dialog-title').textContent=title;$('dialog-copy').textContent=body;
+const box=$('options');box.replaceChildren();
+for(const opt of options){const b=document.createElement('button');b.textContent=opt.title;b.disabled=!!opt.disabled;b.onclick=()=>{if(opt.fn)opt.fn();closeDialog()};box.appendChild(b);if(opt.hint){const small=document.createElement('small');small.textContent=opt.hint;box.appendChild(small)}}
+$('messages').classList.add('show');$('messages').focus();
+}
+function closeDialog(){dialogOpen=false;$('messages').classList.remove('show');}
+$('dismiss').onclick=closeDialog;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&dialogOpen)closeDialog();});
+function storeOutcome(kind){outcome=kind;try{localStorage.setItem(storageKey,kind)}catch(e){}aftermath();objective();openDialog('The decision endures',kind==='ward'?'The Safe Ward is now visible in the refuge. Witnesses remember its opening. The Ward of the Second Night is the source-authored one-time armor reward. The missing census was not erased by this decision.':'The Open Census is now visible. Witnesses remember names being publicly recorded. The Lantern of Unredacted Names is the source-authored one-time charm reward. The newly visible names do not supply shelter.');}
+function interact(){
+if(dialogOpen)return;
+const here=nearest();
+if(!here){openDialog('No nearby interaction','Approach an illuminated marker, then press E, Space, or INTERACT. This prototype limits interactions to proximity, without final collision or line-of-sight checks.');return}
+switch(here.id){
+case 'cache': evidence='relief';witness=false;objective();openDialog('Uncatalogued relief cache','The supplies demonstrate an immediate shelter need for unregistered families. This evidence can be confirmed by Sorin the healer. You may inspect the other record to change focus before committing.');break;
+case 'census':evidence='census';witness=false;objective();openDialog('Altered census','The record physically documents erased names. Ivera the tutor can verify the children and the alterations. You may inspect the other evidence source before committing.');break;
+case 'sorin':if(evidence==='relief'&&!outcome){witness=true;objective();openDialog('Sorin — first-hand testimony','Sorin confirms that the uncatalogued supplies relate to families who need shelter now. Speak with Hessa to decide whether to open the Safe Ward.');}else openDialog('Sorin — healer',outcome==='ward'?'Sorin can see the refuge ward that was opened. The record dispute remains.':outcome?'Sorin still faces the problem of families needing beds.':'Sorin cannot confirm your current evidence. Inspect the relief cache first.');break;
+case 'ivera':if(evidence==='census'&&!outcome){witness=true;objective();openDialog('Ivera — first-hand testimony','Ivera verifies the names missing from the altered register. Speak with Hessa to decide whether those names should be recorded in an Open Census.');}else openDialog('Ivera — tutor',outcome==='census'?'Ivera can see the monument bearing the public record. Families still need shelter.':outcome?'Ivera knows that the census dispute remains.':'Ivera cannot verify your current evidence. Inspect the altered census first.');break;
+case 'hessa':
+if(outcome){openDialog('Hessa — the return visit',outcome==='ward'?'The Safe Ward stands, but the dispute about erased families remains. Residents do not all share the same knowledge.':'The Open Census preserves lost names in public. The need for shelter remains unresolved.');break;}
+if(!witness){openDialog('Hessa — refuge matron','A settlement decision requires physical evidence and the matching first-hand witness. Investigate the cache with Sorin or the census with Ivera first.');break;}
+openDialog('Hessa — choose what comes first','Both needs are real. Opening a Safe Ward protects people from the cold immediately. Recording the erased names establishes a durable public testimony. The matching evidence determines which action is presently available.',[
+{title:'Open the Safe Ward · immediate shelter',disabled:evidence!=='relief',fn:()=>storeOutcome('ward'),hint:evidence==='relief'?'Confirmed by Sorin':'Requires the relief cache and Sorin'},
+{title:'Commission the Open Census · publicly preserve erased names',disabled:evidence!=='census',fn:()=>storeOutcome('census'),hint:evidence==='census'?'Confirmed by Ivera':'Requires the altered census and Ivera'}],'DECISION / HESSA');
+break;
+}}
+function nearest(){let best=null,d=2.7;for(const p of spots){const n=Math.hypot(p.x-avatar.position.x,p.z-avatar.position.z);if(n<d){best=p;d=n}}return best}
+const dirs={up:false,down:false,left:false,right:false};const down=new Set();document.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();down.add(e.key.toLowerCase());if((e.key.toLowerCase()==='e'||e.key===' ')&&!e.repeat)interact();});document.addEventListener('keyup',e=>down.delete(e.key.toLowerCase()));window.addEventListener('blur',()=>down.clear());
+for(const b of document.querySelectorAll('[data-move]')){const key=b.dataset.move;b.addEventListener('pointerdown',e=>{e.preventDefault();dirs[key]=true;b.classList.add('pressed');b.setPointerCapture(e.pointerId)});const up=()=>{dirs[key]=false;b.classList.remove('pressed')};b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('lostpointercapture',up)}
+$('tap').onclick=interact;
+function returnHome(){avatar.position.set(0,0,9);objective();openDialog('You return to Bellwold',outcome?'Your earlier decision remains part of this browser prototype. Visit the changed refuge and speak with Hessa again.':'The Second Night investigation is still unresolved. The residents and the evidence remain available.')}
+$('return').onclick=returnHome;
+$('newrun').onclick=()=>{outcome=null;evidence=null;witness=false;try{localStorage.removeItem(storageKey)}catch(e){}avatar.position.set(0,0,9);aftermath();objective();openDialog('A new illustrative run','The browser-only demonstration has been reset. This action does not modify any actual saved Unreal game data.')};
+let loaded=false;
+new GLTFLoader().load('models/Environment/SM_Unmade_ThreefoldReach.glb',g=>{g.scene.position.y=.44;scene.add(g.scene);loaded=true;ui.status.textContent='Original Threefold Reach mesh loaded';},undefined,err=>{ui.status.textContent='3D asset unavailable · prototype geometry only';console.error(err)});
+const clock=new THREE.Clock(),camAt=new THREE.Vector3();
+function resize(){const r=field.getBoundingClientRect();renderer.setSize(Math.max(2,r.width),Math.max(2,r.height),false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix()}
+new ResizeObserver(resize).observe(field);resize();
+function animate(){requestAnimationFrame(animate);const dt=Math.min(.055,clock.getDelta());
+if(!dialogOpen){let x=0,z=0;
+if(dirs.left||down.has('a')||down.has('arrowleft'))x-=1;
+if(dirs.right||down.has('d')||down.has('arrowright'))x+=1;
+if(dirs.up||down.has('w')||down.has('arrowup'))z-=1;
+if(dirs.down||down.has('s')||down.has('arrowdown'))z+=1;
+const speed=down.has('shift')?6.4:3.8,mag=Math.hypot(x,z);
+if(mag>0){x/=mag;z/=mag;avatar.position.x=THREE.MathUtils.clamp(avatar.position.x+x*dt*speed,-11.4,11.4);avatar.position.z=THREE.MathUtils.clamp(avatar.position.z+z*dt*speed,-10.2,10.2);avatar.rotation.y=Math.atan2(-x,-z);avatar.position.y=.05*Math.sin(performance.now()*.013)}else avatar.position.y=0;
+const near=nearest();ui.prompt.textContent=near?'E / INTERACT · '+near.name:'Move toward a glowing quest marker';
+}
+for(const [id,g] of visual){g.userData.orb.rotation.y+=dt;g.userData.orb.position.y=(id==='cache'||id==='census'?1.9:2.4)+.12*Math.sin(clock.elapsedTime*2)}
+camAt.set(avatar.position.x+7,avatar.position.y+7.8,avatar.position.z+11.8);camera.position.lerp(camAt,Math.min(1,dt*3.5));camera.lookAt(avatar.position.x,1.0,avatar.position.z-1.5);renderer.render(scene,camera);
+}
+animate();
+</script></body></html>
