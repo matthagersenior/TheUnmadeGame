@@ -1,5 +1,9 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-21 — User-selected backup takes precedence over unreadable primary
+When a player deliberately selects a validated backup profile, the loader now honors that selection even if the primary save is incompatible. Ordinary loading still refuses to silently replace or overwrite an incompatible primary. This corrects the previously tested source recovery policy without migrating saves, discarding primary bytes or changing any canonical journey/quest state. Actual Unreal backup UI and corrupted-file playback remain to be tested.
+
+
 ## 2026-10-21 — Stable resident memory survives off-screen save cycles
 - Citizen-memory saves now preserve records belonging to named residents who are not currently spawned or streamed, updating only the same stable ID when a resident is actually present.
 - Saved NPC observations are validated against their original GUID, resident stable ID, bounded 64-observation memory, unique event records, evidence type and named speaker for rumors before any profile load or write.

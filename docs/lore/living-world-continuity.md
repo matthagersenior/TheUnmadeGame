@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-21 — Explicit profile recovery does not invent progress
+User-selected, structurally validated backup records now take precedence over an incompatible primary during a deliberate restore. The original primary file remains protected from silent replacement. The operation uses recorded past state only: no new witness testimony, restored unearned mastery, extra inventory or retrospective physical deliveries may be invented. Tested by native source policy, not an Unreal recovery-session playthrough.
+
+
 ## 2026-10-21 — Local recollection remains attributable
 An NPC's observation now survives profile saves made while that NPC is physically absent from the active Unreal scene. An incoming observation is still local, keyed to a stable resident, and may only be identified as witnessed or a named-speaker rumor; duplicated event GUIDs cannot create extra trust. The save boundary does not infer knowledge from global events, publish protected guest names, change OPEN mysteries or invent encounters. Source tests cover the preservation invariant; actual Unreal level streaming is not yet compiled or playtested.
 
