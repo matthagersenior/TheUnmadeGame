@@ -1,5 +1,11 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-21 — Prove earned expedition gear and physical Ability Study before restoring profiles
+- Strengthened the existing source-only save preflight to call the authoritative nine-realm `Expeditions::Restore` before accepting packed expedition progress or selected realm rewards. In-range equipment slots alone no longer permit forged reward ownership.
+- Saved Observation → Understanding → Experimentation → Mastery must pass the existing `AbilityStudy::Restore` requirements, including firsthand evidence, an independent signal and paid experiments, before the profile is made available.
+- No new abilities, rewards, locations, save-schema fields or quest resolutions were invented. Older schema-1 profiles with absent optional expedition/research flags remain valid. Unreal runtime persistence and full-playthrough acceptance remain unverified.
+
+
 ## 2026-10-21 — Critical save preflight before restore and overwrite
 - Existing schema-1 save fields are checked for invalid player resume values, inventory/equipment array shapes, finite world clock, economy values, one-of-nine loadout indices, witnessed echo masks and chronology of carried testimony.
 - Invalid records are refused on read or before overwriting primary/backup; the previous disk records remain untouched. Disabled optional flags retain the old empty-state compatibility. Actual subsystem Restore continues to enforce deeper rules; this preflight is not a full-save migration or Unreal-verified disk-fault test.
