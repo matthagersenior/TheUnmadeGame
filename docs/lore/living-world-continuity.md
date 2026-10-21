@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-21 — Physical progression still governs save restoration
+Profile restoration no longer trusts range-valid but unattested expedition reward indices or staged Ability Study flags. These fields are cross-checked against the **existing** canonical expedition and research domain rules, preserving nine distinct realms, physically earned observation and optional-content exclusions. Source C++ fixtures cover malformed and valid legacy saves; no new lore claim, OPEN mystery resolution, character acquisition or alternate route is introduced. Engine compilation and file-based restore testing remain pending.
+
+
 ## 2026-10-21 — Save integrity, no retroactive lore
 The source now validates critical persisted record shapes before actor restoration or profile writes. It does not grant retroactive quest evidence, resolve an OPEN mystery, identify unnamed refugees, transform an unavailable backup into a valid record or alter old save fields. A failed structural check preserves existing data and signals refusal; native fixtures cover legacy optional absence and malformed testimony chronology, with actual UE load acceptance pending.
 

@@ -6,6 +6,9 @@
 #include "Save/UnmadeSessionRules.h"
 #include "Items/UnmadeItemRules.h"
 #include "World/UnmadeWitnessEchoRules.h"
+#include "Items/UnmadeUnifiedLoadoutRules.h"
+#include "World/UnmadeAbilityStudyRules.h"
+#include <vector>
 #include <cmath>
 
 namespace UnmadeCore {
@@ -31,9 +34,37 @@ bool ValidCriticalSaveShape(const Record& save) {
            save.PaidContractMask<0)return false;
         for(const auto rank:save.ProfessionSkills)if(rank<0)return false;
     }
+    // Validate the full nine-realm source domain before accepting equipped
+    // rewards. An in-range realm index is not proof a reward was earned.
+    Expeditions earned;
+    if(save.bHasExpeditions) {
+        std::vector<int> record;
+        record.reserve(save.ExpeditionState.Num());
+        for(const auto value:save.ExpeditionState)record.push_back(value);
+        if(!earned.Restore(record))return false;
+    }
     if(save.bHasUnifiedLoadout) {
         if(save.UnifiedRealmLoadout.Num()!=3)return false;
-        for(const auto id:save.UnifiedRealmLoadout)if(id<-1||id>=9)return false;
+        const UnifiedLoadout equipped{save.UnifiedRealmLoadout[0],
+                                      save.UnifiedRealmLoadout[1],
+                                      save.UnifiedRealmLoadout[2]};
+        if(!equipped.Valid(earned))return false;
+    }
+    // Failed or secondhand-only research cannot skip understanding or trials.
+    if(save.bHasAbilityStudy) {
+        if(save.AbilityStudyStages.Num()!=StudyCount ||
+           save.AbilityStudyEvidence.Num()!=StudyCount ||
+           save.AbilityStudyTrials.Num()!=StudyCount ||
+           save.AbilityStudySelection<0 ||
+           save.AbilityStudySelection>=StudyCount)return false;
+        StudySnapshot snapshot;
+        for(int i=0;i<StudyCount;++i) {
+            snapshot.stages[i]=save.AbilityStudyStages[i];
+            snapshot.evidence[i]=save.AbilityStudyEvidence[i];
+            snapshot.trials[i]=save.AbilityStudyTrials[i];
+        }
+        AbilityStudy research;
+        if(!research.Restore(snapshot))return false;
     }
     if(save.bHasWitnessEchoSnapshot) {
         const int first=save.WitnessEchoFirstMask;
