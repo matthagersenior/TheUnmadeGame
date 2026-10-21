@@ -24,7 +24,7 @@ header{display:flex;gap:16px;justify-content:space-between;align-items:center;pa
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"}}</script>
 </head><body>
 <header><b>THE UNMADE</b><a href="real-models.html">Inspect original 3D meshes ↗</a></header>
-<div class="topline"><span>BELLWOLD · THE SECON​D NIGHT</span><span>INTERACTIVE SOURCE-BASED WEB PROTOTYPE · NOT UNREAL GAMEPLAY</span></div>
+<div class="topline"><span>BELLWOLD · THE SECOND NIGHT</span><span>INTERACTIVE SOURCE-BASED WEB PROTOTYPE · NOT UNREAL GAMEPLAY</span></div>
 <main><div class="playfield" id="field">
 <div id="render" aria-label="Interactive third-person browser 3D environment"></div>
 <div id="left"><small>AFTERLIGHT / RETURN VISIT</small><h1>What the world remembers</h1><p id="mission">Find the relief cache or the altered census.</p><p id="details">Follow the lantern markers to physical evidence in Bellwold.</p><p id="progress">Evidence: none · Witness: none</p></div>
@@ -80,6 +80,7 @@ const spots=[
 {id:'hessa',name:'Hessa · refuge matron',x:0,z:-8,color:0xf1cb96,desc:'Decide in Hessa’s presence after establishing a proper witness.'}
 ];
 const visual=new Map();
+function nameSprite(name){const canvas=document.createElement('canvas');canvas.width=512;canvas.height=92;const c=canvas.getContext('2d');c.fillStyle='rgba(14,19,29,.88)';c.fillRect(0,0,512,92);c.strokeStyle='#bba179';c.lineWidth=4;c.strokeRect(2,2,508,88);c.fillStyle='#f2dfc3';c.textAlign='center';c.textBaseline='middle';c.font='bold 31px system-ui';c.fillText(name,256,47,490);const t=new THREE.CanvasTexture(canvas);t.colorSpace=THREE.SRGBColorSpace;const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:t,transparent:true,depthTest:false}));sp.scale.set(3.55,.65,1);return sp}
 function lantern(x,z){const g=new THREE.Group();addMesh(g,new THREE.CylinderGeometry(.06,.08,2.2,8),dark,0,1.1,0);addMesh(g,new THREE.BoxGeometry(.33,.34,.33),lamp,0,2.15,0);const l=new THREE.PointLight(0xffb97e,3.2,6);l.position.set(0,2.15,0);g.add(l);g.position.set(x,0,z);scene.add(g)}
 for(const p of spots){
 const g=new THREE.Group(),c=new THREE.Color(p.color);
@@ -88,7 +89,7 @@ else if(p.id==='census'){addMesh(g,new THREE.BoxGeometry(1.15,.75,.12),mat(0xc6b
 else{const npcMat=mat(p.id==='hessa'?0x795a60:0x57727a);addMesh(g,new THREE.CylinderGeometry(.25,.38,1.4,9),npcMat,0,.72,0);addMesh(g,new THREE.SphereGeometry(.25,12,10),mat(0xbb9b80),0,1.55,0)}
 const ring=new THREE.Mesh(new THREE.TorusGeometry(.72,.034,6,36),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:.8}));ring.rotation.x=-Math.PI/2;ring.position.y=.10;g.add(ring);
 const orb=new THREE.Mesh(new THREE.OctahedronGeometry(.18,0),new THREE.MeshBasicMaterial({color:c}));orb.position.y=p.id==='cache'||p.id==='census'?1.9:2.4;g.add(orb);g.userData.orb=orb;
-g.position.set(p.x,0,p.z);scene.add(g);visual.set(p.id,g);lantern(p.x+1.8,p.z+1.1);
+const tag=nameSprite(p.name);tag.position.y=p.id==='cache'||p.id==='census'?2.55:3.05;g.add(tag);g.position.set(p.x,0,p.z);scene.add(g);visual.set(p.id,g);lantern(p.x+1.8,p.z+1.1);
 }
 let changed=null;
 function aftermath(){if(changed)scene.remove(changed);changed=new THREE.Group();if(outcome==='ward'){for(let i=0;i<3;i++){addMesh(changed,new THREE.BoxGeometry(.14,2.1,.14),metal,-2+i*2,1.05,-11);addMesh(changed,new THREE.BoxGeometry(2,.22,1.9),mat(0x675b4b),-1+i,2.1,-11);addMesh(changed,new THREE.BoxGeometry(.42,.8,1.3),mat(0x7e6554),-2+i, .4,-10.5)}}else if(outcome==='census'){addMesh(changed,new THREE.BoxGeometry(2.4,2.4,.44),stone,0,1.4,-11);addMesh(changed,new THREE.BoxGeometry(2.8,.32,1.1),metal,0,.21,-11);for(let y=1;y<2.4;y+=.3)addMesh(changed,new THREE.BoxGeometry(1.5,.035,.46),mat(0xc7aa7e),0,y,-11)}changed.visible=!!outcome;scene.add(changed)}
