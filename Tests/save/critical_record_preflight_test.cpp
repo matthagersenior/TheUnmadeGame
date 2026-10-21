@@ -8,15 +8,34 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <string>
 using namespace UnmadeCore;
 template<class T> struct Array:std::vector<T>{
     using std::vector<T>::vector;
     int Num()const{return static_cast<int>(this->size());}
+    void Add(const T& value){this->push_back(value);}
+};
+struct Name{
+ std::string value;
+ bool IsNone()const{return value.empty();}
+ bool operator==(const Name& other)const{return value==other.value;}
+};
+struct Guid{
+ int value=0;
+ bool IsValid()const{return value>0;}
+ bool operator==(const Guid& other)const{return value==other.value;}
+};
+struct Observation{
+ Guid EventId;Name EventKind,SubjectId;int Evidence=0;Name SpeakerId;
+};
+struct NpcSnapshot{
+ Name NpcId;Array<Observation> Observations;int Trust=0,Fear=0;
 };
 struct Pos { double X=0,Y=0,Z=135; };
 struct Record{
  int SchemaVersion=1;
  bool bHasPlayerResume=false;Pos ResumePosition{};
+ Array<NpcSnapshot> NpcSnapshots;
  double ResumeHealth=100,ResumeStamina=100;
  bool bHasLivingWorldSnapshot=false;double LivingWorldSeconds=0;
  bool bHasInventorySnapshot=false;
@@ -165,6 +184,43 @@ int main(){
  assert(!ValidCriticalSaveShape(s)); // two simultaneous player-held crates
  s.LivingTradeCargoRoute=-1;s.LivingTradeCargoDay=0;
  s.MaterialCargoRealm=-1;s.MaterialCargoUnits=0;s.MaterialCargoDay=0;
+ assert(ValidCriticalSaveShape(s));
+ // Resident memory must be identity-specific, deduplicated and attributable.
+ NpcSnapshot orrel;orrel.NpcId={"npc.orrel"};orrel.Observations.push_back(
+     {{10},{"World.WitnessBraidShelter"},{},0,{}});
+ s.NpcSnapshots.push_back(orrel);
+ assert(ValidCriticalSaveShape(s));
+ s.NpcSnapshots.push_back(orrel);
+ assert(!ValidCriticalSaveShape(s)); // duplicate resident identity
+ s.NpcSnapshots.pop_back();
+ s.NpcSnapshots[0].Observations.push_back(orrel.Observations[0]);
+ assert(!ValidCriticalSaveShape(s)); // repeated event for same NPC
+ s.NpcSnapshots[0].Observations.pop_back();
+ s.NpcSnapshots[0].Observations[0].Evidence=1;
+ assert(!ValidCriticalSaveShape(s)); // rumor with no attributable speaker
+ s.NpcSnapshots[0].Observations[0].SpeakerId={"npc.hessa"};
+ assert(ValidCriticalSaveShape(s));
+ s.NpcSnapshots[0].Observations[0].Evidence=4;
+ assert(!ValidCriticalSaveShape(s)); // arbitrary evidence enum
+ s.NpcSnapshots[0].Observations[0].Evidence=1;
+ s.NpcSnapshots[0].Observations[0].EventId.value=0;
+ assert(!ValidCriticalSaveShape(s)); // invalid event ID
+ s.NpcSnapshots[0].Observations[0].EventId.value=10;
+ assert(ValidCriticalSaveShape(s));
+ // Offline residents must survive the live population's next write.
+ NpcSnapshot hessa;hessa.NpcId={"npc.hessa"};hessa.Observations.push_back(
+     {{21},{"Player.Helped"},{},0,{}});
+ assert(MergeNpcSnapshot(s.NpcSnapshots,hessa));
+ assert(s.NpcSnapshots.Num()==2);
+ NpcSnapshot orrelUpdated=orrel;
+ orrelUpdated.Observations.push_back({{12},{"World.WitnessBraidDocket"},{},0,{}});
+ assert(MergeNpcSnapshot(s.NpcSnapshots,orrelUpdated));
+ assert(s.NpcSnapshots.Num()==2);
+ assert(s.NpcSnapshots[0].Observations.Num()==2);
+ assert(s.NpcSnapshots[1].Observations[0].EventId.value==21);
+ NpcSnapshot tampered=orrelUpdated;tampered.Observations[0].Evidence=1;
+ assert(!MergeNpcSnapshot(s.NpcSnapshots,tampered));
+ assert(s.NpcSnapshots[0].Observations[0].Evidence==0);
  assert(ValidCriticalSaveShape(s));
  // Disabled optional fields must be ignored for legacy/earlier save slots.
  Record legacy;legacy.WitnessBraidOutcome=999;legacy.TradeMarks=-7;

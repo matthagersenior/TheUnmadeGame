@@ -99,7 +99,8 @@ class LivingWorldSourceTests(unittest.TestCase):
         self.assertIn("RestoredVillages.Restore", hub)
         self.assertIn("VillagesVisited.Visit", hub)
         self.assertIn("VillagesVisited.Restore", hub)
-        self.assertIn("Save->NpcSnapshots.Reset()", hub)
+        self.assertIn("MergeNpcSnapshot(Merged", hub)
+        self.assertNotIn("Save->NpcSnapshots.Reset()", hub)
 
     def test_offline_test_and_combined_scenario(self):
         workflow = read(".github/workflows/static-checks.yml")

@@ -6,6 +6,7 @@
 #include "Save/UnmadeSessionRules.h"
 #include "Items/UnmadeItemRules.h"
 #include "World/UnmadeWitnessEchoRules.h"
+#include "Save/UnmadeNpcMemorySaveRules.h"
 #include "Items/UnmadeUnifiedLoadoutRules.h"
 #include "World/UnmadeAbilityStudyRules.h"
 #include "World/UnmadeLivingEconomyRules.h"
@@ -16,6 +17,7 @@ namespace UnmadeCore {
 template<class Record>
 bool ValidCriticalSaveShape(const Record& save) {
     if(save.SchemaVersion!=1)return false;
+    if(!ValidNpcSnapshots(save.NpcSnapshots))return false;
     if(save.bHasPlayerResume && !ValidResume(
         save.ResumePosition.X,save.ResumePosition.Y,save.ResumePosition.Z,
         save.ResumeHealth,save.ResumeStamina))return false;

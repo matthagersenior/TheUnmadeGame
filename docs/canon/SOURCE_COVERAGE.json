@@ -63,6 +63,21 @@
         "codex:realm.OrchardOfKings",
         "codex:realm.FirstAbsence"
       ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeNpcMemorySaveRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
     }
   ]
 }

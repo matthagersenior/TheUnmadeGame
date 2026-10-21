@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-21 — Local recollection remains attributable
+An NPC's observation now survives profile saves made while that NPC is physically absent from the active Unreal scene. An incoming observation is still local, keyed to a stable resident, and may only be identified as witnessed or a named-speaker rumor; duplicated event GUIDs cannot create extra trust. The save boundary does not infer knowledge from global events, publish protected guest names, change OPEN mysteries or invent encounters. Source tests cover the preservation invariant; actual Unreal level streaming is not yet compiled or playtested.
+
+
 ## 2026-10-21 — Finite deliveries remain attributable after reload
 The game's material units, municipal wages, worker receipts and physical cross-realm cargo are now checked against the exact existing MaterialWorld and LivingEconomy restoration contracts at the profile boundary. This neither converts rainwater into ember baskets nor creates paid shifts or witnesses where no physical delivery occurred. It preserves nine distinct realms, no free currency, named obligations and prior schema-1 optional absence. Tested in native C++ source; Unreal compilation/playtesting still pending.
 

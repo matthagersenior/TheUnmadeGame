@@ -1,5 +1,12 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-21 — Stable resident memory survives off-screen save cycles
+- Citizen-memory saves now preserve records belonging to named residents who are not currently spawned or streamed, updating only the same stable ID when a resident is actually present.
+- Saved NPC observations are validated against their original GUID, resident stable ID, bounded 64-observation memory, unique event records, evidence type and named speaker for rumors before any profile load or write.
+- The memory update prepares a validated copy rather than clearing the saved list; malformed gossip refuses the write and leaves prior resident records intact. Direct witnessing cannot be invented from gossip.
+- This changes no quest outcomes, faction values, witness consent or authored resident identities. Unreal streaming/playthrough and storage-failure behavior still need real-engine acceptance.
+
+
 ## 2026-10-21 — Cross-realm finite warehouse, wage and cargo save integrity
 - Added a source-only preflight that reuses the existing nine-realm MaterialWorld and LivingEconomy validators *together*, using the original saved in-world clock. Partial warehouse/worker array snapshots, illegal negative stock, nonconserved municipal payroll and simultaneous incompatible carried cargo are rejected before restore or overwrite.
 - Accepted schema-1 saves with the optional snapshots absent continue using their previous defaults. This adds no resources, wages, shipments, item grants, quest progression, or new canonical IDs. Real Unreal restore, power-loss and crash recovery remain unverified.

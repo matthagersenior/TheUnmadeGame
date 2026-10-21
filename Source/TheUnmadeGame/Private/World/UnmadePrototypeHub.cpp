@@ -10,6 +10,7 @@
 #include "World/UnmadeThreefoldObjectiveGuide.h"
 #include "NPC/UnmadeNpcCharacter.h"
 #include "NPC/UnmadeMemoryComponent.h"
+#include "Save/UnmadeNpcMemorySaveRules.h"
 #include "Save/UnmadePrototypeSave.h"
 #include "Fracture/UnmadeFractureAnchor.h"
 #include "Combat/UnmadeEnemyCharacter.h"
@@ -3423,12 +3424,25 @@ void AUnmadePrototypeHub::SaveCitizens()
 {
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return;
-    Save->NpcSnapshots.Reset(); // Avoid duplicates on repeated gossip saves.
+    // Streaming and deferred spawning may leave many named residents absent.
+    // Never erase their existing firsthand memories or rumor provenance.
+    TArray<FUnmadeNpcSnapshot> Merged=Save->NpcSnapshots;
     for (TActorIterator<AUnmadeNpcCharacter> It(GetWorld()); It; ++It)
     {
-        if (!It->GetStableId().IsNone())
-            Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
+        if (It->GetStableId().IsNone())continue;
+        if (!UnmadeCore::MergeNpcSnapshot(Merged,
+             It->GetMemory()->WriteSnapshot(It->GetStableId())))
+        {
+            UE_LOG(LogTemp,Error,TEXT("Malformed NPC memory snapshot; original profile protected"));
+            return;
+        }
     }
+    if (!UnmadeCore::ValidNpcSnapshots(Merged))
+    {
+        UE_LOG(LogTemp,Error,TEXT("Duplicate or unattributed NPC memories; refusing save"));
+        return;
+    }
+    Save->NpcSnapshots=MoveTemp(Merged);
     if (!UnmadeSave::SaveGameToSlot(Save))
         UE_LOG(LogTemp, Error, TEXT("Unmade NPC social update save failed"));
 }

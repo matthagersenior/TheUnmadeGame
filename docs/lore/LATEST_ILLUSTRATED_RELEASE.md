@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**21 October 2026 source-only resident-memory persistence milestone:** Saved observation identities and rumor provenance survive off-screen resident refreshes and malformed duplicates are refused before profile write. No historical illustrated v20 source hash or final release status has changed. UE compilation and streamed-resident acceptance remain pending.
+
+
 **21 October 2026 source-only economic preflight:** A combined material, payroll and cargo restore consistency check now guards existing schema-1 profiles. No canonical illustrated v20 material, file hashes or prior source base has changed; no actual Unreal game persistence is certified.
 
 

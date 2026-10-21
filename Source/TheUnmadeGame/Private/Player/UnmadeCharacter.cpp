@@ -1,5 +1,6 @@
 #include "UI/UnmadePlayerFacingRules.h"
 #include "Save/UnmadeSaveSession.h"
+#include "Save/UnmadeNpcMemorySaveRules.h"
 #include "UI/UnmadeRpgFeedback.h"
 #include "Player/UnmadeCharacter.h"
 #include "UI/UnmadePlayerPreferences.h"
@@ -1689,12 +1690,20 @@ void AUnmadeCharacter::SaveNearbyNpcMemories()
     if (!World) return;
     UUnmadePrototypeSave* Save = UUnmadePrototypeSave::LoadOrCreate();
     if (!Save) return;
-    Save->NpcSnapshots.Reset(); // Keep one snapshot per stable NPC ID.
+    // Do not erase memories held by stable residents outside this live scene.
+    TArray<FUnmadeNpcSnapshot> Merged=Save->NpcSnapshots;
     for (TActorIterator<AUnmadeNpcCharacter> It(World); It; ++It)
     {
-        if (!It->GetStableId().IsNone())
-            Save->NpcSnapshots.Add(It->GetMemory()->WriteSnapshot(It->GetStableId()));
+        if(It->GetStableId().IsNone())continue;
+        if(!UnmadeCore::MergeNpcSnapshot(Merged,
+           It->GetMemory()->WriteSnapshot(It->GetStableId())))
+        {
+            UE_LOG(LogTemp,Error,TEXT("Invalid NPC memory; refusing profile mutation"));
+            return;
+        }
     }
+    if(!UnmadeCore::ValidNpcSnapshots(Merged))return;
+    Save->NpcSnapshots=MoveTemp(Merged);
     if (!UnmadeSave::SaveGameToSlot(Save))
     {
         UE_LOG(LogTemp, Error, TEXT("Unmade prototype NPC memory save failed"));
