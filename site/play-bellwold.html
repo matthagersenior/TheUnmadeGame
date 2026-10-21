@@ -103,7 +103,7 @@ objective();
 function openDialog(title,body,options=[],kicker='FIELD NOTE'){
 dialogOpen=true;$('dialog-kicker').textContent=kicker;$('dialog-title').textContent=title;$('dialog-copy').textContent=body;
 const box=$('options');box.replaceChildren();
-for(const opt of options){const b=document.createElement('button');b.textContent=opt.title;b.disabled=!!opt.disabled;b.onclick=()=>{if(opt.fn)opt.fn();closeDialog()};box.appendChild(b);if(opt.hint){const small=document.createElement('small');small.textContent=opt.hint;box.appendChild(small)}}
+for(const opt of options){const b=document.createElement('button');b.textContent=opt.title;b.disabled=!!opt.disabled;b.onclick=()=>{closeDialog();if(opt.fn)opt.fn()};box.appendChild(b);if(opt.hint){const small=document.createElement('small');small.textContent=opt.hint;box.appendChild(small)}}
 $('messages').classList.add('show');$('messages').focus();
 }
 function closeDialog(){dialogOpen=false;$('messages').classList.remove('show');}
