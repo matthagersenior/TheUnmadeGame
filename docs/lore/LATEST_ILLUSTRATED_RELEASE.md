@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**21 October 2026 source-only economic preflight:** A combined material, payroll and cargo restore consistency check now guards existing schema-1 profiles. No canonical illustrated v20 material, file hashes or prior source base has changed; no actual Unreal game persistence is certified.
+
+
 **21 October 2026 source-only progress preflight:** Existing nine-realm expedition and Ability Study states are now validated with their authoritative restoration rules before a schema-1 profile is accepted. The historical illustrated v20 release files and hashes remain unchanged; no Unreal editor/playtest acceptance is implied.
 
 

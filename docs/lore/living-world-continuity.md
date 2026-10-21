@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-21 — Finite deliveries remain attributable after reload
+The game's material units, municipal wages, worker receipts and physical cross-realm cargo are now checked against the exact existing MaterialWorld and LivingEconomy restoration contracts at the profile boundary. This neither converts rainwater into ember baskets nor creates paid shifts or witnesses where no physical delivery occurred. It preserves nine distinct realms, no free currency, named obligations and prior schema-1 optional absence. Tested in native C++ source; Unreal compilation/playtesting still pending.
+
+
 ## 2026-10-21 — Physical progression still governs save restoration
 Profile restoration no longer trusts range-valid but unattested expedition reward indices or staged Ability Study flags. These fields are cross-checked against the **existing** canonical expedition and research domain rules, preserving nine distinct realms, physically earned observation and optional-content exclusions. Source C++ fixtures cover malformed and valid legacy saves; no new lore claim, OPEN mystery resolution, character acquisition or alternate route is introduced. Engine compilation and file-based restore testing remain pending.
 

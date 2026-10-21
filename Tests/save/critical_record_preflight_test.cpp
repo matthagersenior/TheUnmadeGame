@@ -1,6 +1,7 @@
 #include "Save/UnmadeCriticalSavePreflight.h"
 #include "World/UnmadeExpeditionRules.h"
 #include "World/UnmadeAbilityStudyRules.h"
+#include "World/UnmadeLivingEconomyRules.h"
 #include "Items/UnmadeItemRules.h"
 #include <cassert>
 #include <cmath>
@@ -26,6 +27,15 @@ struct Record{
  bool bHasExpeditions=false;Array<int> ExpeditionState;
  bool bHasAbilityStudy=false;Array<int> AbilityStudyStages,AbilityStudyEvidence,AbilityStudyTrials;
  int AbilityStudySelection=0;
+ bool bHasMaterialWorld=false;
+ Array<int> MaterialDays,MaterialStores,MaterialHouseholds,MaterialIntegrity,MaterialProduced,
+    MaterialConsumed,MaterialShortageDays,MaterialLaborHours,MaterialDeliveries,MaterialRepairs;
+ int MaterialCargoRealm=-1,MaterialCargoUnits=0,MaterialCargoDay=0;
+ bool bHasLivingEconomy=false;
+ Array<int> LivingEmployerMarks,LivingEarnedMarks,LivingOwedMarks,LivingPaidShifts,
+     LivingPaidDays,LivingWorkerReceipts,LivingForeignStock,LivingRouteReceipts,
+     LivingTradePayments,LivingConsumedSupport;
+ int LivingTradeCargoRoute=-1,LivingTradeCargoDay=0;
  bool bHasWitnessEchoSnapshot=false;int WitnessEchoFirstMask=0,WitnessEchoReturnMask=0;
  bool bHasWitnessBraidSnapshot=false;int WitnessBraidOutcome=0;
  bool bHasWitnessDispatchSnapshot=false;
@@ -116,6 +126,45 @@ int main(){
  s.AbilityStudyEvidence[0]=2; // secondhand signal without first encounter
  assert(!ValidCriticalSaveShape(s));
  s.AbilityStudyEvidence[0]=1;
+ assert(ValidCriticalSaveShape(s));
+
+ // Warehouse units and marks are finite: the source-of-truth domain classes
+ // validate a save as a whole, including cargo custody and treasury conservation.
+ s.bHasMaterialWorld=true;
+ assert(!ValidCriticalSaveShape(s)); // partial columns cannot be loaded
+ MaterialWorld original;
+ const auto towns=original.Snapshot();
+ for(const auto& t:towns) {
+    s.MaterialDays.push_back(t.day);s.MaterialStores.push_back(t.store);
+    s.MaterialHouseholds.push_back(t.households);s.MaterialIntegrity.push_back(t.integrity);
+    s.MaterialProduced.push_back(t.produced);s.MaterialConsumed.push_back(t.consumed);
+    s.MaterialShortageDays.push_back(t.shortageDays);s.MaterialLaborHours.push_back(t.laborHours);
+    s.MaterialDeliveries.push_back(t.deliveries);s.MaterialRepairs.push_back(t.repairs);
+ }
+ assert(ValidCriticalSaveShape(s));
+ s.MaterialStores[0]=-1;assert(!ValidCriticalSaveShape(s));s.MaterialStores[0]=towns[0].store;
+ assert(ValidCriticalSaveShape(s));
+ s.bHasLivingEconomy=true;
+ assert(!ValidCriticalSaveShape(s)); // no fabricated worker or trade columns
+ const auto economy=LivingEconomy{}.Save();
+ for(const auto& w:economy.workers){
+    s.LivingEmployerMarks.push_back(w.employerMarks);s.LivingEarnedMarks.push_back(w.earnedMarks);
+    s.LivingOwedMarks.push_back(w.owedMarks);s.LivingPaidShifts.push_back(w.shiftsPaid);
+    s.LivingPaidDays.push_back(w.lastPaidDay);s.LivingWorkerReceipts.push_back(w.deliveriesWitnessed);
+ }
+ for(const auto& r:economy.routes){
+    s.LivingForeignStock.push_back(r.foreignStock);s.LivingRouteReceipts.push_back(r.deliveries);
+    s.LivingTradePayments.push_back(r.paidMarks);s.LivingConsumedSupport.push_back(r.consumedSupport);
+ }
+ assert(ValidCriticalSaveShape(s));
+ s.LivingEmployerMarks[0]+=1;assert(!ValidCriticalSaveShape(s)); // invented mark
+ s.LivingEmployerMarks[0]-=1;assert(ValidCriticalSaveShape(s));
+ s.MaterialCargoRealm=0;s.MaterialCargoUnits=5;s.MaterialCargoDay=1;
+ assert(ValidCriticalSaveShape(s));
+ s.LivingTradeCargoRoute=0;s.LivingTradeCargoDay=1;
+ assert(!ValidCriticalSaveShape(s)); // two simultaneous player-held crates
+ s.LivingTradeCargoRoute=-1;s.LivingTradeCargoDay=0;
+ s.MaterialCargoRealm=-1;s.MaterialCargoUnits=0;s.MaterialCargoDay=0;
  assert(ValidCriticalSaveShape(s));
  // Disabled optional fields must be ignored for legacy/earlier save slots.
  Record legacy;legacy.WitnessBraidOutcome=999;legacy.TradeMarks=-7;
