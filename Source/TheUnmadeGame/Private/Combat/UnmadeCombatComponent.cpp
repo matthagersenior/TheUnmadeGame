@@ -1,4 +1,5 @@
 #include "Combat/UnmadeCombatComponent.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "Combat/UnmadePresentation.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
@@ -23,6 +24,12 @@ void UUnmadeCombatComponent::SetGearBonuses(int32 Attack, int32 Armor)
 bool UUnmadeCombatComponent::Heal(float Amount)
 {
     return State.Heal(static_cast<double>(Amount));
+}
+bool UUnmadeCombatComponent::CommitHealing(float Amount,TFunctionRef<bool()> Writer)
+{
+    // Keep cooldowns, incoming-hit receipts, guard and combat-window state.
+    // The writer synchronously captures this *healed* State into one SaveGame.
+    return UnmadeCore::CommitCombatHealing(State,static_cast<double>(Amount),Writer);
 }
 
 void UUnmadeCombatComponent::SetGuarding(bool bEnabled)

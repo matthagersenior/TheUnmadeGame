@@ -41,6 +41,13 @@
         "codex:realm.OrchardOfKings",
         "codex:realm.FirstAbsence"
       ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeRecoveryRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach"
+      ]
     }
   ]
 }

@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**21 October 2026 source-only save integrity milestone:** Existing potion recovery now occurs before synchronous profile serialization and rolls back combat/inventory on failure. This has no effect on the previously verified illustrated edition v20 files, their hashes or its canonical source and is not an Unreal-runtime playtest.
+
+
 **20 October 2026 source-only character-readability milestone:** Five NPC role silhouettes and twelve creature silhouettes are now linked to established actors' optional primitive visuals. This does not alter the previously published illustrated v20 package or its file hashes, and does not establish finished 3D character art or Unreal runtime QA.
 
 
