@@ -96,7 +96,7 @@ def full_encyclopedia():
  print("Published complete canonical encyclopedia",output.stat().st_size,"bytes across eight source volumes")
 
 def verify():
- for fn in ["index.html","main.js","styles.css","field-codex.html","gameplay-guide.html","trailer-storyboard.html","downloads/the-unmade-field-codex.pdf","downloads/the-unmade-gameplay-guide.pdf"checklist]:
+ for fn in ["index.html","main.js","styles.css","field-codex.html","gameplay-guide.html","trailer-storyboard.html","downloads/the-unmade-field-codex.pdf","downloads/the-unmade-gameplay-guide.pdf"]:
   p=O/fn
   if not p.is_file() or p.stat().st_size<30:raise RuntimeError("Missing "+str(p))
  if not (O/"downloads/the-unmade-definitive-canon-encyclopedia.pdf").is_file():raise RuntimeError("Missing canonical full PDF")
