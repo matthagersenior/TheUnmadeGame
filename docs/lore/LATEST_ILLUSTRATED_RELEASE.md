@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**21 October 2026 source-only recovery handoff:** Safe backup cloning into a genuinely unused profile is wired to a distinct two-press Session action. No illustrated v20 release file, historical checksum, Unreal runtime validation or verified gameplay package has changed.
+
+
 **21 October 2026 source-only recovery milestone:** Explicitly selected compatible backups can be loaded despite an incompatible primary record, while unattended loads still fail closed. Previously published illustrated v20 files, hashes and release status remain unchanged; real engine disk-corruption QA remains pending.
 
 

@@ -1,5 +1,11 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-21 — Verified backup copy into an unused save profile
+- A separate, two-press-confirmed Session action can copy a structurally validated old backup into an actually unoccupied numbered profile. The source primary and source backup are never written, deleted or migrated.
+- The copied record is validated on disk before selecting the new profile for normal saving; the action refuses if all destination slots are occupied. Unlike merely loading the backup, the player can now resume saving without overwriting an incompatible source record.
+- Source-only native slot-selection checks and UI path wiring tests cover preservation and confirmation; actual Unreal storage failure, race conditions, disk corruption and UI playtest require first-PC acceptance.
+
+
 ## 2026-10-21 — User-selected backup takes precedence over unreadable primary
 When a player deliberately selects a validated backup profile, the loader now honors that selection even if the primary save is incompatible. Ordinary loading still refuses to silently replace or overwrite an incompatible primary. This corrects the previously tested source recovery policy without migrating saves, discarding primary bytes or changing any canonical journey/quest state. Actual Unreal backup UI and corrupted-file playback remain to be tested.
 
