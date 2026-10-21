@@ -1,5 +1,11 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-21 — Transaction-safe player healing
+- Potions now stage health recovery before the combined profile save captures the combatant, not afterward. A synchronous failed save restores the exact prior combatant (hit receipts/cooldowns included) and potion inventory; it cannot silently promote the next potion in the preference list.
+- Zero-health-restore Strain consumables still write a synchronous combined save; the already existing fracture recovery follows that successful save. No new item, species, ending, save field or lore answer was introduced.
+- Native rollback tests and source wiring checks cover these rules, but Unreal asset builds, staged engine gameplay and actual disk-fault recovery require later UE hardware acceptance.
+
+
 ## 2026-10-20 — Fallback character silhouettes
 - Added source-defined but visually distinct fallback proportions/crest profiles for five roles and twelve creature species. No new inhabitants or enemies were spawned.
 - The existing game-collision capsules, AI, combat profile, witness memory, skeletal assets and narrative decisions are unchanged. An imported rig hides the fallback rather than showing both.

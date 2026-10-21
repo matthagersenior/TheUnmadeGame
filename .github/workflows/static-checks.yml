@@ -194,6 +194,10 @@ jobs:
         run: python Scripts/validate_ability_codex.py --report
       - name: Run validator unit tests
         run: python -m unittest discover -s Scripts/tests -v
+      - name: Verify atomic health and consumable save-failure rollback
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/save/atomic_healing_test.cpp -o /tmp/unmade-atomic-heal
+          /tmp/unmade-atomic-heal
       - name: Compile and test deterministic C++ fracture rules
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/fracture/fracture_core_test.cpp -o /tmp/unmade-fracture-test

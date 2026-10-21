@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-21 — Source-only potion save integrity
+The game's preexisting consumables retain their original acquisition, costs, health/Strain effects and preferred order. A failed combined save no longer silently loses recorded healing on reload or advances to another item. Native source tests validate transaction order, inventory rollback, player-facing save failure and preservation of combat hit receipts; this does not invent lore, an item, an irreversible choice, or new player progress. Real Unreal gameplay and storage-failure testing remain unverified.
+
+
 ## 2026-10-20 — Readable graybox residents and creatures
 The five existing resident professions and 12 registered creature species now have source-defined silhouette proportions and visual accessories for the no-rig fallback. These use basic original Unreal primitives attached to existing NPC components and do not introduce a combat collider, new character identity, new species, learned power, NPC memory or social outcome. If the actual skinned character performance asset is loaded, the fallback accessory is hidden. Source C++ and structural wiring checks cover the identifiers; **no real Unreal compile, rendering, animation retargeting or gameplay QA is claimed**.
 

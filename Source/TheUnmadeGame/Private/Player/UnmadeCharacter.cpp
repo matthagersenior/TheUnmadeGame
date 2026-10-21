@@ -193,13 +193,22 @@ void AUnmadeCharacter::UseHealthPotion()
         UnmadeCore::ItemId::RootboundPoultice, UnmadeCore::ItemId::AshOfPossibleLives
     };
     for (const auto Id : Potions)
-        if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored))
+    {
+        bool bPersistenceFailed=false;
+        if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored, &bPersistenceFailed))
         {
             if (Restored > 0) FractureModel.Recover(Restored / UnmadeCore::FractureModel::RecoveryPerSecond);
             if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Green,
                 TEXT("Healing consumed. Health and any Strain recovery applied."));
             return;
         }
+        if(bPersistenceFailed)
+        {
+            if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Yellow,
+                TEXT("SAVE FAILED: nothing consumed or restored; the next potion was not attempted."));
+            return;
+        }
+    }
     if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Silver,
         TEXT("No useful healing consumable in your bag."));
 }
@@ -212,13 +221,22 @@ void AUnmadeCharacter::UseStrainPotion()
         UnmadeCore::ItemId::StrainVial, UnmadeCore::ItemId::AshOfPossibleLives
     };
     for (const auto Id : Potions)
-        if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored))
+    {
+        bool bPersistenceFailed=false;
+        if (Equipment->UseConsumable(Id, FractureModel.CurrentStrain(), Restored, &bPersistenceFailed))
         {
             if (Restored > 0) FractureModel.Recover(Restored / UnmadeCore::FractureModel::RecoveryPerSecond);
             if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Cyan,
                 TEXT("Stillness restored: Reality Strain diminished."));
             return;
         }
+        if(bPersistenceFailed)
+        {
+            if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Yellow,
+                TEXT("SAVE FAILED: nothing consumed or restored; the next elixir was not attempted."));
+            return;
+        }
+    }
     if (GEngine) UnmadeRpgFeedback(-1, 5.f, FColor::Silver,
         TEXT("No useful Strain elixir remains."));
 }

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Combat/UnmadeCombatRules.h"
+#include "Templates/Function.h"
 #include "Combat/UnmadeCombatStyleRules.h"
 #include "Combat/UnmadeContactRules.h"
 #include "UnmadeCombatComponent.generated.h"
@@ -48,6 +49,8 @@ public:
     bool SetAttackDamage(double Damage){return State.SetDamage(Damage);}
     void SetGearBonuses(int32 Attack, int32 Armor);
     bool Heal(float Amount);
+    // Heal before synchronous profile capture, rolling all combat state back on failed persistence.
+    bool CommitHealing(float Amount,TFunctionRef<bool()> Writer);
     /** A single identified storm/heat pulse, deduplicated by the combat domain. */
     bool ReceiveHazardPulse(uint64 SourceId,uint64 PulseId,double Damage);
     bool ReviveAtCheckpoint();
