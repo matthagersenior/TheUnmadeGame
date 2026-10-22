@@ -13,6 +13,7 @@ on:
     paths:
       - Scripts/build_hero_models.py
       - Scripts/tests/test_hero_model_assets.py
+      - Scripts/tests/test_distinct_realm_city_layouts.py
       - .github/workflows/hero-3d-models.yml
       - Authoring/world_content_pack.json
 permissions:

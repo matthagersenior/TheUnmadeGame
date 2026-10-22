@@ -33,3 +33,7 @@ Publishing must not imply the GLBs are final hero art, physical levels, rigged a
 ### Distinct realm and city topology
 
 `Scripts/build_hero_models.py` now defines nine independent region route graphs and eleven separate city route graphs. Unlike the former common four-corner grid, each has a source-inspired ground/vertical silhouette, roads, and recognizable landmarks. Bellwold has its own uncast empty bell yoke and refuge/kitchen, Paperhaven has archive vaults, and other cities use appropriate topology. `test_distinct_realm_city_layouts.py` enforces non-template authored layouts. All remain dioramas; real navigation/collision and in-engine lighting are future work.
+
+### Restored housing density (source preview)
+
+After user feedback that the 50-model topology pass had removed too many buildings, regenerated the same 50 GLBs with **12 new inhabited-building exterior shells per region overview** and **20 per canon city**, laid out across distinct district clusters. The actual three-dimensional geometry includes local roofs, working props, civic textures and neighborhood road spurs; the viewer reports exact `building_shells` and `district_count` from the manifest. These are non-enterable, untested art blockouts, not polished full-size settlements or Unreal levels. Maintain minimum-density regression tests and check visual framing before reducing settlement fabric again.

@@ -23,6 +23,12 @@ Four generated directories:
 - `Build/UnmadeHeroModels/Environment/`: one distinct route network and material environment per each of the nine realms (no shared straight street or square plan).
 - `Build/UnmadeHeroModels/City/`: eleven additional, independent source-grounded layouts for the three Reach towns (Crossings, Bellwold, Paperhaven) and Saltwake, Cinderhold, Drevlach, Orravane, Vathless, Eillun, Tharniv, and Auvren; all have their own route geometry and named landmark structures.
 
+### Density restored after the sparse-layout regression
+
+The unique-route version inadvertently replaced some earlier housing clusters with nearly empty landmark scenes. The revised geometry retains nine different regional path networks and eleven different city layouts while **adding 12 individually constructed dwelling/working-building exterior shells to each region overview and 20 to each city diorama**, organized into three and four neighborhood clusters respectively. This is **328 new source-authored building shells across those 20 previews** (9 × 12 + 11 × 20) beyond the existing individual landmark architecture, not 328 finished/enterable playable interiors. Homes have different materials, rooflines, and local additions according to civic function: shelters and lanterns in Bellwold; chalk records in Paperhaven; inverted hull dwellings in Saltwake; furnace chimneys in Cinderhold; counted canal lockhouses in Drevlach; suspended houses in Orravane; quarry ledgers in Vathless; consenting thresholds in Eillun; grown petition shelters in Tharniv; and limestone witness rooms in Auvren.
+
+The manifest records the exact generated `building_shells` and `district_count` and the public 3D viewer shows them. `Scripts/tests/test_distinct_realm_city_layouts.py` now fails if a future art pass deletes the neighborhood fabric or substitutes only sparse landmarks. Overlap clearance, physical entrance access, real occupancy and final playability must still be assessed in Unreal.
+
 ### Import truth and next art pass
 
 The models use **meters, Y up, positive Z forward** in glTF. Unreal coordinates are **centimeters, Z up**; use verified import conversion. All nodes are **static mesh objects**, including the individually named NPCs. They do **not** yet include skeletal joints, skinning, cloth simulation, blendshapes, authored collision, bone-weighting, texture atlases, normal map baking or generated Unreal navmeshes.
