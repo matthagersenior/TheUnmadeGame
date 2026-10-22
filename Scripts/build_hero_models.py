@@ -988,6 +988,18 @@ def build_environment(realm):
  _build_habited_districts(k,REGION_HABITAT[realm],realm,_regional_district_plan(realm),REALM_PATHS[realm],base,trim,light)
  return k
 
+_BELLWOLD_HERO_MODULE=None
+def _add_bellwold_hero_layer(k):
+ global _BELLWOLD_HERO_MODULE
+ if _BELLWOLD_HERO_MODULE is None:
+  import importlib.util
+  module_path=Path(__file__).with_name('bellwold_hero_pbr.py')
+  spec=importlib.util.spec_from_file_location('unmade_bellwold_hero_pbr',module_path)
+  module=importlib.util.module_from_spec(spec)
+  spec.loader.exec_module(module)
+  _BELLWOLD_HERO_MODULE=module
+ _BELLWOLD_HERO_MODULE.add_bellwold_hero(k)
+
 def build_city_environment(city):
  if city not in CITY_SPECS:raise ValueError("Unknown canonical settlement "+str(city))
  spec=CITY_SPECS[city];realm=spec["realm"];base,trim,light=PALETTE[realm]
@@ -997,6 +1009,7 @@ def build_city_environment(city):
  _regional_signature(k,realm,base,trim,light)
  _city_signature(k,city,base,trim,light)
  _build_habited_districts(k,city,realm,CITY_DISTRICTS[city],spec['routes'],base,trim,light)
+ if city=='Bellwold':_add_bellwold_hero_layer(k)
  return k
 
 # Source of truth: exact canonical roster from existing Authoring file, with
@@ -1039,8 +1052,9 @@ def build_all(root=ROOT,out=None,verify=False):
   building_shells=sum('_habitation_shell_' in name for name in k.scene.geometry)
   district_count=(len(CITY_DISTRICTS[stable.removeprefix('city:')]) if group=='City' else len(_regional_district_plan(realm)) if group=='Environment' else 0)
   district_views=([[round(float(x),3),round(4.9 if realm=='SkyBelow' else 1.3,3),round(float(z),3)] for x,z,_,_ in (CITY_DISTRICTS[stable.removeprefix('city:')] if group=='City' else _regional_district_plan(realm))] if group in ('City','Environment') else [])
-  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
- manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0) embedded binary meshes and vertex colors','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
+  pbr_materials=sorted({g.visual.material.name for g in k.scene.geometry.values() if getattr(getattr(g,'visual',None),'kind',None)=='texture' and hasattr(g.visual,'material') and g.visual.material is not None and getattr(g.visual.material,'baseColorTexture',None) is not None})
+  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
+ manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0), binary static meshes, vertex colors, and locally generated embedded Bellwold UV/PBR albedo and normal textures','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')
   if {str(p.relative_to(out)) for p in out.rglob('*.glb')}!={r['file'] for r in entries}:raise ValueError('Asset file inventory drift')

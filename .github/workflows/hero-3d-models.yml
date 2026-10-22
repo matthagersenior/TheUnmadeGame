@@ -8,6 +8,7 @@ on:
       - Scripts/tests/test_hero_model_assets.py
       - Scripts/tests/test_distinct_realm_city_layouts.py
       - Scripts/tests/test_neighborhood_quality.py
+      - Scripts/tests/test_bellwold_hero_pbr.py
       - .github/workflows/hero-3d-models.yml
       - Authoring/world_content_pack.json
   pull_request:
@@ -40,6 +41,8 @@ jobs:
         run: python -m unittest discover -s Scripts/tests -p test_distinct_realm_city_layouts.py -v
       - name: Verify district footprints, landmark life and camera points
         run: python -m unittest discover -s Scripts/tests -p test_neighborhood_quality.py -v
+      - name: Verify Bellwold embedded UV and physical material textures
+        run: python -m unittest discover -s Scripts/tests -p test_bellwold_hero_pbr.py -v
       - name: Upload 50 source-geometry reference meshes as one artifact
         uses: actions/upload-artifact@v4
         with:
