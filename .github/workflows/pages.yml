@@ -11,6 +11,8 @@ on:
       - 'Scripts/tests/test_neighborhood_quality.py'
       - 'Scripts/tests/test_bellwold_hero_pbr.py'
       - 'Scripts/tests/test_all_realm_hero_pbr.py'
+      - 'Scripts/tests/test_district_surface_fidelity.py'
+      - 'Scripts/district_surface_detail.py'
       - 'Scripts/realm_hero_pbr.py'
       - 'Scripts/bellwold_hero_pbr.py'
       - '.github/workflows/pages.yml'
@@ -50,6 +52,7 @@ jobs:
           python -m unittest discover -s Scripts/tests -p test_neighborhood_quality.py -v
           python -m unittest discover -s Scripts/tests -p test_bellwold_hero_pbr.py -v
           python -m unittest discover -s Scripts/tests -p test_all_realm_hero_pbr.py -v
+          python -m unittest discover -s Scripts/tests -p test_district_surface_fidelity.py -v
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
