@@ -8,11 +8,15 @@ except ImportError:
  np=None
 
 ROOT=Path(__file__).resolve().parents[2]
-spec=importlib.util.spec_from_file_location("terrain_edge_builder",ROOT/"Scripts/build_hero_models.py")
-builder=importlib.util.module_from_spec(spec)
-spec.loader.exec_module(builder)
-surface=builder._district_surface()
+if all(importlib.util.find_spec(m) for m in ("numpy","trimesh","PIL")):
+ spec=importlib.util.spec_from_file_location("terrain_edge_builder",ROOT/"Scripts/build_hero_models.py")
+ builder=importlib.util.module_from_spec(spec)
+ spec.loader.exec_module(builder)
+ surface=builder._district_surface()
+else:
+ builder=surface=None
 
+@unittest.skipUnless(builder is not None,"Mesh libraries installed only in 3D workflow")
 class SculptedTerrainEdgeTests(unittest.TestCase):
  def test_each_district_has_separate_embedded_pbr_blend_geometry(self):
   from trimesh.visual.texture import TextureVisuals
