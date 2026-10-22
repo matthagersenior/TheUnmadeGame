@@ -628,7 +628,7 @@ def _dwelling(k,city,idx,x,z,base,trim,light):
  door_side=(-1 if idx%2 else 1)
  k.box(tag+"_threshold_"+str(idx),(x+door_side*.40,y+.84,z+d*.51),(.6,1.52,.09),DARK)
  for side in (-1,1):
-  k.box(tag+"_lit_window_"+str(idx),(x+side*w*.33,y+h*.58,z+d*.515),(.31,.39,.11),light)
+  k.box(tag+"_lit_window_"+str(idx),(x+side*w*.33,y+max(h*.75,1.9),z+d*.515),(.31,.39,.11),light)
  roofline=y+h+.27
  if city in ("Crossings","Bellwold","Eillun"):
   # Split gables make timber/refuge/overlapping houses recognizable in silhouette.
