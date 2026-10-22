@@ -109,6 +109,11 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
     }
     FieldSurveyGates.SetNum(6);
     FieldSurveySigns.SetNum(6);
+    HabitatShutters.SetNum(6);
+    HabitatInspectSigns.SetNum(6);
+    HabitatResponseLights.SetNum(6);
+    HabitatInspected.fill(false);
+    HabitatLastCue.fill(-1);
     struct FSite {
         const TCHAR* Id;
         const TCHAR* Label;
@@ -226,6 +231,119 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
                 }
             }
         };
+        // Habitat placement uses the existing source-grounded creature roster.
+        // Habitat silhouettes are explicitly PROVISIONAL world art, not a new
+        // claim about sealed origins or a permanent spawning ecosystem.
+        const auto& Habitat=UnmadeCore::HabitatSites[GuideIndex];
+        const auto BuildEncounterHabitat=[&]()
+        {
+            const double N=Habitat.denOffsetY;
+            if(GuideIndex==0) // JawDen: gnawed stone cavity, claw-scraped ribs.
+            {
+                AddLandmark(TEXT(".Habitat.JawDen.Hollow"),TEXT("Cylinder"),FVector(0,N,165),
+                    FVector(3.6,2.3,3.1),FRotator(0,0,90),true);
+                for(int j=0;j<5;++j)
+                    AddLandmark(*FString::Printf(TEXT(".Habitat.JawDen.Rib%d"),j),
+                        TEXT("Cylinder"),FVector(-260+j*130,N+40,165+j%2*25),
+                        FVector(.20,.24,2.7),FRotator(0,12*j,(-24+j*10)),true);
+                AddLandmark(TEXT(".Habitat.JawDen.Tracks"),TEXT("Cube"),
+                    FVector(120,N-260,26),FVector(2.1,1.35,.2),FRotator::ZeroRotator,false);
+            }
+            else if(GuideIndex==1) // GlassRoost: prisms block watcher sightlines.
+            {
+                for(int j=0;j<5;++j)
+                    AddLandmark(*FString::Printf(TEXT(".Habitat.GlassRoost.Spire%d"),j),
+                        TEXT("Cone"),FVector((j-2)*140,N+45+j*18,180+j*18),
+                        FVector(.95,1.25,3.8+j*.65),FRotator(0,10*j,(-12+j*7)),true);
+                AddLandmark(TEXT(".Habitat.GlassRoost.Perch"),TEXT("Cylinder"),
+                    FVector(0,N+130,280),FVector(3.6,.85,.48),FRotator(0,0,90),true);
+                AddLandmark(TEXT(".Habitat.GlassRoost.SightBrace"),TEXT("Cube"),
+                    FVector(0,N-170,185),FVector(.45,3,3.4),FRotator(0,23,0),true);
+            }
+            else if(GuideIndex==2) // HoundUndercroft, away from public refuge.
+            {
+                AddLandmark(TEXT(".Habitat.HoundUndercroft.Roof"),TEXT("Cylinder"),
+                    FVector(0,N+35,225),FVector(4.5,1.4,2.1),FRotator(0,0,90),true);
+                for(int side=-1;side<=1;side+=2)
+                {
+                    AddLandmark(*FString::Printf(TEXT(".Habitat.HoundUndercroft.Pillar%d"),side),
+                        TEXT("Cylinder"),FVector(side*310,N-85,147),
+                        FVector(.75,.75,3.0),FRotator(0,0,side*14),true);
+                    AddLandmark(*FString::Printf(TEXT(".Habitat.HoundUndercroft.Trail%d"),side),
+                        TEXT("Cube"),FVector(side*210,N-230,20),
+                        FVector(.7,1.8,.16),FRotator(0,side*18,0),false);
+                }
+                AddLandmark(TEXT(".Habitat.HoundUndercroft.EmptyCradle"),TEXT("Cube"),
+                    FVector(0,N+85,330),FVector(2.0,.45,.35),FRotator::ZeroRotator,true);
+            }
+            else if(GuideIndex==3) // ArchiveBurrow: paper-worn side galleries.
+            {
+                for(int j=0;j<6;++j)
+                    AddLandmark(*FString::Printf(TEXT(".Habitat.ArchiveBurrow.Shelf%d"),j),
+                        TEXT("Cube"),FVector((j%3-1)*210,N+90+(j/3)*220,160),
+                        FVector(.45,1.8,3.2),FRotator(0,(-14+j*7),0),true);
+                AddLandmark(TEXT(".Habitat.ArchiveBurrow.Rent"),TEXT("Cube"),
+                    FVector(0,N+195,325),FVector(5.2,.4,.5),FRotator(0,19,16),true);
+            }
+            else if(GuideIndex==4) // TideCave: sheltered tide-cut stone and pilings.
+            {
+                AddLandmark(TEXT(".Habitat.TideCave.Shell"),TEXT("Cylinder"),
+                    FVector(0,N+115,147),FVector(4.6,2.6,2.0),FRotator(0,0,90),true);
+                for(int j=0;j<5;++j)
+                    AddLandmark(*FString::Printf(TEXT(".Habitat.TideCave.Pile%d"),j),
+                        TEXT("Cylinder"),FVector((j-2)*145,N-100+((j%2)*110),155),
+                        FVector(.35,.4,3.1),FRotator(0,0,(j-2)*11),true);
+                AddLandmark(TEXT(".Habitat.TideCave.WaterMark"),TEXT("Cube"),
+                    FVector(0,N-280,15),FVector(6.2,1.0,.14),FRotator::ZeroRotator,false);
+            }
+            else // SlagMaw: blackslag chimney mouth with substantial cover.
+            {
+                AddLandmark(TEXT(".Habitat.SlagMaw.Mouth"),TEXT("Cylinder"),
+                    FVector(0,N,205),FVector(3.3,2.1,2.5),FRotator(90,0,0),true);
+                for(int j=0;j<4;++j)
+                    AddLandmark(*FString::Printf(TEXT(".Habitat.SlagMaw.Vent%d"),j),
+                        TEXT("Cone"),FVector((j-2)*190,N+90,285+j%2*90),
+                        FVector(.75,.90,4.0+j*.60),FRotator(0,j*19,j*9),true);
+                AddLandmark(TEXT(".Habitat.SlagMaw.Brace"),TEXT("Cube"),
+                    FVector(0,N-215,140),FVector(5.3,.65,2.3),FRotator(0,16,0),true);
+            }
+            // Player can take physical cover on the approach. The reactive
+            // enclosure is an inspectable movable obstruction: no quest gate.
+            for(int side=-1;side<=1;side+=2)
+                AddLandmark(*FString::Printf(TEXT(".Habitat.Cover%d"),side),
+                    TEXT("Cube"),FVector(side*490,N-175,120),
+                    FVector(1.2,1.8,2.2),FRotator(0,side*27,0),true);
+            if(AStaticMeshActor* Shutter=GetWorld()->SpawnActor<AStaticMeshActor>(
+                Site.Center+FVector(0,N-135,135),FRotator::ZeroRotator))
+            {
+                Shutter->Tags.AddUnique(FName(*(Id+TEXT(".Habitat.ShelterShutter"))));
+                auto* Mesh=Shutter->GetStaticMeshComponent();
+                Mesh->SetMobility(EComponentMobility::Movable);
+                Mesh->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));
+                Mesh->SetWorldScale3D(FVector(2.0,.28,2.6));
+                Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+                HabitatShutters[GuideIndex]=Shutter;
+            }
+            if(ATextRenderActor* Inspect=GetWorld()->SpawnActor<ATextRenderActor>(
+                Site.Center+FVector(0,N-380,105),FRotator(0,90,0)))
+            {
+                Inspect->Tags.AddUnique(FName(*(Id+TEXT(".Habitat.Inspect"))));
+                Inspect->GetTextRender()->SetWorldSize(17.f);
+                Inspect->GetTextRender()->SetText(FText::FromString(
+                    FString::Printf(TEXT("E - INSPECT %s TRACKS / SHELTER"),UTF8_TO_TCHAR(Habitat.kind))));
+                HabitatInspectSigns[GuideIndex]=Inspect;
+            }
+            if(APointLight* Response=GetWorld()->SpawnActor<APointLight>(
+                Site.Center+FVector(0,N,340),FRotator::ZeroRotator))
+            {
+                Response->Tags.AddUnique(FName(*(Id+TEXT(".Habitat.ResponseLight"))));
+                Response->PointLightComponent->SetIntensity(90.f);
+                Response->PointLightComponent->SetAttenuationRadius(650.f);
+                Response->PointLightComponent->SetLightColor(FLinearColor(Site.Accent));
+                HabitatResponseLights[GuideIndex]=Response;
+            }
+        };
+        BuildEncounterHabitat();
         if(GuideIndex==0) // Ash Road: fossil ribs and a fallen waystone.
         {
             AddLandmark(TEXT(".RibOne"),TEXT("Cylinder"),FVector(-330,300,165),
