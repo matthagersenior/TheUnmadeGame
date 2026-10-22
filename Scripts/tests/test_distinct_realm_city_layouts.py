@@ -1,16 +1,21 @@
 """Regression guard: realms and settlements must not share one town-square grid."""
 import importlib.util
 import unittest
+from importlib.util import find_spec
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]
 SPEC=importlib.util.spec_from_file_location("unmade_hero_topologies",ROOT/"Scripts/build_hero_models.py")
-builder=importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(builder)
+if all(find_spec(name) for name in ("numpy","trimesh","PIL")):
+ builder=importlib.util.module_from_spec(SPEC)
+ SPEC.loader.exec_module(builder)
+else:
+ builder=None
 
 def signature(routes):
  return tuple(tuple((round(float(x),2),round(float(z),2)) for x,z in poly) for poly in routes)
 
+@unittest.skipUnless(builder is not None, '3D geometry libraries are exercised in the dedicated asset workflow')
 class DistinctRealmCityLayouts(unittest.TestCase):
  def test_all_realms_have_distinct_navigational_shapes(self):
   self.assertEqual(set(builder.REALM_PATHS),set(builder.REALMS))
