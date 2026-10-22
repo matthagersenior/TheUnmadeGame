@@ -51,6 +51,12 @@ class StreetLevelFacades(unittest.TestCase):
      self.assertGreaterEqual(len(g.faces),18)
    self.assertEqual(sum("_habitation_shell_" in n for n in names),20,city)
 
+ def test_viewer_offers_eye_height_instead_of_only_aerial_orbits(self):
+  html=(ROOT/"site/real-models.html").read_text()
+  self.assertIn("function focusStreet(",html)
+  self.assertIn("Street view",html)
+  self.assertIn("model viewer perspective, not verified player navigation",html)
+
  def test_regional_overviews_keep_12_façades_and_unique_street_layouts(self):
   for realm in builder.REALMS:
    scene=builder.build_environment(realm).scene
