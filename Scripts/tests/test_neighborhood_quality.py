@@ -51,3 +51,19 @@ class NeighborhoodQuality(unittest.TestCase):
      self.assertTrue(all(len(v)==3 for v in views))
      self.assertEqual(len({tuple(v) for v in views}),expected)
     else:self.assertEqual(views,[])
+
+ def test_public_viewer_has_district_focus_controls_and_valid_javascript(self):
+  import re, shutil, subprocess, tempfile
+  html=(ROOT/"site/real-models.html").read_text()
+  self.assertIn('id="districtfocus"',html)
+  self.assertIn("district_views",html)
+  self.assertIn("function focusDistrict(",html)
+  self.assertIn("overviewCamera",html)
+  scripts=re.findall(r'<script type="module">([\\s\\S]+?)</script>',html)
+  self.assertEqual(len(scripts),1)
+  node=shutil.which("node")
+  if node:
+   with tempfile.TemporaryDirectory() as tmp:
+    path=Path(tmp)/"real-models.mjs"
+    path.write_text(scripts[0])
+    subprocess.run([node,"--check",str(path)],check=True,capture_output=True,text=True)
