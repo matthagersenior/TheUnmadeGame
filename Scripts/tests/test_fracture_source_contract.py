@@ -56,5 +56,18 @@ class FractureSourceContractTests(unittest.TestCase):
                             "NotEnoughStability", "Restore(", "UnsupportedTarget"):
             self.assertIn(requirement, cpp)
 
+    def test_seeded_rollback_stress_runs_in_ci(self):
+        workflow = read(".github/workflows/static-checks.yml")
+        test = read("Tests/fracture/fracture_conflict_fuzz_test.cpp")
+        self.assertIn("Tests/fracture/fracture_conflict_fuzz_test.cpp", workflow)
+        for requirement in ("Seed = 0x5EED1234", "100000", "durable-write failure",
+                            "variant.injected", "ConflictChoice::Research"):
+            self.assertIn(requirement, test)
+        player = read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
+        rites = read("Source/TheUnmadeGame/Private/World/UnmadeTenfoldComponent.cpp")
+        self.assertIn("FractureModel.Restore(Previous);", player)
+        self.assertIn("Player->RefundRealityStrain(Power.cost);", rites)
+        self.assertIn("Confluence.Restore(PriorConfluence);", rites)
+
 if __name__ == "__main__":
     unittest.main()

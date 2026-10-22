@@ -206,6 +206,10 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/fracture/fracture_core_test.cpp -o /tmp/unmade-fracture-test
           /tmp/unmade-fracture-test
+      - name: Stress fracture and conflict rollback invariants
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/fracture/fracture_conflict_fuzz_test.cpp -o /tmp/unmade-fracture-conflict-fuzz-test
+          /tmp/unmade-fracture-conflict-fuzz-test
       - name: Compile and test completely offline NPC decision rules
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/npc/adaptive_npc_test.cpp -o /tmp/unmade-npc-test

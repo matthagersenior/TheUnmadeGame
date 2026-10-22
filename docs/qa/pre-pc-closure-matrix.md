@@ -60,4 +60,10 @@
 
 For each domain, require **source identifier → input conditions → deterministic output → saved consequence → test link → engine playtest to run later**. Passing native tests closes *only* the source column. 
 
+### Strain, Rewrite and conflict rollback stress — 22 October
+
+`Tests/fracture/fracture_conflict_fuzz_test.cpp` runs 100,000 deterministic seeded transitions (`0x5EED1234`) across Glimpse, Fold, Rewrite, strain spend/recovery, environmental strain, conflict choices, and supply pickup/delivery. It checks strain bounds, supported Rewrite outcomes, one-time conflict decisions, monotonic supply delivery, and save snapshot round trips. Successful Rewrite transitions are immediately rolled back to the exact pre-commit snapshot to model a failed durable write; malformed restores must leave the current snapshot unchanged. A structural source test also checks that the actual Unreal Rewrite and rite handlers restore fracture, rite, confluence and paid Strain state after persistence failure. This closes portable stress and source-wiring evidence only; disk failure injection and engine behavior remain PC acceptance work.
+
+**Next:** multi-NPC contradictory firsthand/hearsay paths.
+
 Related: [current pre-PC readiness](pre-pc-readiness.md), [v21 parity floor](gameplay-parity-v21.md), [vertical-slice status](vertical-slice-status.md), [campaign specification](../design/unanswered-road-main-campaign.md).
