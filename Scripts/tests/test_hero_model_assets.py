@@ -13,6 +13,8 @@ class HeroModels(unittest.TestCase):
    self.assertIn(anchor,source)
   self.assertNotIn("SaveGameToSlot",source)
   self.assertNotIn("GiveReward",source)
+  for detail in ("eye_socket","eye_iris","eye_pupil","eye_glint"):
+   self.assertIn("k.orb('"+detail+"'",source)
   pack=json.loads((ROOT/"Authoring/world_content_pack.json").read_text())
   self.assertEqual(len(pack["npcs"]),18)
   self.assertEqual(len(pack["realms"]),9)
@@ -47,6 +49,10 @@ class HeroModels(unittest.TestCase):
     self.assertEqual(len(loaded.geometry),record["parts"])
     self.assertEqual(sum(len(v.faces) for v in loaded.geometry.values()),record["triangles"])
     self.assertTrue(all(g.is_volume or g.faces.shape[0]>0 for g in loaded.geometry.values()))
+    if record["category"]=="Creature" and record["stable_id"]!="creature:KilnWisp":
+     names=tuple(loaded.geometry)
+     for detail in ("eye_socket","eye_iris","eye_pupil","eye_glint"):
+      self.assertTrue(any(detail in name for name in names),(record["stable_id"],detail))
    verified=builder.build_all(ROOT,out,True)
    self.assertEqual(verified,ledger)
  def test_manifest_tamper_is_refused(self):

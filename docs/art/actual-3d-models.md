@@ -29,6 +29,10 @@ The unique-route version inadvertently replaced some earlier housing clusters wi
 
 The manifest records the exact generated `building_shells` and `district_count` and the public 3D viewer shows them. `Scripts/tests/test_distinct_realm_city_layouts.py` now fails if a future art pass deletes the neighborhood fabric or substitutes only sparse landmarks. Overlap clearance, physical entrance access, real occupancy and final playability must still be assessed in Unreal.
 
+### Creature face detail pass
+
+The eleven creatures with eyes now use four independently named geometric layers: a dark socket, colored iris, forward pupil and small light-catching glint. The added parts remain vertex-colored GLB geometry, with no external textures, shared creature placeholder, or changes to enemy behavior. The 50-model workflow checks the exported components in each generated creature GLB. KilnWisp retains its established faceless coal-and-flame silhouette. These additions improve the source-authored visual references; they are not rigged or Unreal-rendered models.
+
 ### Import truth and next art pass
 
 The models use **meters, Y up, positive Z forward** in glTF. Unreal coordinates are **centimeters, Z up**; use verified import conversion. All nodes are **static mesh objects**, including the individually named NPCs. They do **not** yet include skeletal joints, skinning, cloth simulation, blendshapes, authored collision, bone-weighting, texture atlases, normal map baking or generated Unreal navmeshes.
