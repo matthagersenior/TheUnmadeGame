@@ -69,6 +69,16 @@ function focusDistrict(location){
  controls.update();
  spin=false;$('spin').classList.remove('active');
 }
+function focusStreet(location){
+ if(!current||!Array.isArray(location)||location.length!==3)return;
+ // Model viewer perspective, not verified player navigation. In real Unreal
+ // levels this would require collision, floor alignment, and path testing.
+ const target=new THREE.Vector3(location[0],location[1]+1.65,location[2]).add(current.position);
+ camera.position.copy(target).add(new THREE.Vector3(.7,.45,6.2));
+ controls.target.copy(target);controls.update();
+ spin=false;$('spin').classList.remove('active');
+ $('state').textContent='Street-height concept view · not Unreal gameplay';
+}
 function setDistrictControls(asset){
  const bar=$('districtfocus');
  bar.replaceChildren();
@@ -84,6 +94,12 @@ function setDistrictControls(asset){
   b.title='Focus on actual source-modeled district '+(i+1);
   b.onclick=()=>{focusDistrict(v);bar.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));};
   bar.appendChild(b);
+  const street=document.createElement('button');street.type='button';
+  street.textContent='Street view '+(i+1);
+  street.title='Eye-height model viewer perspective, not verified player navigation';
+  street.setAttribute('aria-label','Street-height view of district '+(i+1));
+  street.onclick=()=>{focusStreet(v);bar.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===street));};
+  bar.appendChild(street);
  });
  if(Array.isArray(asset.hero_focus)&&asset.hero_focus.length===3){
   const hero=document.createElement('button');hero.type='button';
