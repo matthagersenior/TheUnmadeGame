@@ -9,6 +9,7 @@ on:
       - 'Authoring/world_content_pack.json'
       - 'Scripts/tests/test_distinct_realm_city_layouts.py'
       - 'Scripts/tests/test_neighborhood_quality.py'
+      - 'Scripts/tests/test_bellwold_hero_pbr.py'
       - '.github/workflows/pages.yml'
   pull_request:
     paths:
@@ -44,6 +45,7 @@ jobs:
           python Scripts/build_hero_models.py --out-dir site/dist/models --verify-output
           python -m unittest discover -s Scripts/tests -p test_distinct_realm_city_layouts.py -v
           python -m unittest discover -s Scripts/tests -p test_neighborhood_quality.py -v
+          python -m unittest discover -s Scripts/tests -p test_bellwold_hero_pbr.py -v
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
