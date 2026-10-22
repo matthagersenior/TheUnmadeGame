@@ -50,6 +50,13 @@ class BellwoldHeroPBRTests(unittest.TestCase):
   self.assertGreaterEqual(len(textured),18)
   self.assertTrue(any(g.visual.material.normalTexture is not None for g in textured))
 
+ def test_gallery_exposes_lighting_presets_and_bell_yoke_focus(self):
+  text=(ROOT/"site/real-models.html").read_text(encoding="utf-8")
+  self.assertIn('id="lighting"',text)
+  self.assertIn("applyLighting(",text)
+  self.assertIn("Empty bell yoke",text)
+  self.assertIn('id="pbr"',text)
+
  def test_other_cities_remain_unmodified_by_hero_material(self):
   for city in ("Paperhaven","Saltwake","Orravane"):
    geometry=builder.build_city_environment(city).scene.geometry
