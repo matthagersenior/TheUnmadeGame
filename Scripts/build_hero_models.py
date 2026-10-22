@@ -675,6 +675,7 @@ def _dwelling(k,city,idx,x,z,base,trim,light):
 
  _architecture_finish(k,city,idx,x,y,z,w,d,h,base,trim,light)
  _district_surface().finish_dwelling(k,city,idx,x,y,z,w,h,d)
+ return y
 
 
 def _sculpted_pitch(k,name,x,y,z,w,d,rise,material):
@@ -962,6 +963,18 @@ def _district_surface():
   _DISTRICT_SURFACE_MODULE=module
  return _DISTRICT_SURFACE_MODULE
 
+_TERRAIN_JOINERY_MODULE=None
+def _terrain_joinery():
+ global _TERRAIN_JOINERY_MODULE
+ if _TERRAIN_JOINERY_MODULE is None:
+  import importlib.util
+  source=Path(__file__).with_name('terrain_street_joinery.py')
+  spec=importlib.util.spec_from_file_location('unmade_terrain_street_joinery',source)
+  module=importlib.util.module_from_spec(spec)
+  spec.loader.exec_module(module)
+  _TERRAIN_JOINERY_MODULE=module
+ return _TERRAIN_JOINERY_MODULE
+
 def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
  spurs=[];positions=district_house_positions(plan);index=0
  for district,(cx,cz,count,heading) in enumerate(plan):
@@ -979,7 +992,10 @@ def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
   _streetlife(k,city,district,cx,cz,trim,light)
   for j in range(count):
    x,z=positions[index]
-   _dwelling(k,city,index,x,z,base,trim,light)
+   house_y=_dwelling(k,city,index,x,z,base,trim,light)
+   width=2.25+.24*(index%3);depth=2.20+.28*(index%2)
+   _terrain_joinery().join_house_to_relief(k,city,index,x,house_y,z,width,depth,
+       district,cx,cz,floor_y,_district_surface().terrain_surface_height)
    index+=1
  _road_mesh(k,realm,spurs,"neighborhood",base,light)
 
@@ -1092,7 +1108,9 @@ def build_all(root=ROOT,out=None,verify=False):
   else:hero_label,hero_focus='',[]
   textured_roofs=sum('_district_pbr_pitched_roof_' in key for key in k.scene.geometry)
   sculpted_districts=sum('_district_terrain_relief_' in key for key in k.scene.geometry)
-  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,textured_roofs=textured_roofs,sculpted_districts=sculpted_districts,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
+  grounded_homes=sum('_terrain_joinery_support_' in key for key in k.scene.geometry)
+  graded_walkways=sum('_terrain_joinery_walkway_' in key for key in k.scene.geometry)
+  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,textured_roofs=textured_roofs,sculpted_districts=sculpted_districts,grounded_homes=grounded_homes,graded_walkways=graded_walkways,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
  manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0), binary static meshes, vertex colors, and locally generated source-generated realm, city, roof and terrain UV/PBR albedo and normal textures','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')
