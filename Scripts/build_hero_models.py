@@ -665,21 +665,105 @@ def _dwelling(k,city,idx,x,z,base,trim,light):
   k.box(tag+"_roof_detail_open_limestone_lintel_"+str(idx),(x,roofline,z),(w+.5,.18,d+.4),WHITE)
   k.box(tag+"_witness_bench_"+str(idx),(x-.6,y+.36,z+d*.7),(1.3,.2,.44),trim)
 
-def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
- spurs=[]
+def district_house_positions(plan):
+ """Stable non-colliding footprint centers for region and city blockouts.
+
+ These distances are exterior-shell spacing in a source-art diorama, not
+ validated pathfinding, building clearance or finished Unreal collision.
+ """
+ positions=[]
  for district,(cx,cz,count,heading) in enumerate(plan):
-  # Attach each lived-in cluster to an authored street-network endpoint.
+  for j in range(count):
+   radius=3.75+.50*((j+district)%3)
+   angle=heading+2*math.pi*j/count+(.11 if j%2 else 0)
+   for attempt in range(120):
+    # Rotating candidates around the district, then widening the local ring,
+    # preserves different street fabrics without placing buildings inside one another.
+    theta=angle+(attempt%8)*.074
+    r=radius+(attempt//8)*.42
+    x=cx+r*math.cos(theta);z=cz+r*math.sin(theta)
+    if all(math.hypot(x-px,z-pz)>=3.30 for px,pz in positions):
+     positions.append((round(x,4),round(z,4)))
+     break
+   else:raise ValueError("Not enough room for inhabited district footprint")
+ return positions
+
+def _streetlife(k,city,district,x,z,trim,light):
+ """Small source-lore civic props, not quest actors or interactive evidence."""
+ t="streetlife_"+city.lower()+"_"+str(district)+"_"
+ y=4.65 if city=="Orravane" else .12
+ k.box(t+"public_pause_seat",(x-1.4,y+.22,z+1.1),(1.75,.26,.55),trim)
+ k.box(t+"seat_support",(x-1.4,y-.01,z+1.1),(1.25,.36,.40),DARK)
+ if city in ("Bellwold","Crossings","Eillun"):
+  # A guest is sheltered before being asked for a name.
+  k.box(t+"shared_kettle_stand",(x,y+.52,z),(.96,.82,.82),trim)
+  k.orb(t+"ordinary_public_kettle",(x,y+1.05,z),(.43,.29,.40),DARK,1)
+  k.box(t+"unregistered_cup",(x+.62,y+.75,z+.32),(.19,.20,.19),WHITE)
+  if city=="Bellwold":
+   k.beam(t+"lantern_tender_staff",(x-.8,y,z-1.2),(x-.8,y+2.4,z-1.2),.07,trim)
+   k.orb(t+"stable_lantern",(x-.8,y+2.42,z-1.2),(.20,.29,.2),GOLD,1)
+  elif city=="Crossings":
+   k.box(t+"disagreeing_waystones",(x-.75,y+.50,z-1.0),(.49,.83,.42),WHITE)
+   k.box(t+"alternate_route_mark",(x-.23,y+.65,z-1.0),(.34,.35,.42),GOLD)
+  else:k.box(t+"unsigned_welcome_table",(x-.8,y+.56,z-1.0),(1.38,.22,.8),WHITE)
+ elif city=="Paperhaven":
+  k.box(t+"chalk_public_index",(x,y+1.1,z),(1.95,1.9,.35),WHITE)
+  for a in range(3):
+   k.box(t+"ledger_leaf_"+str(a),(x-.62+a*.59,y+.8,z+.2),(.35,.48,.04),trim)
+  k.box(t+"ink_and_public_papers",(x+.9,y+.28,z+1.1),(1.2,.24,.8),GOLD)
+ elif city=="Saltwake":
+  k.box(t+"dry_water_catcher",(x,y+.35,z),(1.75,.55,1.28),trim)
+  k.box(t+"public_rain_basin",(x,y+.67,z),(1.58,.14,1.13),light)
+  for side in (-1,1):
+   k.ring(t+"coiled_rope_"+str(side),(x+side*.85,y+.20,z-.95),.30,.08,WHITE,plane="xz")
+ elif city=="Cinderhold":
+  k.box(t+"ash_sieve",(x,y+.55,z),(1.5,.15,1.1),trim)
+  k.box(t+"heat_transfer_channel",(x+.9,y+.13,z-1),(1.3,.20,.35),GOLD)
+  k.taper(t+"communal_braided_furnace_flue",(x-.8,y,z-.4),(x-.6,y+2.1,z-.4),.33,.14,DARK)
+ elif city=="Drevlach":
+  k.box(t+"double_read_debt_slate",(x,y+1.1,z),(1.8,1.9,.14),trim)
+  k.box(t+"public_accounting_table",(x+.8,y+.56,z+.94),(1.44,.16,.9),WHITE)
+  k.ring(t+"tide_clock_marker",(x-.9,y+1.55,z),.55,.07,GOLD,plane="xy")
+ elif city=="Orravane":
+  k.beam(t+"restate_support_note_rail",(x-1.0,y,z),(x+1.0,y+.55,z),.13,WHITE)
+  k.box(t+"rest_platform",(x,y+.2,z),(2.6,.21,1.85),trim)
+  k.ring(t+"choir_counterweight",(x,y-1.2,z),.52,.09,GOLD,plane="xz")
+ elif city=="Vathless":
+  k.box(t+"quarry_safety_brace",(x,y+.55,z),(1.8,.34,.65),WHITE)
+  k.beam(t+"supporting_rail",(x-1,y,z-1),(x+1.2,y+1.4,z-1),.16,trim)
+  k.box(t+"family_stone_unfilled_seam",(x+.4,y+.9,z+.8),(1.25,1.0,.18),GOLD)
+ elif city=="Tharniv":
+  k.taper(t+"grafted_public_petition_root",(x,y,z),(x-.1,y+2.7,z),.47,.18,trim)
+  for j in range(3):
+   a=2*math.pi*j/3
+   k.beam(t+"petition_branch_"+str(j),(x,y+2.0,z),
+    (x+1.8*math.cos(a),y+2.7,z+1.6*math.sin(a)),.09,WHITE)
+  k.box(t+"empty_public_witness_seat",(x+1,y+.45,z+1.1),(1.0,.4,.8),GOLD)
+ elif city=="Auvren":
+  k.box(t+"witness_threshold_base",(x,y+.3,z),(2.35,.53,1.9),WHITE)
+  for side in (-1,1):
+   k.beam(t+"paired_different_thresholds_"+str(side),
+    (x+side*.90,y,z),(x+side*.90,y+2.4,z),.16,trim)
+  k.box(t+"witness_record_without_answer",(x,y+2.55,z),(2.1,.21,.41),GOLD)
+
+def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
+ spurs=[];positions=district_house_positions(plan);index=0
+ for district,(cx,cz,count,heading) in enumerate(plan):
+  # All homes sit within a visual district foundation; a separate neighborhood
+  # spur joins the authored approach road. This does not promise Unreal traversal.
+  floor_y=4.12 if city=="Orravane" else -.42
+  k.box("district_ground_"+city.lower()+"_"+str(district),
+        (cx,floor_y,cz),(14.2,.25,14.2),base if district%2 else trim)
   endpoints=[p for route in roads for p in (route[0],route[-1])]
   connection=min(endpoints,key=lambda p:(p[0]-cx)**2+(p[1]-cz)**2)
   if math.hypot(connection[0]-cx,connection[1]-cz)<.1:
    spurs.append(((cx,cz),(cx+3*math.cos(heading),cz+3*math.sin(heading))))
   else:spurs.append((connection,(cx,cz)))
+  _streetlife(k,city,district,cx,cz,trim,light)
   for j in range(count):
-   idx=sum(row[2] for row in plan[:district])+j
-   angle=heading+(j/count)*2*math.pi+(.11 if j%2 else 0)
-   rad=3.75+.5*((j+district)%3)
-   x=cx+rad*math.cos(angle);z=cz+rad*math.sin(angle)
-   _dwelling(k,city,idx,x,z,base,trim,light)
+   x,z=positions[index]
+   _dwelling(k,city,index,x,z,base,trim,light)
+   index+=1
  _road_mesh(k,realm,spurs,"neighborhood",base,light)
 
 def _regional_district_plan(realm):
@@ -748,7 +832,8 @@ def build_all(root=ROOT,out=None,verify=False):
   if info['triangles']<150 or info['parts']<({'Creature':5,'NPC':10,'Environment':15,'City':23}[group]):raise ValueError('Too little genuine model geometry: '+name)
   building_shells=sum('_habitation_shell_' in name for name in k.scene.geometry)
   district_count=(len(CITY_DISTRICTS[stable.removeprefix('city:')]) if group=='City' else len(_regional_district_plan(realm)) if group=='Environment' else 0)
-  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
+  district_views=([[round(float(x),3),round(4.9 if realm=='SkyBelow' else 1.3,3),round(float(z),3)] for x,z,_,_ in (CITY_DISTRICTS[stable.removeprefix('city:')] if group=='City' else _regional_district_plan(realm))] if group in ('City','Environment') else [])
+  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
  manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0) embedded binary meshes and vertex colors','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')
