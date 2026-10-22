@@ -568,3 +568,7 @@ The nine realms' aftermath locations, physical mechanism interactions, named tes
 ## 2026-10-22 — Campaign journal source fidelity (source-only)
 
 The campaign journal's existing act titles, questions, objectives, physical leads and boss-access boundaries now have exact native regression snapshots. Older schema-1 saves reconstruct this read-only guidance from the existing Crossings testimony, completed first chapters and final-journey state; no journal save field, lore answer, choice, reward or realm completion is added. Realm bits outside the nine established realms are ignored. This is a source compatibility and text-fidelity change, not a new canon event. Unreal deserialization and rendered journal behavior remain unverified.
+
+## 2026-10-22 — Realm skyline identities (source-only)
+
+The nine existing frontier silhouette triplets now use distinct bounded per-piece orientations when spawned. The transforms only alter presentation of existing primitive meshes; realm names, landmarks, story motifs, choices, rewards, traversal, collision, save state and mystery status are unchanged. Native profile checks pass; Unreal rendering and distance readability remain unverified. No illustrated edition was regenerated.

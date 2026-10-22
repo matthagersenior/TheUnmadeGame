@@ -490,3 +490,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Added exact native snapshots for campaign journal titles, questions, objectives, lead choices and boss access across each act transition.
 - Reconstructs guidance from existing schema-1 evidence and final-journey fields without adding a journal save field or writing a migration.
 - No canon event, ending, mystery answer, quest reward or completion state changed. Unreal rendering and disk deserialization remain unverified; the historical v20 illustrated package was not regenerated.
+
+## 2026-10-22 — Realm skyline identity profiles
+
+- Added nine source-authored three-piece orientation profiles to distinguish the existing realm skyline silhouettes.
+- Kept decorative meshes noncolliding and outside overlap, navigation and gameplay state.
+- No canon facts, IDs, rewards, save fields or illustrated assets changed. Native checks pass; Unreal rendering remains unverified.

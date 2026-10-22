@@ -9,6 +9,8 @@ class NativeRealmVisuals(unittest.TestCase):
         self.assertIn('#include "World/UnmadeProceduralArtRules.h"',cpp)
         self.assertIn("RealmVisualDesigns[a]",cpp)
         self.assertIn("Design.silhouette[j]",cpp)
+        self.assertIn("RealmVisualRotations[a][j]",cpp)
+        self.assertIn("FRotator(Rotation.pitch,Rotation.yaw,Rotation.roll)",cpp)
         self.assertIn("UnmadeVisualGuide.%d.%d",cpp)
         self.assertIn("FVector(Piece.dx,Piece.dy,Piece.dz)",cpp)
         self.assertIn("GetWorld()->SpawnActor<AStaticMeshActor>",cpp)
@@ -26,4 +28,6 @@ class NativeRealmVisuals(unittest.TestCase):
         self.assertNotIn("GiveToOrrel",header)
         self.assertIn("Tests/world/realm_visual_guides_test.cpp",
                       source(".github/workflows/static-checks.yml"))
+        native=source("Tests/world/realm_visual_guides_test.cpp")
+        self.assertIn("orientations.size()==9",native)
 if __name__=="__main__":unittest.main()
