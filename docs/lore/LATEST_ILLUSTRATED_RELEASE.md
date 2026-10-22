@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**22 October 2026 source-only campaign journal update:** Exact act text and lead choices are regression-tested, and prior schema-1 story progress reconstructs the read-only journal without new save fields. This adds no canon events or answers. It does **not** issue a new illustrated edition: the v20 PDFs, DOCX files, atlas, ZIP and recorded digests remain historical and unchanged. Unreal save deserialization and journal rendering remain unverified.
+
 **21 October 2026 source-only recovery handoff:** Safe backup cloning into a genuinely unused profile is wired to a distinct two-press Session action. No illustrated v20 release file, historical checksum, Unreal runtime validation or verified gameplay package has changed.
 
 

@@ -40,6 +40,10 @@
 
 **Important limits:** a synthetic chapter-completion receipt is not proof that an NPC/portal can actually complete that quest in Unreal. It verifies the consequences of bona fide events, not level geometry or save files from an installed game. Exact prose/localization snapshot coverage is a *subsequent* source task, not silently claimed done.
 
+### Campaign journal snapshots and schema-1 restoration — 22 October
+
+`RestoreRoadEvidence` reconstructs the journal from existing opening testimony, first-chapter receipts and final-journey state. It masks out bits beyond the nine canonical realms and adds no journal fields or save migration. The native campaign test locks the exact title, question, objective, branch choices and boss-access state across the opening, each route split, Auvren, the second boss form and post-ending return. It also covers older records with only Crossings testimony, realm progress, or final-journey progress. These are portable source tests; Unreal's actual deserialization and in-game journal rendering remain engine acceptance work.
+
 ## Branching rules we will not trade away
 
 1. Never require an optional Echo, guardian kill, confluence, all-landmarks trophy or mythic forge for Nhal-Vey.
@@ -52,7 +56,7 @@
 
 ## Recommended remaining pre-PC order
 
-**Next:** (1) authoritative journal/golden-text and migrated-save test coverage; (2) Strain/Rewrite rollback and conflict fuzz; (3) multi-NPC contradiction paths; (4) economy stress/softlock simulation; (5) role/counterplay and boss pacing; (6) UI navigation/caption/rebinding specifications; (7) immutable IDs and data import parity; (8) final status/README and slice acceptance.
+**Next:** (1) Strain/Rewrite rollback and conflict fuzz; (2) multi-NPC contradiction paths; (3) economy stress/softlock simulation; (4) role/counterplay and boss pacing; (5) UI navigation/caption/rebinding specifications; (6) immutable IDs and data import parity; (7) final status/README and slice acceptance.
 
 For each domain, require **source identifier → input conditions → deterministic output → saved consequence → test link → engine playtest to run later**. Passing native tests closes *only* the source column. 
 

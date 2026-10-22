@@ -564,3 +564,7 @@ The nine personal story definitions now originate from the Codex with all their 
 ## 2026-10-19 — Aftermath outcomes must never collapse into one narrative
 
 The nine realms' aftermath locations, physical mechanism interactions, named testimony sources, separate care/public-truth evidence, two local outcomes and aftershocks are now source-generated from Codex. The alternatives are distinct and persistent; a witnessed resolution is not interchangeable with a rumor, and no site is declared cleared merely because a Codex record exists. The original three source-backed footholds remain distinct from six unverified Unreal realm levels. The canonical world maintains the player's right to choose without an automatically classified moral winner.
+
+## 2026-10-22 — Campaign journal source fidelity (source-only)
+
+The campaign journal's existing act titles, questions, objectives, physical leads and boss-access boundaries now have exact native regression snapshots. Older schema-1 saves reconstruct this read-only guidance from the existing Crossings testimony, completed first chapters and final-journey state; no journal save field, lore answer, choice, reward or realm completion is added. Realm bits outside the nine established realms are ignored. This is a source compatibility and text-fidelity change, not a new canon event. Unreal deserialization and rendered journal behavior remain unverified.

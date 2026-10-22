@@ -49,6 +49,19 @@ class UnansweredRoadWiring(unittest.TestCase):
         self.assertIn("if(!state.openingWitnessed) return relic;",rules)
         self.assertIn("return std::max(relic,upper?4:3);",rules)
         self.assertNotIn("Gated by actually earned relics",gates)
+    def test_schema_one_journal_rebuilds_from_existing_save_authorities(self):
+        rules=src("Source/TheUnmadeGame/Public/World/UnmadeCampaignSpineRules.h")
+        adapter=src("Source/TheUnmadeGame/Private/World/UnmadeCampaignWorld.cpp")
+        save=src("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
+        test=src("Tests/story/unanswered_road_test.cpp")
+        self.assertIn("RestoreRoadEvidence(OpeningWitnessed,FirstStories",adapter)
+        self.assertIn("firstStories&allStories",rules)
+        self.assertIn("openingWitnessed||out.firstStories!=0||finalAct!=0",rules)
+        self.assertIn("int32 SchemaVersion = 1",save)
+        self.assertNotIn("RoadEvidenceSnapshot",save)
+        self.assertIn("TestSchemaOneJournalRestoration",test)
+        self.assertIn("TestJournalGoldens",test)
+        self.assertIn("actual.objective,objective",test)
     def test_tomorrow_debt_mastery_name_matches_inventory_and_codex(self):
         import json
         rite=src("Source/TheUnmadeGame/Public/World/UnmadeTenfoldChronicle.h")

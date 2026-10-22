@@ -26,6 +26,20 @@ struct RoadEvidence {
     std::uint16_t firstStories=0;  // 9-bit mask of REAL completed first chapters
     int finalAct=0; // from FinalJourney only
 };
+// Reconstruct the journal from fields that already existed in schema-1
+// saves. Older records have no journal snapshot, so completion receipts and
+// final-journey progress must remain authoritative after loading them.
+inline RoadEvidence RestoreRoadEvidence(bool openingWitnessed,
+                                       std::uint16_t firstStories,
+                                       int finalAct) noexcept {
+    constexpr std::uint16_t allStories=static_cast<std::uint16_t>(
+        (1u<<static_cast<int>(Realm::Count))-1u);
+    RoadEvidence out;
+    out.firstStories=static_cast<std::uint16_t>(firstStories&allStories);
+    out.openingWitnessed=openingWitnessed||out.firstStories!=0||finalAct!=0;
+    out.finalAct=finalAct;
+    return out;
+}
 struct RoadGuidance {
     RoadAct act=RoadAct::Opening;
     const char* title="";
