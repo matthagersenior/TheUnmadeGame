@@ -109,7 +109,13 @@ class Kit:
 # Signature animals have different anatomy, appendages and locomotion cues.
 def build_creature(kind):
  k=Kit();c=PALETTE[REALMS[SPECIES.index(kind)%9]];base,trim,light=c
- def eye(x,y,z,r=.075):k.orb('sight_glass',(x,y,z),(r,r,r*.6),light,2)
+ def eye(x,y,z,r=.075):
+  # Layered, forward-facing eye geometry reads as a face at model scale and
+  # survives the GLB's vertex-color material path without texture dependence.
+  k.orb('eye_socket',(x,y,z-r*.34),(r*1.38,r*1.28,r*.54),BLACK,2)
+  k.orb('eye_iris',(x,y,z),(r,r,r*.62),trim,2)
+  k.orb('eye_pupil',(x,y,z+r*.34),(r*.47,r*.54,r*.36),light,2)
+  k.orb('eye_glint',(x-r*.20,y+r*.24,z+r*.56),(r*.18,r*.20,r*.13),WHITE,1)
  def spine_row(start,n,sep,height=.45):
   for i in range(n):
    z=start+i*sep
@@ -137,6 +143,7 @@ def build_creature(kind):
     k.box('split_charcoal_jaw',(side*.25,bodyY-.15,faceZ+.30),(.43,.13,.65),DARK)
     for t in range(4):k.taper('molten_tooth',(side*(.09+t*.11),bodyY-.09,faceZ+.62),(side*(.09+t*.11),bodyY+.13,faceZ+.67),.058,.001,WHITE,7)
    for z in (-.50,-.13,.26):k.taper('ash_fin',(0,bodyY+.33,z),(0,bodyY+.88,z-.15),.18,.01,light)
+   spine_row(-.57,5,.25,bodyY+.36)
   if kind=='HollowHound':
    for x in (-.34,.34):
     for z in (-.44,-.18,.1,.36):k.beam('exposed_rib',(x,bodyY+.26,z),(x*.85,bodyY-.21,z+.08),.038,WHITE,7)
