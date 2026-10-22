@@ -32,6 +32,7 @@
 #include "World/UnmadeRealmResonanceRules.h"
 #include "Combat/UnmadeRealmGuardianRules.h"
 #include "Combat/UnmadeFinalEncounterRules.h"
+#include "World/UnmadeCreatureHabitatRules.h"
 #include "Story/UnmadeCommitmentRules.h"
 #include "World/UnmadeLaterHazardRules.h"
 #include "TimerManager.h"
@@ -50,6 +51,7 @@ class ADirectionalLight;
 class AUnmadeCharacter;
 class AStaticMeshActor;
 class ACameraActor;
+class APointLight;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(
     FUnmadeBesDirectedBeat, FName, SpeakerId,
@@ -131,6 +133,8 @@ public:
     bool IsCinderholdVentActive() const;
     void PlayCinderholdScene(int32 Scene);
     bool TryFieldSurveyInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryHabitatInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    void RefreshHabitatReactions(const FVector& PlayerPosition);
     bool TryMaterialInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryLivingTradeInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     FString GetLivingEconomyResidentLine(FName StableId) const;
@@ -310,6 +314,14 @@ private:
     struct DeferredBlock {FVector Center,Scale;FName Label;};
     TArray<DeferredBlock> DeferredBlocks;
     TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>> RuntimeEnemies;
+    // Transient and non-canonical, independent of SaveGame quest evidence.
+    TArray<TWeakObjectPtr<AStaticMeshActor>> HabitatShutters;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> HabitatInspectSigns;
+    TArray<TWeakObjectPtr<APointLight>> HabitatResponseLights;
+    std::array<bool,6> HabitatInspected{};
+    std::array<int,6> HabitatLastCue{{-1,-1,-1,-1,-1,-1}};
+    double NextHabitatCueTick=0.0;
+
     TArray<TWeakObjectPtr<class AUnmadeNpcCharacter>> RuntimePeople;
     TArray<TWeakObjectPtr<class ATextRenderActor>> RuntimeSigns;
     TMap<TWeakObjectPtr<class ATextRenderActor>,FString> SignOriginal,SignFormatted;
