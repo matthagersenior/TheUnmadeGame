@@ -769,7 +769,10 @@ def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
 def _regional_district_plan(realm):
  # Smaller previews remain inhabited, while city-level views show all four
  # districts at higher building density and their own civic micro-topology.
- roads=REALM_PATHS[realm];points=[route[0] for route in roads[:3]]
+ roads=REALM_PATHS[realm]
+ # The orchard is a radial road system: all routes BEGIN at the public empty seat.
+ # District viewpoints belong at different branch destinations, not atop each other.
+ points=[route[-1] if realm=='OrchardOfKings' else route[0] for route in roads[:3]]
  if len(points)<3:raise ValueError("Three independent regional approaches required")
  return tuple((float(x)*1.22,float(z)*1.18,4,(i*.81+.27)) for i,(x,z) in enumerate(points))
 
