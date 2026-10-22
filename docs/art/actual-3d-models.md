@@ -31,7 +31,7 @@ The manifest records the exact generated `building_shells` and `district_count` 
 
 ### Creature face detail pass
 
-The eleven creatures with eyes now use four independently named geometric layers: a dark socket, colored iris, forward pupil and small light-catching glint. The added parts remain vertex-colored GLB geometry, with no external textures, shared creature placeholder, or changes to enemy behavior. The 50-model workflow checks the exported components in each generated creature GLB. KilnWisp retains its established faceless coal-and-flame silhouette. These additions improve the source-authored visual references; they are not rigged or Unreal-rendered models.
+The ten creatures with eyes now use four independently named geometric layers: a dark socket, colored iris, forward pupil and small light-catching glint. The added parts remain vertex-colored GLB geometry, with no external textures, shared creature placeholder, or changes to enemy behavior. The 50-model workflow checks the exported components in each generated eye-bearing creature GLB. GriefLantern retains its established lit-soul-in-a-cage design, and KilnWisp retains its faceless coal-and-flame silhouette. These additions improve the source-authored visual references; they are not rigged or Unreal-rendered models.
 
 ### Import truth and next art pass
 
