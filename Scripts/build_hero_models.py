@@ -671,7 +671,9 @@ def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
   # Attach each lived-in cluster to an authored street-network endpoint.
   endpoints=[p for route in roads for p in (route[0],route[-1])]
   connection=min(endpoints,key=lambda p:(p[0]-cx)**2+(p[1]-cz)**2)
-  spurs.append((connection,(cx,cz)))
+  if math.hypot(connection[0]-cx,connection[1]-cz)<.1:
+   spurs.append(((cx,cz),(cx+3*math.cos(heading),cz+3*math.sin(heading))))
+  else:spurs.append((connection,(cx,cz)))
   for j in range(count):
    idx=sum(row[2] for row in plan[:district])+j
    angle=heading+(j/count)*2*math.pi+(.11 if j%2 else 0)
