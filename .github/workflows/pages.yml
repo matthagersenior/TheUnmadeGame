@@ -48,6 +48,8 @@ jobs:
         run: python Scripts/publishing/build_public_site.py
       - name: Generate real source-authored realm, creature and resident meshes
         run: python Scripts/build_hero_models.py --out-dir site/dist/models
+      - name: Verify browser habitat interaction prototype and JavaScript syntax
+        run: python -m unittest discover -s Scripts/tests -p test_habitat_web_prototype.py -v
       - name: Validate published artifact and all 50 authentic GLB assets
         run: |
           python Scripts/publishing/build_public_site.py --check
