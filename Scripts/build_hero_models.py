@@ -562,12 +562,138 @@ def _city_signature(k,city,base,trim,light):
   for x,z in ((-4,-5),(4,5),(0,-9)):
    k.box("identity_auvren_public_testimony_stone",(x,1.2,z),(2.5,2.4,.5),light)
 
+# Districts are independently located within each town rather than repeating
+# a square of four buildings around the same axial road. Tuples are
+# (district x, district z, distinct habitable buildings, local frontage angle).
+# These are deterministic concept-art placements, not canonical map coordinates.
+CITY_DISTRICTS={
+ "Crossings":((-14,-9,5,.18),(-4,11,5,1.45),(11,-12,5,.9),(15,8,5,2.25)),
+ "Bellwold":((-11,-9,5,.28),(-10,8,5,2.00),(6,10,5,.90),(13,-8,5,2.65)),
+ "Paperhaven":((-12,-10,5,.02),(-6,11,5,.56),(5,-7,5,1.24),(13,8,5,2.33)),
+ "Saltwake":((-13,9,5,1.42),(-11,-8,5,1.58),(2,-12,5,.22),(12,6,5,2.02)),
+ "Cinderhold":((-11,0,5,.2),(-5,-11,5,.97),(9,-8,5,1.8),(10,10,5,2.48)),
+ "Drevlach":((-12,-8,5,1.58),(-12,9,5,1.4),(1,-11,5,1.25),(12,8,5,1.87)),
+ "Orravane":((-12,5,5,2.3),(-4,-11,5,.85),(8,8,5,1.02),(13,-7,5,2.67)),
+ "Vathless":((-13,-10,5,.30),(-9,5,5,.99),(4,-7,5,1.68),(12,10,5,2.48)),
+ "Eillun":((-12,8,5,2.8),(-8,-9,5,1.66),(7,3,5,2.0),(13,-11,5,.12)),
+ "Tharniv":((-11,10,5,1.9),(-12,-8,5,.25),(8,-10,5,2.2),(12,9,5,3.02)),
+ "Auvren":((-11,-8,5,.52),(-12,11,5,1.96),(7,7,5,2.45),(12,-9,5,.78))
+}
+REGION_HABITAT={
+ "ThreefoldReach":"Crossings","WidowedRain":"Saltwake","HearthBeneath":"Cinderhold",
+ "TidalLedger":"Drevlach","SkyBelow":"Orravane","CinderSpine":"Vathless",
+ "HundredUnlived":"Eillun","OrchardOfKings":"Tharniv","FirstAbsence":"Auvren"
+}
+
+def _dwelling(k,city,idx,x,z,base,trim,light):
+ # Materials, floors, and structure change according to the settlement's
+ # trade and social use. Every house has a real independent body and roof.
+ # No house position is a claim about playable navigation.
+ offset=(idx*7)%5
+ w=2.25+.24*(idx%3);h=2.3+.36*(idx%4);d=2.20+.28*(idx%2)
+ y=0.0
+ if city=="Orravane":y=4.6+1.55*(idx%3)
+ elif city=="Vathless":y=.55*(idx%4)
+ elif city=="Auvren":y=.50*(idx%3)
+ elif city=="Cinderhold":y=-.28
+ tag="fabric_"+city.lower()
+ k.box(tag+"_ground_pad_"+str(idx),(x,y-.31,z),(w+1.1,.25,d+1.0),base)
+ if city=="Tharniv":
+  k.taper(tag+"_living_root_"+str(idx),(x,y-.15,z),(x+.16,y+h+.7,z),.62,.3,base)
+  for j in range(3):
+   angle=2*math.pi*j/3+.1*idx
+   end=(x+2*math.cos(angle),y+h+2,z+2*math.sin(angle))
+   k.taper(tag+"_canopy_bough_"+str(idx),(x,y+h-.1,z),end,.19,.04,trim,8)
+  y+=.35
+ if city=="Saltwake":
+  k.box(tag+"_dry_hull_keel_"+str(idx),(x,y+.22,z),(w+.6,.32,d+.7),trim)
+  y+=.45
+ if city=="Vathless":
+  k.box(tag+"_step_bearing_stone_"+str(idx),(x,y-.12,z),(w+.45,.32,d+.32),WHITE)
+ if city=="Orravane":
+  for side in (-1,1):
+   k.beam(tag+"_suspension_tether_"+str(idx),
+     (x+side*.85,y+h,z),(x+side*1.20,y+h+4.5,z),.068,light)
+ if city=="Auvren":
+  k.box(tag+"_unmatched_threshold_"+str(idx),(x+.6,y+.72,z+d*.53),(.17,1.5,.24),WHITE)
+ k.box(tag+"_habitation_shell_"+str(idx),(x,y+h*.50,z),(w,h,d),base if idx%2 else trim)
+ door_side=(-1 if idx%2 else 1)
+ k.box(tag+"_threshold_"+str(idx),(x+door_side*.40,y+.84,z+d*.51),(.6,1.52,.09),DARK)
+ for side in (-1,1):
+  k.box(tag+"_lit_window_"+str(idx),(x+side*w*.33,y+h*.58,z+d*.515),(.31,.39,.11),light)
+ roofline=y+h+.27
+ if city in ("Crossings","Bellwold","Eillun"):
+  # Split gables make timber/refuge/overlapping houses recognizable in silhouette.
+  k.box(tag+"_roof_detail_gable_left_"+str(idx),(x-w*.25,roofline,z),(w*.57,.34,d+.48),trim)
+  k.box(tag+"_roof_detail_gable_right_"+str(idx),(x+w*.25,roofline+.18,z),(w*.60,.25,d+.47),base)
+  if city=="Bellwold":
+   k.box(tag+"_refuge_chimney_"+str(idx),(x-w*.26,roofline+.65,z-.36),(.36,1.0,.45),WHITE)
+   k.box(tag+"_shelter_lantern_"+str(idx),(x+w*.28,y+1.7,z+d*.58),(.23,.38,.18),GOLD)
+  if city=="Eillun":k.box(tag+"_consent_notice_not_name_"+str(idx),(x,y+1.8,z+d*.56),(.7,.2,.12),WHITE)
+  if city=="Crossings":k.beam(tag+"_route_knot_beam_"+str(idx),(x-1,roofline+.35,z),(x+1,roofline+.25,z),.11,GOLD)
+ elif city=="Paperhaven":
+  k.box(tag+"_roof_detail_archive_cap_"+str(idx),(x,roofline+.38,z),(w+.24,.62,d+.26),WHITE)
+  k.box(tag+"_roof_detail_ink_flue_"+str(idx),(x+.65,roofline+.95,z-.2),(.30,.72,.43),DARK)
+  for j in range(3):
+   k.box(tag+"_public_ledger_slit_"+str(idx),(x-.65+j*.65,y+1.22,z+d*.56),(.35,.11,.07),GOLD)
+ elif city=="Saltwake":
+  for side in (-1,1):
+   k.taper(tag+"_roof_detail_inverted_hull_rib_"+str(idx),
+     (x+side*(w*.57),roofline-.06,z),(x,roofline+1.15,z),.17,.045,trim)
+  k.box(tag+"_roof_detail_rain_catch_"+str(idx),(x,roofline+1.09,z),(w*.56,.16,d+.62),light)
+ elif city=="Cinderhold":
+  k.box(tag+"_roof_detail_basalt_vent_"+str(idx),(x,roofline+.22,z),(w+.3,.47,d+.2),DARK)
+  k.taper(tag+"_heat_chimney_"+str(idx),(x+.45,roofline,z),(x+.3,roofline+2.0,z),.32,.2,trim)
+  k.orb(tag+"_public_hearth_glow_"+str(idx),(x+.3,roofline+2.03,z),(.22,.18,.2),GOLD,1)
+ elif city=="Drevlach":
+  k.box(tag+"_roof_detail_lockhouse_slate_"+str(idx),(x,roofline+.18,z),(w+.3,.34,d+.34),trim)
+  k.box(tag+"_counting_ledger_table_"+str(idx),(x-.5,y+1.64,z+d*.56),(.55,.75,.13),WHITE)
+  k.beam(tag+"_tide_debt_pole_"+str(idx),(x+.7,y+.1,z+1),(x+.7,roofline+1.1,z+1),.05,GOLD)
+ elif city=="Orravane":
+  k.box(tag+"_roof_detail_hanging_terrace_"+str(idx),(x,roofline,z),(w+.9,.23,d+.65),trim)
+  k.box(tag+"_acoustic_counterweight_"+str(idx),(x,y-.7,z),(.34,.8,.37),GOLD)
+  k.beam(tag+"_bridge_anchor_"+str(idx),(x-.9,y,z-.5),(x-1.7,y-.25,z-2),.08,WHITE)
+ elif city=="Vathless":
+  k.box(tag+"_roof_detail_quarry_shelf_"+str(idx),(x,roofline+.14,z),(w+.48,.4,d+.3),trim)
+  for n in range(3):
+   k.box(tag+"_consented_family_inlay_"+str(idx),(x-.7+n*.62,y+1.35,z+d*.56),(.42,.12,.10),WHITE)
+ elif city=="Tharniv":
+  k.box(tag+"_roof_detail_petition_canopy_"+str(idx),(x,roofline+.15,z),(w+1.2,.26,d+1.0),light)
+  for n in (-1,1):
+   k.beam(tag+"_root_veranda_"+str(idx),(x+n*.9,y+.1,z+d*.52),(x+n*.8,roofline,z+d*.52),.12,base)
+ elif city=="Auvren":
+  k.box(tag+"_roof_detail_open_limestone_lintel_"+str(idx),(x,roofline,z),(w+.5,.18,d+.4),WHITE)
+  k.box(tag+"_witness_bench_"+str(idx),(x-.6,y+.36,z+d*.7),(1.3,.2,.44),trim)
+
+def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
+ spurs=[]
+ for district,(cx,cz,count,heading) in enumerate(plan):
+  # Attach each lived-in cluster to an authored street-network endpoint.
+  endpoints=[p for route in roads for p in (route[0],route[-1])]
+  connection=min(endpoints,key=lambda p:(p[0]-cx)**2+(p[1]-cz)**2)
+  spurs.append((connection,(cx,cz)))
+  for j in range(count):
+   idx=sum(row[2] for row in plan[:district])+j
+   angle=heading+(j/count)*2*math.pi+(.11 if j%2 else 0)
+   rad=3.75+.5*((j+district)%3)
+   x=cx+rad*math.cos(angle);z=cz+rad*math.sin(angle)
+   _dwelling(k,city,idx,x,z,base,trim,light)
+ _road_mesh(k,realm,spurs,"neighborhood",base,light)
+
+def _regional_district_plan(realm):
+ # Smaller previews remain inhabited, while city-level views show all four
+ # districts at higher building density and their own civic micro-topology.
+ roads=REALM_PATHS[realm];points=[route[0] for route in roads[:3]]
+ if len(points)<3:raise ValueError("Three independent regional approaches required")
+ return tuple((float(x)*1.22,float(z)*1.18,4,(i*.81+.27)) for i,(x,z) in enumerate(points))
+
 def build_environment(realm):
  if realm not in REALM_PATHS:raise ValueError("Unknown canonical realm "+str(realm))
  k=Kit();base,trim,light=PALETTE[realm]
  _terrain(k,realm,base,trim)
  _road_mesh(k,realm,REALM_PATHS[realm],"realm",base,trim)
  _regional_signature(k,realm,base,trim,light)
+ _build_habited_districts(k,REGION_HABITAT[realm],realm,_regional_district_plan(realm),REALM_PATHS[realm],base,trim,light)
  return k
 
 def build_city_environment(city):
@@ -578,6 +704,7 @@ def build_city_environment(city):
  _road_mesh(k,realm,spec["routes"],"city",base,light)
  _regional_signature(k,realm,base,trim,light)
  _city_signature(k,city,base,trim,light)
+ _build_habited_districts(k,city,realm,CITY_DISTRICTS[city],spec['routes'],base,trim,light)
  return k
 
 # Source of truth: exact canonical roster from existing Authoring file, with
