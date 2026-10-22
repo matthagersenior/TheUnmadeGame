@@ -76,6 +76,15 @@ class NeighborhoodQuality(unittest.TestCase):
    self.assertEqual(sum("_habitation_shell_" in n for n in names),20,city)
    self.assertTrue(any("_nonrectangular_roof_" in n for n in names),city+" uses flat blocks for every roof")
 
+ def test_roof_materials_have_source_generated_light_and_wear_variation(self):
+  import numpy as np
+  for city in builder.CITY_SPECS:
+   scene=builder.build_city_environment(city).scene
+   roofs=[mesh for name,mesh in scene.geometry.items() if "_nonrectangular_roof_" in name]
+   self.assertEqual(len(roofs),20,city)
+   self.assertTrue(all(len(np.unique(mesh.visual.vertex_colors[:,:3],axis=0))>=3
+     for mesh in roofs),city+" still has flat, single-color roof geometry")
+
  def test_public_viewer_has_district_focus_controls_and_valid_javascript(self):
   import re, shutil, subprocess, tempfile
   html=(ROOT/"site/real-models.html").read_text()
