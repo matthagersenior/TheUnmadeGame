@@ -14,6 +14,9 @@ class HabitatWiring(unittest.TestCase):
   self.assertIn("SetCollisionEnabled",ENC)
   self.assertIn("HabitatInspectSigns",ENC)
   self.assertIn("CreatureKind",ENC)
+  self.assertIn("ConfigureHabitatHome(",ENC)
+  enemy_header=(ROOT/"Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h").read_text()
+  self.assertIn("TerritoryHome=Forecourt",enemy_header)
  def test_reactive_environment_and_physical_interaction_in_real_source(self):
   for name in ("TryHabitatInteraction","RefreshHabitatReactions"):
    self.assertIn(name,HEAD)
