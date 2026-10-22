@@ -33,6 +33,10 @@ The manifest records the exact generated `building_shells` and `district_count` 
 
 The ten creatures with eyes now use four independently named geometric layers: a dark socket, colored iris, forward pupil and small light-catching glint. The added parts remain vertex-colored GLB geometry, with no external textures, shared creature placeholder, or changes to enemy behavior. The 50-model workflow checks the exported components in each generated eye-bearing creature GLB. GriefLantern retains its established lit-soul-in-a-cage design, and KilnWisp retains its faceless coal-and-flame silhouette. These additions improve the source-authored visual references; they are not rigged or Unreal-rendered models.
 
+### Species-specific enemy readability details
+
+The twelve source creature meshes now include small, independently named geometry details that reinforce each existing silhouette and behavior profile: Cinderjaw jaw hinges; Pale Strider lunge tendons; Veilwatch lens vanes; Gleam Moth wing ocelli; Hollow Hound exposed ribs; Grief Lantern's internal clapper; Inkmaw's layered page-jaws; Redaction Eye brows; Saltglass Crawler's raised scute ridges; Drowned Watch's tide-marked helmet seam; Ashmaw chimney louvers; and Kiln Wisp orbiting cinders. The GLB regression check inspects each exported species for its signature part, alongside the layered eye checks. These are fixed visual accents, not animated telegraphs, new enemy abilities, combat changes, or new canon. Final scale/readability still needs a real viewer and Unreal lighting review.
+
 ### Import truth and next art pass
 
 The models use **meters, Y up, positive Z forward** in glTF. Unreal coordinates are **centimeters, Z up**; use verified import conversion. All nodes are **static mesh objects**, including the individually named NPCs. They do **not** yet include skeletal joints, skinning, cloth simulation, blendshapes, authored collision, bone-weighting, texture atlases, normal map baking or generated Unreal navmeshes.

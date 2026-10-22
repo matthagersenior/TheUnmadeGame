@@ -54,6 +54,23 @@ class HeroModels(unittest.TestCase):
      names=tuple(loaded.geometry)
      for detail in ("eye_socket","eye_iris","eye_pupil","eye_glint"):
       self.assertTrue(any(detail in name for name in names),(record["stable_id"],detail))
+    if record["category"]=="Creature":
+     signature_detail={
+      "Cinderjaw":"jaw_hinge_iron",
+      "PaleStrider":"lunge_tendon",
+      "Veilwatch":"pulse_lens_vane",
+      "GleamMoth":"wing_ocellus",
+      "HollowHound":"exposed_rib",
+      "GriefLantern":"bell_clapper",
+      "Inkmaw":"layered_jaw_leaf",
+      "RedactionEye":"redaction_brow",
+      "SaltglassCrawler":"scute_center_ridge",
+      "DrownedWatch":"helmet_tide_seam",
+      "Ashmaw":"chimney_vent_louver",
+      "KilnWisp":"orbiting_cinder",
+     }[record["stable_id"].split(":",1)[1]]
+     self.assertTrue(any(signature_detail in name for name in loaded.geometry),
+      (record["stable_id"],signature_detail))
    verified=builder.build_all(ROOT,out,True)
    self.assertEqual(verified,ledger)
  def test_manifest_tamper_is_refused(self):
