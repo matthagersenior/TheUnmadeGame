@@ -17,7 +17,7 @@ class BellwoldWebPrototypeTests(unittest.TestCase):
         cls.canon=CANON.read_text(encoding="utf-8")
 
     def test_realm_asset_reference_and_mobile_controls(self):
-        self.assertIn("models/Environment/SM_Unmade_ThreefoldReach.glb",self.html)
+        self.assertIn("models/City/SM_Unmade_Bellwold.glb",self.html)
         self.assertIn("data-move=",self.html)
         self.assertIn("keydown",self.html)
         self.assertIn("INTERACT",self.html)
