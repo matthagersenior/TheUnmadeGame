@@ -370,7 +370,7 @@ def _road_mesh(k,realm,routes,prefix,base,trim):
   for vertex,(x,z) in enumerate(points[1:-1]):
    k.box(f'{prefix}_route_marker_{realm}',(x,y+.25,z),(.24,.46,.24),GOLD if vertex%2 else trim)
 
-def _terrain(k,realm,base,city=None):
+def _terrain(k,realm,base,trim,city=None):
  # Region-specific silhouette including physically raised quarry/suspended
  # zones; no one-size 28 x 25 foundation beneath identical corners.
  terrain={
@@ -565,7 +565,7 @@ def _city_signature(k,city,base,trim,light):
 def build_environment(realm):
  if realm not in REALM_PATHS:raise ValueError("Unknown canonical realm "+str(realm))
  k=Kit();base,trim,light=PALETTE[realm]
- _terrain(k,realm,base)
+ _terrain(k,realm,base,trim)
  _road_mesh(k,realm,REALM_PATHS[realm],"realm",base,trim)
  _regional_signature(k,realm,base,trim,light)
  return k
@@ -574,7 +574,7 @@ def build_city_environment(city):
  if city not in CITY_SPECS:raise ValueError("Unknown canonical settlement "+str(city))
  spec=CITY_SPECS[city];realm=spec["realm"];base,trim,light=PALETTE[realm]
  k=Kit()
- _terrain(k,realm,base,city)
+ _terrain(k,realm,base,trim,city)
  _road_mesh(k,realm,spec["routes"],"city",base,light)
  _regional_signature(k,realm,base,trim,light)
  _city_signature(k,city,base,trim,light)
