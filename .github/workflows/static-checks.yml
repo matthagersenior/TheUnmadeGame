@@ -227,6 +227,7 @@ jobs:
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/creature_habitat_test.cpp -o /tmp/unmade-habitat-rules
           /tmp/unmade-habitat-rules
           python -m unittest discover -s Scripts/tests -p test_creature_habitat_wiring.py -v
+          python -m unittest discover -s Scripts/tests -p test_habitat_web_prototype.py -v
       - name: Test twelve creature profiles and fair elder counterplay
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/creature_rules_test.cpp -o /tmp/unmade-creatures
