@@ -23,7 +23,7 @@ header{display:flex;gap:16px;justify-content:space-between;align-items:center;pa
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"}}</script>
 </head><body>
-<header><b>THE UNMADE</b><a href="real-models.html">Inspect original 3D meshes ↗</a></header>
+<header><b>THE UNMADE</b><a href="real-models.html?city=Bellwold">Inspect the actual Bellwold city mesh ↗</a></header>
 <div class="topline"><span>BELLWOLD · THE SECOND NIGHT</span><span>INTERACTIVE SOURCE-BASED WEB PROTOTYPE · NOT UNREAL GAMEPLAY</span></div>
 <main><div class="playfield" id="field">
 <div id="render" aria-label="Interactive third-person browser 3D environment"></div>
@@ -59,7 +59,7 @@ scene.add(new THREE.HemisphereLight(0xffe1c1,0x3c4868,2.1));
 const sunset=new THREE.DirectionalLight(0xffc895,3.3);sunset.position.set(-12,27,-7);scene.add(sunset);
 const fill=new THREE.DirectionalLight(0x9dbce3,1.2);fill.position.set(9,11,15);scene.add(fill);
 const ground=new THREE.Mesh(new THREE.PlaneGeometry(140,140),new THREE.MeshStandardMaterial({color:0x333b43,roughness:.98}));ground.rotation.x=-Math.PI/2;ground.position.y=-.5;scene.add(ground);
-const paths=new THREE.Mesh(new THREE.PlaneGeometry(5,30),new THREE.MeshStandardMaterial({color:0x706659,roughness:1,transparent:true,opacity:.65}));paths.rotation.x=-Math.PI/2;paths.position.y=-.47;scene.add(paths);
+// The actual source-built Bellwold GLB supplies its own unique streets. No shared axial road overlay.
 const deco=new THREE.Group();scene.add(deco);
 const mat=(color,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness:.8,metalness});
 const stone=mat(0x69717b),dark=mat(0x282634),cloakMat=mat(0x27202b),metal=mat(0xa08a69,.45),lamp=mat(0xf2a968);
