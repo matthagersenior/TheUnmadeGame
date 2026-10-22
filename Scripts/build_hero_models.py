@@ -141,6 +141,7 @@ def build_creature(kind):
   if kind=='Cinderjaw':
    for side in (-1,1):
     k.box('split_charcoal_jaw',(side*.25,bodyY-.15,faceZ+.30),(.43,.13,.65),DARK)
+    k.orb('jaw_hinge_iron',(side*.39,bodyY-.10,faceZ+.16),(.085,.085,.085),GOLD,1)
     for t in range(4):k.taper('molten_tooth',(side*(.09+t*.11),bodyY-.09,faceZ+.62),(side*(.09+t*.11),bodyY+.13,faceZ+.67),.058,.001,WHITE,7)
    for z in (-.50,-.13,.26):k.taper('ash_fin',(0,bodyY+.33,z),(0,bodyY+.88,z-.15),.18,.01,light)
    spine_row(-.57,5,.25,bodyY+.36)
@@ -155,9 +156,13 @@ def build_creature(kind):
    for side in (-1,1):
     k.box('broken_furnace_chimney',(side*.55,bodyY+.58,-.34),(.28,.91,.30),base)
     k.taper('burnt_cowl',(side*.55,bodyY+1.07,-.34),(side*.68,bodyY+1.26,-.47),.23,.10,DARK)
+    for slot in range(3):
+     k.box('chimney_vent_louver',(side*.55,bodyY+.50+slot*.17,-.175),(.16,.035,.018),light)
   if kind=='PaleStrider':
    k.taper('long_spine',(0,bodyY+.33,0),(0,bodyY+.95,-.18),.22,.08,WHITE)
-   for side in (-1,1): k.beam('unpaired_rear_hoof',(side*.42,-.43,-.31),(side*.62,-.69,-.58),.065,WHITE)
+   for side in (-1,1):
+    k.beam('unpaired_rear_hoof',(side*.42,-.43,-.31),(side*.62,-.69,-.58),.065,WHITE)
+    k.taper('lunge_tendon',(side*.20,bodyY-.12,.53),(side*.30,.08,.84),.065,.025,trim,8)
  elif kind in ('GleamMoth','Veilwatch','GriefLantern','RedactionEye','DrownedWatch','KilnWisp'):
   if kind=='GleamMoth':
    k.orb('lantern_thorax',(0,1.2,0),(.23,.48,.28),base,2)
@@ -166,12 +171,15 @@ def build_creature(kind):
      pts=[(side*.14,1.44,rear*.06),(side*1.04,1.92,rear*.52),(side*1.25,.95,rear*.49),(side*.17,1.04,rear*.11)]
      k.ribbon('four_glass_wings',pts,.41,light if rear>0 else trim)
      k.beam('veins',pts[0],pts[1],.027,GOLD,7)
+     k.ring('wing_ocellus',(side*.73,1.46,rear*.37),.105,.022,GOLD,segments=12,sides=5,plane='xy')
     k.taper('antennae',(side*.14,1.55,.07),(side*.32,2.07,.44),.07,.001,trim)
    eye(0,1.42,.29,.15)
   elif kind=='Veilwatch':
    k.taper('narrow_shroud',(0,.22,0),(0,2.2,0),.70,.32,base,20)
    k.orb('blind_lens',(0,1.55,.47),(.30,.23,.09),BLACK,2)
    eye(0,1.54,.56,.13)
+   for side in (-1,1):
+    k.taper('pulse_lens_vane',(side*.23,1.55,.48),(side*.51,1.55,.42),.047,.012,light,7)
    for side in (-1,1):
     for p in range(3): k.ribbon('veil_fray',[(side*.45,1.4,p*.16-.28),(side*(.75+p*.12),.75,p*.16-.28),(side*(.55+p*.09),.20,p*.16-.27)],.17,trim)
    k.ring('watcher_halo',(0,2.2,0),.46,.041,light,plane='xz')
@@ -182,12 +190,15 @@ def build_creature(kind):
     k.beam('cage_pillar',(x,.61,z),(x,2.10,z),.073,base)
    k.taper('hanging_bell',(0,.64,0),(0,1.86,0),.50,.33,trim,14)
    k.ring('suspended_bell',(0,2.05,0),.42,.07,light,plane='xz')
+   k.taper('bell_clapper',(0,1.50,.28),(0,1.90,.30),.085,.035,GOLD,9)
    for i in range(4):k.beam('lament_chain',(0,2.24+i*.1,0),(0,2.36+i*.10,.07),.052,GOLD)
    k.orb('lantern_soul',(0,1.30,.50),(.14,.19,.10),light,2)
   elif kind=='RedactionEye':
    k.orb('great_cornea',(0,1.29,0),(.63,.65,.46),base,2)
    k.orb('iris',(0,1.34,.42),(.30,.32,.10),trim,2)
    eye(0,1.34,.53,.19)
+   for side in (-1,1):
+    k.taper('redaction_brow',(side*.22,1.66,.49),(side*.43,1.57,.44),.085,.025,trim,8)
    k.box('forbidden_text_bar',(0,1.26,.62),(1.25,.14,.08),BLACK)
    for i in range(5):
     x=(-2+i)*.32
@@ -196,6 +207,7 @@ def build_creature(kind):
   elif kind=='DrownedWatch':
    k.orb('drowned_body',(0,1.17,0),(.48,.82,.32),base,2)
    k.orb('helmet',(0,2.15,0),(.34,.39,.33),trim,2)
+   k.ring('helmet_tide_seam',(0,2.16,.28),.29,.025,light,segments=18,sides=5,plane='xy')
    for side in (-1,1):
     k.beam('weighted_arm',(side*.46,1.65,0),(side*.59,.52,.03),.17,base)
     k.ring('tide_halo',(0,1.40,0),.76+.12*(side+1),.037,light,plane='xz')
@@ -206,6 +218,10 @@ def build_creature(kind):
    for z in range(4):
     angle=z*1.44;x=.18*math.cos(angle);zz=.18*math.sin(angle)
     k.taper('flame_blade',(x,.88+z*.3,zz),(.28*math.cos(angle+.8),1.32+z*.34,.30*math.sin(angle+.8)),.21,.014,light,9)
+   for shard in range(4):
+    angle=shard*math.pi/2+.38
+    at=(.42*math.cos(angle),1.12+.12*(shard%2),.42*math.sin(angle))
+    k.taper('orbiting_cinder',(at[0],at[1]-.09,at[2]),(at[0]*1.12,at[1]+.10,at[2]*1.12),.07,.012,GOLD,7)
    for i in range(3):k.ring('floating_ash_rings',(0,.83+i*.25,0),.41-i*.06,.032,trim,plane='xz')
  elif kind in ('Inkmaw','SaltglassCrawler'):
   if kind=='Inkmaw':
@@ -214,6 +230,9 @@ def build_creature(kind):
     k.box('jaw_pages',(side*.52,.9,.58),(.43,.24,1.03),trim)
     for i in range(8):
      z=-.46+i*.18;k.taper('ink_quill',(side*.58,1.12,z),(side*(.73+.14*i/8),1.63,z+.06),.055,.001,BLACK,7)
+   for side in (-1,1):
+    for layer in range(3):
+     k.box('layered_jaw_leaf',(side*(.50+.045*layer),.72+layer*.10,1.04),(.34,.035,.68-.08*layer),WHITE if layer==1 else trim)
    k.orb('black_gullet',(0,.93,1.04),(.33,.21,.14),BLACK,2)
    eye(-.35,1.23,.78,.07);eye(.35,1.23,.78,.07)
    for i in range(4):k.box('page_spine_segment',(0,1.2,-.65+i*.42),(.28,.20,.25),WHITE)
@@ -222,6 +241,7 @@ def build_creature(kind):
    for j in range(8):
     z=-.95+j*.27
     k.box('calcite_scute',(0,1.27,z),(1.35,.12,.11),WHITE)
+    k.box('scute_center_ridge',(0,1.35,z),(1.01,.055,.045),light)
    for side in (-1,1):
     for j in range(5):
      z=-.88+j*.39
