@@ -10,7 +10,7 @@
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/"}}</script>
 </head><body>
 <header><b>✦ THE UNMADE</b><a href="play-bellwold.html">Try a third-person interactive prototype ↗</a><a href="index.html">← Back to the website</a></header>
-<section class="intro"><div class="eyebrow">ACTUAL SOURCE ASSETS · NOT A GENERATED CINEMATIC</div><h1>SEE THE WORLD<br><em>TAKING SHAPE.</em></h1><p>This preview displays the <strong>50 actual GLB mesh models</strong> made by The Unmade's own 3D source generator: nine distinct realm dioramas, eleven separate canon-named settlements, twelve distinct creatures and eighteen individually designed residents. Use your finger or mouse to rotate and zoom.</p><div class="truth"><strong>Important:</strong> These are real 3D geometry prototypes, now showing more inhabited building shells and separate neighborhood clusters; they are not gameplay screenshots, final art or Unreal-engine captures. Character meshes are unrigged, buildings are small dioramas, and gameplay/lighting/animation have not been verified together in Unreal.</div></section>
+<section class="intro"><div class="eyebrow">ACTUAL SOURCE ASSETS · NOT A GENERATED CINEMATIC</div><h1>SEE THE WORLD<br><em>TAKING SHAPE.</em></h1><p>This preview displays the <strong>50 actual GLB mesh models</strong> made by The Unmade's own 3D source generator: nine distinct realm dioramas, eleven separate canon-named settlements, twelve distinct creatures and eighteen individually designed residents. Use your finger or mouse to rotate and zoom.</p><div class="truth"><strong>Important:</strong> These are real 3D geometry prototypes, with inhabited building shells, source-authored hero landmarks and separate neighborhood clusters; they are not gameplay screenshots, final art or Unreal-engine captures. Character meshes are unrigged, buildings are small dioramas, and gameplay/lighting/animation have not been verified together in Unreal.</div></section>
 <section class="section" id="models"><div class="eyebrow">01 / INTERACTIVE MODEL INSPECTION</div><h2>Explore genuine game assets</h2><div class="workspace">
 <div class="catalog"><div class="filters"><button type="button" data-group="Environment" class="active">Realms</button><button type="button" data-group="City">Cities</button><button type="button" data-group="Creature">Creatures</button><button type="button" data-group="NPC">People</button><button type="button" data-group="All">All</button></div><input id="filter" type="search" aria-label="Filter source models" placeholder="Find a model…"><div class="entries" id="entries">Loading model list…</div></div>
 <div class="view"><div class="viewtitle"><span id="key">3D SOURCE ASSET</span><span id="state" role="status">Loading…</span></div><div class="screen" id="screen" aria-label="Three-dimensional model viewer; drag to rotate or pinch to zoom"></div><div class="controls"><button id="spin" class="active">↻ Rotate</button><button id="wire">◇ Wireframe</button><button id="reset">↖ Reset view</button><label for="lighting">Lighting <select id="lighting" aria-label="3D gallery lighting"><option value="dusk">Warm dusk</option><option value="overcast">Overcast</option><option value="moon">Moonlit</option></select></label><span>Drag to orbit · Pinch to zoom</span></div><div class="district-focus" id="districtfocus" aria-label="Inspect neighborhoods individually"></div></div>
@@ -85,11 +85,11 @@ function setDistrictControls(asset){
   b.onclick=()=>{focusDistrict(v);bar.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===b));};
   bar.appendChild(b);
  });
- if(asset.stable_id==='city:Bellwold'){
+ if(Array.isArray(asset.hero_focus)&&asset.hero_focus.length===3){
   const hero=document.createElement('button');hero.type='button';
-  hero.textContent='Empty bell yoke';
-  hero.title='Inspect Bellwold\'s actual never-cast bell tower detail';
-  hero.onclick=()=>{focusDistrict([4.5,7.4,-5]);bar.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===hero));};
+  hero.textContent='Hero landmark: '+asset.hero_label;
+  hero.title='Focus on source-built '+asset.hero_label+' in '+human(asset);
+  hero.onclick=()=>{focusDistrict(asset.hero_focus);bar.querySelectorAll('button').forEach(x=>x.classList.toggle('selected',x===hero));};
   bar.appendChild(hero);
  }
 }
