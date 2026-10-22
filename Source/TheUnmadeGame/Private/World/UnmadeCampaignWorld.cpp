@@ -35,24 +35,22 @@ UnmadeCore::Realm WhereRoadBegins(FVector position)
 
 UnmadeCore::RoadEvidence AUnmadePrototypeHub::GetUnansweredRoadEvidence() const
 {
-    UnmadeCore::RoadEvidence Progress;
     // A change in the Crossings, two communities, or two genuine landmarks is
     // enough opening testimony. Migrated advanced saves remain recognized.
-    Progress.openingWitnessed=ReadStoryChoice()!=0 ||
+    const bool OpeningWitnessed=ReadStoryChoice()!=0 ||
         VillagesVisited.Count()>=2 || Discoveries.Count()>=2;
+    std::uint16_t FirstStories=0;
     if(Frontier.IsResolved(UnmadeCore::Realm::WidowedRain))
-        Progress.firstStories|=UnmadeCore::RoadMask(UnmadeCore::Realm::WidowedRain);
+        FirstStories|=UnmadeCore::RoadMask(UnmadeCore::Realm::WidowedRain);
     if(Frontier.IsResolved(UnmadeCore::Realm::HearthBeneath))
-        Progress.firstStories|=UnmadeCore::RoadMask(UnmadeCore::Realm::HearthBeneath);
+        FirstStories|=UnmadeCore::RoadMask(UnmadeCore::Realm::HearthBeneath);
     for(const auto& Region:UnmadeCore::LaterRealms)
         if(LaterRealm.IsComplete(Region.realm))
-            Progress.firstStories|=UnmadeCore::RoadMask(Region.realm);
-    // Do not retroactively undo a progressed pre-existing final save, even
-    // if its old route did not have the newly authored five-act journal.
-    if(Progress.firstStories!=0 || FinalStory.Act()!=UnmadeCore::FinalAct::Veil)
-        Progress.openingWitnessed=true;
-    Progress.finalAct=static_cast<int>(FinalStory.Act());
-    return Progress;
+            FirstStories|=UnmadeCore::RoadMask(Region.realm);
+    // This reconstruction uses only persisted v1 fields. No journal field or
+    // migration write is required, and old final-stage saves retain access.
+    return UnmadeCore::RestoreRoadEvidence(OpeningWitnessed,FirstStories,
+        static_cast<int>(FinalStory.Act()));
 }
 UnmadeCore::RoadGuidance AUnmadePrototypeHub::GetUnansweredRoadGuidance() const
 {

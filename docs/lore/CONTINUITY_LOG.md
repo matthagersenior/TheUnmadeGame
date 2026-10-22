@@ -484,3 +484,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Moved all nine realm aftermath source contracts—mechanism sites, attributed witnesses, mutually exclusive evidence/outcome branches and future local world changes—into canonical Codex records and a compiled generated C++ table.
 - Added compiled portable and Codex-validator regression checks for differing consequences, real witnesses and the truth of level availability.
 - Preserved old game saves, original physical quest gates and narrative choice freedom; no new illustrated assets or Engine builds claimed.
+
+## 2026-10-22 — Campaign journal text and old-save reconstruction
+
+- Added exact native snapshots for campaign journal titles, questions, objectives, lead choices and boss access across each act transition.
+- Reconstructs guidance from existing schema-1 evidence and final-journey fields without adding a journal save field or writing a migration.
+- No canon event, ending, mystery answer, quest reward or completion state changed. Unreal rendering and disk deserialization remain unverified; the historical v20 illustrated package was not regenerated.
