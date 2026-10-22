@@ -32,7 +32,7 @@ class DistrictSurfaceTests(unittest.TestCase):
   for realm,city in builder.REGION_HABITAT.items():
    names=list(builder.build_environment(realm).scene.geometry)
    self.assertEqual(sum("_district_pbr_pitched_roof_" in n for n in names),12,realm)
-   self.assertEqual(sum("_district_pbr_rainworn_facade_" in n for n in names),12,realm)
+   self.assertEqual(sum("_district_pbr_apertured_facade_" in n for n in names),12,realm)
  def test_individual_district_terrain_is_sculpted_with_surface_uvs(self):
   import numpy as np
   from trimesh.visual.texture import TextureVisuals
