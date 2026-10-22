@@ -158,8 +158,8 @@ def add_bellwold_hero(k):
         _beam(k,f"copper_tower_reinforcing_strap_{i}",(x,5.65,-5),(x,8.35,-5),.16,"copper")
         _box(k,f"copper_tower_heel_clasp_{i}",x,5.58,-4.98,.88,.38,.79,"copper")
         _box(k,f"copper_tower_moss_streak_{i}",x,7.00,-4.58,.24,1.1,.18,"copper")
-    _beam(k,"copper_empty_yoke_crosspiece",(3.1,8.31,-4.96),(5.9,8.31,-4.96),.20,"copper")
+    _beam(k,"empty_yoke_copper_crosspiece",(3.1,8.31,-4.96),(5.9,8.31,-4.96),.20,"copper")
     for i,x in enumerate((3.85,5.15)):
-        _box(k,f"copper_empty_yoke_rivet_{i}",x,8.39,-4.72,.18,.20,.12,"copper")
-    _box(k,"copper_empty_yoke_absent_hanger_plate",4.5,8.01,-4.91,.46,.13,.24,"copper")
+        _box(k,f"empty_yoke_copper_rivet_{i}",x,8.39,-4.72,.18,.20,.12,"copper")
+    _box(k,"empty_yoke_copper_absent_hanger_plate",4.5,8.01,-4.91,.46,.13,.24,"copper")
     # No cast bell, clapper, pseudo-ghost bell or implied lore resolution.
