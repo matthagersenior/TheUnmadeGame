@@ -240,7 +240,7 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             const double N=Habitat.denOffsetY;
             if(GuideIndex==0) // JawDen: gnawed stone cavity, claw-scraped ribs.
             {
-                AddLandmark(TEXT(".Habitat.JawDen.Hollow"),TEXT("Cylinder"),FVector(0,N,165),
+                AddLandmark(TEXT(".Habitat.JawDen.Hollow"),TEXT("Cylinder"),FVector(0,N+260,285),
                     FVector(3.6,2.3,3.1),FRotator(0,0,90),true);
                 for(int j=0;j<5;++j)
                     AddLandmark(*FString::Printf(TEXT(".Habitat.JawDen.Rib%d"),j),
@@ -263,7 +263,7 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             else if(GuideIndex==2) // HoundUndercroft, away from public refuge.
             {
                 AddLandmark(TEXT(".Habitat.HoundUndercroft.Roof"),TEXT("Cylinder"),
-                    FVector(0,N+35,225),FVector(4.5,1.4,2.1),FRotator(0,0,90),true);
+                    FVector(0,N+235,295),FVector(4.5,1.4,2.1),FRotator(0,0,90),true);
                 for(int side=-1;side<=1;side+=2)
                 {
                     AddLandmark(*FString::Printf(TEXT(".Habitat.HoundUndercroft.Pillar%d"),side),
@@ -288,7 +288,7 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             else if(GuideIndex==4) // TideCave: sheltered tide-cut stone and pilings.
             {
                 AddLandmark(TEXT(".Habitat.TideCave.Shell"),TEXT("Cylinder"),
-                    FVector(0,N+115,147),FVector(4.6,2.6,2.0),FRotator(0,0,90),true);
+                    FVector(0,N+235,270),FVector(4.6,2.6,2.0),FRotator(0,0,90),true);
                 for(int j=0;j<5;++j)
                     AddLandmark(*FString::Printf(TEXT(".Habitat.TideCave.Pile%d"),j),
                         TEXT("Cylinder"),FVector((j-2)*145,N-100+((j%2)*110),155),
@@ -299,7 +299,7 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             else // SlagMaw: blackslag chimney mouth with substantial cover.
             {
                 AddLandmark(TEXT(".Habitat.SlagMaw.Mouth"),TEXT("Cylinder"),
-                    FVector(0,N,205),FVector(3.3,2.1,2.5),FRotator(90,0,0),true);
+                    FVector(0,N+240,300),FVector(3.3,2.1,2.5),FRotator(90,0,0),true);
                 for(int j=0;j<4;++j)
                     AddLandmark(*FString::Printf(TEXT(".Habitat.SlagMaw.Vent%d"),j),
                         TEXT("Cone"),FVector((j-2)*190,N+90,285+j%2*90),
@@ -307,6 +307,8 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
                 AddLandmark(TEXT(".Habitat.SlagMaw.Brace"),TEXT("Cube"),
                     FVector(0,N-215,140),FVector(5.3,.65,2.3),FRotator(0,16,0),true);
             }
+            // Keep the shutter well ahead of the third creature's spawn (Y=600),
+            // so the player-operated alcove is not accidentally a spawn cage.
             // Player can take physical cover on the approach. The reactive
             // enclosure is an inspectable movable obstruction: no quest gate.
             for(int side=-1;side<=1;side+=2)
@@ -314,7 +316,7 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
                     TEXT("Cube"),FVector(side*490,N-175,120),
                     FVector(1.2,1.8,2.2),FRotator(0,side*27,0),true);
             if(AStaticMeshActor* Shutter=GetWorld()->SpawnActor<AStaticMeshActor>(
-                Site.Center+FVector(0,N-135,135),FRotator::ZeroRotator))
+                Site.Center+FVector(0,N-340,135),FRotator::ZeroRotator))
             {
                 Shutter->Tags.AddUnique(FName(*(Id+TEXT(".Habitat.ShelterShutter"))));
                 auto* Mesh=Shutter->GetStaticMeshComponent();
