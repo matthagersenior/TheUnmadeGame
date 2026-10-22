@@ -22,6 +22,8 @@
 #include "Player/UnmadeCharacter.h"
 #include "Engine/Engine.h"
 #include "Engine/DirectionalLight.h"
+#include "Engine/PointLight.h"
+#include "Components/PointLightComponent.h"
 #include "Components/DirectionalLightComponent.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
@@ -1940,6 +1942,57 @@ FString AUnmadePrototypeHub::GetWitnessEchoJournal() const
     return Text;
 }
 
+void AUnmadePrototypeHub::RefreshHabitatReactions(const FVector& PlayerPosition)
+{
+    if(!GetWorld()||HabitatResponseLights.Num()!=6)return;
+    const double Now=Clock.ElapsedSeconds();
+    if(Now<NextHabitatCueTick)return;  // Six sight checks max once per second.
+    NextHabitatCueTick=Now+1.0;
+    const bool bNight=Clock.Phase()==UnmadeCore::DayPhase::Night ||
+                      Clock.Phase()==UnmadeCore::DayPhase::Dusk;
+    for(int32 i=0;i<6;++i)
+    {
+        const auto& Habitat=UnmadeCore::HabitatSites[i];
+        const FVector Den(Habitat.centerX,Habitat.centerY+Habitat.denOffsetY,180);
+        const double Distance=FVector::Dist2D(Den,PlayerPosition);
+        if(Distance>Habitat.trackRadius+100)
+        {
+            HabitatLastCue[i]=static_cast<int>(UnmadeCore::HabitatCue::Quiet);
+            continue;
+        }
+        FCollisionQueryParams Cover(SCENE_QUERY_STAT(UnmadeDenCover),false);
+        if(const ACharacter* Player=UGameplayStatics::GetPlayerCharacter(GetWorld(),0))
+            Cover.AddIgnoredActor(Player);
+        const bool bCovered=GetWorld()->LineTraceTestByChannel(
+            Den,PlayerPosition+FVector(0,0,130),ECC_Visibility,Cover);
+        const auto Cue=UnmadeCore::HabitatReaction(Habitat,Distance,bCovered,bNight,
+                                                   HabitatInspected[i]);
+        // Light and cover physically respond to the player's position, rather
+        // than changing just a map marker. Cover never grants creature skills.
+        if(HabitatResponseLights[i].IsValid())
+        {
+            const float Glow=Cue==UnmadeCore::HabitatCue::Disturbed?2600.f:
+                Cue==UnmadeCore::HabitatCue::Warning?950.f:
+                Cue==UnmadeCore::HabitatCue::Sheltered?180.f:85.f;
+            HabitatResponseLights[i]->PointLightComponent->SetIntensity(Glow);
+        }
+        const int State=static_cast<int>(Cue);
+        if(State==HabitatLastCue[i])continue;
+        HabitatLastCue[i]=State;
+        if(!GEngine||Cue==UnmadeCore::HabitatCue::Quiet)continue;
+        const TCHAR* Hint=Cue==UnmadeCore::HabitatCue::Tracks?
+            TEXT("Tracks and disturbed ground lead toward an occupied habitat."):
+            Cue==UnmadeCore::HabitatCue::Warning?
+            TEXT("The den reacts to your approach. Find cover or retreat."):
+            Cue==UnmadeCore::HabitatCue::Disturbed?
+            TEXT("You have disturbed the creature's home. Its defensive behavior intensifies."):
+            TEXT("The rocks and shelter break sight. Watch its attack tell before moving.");
+        UnmadeRpgFeedback(-1,4.f,Cue==UnmadeCore::HabitatCue::Disturbed?
+            FColor::Orange:FColor::Cyan,FString::Printf(TEXT("%s | %s"),
+            UTF8_TO_TCHAR(Habitat.kind),Hint));
+    }
+}
+
 void AUnmadePrototypeHub::Tick(float DeltaSeconds)
 {
     RefreshSimulationBudget();
@@ -2000,6 +2053,7 @@ void AUnmadePrototypeHub::Tick(float DeltaSeconds)
     if (!IsValid(Player)) return;
 
     const FVector Position = Player->GetActorLocation();
+    RefreshHabitatReactions(Position);
     const UnmadeCore::SettlementId Village = UnmadeCore::SettlementAt(Position.X, Position.Y);
     if (Village != LastVisitedVillage)
     {
