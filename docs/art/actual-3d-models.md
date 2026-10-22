@@ -46,3 +46,23 @@ The Bellwold city GLB includes an **additional, canon-safe hero architecture lay
 The model is an **art-direction prototype**, not a photogrammetric sculpt, AAA environment, production-quality 4K texture set, or a playable Unreal level. A practical later artist pass must author hand-made UV layout/texture atlases, high/low mesh baking, LODs, collision proxies, corrected interior/exterior entrances, lighting scenarios, and a full Unreal import/visual review. The website inspector offers simulated three-point/dusk/overcast/night lighting for this purpose; it does **not** claim Unreal rendering was tested.
 
 The exported `manifest.json` now includes `pbr_materials` (material names with embedded albedo+normal maps), so builds and the public viewer can distinguish true texturing from single-color vertex materials.
+
+### Realm-specific material and civic landmark pass (all nine realms / eleven cities)
+
+`Scripts/realm_hero_pbr.py` adds original locally generated **embedded glTF PBR** 160×160 albedo and tangent-space normal textures, with distinct roughness/metallic settings, UVs and individually modeled public-landmark components for Crossings, Paperhaven, Saltwake, Cinderhold, Drevlach, Orravane, Vathless, Eillun, Tharniv, and Auvren. Bellwold retains its existing 192×192 hand-oriented procedural stone/timber/verdigris hero layer. This extends the original art from **one** textured showcase to **all twenty realm/settlement geographical GLBs**, without changing the total 50-model roster or reducing existing neighborhood density. A realm preview uses its own representative settlement's distinct material and public-landmark architecture rather than sharing a single generic house kit.
+
+| Location | Actual new modeled hero focus | Material construction language |
+|---|---|---|
+| Crossings / Threefold Reach | Disagreeing three-way survey forks and charter gantries | Surveyor limestone and river-patinated iron |
+| Bellwold | Stone/timber refuge facade; **empty** copper-green yoke | Patched stone, salvaged timber, oxidized copper |
+| Paperhaven | Tiered archives, buttresses and folio niches | Chalk archive stone and dark storage fittings |
+| Saltwake / Widowed Rain | Upturned hull ribs, dry slipways, rain catchments | Salt-weathered hull timber and dock bronze |
+| Cinderhold / Hearth Beneath | Banded high thermal kilns and feed lines | Sintered basalt and thermal copper |
+| Drevlach / Owed Estuary | Public tide-accounting clock, counterweights and ledger rails | Wet sluice granite and ledger brass |
+| Orravane / Inverted Choir | Suspended walkways, cable anchors, acoustic weights | Suspension slate and resonant alloys |
+| Vathless / Yesterday Quarry | Layered bearing-stone switchbacks and ledger faces | Memorial stone and support iron |
+| Eillun / Unclaimed City | Reversible privacy screens and voluntary thresholds | Reused plaster and privacy timbers |
+| Tharniv / Untitled Orchard | Branch-built petition court, grafted civic roots | Living bark and grown resin |
+| Auvren / Before-Place | Disconnected contradictory portals and witness platforms | Unfounded limestone and witness alloy |
+
+Each asset manifest includes `hero_label`, `hero_focus`, and embedded `pbr_materials` for inspectability; the public viewer displays a location-specific **Hero landmark** action. CI tests distinct geometry names, UV/PBR export, material identities, texture preservation, density and deterministic GLB equality. **These maps are compact procedural visual-development textures, not handmade production 2K/4K scan-quality materials.** Without Unreal import, collision, LODs, hand-scanned textures, lighting, rigging and gameplay testing, no preview should be marketed as final in-engine imagery.
