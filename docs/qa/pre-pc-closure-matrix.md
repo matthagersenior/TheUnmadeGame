@@ -66,4 +66,8 @@ For each domain, require **source identifier → input conditions → determinis
 
 **Next:** multi-NPC contradictory firsthand/hearsay paths.
 
+### Realm skyline signatures — 22 October
+
+Each of the nine existing frontier silhouette triplets now has its own bounded three-piece orientation profile, applied at spawn while retaining the existing realm-specific placement, primitive selection, noncollision, no-overlap, and no-navigation rules. Native checks verify all nine profiles differ and every angle stays within 20 degrees. This improves long-distance visual identification in the prototype; it does not add an asset, gameplay landmark, discovery, route, or lore fact. Unreal rendering and distance readability remain unverified.
+
 Related: [current pre-PC readiness](pre-pc-readiness.md), [v21 parity floor](gameplay-parity-v21.md), [vertical-slice status](vertical-slice-status.md), [campaign specification](../design/unanswered-road-main-campaign.md).

@@ -10,6 +10,7 @@ struct RealmRgb { int R,G,B; };
 struct RealmSilhouettePart {
  int dx,dy,dz; float sx,sy,sz; // centimeters relative to the frontier site
 };
+struct RealmVisualRotation { int pitch,yaw,roll; };
 enum class RealmCrown {
  CharterArch, TideGauge, EmberFlue, LedgerChain, ChoirWeight,
  SplitSeam, OccupiedBed, RootGraft, PairedThreshold
@@ -59,6 +60,21 @@ inline constexpr std::array<RealmVisualDesign,9> RealmVisualDesigns={{
   RealmCrown::PairedThreshold,
   {79,75,124},{172,220,216},
   {{{-2580,610,260,.45f,1.0f,5.2f},{-2140,610,185,1.55f,.35f,3.7f},{-1720,610,260,.45f,1.0f,5.2f}}}}
+}};
+
+// Authored local rotations make the nine skyline signatures readable even
+// while the prototype still uses only engine primitive meshes. These are
+// presentation transforms; they do not change collision or traversal.
+inline constexpr std::array<std::array<RealmVisualRotation,3>,9> RealmVisualRotations={{
+ {{{0,0,0},{0,0,0},{0,0,0}}},
+ {{{0,0,-9},{0,0,0},{0,0,11}}},
+ {{{0,0,8},{0,0,0},{0,0,-10}}},
+ {{{0,0,0},{0,0,17},{0,0,-13}}},
+ {{{12,0,0},{0,0,0},{-14,0,0}}},
+ {{{0,0,15},{0,0,-8},{0,0,-12}}},
+ {{{0,0,0},{0,0,9},{0,0,0}}},
+ {{{0,0,-18},{0,0,0},{0,0,16}}},
+ {{{0,0,12},{0,0,0},{0,0,-12}}}
 }};
 
 enum class VisualRole { Foundation,Gate,Evidence,Mechanism,Landmark,Ordinary };

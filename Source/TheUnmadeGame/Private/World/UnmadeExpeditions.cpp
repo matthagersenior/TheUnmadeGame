@@ -50,6 +50,7 @@ void AUnmadePrototypeHub::BuildExpeditions(){
   UStaticMesh* VisualCone=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cone.Cone"));
   for(int j=0;j<3;++j){
    const auto& Piece=Design.silhouette[j];
+   const auto& Rotation=UnmadeCore::RealmVisualRotations[a][j];
    const FVector At=FrontierMarker+FVector(Piece.dx,Piece.dy,Piece.dz);
    UStaticMesh* Shape=VisualCube;
    if((j==1&&Design.crown!=UnmadeCore::RealmCrown::SplitSeam)||
@@ -59,7 +60,8 @@ void AUnmadePrototypeHub::BuildExpeditions(){
       (Design.crown==UnmadeCore::RealmCrown::EmberFlue && j==2))
        Shape=VisualCone;
    if(!Shape)continue;
-   auto* Ornament=GetWorld()->SpawnActor<AStaticMeshActor>(At,FRotator::ZeroRotator);
+   auto* Ornament=GetWorld()->SpawnActor<AStaticMeshActor>(At,
+       FRotator(Rotation.pitch,Rotation.yaw,Rotation.roll));
    if(!Ornament)continue;
    auto* DecorativeMesh=Ornament->GetStaticMeshComponent();
    DecorativeMesh->SetMobility(EComponentMobility::Movable);

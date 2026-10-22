@@ -9,12 +9,23 @@ using namespace UnmadeCore;
 int main(){
     std::set<std::string> names,motifs,colors;
     std::set<int> crowns;
+    std::set<std::string> orientations;
     for(int i=0;i<9;++i){
         const auto& design=RealmVisualDesigns[i];
         assert(design.name && design.landmark && design.storyMotif);
         assert(names.insert(design.landmark).second);
         assert(motifs.insert(design.storyMotif).second);
         assert(crowns.insert(static_cast<int>(design.crown)).second);
+        std::string orientation;
+        for(const auto& rotation:RealmVisualRotations[i]){
+            assert(rotation.pitch>=-20&&rotation.pitch<=20);
+            assert(rotation.yaw>=-20&&rotation.yaw<=20);
+            assert(rotation.roll>=-20&&rotation.roll<=20);
+            orientation+=std::to_string(rotation.pitch)+":"+
+                         std::to_string(rotation.yaw)+":"+
+                         std::to_string(rotation.roll)+";";
+        }
+        assert(orientations.insert(orientation).second);
         assert(colors.insert(std::to_string(design.color.R)+":"+
                              std::to_string(design.color.G)+":"+
                              std::to_string(design.color.B)).second);
@@ -33,7 +44,7 @@ int main(){
         assert(road.realm==i && road.role==VisualRole::Foundation);
         assert(!road.allowDecoration && road.keepCubeCollision);
     }
-    assert(crowns.size()==9 && names.size()==9 && motifs.size()==9);
+    assert(crowns.size()==9 && names.size()==9 && motifs.size()==9 && orientations.size()==9);
     assert(ClassifyRealmProp("Expedition.99.Landmark",1,1,1).realm==-1);
     assert(ClassifyRealmProp("Expedition.2x.Landmark",1,1,1).realm==-1);
     assert(ClassifyRealmProp("",1,1,1).realm==-1);
