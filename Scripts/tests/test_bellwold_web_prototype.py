@@ -21,6 +21,8 @@ class BellwoldWebPrototypeTests(unittest.TestCase):
         self.assertIn("data-move=",self.html)
         self.assertIn("keydown",self.html)
         self.assertIn("INTERACT",self.html)
+        self.assertNotIn("new THREE.PlaneGeometry(5,30)",self.html)
+        self.assertIn("real-models.html?city=Bellwold",self.html)
 
     def test_exact_authenticated_evidence_and_witness_pairs(self):
         for word in ("relief cache","altered census","Sorin","Ivera","Hessa","Safe Ward","Open Census"):
