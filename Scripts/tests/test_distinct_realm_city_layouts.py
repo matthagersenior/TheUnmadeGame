@@ -84,5 +84,15 @@ class DistinctRealmCityLayouts(unittest.TestCase):
    self.assertEqual({a["stable_id"] for a in data["assets"] if a["category"]=="City"},
     {"city:"+city for city in builder.CITY_SPECS})
    self.assertEqual(len({a["sha256"] for a in data["assets"] if a["category"] in ("City","Environment")}),20)
+   for record in data["assets"]:
+    if record["category"]=="City":
+     self.assertGreaterEqual(record["building_shells"],18)
+     self.assertEqual(record["district_count"],4)
+    elif record["category"]=="Environment":
+     self.assertGreaterEqual(record["building_shells"],10)
+     self.assertEqual(record["district_count"],3)
+    else:
+     self.assertEqual(record["building_shells"],0)
+     self.assertEqual(record["district_count"],0)
 
 if __name__=="__main__":unittest.main()
