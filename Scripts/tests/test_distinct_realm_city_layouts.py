@@ -51,6 +51,30 @@ class DistinctRealmCityLayouts(unittest.TestCase):
   self.assertTrue(any("uncast_yoke" in n for n in bell.scene.geometry))
   paper=builder.build_city_environment("Paperhaven")
   self.assertTrue(any("archive_vault" in n for n in paper.scene.geometry))
+ def test_city_fabric_restores_real_density_without_reusing_one_neighborhood(self):
+  # Regression from the sparse unique-topology pass: landmarks and routes alone
+  # are not equivalent to populated communities.
+  self.assertEqual(set(builder.CITY_DISTRICTS),set(builder.CITY_SPECS))
+  district_signatures=[]
+  for city,plan in builder.CITY_DISTRICTS.items():
+   self.assertGreaterEqual(len(plan),4,city)
+   self.assertGreaterEqual(sum(row[2] for row in plan),18,city)
+   self.assertTrue(all(len(row)==4 for row in plan),city)
+   district_signatures.append(tuple(plan))
+   k=builder.build_city_environment(city)
+   geometry=list(k.scene.geometry)
+   homes=[n for n in geometry if "_habitation_shell_" in n]
+   self.assertGreaterEqual(len(homes),18,city+" regressed to an empty landmark diorama")
+   self.assertGreaterEqual(len([n for n in geometry if "_roof_detail_" in n]),18,city)
+   self.assertTrue(any("neighborhood_route_" in n for n in geometry),city+" has disconnected housing")
+  self.assertEqual(len(set(district_signatures)),11)
+ def test_realm_previews_contain_settled_neighborhoods_not_just_monuments(self):
+  for realm in builder.REALMS:
+   k=builder.build_environment(realm)
+   geometry=list(k.scene.geometry)
+   homes=[n for n in geometry if "_habitation_shell_" in n]
+   self.assertGreaterEqual(len(homes),10,realm+" became emptier than the original neighborhood")
+   self.assertTrue(any("neighborhood_route_" in n for n in geometry),realm)
  def test_export_includes_every_city_not_only_realm_overviews(self):
   import tempfile
   with tempfile.TemporaryDirectory() as td:
