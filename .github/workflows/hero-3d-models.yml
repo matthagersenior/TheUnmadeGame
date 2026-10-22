@@ -28,7 +28,7 @@ jobs:
           python-version: '3.11'
       - name: Install reproducible offline mesh tools
         run: python -m pip install 'numpy==2.3.5' 'trimesh==4.11.1' 'Pillow==12.3.0'
-      - name: Build 39 different canonical meshes (GLB, not mockups)
+      - name: Build 50 different canonical meshes including eleven settlements (GLB, not mockups)
         run: python Scripts/build_hero_models.py --out-dir Build/UnmadeHeroModels
       - name: Verify every byte against the source generator
         run: python Scripts/build_hero_models.py --out-dir Build/UnmadeHeroModels --verify-output
@@ -36,10 +36,10 @@ jobs:
         run: python -m unittest discover -s Scripts/tests -p test_hero_model_assets.py -v
       - name: Verify nine distinct realms and eleven distinct city layouts
         run: python -m unittest discover -s Scripts/tests -p test_distinct_realm_city_layouts.py -v
-      - name: Upload 39 playable-software-importable meshes as one artifact
+      - name: Upload 50 source-geometry reference meshes as one artifact
         uses: actions/upload-artifact@v4
         with:
-          name: TheUnmade-39-Creature-NPC-Realm-GLB
+          name: TheUnmade-50-Creature-NPC-Realm-City-GLB
           path: Build/UnmadeHeroModels/
           if-no-files-found: error
           retention-days: 30
