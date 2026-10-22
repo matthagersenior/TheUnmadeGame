@@ -12,7 +12,9 @@ on:
       - Scripts/tests/test_all_realm_hero_pbr.py
       - Scripts/tests/test_district_surface_fidelity.py
       - Scripts/tests/test_street_level_facades.py
+      - Scripts/tests/test_terrain_grounding.py
       - Scripts/district_surface_detail.py
+      - Scripts/terrain_street_joinery.py
       - Scripts/realm_hero_pbr.py
       - Scripts/bellwold_hero_pbr.py
       - .github/workflows/hero-3d-models.yml
@@ -37,6 +39,8 @@ jobs:
           python-version: '3.11'
       - name: Install reproducible offline mesh tools
         run: python -m pip install 'numpy==2.3.5' 'trimesh==4.11.1' 'Pillow==12.3.0'
+      - name: Verify terrain-height reuse and grounded pedestrian connections
+        run: python -m unittest discover -s Scripts/tests -p test_terrain_grounding.py -v
       - name: Build 50 different canonical meshes including eleven settlements (GLB, not mockups)
         run: python Scripts/build_hero_models.py --out-dir Build/UnmadeHeroModels
       - name: Verify every byte against the source generator
