@@ -44,6 +44,14 @@ class TerrainGroundedNeighborhoods(unittest.TestCase):
     self.assertEqual(sum(tag in n for n in scene.geometry),12,(realm,tag))
    self.assertEqual(sum("_habitation_shell_" in n for n in scene.geometry),12,realm)
 
+ def test_visible_supports_have_sculpted_cultural_profiles_not_four_box_posts(self):
+  # Four square prisms alone reproduce the original rudimentary blockout
+  # problem. Each support assembly must actually carry curved/tapered rings.
+  for city in ("Bellwold","Saltwake","Orravane","Vathless","Tharniv"):
+   model=builder.build_city_environment(city)
+   name,geo=next((n,g) for n,g in model.scene.geometry.items() if "_terrain_joinery_support_0" in n)
+   self.assertGreaterEqual(len(geo.faces),350,(city,name))
+
  def test_city_specific_joinery_materials_are_not_shared_generic_props(self):
   cities=("Saltwake","Orravane","Vathless","Tharniv","Bellwold")
   signatures=[]
