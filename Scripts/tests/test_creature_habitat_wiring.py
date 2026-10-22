@@ -25,6 +25,14 @@ class HabitatWiring(unittest.TestCase):
   self.assertIn("TryHabitatInteraction(this,ResidentDistSq)",PLAYER)
   self.assertIn("SetIntensity(",HUB)
   self.assertIn("HabitatCanInspect(",ENC)
+ def test_habitat_mouth_and_cover_do_not_cage_existing_enemy_spawns(self):
+  # The third creature is authored at local encounter Y=600. Ensure the
+  # interaction shutter stands on the approach instead of intersecting spawn.
+  self.assertIn("Site.Center+FVector(0,N-340,135)",ENC)
+  self.assertNotIn("Site.Center+FVector(0,N-135,135)",ENC)
+  self.assertIn("FVector(0,N+260,285)",ENC)
+  self.assertIn("FVector(0,N+235,295)",ENC)
+  self.assertIn("FVector(0,N+240,300)",ENC)
  def test_safety_and_existing_quests(self):
   self.assertIn("TryFieldSurveyInteraction(this,ResidentDistSq)",PLAYER)
   self.assertIn("HabitatInspectSigns",HEAD)
