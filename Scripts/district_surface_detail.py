@@ -9,7 +9,11 @@ from __future__ import annotations
 import math
 import numpy as np
 import trimesh
-import realm_hero_pbr as pbr
+import importlib.util
+from pathlib import Path
+_spec=importlib.util.spec_from_file_location('district_realm_pbr',Path(__file__).with_name('realm_hero_pbr.py'))
+pbr=importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(pbr)
 
 # The existing models provide city-specific silhouette and functional features.
 # These finishes are supplemental exterior skins fitted just outside the
