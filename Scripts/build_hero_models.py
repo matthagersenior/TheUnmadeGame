@@ -34,7 +34,15 @@ class Kit:
  def add(self,mesh,name,color):
   if mesh is None:return
   mesh=mesh.copy()
-  mesh.visual.vertex_colors=np.tile(np.array([*color,255],dtype=np.uint8),(len(mesh.vertices),1))
+  # Stable, UV-free stone/wood tonal modulation. Unlike the older single
+  # RGBA value for every vertex, sloped surfaces now read under lighting.
+  # No random state, external texture fetch, or loss of original palette.
+  verts=np.asarray(mesh.vertices,dtype=float)
+  grain=(np.sin(verts[:,0]*1.713+verts[:,2]*2.411+verts[:,1]*.71)
+        +.42*np.cos(verts[:,0]*3.079-verts[:,2]*.963+verts[:,1]*1.409))
+  tone=np.clip(.955+.067*grain,.83,1.07)
+  rgb=np.clip(np.asarray(color,dtype=float)[None,:]*tone[:,None],0,255).astype(np.uint8)
+  mesh.visual.vertex_colors=np.column_stack((rgb,np.full(len(verts),255,dtype=np.uint8)))
   key=f'{self.count:04d}_{name}';self.count+=1
   self.scene.add_geometry(mesh,geom_name=key,node_name=key)
  def orb(self,name,at,radii,color,detail=2):
@@ -665,27 +673,309 @@ def _dwelling(k,city,idx,x,z,base,trim,light):
   k.box(tag+"_roof_detail_open_limestone_lintel_"+str(idx),(x,roofline,z),(w+.5,.18,d+.4),WHITE)
   k.box(tag+"_witness_bench_"+str(idx),(x-.6,y+.36,z+d*.7),(1.3,.2,.44),trim)
 
-def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
- spurs=[]
+ _architecture_finish(k,city,idx,x,y,z,w,d,h,base,trim,light)
+
+
+def _sculpted_pitch(k,name,x,y,z,w,d,rise,material):
+ # Six-vertex gabled prism: genuinely sloped roof planes, with closed gables.
+ # Replaces one-size-fits-all flat roof silhouettes without requiring Blender.
+ a=w*.55;b=d*.56
+ vertices=[
+  (x-a,y,z-b),(x,y+rise,z-b),(x+a,y,z-b),
+  (x-a,y,z+b),(x,y+rise,z+b),(x+a,y,z+b)]
+ faces=[[0,2,1],[3,4,5],[0,1,4],[0,4,3],
+        [1,2,5],[1,5,4],[0,3,5],[0,5,2]]
+ mesh=trimesh.Trimesh(vertices=vertices,faces=faces,process=False)
+ k.add(mesh,name,material)
+
+def _architecture_finish(k,city,idx,x,y,z,w,d,h,base,trim,light):
+ """Specific shaped exterior structure. No generic single-town house grammar.
+
+ Details are visual-only geometry, not interactive game props, approved
+ canonical interior layouts or pathfinding-ready structures.
+ """
+ identity={
+  "Crossings":"triple_way_charter","Bellwold":"refuge_patched_stone",
+  "Paperhaven":"archive_buttress","Saltwake":"ship_hull_curvature",
+  "Cinderhold":"heat_channel_exhaust","Drevlach":"counterweight_lockhouse",
+  "Orravane":"suspended_walkway","Vathless":"quarry_switchback",
+  "Eillun":"consent_threshold_screen","Tharniv":"grafted_root_vault",
+  "Auvren":"limestone_witness_frame"
+ }[city]
+ tag="architecture_"+identity+"_"+str(idx)+"_"
+ # Tilted roof is a separately triangulated object. The rise and eave rhythm
+ # varies by settlement and neighborhood, not by a common material swap.
+ roof_base=y+h+.13
+ rise=.72+.19*(idx%4)
+ if city in ("Saltwake","Tharniv","Orravane"):rise=1.05+.11*(idx%5)
+ if city in ("Paperhaven","Drevlach","Vathless"):rise=.48+.17*(idx%3)
+ _sculpted_pitch(k,tag+"nonrectangular_roof_gable",x,roof_base,z,w,d,rise,trim)
+ k.beam(tag+"ridge_support",(x,roof_base+rise,z-d*.56),
+        (x,roof_base+rise,z+d*.56),.09,light)
+ for side in (-1,1):
+  k.beam(tag+"sloping_rafter",(x,roof_base+rise,z),
+         (x+side*w*.55,roof_base,z),.075,base)
+  k.box(tag+"wall_trim_plaster",(x+side*(w*.5+.04),y+h*.7,z),
+        (.09,.22,d*.8),WHITE if idx%3==0 else trim)
+ # Architectural completion uses eight or more city-specific medium-scale
+ # feature types; the city should remain recognizable with palette removed.
+ if city=="Crossings":
+  for side in (-1,1):
+   k.beam(tag+"forked_timber_rib",(x+side*w*.42,y+.25,z+.70),
+          (x+side*w*.61,roof_base+.27,z-.30),.11,GOLD)
+   k.box(tag+"route_notice_lintel",(x+side*.64,y+1.85,z+d*.62),
+         (.83,.23,.18),WHITE)
+  k.box(tag+"charter_porch",(x,y+.15,z+d*.77),(w*.84,.3,1.03),base)
+  k.beam(tag+"bridging_survey_rail",(x-w*.4,y+1.4,z+d*.9),
+         (x+w*.42,y+1.45,z+d*.9),.09,trim)
+  k.box(tag+"three_way_chalk_mark",(x,y+.33,z+d*.86),(.65,.08,.42),WHITE)
+  k.box(tag+"refuge_side_awning",(x-w*.47,y+2.0,z),(1.05,.15,1.55),trim)
+ elif city=="Bellwold":
+  k.box(tag+"refuge_lean_to",(x+w*.63,y+.93,z+.2),(1.25,1.72,d*.68),base)
+  k.beam(tag+"patched_roof_support",(x+w*.58,y+1.95,z-d*.28),
+         (x+w*1.0,y+1.62,z+d*.25),.11,trim)
+  k.box(tag+"copper_lantern_hood",(x-w*.31,y+1.94,z+d*.62),(.62,.18,.52),GOLD)
+  k.box(tag+"covered_guest_veranda",(x,y+.29,z+d*.85),(w*.84,.22,1.25),WHITE)
+  for side in (-1,1):
+   k.beam(tag+"weathered_refuge_knee_brace",(x+side*w*.38,y+.4,z+d*.76),
+          (x+side*w*.27,y+2.18,z+d*.61),.13,trim)
+  k.box(tag+"smoke_baffle",(x-w*.3,roof_base+.78,z-.5),(.44,.39,.48),DARK)
+  k.box(tag+"community_wash_rack",(x+w*.52,y+.57,z-.6),(.15,1.08,1.56),WHITE)
+ elif city=="Paperhaven":
+  for side in (-1,1):
+   k.taper(tag+"archive_buttress_pier",
+       (x+side*(w*.65),y,z),(x+side*w*.52,roof_base+.7,z),.37,.14,WHITE)
+   k.box(tag+"index_slit_frame",(x+side*w*.22,y+1.68,z+d*.6),
+         (.23,.98,.13),trim)
+  k.box(tag+"stacked_chalk_folio",(x,y+2.2,z+d*.67),(w*.64,.18,.24),WHITE)
+  k.box(tag+"narrow_archive_terrace",(x,roof_base+.19,z-d*.55),
+        (w+.48,.24,.72),trim)
+  k.box(tag+"vault_corner_cap",(x-w*.39,roof_base+.75,z+d*.3),(.28,.65,.28),GOLD)
+  k.box(tag+"public_index_shelf",(x,y+.70,z+d*.73),(w*.62,.15,.35),base)
+ elif city=="Saltwake":
+  # Hull form: keel plus multiple curved-looking spaced ribs across pitched roof.
+  for side in (-1,0,1):
+   zz=z+side*d*.42
+   k.beam(tag+"upturned_hull_port_rib",(x-w*.56,roof_base,zz),
+          (x,roof_base+rise*1.38,zz),.125,trim)
+   k.beam(tag+"upturned_hull_starboard_rib",(x,roof_base+rise*1.38,zz),
+          (x+w*.56,roof_base,zz),.125,light)
+  k.box(tag+"inverted_keel",(x,roof_base+rise*1.22,z),
+        (.23,.14,d+.67),DARK)
+  k.box(tag+"tide_catch_gutter",(x+w*.54,roof_base-.28,z),
+        (.27,.24,d+.41),GOLD)
+  k.beam(tag+"rope_brace",(x+w*.50,y+1.93,z-.4),
+         (x+w*.96,y+.21,z+.35),.07,WHITE)
+  k.box(tag+"harbor_drying_frame",(x-w*.55,y+1.12,z+d*.68),
+        (1.4,1.35,.12),trim)
+ elif city=="Cinderhold":
+  k.box(tag+"heat_channel_apron",(x,y+.17,z+d*.75),(w*.85,.22,1.27),DARK)
+  for side in (-1,1):
+   k.box(tag+"basalt_corner_rib",(x+side*w*.50,y+1.5,z),
+         (.35,2.9,.36),base)
+   k.beam(tag+"exhaust_tension_brace",(x+side*.75,roof_base+.26,z),
+          (x+side*1.16,y+1.1,z+.25),.11,trim)
+  k.taper(tag+"sintered_kiln_chimney",(x+w*.22,roof_base,z),
+          (x+w*.29,roof_base+2.6,z),.48,.31,DARK)
+  k.ring(tag+"chimney_collar",(x+w*.29,roof_base+2.3,z),.40,.07,GOLD,plane="xz")
+  k.box(tag+"heat_warning_sill",(x,y+.68,z+d*.59),(w*.6,.17,.3),light)
+ elif city=="Drevlach":
+  k.box(tag+"canal_lock_house_platform",(x,y+.26,z+d*.62),
+        (w+.7,.35,1.60),trim)
+  for side in (-1,1):
+   k.beam(tag+"counterweight_suspended_cord",
+          (x+side*.76,roof_base+1.15,z),
+          (x+side*.72,y+.45,z),.07,GOLD)
+   k.box(tag+"ledger_weight",(x+side*.72,y+.56,z),(.32,.77,.34),DARK)
+  k.ring(tag+"debt_balance_wheel",(x,roof_base+.87,z),.59,.09,WHITE,plane="xy")
+  k.box(tag+"date_inscribed_lock_sluice",(x,y+.46,z+d*.78),
+        (w*.5,.25,.3),GOLD)
+  k.box(tag+"public_double_read_panel",(x+w*.52,y+1.55,z),
+        (.15,1.3,1.11),WHITE)
+ elif city=="Orravane":
+  # Distinct suspended habitation with overhead support geometry and balcony.
+  k.box(tag+"hanging_public_walkway",(x,y-.35,z+d*.75),
+        (w+1.10,.22,1.5),WHITE)
+  for side in (-1,1):
+   k.beam(tag+"diagonal_tension_cable",
+          (x+side*w*.54,roof_base,z),
+          (x+side*w*.84,roof_base+5.0,z-.82),.085,light)
+   k.beam(tag+"walkway_guardrail",(x+side*w*.50,y+.78,z+d*.7),
+          (x+side*w*.50,y+.78,z+d*1.2),.09,trim)
+  k.box(tag+"acoustic_balcony",(x,y+1.02,z+d*.72),
+        (w*.92,.21,.84),base)
+  k.ring(tag+"counterweight_tuner",(x,y-.85,z),.42,.08,GOLD,plane="xz")
+  k.box(tag+"choir_rest_platform",(x-w*.55,y+.1,z),
+        (.65,.30,1.05),WHITE)
+ elif city=="Vathless":
+  for step in range(3):
+   k.box(tag+"quarry_cut_switchback_step",
+         (x+w*.7+step*.34,y+.19+step*.36,z+step*.31),
+         (1.05,.35,1.07),trim if step%2 else base)
+  for side in (-1,1):
+   k.taper(tag+"bearing_stone_buttress",
+         (x+side*w*.52,y+.15,z),
+         (x+side*w*.55,roof_base-.1,z),.33,.18,WHITE)
+  k.box(tag+"ancestral_ledger_frieze",(x,y+2.1,z+d*.59),
+        (w*.76,.30,.16),GOLD)
+  k.beam(tag+"safe_quarry_rail",(x-w*.55,y+1.05,z+d*.83),
+         (x+w*.55,y+1.05,z+d*.83),.10,trim)
+  k.box(tag+"shored_family_wall",(x-w*.6,y+1.0,z-d*.20),
+        (.28,1.95,d*.47),base)
+ elif city=="Eillun":
+  # The overlapping thresholds are visibly reversible, not census scanners.
+  for side in (-1,1):
+   k.beam(tag+"privacy_screen_post",(x+side*.92,y,z+d*.92),
+          (x+side*.92,y+2.4,z+d*.92),.09,trim)
+   k.box(tag+"consent_folded_screen",(x+side*.59,y+1.12,z+d*.94),
+         (.41,1.92,.15),WHITE)
+  k.box(tag+"reversible_unmarked_sill",(x,y+.17,z+d*.91),
+        (w*.92,.29,.48),base)
+  k.box(tag+"protected_guest_awning",(x,roof_base-.56,z+d*.8),
+        (w*.85,.15,.94),GOLD)
+  k.box(tag+"quiet_community_cup_board",(x+w*.61,y+.86,z+.20),
+        (.22,1.1,.85),light)
+  k.beam(tag+"intersecting_unnumbered_lintel",(x-w*.65,y+2.54,z+d*.93),
+         (x+w*.65,y+2.54,z+d*.93),.12,trim)
+ elif city=="Tharniv":
+  for side in (-1,1):
+   k.taper(tag+"grafted_root_truss",
+        (x+side*w*.46,y,z),
+        (x+side*.14,roof_base+1.30,z),.29,.08,base)
+   k.beam(tag+"living_arched_branch",(x+side*w*.52,y+2.0,z+d*.37),
+         (x+side*w*.68,roof_base+1.5,z),.12,trim)
+  k.box(tag+"petition_civic_arbor",(x,roof_base+.76,z),
+        (w+1.0,.17,d+.76),light)
+  k.box(tag+"root_step_veranda",(x,y+.12,z+d*.86),
+        (w*.85,.26,1.1),base)
+  k.orb(tag+"grafted_public_fruit",(x+w*.59,roof_base+1.43,z),
+        (.34,.45,.30),GOLD,1)
+  k.box(tag+"uncrowned_threshold_witness",(x-w*.46,y+.65,z+d*.63),
+        (.34,1.2,.22),WHITE)
+ elif city=="Auvren":
+  for side in (-1,1):
+   k.box(tag+"discontinuous_limestone_arch",(x+side*w*.54,y+1.8,z),
+         (.37,3.6,.36),WHITE)
+   k.beam(tag+"witness_diagonal_frame",
+         (x+side*w*.45,y+.3,z),
+         (x+side*.20,roof_base+1.0,z),.15,trim)
+  k.box(tag+"paired_threshold_crown",(x,roof_base+.72,z),
+        (w+.86,.38,.53),WHITE)
+  k.box(tag+"unresolved_ground_stair",(x,y+.18,z+d*.86),
+        (w*.72,.34,1.05),base)
+  k.box(tag+"public_origin_witness_plate",(x,y+1.52,z+d*.58),
+        (1.03,.73,.15),GOLD)
+  k.beam(tag+"unlinked_second_entrance",(x+w*.55,y,z-.4),
+         (x+w*.55,y+2.7,z-.4),.09,WHITE)
+
+def district_house_positions(plan):
+ """Stable non-colliding footprint centers for region and city blockouts.
+
+ These distances are exterior-shell spacing in a source-art diorama, not
+ validated pathfinding, building clearance or finished Unreal collision.
+ """
+ positions=[]
  for district,(cx,cz,count,heading) in enumerate(plan):
-  # Attach each lived-in cluster to an authored street-network endpoint.
+  for j in range(count):
+   radius=3.75+.50*((j+district)%3)
+   angle=heading+2*math.pi*j/count+(.11 if j%2 else 0)
+   for attempt in range(120):
+    # Rotating candidates around the district, then widening the local ring,
+    # preserves different street fabrics without placing buildings inside one another.
+    theta=angle+(attempt%8)*.074
+    r=radius+(attempt//8)*.42
+    x=cx+r*math.cos(theta);z=cz+r*math.sin(theta)
+    if all(math.hypot(x-px,z-pz)>=3.30 for px,pz in positions):
+     positions.append((round(x,4),round(z,4)))
+     break
+   else:raise ValueError("Not enough room for inhabited district footprint")
+ return positions
+
+def _streetlife(k,city,district,x,z,trim,light):
+ """Small source-lore civic props, not quest actors or interactive evidence."""
+ t="streetlife_"+city.lower()+"_"+str(district)+"_"
+ y=4.65 if city=="Orravane" else .12
+ k.box(t+"public_pause_seat",(x-1.4,y+.22,z+1.1),(1.75,.26,.55),trim)
+ k.box(t+"seat_support",(x-1.4,y-.01,z+1.1),(1.25,.36,.40),DARK)
+ if city in ("Bellwold","Crossings","Eillun"):
+  # A guest is sheltered before being asked for a name.
+  k.box(t+"shared_kettle_stand",(x,y+.52,z),(.96,.82,.82),trim)
+  k.orb(t+"ordinary_public_kettle",(x,y+1.05,z),(.43,.29,.40),DARK,1)
+  k.box(t+"unregistered_cup",(x+.62,y+.75,z+.32),(.19,.20,.19),WHITE)
+  if city=="Bellwold":
+   k.beam(t+"lantern_tender_staff",(x-.8,y,z-1.2),(x-.8,y+2.4,z-1.2),.07,trim)
+   k.orb(t+"stable_lantern",(x-.8,y+2.42,z-1.2),(.20,.29,.2),GOLD,1)
+  elif city=="Crossings":
+   k.box(t+"disagreeing_waystones",(x-.75,y+.50,z-1.0),(.49,.83,.42),WHITE)
+   k.box(t+"alternate_route_mark",(x-.23,y+.65,z-1.0),(.34,.35,.42),GOLD)
+  else:k.box(t+"unsigned_welcome_table",(x-.8,y+.56,z-1.0),(1.38,.22,.8),WHITE)
+ elif city=="Paperhaven":
+  k.box(t+"chalk_public_index",(x,y+1.1,z),(1.95,1.9,.35),WHITE)
+  for a in range(3):
+   k.box(t+"ledger_leaf_"+str(a),(x-.62+a*.59,y+.8,z+.2),(.35,.48,.04),trim)
+  k.box(t+"ink_and_public_papers",(x+.9,y+.28,z+1.1),(1.2,.24,.8),GOLD)
+ elif city=="Saltwake":
+  k.box(t+"dry_water_catcher",(x,y+.35,z),(1.75,.55,1.28),trim)
+  k.box(t+"public_rain_basin",(x,y+.67,z),(1.58,.14,1.13),light)
+  for side in (-1,1):
+   k.ring(t+"coiled_rope_"+str(side),(x+side*.85,y+.20,z-.95),.30,.08,WHITE,plane="xz")
+ elif city=="Cinderhold":
+  k.box(t+"ash_sieve",(x,y+.55,z),(1.5,.15,1.1),trim)
+  k.box(t+"heat_transfer_channel",(x+.9,y+.13,z-1),(1.3,.20,.35),GOLD)
+  k.taper(t+"communal_braided_furnace_flue",(x-.8,y,z-.4),(x-.6,y+2.1,z-.4),.33,.14,DARK)
+ elif city=="Drevlach":
+  k.box(t+"double_read_debt_slate",(x,y+1.1,z),(1.8,1.9,.14),trim)
+  k.box(t+"public_accounting_table",(x+.8,y+.56,z+.94),(1.44,.16,.9),WHITE)
+  k.ring(t+"tide_clock_marker",(x-.9,y+1.55,z),.55,.07,GOLD,plane="xy")
+ elif city=="Orravane":
+  k.beam(t+"restate_support_note_rail",(x-1.0,y,z),(x+1.0,y+.55,z),.13,WHITE)
+  k.box(t+"rest_platform",(x,y+.2,z),(2.6,.21,1.85),trim)
+  k.ring(t+"choir_counterweight",(x,y-1.2,z),.52,.09,GOLD,plane="xz")
+ elif city=="Vathless":
+  k.box(t+"quarry_safety_brace",(x,y+.55,z),(1.8,.34,.65),WHITE)
+  k.beam(t+"supporting_rail",(x-1,y,z-1),(x+1.2,y+1.4,z-1),.16,trim)
+  k.box(t+"family_stone_unfilled_seam",(x+.4,y+.9,z+.8),(1.25,1.0,.18),GOLD)
+ elif city=="Tharniv":
+  k.taper(t+"grafted_public_petition_root",(x,y,z),(x-.1,y+2.7,z),.47,.18,trim)
+  for j in range(3):
+   a=2*math.pi*j/3
+   k.beam(t+"petition_branch_"+str(j),(x,y+2.0,z),
+    (x+1.8*math.cos(a),y+2.7,z+1.6*math.sin(a)),.09,WHITE)
+  k.box(t+"empty_public_witness_seat",(x+1,y+.45,z+1.1),(1.0,.4,.8),GOLD)
+ elif city=="Auvren":
+  k.box(t+"witness_threshold_base",(x,y+.3,z),(2.35,.53,1.9),WHITE)
+  for side in (-1,1):
+   k.beam(t+"paired_different_thresholds_"+str(side),
+    (x+side*.90,y,z),(x+side*.90,y+2.4,z),.16,trim)
+  k.box(t+"witness_record_without_answer",(x,y+2.55,z),(2.1,.21,.41),GOLD)
+
+def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
+ spurs=[];positions=district_house_positions(plan);index=0
+ for district,(cx,cz,count,heading) in enumerate(plan):
+  # All homes sit within a visual district foundation; a separate neighborhood
+  # spur joins the authored approach road. This does not promise Unreal traversal.
+  floor_y=4.12 if city=="Orravane" else -.42
+  k.box("district_ground_"+city.lower()+"_"+str(district),
+        (cx,floor_y,cz),(14.2,.25,14.2),base if district%2 else trim)
   endpoints=[p for route in roads for p in (route[0],route[-1])]
   connection=min(endpoints,key=lambda p:(p[0]-cx)**2+(p[1]-cz)**2)
   if math.hypot(connection[0]-cx,connection[1]-cz)<.1:
    spurs.append(((cx,cz),(cx+3*math.cos(heading),cz+3*math.sin(heading))))
   else:spurs.append((connection,(cx,cz)))
+  _streetlife(k,city,district,cx,cz,trim,light)
   for j in range(count):
-   idx=sum(row[2] for row in plan[:district])+j
-   angle=heading+(j/count)*2*math.pi+(.11 if j%2 else 0)
-   rad=3.75+.5*((j+district)%3)
-   x=cx+rad*math.cos(angle);z=cz+rad*math.sin(angle)
-   _dwelling(k,city,idx,x,z,base,trim,light)
+   x,z=positions[index]
+   _dwelling(k,city,index,x,z,base,trim,light)
+   index+=1
  _road_mesh(k,realm,spurs,"neighborhood",base,light)
 
 def _regional_district_plan(realm):
  # Smaller previews remain inhabited, while city-level views show all four
  # districts at higher building density and their own civic micro-topology.
- roads=REALM_PATHS[realm];points=[route[0] for route in roads[:3]]
+ roads=REALM_PATHS[realm]
+ # The orchard is a radial road system: all routes BEGIN at the public empty seat.
+ # District viewpoints belong at different branch destinations, not atop each other.
+ points=[route[-1] if realm=='OrchardOfKings' else route[0] for route in roads[:3]]
  if len(points)<3:raise ValueError("Three independent regional approaches required")
  return tuple((float(x)*1.22,float(z)*1.18,4,(i*.81+.27)) for i,(x,z) in enumerate(points))
 
@@ -748,7 +1038,8 @@ def build_all(root=ROOT,out=None,verify=False):
   if info['triangles']<150 or info['parts']<({'Creature':5,'NPC':10,'Environment':15,'City':23}[group]):raise ValueError('Too little genuine model geometry: '+name)
   building_shells=sum('_habitation_shell_' in name for name in k.scene.geometry)
   district_count=(len(CITY_DISTRICTS[stable.removeprefix('city:')]) if group=='City' else len(_regional_district_plan(realm)) if group=='Environment' else 0)
-  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
+  district_views=([[round(float(x),3),round(4.9 if realm=='SkyBelow' else 1.3,3),round(float(z),3)] for x,z,_,_ in (CITY_DISTRICTS[stable.removeprefix('city:')] if group=='City' else _regional_district_plan(realm))] if group in ('City','Environment') else [])
+  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
  manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0) embedded binary meshes and vertex colors','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')

@@ -8,6 +8,7 @@ on:
       - 'Scripts/build_hero_models.py'
       - 'Authoring/world_content_pack.json'
       - 'Scripts/tests/test_distinct_realm_city_layouts.py'
+      - 'Scripts/tests/test_neighborhood_quality.py'
       - '.github/workflows/pages.yml'
   pull_request:
     paths:
@@ -42,6 +43,7 @@ jobs:
           python Scripts/publishing/build_public_site.py --check
           python Scripts/build_hero_models.py --out-dir site/dist/models --verify-output
           python -m unittest discover -s Scripts/tests -p test_distinct_realm_city_layouts.py -v
+          python -m unittest discover -s Scripts/tests -p test_neighborhood_quality.py -v
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site/dist
