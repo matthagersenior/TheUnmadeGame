@@ -28,7 +28,7 @@ class StreetLevelFacades(unittest.TestCase):
     self.assertFalse(((abs(center[:,0]-door_x)<.27)&(center[:,1]>.10)&(center[:,1]<1.47)).any(),
                      "Face covers the existing door aperture")
     for x in (-w*.33,w*.33):
-     self.assertFalse(((abs(center[:,0]-x)<.13)&(abs(center[:,1]-h*.58)<.16)).any(),
+     self.assertFalse(((abs(center[:,0]-x)<.13)&(abs(center[:,1]-max(h*.75,1.9))<.16)).any(),
                       "Face covers a glowing window aperture")
     self.assertLessEqual(float(mesh.bounds[1][0]),w*.55)
     self.assertGreaterEqual(float(mesh.bounds[0][0]),-w*.55)
