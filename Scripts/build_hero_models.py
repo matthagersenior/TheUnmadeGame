@@ -981,8 +981,10 @@ def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
   # All homes sit within a visual district foundation; a separate neighborhood
   # spur joins the authored approach road. This does not promise Unreal traversal.
   floor_y=4.12 if city=="Orravane" else -.42
+  # The load-bearing base is buried inside the terrain apron; the old
+  # exposed 14.2m square pad formed a visible hard cliff around each district.
   k.box("district_ground_"+city.lower()+"_"+str(district),
-        (cx,floor_y,cz),(14.2,.25,14.2),base if district%2 else trim)
+        (cx,floor_y-.2,cz),(13.1,.2,13.1),base if district%2 else trim)
   _district_surface().finish_district_terrain(k,city,district,cx,cz,floor_y)
   endpoints=[p for route in roads for p in (route[0],route[-1])]
   connection=min(endpoints,key=lambda p:(p[0]-cx)**2+(p[1]-cz)**2)
@@ -1108,9 +1110,10 @@ def build_all(root=ROOT,out=None,verify=False):
   else:hero_label,hero_focus='',[]
   textured_roofs=sum('_district_pbr_pitched_roof_' in key for key in k.scene.geometry)
   sculpted_districts=sum('_district_terrain_relief_' in key for key in k.scene.geometry)
+  blended_edges=sum('_terrain_blend_apron_' in key for key in k.scene.geometry)
   grounded_homes=sum('_terrain_joinery_support_' in key for key in k.scene.geometry)
   graded_walkways=sum('_terrain_joinery_walkway_' in key for key in k.scene.geometry)
-  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,textured_roofs=textured_roofs,sculpted_districts=sculpted_districts,grounded_homes=grounded_homes,graded_walkways=graded_walkways,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
+  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,textured_roofs=textured_roofs,sculpted_districts=sculpted_districts,blended_edges=blended_edges,grounded_homes=grounded_homes,graded_walkways=graded_walkways,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
  manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0), binary static meshes, vertex colors, and locally generated source-generated realm, city, roof and terrain UV/PBR albedo and normal textures','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')
