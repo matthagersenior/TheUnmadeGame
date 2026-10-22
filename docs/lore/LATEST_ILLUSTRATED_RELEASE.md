@@ -1,5 +1,8 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**22 October 2026 source-only ecology milestone:** Six existing encounter sites now have proposed collision-bearing creature habitat props, cover, transient player-proximity warnings, reactive lighting and local E-inspection that opens an alcove. Creature lineages, uncertain origin lore, acquisition rules, quest progress and saved state remain unchanged. The illustrated v20 binaries/digests are historical and unchanged; no new illustrated edition was issued. Native Unreal runtime/AI/line-of-sight behavior has not been compiled or playtested.
+
+
 **22 October 2026 source-only realm skyline update:** Nine distinct bounded per-piece orientation profiles now shape the existing decorative primitive silhouettes. No new canon fact, gameplay state, collision rule or save field was added. The v20 illustrated files and digests remain historical and unchanged; no new illustrated edition was issued. Unreal rendering remains unverified.
 
 **22 October 2026 source-only campaign journal update:** Exact act text and lead choices are regression-tested, and prior schema-1 story progress reconstructs the read-only journal without new save fields. This adds no canon events or answers. It does **not** issue a new illustrated edition: the v20 PDFs, DOCX files, atlas, ZIP and recorded digests remain historical and unchanged. Unreal save deserialization and journal rendering remain unverified.
