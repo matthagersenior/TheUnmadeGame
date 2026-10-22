@@ -665,6 +665,201 @@ def _dwelling(k,city,idx,x,z,base,trim,light):
   k.box(tag+"_roof_detail_open_limestone_lintel_"+str(idx),(x,roofline,z),(w+.5,.18,d+.4),WHITE)
   k.box(tag+"_witness_bench_"+str(idx),(x-.6,y+.36,z+d*.7),(1.3,.2,.44),trim)
 
+ _architecture_finish(k,city,idx,x,y,z,w,d,h,base,trim,light)
+
+
+def _sculpted_pitch(k,name,x,y,z,w,d,rise,material):
+ # Six-vertex gabled prism: genuinely sloped roof planes, with closed gables.
+ # Replaces one-size-fits-all flat roof silhouettes without requiring Blender.
+ a=w*.55;b=d*.56
+ vertices=[
+  (x-a,y,z-b),(x,y+rise,z-b),(x+a,y,z-b),
+  (x-a,y,z+b),(x,y+rise,z+b),(x+a,y,z+b)]
+ faces=[[0,2,1],[3,4,5],[0,1,4],[0,4,3],
+        [1,2,5],[1,5,4],[0,3,5],[0,5,2]]
+ mesh=trimesh.Trimesh(vertices=vertices,faces=faces,process=False)
+ k.add(mesh,name,material)
+
+def _architecture_finish(k,city,idx,x,y,z,w,d,h,base,trim,light):
+ """Specific shaped exterior structure. No generic single-town house grammar.
+
+ Details are visual-only geometry, not interactive game props, approved
+ canonical interior layouts or pathfinding-ready structures.
+ """
+ identity={
+  "Crossings":"triple_way_charter","Bellwold":"refuge_patched_stone",
+  "Paperhaven":"archive_buttress","Saltwake":"ship_hull_curvature",
+  "Cinderhold":"heat_channel_exhaust","Drevlach":"counterweight_lockhouse",
+  "Orravane":"suspended_walkway","Vathless":"quarry_switchback",
+  "Eillun":"consent_threshold_screen","Tharniv":"grafted_root_vault",
+  "Auvren":"limestone_witness_frame"
+ }[city]
+ tag="architecture_"+identity+"_"+str(idx)+"_"
+ # Tilted roof is a separately triangulated object. The rise and eave rhythm
+ # varies by settlement and neighborhood, not by a common material swap.
+ roof_base=y+h+.13
+ rise=.72+.19*(idx%4)
+ if city in ("Saltwake","Tharniv","Orravane"):rise=1.05+.11*(idx%5)
+ if city in ("Paperhaven","Drevlach","Vathless"):rise=.48+.17*(idx%3)
+ _sculpted_pitch(k,tag+"nonrectangular_roof_gable",x,roof_base,z,w,d,rise,trim)
+ k.beam(tag+"ridge_support",(x,roof_base+rise,z-d*.56),
+        (x,roof_base+rise,z+d*.56),.09,light)
+ for side in (-1,1):
+  k.beam(tag+"sloping_rafter",(x,roof_base+rise,z),
+         (x+side*w*.55,roof_base,z),.075,base)
+  k.box(tag+"wall_trim_plaster",(x+side*(w*.5+.04),y+h*.7,z),
+        (.09,.22,d*.8),WHITE if idx%3==0 else trim)
+ # Architectural completion uses eight or more city-specific medium-scale
+ # feature types; the city should remain recognizable with palette removed.
+ if city=="Crossings":
+  for side in (-1,1):
+   k.beam(tag+"forked_timber_rib",(x+side*w*.42,y+.25,z+.70),
+          (x+side*w*.61,roof_base+.27,z-.30),.11,GOLD)
+   k.box(tag+"route_notice_lintel",(x+side*.64,y+1.85,z+d*.62),
+         (.83,.23,.18),WHITE)
+  k.box(tag+"charter_porch",(x,y+.15,z+d*.77),(w*.84,.3,1.03),base)
+  k.beam(tag+"bridging_survey_rail",(x-w*.4,y+1.4,z+d*.9),
+         (x+w*.42,y+1.45,z+d*.9),.09,trim)
+  k.box(tag+"three_way_chalk_mark",(x,y+.33,z+d*.86),(.65,.08,.42),WHITE)
+  k.box(tag+"refuge_side_awning",(x-w*.47,y+2.0,z),(1.05,.15,1.55),trim)
+ elif city=="Bellwold":
+  k.box(tag+"refuge_lean_to",(x+w*.63,y+.93,z+.2),(1.25,1.72,d*.68),base)
+  k.beam(tag+"patched_roof_support",(x+w*.58,y+1.95,z-d*.28),
+         (x+w*1.0,y+1.62,z+d*.25),.11,trim)
+  k.box(tag+"copper_lantern_hood",(x-w*.31,y+1.94,z+d*.62),(.62,.18,.52),GOLD)
+  k.box(tag+"covered_guest_veranda",(x,y+.29,z+d*.85),(w*.84,.22,1.25),WHITE)
+  for side in (-1,1):
+   k.beam(tag+"weathered_refuge_knee_brace",(x+side*w*.38,y+.4,z+d*.76),
+          (x+side*w*.27,y+2.18,z+d*.61),.13,trim)
+  k.box(tag+"smoke_baffle",(x-w*.3,roof_base+.78,z-.5),(.44,.39,.48),DARK)
+  k.box(tag+"community_wash_rack",(x+w*.52,y+.57,z-.6),(.15,1.08,1.56),WHITE)
+ elif city=="Paperhaven":
+  for side in (-1,1):
+   k.taper(tag+"archive_buttress_pier",
+       (x+side*(w*.65),y,z),(x+side*w*.52,roof_base+.7,z),.37,.14,WHITE)
+   k.box(tag+"index_slit_frame",(x+side*w*.22,y+1.68,z+d*.6),
+         (.23,.98,.13),trim)
+  k.box(tag+"stacked_chalk_folio",(x,y+2.2,z+d*.67),(w*.64,.18,.24),WHITE)
+  k.box(tag+"narrow_archive_terrace",(x,roof_base+.19,z-d*.55),
+        (w+.48,.24,.72),trim)
+  k.box(tag+"vault_corner_cap",(x-w*.39,roof_base+.75,z+d*.3),(.28,.65,.28),GOLD)
+  k.box(tag+"public_index_shelf",(x,y+.70,z+d*.73),(w*.62,.15,.35),base)
+ elif city=="Saltwake":
+  # Hull form: keel plus multiple curved-looking spaced ribs across pitched roof.
+  for side in (-1,0,1):
+   zz=z+side*d*.42
+   k.beam(tag+"upturned_hull_port_rib",(x-w*.56,roof_base,zz),
+          (x,roof_base+rise*1.38,zz),.125,trim)
+   k.beam(tag+"upturned_hull_starboard_rib",(x,roof_base+rise*1.38,zz),
+          (x+w*.56,roof_base,zz),.125,light)
+  k.box(tag+"inverted_keel",(x,roof_base+rise*1.22,z),
+        (.23,.14,d+.67),DARK)
+  k.box(tag+"tide_catch_gutter",(x+w*.54,roof_base-.28,z),
+        (.27,.24,d+.41),GOLD)
+  k.beam(tag+"rope_brace",(x+w*.50,y+1.93,z-.4),
+         (x+w*.96,y+.21,z+.35),.07,WHITE)
+  k.box(tag+"harbor_drying_frame",(x-w*.55,y+1.12,z+d*.68),
+        (1.4,1.35,.12),trim)
+ elif city=="Cinderhold":
+  k.box(tag+"heat_channel_apron",(x,y+.17,z+d*.75),(w*.85,.22,1.27),DARK)
+  for side in (-1,1):
+   k.box(tag+"basalt_corner_rib",(x+side*w*.50,y+1.5,z),
+         (.35,2.9,.36),base)
+   k.beam(tag+"exhaust_tension_brace",(x+side*.75,roof_base+.26,z),
+          (x+side*1.16,y+1.1,z+.25),.11,trim)
+  k.taper(tag+"sintered_kiln_chimney",(x+w*.22,roof_base,z),
+          (x+w*.29,roof_base+2.6,z),.48,.31,DARK)
+  k.ring(tag+"chimney_collar",(x+w*.29,roof_base+2.3,z),.40,.07,GOLD,plane="xz")
+  k.box(tag+"heat_warning_sill",(x,y+.68,z+d*.59),(w*.6,.17,.3),light)
+ elif city=="Drevlach":
+  k.box(tag+"canal_lock_house_platform",(x,y+.26,z+d*.62),
+        (w+.7,.35,1.60),trim)
+  for side in (-1,1):
+   k.beam(tag+"counterweight_suspended_cord",
+          (x+side*.76,roof_base+1.15,z),
+          (x+side*.72,y+.45,z),.07,GOLD)
+   k.box(tag+"ledger_weight",(x+side*.72,y+.56,z),(.32,.77,.34),DARK)
+  k.ring(tag+"debt_balance_wheel",(x,roof_base+.87,z),.59,.09,WHITE,plane="xy")
+  k.box(tag+"date_inscribed_lock_sluice",(x,y+.46,z+d*.78),
+        (w*.5,.25,.3),GOLD)
+  k.box(tag+"public_double_read_panel",(x+w*.52,y+1.55,z),
+        (.15,1.3,1.11),WHITE)
+ elif city=="Orravane":
+  # Distinct suspended habitation with overhead support geometry and balcony.
+  k.box(tag+"hanging_public_walkway",(x,y-.35,z+d*.75),
+        (w+1.10,.22,1.5),WHITE)
+  for side in (-1,1):
+   k.beam(tag+"diagonal_tension_cable",
+          (x+side*w*.54,roof_base,z),
+          (x+side*w*.84,roof_base+5.0,z-.82),.085,light)
+   k.beam(tag+"walkway_guardrail",(x+side*w*.50,y+.78,z+d*.7),
+          (x+side*w*.50,y+.78,z+d*1.2),.09,trim)
+  k.box(tag+"acoustic_balcony",(x,y+1.02,z+d*.72),
+        (w*.92,.21,.84),base)
+  k.ring(tag+"counterweight_tuner",(x,y-.85,z),.42,.08,GOLD,plane="xz")
+  k.box(tag+"choir_rest_platform",(x-w*.55,y+.1,z),
+        (.65,.30,1.05),WHITE)
+ elif city=="Vathless":
+  for step in range(3):
+   k.box(tag+"quarry_cut_switchback_step",
+         (x+w*.7+step*.34,y+.19+step*.36,z+step*.31),
+         (1.05,.35,1.07),trim if step%2 else base)
+  for side in (-1,1):
+   k.taper(tag+"bearing_stone_buttress",
+         (x+side*w*.52,y+.15,z),
+         (x+side*w*.55,roof_base-.1,z),.33,.18,WHITE)
+  k.box(tag+"ancestral_ledger_frieze",(x,y+2.1,z+d*.59),
+        (w*.76,.30,.16),GOLD)
+  k.beam(tag+"safe_quarry_rail",(x-w*.55,y+1.05,z+d*.83),
+         (x+w*.55,y+1.05,z+d*.83),.10,trim)
+  k.box(tag+"shored_family_wall",(x-w*.6,y+1.0,z-d*.20),
+        (.28,1.95,d*.47),base)
+ elif city=="Eillun":
+  # The overlapping thresholds are visibly reversible, not census scanners.
+  for side in (-1,1):
+   k.beam(tag+"privacy_screen_post",(x+side*.92,y,z+d*.92),
+          (x+side*.92,y+2.4,z+d*.92),.09,trim)
+   k.box(tag+"consent_folded_screen",(x+side*.59,y+1.12,z+d*.94),
+         (.41,1.92,.15),WHITE)
+  k.box(tag+"reversible_unmarked_sill",(x,y+.17,z+d*.91),
+        (w*.92,.29,.48),base)
+  k.box(tag+"protected_guest_awning",(x,roof_base-.56,z+d*.8),
+        (w*.85,.15,.94),GOLD)
+  k.box(tag+"quiet_community_cup_board",(x+w*.61,y+.86,z+.20),
+        (.22,1.1,.85),light)
+  k.beam(tag+"intersecting_unnumbered_lintel",(x-w*.65,y+2.54,z+d*.93),
+         (x+w*.65,y+2.54,z+d*.93),.12,trim)
+ elif city=="Tharniv":
+  for side in (-1,1):
+   k.taper(tag+"grafted_root_truss",
+        (x+side*w*.46,y,z),
+        (x+side*.14,roof_base+1.30,z),.29,.08,base)
+   k.beam(tag+"living_arched_branch",(x+side*w*.52,y+2.0,z+d*.37),
+         (x+side*w*.68,roof_base+1.5,z),.12,trim)
+  k.box(tag+"petition_civic_arbor",(x,roof_base+.76,z),
+        (w+1.0,.17,d+.76),light)
+  k.box(tag+"root_step_veranda",(x,y+.12,z+d*.86),
+        (w*.85,.26,1.1),base)
+  k.orb(tag+"grafted_public_fruit",(x+w*.59,roof_base+1.43,z),
+        (.34,.45,.30),GOLD,1)
+  k.box(tag+"uncrowned_threshold_witness",(x-w*.46,y+.65,z+d*.63),
+        (.34,1.2,.22),WHITE)
+ elif city=="Auvren":
+  for side in (-1,1):
+   k.box(tag+"discontinuous_limestone_arch",(x+side*w*.54,y+1.8,z),
+         (.37,3.6,.36),WHITE)
+   k.beam(tag+"witness_diagonal_frame",
+         (x+side*w*.45,y+.3,z),
+         (x+side*.20,roof_base+1.0,z),.15,trim)
+  k.box(tag+"paired_threshold_crown",(x,roof_base+.72,z),
+        (w+.86,.38,.53),WHITE)
+  k.box(tag+"unresolved_ground_stair",(x,y+.18,z+d*.86),
+        (w*.72,.34,1.05),base)
+  k.box(tag+"public_origin_witness_plate",(x,y+1.52,z+d*.58),
+        (1.03,.73,.15),GOLD)
+  k.beam(tag+"unlinked_second_entrance",(x+w*.55,y,z-.4),
+         (x+w*.55,y+2.7,z-.4),.09,WHITE)
+
 def district_house_positions(plan):
  """Stable non-colliding footprint centers for region and city blockouts.
 
