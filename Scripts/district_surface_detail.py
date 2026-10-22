@@ -231,35 +231,44 @@ def finish_dwelling(k,city,idx,x,y,z,w,h,d):
             (x+offset,y+h+.25+math.tan(pitch)*width*.11,z+d*.56),
             .028,"roof")
 
-def finish_district_terrain(k,city,district,cx,cz,floor_y):
-    """Unique irregular public surface: a true gridded 3D relief, not a box."""
+def terrain_surface_height(city,district,x,z,cx,cz,floor_y):
+    """Exact source function shared by sculpted relief and foundation supports.
+
+    Coordinates are 3D-preview Y-up metres, not collision-ready landscape data.
+    """
     if city not in CITY_RHYTHM:raise ValueError(city)
     freq_a,freq_b,amplitude=CITY_RHYTHM[city]
+    x=float(x)-float(cx);z=float(z)-float(cz)
+    if city=="Vathless":
+        elevation=.12*np.floor((x+7)/2.5)+amplitude*np.sin(z*.44)
+    elif city=="Drevlach":
+        elevation=amplitude*(.5-abs(np.sin(x*.56)))*1.6+.06*np.cos(z*.5)
+    elif city=="Saltwake":
+        elevation=amplitude*(np.sin(x*.5+z*.26)**2)-.07*np.cos(z*.7)
+    elif city=="Orravane":
+        elevation=amplitude*(np.sin(x*.4)+np.cos(z*.47))+.14*np.sin(x*.18*z*.1)
+    elif city=="Tharniv":
+        elevation=amplitude*(np.sin(x*.38)**2+np.cos(z*.42)**2)*.64
+    elif city=="Auvren":
+        elevation=amplitude*(np.sign(np.sin(x*.47+z*.33))*.40+
+            np.sin(z*.4))
+    else:
+        elevation=amplitude*(np.sin(x*freq_a*.37+district*.37)
+           *np.cos(z*freq_b*.41)+.33*np.sin(x*.13*z*.12))
+    elevation+=.014*district*(x/6.9)+.018*np.sin(x*.7+z*.31+district)
+    return float(floor_y+.2+elevation)
+
+def finish_district_terrain(k,city,district,cx,cz,floor_y):
+    """Unique physical relief using the EXACT elevations of house supports."""
+    if city not in CITY_RHYTHM:raise ValueError(city)
     count=15
     xs=np.linspace(-6.9,6.9,count)
     zs=np.linspace(-6.9,6.9,count)
     vertices=[]
-    for iz,z in enumerate(zs):
-        for ix,x in enumerate(xs):
-            if city=="Vathless":
-                elevation=.12*np.floor((x+7)/2.5)+amplitude*np.sin(z*.44)
-            elif city=="Drevlach":
-                elevation=amplitude*(.5-abs(np.sin(x*.56)))*1.6+.06*np.cos(z*.5)
-            elif city=="Saltwake":
-                elevation=amplitude*(np.sin(x*.5+z*.26)**2)-.07*np.cos(z*.7)
-            elif city=="Orravane":
-                elevation=amplitude*(np.sin(x*.4)+np.cos(z*.47))+.14*np.sin(x*.18*z*.1)
-            elif city=="Tharniv":
-                elevation=amplitude*(np.sin(x*.38)**2+np.cos(z*.42)**2)*.64
-            elif city=="Auvren":
-                elevation=amplitude*(np.sign(np.sin(x*.47+z*.33))*.40+
-                    np.sin(z*.4))
-            else:
-                elevation=amplitude*(np.sin(x*freq_a*.37+district*.37)
-                   *np.cos(z*freq_b*.41)+.33*np.sin(x*.13*z*.12))
-            # Each district gets another small unique slope; avoid cloned terrain.
-            elevation+=.014*district*(x/6.9)+.018*np.sin(x*.7+z*.31+district)
-            vertices.append((cx+x,floor_y+.2+elevation,cz+z))
+    for z in zs:
+        for x in xs:
+            ax=float(cx+x);az=float(cz+z)
+            vertices.append((ax,terrain_surface_height(city,district,ax,az,cx,cz,floor_y),az))
     faces=[]
     for iz in range(count-1):
         for ix in range(count-1):
