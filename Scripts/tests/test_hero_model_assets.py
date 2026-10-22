@@ -1,4 +1,4 @@
-"""Source contract for the actual 39 canon-linked binary glTF hero meshes."""
+"""Source contract for the actual 50 canon-linked binary glTF hero meshes."""
 from __future__ import annotations
 import importlib.util,json,tempfile,hashlib,unittest
 from pathlib import Path
@@ -25,16 +25,18 @@ class HeroModels(unittest.TestCase):
   import trimesh
   with tempfile.TemporaryDirectory() as td:
    out=Path(td);ledger=builder.build_all(ROOT,out)
-   self.assertEqual(ledger["asset_count"],39)
-   self.assertEqual(ledger["categories"],{"NPC":18,"Creature":12,"Environment":9})
-   self.assertEqual(len({r["stable_id"] for r in ledger["assets"]}),39)
-   self.assertEqual(len({r["sha256"] for r in ledger["assets"]}),39)
+   self.assertEqual(ledger["asset_count"],50)
+   self.assertEqual(ledger["categories"],{"NPC":18,"Creature":12,"Environment":9,"City":11})
+   self.assertEqual(len({r["stable_id"] for r in ledger["assets"]}),50)
+   self.assertEqual(len({r["sha256"] for r in ledger["assets"]}),50)
    self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="NPC"},
      {n["id"] for n in json.loads((ROOT/"Authoring/world_content_pack.json").read_text())["npcs"]})
    self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="Creature"},
      {"creature:"+k for k in builder.SPECIES})
    self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="Environment"},
      {"realm:"+k for k in builder.REALMS})
+   self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="City"},
+     {"city:"+c for c in builder.CITY_SPECS})
    for record in ledger["assets"]:
     path=out/record["file"]
     self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),record["sha256"])

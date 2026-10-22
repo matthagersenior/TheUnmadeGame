@@ -319,101 +319,265 @@ def build_resident(row,index):
 
 # These nine distinct environments are real multi-mesh architectural dioramas
 # with separate non-interactable parts, not navmesh/quest/lighting-authoritative maps.
-def build_environment(realm):
- k=Kit();base,trim,light=PALETTE[realm];seed=REALMS.index(realm)
- rng=random.Random(17511+seed)
- k.box('terrain_foundation',(0,-.22,0),(28,.44,25),base)
- # Visible stone roads and visually legible entrances; imported as art, no collision contract.
- for j in range(12):
-  z=-11+j*2.05
-  k.box('surveyor_path_stone',(rng.uniform(-.24,.24),.025,z),(2.2,.085,1.65),trim)
- def cottage(x,z,w=3.2,h=3.7,d=3.3,roof=True):
-  k.box('structure_walls',(x,h*.45,z),(w,h*.90,d),trim)
-  k.box('door_dark_recess',(x,.98,z+d*.507),(.72,1.85,.055),DARK)
-  k.box('door_bell_lintel',(x,2.0,z+d*.55),(1.08,.22,.23),light)
-  for xx in (-w*.32,w*.32):
-   k.box('window_vents',(x+xx,2.15,z+d*.51),(.36,.51,.08),BLACK)
-  if roof:
-   k.taper('roof_pitched_first',(x-w*.54,h*.9,z),(x,h*1.27,z),.17,.08,base)
-   k.taper('roof_pitched_second',(x+w*.54,h*.9,z),(x,h*1.27,z),.17,.08,base)
-   k.box('ridge_cap',(x,h*1.24,z),(w*.21,.22,d*1.05),light)
- def stone_tower(x,z,h=7,r=.75):
-  k.taper('cut_stone_column',(x,.0,z),(x,h,z),r,r*.68,trim,16)
-  for j in range(4):k.ring('civic_tower_rings',(x,1.1+j*h/5,z),r*.91,.07,light,plane='xz')
- if realm=='ThreefoldReach':
-  for x,z in ((-8,-6),(8,-7),(-7,7),(8,6)):cottage(x,z,3.5,3.5,3.4)
-  for x,h in ((-2.4,5.4),(0,7.0),(2.4,6.1)):
-   stone_tower(x,1.0,h,.46)
-   k.ring('no_final_bell_sound',(x,h+.20,1),.55,.09,GOLD,plane='xy')
-  for i in range(7):k.box('chalk_waymarker',(rng.uniform(-5,5),.25,rng.uniform(-10,10)),(.38,.5,.38),WHITE)
- elif realm=='WidowedRain':
-  for x,z in ((-8,-6),(7,-7),(-8,7),(8,6)):
-   cottage(x,z,4,2.8,3.9,roof=False)
-   for offset in (-1,1):k.taper('dry_boat_roof',(x+offset*2.25,2.8,z),(x,4.35,z),.15,.045,base)
-  for side in (-1,1):
-   k.beam('pier_rail',(side*2.8,.38,-11),(side*2.8,.38,11),.10,trim)
-   for z in range(-10,11,2):k.beam('pier_post',(side*2.8,-.1,z),(side*2.8,1.1,z),.10,GOLD)
-  stone_tower(3,0,7,.33)
-  for j in range(9):k.box('dry_tide_notch',(3.36,.58+j*.64,.0),(.13,.065,.6),light)
- elif realm=='HearthBeneath':
-  for x,z in ((-8,-6),(8,-7),(-8,6),(8,7)):
-   k.box('charred_communal_foundation',(x,1.32,z),(5,2.5,4),DARK)
-   k.box('ember_channel',(x,1.24,z+2.06),(3.0,.36,.13),light)
-   k.taper('braided_chimney',(x,2.4,z),(x+.3,6.25,z),.54,.34,trim)
-   k.orb('furnace_throat',(x+.3,6.3,z),(.42,.12,.36),light,2)
-  for j in range(13):
-   z=-11+j*1.7;k.box('heat_aqueduct',(4,.18,z),(1.1,.26,1.45),light)
- elif realm=='TidalLedger':
-  for x,z in ((-8,-7),(8,-7),(-8,6),(8,7)):
-   cottage(x,z,4,3.7,3.1)
-   for j in range(6):k.box('debt_slate',(x,1.0+j*.44,z+1.65),(.86,.11,.16),light)
-  for x in (-2.4,2.4):
-   stone_tower(x,0,8,.55)
-   k.beam('ledger_suspension',(x,7.8,.0),(x,2.7,1.4),.040,GOLD)
-   k.box('unclaimed_hanging_ledger',(x,2.6,1.4),(.75,1.2,.13),trim)
-  k.ring('uncertain_contract_halo',(0,7.8,0),2.1,.12,light,plane='xz')
- elif realm=='SkyBelow':
-  for x,z,h in ((-8,-7,4.2),(8,-7,6.0),(-7,7,5.6),(8,7,7.2)):
-   k.box('suspended_house_roof',(x,h,z),(5,.35,4.6),trim)
-   k.box('open_habitat',(x,h+.98,z),(3.6,1.8,2.7),base)
-   for side in (-1,1):k.beam('aerial_support_cable',(x+side*2,h,z),(x+side*.6,h+7,z),.064,light)
-   k.ring('choir_counterweight',(x,h-1.3,z),.7,.10,GOLD,plane='xz')
-  for x in (-2.5,2.5):k.beam('central_hanging_bridge',(x,1,-10),(x,4,10),.13,WHITE)
- elif realm=='CinderSpine':
-  for x in (-10,10):
+# These route graphs are deliberately different physical layouts, not a shared
+# town-square grid with new building props. They are authored preview layouts,
+# NOT validated Unreal navigation, collision, or canon world coordinates.
+REALM_PATHS={
+ "ThreefoldReach":(((-12,-8),(-6,-4),(0,0),(8,8)),((-12,8),(-5,3),(0,0),(11,-8)),((-6,10),(-2,4),(0,0),(4,-3))),
+ "WidowedRain":(((-12,8),(-9,8),(-9,-8),(5,-8),(5,6)),((-9,-3),(-3,-3),(1,2),(10,2)),((-1,-11),(-1,-4),(4,-4),(10,-9))),
+ "HearthBeneath":(((-11,0),(-6,0),(-4,-4),(0,-6),(5,-3),(7,1)),((0,-12),(0,-6),(4,-1),(7,5),(12,7)),((-7,10),(-7,4),(-3,2),(3,2),(8,8))),
+ "TidalLedger":(((-11,-10),(-9,-1),(-10,9)),((-3,-11),(-2,-1),(-3,10)),((4,-10),(4,-1),(7,10)),((-10,0),(-3,2),(4,1),(12,2))),
+ "SkyBelow":(((-12,-9),(-5,-9),(2,-5),(8,1)),((-10,9),(-2,6),(5,8),(11,5)),((-5,-9),(-2,0),(5,8))),
+ "CinderSpine":(((-12,-10),(-5,-10),(-5,-5),(4,-5),(4,1),(11,1)),((-10,9),(-10,4),(-2,4),(-2,9),(8,9)),((-5,-5),(-2,0),(-2,4))),
+ "HundredUnlived":(((-12,-8),(-8,-8),(-8,-3),(-2,-3),(1,-8),(10,-8)),((-10,7),(-5,7),(-5,2),(2,2),(2,9)),((-2,-3),(4,-3),(7,2),(12,2))),
+ "OrchardOfKings":(((0,0),(-5,-3),(-11,-9)),((0,0),(6,-2),(11,-7)),((0,0),(2,6),(7,10)),((0,0),(-4,6),(-9,11))),
+ "FirstAbsence":(((-11,-8),(-4,-8),(-4,-2)),((4,2),(4,8),(11,8)),((-3,10),(-3,3),(3,-3),(10,-3)),((-10,2),(-6,2),(-6,-5)))
+}
+# Eleven distinct settlement plans. City identifiers here are asset IDs, not a
+# replacement for canonical world-place IDs or quest/SaveGame references.
+CITY_SPECS={
+ "Crossings":{"realm":"ThreefoldReach","routes":(((-12,-6),(-4,-2),(0,0),(5,6)),((-11,8),(-4,4),(0,0),(11,-7)),((0,0),(9,2),(12,7)))},
+ "Bellwold":{"realm":"ThreefoldReach","routes":(((-11,9),(-7,6),(-2,2),(1,-5)),((-8,-10),(-3,-7),(1,-5),(8,-7)),((1,-5),(5,0),(10,3)))},
+ "Paperhaven":{"realm":"ThreefoldReach","routes":(((-12,-8),(-6,-6),(-3,-1),(0,8)),((-7,10),(0,8),(7,8),(11,3)),((-3,-1),(5,-3),(11,-9)))},
+ "Saltwake":{"realm":"WidowedRain","routes":(((-11,9),(-7,5),(-7,-10)),((-7,5),(2,5),(5,0),(5,-9)),((5,0),(11,0),(11,9)))},
+ "Cinderhold":{"realm":"HearthBeneath","routes":(((-11,-8),(-5,-5),(-2,0),(4,3)),((0,-11),(-2,0),(2,7),(10,9)),((-10,7),(-4,5),(2,7)))},
+ "Drevlach":{"realm":"TidalLedger","routes":(((-12,-9),(-9,0),(-11,10)),((-2,-10),(0,0),(-1,10)),((8,-9),(7,1),(10,10)),((-10,0),(0,0),(7,1)))},
+ "Orravane":{"realm":"SkyBelow","routes":(((-11,9),(-5,5),(2,8),(10,3)),((-11,-7),(-3,-9),(3,-3),(11,-8)),((-5,5),(-3,-2),(3,-3)))},
+ "Vathless":{"realm":"CinderSpine","routes":(((-12,-10),(-6,-10),(-6,-4),(0,-4),(0,3)),((-11,9),(-3,9),(-3,4),(4,4),(11,9)),((0,3),(7,2),(7,-5),(11,-5)))},
+ "Eillun":{"realm":"HundredUnlived","routes":(((-11,9),(-6,7),(-4,1),(2,4),(9,9)),((-10,-8),(-4,-5),(0,-9),(8,-7)),((-4,1),(2,-2),(8,-7)))},
+ "Tharniv":{"realm":"OrchardOfKings","routes":(((-12,8),(-7,5),(-4,1),(0,-2)),((0,-2),(4,2),(8,9)),((0,-2),(5,-6),(11,-10)),((0,-2),(-6,-8)))},
+ "Auvren":{"realm":"FirstAbsence","routes":(((-11,9),(-8,4),(-2,4)),((2,-3),(8,-3),(11,-8)),((-8,-10),(-3,-5),(2,-3)),((4,10),(5,4),(11,4)))}
+}
+
+def _road_mesh(k,realm,routes,prefix,base,trim):
+ # A physically oriented strip follows each segment rather than reusing a
+ # single center-line grid in every realm.
+ y=3.2 if realm=="SkyBelow" else .105
+ width={"ThreefoldReach":1.45,"WidowedRain":1.65,"HearthBeneath":1.35,
+        "TidalLedger":1.05,"SkyBelow":1.05,"CinderSpine":1.2,
+        "HundredUnlived":1.32,"OrchardOfKings":1.08,"FirstAbsence":.95}[realm]
+ for road_id,points in enumerate(routes):
+  for part,((x1,z1),(x2,z2)) in enumerate(zip(points,points[1:])):
+   dx,dz=x2-x1,z2-z1;length=math.hypot(dx,dz)
+   if length<=.01:raise ValueError("Zero street segment")
+   strip=trimesh.creation.box(extents=(width,.11,length))
+   strip.apply_transform(trimesh.transformations.rotation_matrix(math.atan2(dx,dz),[0,1,0]))
+   strip.apply_translation(((x1+x2)*.5,y,(z1+z2)*.5))
+   k.add(strip,f'{prefix}_route_{realm}_{road_id}_{part}',trim if road_id%2 else base)
+   for xx,zz in ((x1,z1),(x2,z2)):
+    k.box(f'{prefix}_junction_{realm}',(xx,y+.018,zz),(.29,.055,.34),WHITE if road_id==0 else trim)
+  # A path that forks visibly has more than one junction, not a corridor texture.
+  for vertex,(x,z) in enumerate(points[1:-1]):
+   k.box(f'{prefix}_route_marker_{realm}',(x,y+.25,z),(.24,.46,.24),GOLD if vertex%2 else trim)
+
+def _terrain(k,realm,base,trim,city=None):
+ # Region-specific silhouette including physically raised quarry/suspended
+ # zones; no one-size 28 x 25 foundation beneath identical corners.
+ terrain={
+  "ThreefoldReach":[(-7,-5,13,13,-.24),(5,5,17,16,-.28),(-2,-9,11,7,-.37)],
+  "WidowedRain":[(-9,2,9,23,-.40),(4,-7,17,8,-.4),(8,7,9,12,-.4)],
+  "HearthBeneath":[(-7,-3,11,20,-.45),(5,4,16,14,-.53),(5,-9,12,6,-.5)],
+  "TidalLedger":[(-10,-1,6,25,-.36),(-1,2,8,25,-.4),(9,-2,7,26,-.36)],
+  "SkyBelow":[(-9,-7,8,9,2.0),(-2,2,10,9,2.6),(8,7,9,8,3.1),(7,-9,10,6,2.3)],
+  "CinderSpine":[(-9,0,9,26,-.3),(-1,-5,9,13,1.3),(8,4,9,22,2.2)],
+  "HundredUnlived":[(-7,-7,14,12,-.3),(4,-6,17,12,-.3),(-4,6,17,13,-.4),(8,7,11,12,-.2)],
+  "OrchardOfKings":[(0,0,19,18,-.4),(-9,-6,7,12,-.3),(9,8,8,11,-.3)],
+  "FirstAbsence":[(-8,-5,8,14,.45),(6,5,11,14,1.2),(-6,8,7,8,1.7),(8,-8,8,8,.8)]
+ }[realm]
+ for i,(x,z,w,d,elevation) in enumerate(terrain):
+  k.box(f'landform_{realm}_terrace_{i}',(x,elevation,z),(w,.6,d),base if i%2==0 else trim)
+ # No invisible navigation claim: these are diorama landmasses only.
+
+def _shelter(k,x,z,base,trim,light,kind="refuge"):
+ k.box(kind+'_walls',(x,1.45,z),(3.9,2.9,3.3),base)
+ k.box(kind+'_dark_entry',(x,.9,z+1.68),(.9,1.8,.08),DARK)
+ for offset in (-1.3,1.3):
+  k.box(kind+'_windows',(x+offset,1.85,z+1.70),(.43,.48,.09),light)
+ k.box(kind+'_roof_left',(x-.92,3.05,z),(2.18,.32,3.55),trim)
+ k.box(kind+'_roof_right',(x+.92,3.15,z),(2.12,.32,3.55),trim)
+ k.box(kind+'_soot_band',(x,1.15,z+1.75),(2.7,.15,.08),DARK)
+
+def _tall_frame(k,x,z,h,color,tag):
+ for d in (-1.05,1.05):k.box(tag+'_upright',(x+d,h*.5,z),(.24,h,.34),color)
+ k.box(tag+'_lintel',(x,h,z),(2.38,.30,.42),color)
+
+def _regional_signature(k,realm,base,trim,light):
+ # Nine materially different macro geometries, traversals and verticalities.
+ if realm=="ThreefoldReach":
+  _shelter(k,-8,-5,base,trim,light,"refuge_split_roof")
+  _shelter(k,7,6,base,trim,light,"carter_kitchen")
+  for x,z in ((-3,2),(3,1)):
+   _tall_frame(k,x,z,5.7,trim,"bridge_ledger_gate")
+   k.beam("surveyed_rope_span",(x-1,3.5,z),(x+1,3.5,z),.10,light)
+  k.box("conflicting_mile_stone",(0,.5,0),(.85,1.1,.72),WHITE)
+  for i,z in enumerate((-9,-4,5,10)):
+   k.box("refuge_lantern_post",(9,1.15,z),(.18,2.2,.18),DARK)
+   k.orb("held_lantern_wick",(9,2.4,z),(.18,.28,.18),GOLD,1)
+ elif realm=="WidowedRain":
+  for x,z in ((-9,-6),(-8,5),(5,-7),(8,5)):
+   k.beam("dry_dock_rib",(x-.8,.2,z),(x,2.9,z+1),.15,trim)
+   k.beam("dry_dock_rib",(x+.8,.2,z),(x,2.9,z+1),.15,trim)
+   k.box("upturned_hull_planking",(x,3.05,z),(3.4,.25,1.7),base)
+  for i,z in enumerate(range(-9,10,3)):
+   k.beam("empty_harbor_pier",(-1.5,.3,z),(-1.5,.3,z+2.8),.18,trim)
+   k.box("rain_catcher_basin",(4,.8,z),(2.5,.3,1.1),light)
+  _tall_frame(k,9,-2,6.1,GOLD,"tide_gauge_gate")
+ elif realm=="HearthBeneath":
+  for r in (2.4,4.3,6.2):
+   k.ring("sunken_communal_kiln_court",(0,.05,0),r,.22,trim,plane="xz")
+  for x,z in ((-8,7),(7,-7)):
+   k.box("basalt_house_ribs",(x,1.65,z),(3.8,3.2,3.1),base)
+   k.taper("braided_kiln_chimney",(x,2.7,z),(x+.3,7.3,z),.62,.32,trim)
+   k.orb("borrowed_hearth_coals",(x+.3,7.55,z),(.51,.19,.46),light,2)
+  for x in (-7,-4,4,7):
+   k.box("ash_filter_sieve",(x,.6,5),(1.35,1,.25),light)
+  for z in (-8,-5,-2,2,6):
+   k.box("heated_basal_channel",(2,.06,z),(1.2,.18,1.7),GOLD)
+ elif realm=="TidalLedger":
+  for x in (-6.5,2.5):
+   for z in (-9,-4,1,6):
+    k.box("inkstone_lock_bank",(x,.36,z),(.6,.82,2.8),base)
+  for x,z in ((-3,-6),(4,4),(-2,9)):
+   _tall_frame(k,x,z,3.9,trim,"portable_counting_bridge")
+   k.box("counterweight_ledger",(x,2.4,z+1.1),(1.45,2.1,.20),light)
+  for i in range(8):
+   k.box("forward_backward_tide_date",(-10+i*2.4,1.15,-10),(.24,.4,.14),GOLD)
+ elif realm=="SkyBelow":
+  for x,z,h in ((-9,-7,6.0),(-2,3,8.8),(8,7,10.4),(7,-8,7.5)):
+   k.box("inverted_terrace",(x,h,z),(5,.35,4.2),trim)
+   k.box("inhabited_hanging_floor",(x,h-.95,z),(3.4,1.6,2.8),base)
+   for side in (-1,1):
+    k.beam("choir_suspension_cable",(x+side*2,h,z),(x+side*.6,h+7.2,z),.09,light)
+   k.ring("audible_counterweight",(x,h-2.1,z),.62,.10,GOLD,plane="xz")
+  for a,b in (((-9,6,-7),(-2,8.8,3)),((-2,8.8,3),(8,10.4,7)),((8,10.4,7),(7,7.5,-8))):
+   k.beam("singing_span_between_homes",a,b,.16,WHITE)
+ elif realm=="CinderSpine":
+  for i,(x,z,y) in enumerate(((-9,-9,3),(-9,0,5),(-9,8,4),(1,-6,4),(6,2,6),(10,10,8))):
+   k.box("bearing_quarry_shelf",(x,y*.4,z),(5.3,y,4.0),trim if i%2 else base)
+   k.box("family_wall_with_inlaid_names",(x,y*.7,z+2),(4.5,.7,.12),WHITE)
+   k.taper("bone_seam_column",(x-1,y,z),(x-.45,y+3,z+.4),.30,.05,light)
+  for z in (-10,-7,-4,-1,2,5,8):
+   k.box("quarry_switchback_step",(2,.27,z),(2.7,.53,.8),trim)
+ elif realm=="HundredUnlived":
+  for i,(x,z) in enumerate(((-9,-7),(-3,4),(8,-4),(7,9))):
+   _tall_frame(k,x,z,3.3+i*.4,trim,"consenting_overlapping_doorstep")
+   k.box("unregistered_house_wall",(x+1.1,1.2,z-1),(2.6,2.2,2.2),base)
+   k.box("household_reversible_sign",(x-.8,2,z+.3),(1.2,.24,.2),light)
+  for x,z in ((0,-8),(4,2),(-5,8)):
+   k.box("public_uncounted_sleeping_mat",(x,.25,z),(1.6,.19,.90),WHITE)
+  k.box("unsigned_civic_refuge_wall",(-1,2.2,0),(3.5,4.2,.25),trim)
+ elif realm=="OrchardOfKings":
+  for x,z,r in ((-8,-8,.8),(-8,8,1.1),(8,-8,1.2),(7,8,.93),(0,0,1.5)):
+   k.taper("grafted_root_trunk",(x,0,z),(x+.15,4+r*2,z),r*.54,r*.31,base)
    for j in range(6):
-    z=-10+j*4
-    k.box('quarry_strata',(x,rng.uniform(1.3,3.1),z),(5.2,rng.uniform(2.2,5.5),3.9),base if j%2 else trim)
-    k.taper('split_seam_bone',(x,4.6,z),(x+(1 if x<0 else -1)*1.5,7.8,z+.5),.27,.01,WHITE)
-  cottage(0,-7,3.6,3.7,2.9);cottage(0,6,4.5,3.2,3.2)
-  for z in range(-7,8,2):k.box('quarry_cut',(3.5,.15,z),(.56,.15,1.3),light)
- elif realm=='HundredUnlived':
-  for i,(x,z) in enumerate(((-8,-7),(7,-6),(-8,7),(8,7))):
-   cottage(x,z,4.2,3.6+i*.35,3.2,roof=False)
-   for j in range(6):k.box('different_household_patch',(x+(-1+j%3)*.88,2.5+(j//3)*.51,z+1.67),(.75,.44,.09),PALETTE[REALMS[(j+i)%9]][1])
-  for j in range(11):
-   x=(j%4-1.5)*1.5;z=(j//4-1)*2.0
-   k.box('uncounted_bed',(x,.35,z),(.65,.52,1.2),WHITE)
-  k.box('blank_public_registry',(0,3.9,5.5),(2.5,3.2,.17),trim)
- elif realm=='OrchardOfKings':
-  for x,z,r in ((-9,-7,.50),(9,-6,.64),(-8,7,.55),(8,7,.46),(0,0,.92)):
-   k.taper('old_root_trunk',(x,0,z),(x+.2,5.4+4*r,z),r,r*.47,base,12)
-   for t in range(5):
-    ang=2*math.pi*t/5
-    tip=(x+3.2*math.cos(ang),7.1+1.8*r,z+3.1*math.sin(ang))
-    k.taper('grafted_crown_branch',(x,4.6+3*r,z),tip,r*.22,.06,trim,9)
-    k.orb('crown_fruit',tip,(.25,.32,.22),light,1)
-  k.ring('no_crowned_throne',(0,.61,0),2.5,.22,GOLD,plane='xz')
-  for j in range(8):
-   th=2*math.pi*j/8;k.box('root_vote_tablet',(5*math.cos(th),.25,5*math.sin(th)),(.64,.50,.34),trim)
- elif realm=='FirstAbsence':
-  for i,(x,z,off) in enumerate(((-8,-6,-1),(8,-7,1),(-8,7,1),(8,7,-1))):
-   k.box('missing_corner_monolith',(x,3.0,z),(3.0,6.0,2.6),base)
-   k.box('reversible_exterior_seam',(x+off*1.55,3.5,z),(.1,5.0,.08),light)
-  for x,z,h in ((-2.4,0,7.3),(2.4,1.1,6.6)):
-   for side in (-1,1):k.box('two_nonmatching_thresholds',(x+side*.9,h/2,z),(.37,h,.65),trim)
-   k.box('unanswered_lintel',(x,h,z),(2.2,.40,.80),light)
-  for j in range(8):k.box('absent_paving_inlay',(rng.uniform(-4,4),.11,rng.uniform(-10,10)),(.65,.10,.80),BLACK)
+    a=2*math.pi*j/6;tip=(x+math.cos(a)*2.7,6+r,z+math.sin(a)*2.5)
+    k.taper("petition_bark_branch",(x,3.5+r,z),tip,.27,.045,trim,9)
+    k.orb("uncrowned_petition_fruit",tip,(.24,.34,.22),light,1)
+  k.ring("empty_civic_crown_seat",(0,.68,0),2.1,.18,GOLD,plane="xz")
+  for i in range(8):
+   a=2*math.pi*i/8
+   k.box("root_vote_pedestal",(5*math.cos(a),.30,5*math.sin(a)),(.6,.6,.6),WHITE)
+ elif realm=="FirstAbsence":
+  for x,z,h in ((-9,-8,6.1),(-2,7,4.8),(9,5,8.4),(6,-8,7.7)):
+   _tall_frame(k,x,z,h,trim,"two_contradictory_foundation_thresholds")
+   k.box("unoccupied_threshold_stone",(x,.85,z+1.2),(3.1,.25,.46),WHITE)
+  for i,(x,z) in enumerate(((-6,0),(-4,-5),(3,1),(9,-1))):
+   k.box("witness_plateau_marker",(x,1.4+i*.45,z),(2.3,.23,1.9),base)
+   k.box("limestone_room_outside_itself",(x,2.6+i*.45,z),(1.9,1.3,.20),light)
+
+def _city_signature(k,city,base,trim,light):
+ # A settlement has its own civic centerpiece. It is not a recolored regional
+ # overview or a reusable clone of another city's square.
+ if city=="Crossings":
+  for x,z in ((-7,3),(3,-4),(7,6)):
+   _tall_frame(k,x,z,4.0,trim,"identity_crossings_bridge_ledger")
+  for i,(x,z) in enumerate(((-4,-6),(3,2),(9,-2))):
+   k.box("identity_crossings_three_different_knots",(x,.6,z),(1+i*.27,.26,.45),GOLD)
+ elif city=="Bellwold":
+  _shelter(k,-4,-3,base,trim,light,"identity_bellwold_refuge_kettle_kitchen")
+  k.box("identity_bellwold_shared_kettle",(-3.1,1.8,-1.25),(.55,.45,.45),GOLD)
+  for x in (-4.2,-3.3,-2.4):
+   k.box("identity_bellwold_one_uncounted_cup",(x,.9,-1.12),(.2,.24,.22),WHITE)
+  # The bell never existed: an empty cross-yoke, absolutely no bell geometry.
+  for x in (3.1,5.9):
+   k.taper("identity_bellwold_green_copper_tower",(x,0,-5),(x,8.6,-5),.62,.46,trim)
+  k.beam("identity_bellwold_uncast_yoke",(3.1,8.2,-5),(5.9,8.2,-5),.16,GOLD)
+  k.box("identity_bellwold_absent_casting_seam",(4.5,7.2,-5),(.6,.12,.13),DARK)
+  for z in (-9,-6,-2,2,6):
+   k.box("identity_bellwold_refuge_lantern_staff",(8,1.3,z),(.18,2.4,.18),DARK)
+   k.orb("identity_bellwold_persistent_lantern",(8,2.6,z),(.2,.31,.19),light,1)
+ elif city=="Paperhaven":
+  for x,z,h in ((-7,-5,4.8),(-4,6,6.2),(7,5,8.2)):
+   k.box("identity_paperhaven_chalk_archive_vault",(x,h*.5,z),(4.2,h,3.2),WHITE)
+   k.box("identity_paperhaven_narrow_roof_archive",(x,h+.5,z),(4.4,.85,3.5),trim)
+  k.box("identity_paperhaven_cross_index_desk",(3,.9,-5),(3.6,1.3,2.1),base)
+  for i in range(8):
+   k.box("identity_paperhaven_inkless_witness_slip",(1.8+i*.24,1.61,-4.7),(.17,.06,.29),light)
+ elif city=="Saltwake":
+  for x,z in ((-8,-4),(-2,5),(7,1)):
+   for dx in (-1,0,1):
+    k.beam("identity_saltwake_upturned_hull_ribs",(x+dx*.65,.4,z-1),(x,3.1,z+.4),.13,trim)
+   k.box("identity_saltwake_rain_slate_catch",(x,3.2,z),(3.3,.18,2),light)
+  k.box("identity_saltwake_public_storm_sluice",(9,.18,-7),(3.7,.34,4.9),GOLD)
+ elif city=="Cinderhold":
+  for i,(x,z) in enumerate(((-8,4),(1,-6),(9,3))):
+   k.ring("identity_cinderhold_household_hearth",(x,.3,z),1.55+i*.16,.18,GOLD,plane="xz")
+   k.taper("identity_cinderhold_heat_vent",(x,0,z),(x,4.8+i*.6,z),.54,.21,trim)
+  for z in range(-7,8,2):
+   k.box("identity_cinderhold_shared_heat_allotment_channel",(4,.2,z),(1.5,.18,1.5),light)
+ elif city=="Drevlach":
+  for x,z in ((-8,6),(4,-7),(8,7)):
+   k.box("identity_drevlach_inkstone_lockhouse",(x,1.8,z),(3.9,3.6,3.5),base)
+   k.box("identity_drevlach_double_read_contract_board",(x,2.2,z+1.9),(2.0,1.1,.21),GOLD)
+  _tall_frame(k,0,0,8.4,trim,"identity_drevlach_future_tide_clock")
+  k.ring("identity_drevlach_time_debt_wheel",(0,6.5,0),1.9,.13,light,plane="xy")
+ elif city=="Orravane":
+  for x,z,h in ((-8,2,6.1),(2,5,9.0),(8,-7,7.7)):
+   k.box("identity_orravane_inverted_terrace",(x,h,z),(4.5,.4,3.8),trim)
+   k.beam("identity_orravane_restable_singer_cable",(x-1.7,h,z),(x-1,15,z),.13,light)
+   k.beam("identity_orravane_restable_singer_cable",(x+1.7,h,z),(x+1,15,z),.13,light)
+  k.ring("identity_orravane_missing_choir_tone",(0,5,0),3.0,.16,GOLD,plane="xy")
+ elif city=="Vathless":
+  for i,(x,z) in enumerate(((-8,-5),(-4,7),(5,-6),(9,7))):
+   k.box("identity_vathless_family_bearing_stone",(x,2.1+i*.25,z),(3.6,4.1+i*.5,3.1),base)
+   for j in range(4):k.box("identity_vathless_inlaid_ancestral_name",(x-1+j*.63,1.65,z+1.61),(.42,.13,.10),WHITE)
+  k.box("identity_vathless_quarry_witness_shelter",(0,1.4,0),(3.5,2.8,2.4),trim)
+ elif city=="Eillun":
+  for x,z,rot in ((-9,-6,1),(-3,5,-1),(7,-3,1),(10,7,-1)):
+   _tall_frame(k,x,z,4.0+rot*.3,light,"identity_eillun_overlapping_consensual_threshold")
+   k.box("identity_eillun_unsigned_household_lamp",(x+rot,2.3,z+.4),(.37,.45,.34),GOLD)
+  k.box("identity_eillun_unrecorded_refuge_hall",(0,1.9,-3),(6.1,3.8,4),trim)
+ elif city=="Tharniv":
+  for i,(x,z) in enumerate(((-8,8),(8,-7),(-8,-8),(7,8))):
+   k.taper("identity_tharniv_petition_bark_trunk",(x,0,z),(x-.2,7,z),.7,.4,base)
+   for j in range(4):
+    a=2*math.pi*j/4
+    k.taper("identity_tharniv_grafted_civic_branch",(x,5,z),(x+2.1*math.cos(a),8.6,z+2*math.sin(a)),.2,.04,trim)
+  k.box("identity_tharniv_uncrowned_plinth",(0,.8,0),(3.7,1.6,3.2),WHITE)
+  k.ring("identity_tharniv_law_without_author",(0,1.8,0),1.35,.10,GOLD,plane="xz")
+ elif city=="Auvren":
+  for x,z,h in ((-7,5,7.3),(7,-4,6.1)):
+   _tall_frame(k,x,z,h,WHITE,"identity_auvren_two_founding_thresholds")
+  k.box("identity_auvren_northern_witness_plateau",(0,1.8,9),(7.1,1.7,4.6),trim)
+  for x,z in ((-4,-5),(4,5),(0,-9)):
+   k.box("identity_auvren_public_testimony_stone",(x,1.2,z),(2.5,2.4,.5),light)
+
+def build_environment(realm):
+ if realm not in REALM_PATHS:raise ValueError("Unknown canonical realm "+str(realm))
+ k=Kit();base,trim,light=PALETTE[realm]
+ _terrain(k,realm,base,trim)
+ _road_mesh(k,realm,REALM_PATHS[realm],"realm",base,trim)
+ _regional_signature(k,realm,base,trim,light)
+ return k
+
+def build_city_environment(city):
+ if city not in CITY_SPECS:raise ValueError("Unknown canonical settlement "+str(city))
+ spec=CITY_SPECS[city];realm=spec["realm"];base,trim,light=PALETTE[realm]
+ k=Kit()
+ _terrain(k,realm,base,trim,city)
+ _road_mesh(k,realm,spec["routes"],"city",base,light)
+ _regional_signature(k,realm,base,trim,light)
+ _city_signature(k,city,base,trim,light)
  return k
 
 # Source of truth: exact canonical roster from existing Authoring file, with
@@ -438,6 +602,7 @@ def build_all(root=ROOT,out=None,verify=False):
  for i,kind in enumerate(SPECIES):specs.append(('Creature',kind,'creature:'+kind,REALMS[i%9],build_creature(kind)))
  for i,row in enumerate(npcs):specs.append(('NPC',re.sub('[^A-Za-z0-9_]+','_',row[0]),row[0],row[2],build_resident(row,i)))
  for realm in REALMS:specs.append(('Environment',realm,'realm:'+realm,realm,build_environment(realm)))
+ for city,spec in CITY_SPECS.items():specs.append(('City',city,'city:'+city,spec['realm'],build_city_environment(city)))
  if verify:
   if not out.is_dir():raise ValueError('Missing generated art folder')
   old=json.loads((out/'manifest.json').read_text())
@@ -451,9 +616,9 @@ def build_all(root=ROOT,out=None,verify=False):
    if not path.is_file() or path.read_bytes()!=buf:raise ValueError('Not deterministic: '+name)
    info={'parts':k.count,'triangles':sum(len(m.faces) for m in k.scene.geometry.values()),'bytes':len(buf),'sha256':hashlib.sha256(buf).hexdigest(),'bounds_m':[[round(float(x),3) for x in row] for row in k.scene.bounds.tolist()]}
   else:info=k.export(path)
-  if info['triangles']<150 or info['parts']<({'Creature':5,'NPC':10,'Environment':15}[group]):raise ValueError('Too little genuine model geometry: '+name)
+  if info['triangles']<150 or info['parts']<({'Creature':5,'NPC':10,'Environment':15,'City':23}[group]):raise ValueError('Too little genuine model geometry: '+name)
   entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
- manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9},'format':'GLB (glTF 2.0) embedded binary meshes and vertex colors','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
+ manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0) embedded binary meshes and vertex colors','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')
   if {str(p.relative_to(out)) for p in out.rglob('*.glb')}!={r['file'] for r in entries}:raise ValueError('Asset file inventory drift')
@@ -473,5 +638,5 @@ def main():
    manifest=build_all(args.root,Path(td))
  elif args.verify_output:manifest=build_all(args.root,args.out_dir,True)
  else:manifest=build_all(args.root,args.out_dir)
- print('PASS: %d real glTF/GLB meshes: %d NPCs, %d unique creatures, %d realms; %d triangles'%(manifest['asset_count'],18,12,9,sum(a['triangles'] for a in manifest['assets'])))
+ print('PASS: %d real GLB meshes: 18 NPCs, 12 unique creatures, 9 realms and 11 cities; %d triangles'%(manifest['asset_count'],sum(a['triangles'] for a in manifest['assets'])))
 if __name__=='__main__':main()
