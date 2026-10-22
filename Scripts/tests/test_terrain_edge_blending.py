@@ -2,7 +2,10 @@
 import importlib.util
 import unittest
 from pathlib import Path
-import numpy as np
+try:
+ import numpy as np
+except ImportError:
+ np=None
 
 ROOT=Path(__file__).resolve().parents[2]
 spec=importlib.util.spec_from_file_location("terrain_edge_builder",ROOT/"Scripts/build_hero_models.py")
