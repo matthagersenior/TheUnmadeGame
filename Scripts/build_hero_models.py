@@ -34,7 +34,15 @@ class Kit:
  def add(self,mesh,name,color):
   if mesh is None:return
   mesh=mesh.copy()
-  mesh.visual.vertex_colors=np.tile(np.array([*color,255],dtype=np.uint8),(len(mesh.vertices),1))
+  # Stable, UV-free stone/wood tonal modulation. Unlike the older single
+  # RGBA value for every vertex, sloped surfaces now read under lighting.
+  # No random state, external texture fetch, or loss of original palette.
+  verts=np.asarray(mesh.vertices,dtype=float)
+  grain=(np.sin(verts[:,0]*1.713+verts[:,2]*2.411+verts[:,1]*.71)
+        +.42*np.cos(verts[:,0]*3.079-verts[:,2]*.963+verts[:,1]*1.409))
+  tone=np.clip(.955+.067*grain,.83,1.07)
+  rgb=np.clip(np.asarray(color,dtype=float)[None,:]*tone[:,None],0,255).astype(np.uint8)
+  mesh.visual.vertex_colors=np.column_stack((rgb,np.full(len(verts),255,dtype=np.uint8)))
   key=f'{self.count:04d}_{name}';self.count+=1
   self.scene.add_geometry(mesh,geom_name=key,node_name=key)
  def orb(self,name,at,radii,color,detail=2):
