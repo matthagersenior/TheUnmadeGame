@@ -52,7 +52,7 @@ class SculptedTerrainEdgeTests(unittest.TestCase):
    self.assertGreater(len(part.vertices),180)
    self.assertTrue(np.isfinite(part.vertices).all())
    # A visible roughened outer rim, unlike a single square plate.
-   outer=part.vertices[-56:]
+   outer=part.vertices[np.maximum(abs(part.vertices[:,0]),abs(part.vertices[:,2]))>6.95]
    self.assertGreater(float(np.ptp(np.linalg.norm(outer[:,[0,2]],axis=1))),.4)
    shape_signatures.append((round(float(np.ptp(outer[:,0])),3),
                             round(float(np.ptp(outer[:,2])),3)))
