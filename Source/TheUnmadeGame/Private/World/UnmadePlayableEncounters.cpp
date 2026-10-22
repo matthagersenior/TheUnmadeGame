@@ -488,3 +488,48 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
             }
         }
 }
+
+
+bool AUnmadePrototypeHub::TryHabitatInteraction(AUnmadeCharacter* Player,
+    double CompetingNpcDistanceSq)
+{
+    if(!GetWorld()||!IsValid(Player)||!IsValid(Player->GetCombat())||
+       Player->GetCombat()->IsDefeated()||HabitatInspectSigns.Num()!=6)return false;
+    for(int32 i=0;i<6;++i)
+    {
+        const auto& Site=UnmadeCore::HabitatSites[i];
+        const FVector Marker(Site.centerX,Site.centerY+Site.denOffsetY-380.0,105);
+        const double DistSq=FVector::DistSquared(Player->GetActorLocation(),Marker);
+        if(DistSq>FMath::Square(Site.inspectionRadius)||DistSq>CompetingNpcDistanceSq)continue;
+        FCollisionQueryParams Sight(SCENE_QUERY_STAT(UnmadeHabitatInspectSight),false);
+        Sight.AddIgnoredActor(Player);
+        if(HabitatInspectSigns.IsValidIndex(i)&&HabitatInspectSigns[i].IsValid())
+            Sight.AddIgnoredActor(HabitatInspectSigns[i].Get());
+        const bool bClear=!GetWorld()->LineTraceTestByChannel(
+            Player->GetActorLocation()+FVector(0,0,50),Marker+FVector(0,0,60),
+            ECC_Visibility,Sight);
+        if(!UnmadeCore::HabitatCanInspect(Site,FMath::Sqrt(DistSq),bClear))continue;
+        if(HabitatInspected[i])
+        {
+            if(GEngine)UnmadeRpgFeedback(-1,4.f,FColor::Cyan,
+                TEXT("A previously inspected shelter alcove remains open. The den is still occupied."));
+            return true;
+        }
+        // Physical world reaction, not a grant of combat skill or a quest
+        // success. Inspecting makes the alcove cover available to use.
+        HabitatInspected[i]=true;
+        if(HabitatShutters.IsValidIndex(i)&&HabitatShutters[i].IsValid())
+        {
+            HabitatShutters[i]->SetActorEnableCollision(false);
+            HabitatShutters[i]->SetActorHiddenInGame(true);
+        }
+        if(HabitatInspectSigns[i].IsValid())
+            HabitatInspectSigns[i]->GetTextRender()->SetText(
+                FText::FromString(TEXT("SHELTER ALCOVE OPEN - USE COVER / WATCH THE DEN")));
+        if(GEngine)UnmadeRpgFeedback(-1,7.f,FColor::Cyan,
+            FString::Printf(TEXT("HABITAT OBSERVED: %s | Side alcove opened. No power copied."),
+                UTF8_TO_TCHAR(Site.inspection)));
+        return true;
+    }
+    return false;
+}
