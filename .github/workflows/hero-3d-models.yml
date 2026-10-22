@@ -6,6 +6,7 @@ on:
     paths:
       - Scripts/build_hero_models.py
       - Scripts/tests/test_hero_model_assets.py
+      - Scripts/tests/test_distinct_realm_city_layouts.py
       - .github/workflows/hero-3d-models.yml
       - Authoring/world_content_pack.json
   pull_request:
@@ -33,6 +34,8 @@ jobs:
         run: python Scripts/build_hero_models.py --out-dir Build/UnmadeHeroModels --verify-output
       - name: Verify geometry and canonical identity
         run: python -m unittest discover -s Scripts/tests -p test_hero_model_assets.py -v
+      - name: Verify nine distinct realms and eleven distinct city layouts
+        run: python -m unittest discover -s Scripts/tests -p test_distinct_realm_city_layouts.py -v
       - name: Upload 39 playable-software-importable meshes as one artifact
         uses: actions/upload-artifact@v4
         with:
