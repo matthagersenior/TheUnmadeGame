@@ -616,7 +616,7 @@ def build_all(root=ROOT,out=None,verify=False):
    if not path.is_file() or path.read_bytes()!=buf:raise ValueError('Not deterministic: '+name)
    info={'parts':k.count,'triangles':sum(len(m.faces) for m in k.scene.geometry.values()),'bytes':len(buf),'sha256':hashlib.sha256(buf).hexdigest(),'bounds_m':[[round(float(x),3) for x in row] for row in k.scene.bounds.tolist()]}
   else:info=k.export(path)
-  if info['triangles']<150 or info['parts']<({'Creature':5,'NPC':10,'Environment':15}[group]):raise ValueError('Too little genuine model geometry: '+name)
+  if info['triangles']<150 or info['parts']<({'Creature':5,'NPC':10,'Environment':15,'City':23}[group]):raise ValueError('Too little genuine model geometry: '+name)
   entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
  manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0) embedded binary meshes and vertex colors','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
