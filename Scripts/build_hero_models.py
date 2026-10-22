@@ -674,6 +674,7 @@ def _dwelling(k,city,idx,x,z,base,trim,light):
   k.box(tag+"_witness_bench_"+str(idx),(x-.6,y+.36,z+d*.7),(1.3,.2,.44),trim)
 
  _architecture_finish(k,city,idx,x,y,z,w,d,h,base,trim,light)
+ _district_surface().finish_dwelling(k,city,idx,x,y,z,w,h,d)
 
 
 def _sculpted_pitch(k,name,x,y,z,w,d,rise,material):
@@ -949,6 +950,18 @@ def _streetlife(k,city,district,x,z,trim,light):
     (x+side*.90,y,z),(x+side*.90,y+2.4,z),.16,trim)
   k.box(t+"witness_record_without_answer",(x,y+2.55,z),(2.1,.21,.41),GOLD)
 
+_DISTRICT_SURFACE_MODULE=None
+def _district_surface():
+ global _DISTRICT_SURFACE_MODULE
+ if _DISTRICT_SURFACE_MODULE is None:
+  import importlib.util
+  loc=Path(__file__).with_name('district_surface_detail.py')
+  spec=importlib.util.spec_from_file_location('unmade_district_surface_detail',loc)
+  module=importlib.util.module_from_spec(spec)
+  spec.loader.exec_module(module)
+  _DISTRICT_SURFACE_MODULE=module
+ return _DISTRICT_SURFACE_MODULE
+
 def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
  spurs=[];positions=district_house_positions(plan);index=0
  for district,(cx,cz,count,heading) in enumerate(plan):
@@ -957,6 +970,7 @@ def _build_habited_districts(k,city,realm,plan,roads,base,trim,light):
   floor_y=4.12 if city=="Orravane" else -.42
   k.box("district_ground_"+city.lower()+"_"+str(district),
         (cx,floor_y,cz),(14.2,.25,14.2),base if district%2 else trim)
+  _district_surface().finish_district_terrain(k,city,district,cx,cz,floor_y)
   endpoints=[p for route in roads for p in (route[0],route[-1])]
   connection=min(endpoints,key=lambda p:(p[0]-cx)**2+(p[1]-cz)**2)
   if math.hypot(connection[0]-cx,connection[1]-cz)<.1:
@@ -1076,8 +1090,10 @@ def build_all(root=ROOT,out=None,verify=False):
    hero_label,hero_focus=_REALM_HERO_MODULE.FOCUS[hero_city]
    hero_focus=list(hero_focus)
   else:hero_label,hero_focus='',[]
-  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
- manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0), binary static meshes, vertex colors, and locally generated embedded Bellwold UV/PBR albedo and normal textures','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
+  textured_roofs=sum('_district_pbr_pitched_roof_' in key for key in k.scene.geometry)
+  sculpted_districts=sum('_district_terrain_relief_' in key for key in k.scene.geometry)
+  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,textured_roofs=textured_roofs,sculpted_districts=sculpted_districts,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
+ manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0), binary static meshes, vertex colors, and locally generated source-generated realm, city, roof and terrain UV/PBR albedo and normal textures','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')
   if {str(p.relative_to(out)) for p in out.rglob('*.glb')}!={r['file'] for r in entries}:raise ValueError('Asset file inventory drift')
