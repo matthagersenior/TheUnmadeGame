@@ -258,6 +258,58 @@ def terrain_surface_height(city,district,x,z,cx,cz,floor_y):
     elevation+=.014*district*(x/6.9)+.018*np.sin(x*.7+z*.31+district)
     return float(floor_y+.2+elevation)
 
+def terrain_blend_apron(city,district,cx,cz,floor_y):
+    """Triangulated 3-band transition stitched to every existing relief edge.
+
+    Its first ring is identical to the 15x15 central terrain's 56 perimeter
+    vertices. The outer edge varies by culture and neighborhood. This softens
+    the *visible* square border; it does not weld unrelated neighboring tiles
+    or establish a collision-tested Unreal landscape.
+    """
+    if city not in CITY_RHYTHM:raise ValueError(city)
+    n=15
+    values=np.linspace(-6.9,6.9,n)
+    edge=([(float(x),-6.9) for x in values]+
+          [(6.9,float(z)) for z in values[1:]]+
+          [(float(x),6.9) for x in values[-2::-1]]+
+          [(-6.9,float(z)) for z in values[-2:0:-1]])
+    if len(edge)!=56:raise ValueError("Perimeter topology changed")
+    place=list(CITY_RHYTHM).index(city)
+    slope_x,slope_z,amplitude=CITY_RHYTHM[city]
+    # Three nested easing bands; all geometry is genuinely curved into the
+    # ground rather than painting a cliff edge on a rectangular support pad.
+    vertices=[]
+    for ring in range(4):
+        t=ring/3
+        smooth=t*t*(3-2*t)
+        for i,(x,z) in enumerate(edge):
+            angle=math.atan2(z,x)
+            rim_width=(1.15+.112*place+.19*(district%3)) * (
+                1+.14*math.sin(angle*(3+place%4)+district*.71)
+                 +.07*math.cos(angle*(5+place%3)-district*.32))
+            ux=(1 if x>=6.9 else -1 if x<=-6.9 else 0)
+            uz=(1 if z>=6.9 else -1 if z<=-6.9 else 0)
+            length=max(math.hypot(ux,uz),1)
+            wx=float(cx)+x+(ux/length)*rim_width*smooth
+            wz=float(cz)+z+(uz/length)*rim_width*smooth
+            inner=terrain_surface_height(city,district,float(cx)+x,
+                                         float(cz)+z,cx,cz,floor_y)
+            # The final edge meets the nominal district foundation's upper
+            # ground band, not a fake flat cliff. Local erosion persists
+            # between the original relief and that boundary.
+            outer=float(floor_y+.075+.025*math.sin(angle*2+district))
+            wave=(.018+.02*amplitude)*math.sin(angle*(4+place%5)+district)
+            wy=inner*(1-smooth)+outer*smooth+wave*math.sin(math.pi*t)
+            vertices.append((wx,wy,wz))
+    faces=[]
+    for ring in range(3):
+        for j in range(56):
+            a=ring*56+j;b=ring*56+(j+1)%56
+            c=(ring+1)*56+j;d=(ring+1)*56+(j+1)%56
+            faces.extend(((a,b,d),(a,d,c)))
+    return trimesh.Trimesh(vertices=np.asarray(vertices),
+                           faces=np.asarray(faces),process=False)
+
 def finish_district_terrain(k,city,district,cx,cz,floor_y):
     """Unique physical relief using the EXACT elevations of house supports."""
     if city not in CITY_RHYTHM:raise ValueError(city)
@@ -276,3 +328,5 @@ def finish_district_terrain(k,city,district,cx,cz,floor_y):
             faces.extend(([a,b,d],[a,d,c]))
     mesh=trimesh.Trimesh(vertices=vertices,faces=faces,process=False)
     pbr._put(k,city,f"district_terrain_relief_{district}",mesh,"structure")
+    pbr._put(k,city,f"terrain_blend_apron_{district}",
+             terrain_blend_apron(city,district,cx,cz,floor_y),"structure")
