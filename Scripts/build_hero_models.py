@@ -979,6 +979,20 @@ def _regional_district_plan(realm):
  if len(points)<3:raise ValueError("Three independent regional approaches required")
  return tuple((float(x)*1.22,float(z)*1.18,4,(i*.81+.27)) for i,(x,z) in enumerate(points))
 
+def _add_region_hero_layer(k,city):
+ global _REALM_HERO_MODULE
+ if _REALM_HERO_MODULE is None:
+  import importlib.util
+  module_path=Path(__file__).with_name('realm_hero_pbr.py')
+  spec=importlib.util.spec_from_file_location('unmade_realm_hero_pbr',module_path)
+  module=importlib.util.module_from_spec(spec)
+  spec.loader.exec_module(module)
+  _REALM_HERO_MODULE=module
+ _REALM_HERO_MODULE.add_unique_hero(k,city)
+ return _REALM_HERO_MODULE
+
+_REALM_HERO_MODULE=None
+
 def build_environment(realm):
  if realm not in REALM_PATHS:raise ValueError("Unknown canonical realm "+str(realm))
  k=Kit();base,trim,light=PALETTE[realm]
@@ -986,6 +1000,7 @@ def build_environment(realm):
  _road_mesh(k,realm,REALM_PATHS[realm],"realm",base,trim)
  _regional_signature(k,realm,base,trim,light)
  _build_habited_districts(k,REGION_HABITAT[realm],realm,_regional_district_plan(realm),REALM_PATHS[realm],base,trim,light)
+ _add_region_hero_layer(k,REGION_HABITAT[realm])
  return k
 
 _BELLWOLD_HERO_MODULE=None
@@ -1010,6 +1025,7 @@ def build_city_environment(city):
  _city_signature(k,city,base,trim,light)
  _build_habited_districts(k,city,realm,CITY_DISTRICTS[city],spec['routes'],base,trim,light)
  if city=='Bellwold':_add_bellwold_hero_layer(k)
+ else:_add_region_hero_layer(k,city)
  return k
 
 # Source of truth: exact canonical roster from existing Authoring file, with
@@ -1053,7 +1069,14 @@ def build_all(root=ROOT,out=None,verify=False):
   district_count=(len(CITY_DISTRICTS[stable.removeprefix('city:')]) if group=='City' else len(_regional_district_plan(realm)) if group=='Environment' else 0)
   district_views=([[round(float(x),3),round(4.9 if realm=='SkyBelow' else 1.3,3),round(float(z),3)] for x,z,_,_ in (CITY_DISTRICTS[stable.removeprefix('city:')] if group=='City' else _regional_district_plan(realm))] if group in ('City','Environment') else [])
   pbr_materials=sorted({g.visual.material.name for g in k.scene.geometry.values() if getattr(getattr(g,'visual',None),'kind',None)=='texture' and hasattr(g.visual,'material') and g.visual.material is not None and getattr(g.visual.material,'baseColorTexture',None) is not None})
-  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
+  hero_city=(stable.removeprefix('city:') if group=='City' else REGION_HABITAT[realm] if group=='Environment' else None)
+  if hero_city=='Bellwold':hero_label,hero_focus='Empty bell yoke',[4.5,7.4,-5]
+  elif hero_city:
+   if _REALM_HERO_MODULE is None:raise ValueError('Region hero module not loaded')
+   hero_label,hero_focus=_REALM_HERO_MODULE.FOCUS[hero_city]
+   hero_focus=list(hero_focus)
+  else:hero_label,hero_focus='',[]
+  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
  manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0), binary static meshes, vertex colors, and locally generated embedded Bellwold UV/PBR albedo and normal textures','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')

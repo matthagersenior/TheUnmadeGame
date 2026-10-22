@@ -57,7 +57,9 @@ class BellwoldHeroPBRTests(unittest.TestCase):
   self.assertIn("Empty bell yoke",text)
   self.assertIn('id="pbr"',text)
 
- def test_other_cities_remain_unmodified_by_hero_material(self):
-  for city in ("Paperhaven","Saltwake","Orravane"):
-   geometry=builder.build_city_environment(city).scene.geometry
-   self.assertFalse(any("_hero_pbr_" in name for name in geometry),city)
+ def test_bellwold_keeps_its_own_material_and_hero_identities(self):
+  city=builder.build_city_environment("Bellwold")
+  names=list(city.scene.geometry)
+  self.assertTrue(any("empty_yoke_" in n for n in names))
+  self.assertTrue(any("hero_pbr_refuge_stone_" in n for n in names))
+  self.assertFalse(any("hero_pbr_saltwake_" in n for n in names))
