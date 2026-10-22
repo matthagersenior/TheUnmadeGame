@@ -52,6 +52,30 @@ class NeighborhoodQuality(unittest.TestCase):
      self.assertEqual(len({tuple(v) for v in views}),expected)
     else:self.assertEqual(views,[])
 
+ def test_city_architecture_contains_real_nonbox_silhouettes_and_civic_details(self):
+  # Count independent geometric elements, not descriptions or palette swaps.
+  keys={
+   "Crossings":"triple_way_charter",
+   "Bellwold":"refuge_patched_stone",
+   "Paperhaven":"archive_buttress",
+   "Saltwake":"ship_hull_curvature",
+   "Cinderhold":"heat_channel_exhaust",
+   "Drevlach":"counterweight_lockhouse",
+   "Orravane":"suspended_walkway",
+   "Vathless":"quarry_switchback",
+   "Eillun":"consent_threshold_screen",
+   "Tharniv":"grafted_root_vault",
+   "Auvren":"limestone_witness_frame"
+  }
+  for city,token in keys.items():
+   g=builder.build_city_environment(city).scene.geometry
+   names=list(g)
+   distinctive=[n for n in names if "architecture_"+token+"_" in n]
+   self.assertGreaterEqual(len(distinctive),20,city+" has no authored structural middle detail")
+   self.assertGreaterEqual(len({n.split("_")[-1] for n in distinctive}),8,city)
+   self.assertEqual(sum("_habitation_shell_" in n for n in names),20,city)
+   self.assertTrue(any("_nonrectangular_roof_" in n for n in names),city+" uses flat blocks for every roof")
+
  def test_public_viewer_has_district_focus_controls_and_valid_javascript(self):
   import re, shutil, subprocess, tempfile
   html=(ROOT/"site/real-models.html").read_text()
@@ -59,7 +83,7 @@ class NeighborhoodQuality(unittest.TestCase):
   self.assertIn("district_views",html)
   self.assertIn("function focusDistrict(",html)
   self.assertIn("overviewCamera",html)
-  scripts=re.findall(r'<script type="module">([\\s\\S]+?)</script>',html)
+  scripts=re.findall(r'<script type="module">(.+?)</script>',html,re.S)
   self.assertEqual(len(scripts),1)
   node=shutil.which("node")
   if node:
