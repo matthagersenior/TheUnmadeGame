@@ -38,3 +38,11 @@ Import into a **separate, nonblocking art-review folder**; do not rename any exi
 When Unreal 5.8 is available, verify importer node separation, vertex color/material preservation, orientation/scale, contact/collision and GPU budget. Character models need proper sculpt/retopology, material detail and skeletal rigging; environment modules need separation into production kits, real navigation and lighting. Those are **remaining tasks**, not barriers to downloading and editing these actual GLB meshes now.
 
 These new files are additive to earlier 202 static reference models and three original skinned prototype archetypes; they do not replace or falsely upgrade either.
+
+### Bellwold hero art — embedded UV/PBR milestone
+
+The Bellwold city GLB includes an **additional, canon-safe hero architecture layer** with physically sculpted ashlar/refuge facade elements, irregular arch voussoirs, timber porch beams and an **empty copper-green bell yoke** (the bell is never modeled). It uses locally and deterministically generated **192×192 color and tangent-space normal maps**, UV coordinates on the actual triangles, and embedded glTF 2.0 metallic/roughness PBR materials for weathered stone, salvaged timber and verdigris copper. The texture source is transparent Python in `Scripts/bellwold_hero_pbr.py`; it contains no licensed imagery or external downloads. Original 50-model identity and the earlier building-density, shape and canon tests remain in place; all other cities retain earlier vertex-color geometry for now.
+
+The model is an **art-direction prototype**, not a photogrammetric sculpt, AAA environment, production-quality 4K texture set, or a playable Unreal level. A practical later artist pass must author hand-made UV layout/texture atlases, high/low mesh baking, LODs, collision proxies, corrected interior/exterior entrances, lighting scenarios, and a full Unreal import/visual review. The website inspector offers simulated three-point/dusk/overcast/night lighting for this purpose; it does **not** claim Unreal rendering was tested.
+
+The exported `manifest.json` now includes `pbr_materials` (material names with embedded albedo+normal maps), so builds and the public viewer can distinguish true texturing from single-color vertex materials.
