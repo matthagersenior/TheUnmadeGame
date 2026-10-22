@@ -433,6 +433,10 @@ void AUnmadePrototypeHub::BuildPlayableEncounters()
                         i==2?FString(Site.Creatures[i])+TEXT(" - Elder"):FString(Site.Creatures[i]),
                     FLinearColor(Site.Accent));
                 if(GuideIndex==5&&i==2)Enemy->ConfigureCinderholdElder();
+                // Foraging/rest now returns toward the real placed habitat
+                // forecourt, rather than the arbitrary original spawn point.
+                Enemy->ConfigureHabitatHome(Site.Center+FVector((i-1)*280,
+                    Habitat.denOffsetY-240+(i%2)*70,100));
                 Enemy->SetVisualScale(bWatcher?FVector(.7,.7,.9):FVector(1.1,.85,1.05));
             }
         }
