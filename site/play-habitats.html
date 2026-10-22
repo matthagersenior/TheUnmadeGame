@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101722">
+<meta name="description" content="Interactive prototype of creature habitats, cover, tracks and environmental responses in The Unmade. Not Unreal gameplay or canon habitat placement.">
+<title>The Unmade — Living Creature Habitats</title>
+<style>
+:root{color-scheme:dark;--bg:#111722;--edge:#605d66;--text:#eee9e1;--gold:#e7c99c}
+*{box-sizing:border-box}body{margin:0;color:var(--text);background:var(--bg);font-family:system-ui,Arial,sans-serif}
+a{color:var(--gold)}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #e3be83;outline-offset:2px}
+header{padding:15px clamp(15px,3vw,36px);background:#111723;border-bottom:1px solid #665d67;display:flex;gap:20px;justify-content:space-between;align-items:center}
+header strong{font:normal 21px Georgia,serif;letter-spacing:.18em}header a{font-size:12px}
+main{max-width:1450px;margin:auto;padding:12px 18px 28px}
+.intro{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+h1{font:normal clamp(25px,4vw,39px) Georgia,serif;margin:12px 0 8px}
+.intro p{font-size:13px;color:#ced4d9;max-width:730px;line-height:1.6;margin:4px 0 15px}
+#sitebar{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 10px}
+#sitebar button{border:1px solid #626b76;background:#202b3a;padding:9px 11px;font-size:12px;border-radius:5px}
+#sitebar button.active{background:#755b4d;border-color:#e6ba84}
+.stage{position:relative;height:min(70svh,750px);min-height:480px;overflow:hidden;background:#202b38;border:1px solid #67707b;border-radius:8px}
+#render,#render canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.panel{position:absolute;pointer-events:none;background:#111723df;border:1px solid #877660;padding:12px;z-index:2}
+#hud{left:12px;top:12px;max-width:340px;font-size:12px}
+#hud h2{font:normal 23px Georgia,serif;margin:4px 0}
+#hud p{color:#dfcfb8;line-height:1.5;margin:5px 0}
+#status{font-weight:700;color:#ffdfaa}
+#cue{top:12px;right:12px;font-size:12px;max-width:235px;color:#f3e3c5}
+#action{left:50%;bottom:12px;transform:translateX(-50%);width:min(500px,90%);font-size:12px;text-align:center}
+#touch{position:absolute;bottom:76px;left:14px;right:14px;display:none;align-items:end;justify-content:space-between;pointer-events:none}
+.dpad{pointer-events:auto;display:grid;grid-template-columns:repeat(3,47px);grid-template-rows:repeat(3,47px);gap:4px}
+.dpad button,#interact{touch-action:none;background:#1b2339e8;border:1px solid #b59b77;border-radius:9px;font-size:22px}
+#interact{pointer-events:auto;border-radius:50%;width:86px;height:86px;font-size:13px;font-weight:700}
+#message{position:absolute;z-index:6;top:50%;left:50%;transform:translate(-50%,-50%);background:#171923f5;border:1px solid #a99174;width:min(510px,90%);padding:26px;box-shadow:0 20px 70px #000b;display:none}
+#message.show{display:block}#message h3{font:normal 28px Georgia,serif}#message p{line-height:1.65;color:#ddd1bc}#dismiss{border:1px solid #a99679;background:#55483f;padding:12px 18px}
+.under{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:9px;font-size:12px;color:#c8c3c2}
+.under button{padding:8px 12px;background:#2b2935;border:1px solid #8d807a}
+.summary{margin:16px 0 6px;line-height:1.75;color:#c8ced5;font-size:13px;max-width:1050px}
+@media(max-width:800px){#touch{display:flex}#hud{max-width:60%;padding:9px;font-size:10px}#hud h2{font-size:18px}#cue{max-width:36%;padding:8px;font-size:10px}.stage{height:74svh;min-height:570px}#action{bottom:7px}.intro p{font-size:12px}}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js"}}</script>
+</head><body>
+<header><strong>THE UNMADE</strong><a href="play-bellwold.html">Return to Bellwold narrative scene ↗</a></header>
+<main>
+<div class="intro"><div><h1>Where the creatures live</h1><p>Six provisional habitat demonstrations, based on existing encounter sites and canonical creatures. Explore tracks, use physical cover, disturb a territory, and inspect an alcove. This is an interactive browser graybox, <strong>not Unreal gameplay or admitted canon habitat placement</strong>.</p></div></div>
+<nav id="sitebar" aria-label="Choose an existing encounter site"></nav>
+<section class="stage" aria-label="3D creature habitat test">
+<div id="render"></div>
+<div class="panel" id="hud"><small>ENVIRONMENTAL ENCOUNTER · SOURCE-BASED CONCEPT</small><h2 id="name">Forgotten Bells</h2><p id="detail"></p><p id="status" role="status">Walk toward the territory. Find cover.</p><p id="composure">Composure: 100 / 100</p></div>
+<div class="panel" id="cue">Movement creates tracks. The den responds to your presence.</div>
+<div class="panel" id="action">WASD / arrows move · E or INTERACT inspects tracks · hide behind the stone cover</div>
+<div id="touch"><div class="dpad"><span></span><button data-move="up" aria-label="Move forward">↑</button><span></span><button data-move="left" aria-label="Move left">←</button><span></span><button data-move="right" aria-label="Move right">→</button><span></span><button data-move="down" aria-label="Move backward">↓</button><span></span></div><button id="interact">INTERACT</button></div>
+<div id="message" role="dialog" aria-modal="true" aria-label="Habitat discovery" tabindex="-1"><h3 id="dialoghead"></h3><p id="dialogbody"></p><button id="dismiss">Return to encounter</button></div>
+</section>
+<div class="under"><button id="reset">Restore scene</button><button id="clear">Clear browser-only habitat visits</button><span id="saved">No habitat inspected.</span></div>
+<p class="summary"><strong>What reacts:</strong> approaching the territory exposes tracks, brightens its warning signal and awakens the defender. Stone cover interrupts its attention. You can investigate an inspection marker and physically release a sheltered alcove. Approaching exposed for too long reduces composure and eventually returns you to safety; there are no infinite rewards or copied powers. These rules are implemented in the native C++ source too, but this browser scene is a separate demonstration and the Unreal implementation has not been compiled or playtested.</p>
+</main>
+<script type="module">
+import * as THREE from 'three';
+const $=id=>document.getElementById(id);
+const habitats=[
+ {id:"Reach.AshRoad",name:"Ash Road",species:"Cinderjaw / Pale Strider",type:"jaw",color:0xcf7347,note:"Fossil grooves under a jaw-shaped overhang. A territorial stalker is warned by your footsteps."},
+ {id:"Reach.GlassCut",name:"Glass Cut",species:"Veilwatch / Gleam Moth",type:"glass",color:0x92c5e5,note:"A watcher roost formed from broken prisms. The tall side ribs can interrupt line of sight."},
+ {id:"Bellwold.Forgotten",name:"Forgotten Bells",species:"Hollow Hound / Grief Lantern",type:"hound",color:0xe0c18b,note:"Hounds shelter below an empty stone undercroft away from Bellwold's public refuge."},
+ {id:"Paperhaven.Torn",name:"Torn Archive",species:"Inkmaw / Redaction Eye",type:"archive",color:0xb69cdd,note:"A burrow behind fallen shelves. The intact shelves provide cover and alternate angles."},
+ {id:"Saltwake.Saltglass",name:"Saltglass Quay",species:"Saltglass Crawler / Drowned Watch",type:"tide",color:0x75cbd5,note:"A tide-cut cave under tilted harbor pilings. Approaching the mouth excites the crawler."},
+ {id:"Cinderhold.Slag",name:"Blackslag Field",species:"Ashmaw / Kiln Wisp",type:"slag",color:0xf19357,note:"A scorched burrow breathing through ash vents. Its warning light rises as you approach."}
+];
+const storedKey="unmade-proposed-habitat-demo-v1";
+const visited=(()=>{try{const v=JSON.parse(localStorage.getItem(storedKey)||"[]");return new Set(Array.isArray(v)?v.filter(k=>habitats.some(h=>h.id===k)):[])}catch(e){return new Set()}})();
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"high-performance"});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.6));renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.25;
+$('render').appendChild(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x182333);
+scene.fog=new THREE.FogExp2(0x182333,.025);
+const camera=new THREE.PerspectiveCamera(55,1,.1,170);
+scene.add(new THREE.HemisphereLight(0xb9cfe3,0x4d3e3a,2.15));
+const key=new THREE.DirectionalLight(0xffcf9a,2.7);key.position.set(-10,20,7);scene.add(key);
+const glow=new THREE.PointLight(0xf0ae79,1,15);scene.add(glow);
+const staticGroup=new THREE.Group();scene.add(staticGroup);
+const reactive=new THREE.Group();scene.add(reactive);
+const material=(color,metal=0)=>new THREE.MeshStandardMaterial({color,roughness:.72,metalness:metal});
+const shade=material(0x58616d),soil=material(0x323c49),dark=material(0x292b38),shimmer=material(0x9e9d8d,.15);
+const player=new THREE.Group();scene.add(player);
+function mesh(parent,geometry,mat,x,y,z){const m=new THREE.Mesh(geometry,mat);m.position.set(x,y,z);parent.add(m);return m}
+mesh(player,new THREE.CylinderGeometry(.27,.42,1.1,10),material(0x433347),0,.75,0);
+mesh(player,new THREE.SphereGeometry(.26,12,10),material(0xc6a88c),0,1.49,0);
+mesh(player,new THREE.ConeGeometry(.36,.53,8),dark,0,1.68,0);
+const enemy=new THREE.Group();reactive.add(enemy);
+const warning=material(0x8a5a57,.15);
+const enemyBody=mesh(enemy,new THREE.IcosahedronGeometry(.65,1),warning,0,1,0);
+const leg=new THREE.CylinderGeometry(.08,.1,.9,8);
+for(let i=0;i<4;i++)mesh(enemy,leg,shade,(i%2?1:-1)*.33,.42,(i<2?-1:1)*.34);
+const trigger=mesh(reactive,new THREE.TorusGeometry(1,.10,7,26),material(0xd6bd90),0,.20,-5);
+trigger.rotation.x=-Math.PI/2;
+const shutter=mesh(reactive,new THREE.BoxGeometry(2,.98,.30),material(0x9c8770),0,.61,-3.4);
+const track=mesh(reactive,new THREE.BoxGeometry(1.45,.05,.5),material(0x988077),0,.035,-.8);
+const inspectPost=mesh(reactive,new THREE.CylinderGeometry(.08,.09,1.8,8),material(0xa99b83),0,.9,-2.1);
+mesh(reactive,new THREE.BoxGeometry(.74,.35,.19),material(0xffd7a0),0,1.78,-2.1);
+const ground=mesh(staticGroup,new THREE.PlaneGeometry(50,50),soil,0,-.1,0);ground.rotation.x=-Math.PI/2;
+const floor=mesh(staticGroup,new THREE.CircleGeometry(7,48),material(0x51515a),0,-.045,-5);floor.rotation.x=-Math.PI/2;
+const coverBoxes=[{x:-3.2,z:-1.0,w:1.5,d:2.2},{x:3.2,z:-1.0,w:1.5,d:2.2},{x:-4.6,z:-4.4,w:1.3,d:2.2},{x:4.6,z:-4.4,w:1.3,d:2.2}];
+for(const b of coverBoxes)mesh(staticGroup,new THREE.BoxGeometry(b.w,2.9,b.d),shade,b.x,1.40,b.z);
+const defs=habitats.map((h,i)=>{const b=document.createElement("button");b.type="button";b.textContent=h.name;b.onclick=()=>choose(i);$('sitebar').appendChild(b);return b});
+let active=2,inspected=false,composure=100,damageCD=0,cue="quiet",dialog=false,lastSeconds=0;
+const denCenter=new THREE.Vector2(0,-5);
+const dirs={up:false,down:false,left:false,right:false};
+const keys=new Set();
+const clamp=THREE.MathUtils.clamp;
+function decorate(h){
+ while(reactive.children.length>5)reactive.remove(reactive.children[5]);
+ const color=material(h.color,.28);
+ const box=(x,y,z,w,ht,d,mat=color)=>mesh(reactive,new THREE.BoxGeometry(w,ht,d),mat,x,y,z);
+ const stoneAt=(x,z,scale)=>mesh(reactive,new THREE.DodecahedronGeometry(scale,1),shade,x,scale*.8,z);
+ if(h.type==="jaw"){
+  for(let i=-3;i<=3;i++){const rib=mesh(reactive,new THREE.CylinderGeometry(.14,.22,3.5,9),color,i*.70,1.8,-6.7);rib.rotation.z=i*.11}
+  stoneAt(0,-7.8,1.9);box(0,.3,-5,4,.6,3.0,dark);
+ }else if(h.type==="glass"){
+  for(let i=-2;i<=2;i++){const sp=mesh(reactive,new THREE.ConeGeometry(.65,4.6+Math.abs(i)*.42,5),color,i*.9,2,-7);sp.rotation.z=i*.15}
+  box(0,.45,-6,5,.8,2.6,shade);
+ }else if(h.type==="hound"){
+  box(0,3.2,-6.5,7,1.1,2.8,shade);
+  for(let s of [-1,1]){mesh(reactive,new THREE.CylinderGeometry(.5,.7,3.2,10),color,s*2.9,1.6,-6.1);stoneAt(s*2.4,-7.5,.65)}
+ }else if(h.type==="archive"){
+  for(let i=-3;i<=3;i++)box(i*.97,1.8,-6.8,.40,3.6,1.9,i%2?color:shade);
+  box(0,3.8,-7,7.5,.40,3.3,shade);
+ }else if(h.type==="tide"){
+  for(let i=-3;i<=3;i++){const rib=mesh(reactive,new THREE.CylinderGeometry(.24,.33,3.6,8),color,i*.83,1.8,-6.8);rib.rotation.z=i*.11}
+  box(0,3.7,-6.5,6.7,.38,2.5,shade);
+  box(0,.15,-6,8,.11,3.0,material(0x336879,.3));
+ }else{
+  for(let i=-2;i<=2;i++){const vent=mesh(reactive,new THREE.ConeGeometry(.63,4.4+Math.abs(i)*.3,7),color,i*1.35,2.2,-7.7);vent.rotation.z=.15*i}
+  box(0,.4,-6,6,.8,3.2,dark);
+ }
+}
+function persist(){try{localStorage.setItem(storedKey,JSON.stringify([...visited]))}catch(e){}}
+function summary(){$('saved').textContent=visited.size+" of six prototype territories inspected in this browser.";}
+function choose(i){
+ active=i;const h=habitats[i];
+ defs.forEach((b,j)=>{b.classList.toggle("active",j===i);b.setAttribute("aria-pressed",String(j===i))});
+ inspected=visited.has(h.id);composure=100;damageCD=0;cue="quiet";
+ player.position.set(0,0,10);enemy.position.set(0,0,-5);
+ enemyBody.material=material(h.color,.1);glow.color.setHex(h.color);
+ glow.position.set(0,3.6,-5);shutter.visible=!inspected;
+ track.visible=true;decorate(h);
+ $('name').textContent=h.name;$('detail').textContent=h.note;
+ $('composure').textContent="Composure: 100 / 100";
+ $('status').textContent="Explore "+h.species+" territory. Choose cover over confrontation.";
+ $('cue').textContent="No creature technique is learned automatically.";
+ summary();
+}
+function intersectsRect(x,z,b,buffer=.38){
+ return Math.abs(x-b.x)<b.w/2+buffer&&Math.abs(z-b.z)<b.d/2+buffer;
+}
+function visibleFromDen(){
+ // 2D sight sampling is deliberately bounded and interpretable for the demo.
+ // Native Unreal uses an actual visibility trace and collision-bearing meshes.
+ const target=new THREE.Vector2(player.position.x,player.position.z);
+ const dir=target.clone().sub(denCenter);
+ for(let n=1;n<=30;n++){
+  const p=denCenter.clone().addScaledVector(dir,n/30);
+  if(coverBoxes.some(b=>intersectsRect(p.x,p.y,b,.04)))return false;
+ }
+ return true;
+}
+function showDialog(title,body){dialog=true;keys.clear();$('dialoghead').textContent=title;$('dialogbody').textContent=body;$('message').classList.add("show");$('message').focus()}
+function dismiss(){dialog=false;$('message').classList.remove("show")}
+$('dismiss').onclick=dismiss;
+function interact(){
+ if(dialog)return;
+ const d=Math.hypot(player.position.x,player.position.z+2.1);
+ if(d>2.3){showDialog("Find the inspect marker","Approach the small amber marker facing the den. At a reasonable distance, inspect the physical tracks. Other parts of the environment react just to your movement and cover.");return}
+ if(inspected){showDialog("The alcove remains open","You have already inspected this location in the browser demonstration. The stone shelter is still usable, but the creature still inhabits the area.");return}
+ inspected=true;visited.add(habitats[active].id);persist();shutter.visible=false;
+ showDialog("Shelter alcove opened",habitats[active].note+" You found a usable sheltered approach. The encounter changes physically; it does not award a power, kill an enemy, resolve a mystery or save into Unreal.");
+ summary();
+}
+$('interact').onclick=interact;
+$('reset').onclick=()=>choose(active);
+$('clear').onclick=()=>{visited.clear();persist();choose(active)};
+document.addEventListener("keydown",e=>{const k=e.key.toLowerCase();if(["arrowup","arrowdown","arrowleft","arrowright"," "].includes(k))e.preventDefault();keys.add(k);if((k==="e"||k===" ")&&!e.repeat)interact();if(k==="escape"&&dialog)dismiss()});
+document.addEventListener("keyup",e=>keys.delete(e.key.toLowerCase()));
+window.addEventListener("blur",()=>keys.clear());
+for(const b of document.querySelectorAll("[data-move]")){
+ const direction=b.dataset.move;
+ b.addEventListener("pointerdown",e=>{e.preventDefault();dirs[direction]=true;b.setPointerCapture(e.pointerId)});
+ const release=()=>{dirs[direction]=false};
+ for(const type of ["pointerup","pointercancel","lostpointercapture"])b.addEventListener(type,release);
+}
+const cameraTarget=new THREE.Vector3();
+const clock=new THREE.Clock();
+function animate(){
+ requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.055);
+ if(!dialog){
+  let x=Number(dirs.right||keys.has("d")||keys.has("arrowright"))-Number(dirs.left||keys.has("a")||keys.has("arrowleft"));
+  let z=Number(dirs.down||keys.has("s")||keys.has("arrowdown"))-Number(dirs.up||keys.has("w")||keys.has("arrowup"));
+  const len=Math.hypot(x,z);
+  if(len>0){
+   x/=len;z/=len;
+   const px=clamp(player.position.x+x*dt*4,-13.5,13.5),pz=clamp(player.position.z+z*dt*4,-11,13.5);
+   if(!coverBoxes.some(b=>intersectsRect(px,pz,b)))player.position.set(px,0,pz);
+   player.rotation.y=Math.atan2(-x,-z);
+  }
+  const dist=Math.hypot(player.position.x,player.position.z+5);
+  const covered=!visibleFromDen();
+  cue=dist>17.5?"quiet":dist>8.4?"tracks":covered?"sheltered":dist>3.2?"warning":"disturbed";
+  const labels={
+   quiet:"The habitat is still. Observe the area before approaching.",
+   tracks:"Loose ground and old tracks show this creature lives here.",
+   warning:"The den reacts to you. Its signal grows brighter. Find cover.",
+   disturbed:"The creature defends its territory. Retreat behind cover.",
+   sheltered:"Cover interrupts its attention. Inspect the nearby marker."
+  };
+  $('status').textContent=labels[cue];
+  $('cue').textContent=covered?"Line of sight blocked by physical cover.":"Open sightline toward an occupied territory.";
+  glow.intensity=cue==="disturbed"?7:cue==="warning"?4:cue==="sheltered"?.45:cue==="tracks"?1.2:.35;
+  const targetX=cue==="disturbed"&&dist>1?player.position.x*.12:0;
+  const targetZ=cue==="disturbed"&&dist>1?-4+player.position.z*.10:-5;
+  enemy.position.x=THREE.MathUtils.damp(enemy.position.x,targetX,1.4,dt);
+  enemy.position.z=THREE.MathUtils.damp(enemy.position.z,targetZ,1.4,dt);
+  enemy.rotation.y+=dt*(cue==="disturbed"?1.3:.15);
+  warning.emissive=new THREE.Color(habitats[active].color);
+  warning.emissiveIntensity=cue==="disturbed"?.9:cue==="warning"?.4:.08;
+  trigger.scale.setScalar(1+.20*Math.sin(clock.elapsedTime*3));
+  track.visible=cue!=="quiet";
+  damageCD=Math.max(0,damageCD-dt);
+  if(cue==="disturbed"&&damageCD===0){
+   damageCD=2.0;
+   composure=Math.max(0,composure-16);
+   if(composure===0){player.position.set(0,0,10);composure=100;showDialog("You retreat to safety","The den was disturbed while you were exposed. The prototype returns you to a safe approach. No permanent loss or unexplained death. Try using cover and the side alcove.");}
+  }
+  $('composure').textContent="Composure: "+composure+" / 100";
+ }
+ cameraTarget.set(player.position.x+7,player.position.y+8.5,player.position.z+11);
+ camera.position.lerp(cameraTarget,Math.min(1,dt*3));
+ camera.lookAt(player.position.x,1.1,player.position.z-2);
+ renderer.render(scene,camera);
+}
+function resize(){const w=$('render').clientWidth,h=$('render').clientHeight;renderer.setSize(Math.max(1,w),Math.max(1,h),false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+new ResizeObserver(resize).observe($('render'));
+choose(2);resize();animate();
+</script></body></html>
