@@ -222,6 +222,11 @@ jobs:
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/cinderhold_adventure_test.cpp -o /tmp/unmade-cinderhold
           /tmp/unmade-cinderhold
+      - name: Test six creature habitat reactions and native habitat wiring
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/creature_habitat_test.cpp -o /tmp/unmade-habitat-rules
+          /tmp/unmade-habitat-rules
+          python -m unittest discover -s Scripts/tests -p test_creature_habitat_wiring.py -v
       - name: Test twelve creature profiles and fair elder counterplay
         run: |
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/creature_rules_test.cpp -o /tmp/unmade-creatures
