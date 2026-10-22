@@ -49,6 +49,93 @@ def _pitch(k,city,idx,x,y,z,w,d,rise):
 def _structure_beam(k,city,name,a,b,radius=.07,kind="fitting"):
     pbr.beam(k,city,"district_pbr_"+name,a,b,radius,kind)
 
+def window_height(h):
+    """Keep the two upper windows above the tallest door even in small homes."""
+    return max(h*.75,1.9)
+
+def apertured_facade_mesh(x,y,z,w,h,door_side):
+    """Return actual face geometry surrounding three rectangular openings.
+
+    A window or door location is excluded from the triangulated visible
+    surface, not covered with a flat decorative texture. A backing dwelling
+    shell still exists: these are deep visual reveals, not enterable interiors.
+    """
+    if door_side not in (-1,1):raise ValueError("Door side is +/-1")
+    door=(x+door_side*.40-.31,x+door_side*.40+.31,
+          y+.10,y+1.57)
+    windows=[(x+side*w*.33-.17,x+side*w*.33+.17,
+              y+window_height(h)-.20,y+window_height(h)+.20)
+             for side in (-1,1)]
+    openings=[door,*windows]
+    xs=sorted(set([x-w*.5,x+w*.5]+[q for a,b,_,_ in openings for q in (a,b)]))
+    ys=sorted(set([y+.08,y+h-.06]+[q for _,_,a,b in openings for q in (a,b)]))
+    faces=[];vertices=[]
+    for i in range(len(xs)-1):
+        for j in range(len(ys)-1):
+            x0,x1=xs[i:i+2];y0,y1=ys[j:j+2]
+            xm=(x0+x1)*.5;ym=(y0+y1)*.5
+            if x1-x0<1e-5 or y1-y0<1e-5:continue
+            if any(a<xm<b and low<ym<high for a,b,low,high in openings):
+                continue
+            v=len(vertices)
+            vertices.extend(((x0,y0,z),(x1,y0,z),(x1,y1,z),(x0,y1,z)))
+            faces.extend(((v,v+1,v+2),(v,v+2,v+3)))
+    return trimesh.Trimesh(vertices=np.asarray(vertices),faces=np.asarray(faces),process=False)
+
+def _facade_recesses(k,city,idx,x,y,z,w,h,d):
+    """Frame actual visual openings and create a distinct street-facing entry."""
+    side=(-1 if idx%2 else 1)
+    center=x+side*.40
+    glass_y=y+window_height(h)
+    # Surface at z+d*.5+.025. Frames project +.09 while pane/door panels sit
+    # at +.007, in front of underlying colored wall but recessed into PBR stone.
+    face_z=z+d*.5+.025
+    pbr._put(k,city,"district_pbr_apertured_facade_"+str(idx),
+             apertured_facade_mesh(x,y,face_z,w,h,side),"structure")
+    panels=[]
+    def pane(x0,x1,y0,y1,depth):
+        v=len(panels)*4
+        # Four separate triangles per panel are packed in one GLB geometry.
+        return ([(x0,y0,depth),(x1,y0,depth),(x1,y1,depth),(x0,y1,depth)],
+                ((0,1,2),(0,2,3)))
+    vertices=[];faces=[]
+    for a,b,low,high in [(center-.27,center+.27,y+.12,y+1.52)]+[
+            (x+side*w*.33-.13,x+side*w*.33+.13,glass_y-.16,glass_y+.16)
+            for side in (-1,1)]:
+        v=len(vertices)
+        vertices.extend(((a,low,face_z-.014),(b,low,face_z-.014),
+                         (b,high,face_z-.014),(a,high,face_z-.014)))
+        faces.extend(((v,v+1,v+2),(v,v+2,v+3)))
+    backing=trimesh.Trimesh(vertices=vertices,faces=faces,process=False)
+    pbr._put(k,city,"district_pbr_recessed_glazing_"+str(idx),backing,"fitting")
+    # Load-bearing stone/timber framing around a visually recessed door and
+    # windows. Merge per-house pieces to keep WebGL draw calls manageable.
+    members=[]
+    def slab(name,xyz,size):
+        m=trimesh.creation.box(extents=size);m.apply_translation(xyz)
+        members.append(m)
+    slab("left_door", (center-.35,y+.84,face_z+.068),(.10,1.53,.12))
+    slab("right_door",(center+.35,y+.84,face_z+.068),(.10,1.53,.12))
+    slab("door_lintel",(center,y+1.62,face_z+.068),(.84,.13,.14))
+    slab("door_sill",(center,y+.10,face_z+.068),(.83,.16,.17))
+    for side in (-1,1):
+        wc=x+side*w*.33
+        slab("window_sill",(wc,glass_y-.24,face_z+.065),(.50,.10,.15))
+        slab("window_lintel",(wc,glass_y+.24,face_z+.065),(.50,.10,.13))
+        for edge in (-1,1):
+            slab("window_reveal",(wc+edge*.22,glass_y,face_z+.065),(.09,.45,.12))
+    frames=trimesh.util.concatenate(members)
+    pbr._put(k,city,"district_pbr_entrance_casing_"+str(idx),frames,"structure")
+    # City-specific entry apron with two real height changes. These are
+    # illustrative access steps, not verified walkable navigation/collision.
+    step_mats=[]
+    for n in range(3):
+        step=trimesh.creation.box(extents=(.90,.12,1.14-n*.23))
+        step.apply_translation((center,y+.09+n*.11,face_z+.88-n*.17))
+        step_mats.append(step)
+    threshold=trimesh.util.concatenate(step_mats)
+    pbr._put(k,city,"district_pbr_public_threshold_"+str(idx),threshold,"fitting")
+
 def finish_dwelling(k,city,idx,x,y,z,w,h,d):
     """Layer UV-resolved material across each individual inhabited exterior."""
     if city not in CITY_RHYTHM:raise ValueError(city)
@@ -58,9 +145,9 @@ def finish_dwelling(k,city,idx,x,y,z,w,h,d):
     top=y+h-.06
     # A textured ashlar/timber/industrial outer finish; use actual planar
     # geometry with stable UVs, not one material token in the manifest.
-    _sheet(k,city,"rainworn_facade_"+str(idx),[
-      [x-w*.5,y+.08,front],[x+w*.5,y+.08,front],
-      [x+w*.5,top,front],[x-w*.5,top,front]])
+    # Apertured façade replaces the old opaque PBR sheet, which concealed
+    # the windows and the door panels behind it.
+    _facade_recesses(k,city,idx,x,y,z,w,h,d)
     # Independent side sheathing gives the camera both front and oblique detail.
     # Keep normal outward (-X) for correct one-sided glTF rendering.
     _sheet(k,city,"weather_side_"+str(idx),[

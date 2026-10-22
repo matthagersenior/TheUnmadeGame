@@ -77,3 +77,11 @@ The original locally generated realm materials are now 256×256 albedo/normal te
 
 These textures are deliberately development assets. They are not high-resolution hand-painted production materials or detailed architectural sculpture. Distinctive low-poly building forms remain visible beneath the new PBR skins. Material improvements must be evaluated with visual screenshots and actual Unreal import/lighting before representing them as finished game art.
 
+
+### Street-level façade depth and inspection (all 328 source-generated dwellings)
+
+The previous UV-mapped `rainworn_facade` was **one opaque quad** in front of each house. This could conceal doors and bright windows and was a visual-fidelity regression despite its new material textures. The street-level pass replaces that quad with a triangulated, actual **apertured front finish**, aligned to the existing doors and upper windows on all **20 × 11 city** and **12 × 9 regional** residential previews. Each house gains combined PBR-trimmed casing geometry, recessed panels visible through the cutouts, and a small layered public entry threshold. This preserves all 328 original inhabited shells, distinct street plans, roof skins, civic structures and textures rather than adding density at the expense of detail.
+
+`Scripts/tests/test_street_level_facades.py` checks apertures geometrically: triangles must not cover the door or window centers; each city/region model must have one textured apertured finish, window inset, surround and entry threshold per dwelling. `test_district_surface_fidelity.py` continues to require source-generated UV/normal-mapped front surfaces and roofs. The model inspector adds explicit **Street view** buttons for each district; these are model-viewer camera placements, not verified player spawn points, interiors, ramps, collision or Unreal traversal. The old structural wall shell still exists behind the visible openings, so these are recesses rather than architectural openings through an enterable building.
+
+The pass uses the existing cultural materials without importing external images. Real production locations will still require modeled door openings through collision meshes, field-of-view checks, walkway gradients, pathfinding, layered lighting, unique wear sculpting, and per-location level art review.

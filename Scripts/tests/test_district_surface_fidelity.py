@@ -18,7 +18,7 @@ class DistrictSurfaceTests(unittest.TestCase):
    scene=builder.build_city_environment(city).scene
    found={name:geo for name,geo in scene.geometry.items() if "_district_pbr_" in name}
    roofs=[(name,g) for name,g in found.items() if "_pitched_roof_" in name]
-   faces=[(name,g) for name,g in found.items() if "_rainworn_facade_" in name]
+   faces=[(name,g) for name,g in found.items() if "_apertured_facade_" in name]
    self.assertEqual(len(roofs),20,city)
    self.assertEqual(len(faces),20,city)
    self.assertGreaterEqual(len(found),100,city)
@@ -32,7 +32,7 @@ class DistrictSurfaceTests(unittest.TestCase):
   for realm,city in builder.REGION_HABITAT.items():
    names=list(builder.build_environment(realm).scene.geometry)
    self.assertEqual(sum("_district_pbr_pitched_roof_" in n for n in names),12,realm)
-   self.assertEqual(sum("_district_pbr_rainworn_facade_" in n for n in names),12,realm)
+   self.assertEqual(sum("_district_pbr_apertured_facade_" in n for n in names),12,realm)
  def test_individual_district_terrain_is_sculpted_with_surface_uvs(self):
   import numpy as np
   from trimesh.visual.texture import TextureVisuals
