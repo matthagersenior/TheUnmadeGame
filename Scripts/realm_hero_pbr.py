@@ -13,10 +13,11 @@ from PIL import Image
 from trimesh.visual.material import PBRMaterial
 from trimesh.visual.texture import TextureVisuals
 
-SIZE=160
+SIZE=256
 # Locally distinct building materials: [primary masonry/work fabric, metal or
 # timber fittings]. Material identities are place-specific, not nine color swaps.
 CULTURES={
+ "Bellwold":((109,116,117),(105,74,56),"refuge limestone","salvaged roof timber",.02,.0),
  "Crossings":((122,113,92),(95,143,146),"surveyor limestone","river-patinated bridge iron",.11,.72),
  "Paperhaven":((187,183,158),(94,85,88),"chalk archive stone","ink-dark storage brass",.02,.63),
  "Saltwake":((73,110,123),(127,104,78),"salt-bitten hull timber","weathered dock bronze",.02,.65),
@@ -45,6 +46,7 @@ FOCUS={
 }
 
 def _texture(city,kind):
+    if kind not in ("structure","fitting","roof"):raise ValueError(kind)
     yy,xx=np.mgrid[:SIZE,:SIZE].astype(float)
     base=CULTURES[city][0 if kind=="structure" else 1]
     rng=np.random.default_rng(sum((i+1)*ord(ch) for i,ch in enumerate(city+kind))+211)
@@ -73,6 +75,10 @@ def _texture(city,kind):
         deposits=15*np.cos(xx*.33-yy*.13)-18*(np.mod(xx+yy*.1,28)<3)
     else:
         deposits=13*cross+9*weave
+    if kind=="roof":
+        # Separate roof wear and courses for every city: seams, shingle wear, soot.
+        seam=np.mod(yy+11*np.floor(xx/41),22)
+        deposits=deposits*.63-24*(seam<2)+8*np.sin(xx*.29+yy*.08)
     erosion=grit*(9 if kind=="structure" else 15)+deposits
     mineral=(yy/SIZE)*(13 if kind=="structure" else -6)
     albedo=np.clip(np.asarray(base)[None,None,:]+erosion[:,:,None]+mineral[:,:,None],0,255).astype(np.uint8)
@@ -83,14 +89,14 @@ def _texture(city,kind):
     normal=np.stack(((nx/length*.5+.5)*255,(ny/length*.5+.5)*255,(nz/length*.5+.5)*255),axis=2)
     return Image.fromarray(albedo,"RGB"),Image.fromarray(np.clip(normal,0,255).astype(np.uint8),"RGB")
 
-@lru_cache(maxsize=20)
+@lru_cache(maxsize=40)
 def material(city,kind):
     albedo,normal=_texture(city,kind)
     metal=CULTURES[city][4 if kind=="structure" else 5]
-    name=f"{city} "+CULTURES[city][2 if kind=="structure" else 3]
+    name=f"{city} "+("locally weathered residential roofing" if kind=="roof" else CULTURES[city][2 if kind=="structure" else 3])
     return PBRMaterial(name=name,baseColorTexture=albedo,normalTexture=normal,
-      metallicFactor=metal,roughnessFactor=(.9 if kind=="structure" else .59),
-      baseColorFactor=[255,255,255,255],doubleSided=False)
+      metallicFactor=(.015 if kind=="roof" else metal),roughnessFactor=(.92 if kind in ("roof","structure") else .59),
+      baseColorFactor=[255,255,255,255],doubleSided=(kind=="roof"))
 
 def _put(k,city,feature,geo,kind):
     faces=np.asarray(geo.faces,dtype=np.int64)
