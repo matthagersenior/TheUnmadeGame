@@ -66,3 +66,14 @@ The exported `manifest.json` now includes `pbr_materials` (material names with e
 | Auvren / Before-Place | Disconnected contradictory portals and witness platforms | Unfounded limestone and witness alloy |
 
 Each asset manifest includes `hero_label`, `hero_focus`, and embedded `pbr_materials` for inspectability; the public viewer displays a location-specific **Hero landmark** action. CI tests distinct geometry names, UV/PBR export, material identities, texture preservation, density and deterministic GLB equality. **These maps are compact procedural visual-development textures, not handmade production 2K/4K scan-quality materials.** Without Unreal import, collision, LODs, hand-scanned textures, lighting, rigging and gameplay testing, no preview should be marketed as final in-engine imagery.
+
+### Residential surface and terrain fidelity — full twenty geographic assets
+
+The residential exteriors now go beyond vertex-colored architectural blockouts: `Scripts/district_surface_detail.py` adds a textured physical pitched-roof skin, front and side weathered façade surfaces and locally relevant functional accessories to **each** existing habitation shell. That is 20 façades/roofs in each of the 11 separately modeled cities and 12 in each of the nine realm overviews (328 residential surfaces across the 20 geographic GLBs). It does not create, remove, or relocate any of the original 328 houses. The independent PBR layer and density counts coexist; floorplans and interiors remain unimplemented.
+
+Each neighborhood also receives a **real triangulated terrain surface**, with authored functions varying by construction culture: quarry steps in Vathless, water-cut basins in Saltwake, raised suspended courts in Orravane, thermal ripples in Cinderhold, canal-like grading in Drevlach, grown root berms in Tharniv, unresolved limestone irregularities in Auvren, and other locally distinct ground rhythms. These are non-collision-tested scenic terrain, **not playable roads, functioning water systems, or Unreal landscape components**.
+
+The original locally generated realm materials are now 256×256 albedo/normal textures, and there is a separately weathered UV/PBR roof material family for each city, including Bellwold. The attached GLB has real UV coordinates and tangent-space normal textures for building and ground surfaces. Source remains deterministic, self-contained, and without external textures. The manifest records `textured_roofs` and `sculpted_districts` for measurable non-regression. The public viewer shows these counts.
+
+These textures are deliberately development assets. They are not high-resolution hand-painted production materials or detailed architectural sculpture. Distinctive low-poly building forms remain visible beneath the new PBR skins. Material improvements must be evaluated with visual screenshots and actual Unreal import/lighting before representing them as finished game art.
+
