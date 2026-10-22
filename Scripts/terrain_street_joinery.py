@@ -32,6 +32,51 @@ def _box(at,size):
     geo.apply_translation(at)
     return geo
 
+# Each society has a different load-bearing language, including
+# irregular dry-set stone, tapered salvaged ship ribs, hanging choir supports,
+# and fluted grafted roots. These parameters shape actual mesh vertices.
+PIER_CHARACTER={
+ "Crossings":(.27,.19,.14,4,.08),
+ "Bellwold":(.31,.20,.09,6,.05),
+ "Paperhaven":(.30,.22,.04,5,.03),
+ "Saltwake":(.19,.27,.23,3,.11),
+ "Cinderhold":(.33,.23,.05,8,.07),
+ "Drevlach":(.28,.16,.19,7,.06),
+ "Orravane":(.17,.11,.26,4,.14),
+ "Vathless":(.37,.26,.07,5,.03),
+ "Eillun":(.29,.16,.10,6,.08),
+ "Tharniv":(.33,.09,.31,3,.21),
+ "Auvren":(.25,.30,.12,7,.04),
+}
+
+def _sculpted_pier(city,x,z,y0,y1,idx,corner):
+    """Real 3D multi-ring tapered pier with local cultural fluting/sway."""
+    r0,r1,twist,lobes,sway=PIER_CHARACTER[city]
+    n=12
+    verts=[]
+    for ring in range(4):
+        t=ring/3
+        y=y0+(y1-y0)*t
+        center_x=x+sway*math.sin(math.pi*t)*math.cos(idx*.49+corner)
+        center_z=z+sway*math.sin(math.pi*t)*math.sin(idx*.37+corner)
+        base_r=(1-t)*r0+t*r1
+        for q in range(n):
+            angle=2*math.pi*q/n+twist*t
+            flute=1+.105*math.sin(lobes*angle+idx*.31+corner*.17)
+            radial=base_r*flute
+            verts.append((center_x+radial*math.cos(angle),y,
+                          center_z+radial*math.sin(angle)))
+    faces=[]
+    for ring in range(3):
+        for q in range(n):
+            a=ring*n+q;b=ring*n+(q+1)%n
+            c=(ring+1)*n+(q+1)%n;d=(ring+1)*n+q
+            faces.extend(((a,b,c),(a,c,d)))
+    for j in range(1,n-1):
+        faces.append((0,j+1,j))
+        faces.append((3*n,3*n+j,3*n+j+1))
+    return trimesh.Trimesh(vertices=np.asarray(verts),faces=np.asarray(faces),process=False)
+
 def join_house_to_relief(k,city,idx,house_x,house_y,house_z,w,d,
                          district,cx,cz,floor_y,sample_height):
     """Add two genuinely physical, textured source geometry objects per home.
@@ -49,8 +94,7 @@ def join_house_to_relief(k,city,idx,house_x,house_y,house_z,w,d,
         house_bottom=house_y-.28
         lowest=min(ground-.16,house_bottom)
         highest=max(ground+.11,house_bottom+.19)
-        supports.append(_box((xx,(lowest+highest)*.5,zz),
-                             (.32,highest-lowest,.34)))
+        supports.append(_sculpted_pier(city,xx,zz,lowest,highest,idx,corner))
         # The feet are real sizes and grounded; not decorative bars floating
         # at one universal elevation above every separate region's topography.
         supports.append(_box((xx,ground+.035,zz),(.60,.17,.55)))
