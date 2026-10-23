@@ -3,7 +3,7 @@
 **Milestone:** v21 source quality gate  
 **Purpose:** keep every realm and every player-facing system to the same minimum quality bar while the game is developed without Unreal Editor access.
 
-The source gate is a consistency check over authored material. It cannot verify a playable build, rendered interface, real timing, feel, accessibility in use, or save behavior in Unreal. Every engine-only item below stays open until tested in the Editor and a packaged build.
+The maintained [nine-realm coverage ledger](realm-coverage-ledger.json) tracks story, locations, quests, NPC rosters, enemies, bosses, equipment, abilities, environment prototypes, consequences, and CI evidence against stable source records. Its validator runs in static CI. The source gate is a consistency check over authored material. It cannot verify a playable build, rendered interface, real timing, feel, accessibility in use, or save behavior in Unreal. Every engine-only item below stays open until tested in the Editor and a packaged build.
 
 ## Realm-by-realm authoring floor
 
