@@ -24,6 +24,40 @@ class HeroModels(unittest.TestCase):
   self.assertEqual(len(arcs),9)
   self.assertEqual(len({row["boss"] for row in arcs}),9)
   self.assertEqual(len({row["dungeon"] for row in arcs}),9)
+ def test_people_bosses_and_creatures_have_anatomical_variation(self):
+  if not all(importlib.util.find_spec(m) for m in ("numpy","trimesh","PIL")):
+   self.skipTest("3D asset dependencies tested by dedicated hero-model CI workflow")
+  spec=importlib.util.spec_from_file_location("hero_anatomy",FILE);b=importlib.util.module_from_spec(spec);spec.loader.exec_module(b)
+  pack=json.loads((ROOT/"Authoring/world_content_pack.json").read_text())
+  people=[]
+  for i,row in enumerate(pack["npcs"]):
+   model=b.build_resident((row["id"],row["display_name"],row["realm"],row["visual_direction"]),i)
+   names=tuple(model.scene.geometry)
+   self.assertGreaterEqual(model.count,90,row["id"])
+   for part in ("resident_jaw","resident_ear_","resident_iris_","resident_finger_","coat_lapel_"):
+    self.assertTrue(any(part in name for name in names),(row["id"],part))
+   people.append((round(float(model.scene.bounds[1][1]),2),round(float(model.scene.bounds[0][0]),2),model.count))
+  self.assertGreaterEqual(len(set(people)),12,"NPC proportions and hair should vary across the cast")
+  arcs=json.loads((ROOT/"Authoring/frontier_adventures_v14.json").read_text())["arcs"]
+  silhouettes=[]
+  for i,arc in enumerate(arcs):
+   model=b.build_expedition_boss(arc,i);names=tuple(model.scene.geometry)
+   self.assertGreaterEqual(model.count,50,arc["boss"])
+   for part in ("boss_mask_cheek_","boss_mask_brow_","boss_abdominal_lamella_","boss_hand_claw_","boss_signature_"):
+    self.assertTrue(any(part in name for name in names),(arc["boss"],part))
+   bounds=model.scene.bounds
+   silhouettes.append(tuple(round(float(v),2) for v in (bounds[1][1]-bounds[0][1],bounds[1][0]-bounds[0][0],bounds[1][2]-bounds[0][2])))
+  self.assertGreaterEqual(len(set(silhouettes)),8,"boss outlines should remain individually recognizable")
+  for kind in b.SPECIES:
+   model=b.build_creature(kind);names=tuple(model.scene.geometry)
+   self.assertGreaterEqual(model.count,20,kind)
+   anatomy={"Cinderjaw":"dermal_shoulder_scute_","PaleStrider":"stride_spine_tine_",
+    "Veilwatch":"shroud_pleat_","GleamMoth":"wing_membrane_rib_",
+    "HollowHound":"rib_socket_rim_","GriefLantern":"cage_crossbrace_",
+    "Inkmaw":"binding_rivet_","RedactionEye":"corneal_iris_lamination_",
+    "SaltglassCrawler":"shell_growth_ridge_","DrownedWatch":"drowned_scale_",
+    "Ashmaw":"slag_armor_seam_","KilnWisp":"coal_crust_node_"}[kind]
+   self.assertTrue(any(anatomy in name for name in names),(kind,anatomy))
  def test_public_model_gallery_explains_each_creature_signature(self):
   viewer=(ROOT/"site/real-models.html").read_text()
   for species in ("Cinderjaw","PaleStrider","Veilwatch","GleamMoth",
@@ -90,9 +124,26 @@ class HeroModels(unittest.TestCase):
      }[record["stable_id"].split(":",1)[1]]
      self.assertTrue(any(signature_detail in name for name in loaded.geometry),
       (record["stable_id"],signature_detail))
+     anatomy_detail={
+      "Cinderjaw":"dermal_shoulder_scute_","PaleStrider":"stride_spine_tine_",
+      "Veilwatch":"shroud_pleat_","GleamMoth":"wing_membrane_rib_",
+      "HollowHound":"rib_socket_rim_","GriefLantern":"cage_crossbrace_",
+      "Inkmaw":"binding_rivet_","RedactionEye":"corneal_iris_lamination_",
+      "SaltglassCrawler":"shell_growth_ridge_","DrownedWatch":"drowned_scale_",
+      "Ashmaw":"slag_armor_seam_","KilnWisp":"coal_crust_node_",
+     }[record["stable_id"].split(":",1)[1]]
+     self.assertTrue(any(anatomy_detail in name for name in loaded.geometry),
+      (record["stable_id"],anatomy_detail))
+    if record["category"]=="NPC":
+     for detail in ("resident_jaw","resident_iris_","resident_finger_","coat_lapel_"):
+      self.assertTrue(any(detail in name for name in loaded.geometry),(record["stable_id"],detail))
+     self.assertGreaterEqual(record["parts"],90,record["stable_id"])
     if record["category"]=="Boss":
      signature="boss_signature_"
      self.assertTrue(any(signature in name for name in loaded.geometry),record["stable_id"])
+     for detail in ("boss_mask_cheek_","boss_mask_brow_","boss_abdominal_lamella_","boss_hand_claw_"):
+      self.assertTrue(any(detail in name for name in loaded.geometry),(record["stable_id"],detail))
+     self.assertGreaterEqual(record["parts"],50,record["stable_id"])
     if record["category"]=="Lair":
      signature="lair_signature_"
      self.assertTrue(any(signature in name for name in loaded.geometry),record["stable_id"])
