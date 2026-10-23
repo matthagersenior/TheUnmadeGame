@@ -331,38 +331,54 @@ def build_lair_entrance(arc,index):
  if index==0: # Split Charter Vault
   for x in (-1.45,0,1.45):
    k.taper('lair_signature_split_charter_fork_'+str(x),(x,.10,-4.8),(x*1.48,.20,-7.0),.16,.045,GOLD,8)
+  for slot,x in enumerate((-1.35,0,1.35)):
+   k.box('lair_signature_charter_fragment_'+str(slot),(x,.29,-6.08),(.42,.08,.68),light if slot==1 else trim)
+  k.ring('lair_signature_division_seal',(0,.36,-6.35),.30,.055,GOLD,plane='xz')
  elif index==1: # Hollow Breakwater
   for side in (-1,1):
    k.beam('lair_signature_breakwater_rib_'+str(side),(side*2.2,.12,-5.2),(side*1.05,3.0,-5.5),.17,light)
+   k.box('lair_signature_breakwater_buttress_'+str(side),(side*2.55,.72,-5.15),(.38,1.10,.42),base)
+   k.ring('lair_signature_breakwater_tide_mark_'+str(side),(side*1.55,.32,-5.72),.22,.055,GOLD,plane='xz')
   k.box('lair_signature_dry_pressure_basin',(0,.17,-5.5),(2.7,.18,1.6),trim)
  elif index==2: # Furnace Below Blackslag
   for side in (-1,1):
    x=side*1.25
    k.box('lair_signature_blackslag_furnace_mouth_'+str(side),(x,1.1,-5.7),(1.1,2.2,.42),DARK)
    k.ring('lair_signature_thermal_feed_'+str(side),(x,.45,-5.3),.56,.08,light,plane='xz')
+  for slot,x in enumerate((-1.8,0,1.8)):
+   k.box('lair_signature_furnace_vent_louver_'+str(slot),(x,2.55,-5.48),(.72,.12,.18),trim)
  elif index==3: # Foreclosed Anchorage
   k.beam('lair_signature_anchor_crossbar',(-3.1,2.6,-5.8),(3.1,2.6,-5.8),.13,GOLD)
   for side in (-1,1):
    k.taper('lair_signature_anchor_chain_'+str(side),(side*2.5,2.5,-5.8),(side*1.5,.2,-5.8),.09,.065,trim,9)
    k.box('lair_signature_anchor_counterweight_'+str(side),(side*1.5,.1,-5.8),(.62,.5,.54),light)
+   k.ring('lair_signature_anchor_shackle_'+str(side),(side*2.45,2.28,-5.8),.24,.055,light,plane='xz')
  elif index==4: # Fallen Choir Engine
   for x in (-1.8,-.9,0,.9,1.8):
    k.beam('lair_signature_choir_tuning_post_'+str(x),(x,.1,-5.7),(x,2.4,-5.7),.07,light)
   k.ring('lair_signature_engine_counterweight',(0,1.25,-5.7),1.0,.10,GOLD,plane='xz')
+  k.box('lair_signature_silent_pitch_block',(0,.44,-5.96),(.56,.34,.42),trim)
  elif index==5: # Buried Yesterday Foundry
   for level in range(4):
    k.box('lair_signature_foundry_stratum_'+str(level),(0,.16+level*.36,-5.6),(5.8-level*.45,.24,.52),trim if level%2 else base)
+  for slot,x in enumerate((-1.75,0,1.75)):
+   k.box('lair_signature_foundry_date_ingot_'+str(slot),(x,.36,-6.02),(.72,.17,.28),GOLD if slot==1 else light)
  elif index==6: # Unentered Census House
   for side in (-1,1):
    for row in range(3):
     k.box('lair_signature_census_niche_'+str(side)+'_'+str(row),(side*1.65,.7+row*.66,-5.8),(.58,.48,.16),WHITE if row==1 else trim)
+  k.box('lair_signature_unentered_register_plate',(0,2.78,-5.68),(1.0,.52,.18),GOLD)
  elif index==7: # Crownroot Keep
   for side in (-1,1):
    k.taper('lair_signature_root_arch_'+str(side),(side*2.3,.22,-5.4),(side*.5,3.2,-5.8),.34,.08,light,10)
+   k.taper('lair_signature_root_grounding_'+str(side),(side*.62,.12,-5.62),(side*1.9,.92,-5.95),.19,.04,trim,9)
+   k.taper('lair_signature_root_crown_tine_'+str(side),(side*.48,2.78,-5.75),(side*1.05,3.55,-5.83),.14,.025,GOLD,8)
   k.beam('lair_signature_shared_root_crown',(-1.0,2.6,-5.8),(1.0,2.6,-5.8),.16,trim)
  else: # Unfinished Bastion
   for side in (-1,1):
    k.beam('lair_signature_unfinished_jamb_'+str(side),(side*1.72,.1,-5.5),(side*1.72,3.7,-5.5),.18,light)
+   k.box('lair_signature_unfinished_anchor_foot_'+str(side),(side*1.72,.22,-5.5),(.72,.42,.68),trim)
+   k.beam('lair_signature_unfinished_wall_stub_'+str(side),(side*1.72,2.28,-5.5),(side*2.65,2.78,-5.5),.14,base)
   k.box('lair_signature_gap_without_door',(0,1.68,-5.5),(.08,3.1,.16),DARK)
  return k
 

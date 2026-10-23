@@ -96,6 +96,7 @@ class HeroModels(unittest.TestCase):
     if record["category"]=="Lair":
      signature="lair_signature_"
      self.assertTrue(any(signature in name for name in loaded.geometry),record["stable_id"])
+     self.assertGreaterEqual(record["parts"],18,record["stable_id"])
    verified=builder.build_all(ROOT,out,True)
    self.assertEqual(verified,ledger)
  def test_manifest_tamper_is_refused(self):
