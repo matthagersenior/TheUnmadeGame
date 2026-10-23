@@ -19,6 +19,14 @@ class HeroModels(unittest.TestCase):
   self.assertEqual(len(pack["npcs"]),18)
   self.assertEqual(len(pack["realms"]),9)
   self.assertEqual(len({r["id"] for r in pack["npcs"]}),18)
+ def test_public_model_gallery_explains_each_creature_signature(self):
+  viewer=(ROOT/"site/real-models.html").read_text()
+  for species in ("Cinderjaw","PaleStrider","Veilwatch","GleamMoth",
+    "HollowHound","GriefLantern","Inkmaw","RedactionEye",
+    "SaltglassCrawler","DrownedWatch","Ashmaw","KilnWisp"):
+   self.assertIn(species+":'",viewer)
+  self.assertIn("function descriptionFor(a)",viewer)
+  self.assertIn("static geometry accents, not animated tells or new abilities",viewer)
  def test_actual_glb_geometry_is_generated_and_consistent(self):
   if not all(importlib.util.find_spec(m) for m in ("numpy","trimesh","PIL")):
    self.skipTest("3D asset dependencies tested by dedicated hero-model CI workflow")
