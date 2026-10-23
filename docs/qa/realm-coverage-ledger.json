@@ -1,0 +1,1703 @@
+{
+  "schema_version": 1,
+  "title": "The Unmade — Nine-Realm Source Coverage Ledger",
+  "updated_from": "main source milestone bc2a8aa16e65891858932f79fab9235429eb561c (2026-10-23)",
+  "status": "Source-derived coverage index. It distinguishes authored, registered, source-tested, prototype asset, and Unreal-verified evidence. A listed entry is not a claim that the content is playable.",
+  "canonical_guardrails": [
+    "Preserve all nine realm identities and current stable IDs.",
+    "Optional content does not gate the main path.",
+    "Held Morning and Many Mornings remain distinct authored endings.",
+    "Keep OPEN, DISPUTED, and SEALED mysteries in their current state.",
+    "Preserve witness provenance, consent, player choice, and recoverable saved progress.",
+    "No Unreal Editor, PIE, or packaged-game verification is claimed by this ledger."
+  ],
+  "source_authorities": [
+    "docs/canon/encyclopedia/INDEX.json",
+    "Authoring/frontier_adventures_v14.json",
+    "Authoring/adventure_depth_v16.json",
+    "Authoring/world_content_pack.json",
+    "Authoring/ability_codex.json",
+    "docs/canon/dependency-ledger.json"
+  ],
+  "realm_order": [
+    "ThreefoldReach",
+    "WidowedRain",
+    "HearthBeneath",
+    "TidalLedger",
+    "SkyBelow",
+    "CinderSpine",
+    "HundredUnlived",
+    "OrchardOfKings",
+    "FirstAbsence"
+  ],
+  "dimensions": [
+    "story",
+    "locations",
+    "quests",
+    "npcs",
+    "enemies",
+    "bosses",
+    "equipment",
+    "abilities",
+    "environment",
+    "consequences",
+    "tests"
+  ],
+  "realms": [
+    {
+      "id": "ThreefoldReach",
+      "culture": "The Wayward Charter",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "The Last Lantern Charter",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:ThreefoldReach",
+          "main_arc": "A Bell That Had No Last Note"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Crossings",
+          "frontier": "Rookstep",
+          "refuge": "Lantern Rest",
+          "dungeon": "The Split Charter Vault",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 17,
+          "stable_ids": [
+            "quest:quest:expedition:ThreefoldReach",
+            "quest:quest:confluence:SilentAlarm",
+            "quest:quest:wing:ThreefoldReach",
+            "quest:quest:road:Crossings",
+            "quest:quest:road:Bellwold",
+            "quest:quest:road:Paperhaven",
+            "quest:quest:campaign:ThreefoldReach",
+            "quest:quest:aftermath:ThreefoldReach",
+            "quest:quest:faction:Refuge",
+            "quest:quest:faction:Archive",
+            "quest:quest:faction:Roadbound",
+            "quest:quest:depth:ThreefoldReach",
+            "quest:quest:identity:ThreefoldReach",
+            "quest:quest:local:BellwoldLanterns",
+            "quest:quest:local:PaperhavenTestimony",
+            "quest:quest:local:Afterlight",
+            "quest:quest:study:EchoWell"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Maelin",
+            "Tovin",
+            "Rusk",
+            "Jessa",
+            "Noll"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 8,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:ThreefoldReach",
+              "name": "The Tollkeeper Without a Road",
+              "key": "boss:boss:expedition:ThreefoldReach"
+            },
+            {
+              "id": "boss:original:HollowBell",
+              "name": "The Bell That Buried Its Keeper",
+              "key": "boss:boss:original:HollowBell"
+            },
+            {
+              "id": "boss:original:RedactedCurator",
+              "name": "The Curator of Missing Names",
+              "key": "boss:boss:original:RedactedCurator"
+            },
+            {
+              "id": "boss:original:UnfinishedPilgrim",
+              "name": "The Unfinished Pilgrim",
+              "key": "boss:boss:original:UnfinishedPilgrim"
+            },
+            {
+              "id": "boss:wing:ThreefoldReach",
+              "name": "The Unmeasured Bailiff",
+              "key": "boss:boss:wing:ThreefoldReach"
+            },
+            {
+              "id": "boss:road:Crossings",
+              "name": "Milewatch Elder",
+              "key": "boss:boss:road:Crossings"
+            },
+            {
+              "id": "boss:road:Bellwold",
+              "name": "Uncast Bell Elder",
+              "key": "boss:boss:road:Bellwold"
+            },
+            {
+              "id": "boss:road:Paperhaven",
+              "name": "Marginbound Elder",
+              "key": "boss:boss:road:Paperhaven"
+            }
+          ],
+          "frontier_boss": "The Tollkeeper Without a Road",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:ThreefoldReach:weapon",
+              "name": "Mileglass Edge",
+              "key": "regional_gear:gear:ThreefoldReach:weapon"
+            },
+            {
+              "id": "gear:ThreefoldReach:armor",
+              "name": "Witness Brace",
+              "key": "regional_gear:gear:ThreefoldReach:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Mileglass Edge",
+            "Witness Brace"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 2,
+          "stable_ids": [
+            {
+              "id": "skill:technique:ThreefoldReach",
+              "name": "Marked Opening",
+              "key": "learned_skill:skill:technique:ThreefoldReach"
+            },
+            {
+              "id": "skill:study:EchoWell",
+              "name": "Memory Lens / Echo Well",
+              "key": "learned_skill:skill:study:EchoWell"
+            }
+          ],
+          "frontier_technique": "Marked Opening",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Tollkeeper Without a Road is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Tollkeeper Without a Road yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "The Last Lantern Charter",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    },
+    {
+      "id": "WidowedRain",
+      "culture": "The Rainward Account",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "Water For Those Still Waiting",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:WidowedRain",
+          "main_arc": "The Shore Without Its Water"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Saltwake",
+          "frontier": "Brinewatch",
+          "refuge": "Drywake",
+          "dungeon": "The Hollow Breakwater",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 9,
+          "stable_ids": [
+            "quest:quest:expedition:WidowedRain",
+            "quest:quest:confluence:TwoNames",
+            "quest:quest:wing:WidowedRain",
+            "quest:quest:road:Saltwake",
+            "quest:quest:campaign:WidowedRain",
+            "quest:quest:aftermath:WidowedRain",
+            "quest:quest:depth:WidowedRain",
+            "quest:quest:identity:WidowedRain",
+            "quest:quest:frontier:WidowedRain"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Ceryn",
+            "Ossa",
+            "Brelt",
+            "Havin",
+            "Teska"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 3,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:WidowedRain",
+              "name": "The Undertow Bailiff",
+              "key": "boss:boss:expedition:WidowedRain"
+            },
+            {
+              "id": "boss:wing:WidowedRain",
+              "name": "The Brine Tollkeeper",
+              "key": "boss:boss:wing:WidowedRain"
+            },
+            {
+              "id": "boss:road:Saltwake",
+              "name": "Hollow Hull Elder",
+              "key": "boss:boss:road:Saltwake"
+            }
+          ],
+          "frontier_boss": "The Undertow Bailiff",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:WidowedRain:weapon",
+              "name": "Breakwater Spear",
+              "key": "regional_gear:gear:WidowedRain:weapon"
+            },
+            {
+              "id": "gear:WidowedRain:armor",
+              "name": "Rainward Mantle",
+              "key": "regional_gear:gear:WidowedRain:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Breakwater Spear",
+            "Rainward Mantle"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 1,
+          "stable_ids": [
+            {
+              "id": "skill:technique:WidowedRain",
+              "name": "Pressure Read",
+              "key": "learned_skill:skill:technique:WidowedRain"
+            }
+          ],
+          "frontier_technique": "Pressure Read",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Undertow Bailiff is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Undertow Bailiff yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "Water For Those Still Waiting",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    },
+    {
+      "id": "HearthBeneath",
+      "culture": "The Ember Commons",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "The Heat Left Over",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:HearthBeneath",
+          "main_arc": "The Heat Lent By No Sun"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Cinderhold",
+          "frontier": "Emberwatch",
+          "refuge": "Snowmelt Rest",
+          "dungeon": "The Furnace Below Blackslag",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 9,
+          "stable_ids": [
+            "quest:quest:expedition:HearthBeneath",
+            "quest:quest:confluence:UnmappedWay",
+            "quest:quest:wing:HearthBeneath",
+            "quest:quest:road:Cinderhold",
+            "quest:quest:campaign:HearthBeneath",
+            "quest:quest:aftermath:HearthBeneath",
+            "quest:quest:depth:HearthBeneath",
+            "quest:quest:identity:HearthBeneath",
+            "quest:quest:frontier:HearthBeneath"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Kerrin",
+            "Dova",
+            "Sarn",
+            "Ilyet",
+            "Fen"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 3,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:HearthBeneath",
+              "name": "The Ashbound Provost",
+              "key": "boss:boss:expedition:HearthBeneath"
+            },
+            {
+              "id": "boss:wing:HearthBeneath",
+              "name": "The Unspent Furnace",
+              "key": "boss:boss:wing:HearthBeneath"
+            },
+            {
+              "id": "boss:road:Cinderhold",
+              "name": "Bafflewatch Elder",
+              "key": "boss:boss:road:Cinderhold"
+            }
+          ],
+          "frontier_boss": "The Ashbound Provost",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:HearthBeneath:weapon",
+              "name": "Kilnfang Maul",
+              "key": "regional_gear:gear:HearthBeneath:weapon"
+            },
+            {
+              "id": "gear:HearthBeneath:armor",
+              "name": "Cinderguard Plate",
+              "key": "regional_gear:gear:HearthBeneath:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Kilnfang Maul",
+            "Cinderguard Plate"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 1,
+          "stable_ids": [
+            {
+              "id": "skill:technique:HearthBeneath",
+              "name": "Ember Counter",
+              "key": "learned_skill:skill:technique:HearthBeneath"
+            }
+          ],
+          "frontier_technique": "Ember Counter",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Ashbound Provost is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Ashbound Provost yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "The Heat Left Over",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    },
+    {
+      "id": "TidalLedger",
+      "culture": "The Estuary of Owed Days",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "Whose Oath Remains",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:TidalLedger",
+          "main_arc": "The Account That Borrowed Tomorrow"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Drevlach",
+          "frontier": "Oathshoal",
+          "refuge": "Reedwake",
+          "dungeon": "The Foreclosed Anchorage",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 9,
+          "stable_ids": [
+            "quest:quest:expedition:TidalLedger",
+            "quest:quest:confluence:TomorrowPromise",
+            "quest:quest:wing:TidalLedger",
+            "quest:quest:road:Drevlach",
+            "quest:quest:campaign:TidalLedger",
+            "quest:quest:aftermath:TidalLedger",
+            "quest:quest:echo:TidalLedger",
+            "quest:quest:depth:TidalLedger",
+            "quest:quest:identity:TidalLedger"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Velka",
+            "Roven",
+            "Anset",
+            "Deyra",
+            "Sull"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 4,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:TidalLedger",
+              "name": "The Interest Warden",
+              "key": "boss:boss:expedition:TidalLedger"
+            },
+            {
+              "id": "boss:guardian:TidalLedger",
+              "name": "The Collector of Unborn Days",
+              "key": "boss:boss:guardian:TidalLedger"
+            },
+            {
+              "id": "boss:wing:TidalLedger",
+              "name": "The Unclaimed Duelist",
+              "key": "boss:boss:wing:TidalLedger"
+            },
+            {
+              "id": "boss:road:Drevlach",
+              "name": "Unpledged Tide Elder",
+              "key": "boss:boss:road:Drevlach"
+            }
+          ],
+          "frontier_boss": "The Interest Warden",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:TidalLedger:weapon",
+              "name": "Undertide Hook",
+              "key": "regional_gear:gear:TidalLedger:weapon"
+            },
+            {
+              "id": "gear:TidalLedger:armor",
+              "name": "Oathwake Coat",
+              "key": "regional_gear:gear:TidalLedger:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Undertide Hook",
+            "Oathwake Coat"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 1,
+          "stable_ids": [
+            {
+              "id": "skill:technique:TidalLedger",
+              "name": "Oath Interrupt",
+              "key": "learned_skill:skill:technique:TidalLedger"
+            }
+          ],
+          "frontier_technique": "Oath Interrupt",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Interest Warden is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Interest Warden yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "Whose Oath Remains",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    },
+    {
+      "id": "SkyBelow",
+      "culture": "The Downward Cantors",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "A Voice On The Bridge",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:SkyBelow",
+          "main_arc": "The Chorus That Holds The Roof"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Orravane",
+          "frontier": "Downsong",
+          "refuge": "Quiet Span",
+          "dungeon": "The Fallen Choir Engine",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 9,
+          "stable_ids": [
+            "quest:quest:expedition:SkyBelow",
+            "quest:quest:confluence:TwoKeepers",
+            "quest:quest:wing:SkyBelow",
+            "quest:quest:road:Orravane",
+            "quest:quest:campaign:SkyBelow",
+            "quest:quest:aftermath:SkyBelow",
+            "quest:quest:echo:SkyBelow",
+            "quest:quest:depth:SkyBelow",
+            "quest:quest:identity:SkyBelow"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Liora",
+            "Vaun",
+            "Eris",
+            "Kelm",
+            "Sora"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 4,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:SkyBelow",
+              "name": "The Counterweight Cantor",
+              "key": "boss:boss:expedition:SkyBelow"
+            },
+            {
+              "id": "boss:guardian:SkyBelow",
+              "name": "The Missing Chorister",
+              "key": "boss:boss:guardian:SkyBelow"
+            },
+            {
+              "id": "boss:wing:SkyBelow",
+              "name": "The Falling Cantor",
+              "key": "boss:boss:wing:SkyBelow"
+            },
+            {
+              "id": "boss:road:Orravane",
+              "name": "Restweight Elder",
+              "key": "boss:boss:road:Orravane"
+            }
+          ],
+          "frontier_boss": "The Counterweight Cantor",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:SkyBelow:weapon",
+              "name": "Downfall Glaive",
+              "key": "regional_gear:gear:SkyBelow:weapon"
+            },
+            {
+              "id": "gear:SkyBelow:armor",
+              "name": "Choirweight Harness",
+              "key": "regional_gear:gear:SkyBelow:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Downfall Glaive",
+            "Choirweight Harness"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 1,
+          "stable_ids": [
+            {
+              "id": "skill:technique:SkyBelow",
+              "name": "Grounded Fold",
+              "key": "learned_skill:skill:technique:SkyBelow"
+            }
+          ],
+          "frontier_technique": "Grounded Fold",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Counterweight Cantor is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Counterweight Cantor yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "A Voice On The Bridge",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    },
+    {
+      "id": "CinderSpine",
+      "culture": "The Seam-Walkers",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "The Name In The Seam",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:CinderSpine",
+          "main_arc": "The Stone That Remembered Workers"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Vathless",
+          "frontier": "Seamguard",
+          "refuge": "Kinrest",
+          "dungeon": "The Buried Yesterday Foundry",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 9,
+          "stable_ids": [
+            "quest:quest:expedition:CinderSpine",
+            "quest:quest:confluence:FirstAbsence",
+            "quest:quest:wing:CinderSpine",
+            "quest:quest:road:Vathless",
+            "quest:quest:campaign:CinderSpine",
+            "quest:quest:aftermath:CinderSpine",
+            "quest:quest:echo:CinderSpine",
+            "quest:quest:depth:CinderSpine",
+            "quest:quest:identity:CinderSpine"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Aren",
+            "Torva",
+            "Mekk",
+            "Seyl",
+            "Brann"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 4,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:CinderSpine",
+              "name": "The Last Claimant",
+              "key": "boss:boss:expedition:CinderSpine"
+            },
+            {
+              "id": "boss:guardian:CinderSpine",
+              "name": "The Mortar Ancestor",
+              "key": "boss:boss:guardian:CinderSpine"
+            },
+            {
+              "id": "boss:wing:CinderSpine",
+              "name": "The Borrowed Custodian",
+              "key": "boss:boss:wing:CinderSpine"
+            },
+            {
+              "id": "boss:road:Vathless",
+              "name": "Last Brace Elder",
+              "key": "boss:boss:road:Vathless"
+            }
+          ],
+          "frontier_boss": "The Last Claimant",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:CinderSpine:weapon",
+              "name": "Yesterday Pickblade",
+              "key": "regional_gear:gear:CinderSpine:weapon"
+            },
+            {
+              "id": "gear:CinderSpine:armor",
+              "name": "Seamward Shell",
+              "key": "regional_gear:gear:CinderSpine:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Yesterday Pickblade",
+            "Seamward Shell"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 1,
+          "stable_ids": [
+            {
+              "id": "skill:technique:CinderSpine",
+              "name": "Seam Read",
+              "key": "learned_skill:skill:technique:CinderSpine"
+            }
+          ],
+          "frontier_technique": "Seam Read",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Last Claimant is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Last Claimant yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "The Name In The Seam",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    },
+    {
+      "id": "HundredUnlived",
+      "culture": "The Unentered Citizenry",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "Names For A Safe House",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:HundredUnlived",
+          "main_arc": "The Census Of Those Not Born"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Eillun",
+          "frontier": "Elseward",
+          "refuge": "Unlisted Hearth",
+          "dungeon": "The Unentered Census House",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 8,
+          "stable_ids": [
+            "quest:quest:expedition:HundredUnlived",
+            "quest:quest:wing:HundredUnlived",
+            "quest:quest:road:Eillun",
+            "quest:quest:campaign:HundredUnlived",
+            "quest:quest:aftermath:HundredUnlived",
+            "quest:quest:echo:HundredUnlived",
+            "quest:quest:depth:HundredUnlived",
+            "quest:quest:identity:HundredUnlived"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Neris",
+            "Aella",
+            "Durn",
+            "Ovin",
+            "Meya"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 4,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:HundredUnlived",
+              "name": "The Registrar of Empty Beds",
+              "key": "boss:boss:expedition:HundredUnlived"
+            },
+            {
+              "id": "boss:guardian:HundredUnlived",
+              "name": "The Numberless Examiner",
+              "key": "boss:boss:guardian:HundredUnlived"
+            },
+            {
+              "id": "boss:wing:HundredUnlived",
+              "name": "The Unlisted Watcher",
+              "key": "boss:boss:wing:HundredUnlived"
+            },
+            {
+              "id": "boss:road:Eillun",
+              "name": "Unclaimed Lintel Elder",
+              "key": "boss:boss:road:Eillun"
+            }
+          ],
+          "frontier_boss": "The Registrar of Empty Beds",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:HundredUnlived:weapon",
+              "name": "Elseborn Saber",
+              "key": "regional_gear:gear:HundredUnlived:weapon"
+            },
+            {
+              "id": "gear:HundredUnlived:armor",
+              "name": "Unlisted Veil",
+              "key": "regional_gear:gear:HundredUnlived:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Elseborn Saber",
+            "Unlisted Veil"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 1,
+          "stable_ids": [
+            {
+              "id": "skill:technique:HundredUnlived",
+              "name": "Unlisted Step",
+              "key": "learned_skill:skill:technique:HundredUnlived"
+            }
+          ],
+          "frontier_technique": "Unlisted Step",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Registrar of Empty Beds is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Registrar of Empty Beds yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "Names For A Safe House",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    },
+    {
+      "id": "OrchardOfKings",
+      "culture": "The Untitled Courts",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "The Branch They Did Not Graft",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:OrchardOfKings",
+          "main_arc": "The Crown Nobody Accepted"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Tharniv",
+          "frontier": "Rootwatch",
+          "refuge": "Graft Rest",
+          "dungeon": "The Crownroot Keep",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 8,
+          "stable_ids": [
+            "quest:quest:expedition:OrchardOfKings",
+            "quest:quest:wing:OrchardOfKings",
+            "quest:quest:road:Tharniv",
+            "quest:quest:campaign:OrchardOfKings",
+            "quest:quest:aftermath:OrchardOfKings",
+            "quest:quest:echo:OrchardOfKings",
+            "quest:quest:depth:OrchardOfKings",
+            "quest:quest:identity:OrchardOfKings"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Sivra",
+            "Holl",
+            "Perren",
+            "Alva",
+            "Neyt"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 4,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:OrchardOfKings",
+              "name": "The Unwritten Castellan",
+              "key": "boss:boss:expedition:OrchardOfKings"
+            },
+            {
+              "id": "boss:guardian:OrchardOfKings",
+              "name": "The Root Bailiff",
+              "key": "boss:boss:guardian:OrchardOfKings"
+            },
+            {
+              "id": "boss:wing:OrchardOfKings",
+              "name": "The Boundary Pruner",
+              "key": "boss:boss:wing:OrchardOfKings"
+            },
+            {
+              "id": "boss:road:Tharniv",
+              "name": "Crownless Root Elder",
+              "key": "boss:boss:road:Tharniv"
+            }
+          ],
+          "frontier_boss": "The Unwritten Castellan",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:OrchardOfKings:weapon",
+              "name": "Crownroot Falchion",
+              "key": "regional_gear:gear:OrchardOfKings:weapon"
+            },
+            {
+              "id": "gear:OrchardOfKings:armor",
+              "name": "Commonbark Guard",
+              "key": "regional_gear:gear:OrchardOfKings:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Crownroot Falchion",
+            "Commonbark Guard"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 1,
+          "stable_ids": [
+            {
+              "id": "skill:technique:OrchardOfKings",
+              "name": "Root Counter",
+              "key": "learned_skill:skill:technique:OrchardOfKings"
+            }
+          ],
+          "frontier_technique": "Root Counter",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Unwritten Castellan is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Unwritten Castellan yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "The Branch They Did Not Graft",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    },
+    {
+      "id": "FirstAbsence",
+      "culture": "The Before-Witnesses",
+      "coverage": {
+        "story": {
+          "status": "source-authored",
+          "optional_arc": "The Door We Can Describe",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ],
+          "main_arc_id": "quest:quest:campaign:FirstAbsence",
+          "main_arc": "The Answer With No Question"
+        },
+        "locations": {
+          "status": "source-authored",
+          "city": "Auvren",
+          "frontier": "Threshold Watch",
+          "refuge": "Nearrest",
+          "dungeon": "The Unfinished Bastion",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json"
+          ]
+        },
+        "quests": {
+          "status": "source-indexed",
+          "count": 8,
+          "stable_ids": [
+            "quest:quest:expedition:FirstAbsence",
+            "quest:quest:wing:FirstAbsence",
+            "quest:quest:road:Auvren",
+            "quest:quest:campaign:FirstAbsence",
+            "quest:quest:aftermath:FirstAbsence",
+            "quest:quest:echo:FirstAbsence",
+            "quest:quest:depth:FirstAbsence",
+            "quest:quest:identity:FirstAbsence"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/adventure_depth_v16.json"
+          ]
+        },
+        "npcs": {
+          "status": "source-authored-roster",
+          "count": 5,
+          "names": [
+            "Thaelin",
+            "Iven",
+            "Roa",
+            "Essel",
+            "Venn"
+          ],
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Authoring/lived_universe_atlas.json"
+          ],
+          "scope": "Five named frontier-roster people; this is not the total resident count."
+        },
+        "enemies": {
+          "status": "source-rule-prototype",
+          "evidence": [
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h",
+            "Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp",
+            "docs/canon/dependency-ledger.json"
+          ],
+          "engine_verified": false
+        },
+        "bosses": {
+          "status": "source-indexed",
+          "count": 5,
+          "stable_ids": [
+            {
+              "id": "boss:expedition:FirstAbsence",
+              "name": "The Keeper of the Single Door",
+              "key": "boss:boss:expedition:FirstAbsence"
+            },
+            {
+              "id": "boss:guardian:FirstAbsence",
+              "name": "The Unfinished Witness",
+              "key": "boss:boss:guardian:FirstAbsence"
+            },
+            {
+              "id": "boss:wing:FirstAbsence",
+              "name": "The Closing Registrar",
+              "key": "boss:boss:wing:FirstAbsence"
+            },
+            {
+              "id": "boss:road:Auvren",
+              "name": "Near Door Elder",
+              "key": "boss:boss:road:Auvren"
+            },
+            {
+              "id": "boss:final:NhalVey",
+              "name": "Nhal-Vey, The Answer That Ate Its Question",
+              "key": "boss:boss:final:NhalVey"
+            }
+          ],
+          "frontier_boss": "The Keeper of the Single Door",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/Combat/UnmadeEnemyCharacter.h"
+          ]
+        },
+        "equipment": {
+          "status": "source-indexed",
+          "count": 2,
+          "entries": [
+            {
+              "id": "gear:FirstAbsence:weapon",
+              "name": "Nearness Blade",
+              "key": "regional_gear:gear:FirstAbsence:weapon"
+            },
+            {
+              "id": "gear:FirstAbsence:armor",
+              "name": "Threshold Ward",
+              "key": "regional_gear:gear:FirstAbsence:armor"
+            }
+          ],
+          "frontier_rewards": [
+            "Nearness Blade",
+            "Threshold Ward"
+          ],
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "docs/canon/dependency-ledger.json"
+          ]
+        },
+        "abilities": {
+          "status": "source-indexed",
+          "count": 1,
+          "stable_ids": [
+            {
+              "id": "skill:technique:FirstAbsence",
+              "name": "Nearness Hold",
+              "key": "learned_skill:skill:technique:FirstAbsence"
+            }
+          ],
+          "frontier_technique": "Nearness Hold",
+          "evidence": [
+            "docs/canon/encyclopedia/INDEX.json",
+            "Authoring/ability_codex.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeAbilityStudyRules.h"
+          ]
+        },
+        "environment": {
+          "status": "source-authored-prototype",
+          "source_model_families": [
+            "realm overview",
+            "city diorama",
+            "boss silhouette",
+            "lair entrance"
+          ],
+          "evidence": [
+            "docs/art/actual-3d-models.md",
+            "Scripts/build_hero_models.py",
+            "Authoring/city_assembly_kits_v1.json"
+          ],
+          "engine_verified": false
+        },
+        "consequences": {
+          "status": "source-authored-and-rule-backed",
+          "kill_return": "The Keeper of the Single Door is dead. The return passage is open and hostile dungeon patrols are gone. Captives you actually released can return here.",
+          "mercy_return": "The Keeper of the Single Door yielded alive before the evidence. Its patrols stand down and the return passage stays open. Unreleased captives still need your help.",
+          "optional_arc": "The Door We Can Describe",
+          "evidence": [
+            "Authoring/frontier_adventures_v14.json",
+            "Source/TheUnmadeGame/Public/World/UnmadeRealmAftermathRules.h",
+            "Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h"
+          ],
+          "engine_verified": false
+        },
+        "tests": {
+          "status": "source-ci-coverage",
+          "evidence": [
+            "Scripts/tests/test_gameplay_parity.py",
+            "Scripts/tests/test_frontier_aftermath_wiring.py",
+            "Tests/world/expedition_test.cpp",
+            ".github/workflows/static-checks.yml"
+          ],
+          "scope": "cross-realm authoring parity, source wiring, and native expedition branches; no Unreal Editor or packaged-play verification"
+        }
+      }
+    }
+  ],
+  "scope_note": "Counts are realm-attributed stable index records, not all global records. NPC lists are the five named frontier roster per arc, not the realm's total population. Source and CI statuses do not imply Unreal compilation or playability."
+}
