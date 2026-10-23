@@ -1,4 +1,4 @@
-"""Source contract for the actual 50 canon-linked binary glTF hero meshes."""
+"""Source contract for the actual 68 canon-linked binary glTF visual references."""
 from __future__ import annotations
 import importlib.util,json,tempfile,hashlib,unittest
 from pathlib import Path
@@ -7,8 +7,9 @@ FILE=ROOT/"Scripts/build_hero_models.py"
 class HeroModels(unittest.TestCase):
  def test_source_roster_is_canon_bound_not_placeholder_labels(self):
   source=FILE.read_text()
-  for anchor in ("def build_creature(","def build_resident(","def build_environment(",
-    "def build_all(","Authoring/world_content_pack.json","trimesh.Scene()",
+  for anchor in ("def build_creature(","def build_expedition_boss(","def build_lair_entrance(",
+    "def build_resident(","def build_environment(","def build_all(",
+    "read_expedition_roster(root)","Authoring/world_content_pack.json","trimesh.Scene()",
     "SPECIES","REALMS","sha256","vertex_colors","'glb'"):
    self.assertIn(anchor,source)
   self.assertNotIn("SaveGameToSlot",source)
@@ -19,6 +20,10 @@ class HeroModels(unittest.TestCase):
   self.assertEqual(len(pack["npcs"]),18)
   self.assertEqual(len(pack["realms"]),9)
   self.assertEqual(len({r["id"] for r in pack["npcs"]}),18)
+  arcs=json.loads((ROOT/"Authoring/frontier_adventures_v14.json").read_text())["arcs"]
+  self.assertEqual(len(arcs),9)
+  self.assertEqual(len({row["boss"] for row in arcs}),9)
+  self.assertEqual(len({row["dungeon"] for row in arcs}),9)
  def test_public_model_gallery_explains_each_creature_signature(self):
   viewer=(ROOT/"site/real-models.html").read_text()
   for species in ("Cinderjaw","PaleStrider","Veilwatch","GleamMoth",
@@ -27,6 +32,8 @@ class HeroModels(unittest.TestCase):
    self.assertIn(species+":'",viewer)
   self.assertIn("function descriptionFor(a)",viewer)
   self.assertIn("static geometry accents, not animated tells or new abilities",viewer)
+  for category in ("Boss","Lair"):
+   self.assertIn('data-group="'+category+'"',viewer)
  def test_actual_glb_geometry_is_generated_and_consistent(self):
   if not all(importlib.util.find_spec(m) for m in ("numpy","trimesh","PIL")):
    self.skipTest("3D asset dependencies tested by dedicated hero-model CI workflow")
@@ -35,10 +42,10 @@ class HeroModels(unittest.TestCase):
   import trimesh
   with tempfile.TemporaryDirectory() as td:
    out=Path(td);ledger=builder.build_all(ROOT,out)
-   self.assertEqual(ledger["asset_count"],50)
-   self.assertEqual(ledger["categories"],{"NPC":18,"Creature":12,"Environment":9,"City":11})
-   self.assertEqual(len({r["stable_id"] for r in ledger["assets"]}),50)
-   self.assertEqual(len({r["sha256"] for r in ledger["assets"]}),50)
+   self.assertEqual(ledger["asset_count"],68)
+   self.assertEqual(ledger["categories"],{"NPC":18,"Creature":12,"Environment":9,"City":11,"Boss":9,"Lair":9})
+   self.assertEqual(len({r["stable_id"] for r in ledger["assets"]}),68)
+   self.assertEqual(len({r["sha256"] for r in ledger["assets"]}),68)
    self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="NPC"},
      {n["id"] for n in json.loads((ROOT/"Authoring/world_content_pack.json").read_text())["npcs"]})
    self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="Creature"},
@@ -47,6 +54,10 @@ class HeroModels(unittest.TestCase):
      {"realm:"+k for k in builder.REALMS})
    self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="City"},
      {"city:"+c for c in builder.CITY_SPECS})
+   self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="Boss"},
+     {"boss.expedition.signature."+str(i) for i in range(9)})
+   self.assertEqual({r["stable_id"] for r in ledger["assets"] if r["category"]=="Lair"},
+     {"lair.expedition."+str(i) for i in range(9)})
    for record in ledger["assets"]:
     path=out/record["file"]
     self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),record["sha256"])
@@ -79,6 +90,12 @@ class HeroModels(unittest.TestCase):
      }[record["stable_id"].split(":",1)[1]]
      self.assertTrue(any(signature_detail in name for name in loaded.geometry),
       (record["stable_id"],signature_detail))
+    if record["category"]=="Boss":
+     signature="boss_signature_"
+     self.assertTrue(any(signature in name for name in loaded.geometry),record["stable_id"])
+    if record["category"]=="Lair":
+     signature="lair_signature_"
+     self.assertTrue(any(signature in name for name in loaded.geometry),record["stable_id"])
    verified=builder.build_all(ROOT,out,True)
    self.assertEqual(verified,ledger)
  def test_manifest_tamper_is_refused(self):

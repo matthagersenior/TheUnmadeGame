@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Original, real 3-D meshes for The Unmade: 12 enemies, 18 named NPCs,
-9 realm architecture dioramas. Deterministic GLB glTF 2.0 exports with
+"""Original, real 3-D meshes for The Unmade: 12 creatures, 18 named NPCs,
+9 realms, 11 cities, 9 expedition bosses and 9 lair studies. Deterministic GLB glTF 2.0 exports with
 separate named geometric parts and materials. No licensed/external assets.
 
 Each mesh is nonrigged source art; environment dioramas are previews only.
@@ -251,6 +251,119 @@ def build_creature(kind):
     k.taper('double_pincer',(side*1.35,.76,1.57),(side*1.63,.94,2.05),.18,.014,trim)
     k.taper('double_pincer',(side*1.35,.76,1.57),(side*1.36,.47,2.05),.18,.014,WHITE)
    eye(-.21,1.05,1.08,.09);eye(.21,1.05,1.08,.09)
+ return k
+
+# Proposed, non-authoritative visual silhouettes for the nine canon-named
+# expedition bosses. Their attack signatures and realm identities are source
+# bound; exact anatomy remains an art-direction proposal pending creator review.
+def build_expedition_boss(arc,index):
+ realm=arc['realm'];base,trim,light=PALETTE[realm];k=Kit()
+ # A readable tall figure assembled from distinct armor, cloth and identity
+ # geometry. Each profile changes its outline as well as its realm materials.
+ k.taper('boss_coat_silhouette',(0,.18,0),(0,2.02,-.08),.58,.34,base,16)
+ k.orb('boss_chest',(0,1.55,.16),(.47,.53,.35),trim,2)
+ k.orb('boss_head',(0,2.33,.06),(.30,.37,.30),DARK,2)
+ k.box('boss_blank_visage',(0,2.31,.34),(.34,.30,.08),WHITE)
+ for side in (-1,1):
+  shoulder=(side*.43,1.88,.04);elbow=(side*.68,1.36,.13);hand=(side*.62,.97,.31)
+  k.orb('boss_pauldron_'+str(side),shoulder,(.29,.28,.32),light if side==1 else trim,1)
+  k.beam('boss_upper_arm_'+str(side),shoulder,elbow,.16,base)
+  k.taper('boss_forearm_'+str(side),elbow,hand,.15,.11,trim)
+  k.orb('boss_hand_'+str(side),hand,(.13,.14,.13),DARK,1)
+  hip=(side*.22,.77,0);k.taper('boss_leg_'+str(side),hip,(side*.27,.16,.08),.21,.13,base)
+  k.box('boss_boot_'+str(side),(side*.27,.12,.24),(.31,.20,.52),DARK)
+ # Realm-specific shapes echo the authored telegraph vocabulary, not new powers.
+ if index==0: # Tollkeeper — a passable center within a marked ring.
+  k.ring('boss_signature_mileglass_toll_ring',(0,1.93,-.12),.87,.07,GOLD,segments=28,sides=7,plane='xz')
+  for x in (-.55,0,.55):k.box('boss_signature_three_way_tally',(x,.54,.37),(.18,.66,.10),WHITE if x else light)
+ elif index==1: # Undertow — a sideways lane framed by broken hull ribs.
+  for side in (-1,1):
+   k.beam('boss_signature_undertow_hull_rib_'+str(side),(side*.28,.45,-.08),(side*1.05,2.65,-.30),.12,light)
+   k.ring('boss_signature_ballast_weight_'+str(side),(side*.76,.72,.0),.22,.055,GOLD,plane='xz')
+ elif index==2: # Ashbound — split kiln fan and slag mantle.
+  for side in (-1,1):
+   k.taper('boss_signature_slag_fan_'+str(side),(0,1.48,-.20),(side*1.04,2.25,-.30),.28,.035,light,9)
+   k.box('boss_signature_cinder_shoulder_'+str(side),(side*.65,2.02,0),(.37,.58,.62),DARK)
+ elif index==3: # Interest — ledger weights hung from a cross-shaped oath.
+  k.beam('boss_signature_oath_crossbar',(-1.08,2.15,-.08),(1.08,2.15,-.08),.075,GOLD)
+  for side in (-1,1):
+   k.beam('boss_signature_ledger_chain_'+str(side),(side*.82,2.15,-.08),(side*.82,.48,-.08),.055,trim)
+   k.box('boss_signature_debt_weight_'+str(side),(side*.82,.34,-.08),(.34,.40,.34),light)
+ elif index==4: # Cantor — opposing weighted choir vanes.
+  for side in (-1,1):
+   k.taper('boss_signature_counterweight_vane_'+str(side),(side*.27,1.75,-.10),(side*1.34,2.56,-.46),.23,.018,light,10)
+   k.ring('boss_signature_resonance_weight_'+str(side),(side*1.18,1.02,-.10),.31,.06,GOLD,plane='xz')
+ elif index==5: # Last Claimant — visible, offset seam plates.
+  for row in range(4):
+   z=-.24+row*.17
+   k.box('boss_signature_seam_plate_'+str(row),(0,1.14+row*.30,.34),(1.04-row*.11,.12,.11),WHITE if row%2 else light)
+ elif index==6: # Registrar — an empty census frame above the shoulders.
+  k.beam('boss_signature_unentered_index_left',(-.53,1.68,-.05),(-.53,2.92,-.05),.065,GOLD)
+  k.beam('boss_signature_unentered_index_right',(.53,1.68,-.05),(.53,2.92,-.05),.065,GOLD)
+  k.beam('boss_signature_unentered_index_top',(-.53,2.92,-.05),(.53,2.92,-.05),.065,GOLD)
+  for row in range(3):k.box('boss_signature_empty_bed_marker_'+str(row),(0,1.02+row*.20,.39),(.40,.08,.04),WHITE)
+ elif index==7: # Castellan — grafted, branching crown; no royal insignia.
+  for side in (-1,1):
+   k.taper('boss_signature_crownroot_'+str(side),(0,2.45,-.02),(side*.92,3.16,-.16),.20,.025,light,9)
+   k.beam('boss_signature_root_guard_'+str(side),(side*.29,1.62,-.20),(side*.92,1.25,-.48),.13,trim)
+ else: # Keeper — two separated jambs leave the threshold visibly open.
+  for side in (-1,1):
+   k.beam('boss_signature_single_door_jamb_'+str(side),(side*.66,.68,-.18),(side*.66,3.10,-.18),.12,light)
+   k.box('boss_signature_threshold_mark_'+str(side),(side*.72,.27,.35),(.48,.10,.36),WHITE if side<0 else GOLD)
+ return k
+
+# Lair entrance dioramas bind each source dungeon name to its correct realm.
+# These are small art-direction studies, not traversable interiors or claims
+# about hidden evidence placement, collision, or final level architecture.
+def build_lair_entrance(arc,index):
+ realm=arc['realm'];base,trim,light=PALETTE[realm];k=Kit()
+ k.box('lair_approach_plinth',(0,-.20,0),(15.0,.40,12.0),DARK)
+ for step in range(3):
+  k.box('lair_approach_step_'+str(step),(0,.08+step*.18,2.95-step*.95),(6.0-step*.70,.18,1.35),trim if step%2 else base)
+ # Broken, open portal silhouette, with a readable approach and no implied seal state.
+ for side in (-1,1):
+  k.taper('lair_portal_pier_'+str(side),(side*2.65,.1,-1.0),(side*2.30,4.30,-1.0),.48,.35,base,12)
+  k.box('lair_threshold_inset_'+str(side),(side*2.12,.18,-.22),(.56,.14,1.65),light)
+ k.beam('lair_open_lintel',(-2.3,4.05,-1.0),(2.3,4.05,-1.0),.28,trim,12)
+ k.ring('lair_outer_keystone',(0,3.18,-.96),1.75,.12,light,segments=28,sides=8,plane='xz')
+ k.box('lair_unoccupied_boss_apron',(0,.08,-3.4),(7.3,.16,3.0),base)
+ # Nine authored motifs distinguish the lair's visible material language.
+ if index==0: # Split Charter Vault
+  for x in (-1.45,0,1.45):
+   k.taper('lair_signature_split_charter_fork_'+str(x),(x,.10,-4.8),(x*1.48,.20,-7.0),.16,.045,GOLD,8)
+ elif index==1: # Hollow Breakwater
+  for side in (-1,1):
+   k.beam('lair_signature_breakwater_rib_'+str(side),(side*2.2,.12,-5.2),(side*1.05,3.0,-5.5),.17,light)
+  k.box('lair_signature_dry_pressure_basin',(0,.17,-5.5),(2.7,.18,1.6),trim)
+ elif index==2: # Furnace Below Blackslag
+  for side in (-1,1):
+   x=side*1.25
+   k.box('lair_signature_blackslag_furnace_mouth_'+str(side),(x,1.1,-5.7),(1.1,2.2,.42),DARK)
+   k.ring('lair_signature_thermal_feed_'+str(side),(x,.45,-5.3),.56,.08,light,plane='xz')
+ elif index==3: # Foreclosed Anchorage
+  k.beam('lair_signature_anchor_crossbar',(-3.1,2.6,-5.8),(3.1,2.6,-5.8),.13,GOLD)
+  for side in (-1,1):
+   k.taper('lair_signature_anchor_chain_'+str(side),(side*2.5,2.5,-5.8),(side*1.5,.2,-5.8),.09,.065,trim,9)
+   k.box('lair_signature_anchor_counterweight_'+str(side),(side*1.5,.1,-5.8),(.62,.5,.54),light)
+ elif index==4: # Fallen Choir Engine
+  for x in (-1.8,-.9,0,.9,1.8):
+   k.beam('lair_signature_choir_tuning_post_'+str(x),(x,.1,-5.7),(x,2.4,-5.7),.07,light)
+  k.ring('lair_signature_engine_counterweight',(0,1.25,-5.7),1.0,.10,GOLD,plane='xz')
+ elif index==5: # Buried Yesterday Foundry
+  for level in range(4):
+   k.box('lair_signature_foundry_stratum_'+str(level),(0,.16+level*.36,-5.6),(5.8-level*.45,.24,.52),trim if level%2 else base)
+ elif index==6: # Unentered Census House
+  for side in (-1,1):
+   for row in range(3):
+    k.box('lair_signature_census_niche_'+str(side)+'_'+str(row),(side*1.65,.7+row*.66,-5.8),(.58,.48,.16),WHITE if row==1 else trim)
+ elif index==7: # Crownroot Keep
+  for side in (-1,1):
+   k.taper('lair_signature_root_arch_'+str(side),(side*2.3,.22,-5.4),(side*.5,3.2,-5.8),.34,.08,light,10)
+  k.beam('lair_signature_shared_root_crown',(-1.0,2.6,-5.8),(1.0,2.6,-5.8),.16,trim)
+ else: # Unfinished Bastion
+  for side in (-1,1):
+   k.beam('lair_signature_unfinished_jamb_'+str(side),(side*1.72,.1,-5.5),(side*1.72,3.7,-5.5),.18,light)
+  k.box('lair_signature_gap_without_door',(0,1.68,-5.5),(.08,3.1,.16),DARK)
  return k
 
 # Canonical resident prototypes are non-skinned but contain separately named
@@ -1102,14 +1215,30 @@ def read_roster(root):
   raise ValueError('Canonical NPC/realm identity drift; no asset build')
  return rows
 
+def read_expedition_roster(root):
+ path=root/'Authoring/frontier_adventures_v14.json'
+ arcs=json.loads(path.read_text())['arcs']
+ if len(arcs)!=9 or tuple(a.get('realm') for a in arcs)!=REALMS:
+  raise ValueError('Canonical expedition/lair identity drift; no asset build')
+ if any(not a.get('boss') or not a.get('dungeon') for a in arcs):
+  raise ValueError('Every expedition preview requires its authored boss and dungeon names')
+ return arcs
+
 def build_all(root=ROOT,out=None,verify=False):
  out=Path(out or root/'Build/UnmadeHeroModels')
- npcs=read_roster(root)
+ npcs=read_roster(root);arcs=read_expedition_roster(root)
  specs=[]
  for i,kind in enumerate(SPECIES):specs.append(('Creature',kind,'creature:'+kind,REALMS[i%9],build_creature(kind)))
  for i,row in enumerate(npcs):specs.append(('NPC',re.sub('[^A-Za-z0-9_]+','_',row[0]),row[0],row[2],build_resident(row,i)))
  for realm in REALMS:specs.append(('Environment',realm,'realm:'+realm,realm,build_environment(realm)))
  for city,spec in CITY_SPECS.items():specs.append(('City',city,'city:'+city,spec['realm'],build_city_environment(city)))
+ for i,arc in enumerate(arcs):
+  slug=re.sub('[^A-Za-z0-9_]+','_',arc['boss']).strip('_')
+  specs.append(('Boss',slug,'boss.expedition.signature.'+str(i),arc['realm'],build_expedition_boss(arc,i)))
+ for i,arc in enumerate(arcs):
+  slug=re.sub('[^A-Za-z0-9_]+','_',arc['dungeon']).strip('_')
+  specs.append(('Lair',slug,'lair.expedition.'+str(i),arc['realm'],build_lair_entrance(arc,i)))
+ categories={'NPC':18,'Creature':12,'Environment':9,'City':11,'Boss':9,'Lair':9}
  if verify:
   if not out.is_dir():raise ValueError('Missing generated art folder')
   old=json.loads((out/'manifest.json').read_text())
@@ -1123,7 +1252,7 @@ def build_all(root=ROOT,out=None,verify=False):
    if not path.is_file() or path.read_bytes()!=buf:raise ValueError('Not deterministic: '+name)
    info={'parts':k.count,'triangles':sum(len(m.faces) for m in k.scene.geometry.values()),'bytes':len(buf),'sha256':hashlib.sha256(buf).hexdigest(),'bounds_m':[[round(float(x),3) for x in row] for row in k.scene.bounds.tolist()]}
   else:info=k.export(path)
-  if info['triangles']<150 or info['parts']<({'Creature':5,'NPC':10,'Environment':15,'City':23}[group]):raise ValueError('Too little genuine model geometry: '+name)
+  if info['triangles']<150 or info['parts']<({'Creature':5,'NPC':10,'Environment':15,'City':23,'Boss':18,'Lair':18}[group]):raise ValueError('Too little genuine model geometry: '+name)
   building_shells=sum('_habitation_shell_' in name for name in k.scene.geometry)
   district_count=(len(CITY_DISTRICTS[stable.removeprefix('city:')]) if group=='City' else len(_regional_district_plan(realm)) if group=='Environment' else 0)
   district_views=([[round(float(x),3),round(4.9 if realm=='SkyBelow' else 1.3,3),round(float(z),3)] for x,z,_,_ in (CITY_DISTRICTS[stable.removeprefix('city:')] if group=='City' else _regional_district_plan(realm))] if group in ('City','Environment') else [])
@@ -1140,8 +1269,15 @@ def build_all(root=ROOT,out=None,verify=False):
   blended_edges=sum('_terrain_blend_apron_' in key for key in k.scene.geometry)
   grounded_homes=sum('_terrain_joinery_support_' in key for key in k.scene.geometry)
   graded_walkways=sum('_terrain_joinery_walkway_' in key for key in k.scene.geometry)
-  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,**info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,textured_roofs=textured_roofs,sculpted_districts=sculpted_districts,blended_edges=blended_edges,grounded_homes=grounded_homes,graded_walkways=graded_walkways,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
- manifest={'schema':1,'title':'The Unmade — real source-authored 3D character, creature and realm scene meshes','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':{'NPC':18,'Creature':12,'Environment':9,'City':11},'format':'GLB (glTF 2.0), binary static meshes, vertex colors, and locally generated source-generated realm, city, roof and terrain UV/PBR albedo and normal textures','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','assets':entries}
+  expedition_index=int(stable.rsplit('.',1)[1]) if group in ('Boss','Lair') else -1
+  source_arc=arcs[expedition_index] if expedition_index>=0 else None
+  entries.append(dict(category=group,stable_id=stable,realm=realm,file=group+'/'+name,
+      display_name=source_arc['boss'] if group=='Boss' else '',
+      dungeon_name=source_arc['dungeon'] if group=='Lair' else '',
+      source_id=('enemy.expedition_signature.realm.'+str(expedition_index) if group=='Boss' else 'frontier_adventures_v14.json' if group=='Lair' else ''),
+      visual_direction_status='proposed' if group in ('Boss','Lair') else 'prototype',
+      **info,building_shells=building_shells,district_count=district_count,district_views=district_views,pbr_materials=pbr_materials,hero_label=hero_label,hero_focus=hero_focus,textured_roofs=textured_roofs,sculpted_districts=sculpted_districts,blended_edges=blended_edges,grounded_homes=grounded_homes,graded_walkways=graded_walkways,mesh_type='static_visual_reference',gameplay_authority=False,rigged=False,unreal_import_verified=False))
+ manifest={'schema':1,'title':'The Unmade — source-authored 3D world, creature, boss and lair previews','generator':'Scripts/build_hero_models.py','asset_count':len(entries),'categories':categories,'format':'GLB (glTF 2.0), binary static meshes, vertex colors, and locally generated source-generated realm, city, roof and terrain UV/PBR albedo and normal textures','units':'meters, Y-up, +Z forward','authority':'Non-authoritative visual meshes only. No quest progress, collision, skinned animation, or verified UE import','visual_direction':'Boss silhouettes and lair entrances are proposed art-direction previews bound to existing canon identities; they do not assert finalized appearance or dungeon layout','assets':entries}
  if verify:
   if manifest!=old:raise ValueError('Manifest was altered')
   if {str(p.relative_to(out)) for p in out.rglob('*.glb')}!={r['file'] for r in entries}:raise ValueError('Asset file inventory drift')
@@ -1161,5 +1297,5 @@ def main():
    manifest=build_all(args.root,Path(td))
  elif args.verify_output:manifest=build_all(args.root,args.out_dir,True)
  else:manifest=build_all(args.root,args.out_dir)
- print('PASS: %d real GLB meshes: 18 NPCs, 12 unique creatures, 9 realms and 11 cities; %d triangles'%(manifest['asset_count'],sum(a['triangles'] for a in manifest['assets'])))
+ print('PASS: %d real GLB meshes: 18 NPCs, 12 creatures, 9 realms, 11 cities, 9 bosses and 9 lairs; %d triangles'%(manifest['asset_count'],sum(a['triangles'] for a in manifest['assets'])))
 if __name__=='__main__':main()

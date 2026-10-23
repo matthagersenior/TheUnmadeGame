@@ -79,8 +79,8 @@ class DistinctRealmCityLayouts(unittest.TestCase):
   import tempfile
   with tempfile.TemporaryDirectory() as td:
    data=builder.build_all(ROOT,Path(td))
-   self.assertEqual(data["asset_count"],50)
-   self.assertEqual(data["categories"],{"NPC":18,"Creature":12,"Environment":9,"City":11})
+   self.assertEqual(data["asset_count"],68)
+   self.assertEqual(data["categories"],{"NPC":18,"Creature":12,"Environment":9,"City":11,"Boss":9,"Lair":9})
    self.assertEqual({a["stable_id"] for a in data["assets"] if a["category"]=="City"},
     {"city:"+city for city in builder.CITY_SPECS})
    self.assertEqual(len({a["sha256"] for a in data["assets"] if a["category"] in ("City","Environment")}),20)

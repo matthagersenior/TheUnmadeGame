@@ -73,6 +73,14 @@ class AbilityStudyWiring(unittest.TestCase):
         self.assertIn("for(const auto& requirement:AtlasChecklist(ctx))",core)
         self.assertIn("!FindStudyEnemy(SelectedStudy,true)",player)
 
+    def test_journal_surfaces_real_people_creature_and_place_sources(self):
+        player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
+        for token in ("LIVING SOURCES NEARBY", "FindStudyEnemy(Subject,false)",
+                      "NearEchoStudySite()", "UnmadeCore::RiteSpecs",
+                      "Resident->GetStableId()!=FName(UTF8_TO_TCHAR(Rite.witness))",
+                      "UnmadeStudyMentorVisibility", "Being nearby never grants a skill"):
+            self.assertIn(token,player)
+
     def test_keyboard_and_native_controller_menu_are_connected(self):
         config=read("Config/DefaultInput.ini")
         player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")

@@ -1833,6 +1833,55 @@ FString AUnmadeCharacter::GetStudyJournal()const
             Out+=FString::Printf(TEXT("  [%s] %s\n"),R.complete?TEXT("x"):TEXT(" "),
                 UTF8_TO_TCHAR(R.label));
     }
+    // Surface real, local learning sources beside the abstract checklist. The
+    // journal never treats proximity as evidence; the existing action rules
+    // still require the warning, damage, site inspection, or rite objective.
+    Out+=TEXT("\nLIVING SOURCES NEARBY\n");
+    bool bFoundSource=false;
+    for(int32 Subject=0;Subject<3;++Subject)
+    {
+        if(AUnmadeEnemyCharacter* Enemy=FindStudyEnemy(Subject,false))
+        {
+            UnmadeCore::CreatureKind Species;
+            if(Enemy->StudyCreature(Species))
+            {
+                const TCHAR* State=Enemy->IsActivelyTelegraphing(GetWorld()->GetTimeSeconds())
+                    ? TEXT("warning active — press 5 to observe")
+                    : TEXT("living subject — watch for its attack warning");
+                Out+=FString::Printf(TEXT("  Creature: %s (%s)\n"),
+                    UTF8_TO_TCHAR(UnmadeCore::StudyNames[Subject]),State);
+                bFoundSource=true;
+            }
+        }
+    }
+    if(NearEchoStudySite())
+    {
+        Out+=TEXT("  Place: physical Echo Well (inspect its reflection; press 5)\n");
+        bFoundSource=true;
+    }
+    if(GetWorld())
+    {
+        const FVector Here=GetActorLocation();
+        for(const auto& Rite:UnmadeCore::RiteSpecs)
+        {
+            for(TActorIterator<AUnmadeNpcCharacter> It(GetWorld());It;++It)
+            {
+                AUnmadeNpcCharacter* Resident=*It;
+                if(!Resident||Resident->GetStableId()!=FName(UTF8_TO_TCHAR(Rite.witness))||
+                   FVector::DistSquared(Here,Resident->GetActorLocation())>FMath::Square(700.0))continue;
+                FCollisionQueryParams Query(SCENE_QUERY_STAT(UnmadeStudyMentorVisibility),false);
+                Query.AddIgnoredActor(this);Query.AddIgnoredActor(Resident);
+                if(GetWorld()->LineTraceTestByChannel(Here+FVector(0,0,50),
+                    Resident->GetActorLocation()+FVector(0,0,50),ECC_Visibility,Query))continue;
+                Out+=FString::Printf(TEXT("  Person: %s — %s at %s (continue on the Rites page)\n"),
+                    *Resident->GetDisplayLabel(),UTF8_TO_TCHAR(Rite.name),UTF8_TO_TCHAR(Rite.siteName));
+                bFoundSource=true;
+            }
+        }
+    }
+    if(!bFoundSource)
+        Out+=TEXT("  No named mentor, study creature, or Echo Well is in clear view. Explore, then check this journal again.\n");
+    Out+=TEXT("People teach through their authored rite and witness path; creatures and places require their own firsthand evidence. Being nearby never grants a skill.\n");
     Out+=TEXT("\nATLAS OF ABSENCE — CANON / ACQUISITION CHECKLIST\n");
     const auto Atlas=CurrentAtlasRequirements();
     const auto Requirements=AbilityStudy.AtlasChecklist(Atlas);

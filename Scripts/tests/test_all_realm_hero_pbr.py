@@ -61,7 +61,7 @@ class UniqueRealmPBR(unittest.TestCase):
         from pathlib import Path
         with tempfile.TemporaryDirectory() as tmp:
             ledger=builder.build_all(ROOT,Path(tmp))
-            self.assertEqual(ledger["asset_count"],50)
+            self.assertEqual(ledger["asset_count"],68)
             for a in ledger["assets"]:
                 if a["category"] in ("City","Environment"):
                     self.assertGreaterEqual(len(a["pbr_materials"]),2,a["stable_id"])

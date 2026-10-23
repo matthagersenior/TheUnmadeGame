@@ -42,7 +42,7 @@ class NeighborhoodQuality(unittest.TestCase):
   import tempfile
   with tempfile.TemporaryDirectory() as tmp:
    output=builder.build_all(ROOT,Path(tmp))
-   self.assertEqual(output["asset_count"],50)
+   self.assertEqual(output["asset_count"],68)
    for item in output["assets"]:
     views=item["district_views"]
     if item["category"] in ("City","Environment"):

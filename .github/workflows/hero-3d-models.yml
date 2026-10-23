@@ -20,6 +20,7 @@ on:
       - Scripts/bellwold_hero_pbr.py
       - .github/workflows/hero-3d-models.yml
       - Authoring/world_content_pack.json
+      - Authoring/frontier_adventures_v14.json
   pull_request:
     paths:
       - Scripts/build_hero_models.py
@@ -27,6 +28,7 @@ on:
       - Scripts/tests/test_distinct_realm_city_layouts.py
       - .github/workflows/hero-3d-models.yml
       - Authoring/world_content_pack.json
+      - Authoring/frontier_adventures_v14.json
 permissions:
   contents: read
 jobs:
@@ -44,7 +46,7 @@ jobs:
         run: python -m unittest discover -s Scripts/tests -p test_terrain_grounding.py -v
       - name: Verify terrain edge blending in every geographic asset
         run: python -m unittest discover -s Scripts/tests -p test_terrain_edge_blending.py -v
-      - name: Build 50 different canonical meshes including eleven settlements (GLB, not mockups)
+      - name: Build 68 canon-linked world, creature, boss and lair meshes (GLB, not mockups)
         run: python Scripts/build_hero_models.py --out-dir Build/UnmadeHeroModels
       - name: Verify every byte against the source generator
         run: python Scripts/build_hero_models.py --out-dir Build/UnmadeHeroModels --verify-output
@@ -62,10 +64,10 @@ jobs:
         run: python -m unittest discover -s Scripts/tests -p test_district_surface_fidelity.py -v
       - name: Verify all visible street-level entry and window cutouts
         run: python -m unittest discover -s Scripts/tests -p test_street_level_facades.py -v
-      - name: Upload 50 source-geometry reference meshes as one artifact
+      - name: Upload 68 source-geometry reference meshes as one artifact
         uses: actions/upload-artifact@v4
         with:
-          name: TheUnmade-50-Creature-NPC-Realm-City-GLB
+          name: TheUnmade-68-World-Creature-Boss-Lair-GLB
           path: Build/UnmadeHeroModels/
           if-no-files-found: error
           retention-days: 30

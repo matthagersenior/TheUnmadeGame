@@ -70,6 +70,10 @@ Four authored subjects: **Cinderjaw, Pale Strider, Redaction Eye, Echo Well**. E
 
 **Verification:** portable C++ state-machine and reward tests, source-wiring contracts, 186-entry codex parity, and CI. Full Unreal Header Tool compilation, real save/load in-engine, NPC/animation/VFX presentation and extended balance testing are still pending a supported Unreal host.
 
+## 2026-10-23 source discovery pass — visible catalysts
+
+The Ability Study journal now reports **real nearby sources** alongside the saved requirements: a visible eligible living creature, the physical Echo Well, and any nearby named rite witness with a clear line of sight. Mentor rows identify the resident, rite and authored site, then direct the player to continue through the Rites page. This brings people, creatures and places into one discovery surface without merging their separate progression systems. Proximity is guidance only: enemy observation still needs its live warning, Echo Well research still needs physical inspection and paid measurement, and each resident still uses their existing five-stage authored rite. Save fields and unlock rules are unchanged. The source contracts and portable study rules pass; this C++ was not compiled or exercised in Unreal.
+
 ## Canon-locked requirement checklist (19 October 2026)
 
 The native **Actions** page and **Evidence Notebook** now display a `[x] / [ ]` checklist for **every authored study subject**: firsthand observation of an actual live attack or true Echo Well, distinct corroboration (successful contact or paid Well measurement), understanding, two separate timed and paid physical experiments, and mastered technique. Experiments on creatures now require **another actual attack warning**; proximity to an idle enemy alone is not an experiment. Each checklist entry is derived from the authoritative in-memory save-backed study state, not a free-running UI flag.
