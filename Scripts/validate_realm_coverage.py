@@ -95,6 +95,7 @@ def validate():
             total_key = {"quest": "quests", "boss": "bosses",
                          "regional_gear": "regional_gear",
                          "learned_skill": "learned_skill"}[group]
+            total[total_key] += len(source_entries)
             if dimension == "equipment":
                 actual = [entry["key"] for entry in block["entries"]]
             elif dimension == "bosses" or dimension == "abilities":
