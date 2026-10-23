@@ -572,3 +572,9 @@ The campaign journal's existing act titles, questions, objectives, physical lead
 ## 2026-10-22 — Realm skyline identities (source-only)
 
 The nine existing frontier silhouette triplets now use distinct bounded per-piece orientations when spawned. The transforms only alter presentation of existing primitive meshes; realm names, landmarks, story motifs, choices, rewards, traversal, collision, save state and mystery status are unchanged. Native profile checks pass; Unreal rendering and distance readability remain unverified. No illustrated edition was regenerated.
+
+## 2026-10-23 — Study sources and expedition visual studies (source-only)
+
+The Ability Study journal can point to a named, visible living study creature, the physical Echo Well, or an authored rite witness who is nearby and in clear view. These are discovery leads: proximity does not count as firsthand evidence, grant a technique, or replace the existing warning, inspection, payment, and witness requirements. People, creatures and places keep their distinct paths.
+
+The model catalogue now includes source-linked visual studies for the nine existing expedition bosses and their nine authored lairs. The silhouettes are proposed art direction keyed to `frontier_adventures_v14.json`; they do not add encounters, doors, room layouts, evidence placement, collision or canon revelations. The studies and journal guidance were not included in illustrated v20. Unreal compilation, imports and in-engine presentation remain unverified.

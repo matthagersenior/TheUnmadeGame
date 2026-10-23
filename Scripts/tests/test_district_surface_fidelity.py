@@ -51,7 +51,7 @@ class DistrictSurfaceTests(unittest.TestCase):
   import tempfile
   with tempfile.TemporaryDirectory() as td:
    manifest=builder.build_all(ROOT,Path(td))
-   self.assertEqual(manifest["asset_count"],50)
+   self.assertEqual(manifest["asset_count"],68)
    for a in manifest["assets"]:
     if a["category"]=="City":
      self.assertEqual(a["textured_roofs"],20)

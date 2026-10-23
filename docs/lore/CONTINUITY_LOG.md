@@ -496,3 +496,9 @@ Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.jso
 - Added nine source-authored three-piece orientation profiles to distinguish the existing realm skyline silhouettes.
 - Kept decorative meshes noncolliding and outside overlap, navigation and gameplay state.
 - No canon facts, IDs, rewards, save fields or illustrated assets changed. Native checks pass; Unreal rendering remains unverified.
+
+## 2026-10-23 — Nearby study sources and expedition visual studies
+
+- The Study journal now shows visible nearby living creatures, the Echo Well, and named rite witnesses as local learning leads; its established firsthand, payment and rite requirements still govern progress.
+- Added proposed boss and lair visual studies keyed to the nine authored expedition arcs without asserting final level layouts or gameplay behavior.
+- Native tests and reproducible 68-model GLB generation pass. The historical v20 illustrated edition and hashes remain unchanged; no Unreal compile or in-engine visual review is claimed.

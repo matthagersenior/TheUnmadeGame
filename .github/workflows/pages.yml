@@ -7,7 +7,9 @@ on:
       - 'Scripts/publishing/build_public_site.py'
       - 'Scripts/build_hero_models.py'
       - 'Authoring/world_content_pack.json'
+      - 'Authoring/frontier_adventures_v14.json'
       - 'Scripts/tests/test_distinct_realm_city_layouts.py'
+      - 'Scripts/tests/test_hero_model_assets.py'
       - 'Scripts/tests/test_neighborhood_quality.py'
       - 'Scripts/tests/test_bellwold_hero_pbr.py'
       - 'Scripts/tests/test_all_realm_hero_pbr.py'
@@ -48,10 +50,11 @@ jobs:
         run: python Scripts/publishing/build_public_site.py
       - name: Generate real source-authored realm, creature and resident meshes
         run: python Scripts/build_hero_models.py --out-dir site/dist/models
-      - name: Validate published artifact and all 50 authentic GLB assets
+      - name: Validate published artifact and all 68 authentic GLB assets
         run: |
           python Scripts/publishing/build_public_site.py --check
           python Scripts/build_hero_models.py --out-dir site/dist/models --verify-output
+          python -m unittest discover -s Scripts/tests -p test_hero_model_assets.py -v
           python -m unittest discover -s Scripts/tests -p test_distinct_realm_city_layouts.py -v
           python -m unittest discover -s Scripts/tests -p test_neighborhood_quality.py -v
           python -m unittest discover -s Scripts/tests -p test_bellwold_hero_pbr.py -v

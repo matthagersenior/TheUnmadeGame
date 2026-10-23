@@ -1,12 +1,12 @@
-# Actual GLB models · 50-piece source-authored production pass
+# Actual GLB models · 68-piece source-authored production pass
 
 **These are real 3-D vertex meshes** produced by `Scripts/build_hero_models.py`, not written descriptions, screenshots substituting for files, or Unreal-engine compilation claims.
 
-There are **12 unique creature designs**, **18 individually accessorized NPC characters** (matching the exact names, IDs and visual directions in `Authoring/world_content_pack.json`), and **nine physically distinct realm overview dioramas and eleven canon-named city/settlement dioramas**. Each exported `.glb` contains actual triangles, vertex colors, descriptive individually named constituent nodes and the complete embedded glTF binary payload. `manifest.json` retains canonical ID, category, realm, individual triangle count, physical dimensions, file SHA-256 and the truthful unrigged/unimported state.
+There are **12 unique creature designs**, **18 individually accessorized NPC characters** (matching `Authoring/world_content_pack.json`), **nine distinct realm overviews**, **eleven named city dioramas**, **nine canon-linked expedition boss silhouette studies**, and **nine canon-linked lair entrance studies**. Each exported `.glb` contains actual triangles, vertex colors, descriptive individually named constituent nodes and the complete embedded glTF binary payload. `manifest.json` retains stable ID, category, realm, triangle count, physical dimensions, file SHA-256 and the truthful unrigged/unimported state. Boss anatomy and lair construction are proposed visual direction; canon establishes their identities and names, not finalized 3D appearance or traversable lair architecture.
 
 ### Get the binary meshes
 
-Use [Actions → Generate actual The Unmade 3D meshes](../../actions/workflows/hero-3d-models.yml), select a successful run and download its artifact named **TheUnmade-50-Creature-NPC-Realm-City-GLB**. These are the binary files; this repository commits the transparent, change-reviewable generator instead of inflating Git history with 50 unreviewable generated models per iteration.
+Use [Actions → Generate actual The Unmade 3D meshes](../../actions/workflows/hero-3d-models.yml), select a successful run and download its artifact named **TheUnmade-68-World-Creature-Boss-Lair-GLB**. These are the binary files; this repository commits the transparent, change-reviewable generator instead of inflating Git history with generated models per iteration.
 
 Or generate them locally on any Python 3.11+ computer:
 
@@ -16,12 +16,14 @@ python Scripts/build_hero_models.py --out-dir Build/UnmadeHeroModels
 python Scripts/build_hero_models.py --out-dir Build/UnmadeHeroModels --verify-output
 ```
 
-Four generated directories:
+Six generated directories:
 
 - `Build/UnmadeHeroModels/Creature/`: species-specific bodies and signatures; no shared generic wolf placeholder for watchers, glass moths, drowned sentinels, or letter-mouth monsters.
 - `Build/UnmadeHeroModels/NPC/`: 18 canonical named individuals with unique actual geometrical accessories (ledger cord, rope boat hook, monocle, tuning pin, quarry visor, census tokens, blank banner, bark crown, lamp, etc.).
 - `Build/UnmadeHeroModels/Environment/`: one distinct route network and material environment per each of the nine realms (no shared straight street or square plan).
 - `Build/UnmadeHeroModels/City/`: eleven additional, independent source-grounded layouts for the three Reach towns (Crossings, Bellwold, Paperhaven) and Saltwake, Cinderhold, Drevlach, Orravane, Vathless, Eillun, Tharniv, and Auvren; all have their own route geometry and named landmark structures.
+- `Build/UnmadeHeroModels/Boss/`: nine named frontier expedition bosses, each with a realm-specific static silhouette and separately named signature geometry tied to the authored telegraph theme. These are visual proposals, not finalized creature canon or rigged combat actors.
+- `Build/UnmadeHeroModels/Lair/`: nine named dungeon entrance studies with realm materials and one distinct structural motif per authored dungeon. They are entrance art-direction references, not interior maps, navigable levels, or gameplay evidence.
 
 ### Density restored after the sparse-layout regression
 
@@ -31,7 +33,7 @@ The manifest records the exact generated `building_shells` and `district_count` 
 
 ### Creature face detail pass
 
-The ten creatures with eyes now use four independently named geometric layers: a dark socket, colored iris, forward pupil and small light-catching glint. The added parts remain vertex-colored GLB geometry, with no external textures, shared creature placeholder, or changes to enemy behavior. The 50-model workflow checks the exported components in each generated eye-bearing creature GLB. GriefLantern retains its established lit-soul-in-a-cage design, and KilnWisp retains its faceless coal-and-flame silhouette. These additions improve the source-authored visual references; they are not rigged or Unreal-rendered models.
+The ten creatures with eyes now use four independently named geometric layers: a dark socket, colored iris, forward pupil and small light-catching glint. The added parts remain vertex-colored GLB geometry, with no external textures, shared creature placeholder, or changes to enemy behavior. The expanded model workflow checks the exported components in each generated eye-bearing creature GLB. GriefLantern retains its established lit-soul-in-a-cage design, and KilnWisp retains its faceless coal-and-flame silhouette. These additions improve the source-authored visual references; they are not rigged or Unreal-rendered models.
 
 ### Species-specific enemy readability details
 

@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**23 October 2026 source-only world-discovery and model-gallery update:** The Study journal now surfaces nearby visible creature, Echo Well and rite-witness leads without bypassing firsthand evidence or authored progress rules. Nine proposed boss and nine proposed lair visual studies now map to the existing expedition arcs; these are not final level or gameplay claims. The historical v20 illustrated files and hashes remain unchanged. No new illustrated edition was issued; Unreal compilation, import and in-engine visual QA remain unverified.
+
 **22 October 2026 source-only realm skyline update:** Nine distinct bounded per-piece orientation profiles now shape the existing decorative primitive silhouettes. No new canon fact, gameplay state, collision rule or save field was added. The v20 illustrated files and digests remain historical and unchanged; no new illustrated edition was issued. Unreal rendering remains unverified.
 
 **22 October 2026 source-only campaign journal update:** Exact act text and lead choices are regression-tested, and prior schema-1 story progress reconstructs the read-only journal without new save fields. This adds no canon events or answers. It does **not** issue a new illustrated edition: the v20 PDFs, DOCX files, atlas, ZIP and recorded digests remain historical and unchanged. Unreal save deserialization and journal rendering remain unverified.
