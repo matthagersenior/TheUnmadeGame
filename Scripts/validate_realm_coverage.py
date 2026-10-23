@@ -92,7 +92,7 @@ def validate():
         for dimension, group in expected_groups.items():
             source_entries = records(index, arc["realm"], group)
             block = coverage[dimension]
-            total[group] += len(source_entries)
+            total_key = {"quest": "quests", "boss": "bosses",\n                         "regional_gear": "regional_gear",\n                         "learned_skill": "learned_skill"}[group]\n            total[total_key] += len(source_entries)
             if dimension == "equipment":
                 actual = [entry["key"] for entry in block["entries"]]
             elif dimension == "bosses" or dimension == "abilities":
