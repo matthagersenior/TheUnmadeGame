@@ -10,7 +10,7 @@ Explore nine authored realms through combat, investigation, rescue and reality-c
 
 ## Current status
 
-Current source milestone: **v21 cross-realm parity plus the first-PC production handoff** (20 October 2026). The repository contains Unreal C++ gameplay, generated graybox world assembly, portable rules, authored narrative data and prototype asset generators. The source-linked handoff currently indexes 669 work orders across nine realms; this is an authoring and production aid, not evidence that those rows are playable. No packaged playable release is available.
+Current source milestone: **v21 cross-realm parity, first-PC handoff, and PR #164 character/creature anatomy detail** (23 October 2026). [Maintained nine-realm coverage ledger](docs/qa/realm-coverage-ledger.json). The repository contains Unreal C++ gameplay, generated graybox world assembly, portable rules, authored narrative data and prototype asset generators. The source-linked handoff currently indexes 669 work orders across nine realms; this is an authoring and production aid, not evidence that those rows are playable. No packaged playable release is available.
 
 | Evidence | Scope |
 | --- | --- |
