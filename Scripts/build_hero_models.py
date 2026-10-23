@@ -28,6 +28,9 @@ PALETTE={
  "FirstAbsence":((70,81,106),(204,203,195),(119,185,215)),
 }
 DARK=(39,44,56);PALE=(207,193,176);BLACK=(25,30,42);GOLD=(216,179,92);WHITE=(232,229,209)
+SKIN_TONES=((117,78,65),(145,99,78),(170,121,94),(194,150,119),
+ (211,177,146),(91,72,68),(157,131,119),(224,194,165))
+HAIR_TONES=((35,32,31),(70,48,37),(119,83,54),(142,119,87),(49,60,64),(120,105,99))
 
 class Kit:
  def __init__(self):self.scene=trimesh.Scene();self.count=0
@@ -105,6 +108,104 @@ class Kit:
   data=self.scene.export(file_type='glb')
   path.write_bytes(data)
   return {"parts":self.count,"triangles":int(sum(len(m.faces) for m in self.scene.geometry.values())),"bytes":len(data),"sha256":hashlib.sha256(data).hexdigest(),"bounds_m":[[round(float(x),3) for x in row] for row in self.scene.bounds.tolist()]}
+
+def add_detailed_resident(k,ident,index,base,trim,light):
+ """Grounded non-rigged human study; stable visual variation comes from the source ID."""
+ seed=hashlib.sha256(ident.encode('utf-8')).digest()
+ scale=1+((seed[0]%9)-4)*.018
+ shoulder=1+((seed[1]%7)-3)*.045
+ skin=SKIN_TONES[seed[2]%len(SKIN_TONES)]
+ skin_shadow=tuple(int(c*.72) for c in skin)
+ hair=HAIR_TONES[seed[3]%len(HAIR_TONES)]
+ eye_color=((74,113,107),(94,120,148),(122,86,62),(125,142,96))[seed[4]%4]
+ # Layered coat, fitted midsection, and soft shoulder/hip volumes replace the
+ # old single cone-and-sphere mannequin. All pieces remain separately named.
+ k.orb('resident_pelvis',(0,.86,0),(.25*scale,.24,.18),DARK,3)
+ k.taper('resident_outer_coat',(0,.18,0),(0,1.48,0),.43*scale,.31*scale,base,16)
+ k.orb('resident_ribcage',(0,1.30,.025),(.32*scale,.36,.22),trim,3)
+ k.orb('resident_upper_chest',(0,1.49,.01),(.34*shoulder,.22,.22),base,3)
+ k.orb('resident_neck',(0,1.67,.01),(.105,.20,.11),skin,3)
+ # Coat facings, shoulder seams, a real belt and closures give each outfit depth.
+ for side in (-1,1):
+  k.ribbon('coat_lapel_'+str(side),[(side*.27,1.58,.18),(side*.08,1.35,.255),(side*.24,1.12,.225)],.115,light)
+  k.taper('coat_front_seam_'+str(side),(side*.22,.30,.20),(side*.22,1.40,.205),.014,.014,trim,7)
+  k.orb('shoulder_cap_'+str(side),(side*.30*shoulder,1.48,0),(.15,.13,.16),trim,3)
+  k.taper('tailored_trouser_'+str(side),(side*.14,.82,0),(side*.17,.32,.01),.15,.105,base,12)
+  k.orb('resident_knee_'+str(side),(side*.17,.34,.035),(.112,.12,.12),trim,2)
+  k.taper('resident_shin_'+str(side),(side*.17,.32,.015),(side*.17,.10,.03),.102,.076,DARK,12)
+  k.orb('boot_upper_'+str(side),(side*.17,.105,.09),(.125,.13,.20),BLACK,3)
+  k.orb('boot_toe_'+str(side),(side*.17,.055,.235),(.13,.075,.17),DARK,3)
+  k.beam('boot_welt_'+str(side),(side*.29,.075,.12),(side*.05,.075,.12),.018,trim,8)
+ # Double-layered sleeves articulate at elbow and wrist; hands have a palm and fingers.
+ for side in (-1,1):
+  shoulder_at=(side*.32*shoulder,1.48,.02)
+  elbow=(side*.43,1.08,.045);wrist=(side*.47,.77,.12)
+  k.taper('resident_upper_sleeve_'+str(side),shoulder_at,elbow,.145,.118,base,14)
+  k.orb('resident_elbow_'+str(side),elbow,(.12,.12,.115),trim,2)
+  k.taper('resident_forearm_'+str(side),elbow,wrist,.116,.073,trim,14)
+  k.ring('resident_cuff_'+str(side),wrist,.084,.018,light,segments=16,sides=6,plane='xz')
+  palm=(side*.48,.68,.145)
+  k.orb('resident_palm_'+str(side),palm,(.083,.112,.055),skin,3)
+  for finger in range(4):
+   dx=(finger-1.5)*.034
+   start=(palm[0]+dx,palm[1]-.075,palm[2]+.006)
+   end=(palm[0]+dx*1.12,palm[1]-.145-(.012 if finger in (1,2) else 0),palm[2]+.008)
+   k.taper('resident_finger_'+str(side)+'_'+str(finger),start,end,.019,.012,skin,8)
+   k.orb('resident_fingertip_'+str(side)+'_'+str(finger),end,(.013,.019,.014),skin_shadow,2)
+  k.taper('resident_thumb_'+str(side),(side*.41,.69,.16),(side*.39,.61,.19),.032,.018,skin,8)
+ # Head, jaw, ears and facial planes use higher-resolution surfaces and distinct materials.
+ k.orb('resident_face',(0,1.96,.012),(.185*scale,.252,.175),skin,4)
+ k.orb('resident_jaw',(0,1.835,.075),(.145*scale,.115,.139),skin_shadow,3)
+ for side in (-1,1):
+  k.orb('resident_cheek_'+str(side),(side*.108,1.925,.132),(.073,.071,.052),skin,3)
+  k.orb('resident_ear_'+str(side),(side*.19,1.975,.005),(.055,.087,.043),skin_shadow,3)
+  k.orb('resident_ear_ridge_'+str(side),(side*.204,1.98,.038),(.024,.050,.018),skin,2)
+  # Recessed socket, sclera, iris and lid read as a face instead of two dots.
+  eye_x=side*.073
+  k.orb('resident_eye_socket_'+str(side),(eye_x,2.015,.166),(.061,.045,.026),skin_shadow,3)
+  k.orb('resident_eye_white_'+str(side),(eye_x,2.015,.185),(.044,.027,.019),(230,222,205),3)
+  k.orb('resident_iris_'+str(side),(eye_x,2.014,.201),(.022,.023,.012),eye_color,3)
+  k.orb('resident_pupil_'+str(side),(eye_x,2.014,.210),(.010,.014,.008),BLACK,2)
+  k.orb('resident_eye_glint_'+str(side),(eye_x-.006,2.023,.216),(.006,.007,.004),WHITE,1)
+  k.taper('resident_brow_'+str(side),(side*.035,2.075,.176),(side*.12,2.065,.164),.022,.018,hair,8)
+  k.taper('resident_nasolabial_fold_'+str(side),(side*.07,1.90,.174),(side*.085,1.845,.171),.008,.004,skin_shadow,7)
+ # Bridge, tip, nostrils, lips and a small chin plane shape the center of the face.
+ k.taper('resident_nose_bridge',(0,2.035,.165),(0,1.91,.228),.034,.044,skin,9)
+ k.orb('resident_nose_tip',(0,1.905,.232),(.046,.036,.035),skin,3)
+ for side in (-1,1):k.orb('resident_nostril_'+str(side),(side*.023,1.887,.248),(.012,.008,.009),skin_shadow,2)
+ k.ribbon('resident_mouth_line',[(-.061,1.82,.204),(0,1.814,.211),(.061,1.82,.204)],.013,skin_shadow)
+ k.orb('resident_lower_lip',(0,1.797,.201),(.045,.014,.013),tuple(min(255,int(c*1.06)) for c in skin),2)
+ # Nine restrained hair/cover silhouettes prevent the authored people repeating one head shape.
+ style=seed[5]%9
+ if style in (0,5):
+  k.orb('resident_hair_cap',(0,2.14,-.005),(.194,.117,.185),hair,4)
+  for side in (-1,1):k.taper('resident_temple_lock_'+str(side),(side*.145,2.13,.055),(side*.178,1.99,.025),.045,.012,hair,9)
+ elif style in (1,6):
+  k.orb('resident_headwrap',(0,2.13,-.018),(.202,.112,.194),base,3)
+  for row in range(3):k.beam('resident_wrap_stitch_'+str(row),(-.15,2.15-row*.035,.13),(.15,2.15-row*.035,.13),.012,light,7)
+ elif style==2:
+  for side in (-1,1):
+   for braid in range(3):
+    x=side*(.12+braid*.025)
+    k.taper('resident_braid_'+str(side)+'_'+str(braid),(x,2.20,-.02),(side*(.18+braid*.02),1.78,.02),.042,.018,hair,9)
+ elif style==3:
+  k.taper('resident_travel_hood',(0,2.08,-.04),(0,2.35,-.08),.245,.055,base,14)
+  k.ribbon('resident_hood_face_edge',[(-.19,2.06,.10),(-.205,1.97,.13),(-.17,1.88,.12)],.025,light)
+ else:
+  k.orb('resident_coiled_hair',(0,2.145,-.015),(.187,.09,.17),hair,3)
+  for side in (-1,1):
+   k.ring('resident_tied_coil_'+str(side),(side*.18,2.11,-.015),.070,.022,trim,segments=16,sides=6,plane='xz')
+ # Surface stitching, folds and fasteners add craft scale without insignia or new canon.
+ k.box('resident_belt',(0,.88,.195),(.50,.065,.055),DARK)
+ k.box('resident_buckle',(0,.88,.23),(.082,.076,.027),GOLD)
+ for row in range(4):
+  y=1.39-row*.19
+  k.orb('resident_coat_button_'+str(row),(0,y,.247),(.024,.026,.014),GOLD,2)
+ for side in (-1,1):
+  k.taper('resident_dart_seam_'+str(side),(side*.10,.31,.19),(side*.17,1.32,.19),.009,.013,light,7)
+  k.ribbon('resident_coat_fold_'+str(side),[(side*.27,1.23,.19),(side*.31,.82,.20),(side*.34,.35,.12)],.025,trim)
+ k.ring('resident_collar_edge',(0,1.62,.035),.16,.018,light,segments=20,sides=6,plane='xz')
+ return scale
 
 # Signature animals have different anatomy, appendages and locomotion cues.
 def build_creature(kind):
@@ -251,6 +352,82 @@ def build_creature(kind):
     k.taper('double_pincer',(side*1.35,.76,1.57),(side*1.63,.94,2.05),.18,.014,trim)
     k.taper('double_pincer',(side*1.35,.76,1.57),(side*1.36,.47,2.05),.18,.014,WHITE)
    eye(-.21,1.05,1.08,.09);eye(.21,1.05,1.08,.09)
+ # Secondary anatomical marks make the silhouette read as a creature with
+ # structure and wear, rather than a cluster of bright smooth primitives.
+ if kind in ('Cinderjaw','HollowHound','Ashmaw','PaleStrider'):
+  for side in (-1,1):
+   for row in range(3):
+    z=-.34+row*.32
+    k.orb('dermal_shoulder_scute_'+str(side)+'_'+str(row),
+      (side*(dims[0]*.63),bodyY+.20-row*.12,z),(.16,.105,.20),trim if row%2 else light,2)
+   k.ring('limb_joint_cuff_'+str(side),(side*dims[0]*.73,bodyY-.36,.53),.14,.025,light,segments=14,sides=6,plane='xz')
+   for claw in range(2):
+    x=side*(dims[0]*.73+(claw-.5)*.09)
+    k.taper('split_hoof_or_talon_'+str(side)+'_'+str(claw),(x,.11,.62),(x+side*.02,.015,.79),.048,.004,BLACK,7)
+  if kind=='Cinderjaw':
+   for side in (-1,1):
+    k.taper('jaw_hinge_tendon_'+str(side),(side*.36,bodyY-.03,1.22),(side*.28,bodyY-.30,1.38),.045,.014,trim,8)
+    k.orb('cheek_heat_vent_'+str(side),(side*.36,bodyY+.16,1.37),(.075,.11,.045),light,2)
+  elif kind=='PaleStrider':
+   for i in range(5):
+    k.taper('stride_spine_tine_'+str(i),(0,bodyY+.42,-.42+i*.20),(0,bodyY+.68,-.50+i*.20),.065,.006,WHITE,7)
+  elif kind=='HollowHound':
+   for side in (-1,1):
+    for rib in range(3):
+     k.ring('rib_socket_rim_'+str(side)+'_'+str(rib),(side*.30,bodyY-.08,-.32+rib*.31),.105,.017,trim,segments=14,sides=5,plane='xz')
+  else:
+   for i in range(5):
+    k.box('slag_armor_seam_'+str(i),((i-2)*.22,bodyY+.48,-.34),(.11,.23,.055),DARK)
+ elif kind=='GleamMoth':
+  for side in (-1,1):
+   k.orb('wing_root_joint_'+str(side),(side*.22,1.36,.03),(.13,.17,.13),trim,3)
+   for segment in range(4):
+    k.taper('wing_membrane_rib_'+str(side)+'_'+str(segment),
+     (side*.20,1.34,.08),(side*(.44+segment*.18),1.32+(segment%2)*.13,.21+segment*.10),.016,.006,GOLD,6)
+   k.beam('antenna_sensor_'+str(side),(side*.16,1.72,.12),(side*.31,2.27,.48),.022,WHITE,7)
+ elif kind=='Veilwatch':
+  for side in (-1,1):
+   for pleat in range(4):
+    x=side*(.23+pleat*.13)
+    k.taper('shroud_pleat_'+str(side)+'_'+str(pleat),(x,1.58,.02),(x*1.65,.32,-.12),.026,.006,light,7)
+   k.orb('lens_rim_'+str(side),(side*.16,1.55,.52),(.09,.12,.04),trim,2)
+ elif kind=='GriefLantern':
+  for side in (-1,1):
+   for rib in range(3):
+    x=side*(.38+rib*.055)
+    k.beam('lantern_cage_crossbrace_'+str(side)+'_'+str(rib),(x,.82,-.24),(x,1.84,.24),.025,GOLD,7)
+  k.ring('soul_chamber_rim',(0,1.28,.42),.25,.035,GOLD,segments=18,sides=6,plane='xy')
+ elif kind=='RedactionEye':
+  for ring in range(3):
+   k.ring('corneal_iris_lamination_'+str(ring),(0,1.34,.50),.21+ring*.105,.018,light if ring==1 else trim,segments=24,sides=6,plane='xy')
+  for side in (-1,1):
+   k.orb('ocular_lid_'+str(side),(side*.36,1.34,.42),(.12,.30,.07),base,3)
+ elif kind=='DrownedWatch':
+  for side in (-1,1):
+   for plate in range(3):
+    k.box('drowned_scale_'+str(side)+'_'+str(plate),(side*.31,1.48-plate*.28,.30),(.19,.22,.065),light if plate==1 else trim)
+   k.ring('helmet_brow_rivet_'+str(side),(side*.22,2.27,.23),.035,.012,GOLD,segments=10,sides=5,plane='xy')
+ elif kind=='KilnWisp':
+  for shard in range(6):
+   angle=shard*math.pi/3
+   x,z=.31*math.cos(angle),.31*math.sin(angle)
+   k.orb('coal_crust_node_'+str(shard),(x,1.06,z),(.08,.13,.08),trim,2)
+   k.taper('ember_needle_'+str(shard),(x,1.28,z),(x*1.42,1.62,z*1.42),.055,.004,WHITE,7)
+ elif kind=='Inkmaw':
+  for side in (-1,1):
+   for i in range(5):
+    z=-.52+i*.27
+    k.taper('binding_rivet_'+str(side)+'_'+str(i),(side*.42,1.19,z),(side*.45,1.30,z),.035,.025,GOLD,7)
+   k.ring('gullet_lip_'+str(side),(side*.12,.94,1.10),.16,.025,BLACK,segments=18,sides=6,plane='xy')
+ elif kind=='SaltglassCrawler':
+  for side in (-1,1):
+   for leg in range(5):
+    z=-.78+leg*.39;x=side*(1.12+leg*.04)
+    k.orb('crawler_hip_socket_'+str(side)+'_'+str(leg),(side*.70,.80,z),(.13,.14,.14),DARK,2)
+    k.ring('crawler_tarsal_ring_'+str(side)+'_'+str(leg),(x,.37,z+.06),.075,.02,GOLD,segments=12,sides=5,plane='xz')
+  for i in range(6):
+   x=-.55+i*.22
+   k.taper('shell_growth_ridge_'+str(i),(x,1.22,-.9),(x*.84,1.36,.9),.025,.008,trim,7)
  return k
 
 # Proposed, non-authoritative visual silhouettes for the nine canon-named
@@ -258,20 +435,62 @@ def build_creature(kind):
 # bound; exact anatomy remains an art-direction proposal pending creator review.
 def build_expedition_boss(arc,index):
  realm=arc['realm'];base,trim,light=PALETTE[realm];k=Kit()
- # A readable tall figure assembled from distinct armor, cloth and identity
- # geometry. Each profile changes its outline as well as its realm materials.
- k.taper('boss_coat_silhouette',(0,.18,0),(0,2.02,-.08),.58,.34,base,16)
- k.orb('boss_chest',(0,1.55,.16),(.47,.53,.35),trim,2)
- k.orb('boss_head',(0,2.33,.06),(.30,.37,.30),DARK,2)
- k.box('boss_blank_visage',(0,2.31,.34),(.34,.30,.08),WHITE)
+ # Each boss gets a different body plan before its realm-bound signature is
+ # added: varied height, posture, shoulder span, coat cut, and face covering.
+ profiles=(
+  (2.82,.53,.34,.22,.00), (3.05,.46,.29,.08,.15), (2.94,.66,.39,.20,-.10),
+  (2.76,.44,.31,.12,.00), (3.16,.58,.32,.26,.18), (2.68,.57,.42,.18,-.16),
+  (3.08,.40,.30,.08,.00), (3.24,.62,.36,.23,.12), (3.02,.48,.34,.10,0.00))
+ height,shoulder_width,waist_width,stance,lean=profiles[index]
+ head_y=height-.44;chest_y=height*.61
+ k.taper('boss_coat_silhouette',(0,.18,0),(lean,height*.70,-.08),shoulder_width*1.12,waist_width,base,18)
+ k.orb('boss_pelvis',(lean,.83,0),(waist_width*.88,.24,.25),DARK,3)
+ k.orb('boss_chest',(lean,chest_y,.10),(shoulder_width*.90,.44,.34),trim,3)
+ k.orb('boss_sternum_plate',(lean,chest_y+.05,.385),(shoulder_width*.43,.28,.045),light,2)
+ k.taper('boss_neck',(lean,head_y-.15,.035),(lean,head_y+.02,.035),.13,.105,DARK,10)
+ k.orb('boss_head',(lean,head_y,.06),(.29,.37,.29),DARK,3)
+ k.orb('boss_blank_visage',(lean,head_y-.02,.323),(.238,.27,.06),WHITE,3)
+ # Mask-specific cut, brow and cheek planes make the faces legible at a glance.
  for side in (-1,1):
-  shoulder=(side*.43,1.88,.04);elbow=(side*.68,1.36,.13);hand=(side*.62,.97,.31)
-  k.orb('boss_pauldron_'+str(side),shoulder,(.29,.28,.32),light if side==1 else trim,1)
-  k.beam('boss_upper_arm_'+str(side),shoulder,elbow,.16,base)
-  k.taper('boss_forearm_'+str(side),elbow,hand,.15,.11,trim)
-  k.orb('boss_hand_'+str(side),hand,(.13,.14,.13),DARK,1)
-  hip=(side*.22,.77,0);k.taper('boss_leg_'+str(side),hip,(side*.27,.16,.08),.21,.13,base)
-  k.box('boss_boot_'+str(side),(side*.27,.12,.24),(.31,.20,.52),DARK)
+  k.orb('boss_mask_cheek_'+str(side),(lean+side*.16,head_y-.12,.34),(.09,.13,.045),trim,2)
+  k.taper('boss_mask_brow_'+str(side),(lean+side*.025,head_y+.09,.36),(lean+side*.20,head_y+.13,.31),.035,.012,light,8)
+ if index%3==0:
+  k.box('boss_mask_vertical_seam',(lean,head_y-.02,.38),(.035,.33,.018),DARK)
+ elif index%3==1:
+  k.box('boss_mask_eye_slat',(lean,head_y+.025,.385),(.34,.045,.025),DARK)
+ else:
+  k.orb('boss_mask_center_cavity',(lean,head_y-.03,.39),(.075,.095,.024),BLACK,2)
+ # Raised garment construction: collar, stitched front, segmented abdomen,
+ # layered hip panels and asymmetric armor are shaped around each silhouette.
+ k.ring('boss_collar_rim',(lean,chest_y+.37,.04),.22,.055,light,segments=18,sides=7,plane='xz')
+ for side in (-1,1):
+  x=lean+side*shoulder_width*.78
+  k.orb('boss_pauldron_'+str(side),(x,chest_y+.31,.03),(.25,.20,.29),light if side==1 else trim,3)
+  k.taper('boss_pauldron_ridge_'+str(side),(x,chest_y+.47,.02),(x+side*.17,chest_y+.55,-.02),.075,.008,GOLD,8)
+  k.taper('boss_rib_armor_'+str(side),(lean+side*.10,chest_y-.12,.345),(lean+side*.16,.93,.31),.14,.085,base,9)
+  k.taper('boss_arm_upper_'+str(side),(x,chest_y+.27,.03),(lean+side*(shoulder_width+.18),chest_y-.12,.10),.16,.13,base,12)
+  elbow=(lean+side*(shoulder_width+.18),chest_y-.12,.10)
+  wrist=(lean+side*(shoulder_width+.10),1.02,.30)
+  k.orb('boss_elbow_'+str(side),elbow,(.14,.14,.14),DARK,2)
+  k.taper('boss_forearm_'+str(side),elbow,wrist,.14,.105,trim,12)
+  k.ring('boss_wrist_guard_'+str(side),wrist,.115,.028,light,segments=14,sides=6,plane='xz')
+  k.orb('boss_hand_'+str(side),(wrist[0],wrist[1]-.13,wrist[2]),(.12,.15,.10),DARK,2)
+  for finger in range(3):
+   dx=(finger-1)*.055
+   k.taper('boss_hand_claw_'+str(side)+'_'+str(finger),(wrist[0]+dx,wrist[1]-.22,wrist[2]+.02),(wrist[0]+dx*1.1,wrist[1]-.31,wrist[2]+.055),.022,.009,light,7)
+  hip=(lean+side*(waist_width*.66+stance),.78,0)
+  knee=(lean+side*(waist_width*.74+stance),.39,.04)
+  ankle=(lean+side*(waist_width*.76+stance),.14,.10)
+  k.taper('boss_thigh_'+str(side),hip,knee,.20,.14,base,12)
+  k.orb('boss_knee_guard_'+str(side),knee,(.15,.15,.16),light,2)
+  k.taper('boss_greave_'+str(side),knee,ankle,.14,.09,trim,12)
+  k.box('boss_boot_'+str(side),(ankle[0],.10,.25),(.30,.18,.46),DARK)
+ for row in range(3):
+  y=chest_y-.24-row*.19
+  k.box('boss_abdominal_lamella_'+str(row),(lean,y,.31),(.44-row*.045,.105,.065),light if row==1 else trim)
+ for side in (-1,1):
+  hipx=lean+side*(waist_width*.70+stance)
+  k.ribbon('boss_split_hip_cloth_'+str(side),[(hipx*.55,.92,.25),(hipx,.61,.22),(hipx+side*.12,.22,.08)],.20,base if side<0 else trim)
  # Realm-specific shapes echo the authored telegraph vocabulary, not new powers.
  if index==0: # Tollkeeper — a passable center within a marked ring.
   k.ring('boss_signature_mileglass_toll_ring',(0,1.93,-.12),.87,.07,GOLD,segments=28,sides=7,plane='xz')
@@ -387,33 +606,7 @@ def build_lair_entrance(arc,index):
 def build_resident(row,index):
  ident,name,realm,visual=row
  k=Kit();base,trim,light=PALETTE[realm]
- scale=1+((index%5)-2)*.035
- k.taper('coat_hem',(0,.16,0),(0,1.50,0),.45*scale,.31*scale,base,12)
- k.orb('layered_tunic',(0,1.30,.015),(.35*scale,.42,.29),trim,2)
- for side in (-1,1):
-  x=side*.18*scale
-  k.taper('booted_leg',(x,.05,.035),(x,.83,.0),.15,.16,DARK)
-  k.orb('boot',(x,.07,.20),(.16,.09,.29),BLACK,1)
-  a=(side*.31,1.56,0);b=(side*(.46+index%3*.02),1.10,-.03)
-  c=(side*.49,.76,.15)
-  k.beam('detached_sleeve_upper',a,b,.17,base)
-  k.taper('sewn_forearm',b,c,.15,.09,trim)
-  k.orb('hand',c,(.09,.13,.10),PALE,1)
- k.orb('individual_face',(0,1.96,0),(.22*scale,.30,.22),PALE,2)
- k.orb('nose',(0,1.91,.22),(.052,.068,.11),(158,124,110),1)
- for side in (-1,1):k.orb('eye',(side*.089,2.02,.194),(.028,.031,.021),BLACK,1)
- # Unique hair/hood; not cosmetic tint alone: physically distinct geometry.
- style=index%6
- if style in (0,3):
-  k.taper('angular_hood',(0,2.16,0),(0,2.48,.02),.26,.16,base,9)
- elif style==1:
-  for j in range(8):
-   th=j*2*math.pi/8
-   k.taper('hair_braid',(.18*math.cos(th),2.22,.18*math.sin(th)),(.25*math.cos(th),2.0,.27*math.sin(th)),.065,.012,DARK)
- elif style==2:
-  k.orb('cap_and_cowl',(0,2.19,0),(.258,.14,.27),DARK,1)
- else:
-  for side in (-1,1):k.taper('side_bun',(side*.19,2.20,0),(side*.29,2.31,.04),.12,.045,trim)
+ add_detailed_resident(k,ident,index,base,trim,light)
  # Each visual_direction has distinct individually modeled personal object.
  unique=index%18
  if unique==0: # Veynu
