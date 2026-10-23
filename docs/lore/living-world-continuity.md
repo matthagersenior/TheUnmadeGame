@@ -1,5 +1,12 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-22 — Source-only creature territories and reactive habitat prototypes
+
+The six existing optional encounter sites (Reach.AshRoad, Reach.GlassCut, Bellwold.Forgotten, Paperhaven.Torn, Saltwake.Saltglass and Cinderhold.Slag) already had source-assigned canonical species and scout testimony. A **provisional encounter art and environmental interaction layer** now adds distinct jaw dens, watcher roosts, hound undercrofts, archive burrows, tide caves and slag maws outside inhabited streets. These are prototype shapes and reactions, **not newly admitted canon claims about any creature's origin, birthplace, ecology, or the identities of witnesses**.
+
+Approach produces physically situated tracks, warnings, dynamic habitat lighting and sightline-sensitive cover. At an on-site marker, a player may inspect the provisional habitat and release a collision-bearing alcove screen for shelter. Existing rest/forage/patrol logic now returns creatures toward their authored habitat forecourts, not arbitrary arena spawn points. Inspection grants no technique, quest reward or automatic mastery; conflict and creature combat retain existing rules. Habitat-inspection state is session-local, so no schema-1 save format, old replay promise, irreversible world choice, Held Morning/Many Mornings resolution, or OPEN/DISPUTED/SEALED mystery is changed. Native Unreal compilation, AI navigation, real line-of-sight fairness and physical playtesting remain unverified.
+
+
 ## 2026-10-21 — Player-directed safe restoration
 With two explicit confirmations a user may copy a known-compatible historical backup into an unused save profile, keeping both original primary and backup data untouched. This restores exactly recorded state, not retrospective unobserved witness knowledge, unearned gear, fabricated shipments or an alternate ending. The duplicated profile has new storage ownership only, with no changes to established story/canon IDs. Real UE file-system and rollback playtesting is pending.
 
