@@ -52,7 +52,7 @@ def validate():
     assert len(order) == 9 and len(set(order)) == 9, "all nine stable realm IDs are required"
     assert set(ledger["dimensions"]) == DIMENSIONS, "coverage dimensions changed"
     assert [realm["id"] for realm in ledger["realms"]] == order
-    assert "does not imply" in ledger["scope_note"]
+    assert "do not imply" in ledger["scope_note"]
     assert "Unreal" in ledger["scope_note"]
 
     world_by_id = {realm["id"]: realm for realm in world["realms"]}
