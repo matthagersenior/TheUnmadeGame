@@ -127,6 +127,8 @@ jobs:
         run: python Scripts/validate_dependency_ledger.py
       - name: Validate repository structure
         run: python Scripts/validate_repo.py
+      - name: Validate maintained nine-realm coverage ledger
+        run: python Scripts/validate_realm_coverage.py
       - name: Enforce lore continuity on gameplay source commits
         run: python Scripts/check_lore_change.py
       - name: Generate and validate 35 real stereo Unpaid Shift Foley assets
