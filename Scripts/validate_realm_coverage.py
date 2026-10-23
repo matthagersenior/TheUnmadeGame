@@ -68,7 +68,13 @@ def validate():
 
         story = coverage["story"]
         optional = optional_by_index[realm_index]
-        main_quest = next(entry for entry in records(index, arc["realm"], "quest")\n                           if entry["key"] == f"quest:quest:campaign:{arc[\"realm\"]}")\n        assert story["main_arc_id"] == main_quest["key"]\n        assert story["main_arc"] == main_quest["name"]
+        main_quest_key = "quest:quest:campaign:" + arc["realm"]
+        main_quest = next(
+            entry for entry in records(index, arc["realm"], "quest")
+            if entry["key"] == main_quest_key
+        )
+        assert story["main_arc_id"] == main_quest["key"]
+        assert story["main_arc"] == main_quest["name"]
         assert story["optional_arc"] == optional["quest"]
         assert story["status"] == "source-authored"
 
