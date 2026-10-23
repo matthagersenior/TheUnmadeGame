@@ -54,7 +54,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:ThreefoldReach",
+          "main_arc": "A Bell That Had No Last Note"
         },
         "locations": {
           "status": "source-authored",
@@ -266,7 +268,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:WidowedRain",
+          "main_arc": "The Shore Without Its Water"
         },
         "locations": {
           "status": "source-authored",
@@ -440,7 +444,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:HearthBeneath",
+          "main_arc": "The Heat Lent By No Sun"
         },
         "locations": {
           "status": "source-authored",
@@ -614,7 +620,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:TidalLedger",
+          "main_arc": "The Account That Borrowed Tomorrow"
         },
         "locations": {
           "status": "source-authored",
@@ -793,7 +801,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:SkyBelow",
+          "main_arc": "The Chorus That Holds The Roof"
         },
         "locations": {
           "status": "source-authored",
@@ -972,7 +982,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:CinderSpine",
+          "main_arc": "The Stone That Remembered Workers"
         },
         "locations": {
           "status": "source-authored",
@@ -1151,7 +1163,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:HundredUnlived",
+          "main_arc": "The Census Of Those Not Born"
         },
         "locations": {
           "status": "source-authored",
@@ -1329,7 +1343,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:OrchardOfKings",
+          "main_arc": "The Crown Nobody Accepted"
         },
         "locations": {
           "status": "source-authored",
@@ -1507,7 +1523,9 @@
           "evidence": [
             "Authoring/frontier_adventures_v14.json",
             "Authoring/adventure_depth_v16.json"
-          ]
+          ],
+          "main_arc_id": "quest:quest:campaign:FirstAbsence",
+          "main_arc": "The Answer With No Question"
         },
         "locations": {
           "status": "source-authored",
