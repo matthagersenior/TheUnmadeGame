@@ -52,8 +52,8 @@ def validate():
     assert len(order) == 9 and len(set(order)) == 9, "all nine stable realm IDs are required"
     assert set(ledger["dimensions"]) == DIMENSIONS, "coverage dimensions changed"
     assert [realm["id"] for realm in ledger["realms"]] == order
-    assert all("Unreal Editor" in guardrail or "Unreal" in guardrail
-               for guardrail in ledger["canonical_guardrails"])
+    assert "does not imply" in ledger["scope_note"]
+    assert "Unreal" in ledger["scope_note"]
 
     world_by_id = {realm["id"]: realm for realm in world["realms"]}
     optional_by_index = {realm["realm_index"]: realm for realm in depth["realms"]}
