@@ -1,21 +1,22 @@
 #pragma once
-// Source-only, save-backed recovery rules. The combatant copy contains hit
-// dedup receipts, cooldown, current health and guard state (not merely health).
 #include "Combat/UnmadeCombatRules.h"
 #include <cmath>
 
 namespace UnmadeCore {
-enum class ConsumableAttempt { Unavailable, Used, SaveFailed };
+enum class ConsumableCommit { Unavailable, Used, SaveFailed };
+using ConsumableAttempt = ConsumableCommit;
 
-template<class Range,class Try>
-ConsumableAttempt UseFirstConsumable(const Range& items,Try attempt) {
-    for(const auto& item:items) {
-        const auto outcome=attempt(item);
-        if(outcome!=ConsumableAttempt::Unavailable)return outcome;
+// A failed commit must not fall through to a more valuable potion.
+template<class Items, class Use>
+ConsumableCommit UseFirstConsumable(const Items& items, Use use) {
+    for(const auto item:items){
+        const auto result=use(item);
+        if(result!=ConsumableCommit::Unavailable)return result;
     }
-    return ConsumableAttempt::Unavailable;
+    return ConsumableCommit::Unavailable;
 }
 
+// Preserve the complete combat state when a durable write rejects healing.
 template<class Writer>
 bool CommitCombatHealing(Combatant& state,double amount,Writer writer) {
     if(!std::isfinite(amount)||amount<0)return false;
@@ -24,5 +25,35 @@ bool CommitCombatHealing(Combatant& state,double amount,Writer writer) {
     if(writer())return true;
     state=before;
     return false;
+}
+
+// Copying the model also preserves active Fold/Glimpse windows on failure;
+// restoring a persistent-only snapshot would incorrectly cancel those effects.
+template<class Fracture, class Writer>
+bool CommitStrainRecovery(Fracture& fracture, double amount, Writer write) {
+    if (!std::isfinite(amount) || amount < 0) return false;
+    const auto before = fracture;
+    if (amount > 0 && !fracture.Recover(amount / Fracture::RecoveryPerSecond)) return false;
+    if (write()) return true;
+    fracture = before;
+    return false;
+}
+
+// A failed in-session recovery must not use profile restoration: that resets
+// combat windows and can erase a cooldown or an already acknowledged hit.
+template<class Combat, class Stage, class Writer>
+bool CommitCombatRecovery(Combat& combat, Stage stage, Writer write) {
+    const auto before = combat.CaptureRecoveryState();
+    if (stage() && write()) return true;
+    combat.RestoreRecoveryState(before);
+    return false;
+}
+
+// Apply recovery before capture and undo it if the synchronous writer fails.
+template<class Combat, class Writer>
+bool CommitHealing(Combat& combat, double amount, Writer write) {
+    if (!std::isfinite(amount) || amount < 0) return false;
+    return CommitCombatRecovery(combat,
+        [&] { return amount == 0 || combat.Heal(amount); }, write);
 }
 }

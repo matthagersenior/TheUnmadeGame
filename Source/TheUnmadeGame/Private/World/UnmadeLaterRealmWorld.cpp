@@ -56,7 +56,8 @@ void AUnmadePrototypeHub::BuildAtlasGateways()
 
 bool AUnmadePrototypeHub::TryTravelAtlas(AUnmadeCharacter* Player)
 {
-    if(!IsValid(Player) || !GetWorld() || bLaterRealmSaveRejected)return false;
+    if(!IsValid(Player) || !GetWorld() || Player->GetWorld()!=GetWorld() || bLaterRealmSaveRejected)return false;
+    if(!Player->CanCommitCheckpoint())return false;
     const FVector Current=Player->GetActorLocation();
     for(const auto& Edge:UnmadeCore::AtlasPassages)
     {
@@ -91,22 +92,12 @@ bool AUnmadePrototypeHub::TryTravelAtlas(AUnmadeCharacter* Player)
             }
             const auto PreviousLater=LaterRealm.Snapshot();
             const auto PreviousFrontier=Frontier.Snapshot();
-            const bool bNewLater=LaterRealm.Visit(Destination)==UnmadeCore::LaterResult::Visited;
-            const bool bNewFrontier=Frontier.Visit(Destination)==UnmadeCore::FrontierEvent::Advanced;
-            if((bNewLater||bNewFrontier) && !WriteWorldSnapshot())
-            {
-                LaterRealm.Restore(PreviousLater);
-                Frontier.Restore(PreviousFrontier);
-                return false;
-            }
+            LaterRealm.Visit(Destination);Frontier.Visit(Destination);
             const FVector Arrival=RealmOrigin(Destination)+FVector(0,-1170,135);
             PrepareRealmGeometry(Arrival,100000);
-            if(!Player->SetActorLocation(Arrival,false,nullptr,ETeleportType::TeleportPhysics))
-            {
-                LaterRealm.Restore(PreviousLater);
-                Frontier.Restore(PreviousFrontier);
-                if(bNewLater||bNewFrontier)WriteWorldSnapshot();
-                return false;
+            const int32 Route=Destination==UnmadeCore::Realm::WidowedRain?0:Destination==UnmadeCore::Realm::HearthBeneath?1:-1;
+            if(!Player->CommitCheckpointMove(Arrival,Route,[&]{return WriteWorldSnapshot();})){
+                LaterRealm.Restore(PreviousLater);Frontier.Restore(PreviousFrontier);return false;
             }
             if(GEngine)UnmadeRpgFeedback(-1,10.f,FColor::Cyan,
                 FString::Printf(TEXT("PASSAGE OPEN: %s. Listen to local witnesses before acting."),

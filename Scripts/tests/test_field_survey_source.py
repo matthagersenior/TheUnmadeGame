@@ -7,7 +7,7 @@ class FieldSurveySource(unittest.TestCase):
         source=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadePlayableEncounters.cpp').read_text()
         self.assertIn('Distance>FMath::Square(260.f)',source)
         self.assertIn('LineTraceTestByChannel',source)
-        self.assertLess(source.index('SaveGameToSlot'),source.index('FieldSurveyStages=Save->FieldSurveyStages'))
+        self.assertLess(source.index('CommitFieldSurveyStage('),source.index('SetActorEnableCollision(false)'))
         self.assertIn('legacy->Version==1&&legacy->Stages.Num()==6',source)
         self.assertIn('stage<0||stage>2',source)
         self.assertIn('Previous<2',source)

@@ -23,7 +23,7 @@ class ResidentWiring(unittest.TestCase):
         player=txt("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         npc=txt("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")
         self.assertIn("Hub->RecordResidentConversation(Target->GetStableId())",player)
-        self.assertIn("Hub->RecordResidentAid(Target->GetStableId())",player)
+        self.assertIn("Hub->RecordResidentAid(Target->GetStableId(),AlreadyWitnessed)",player)
         self.assertIn("GetResidentReturnLine(NpcId,CurrentHome)",npc)
     def test_ci(self):
         self.assertIn("Tests/npc/resident_continuity_test.cpp",

@@ -10,6 +10,12 @@
 namespace UnmadeCore {
 enum class FinalAct:int { Veil=0, Unmasked=1, AnswerPending=2,
     OtherMorning=3, EchoAwake=4, EchoSettled=5 };
+// A dead actor for the preceding phase is not a pending defeat of the new
+// durable phase; its next Tick still needs to configure the new health bar.
+inline bool PendingFinalDefeat(bool defeated,int configuredAct,FinalAct durableAct){
+ return defeated&&configuredAct==static_cast<int>(durableAct)&&
+     (durableAct==FinalAct::Veil||durableAct==FinalAct::Unmasked||durableAct==FinalAct::EchoAwake);
+}
 enum class Morning:int { Unchosen=0, Anchor=1, Many=2 };
 enum class FinalResult { Locked, MaskBroken, TrueVictory, NewMorning,
     EchoStarted, EchoDefeated, AlreadyDone, WrongStage, Invalid };
@@ -133,6 +139,24 @@ public:
     }
 private:FinalSnapshot state_{};
 };
+// Stage the real return position before the synchronous combined save captures
+// the player. The caller owns movement; no quest, item or earlier choice resets.
+enum class FinalMorningCommit { Unavailable, Applied, RelocationFailed, SaveFailed };
+template<class Position,class Move,class Writer>
+FinalMorningCommit CommitFinalMorningAt(FinalJourney& story,Morning choice,
+    const Position beforePosition,const Position destination,Move move,Writer write){
+    const auto before=story.Snapshot();
+    if(story.ChooseWorld(choice)!=FinalResult::NewMorning)return FinalMorningCommit::Unavailable;
+    if(!move(destination)){
+        story.Restore(before);move(beforePosition);
+        return FinalMorningCommit::RelocationFailed;
+    }
+    if(!write()){
+        story.Restore(before);move(beforePosition);
+        return FinalMorningCommit::SaveFailed;
+    }
+    return FinalMorningCommit::Applied;
+}
 struct FinalBeat {
     FinalMove move=FinalMove::Still;
     FinalAttack attack=FinalAttack::Bell;

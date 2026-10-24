@@ -1,10 +1,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Save/UnmadeServiceCommitRules.h"
+#include "Templates/Function.h"
 #include "GameFramework/Actor.h"
 #include "NPC/UnmadeNpcDecisionRules.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
 #include "World/UnmadeLivingWorldRules.h"
+#include "World/UnmadeTimedProgressRules.h"
 #include "World/UnmadeWitnessEchoRules.h"
 #include "World/UnmadeWitnessBraidRules.h"
 #include "World/UnmadeWitnessDispatchRules.h"
@@ -20,12 +23,17 @@
 #include "World/UnmadeMaterialConsequencesRules.h"
 #include "World/UnmadeLivingEconomyRules.h"
 #include "World/UnmadeBesHouseholdRules.h"
+#include "World/UnmadeHearthPetitionRules.h"
+#include "World/UnmadePetitionRelayRules.h"
+#include "World/UnmadeCrossRealmCarryRules.h"
+#include "World/UnmadeCrossRealmCombatRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeUnpaidShiftSceneRules.h"
 #include "World/UnmadeCommunityConsequences.h"
 #include "World/UnmadeAfterlightRules.h"
 #include "World/UnmadeFrontierHazardRules.h"
 #include "World/UnmadeRealmAftermathRules.h"
+#include "World/UnmadeDiscoveryCivicRules.h"
 #include "World/UnmadeLaterRealmRules.h"
 #include "World/UnmadeCampaignSpineRules.h"
 #include "World/UnmadeEchoQuestRules.h"
@@ -39,6 +47,8 @@
 #include "World/UnmadeExpeditionRegistry.h"
 #include "World/UnmadeRealmJourneyRules.h"
 #include "World/UnmadeExpeditionRules.h"
+#include "World/UnmadeArenaTacticsRules.h"
+#include "World/UnmadeEvidenceCounterplayRules.h"
 #include "World/UnmadeIdentityRules.h"
 #include "World/UnmadeAdventureDepthRules.h"
 #include "Items/UnmadeItemRules.h"
@@ -70,9 +80,13 @@ public:
     void PrepareRealmGeometry(const FVector& At,int Limit=48);
     const TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>>& CachedEnemies()const{return RuntimeEnemies;}
     FName ServiceWorkCue(FName Person,const FVector& At)const;
-    bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected;}
+    bool HasRejectedWorld()const{return !bFieldSurveySaveUsable||bExpeditionSaveRejected||bIdentitySaveRejected||bDepthSaveRejected||bCrossRealmCarryRejected||bExperienceRejected||bRoadSaveRejected||bCinderholdSaveRejected||bAfterlightSaveRejected||bRealmAftermathSaveRejected||bLaterRealmSaveRejected||bEchoSaveRejected||bResonanceSaveRejected||bGuardianSaveRejected||bFinalSaveRejected||bResidentContinuityRejected||bWitnessEchoRejected||bWitnessBraidRejected||bWitnessDispatchRejected||bWitnessReturnRejected||bRealityConsequenceRejected||bOuterReactionsRejected||bMaterialSaveRejected||bLivingEconomyRejected||bBesHouseholdRejected||bHearthPetitionRejected||bPetitionRelayRejected;}
     bool IsWorldReady()const{return bWorldReady;}
-    bool SavePlayerSession(AUnmadeCharacter* Player){return WriteWorldSnapshot(Player);}
+    bool SaveRecoveryState(AUnmadeCharacter* Player);
+    bool SavePlayerSession(AUnmadeCharacter* Player);
+    bool CaptureWorldSnapshot(class UUnmadePrototypeSave* Save);
+    bool HasPendingDefeatReceipts()const;
+    bool SaveNpcMemories();
     AUnmadePrototypeHub();
     bool TryExperienceInteraction(AUnmadeCharacter* Player,double Competing);
     bool RecordExperienceConversation(FName Id,AUnmadeCharacter* Player);
@@ -103,8 +117,8 @@ public:
     double GetWorldClockSeconds() const { return Clock.ElapsedSeconds(); }
     void ApplyRiteEnvironment(UnmadeCore::RiteId Id,double Duration,bool Mastered);
     /** One witnessed, local Tenfold cast updates architecture, combat and civic memory. */
-    bool RecordRealityConsequence(UnmadeCore::RiteId Id,double Duration,bool Mastered,
-                                  const FVector& CastPosition);
+    bool CommitRiteCast(AUnmadeCharacter* Player,UnmadeCore::RiteId Id,double Duration,bool Mastered,
+                        TFunctionRef<bool()> SaveCast,bool& CivicApplied);
     UnmadeCore::RealityConsequenceView RealityConsequenceAt(FVector Position) const;
     int32 GetRealmHazardPercent(FVector Position) const;
     int32 GetRealmTradeTrustBonus(FVector Position) const;
@@ -126,6 +140,8 @@ public:
     bool TryCinderholdAbility(AUnmadeCharacter* Player,int32 Ability,int32 Choice=0);
     bool RecordCinderholdConversation(FName StableId);
     FString GetCinderholdResidentLine(FName StableId) const;
+    /** Local work routine unlocked only after the resident receives the saved report. */
+    bool GetCinderholdAccordRoutineTarget(FName Id,bool bNight,FVector& Out) const;
     FString GetCinderholdJournal() const;
     bool RecordCinderholdElderDefeat(class AUnmadeEnemyCharacter* Elder);
     bool IsCinderholdElderResolved() const { return !bCinderholdSaveRejected&&Cinderhold.Resolved(); }
@@ -142,6 +158,13 @@ public:
     bool RecordBesHouseholdConversation(FName StableId);
     void MaybePlayBesReturnScene(FName StableId);
     bool TryBesHouseholdInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryHearthPetitionInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool TryPetitionRelayInteraction(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
+    bool RecordPetitionRelayConversation(FName StableId);
+    FString GetPetitionRelayResidentLine(FName StableId)const;
+    FString GetPetitionRelayJournal()const;
+    FString GetHearthPetitionJournal()const;
+    FString GetHearthPetitionResidentLine(FName StableId)const;
     /** Authored timed subtitle/shot/foley events; binds to UMG and Sequencer.
         Without production sound assets the captions still work offline. */
     UPROPERTY(BlueprintAssignable,Category="Unmade|Unpaid Shift")
@@ -190,6 +213,7 @@ public:
     /** True only when a real interaction advanced a quest; completion flag is output. */
     bool TryResidentVillageTask(FName ResidentId, bool& bCompleted);
     void TryFactionConversation(FName ResidentId);
+    bool ResolvePreviewedCommit(FName Scope,int32 Choice);
     bool ResolveNearbyFaction(UnmadeCore::FactionEnding Outcome);
     bool GetNearbyCommitPreview(int32 Choice,FName& Scope,FString& Warning) const;
     bool TryTravelFrontier(AUnmadeCharacter* Player);
@@ -203,6 +227,8 @@ public:
     /** Returns true when a closer physical aftershock control/clue handled E. */
     bool InspectRealmAftermathSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryRealmAftermathConversation(FName ResidentId);
+    FString GetDiscoveryCivicResidentLine(FName Id) const;
+    bool GetDiscoveryCivicRoutineTarget(FName Id,bool AtNight,FVector& Out) const;
     bool ResolveNearbyRealmAftermath(int32 Choice);
     bool InspectLaterRealmSite(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool TryLaterRealmConversation(FName ResidentId);
@@ -212,7 +238,6 @@ public:
     int32 GetEchoQuestEnding(UnmadeCore::Realm Realm) const {return EchoQuest.Ending(Realm);}
     int32 GetEchoQuestEvidence(UnmadeCore::Realm Realm) const {return EchoQuest.Evidence(Realm);}
     int32 GetRealmResonanceStage(UnmadeCore::Realm Realm) const {return Resonance.Stage(Realm);}
-    bool RecordNearbyRealmRite(AUnmadeCharacter* Player,UnmadeCore::RiteId Id);
     bool InspectResonanceArchive(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     UnmadeCore::GuardianOutcome GetRealmGuardianOutcome(UnmadeCore::Realm Realm) const {
         return Guardians.Outcome(Realm);
@@ -231,7 +256,7 @@ public:
     FString DescribeUnansweredRoad(AUnmadeCharacter* Player) const;
     bool InspectUnansweredRoad(AUnmadeCharacter* Player,double CompetingNpcDistanceSq);
     bool RecordResidentConversation(FName ResidentId);
-    bool RecordResidentAid(FName ResidentId);
+    bool RecordResidentAid(FName ResidentId,bool AlreadyWitnessed=false);
     FString GetResidentReturnLine(FName ResidentId,UnmadeCore::Realm Home) const;
     bool CommitFinalMorning(AUnmadeCharacter* Player,UnmadeCore::Morning Choice);
     bool WakeFinalEcho();
@@ -275,12 +300,19 @@ public:
     void BuildAdventureDepth();
     void RefreshAdventureDepth();
     bool TryDepthInteraction(AUnmadeCharacter* Player,int Action,double Competing=1000000.);
-    bool UseDepthFieldKit(AUnmadeCharacter* Player);
+    UnmadeCore::FieldKitResult UseDepthFieldKit(AUnmadeCharacter* Player);
     bool UseDepthPower(AUnmadeCharacter* Player);
     bool SelectDepthTechnique(int Arc,AUnmadeCharacter* Player);
     FString GetDepthJournal()const;
+    FString GetCrossRealmCarryJournal()const;
+    FString GetCrossRealmReviewJournal()const;
+    FString GetCrossRealmCarryRecipientLine(FName ResidentId)const;
+    FString GetCrossRealmCombatRecipientLine(FName ResidentId)const;
     FString GetDepthReaction(FName Person)const;
     FString GetDepthPrompt(AUnmadeCharacter* Player)const;
+    // Saved, local return-road work sites; no remote NPC knowledge or teleport.
+    bool GetPublicAccordRoutineTarget(FName ResidentId,bool AtNight,FVector& Out)const;
+    FName GetPublicAccordWorkCue(FName ResidentId,const FVector& At,bool AtNight)const;
     UnmadeCore::WeaponStyle PlayerWeaponStyle(UnmadeCore::ItemId Legacy)const;
     int GetActiveMastery()const{auto* S=Depth.Arc(Depth.Active());return bDepthSaveRejected||!S?0:S->training;}
     TArray<FString> RpgHistory;
@@ -288,16 +320,24 @@ public:
     FString RpgNotice;
     uint64 RpgNoticeSerial=0;
     void NotifyRpg(const FString& Text){RpgNotice=Text;++RpgNoticeSerial;if(RpgHistory.IsEmpty()||RpgHistory.Last()!=Text){RpgHistory.Add(Text);if(RpgHistory.Num()>100)RpgHistory.RemoveAt(0);}}
-    int DepthPendingArc=-1,DepthPendingChoice=0;
-    double DepthConfirmUntil=0;
+    UnmadeCore::ScopedServiceConfirmation DepthConfirmation;
     bool bDepthSaveRejected=false;
     UnmadeCore::AdventureDepth Depth;
+    UnmadeCore::CrossRealmCarry CrossRealmCarry;
+    bool bCrossRealmCarryRejected=false;
     std::array<UnmadeCore::RealmChallenge,9> DepthChallenges;
     TArray<TWeakObjectPtr<class AUnmadeEnemyCharacter>> DepthRetaliators;
     std::array<double,9> NextDepthThreatSave{};
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthEvidenceActors,DepthCacheActors;
     TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthSecretGates;
     TArray<TWeakObjectPtr<class ATextRenderActor>> DepthChallengeSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> DepthWitnessPlanSigns;
+    // Transient: the player must hear a real local witness and apply the map at a control.
+    std::array<double,9> DepthWitnessBriefUntil{};
+    TArray<TWeakObjectPtr<class ATextRenderActor>> DepthAccordSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> DepthCrossRealmReceiptSigns;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthCrossRealmReviewActors;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> DepthAccordWorkActors;
     void BuildIdentity();
     void RefreshIdentity();
     bool TryIdentityInteraction(AUnmadeCharacter* Player,double Competing,bool Survey=false);
@@ -334,7 +374,8 @@ private:
     bool ConfirmExpeditionDecision(int Arc,int Kind,int Value);
     UnmadeCore::PlayerExperience Experience;
     bool bExperienceRejected=false;
-    double NextExperienceRefresh=0,ExperienceWaitConfirm=-1;
+    double NextExperienceRefresh=0;
+    UnmadeCore::ScopedServiceConfirmation ExperienceRestConfirmation;
     std::array<double,9> WingRelayDeadline{};
     mutable TArray<FVector> EscortTrail;
     TWeakObjectPtr<class AUnmadeEnemyCharacter> WingObserver;
@@ -344,7 +385,6 @@ private:
     void BuildPlayerExperience();
     void RefreshPlayerExperience();
     bool CommitExperience(const UnmadeCore::PlayerExperience& Before,AUnmadeCharacter* Player);
-    bool ExperienceScene(int Realm,int Scene,AUnmadeCharacter* Player);
     bool bBuilt = false;
     bool bExpeditionSaveRejected=false;
     UnmadeCore::Expeditions Expeditions;
@@ -353,19 +393,41 @@ private:
     double NextExpeditionRefresh=0;
     std::array<double,9> ExpeditionReleaseUntil{};
     TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionHazardSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> CrossRealmCombatSigns;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionEvidenceSigns;
+    TArray<TWeakObjectPtr<class AStaticMeshActor>> ExpeditionFractureActors;
+    TArray<TWeakObjectPtr<class ATextRenderActor>> ExpeditionFractureSigns;
     std::array<double,9> ExpeditionHazardQuiet{};
     std::array<double,9> ExpeditionReleaseReady{};
+    // The boss counter is transient: no extra rewards, save flags or repeatable farming.
+    std::array<UnmadeCore::ArenaCounter,9> ArenaCounters{};
+    // Transient and one active encounter only: evidence remains in its original save.
+    std::array<UnmadeCore::EvidenceCounterplay,9> EvidenceCounters{};
+    std::array<double,9> ArenaShelterUntil{};
+    // Cache visible state: avoid 36 full-world actor scans per 0.5s refresh.
+    std::array<int,9> ArenaShelterVisible{}, ArenaAftermathVisible{};
+    std::array<int,9> CivicAftermathVisible{};
 
     FTimerHandle GossipTimer;
     FTimerHandle WorldSaveTimer;
     UPROPERTY(Transient)
     TObjectPtr<ADirectionalLight> Sunlight;
     UnmadeCore::LivingWorldClock Clock;
+    UnmadeCore::TimedProgressRetry MaterialDayRetry,SettlementVisitRetry;
+    bool bNpcMemorySavePending=false;
     UnmadeCore::RealityConsequenceLedger RealityLedger; // v1: Reach, do not migrate
     UnmadeCore::OuterRealmReactions OuterReactions; // eight isolated world histories
     UnmadeCore::MaterialWorld Materials;
     UnmadeCore::LivingEconomy LivingTrades;
     UnmadeCore::BesHousehold BesHousehold;
+    UnmadeCore::HearthPetition HearthPetition;
+    UnmadeCore::PetitionRelay PetitionRelay;
+    bool bPetitionRelayRejected=false;
+    void RefreshPetitionRelayWorld();
+    bool bHearthPetitionRejected=false;
+    FName HearthPetitionPendingTag;
+    double HearthPetitionConfirmUntil=-1.0;
+    void RefreshHearthPetitionWorld();
     UnmadeCore::CinderholdAdventure Cinderhold;
     bool bCinderholdSaveRejected=false;
     int32 CinderholdMaintenanceTurns=0;
@@ -466,6 +528,9 @@ private:
     UnmadeCore::RealmResonanceJourney Resonance;
     bool bResonanceSaveRejected=false;
     void BuildRealmResonance();
+    bool StageNearbyRealmRite(AUnmadeCharacter* Player,UnmadeCore::RiteId Id,
+                             int32& Index,UnmadeCore::ResonanceResult& Result);
+    void PublishRealmResonance(int32 Index,UnmadeCore::ResonanceResult Result);
     void RefreshRealmResonanceWorld();
     UnmadeCore::GuardianChronicle Guardians;
     UnmadeCore::CommitmentGate GuardianCommitGate;
@@ -496,12 +561,13 @@ private:
     UnmadeCore::DayPhase LastAmbientPhase = UnmadeCore::DayPhase::Day;
     void RestoreLivingWorld();
     void SaveLivingWorld();
+    bool CommitWorldEvent(FName Event,FName Subject);
+    bool CommitRealmAftermathEvent(UnmadeCore::Realm Realm,int32 Choice);
     bool WriteWorldSnapshot(AUnmadeCharacter* StrainOwner=nullptr);
     int32 ReadStoryChoice() const;
     void SpawnLoreSite(UnmadeCore::District District, FName SiteId,
         const TCHAR* Name, const TCHAR* DayLine, const TCHAR* NightLine, FVector Position);
     void SpreadLocalRumors();
-    void SaveCitizens();
     void SpawnBlock(FVector Center, FVector Scale, FName Label);
     void SpawnCitizen(const UnmadeCore::ResidentSpec& Resident);
     void BuildVillages();

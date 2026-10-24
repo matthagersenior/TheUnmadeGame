@@ -17,6 +17,11 @@ int main(){
     assert(ResidentContinuityIndex(nullptr)==-1);
     assert(ResidentContinuityIndex("npc.fake.return.001")==-1);
     assert(ResidentContinuityId(82)==nullptr);
+    // A changed public world does not create a personal encounter history.
+    for(bool known:{false,true})for(bool morning:{false,true}){
+        assert(std::strstr(ResidentContinuityLine(Familiarity::Stranger,false,known,morning),"begin"));
+        assert(std::strstr(ResidentContinuityLine(Familiarity::Recognized,false,known,morning),"first meeting"));
+    }
     ResidentContinuity journal;
     assert(journal.Talk(Residents[0].id,1)==EncounterEvent::FirstHello);
     assert(journal.Level(Residents[0].id)==Familiarity::Recognized);

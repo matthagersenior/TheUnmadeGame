@@ -1,15 +1,15 @@
 #pragma once
 namespace UnmadeCore {
-struct IdentitySpec{const char* mechanism;const char* hint;const char* ambience;};
+struct IdentitySpec{const char* mechanism;const char* hint;const char* ambience;const char* hunt_task;const char* survey_task;const char* repair_task;};
 inline constexpr IdentitySpec IdentitySpecs[]={
- {"Charter Signal","Light every road signal","crossings"},
- {"Breakwater Pumps","Drain outer pumps; keep middle dark","saltwake"},
- {"Kiln Pressure","Open two intake valves; close exhaust","cinderhold"},
- {"Oath Buoys","Float the two downstream buoys","drevlach"},
- {"Choir Counterweights","Ground only the first counterweight","orravane"},
- {"Yesterday Seams","Expose only the oldest seam","vathless"},
- {"Census Lamps","Leave only the unlisted lamp lit","eillun"},
- {"Root Grafts","Restore all three grafts","tharniv"},
- {"Threshold Lamps","Light the two boundary lamps","auvren"},
+ {"Charter Signal","Light every road signal","crossings","Challenge four charter guards who deny travelers a safe look at the missing road; take the recovery ration only if wounded.","Survey three charter records, align the Charter Signal, and map refuge-road hazards without merging contradictory witnesses.","After a witnessed Crossings return, repair three charter-road wayposts for daily sanctuary; protect travelers without exposing hidden names."},
+ {"Breakwater Pumps","Drain outer pumps; keep middle dark","saltwake","Fight four water-pump guards enforcing a false claim to rain; take the one-time recovery ration only if wounded.","Read three water-account pump records, align Breakwater Pumps, and chart flooded safe lanes across contradictory shorelines.","After a witnessed Saltwake return, repair three waterline wayposts for daytime shore refuge amid contested rain invoices."},
+ {"Kiln Pressure","Open two intake valves; close exhaust","cinderhold","Confront four heat-channel guards denying access to furnace records; take a recovery ration only if injured.","Examine three heat-channel service records, balance Kiln Pressure, and chart dangerous communal furnace routes.","After a witnessed Cinderhold return, mend three heat-channel wayposts for daytime shelter without reallocating scarce fuel."},
+ {"Oath Buoys","Float the two downstream buoys","drevlach","Break through four debt-pier guards enforcing involuntary future debts; take the recovery ration only when wounded.","Gather three debt-pier records, balance the Oath Buoys, and map safe passage through contested collateral crossings.","After a witnessed Drevlach return, repair three debt-pier wayposts for household refuge while disputed oaths remain open."},
+ {"Choir Counterweights","Ground only the first counterweight","orravane","Defeat four choir-engine guards barring the dissenting span; claim the one-time recovery ration only if injured.","Inspect three choir span-load records, tune Choir Counterweights, and map unsafe routes beneath excluded singers.","After a witnessed Orravane return, repair three choir-span wayposts for daylight safety without silencing dissent."},
+ {"Yesterday Seams","Expose only the oldest seam","vathless","Defeat four ancestry-seam guards suppressing disputed quarry history; claim the recovery ration only if wounded.","Read three ancestry seam records, tune Yesterday Seams, and chart safe lanes between contradictory stone histories.","After a witnessed Vathless return, repair three ancestry-seam wayposts for safe rest without deciding whose past is true."},
+ {"Census Lamps","Leave only the unlisted lamp lit","eillun","Stop four census sentries erasing evidence of occupied beds; claim the one-time recovery ration only if wounded.","Recover three census records, tune Census Lamps, and chart shelter passages without exposing residents' names.","After a witnessed Eillun return, repair three census-shelter posts for daily refuge without publishing private names."},
+ {"Root Grafts","Restore all three grafts","tharniv","Confront four crownroot guards enforcing the unsigned orchard law; take one recovery ration only when wounded.","Compare three crown-era graft records, restore Root Grafts, and chart danger beneath the shared orchard.","After a witnessed Tharniv return, regraft three crownroot public wayposts for shared harvest care under an empty throne."},
+ {"Threshold Lamps","Light the two boundary lamps","auvren","Defeat four threshold sentries barring inspection of the second map; claim the one-time recovery ration only when injured.","Examine three threshold records, align Threshold Lamps, and chart safe passage without declaring either map the origin.","After a witnessed Auvren return, mend three threshold wayposts for open-door refuge while incompatible honest maps remain."},
 };
 }

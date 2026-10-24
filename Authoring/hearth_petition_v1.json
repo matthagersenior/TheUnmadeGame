@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "title": "The Hearth Petition",
+  "stable_quest_id": "cinderhold.hearth_petition.v1",
+  "realm": "Cinderhold",
+  "prerequisite": "Bes personally reported arrears; player's physical home visit",
+  "stages": [
+    {
+      "id": 0,
+      "label": "Unheard",
+      "objective": "Listen to Bes and inspect his actual home"
+    },
+    {
+      "id": 1,
+      "label": "Book examined",
+      "actor_tag": "Bes.MissedWageBook",
+      "objective": "Ask Rheva to corroborate the municipal wage record"
+    },
+    {
+      "id": 2,
+      "label": "Municipal evidence",
+      "actor_tag": "Petition.CivicLedger",
+      "objective": "At the two physical petition tables review one permanent course"
+    },
+    {
+      "id": 3,
+      "label": "Document chosen",
+      "choice_tags": [
+        "Petition.PrivateChoice",
+        "Petition.PublicChoice"
+      ],
+      "objective": "Return the following in-world day and speak to Bes"
+    },
+    {
+      "id": 4,
+      "label": "Acknowledged",
+      "actor_tag": "npc.cinderhold.courier.001",
+      "objective": "Return later: wages and household supplies remain independent"
+    }
+  ],
+  "outcomes": [
+    {
+      "ending": 1,
+      "id": "confidential",
+      "marker": "Petition.PrivateMarker",
+      "consequence": "Confidential record preserves refuge privacy without paying arrears",
+      "bes_line": "Privacy protects the household; the wages remain owed."
+    },
+    {
+      "ending": 2,
+      "id": "redacted_public",
+      "marker": "Petition.PublicMarker",
+      "consequence": "Public redacted petition requests a civic accounting, not conviction or payment",
+      "bes_line": "Do not turn the home into a spectacle; the city must answer its books."
+    }
+  ],
+  "scenes": [
+    {
+      "cue": "hearth_book",
+      "shot": "Tight frame on missed-wage book inside the enterable home",
+      "foley": "ledger page and nearby hearth",
+      "subtitle": "An absence in the pay ledger is not the absence of a worker."
+    },
+    {
+      "cue": "corroboration",
+      "shot": "Rheva at her true municipal record",
+      "foley": "page turn and soft municipal room",
+      "subtitle": "I verified these marks. I did not pay them."
+    },
+    {
+      "cue": "decision",
+      "shot": "Both choice stations in frame; hold until deliberate confirmation",
+      "foley": "quiet street and paper",
+      "subtitle": "Confidential protection, or a public claim without names."
+    },
+    {
+      "cue": "return",
+      "shot": "Return to the same resident on a later day",
+      "foley": "familiar cart and changed street",
+      "subtitle": "The record remains. So does the work."
+    }
+  ],
+  "asset_status": "authoring only—not recorded, imported, compiled or rendered",
+  "permanent_flags": "optional HearthPetitionState, outside old schema-1 wage and inventory fields"
+}

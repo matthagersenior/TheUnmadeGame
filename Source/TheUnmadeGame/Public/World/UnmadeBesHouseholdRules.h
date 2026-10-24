@@ -175,6 +175,26 @@ public:
 private:
     Snapshot record_{};
 };
+enum class HouseholdPressure { Unreported, Unpaid, ColdHousehold, Stoppage, Guarantee, Restitution };
+inline HouseholdPressure CommunityPressure(const BesHouseholdSnapshot& s,int day) noexcept {
+ if(day<s.day||s.phase==static_cast<int>(BesPhase::Unheard))return HouseholdPressure::Unreported;
+ if(s.phase==static_cast<int>(BesPhase::Settled))return HouseholdPressure::Restitution;
+ if(s.phase==static_cast<int>(BesPhase::Walkout))return HouseholdPressure::Stoppage;
+ if(s.guaranteeOwed>0||s.meraGuaranteeUsed)return HouseholdPressure::Guarantee;
+ if(s.heatBaskets==0||s.daysCold>1)return HouseholdPressure::ColdHousehold;
+ return HouseholdPressure::Unpaid;
+}
+inline const char* HouseholdPressureLine(HouseholdPressure state) noexcept {
+ switch(state) {
+ case HouseholdPressure::Unreported:return "No named wage report has been witnessed.";
+ case HouseholdPressure::Unpaid:return "Unpaid wages remain a claim, distinct from voluntary aid.";
+ case HouseholdPressure::ColdHousehold:return "The hearth needs actual supplies; warmth does not erase wages.";
+ case HouseholdPressure::Stoppage:return "The work stoppage changes the neighborhood until restitution is made.";
+ case HouseholdPressure::Guarantee:return "Mera's private guarantee remains an actual debt to her household.";
+ case HouseholdPressure::Restitution:return "The wages and private guarantee were repaid from actual employer funds.";
+ }
+ return "";
+}
 inline const char* BesLine(BesPhase phase,int owed,int heat,int daysCold)noexcept{
     switch(phase){
     case BesPhase::Unheard:

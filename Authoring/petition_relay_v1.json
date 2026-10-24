@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "origin_quest": "cinderhold.hearth_petition.v1",
+  "quest_id": "the_unmade.petition_relay.v1",
+  "title": "The Petition That Had To Travel",
+  "realms": [
+    "Cinderhold",
+    "Saltwake",
+    "Crossings"
+  ],
+  "stage_contract": [
+    "Collect document only after Bes actually acknowledges petition",
+    "Hand copy to Mera in Saltwake personally",
+    "Return after a later in-world day and take Mera's reply personally",
+    "Deliver reply to Orrel in the Crossings personally"
+  ],
+  "stable_tags": [
+    "Relay.CinderholdCopy",
+    "Relay.SaltwakePrivate",
+    "Relay.SaltwakePublic",
+    "Relay.CrossingsPrivate",
+    "Relay.CrossingsPublic"
+  ],
+  "witness_ids": [
+    "npc.cinderhold.courier.001",
+    "npc.saltwake.courier.001",
+    "npc.bridgekeeper.001"
+  ],
+  "branches": {
+    "confidential": {
+      "outcome": 1,
+      "saltwake": "Relay.SaltwakePrivate",
+      "crossings": "Relay.CrossingsPrivate",
+      "tension": "Mera protects privacy but fears the private ledger will be ignored"
+    },
+    "redacted_public": {
+      "outcome": 2,
+      "saltwake": "Relay.SaltwakePublic",
+      "crossings": "Relay.CrossingsPublic",
+      "tension": "Mera supports documenting arrears but questions the harm from public pressure"
+    }
+  },
+  "scene_cues": [
+    {
+      "stage": 1,
+      "place": "Bes's return road",
+      "shot": "Traveler physically lifts copy; camera preserves privacy seal",
+      "sound": "envelope and footfall",
+      "subtitle": "A petition does not walk by itself."
+    },
+    {
+      "stage": 2,
+      "place": "Mera's Saltwake route",
+      "shot": "Two people face one another at the local courier's actual station",
+      "sound": "salt rain and paper",
+      "subtitle": "It is not my consent to lend again."
+    },
+    {
+      "stage": 3,
+      "place": "Next Saltwake morning",
+      "shot": "Same woman, new day, returns signed reply to the traveler",
+      "sound": "deliberate fold of paper",
+      "subtitle": "I have had a morning to disagree."
+    },
+    {
+      "stage": 4,
+      "place": "Orrel's Crossings bridge",
+      "shot": "Orrel physically receives and examines the reply",
+      "sound": "river beneath a worked stone bridge",
+      "subtitle": "A record has arrived. The debt has not vanished."
+    }
+  ],
+  "artifact_status": "source authoring and portable tests only; not imported/rendered",
+  "invariants": [
+    "no remote NPC awareness",
+    "no automatic wages, loans or loot",
+    "parent petition remains authoritative",
+    "no main campaign gate"
+  ]
+}

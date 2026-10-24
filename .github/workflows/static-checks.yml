@@ -36,6 +36,34 @@ jobs:
           /tmp/unmade-style
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/defense_receipt_test.cpp -o /tmp/unmade-defense-receipts
           /tmp/unmade-defense-receipts
+      - name: Test nine distinct timed arena counters and persistent rescue outcomes
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/nine_realm_tactics_test.cpp -o /tmp/unmade-nine-realm-tactics
+          /tmp/unmade-nine-realm-tactics
+      - name: Test civic reverberation of petition choices and changing household debt
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/civic_reverberation_test.cpp -o /tmp/unmade-civic-reverberation
+          /tmp/unmade-civic-reverberation
+      - name: Test cross-realm physical petition and guarded reply custody
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/petition_relay_test.cpp -o /tmp/unmade-petition-relay
+          /tmp/unmade-petition-relay
+      - name: Test permanent Hearth Petition choices and next-day returns
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/world/hearth_petition_test.cpp -o /tmp/unmade-hearth-petition
+          /tmp/unmade-hearth-petition
+      - name: Test twelve tactics, first journey, confluences and household states
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/integration/pre_pc_gameplay_depth_test.cpp -o /tmp/unmade-gameplay-depth
+          /tmp/unmade-gameplay-depth
+      - name: Test crouched creature detection and lasting alertness
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/creature_awareness_test.cpp -o /tmp/unmade-creature-awareness
+          /tmp/unmade-creature-awareness
+      - name: Test living wildlife navigation and ordinary group pressure
+        run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/combat/living_encounter_ecology_test.cpp -o /tmp/unmade-living-encounters
+          /tmp/unmade-living-encounters
       - name: Parse first-PC PowerShell entry points
         shell: pwsh
         run: |
@@ -438,6 +466,72 @@ jobs:
 
       - name: Test ordinary spending, profile recovery and regional crafting dependencies
         run: |
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/combat_recovery_rollback_test.cpp -o /tmp/unmade-combat-recovery
+          /tmp/unmade-combat-recovery
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/counter_threat_recovery_test.cpp -o /tmp/unmade-counter-threat
+          /tmp/unmade-counter-threat
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/status_defeat_reward_test.cpp -o /tmp/unmade-status-defeat
+          /tmp/unmade-status-defeat
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/encounter_interruption_test.cpp -o /tmp/unmade-interruption
+          /tmp/unmade-interruption
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/provision_chronology_test.cpp -o /tmp/unmade-provision-chronology
+          /tmp/unmade-provision-chronology
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/world/encounter_hazard_readiness_test.cpp -o /tmp/unmade-hazard-ready
+          /tmp/unmade-hazard-ready
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/combat/mastery_power_test.cpp -o /tmp/unmade-mastery
+          /tmp/unmade-mastery
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/experience_chronology_test.cpp -o /tmp/unmade-experience-chronology
+          /tmp/unmade-experience-chronology
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/relationship_commit_recovery_test.cpp -o /tmp/unmade-relationships
+          /tmp/unmade-relationships
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/service_confirmation_test.cpp -o /tmp/unmade-service-consent
+          /tmp/unmade-service-consent
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/service_mastery_recovery_test.cpp -o /tmp/unmade-services
+          /tmp/unmade-services
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/rite_cast_recovery_test.cpp -o /tmp/unmade-rite-cast
+          /tmp/unmade-rite-cast
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/named_boss_receipt_test.cpp -o /tmp/unmade-named-boss
+          /tmp/unmade-named-boss
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/combat_memory_retry_test.cpp -o /tmp/unmade-combat-memory
+          /tmp/unmade-combat-memory
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/chronicle_history_recovery_test.cpp -o /tmp/unmade-history
+          /tmp/unmade-history
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/action_consequence_batch_test.cpp -o /tmp/unmade-actions
+          /tmp/unmade-actions
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/reality_travel_recovery_test.cpp -o /tmp/unmade-reality-travel
+          /tmp/unmade-reality-travel
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/component_world_capture_test.cpp -o /tmp/unmade-component-capture
+          /tmp/unmade-component-capture
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/timed_progress_recovery_test.cpp -o /tmp/unmade-timed-progress
+          /tmp/unmade-timed-progress
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/startup_rewards_test.cpp -o /tmp/unmade-startup-rewards
+          /tmp/unmade-startup-rewards
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/profile_handoff_test.cpp -o /tmp/unmade-profile-handoff
+          /tmp/unmade-profile-handoff
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/pending_receipt_session_test.cpp -o /tmp/unmade-pending-session
+          /tmp/unmade-pending-session
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/defeat_retry_recovery_test.cpp -o /tmp/unmade-defeat-recovery
+          /tmp/unmade-defeat-recovery
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/defeat_save_retry_test.cpp -o /tmp/unmade-defeat-retry
+          /tmp/unmade-defeat-retry
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/final_morning_recovery_test.cpp -o /tmp/unmade-final-recovery
+          /tmp/unmade-final-recovery
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/endgame_links_test.cpp -o /tmp/unmade-endgame-links
+          /tmp/unmade-endgame-links
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/echo_guardian_recovery_test.cpp -o /tmp/unmade-echo-guardian
+          /tmp/unmade-echo-guardian
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/realm_return_recovery_test.cpp -o /tmp/unmade-realm-return
+          /tmp/unmade-realm-return
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/realm_local_loops_scenario.cpp -o /tmp/unmade-realm-local
+          /tmp/unmade-realm-local
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/save/living_economy_bounds_test.cpp -o /tmp/unmade-wage-bounds
+          /tmp/unmade-wage-bounds
+          g++ -std=c++17 -Wall -Wextra -Werror -fsanitize=undefined -fno-sanitize-recover=undefined -I Source/TheUnmadeGame/Public Tests/integration/combined_slice_scenario.cpp -o /tmp/unmade-combined-slice
+          /tmp/unmade-combined-slice
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/save/combined_integrity_test.cpp -o /tmp/unmade-combined-integrity
+          /tmp/unmade-combined-integrity
+          g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/save/recovery_commit_test.cpp -o /tmp/unmade-recovery-commit
+          /tmp/unmade-recovery-commit
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/save/session_policy_test.cpp -o /tmp/unmade-session-policy
           /tmp/unmade-session-policy
           g++ -std=c++17 -Wall -Wextra -Werror -I Source/TheUnmadeGame/Public Tests/items/field_craft_test.cpp -o /tmp/unmade-field-craft

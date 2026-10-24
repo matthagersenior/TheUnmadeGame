@@ -8,14 +8,14 @@ class CompleteLoopDependencies(unittest.TestCase):
    if p.name=='UnmadeSaveSession.cpp':continue
    self.assertNotIn('UGameplayStatics::SaveGameToSlot(',p.read_text(),str(p))
    if p.name!='UnmadePlayableEncounters.cpp':self.assertNotIn('TEXT("UnmadePrototypeNPC")',p.read_text(),str(p))
-  survey=source('Private/World/UnmadePlayableEncounters.cpp');self.assertIn('SlotName()==TEXT("UnmadePrototypeNPC")',survey);self.assertIn('FieldSurveyStages=Save->FieldSurveyStages',survey);self.assertIn('UnmadeSave::SaveGameToSlot(Save)',survey)
+  survey=source('Private/World/UnmadePlayableEncounters.cpp');self.assertIn('SlotName()==TEXT("UnmadePrototypeNPC")',survey);self.assertIn('FieldSurveyStages=Save->FieldSurveyStages',survey);self.assertIn('CommitFieldSurveyStage(FieldSurveyStages,i',survey)
   self.assertIn('Save->FieldSurveyStages=FieldSurveyStages',source('Private/World/UnmadePrototypeHub.cpp'))
   s=source('Private/Save/UnmadeSaveSession.cpp')
-  for v in ['CommitWithPrevious','Switching','!ValidStored(*existing)','HasRejectedWorld','HasRejectedSave','_Backup']:self.assertIn(v,s)
+  for v in ['CommitWithPrevious','Handoff.WritesBlocked()','existing->SchemaVersion!=1','HasRejectedWorld','HasRejectedSave','_Backup']:self.assertIn(v,s)
  def test_profile_changes_preserve_existing_records(self):
   s=source('Private/Save/UnmadeSaveSession.cpp');self.assertNotIn('DeleteGameInSlot',s)
   self.assertIn('for(int p=1;p<=3;++p)',s);self.assertIn('DoesSaveGameExist(slot+TEXT("_Backup")',s)
-  self.assertIn('Switching=true;settings->ActiveProfile=p',s)
+  self.assertIn('Handoff.Begin(EffectiveSelection(),{p,backup})',s)
  def test_resume_waits_for_restored_world_and_prepared_geometry(self):
   s=source('Private/Player/UnmadeCharacter.cpp');part=s.split('void AUnmadeCharacter::RestoreSessionWhenReady()',1)[1].split('void AUnmadeCharacter::CaptureSession',1)[0]
   self.assertLess(part.index('IsWorldReady()'),part.index('SetActorLocation'))
@@ -36,7 +36,7 @@ class CompleteLoopDependencies(unittest.TestCase):
   self.assertIn('FormatControls(h->GetTrackedObjective())',ui);self.assertIn('FormatControls(text)',ui);self.assertIn('SignOriginal',world);self.assertIn('prefs->FormatControls',world)
  def test_distance_budget_keeps_economy_clock_independent(self):
   s=source('Private/World/UnmadePrototypeHub.cpp');self.assertIn('DeferredBlocks.Add',s);self.assertIn('PrepareRealmGeometry(player->GetActorLocation())',s);self.assertIn('SimulationInterval',s)
-  self.assertNotIn('SetActorTickEnabled(false)',s);self.assertIn('Clock.Advance',s)
+  self.assertNotIn('SetActorTickEnabled(false)',s);self.assertIn('AdvanceWorldClock(Clock,true,DeltaSeconds)',s)
  def test_prototype_performances_are_distinct_and_stagger_has_priority(self):
   s=source('Public/Combat/UnmadeEncounterPerformanceRules.h');self.assertEqual(len(re.findall(r'\{"',s)),9)
   e=source('Private/Combat/UnmadeEnemyCharacter.cpp');self.assertIn('MotionHeldUntil',e);self.assertIn('MotionMayReplace',e);self.assertIn('EncounterPerformances[Arc]',e);self.assertIn('CurrentMotion==FName(TEXT("Death"))',e)

@@ -3,6 +3,13 @@
 #include <vector>
 #include <cmath>
 namespace UnmadeCore {
+// Unreal gamepad triggers report as analog keys, but can still act as buttons.
+// Movement/look axes remain ineligible for action rebinding.
+// The same controller buttons may serve different actions in gameplay and menus.
+inline bool CanBindPlayerControl(bool valid,bool analog,bool supportedTrigger){return valid&&(!analog||supportedTrigger);}
+// Only an intentional trigger press during rebinding can become an action key.
+// A 65% threshold avoids ambient trigger noise and stick-axis menu drift.
+inline bool ShouldCaptureTriggerAnalog(bool rebinding,bool trigger,float value){return rebinding&&trigger&&std::isfinite(value)&&value>=0.65f;}
 struct ControlLabel {std::string key,display;};
 inline bool LabelWord(unsigned char c){return c>=128||(c>='A'&&c<='Z')||(c>='a'&&c<='z')||(c>='0'&&c<='9')||c=='_';}
 inline std::string FormatControlLabels(const std::string& input,const std::vector<ControlLabel>& labels){
@@ -15,6 +22,9 @@ inline std::string FormatControlLabels(const std::string& input,const std::vecto
 enum class SessionIntent {None,Load,Recover,RecoverCopy,New};
 class SessionConfirmation final {SessionIntent intent_=SessionIntent::None;int profile_=-1;public:
  void Clear(){intent_=SessionIntent::None;profile_=-1;}
+ // Only a repeated press for the same pending intent/slot can discard an unsaved session.
+ // The widget uses this read-only check to avoid resaving on the confirming press.
+ bool Awaiting(SessionIntent intent,int profile)const{return intent!=SessionIntent::None&&profile>=0&&profile<=3&&intent_==intent&&profile_==profile;}
  bool Request(SessionIntent intent,int profile,bool saved){if(intent==SessionIntent::None||profile<0||profile>3){Clear();return false;}if(saved&&intent!=SessionIntent::Recover&&intent!=SessionIntent::RecoverCopy){Clear();return true;}if(intent_==intent&&profile_==profile){Clear();return true;}intent_=intent;profile_=profile;return false;}
 };
 inline bool PhysicalTradeAllowed(bool alive,bool consenting,double distanceSq,bool unobstructed){return alive&&consenting&&std::isfinite(distanceSq)&&distanceSq>=0&&distanceSq<=340.0*340.0&&unobstructed;}

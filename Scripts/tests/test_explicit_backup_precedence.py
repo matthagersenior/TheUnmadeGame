@@ -8,9 +8,10 @@ class BackupOverrideWiring(unittest.TestCase):
   self.assertLess(h.index("if(preferBackup)return backupReadable"),
                   h.index("if(primaryExists&&!compatible)return StoredRecord::Incompatible"))
   s=(ROOT/"Source/TheUnmadeGame/Private/Save/UnmadeSaveSession.cpp").read_text()
-  self.assertIn("GetDefault<UUnmadePlayerPreferences>()->UseBackup",s)
+  self.assertIn("EffectiveSelection().backup",s)
   self.assertIn("auto* backup=Read(slot+TEXT(\"_Backup\"))",s)
-  self.assertIn("if(!existing||!ValidStored(*existing))return false;",s)
+  self.assertIn("if(stored&&(!existing||existing->SchemaVersion!=1))return WriteFailed();",s)
+  self.assertIn("existing&&!ValidStored(*existing,slot)",s)
   self.assertIn("bool SelectProfile(UObject* context,int p,bool backup)",s)
-  self.assertIn("settings->UseBackup=backup;",s)
+  self.assertIn("settings->UseBackup=Selected.backup;",s)
 if __name__=="__main__":unittest.main()

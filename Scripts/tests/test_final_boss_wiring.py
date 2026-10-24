@@ -40,6 +40,15 @@ class FinalBossContracts(unittest.TestCase):
         self.assertIn("WakeFinalEcho(",world)
         self.assertIn("TryFinalInteraction(this,",player)
         self.assertIn("Final.World.",world)
+    def test_morning_return_position_uses_the_combined_transaction(self):
+        world=src("Source/TheUnmadeGame/Private/World/UnmadeFinalWorld.cpp")
+        transition=world.split("bool AUnmadePrototypeHub::CommitFinalMorning",1)[1].split("bool AUnmadePrototypeHub::WakeFinalEcho",1)[0]
+        self.assertIn("CommitFinalMorningAt(FinalStory,Choice",transition)
+        self.assertIn("Player->GetActorLocation(),FVector(0,220,155)",transition)
+        self.assertIn("WriteWorldSnapshot(Player)",transition)
+        self.assertIn("FinalMorningCommit::RelocationFailed",transition)
+        self.assertIn("no new morning was saved",transition)
+        self.assertNotIn("Final-world saved; relocation failed",transition)
     def test_ci(self):
         self.assertIn("final_encounter_test.cpp",src(".github/workflows/static-checks.yml"))
 if __name__=="__main__":unittest.main()

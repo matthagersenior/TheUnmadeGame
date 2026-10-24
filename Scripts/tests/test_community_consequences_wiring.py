@@ -20,14 +20,14 @@ class CommunityWorldWiring(unittest.TestCase):
         self.assertIn("RestoreLivingWorld();\n    RefreshCommunityConsequences();",hub)
         first=hub.index("bool AUnmadePrototypeHub::TryResidentVillageTask(")
         last=hub.index("void AUnmadePrototypeHub::TryFactionConversation(",first)
-        self.assertLess(hub.index("if (!WriteWorldSnapshot())",first,last),
+        self.assertLess(hub.index("CommitWorldEvent(FName(\"Player.HelpedVillage\")",first,last),
                         hub.index("RefreshCommunityConsequences();",first,last))
         for start,end in [
             ("bool AUnmadePrototypeHub::ResolveNearbyFaction(","FString AUnmadePrototypeHub::GetCurrentRealmName("),
             ("bool AUnmadePrototypeHub::ResolveNearbyFrontier(","void AUnmadePrototypeHub::BuildFrontiers()")
         ]:
             block=hub[hub.index(start):hub.index(end)]
-            self.assertLess(block.index("if(!WriteWorldSnapshot())"),
+            self.assertLess(block.index("CommitWorldEvent("),
                             block.index("RefreshCommunityConsequences();"))
     def test_npc_locality_and_market_link(self):
         npc=read("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")

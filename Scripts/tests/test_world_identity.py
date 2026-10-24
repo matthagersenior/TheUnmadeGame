@@ -16,5 +16,5 @@ class IdentityTests(unittest.TestCase):
    d=rigs.make_actor(kind);self.assertEqual(len(d['animations']),19)
    self.assertEqual(len({json.dumps(a['samplers']) for a in d['animations']}),19)
  def test_world_state_atomic_and_optional(self):
-  s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeWorldIdentity.cpp').read_text();self.assertIn('Identity=before',s);self.assertIn('WriteWorldSnapshot(p)',s);self.assertLess(s.index('WriteWorldSnapshot(p)'),s.index('Heal(35)'))
+  s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeWorldIdentity.cpp').read_text();self.assertIn('Identity=before',s);self.assertIn('WriteWorldSnapshot(p)',s);self.assertIn('CommitHealing(*p->GetCombat(),heal?35:0',s);self.assertLess(s.index('CommitHealing('),s.index('WriteWorldSnapshot(p)'));self.assertNotIn('if(heal)p->GetCombat()->Heal(35)',s)
   h=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp').read_text();self.assertIn('if(Save->bHasWorldIdentity)',h);self.assertIn('if(bIdentitySaveRejected)return false;',h)

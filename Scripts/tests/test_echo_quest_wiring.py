@@ -34,6 +34,14 @@ class EchoQuestWiring(unittest.TestCase):
         self.assertIn("InspectEchoQuestSite(",player)
         self.assertIn("TryEchoQuestConversation(",player)
         self.assertIn("GetEchoQuestStage(",player)
+    def test_failed_conversation_has_feedback_and_matching_control_guidance(self):
+        echo=source("Source/TheUnmadeGame/Private/World/UnmadeEchoQuestWorld.cpp")
+        conversation=echo.split("bool AUnmadePrototypeHub::TryEchoQuestConversation",1)[1].split("bool AUnmadePrototypeHub::InspectEchoQuestSite",1)[0]
+        self.assertIn("EchoQuest.Restore(Before)",conversation)
+        self.assertIn("Echo conversation could not save",conversation)
+        self.assertIn("Speak again to retry",conversation)
+        self.assertIn("Use the other civic control",echo)
+        self.assertNotIn("changing it requires further testimony",echo)
     def test_floor_and_gates_have_usable_dimensions(self):
         world=source("Source/TheUnmadeGame/Private/World/UnmadeLaterRealmWorld.cpp")
         rules=source("Source/TheUnmadeGame/Public/World/UnmadeRealmGeometryRules.h")

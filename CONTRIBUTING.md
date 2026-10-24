@@ -2,7 +2,7 @@
 
 Use focused branches and squash-merge reviewed pull requests after required source checks pass. Preserve existing main history. Include canon updates with gameplay changes; record historical implementation details in docs/CHANGELOG.md rather than extending README.
 
-The canonical Markdown manuscript is reproducible with Scripts/build_bible.py. Illustrated books are separately versioned editorial snapshots; see docs/publishing.md. Update their latest receipt in the same substantive publishing PR rather than opening a receipt-only PR. Never change artifact hashes without generating and verifying the corresponding files.
+The canonical Markdown manuscript is reproducible with Scripts/build_bible.py. Illustrations and illustrated books are optional, available on request, and never required for gameplay commits, CI, source releases or development completion. Existing art references and publishing tools remain available; see docs/publishing.md. When issuing an illustrated edition, update its receipt in that publishing PR. Never change artifact hashes without generating and verifying the corresponding files.
 
 Use annotated source milestone tags and GitHub releases only against a passing main commit. Mark source milestones as prereleases and state whether engine verification occurred. A source release must not imply a playable executable. Upload illustrated binaries only when distributable inputs and actual artifact QA are available.
 

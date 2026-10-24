@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "source": "UnmadeCore::Arenas and existing expedition boss roster",
+  "artifact_status": "UE graybox source and portable tests only",
+  "encounters": [
+    {
+      "realm": "Crossings",
+      "name": "Split Charter Reversal",
+      "objective": "seal -> road anchor",
+      "window_seconds": 7,
+      "cooldown_seconds": 27,
+      "exposure_seconds": 5,
+      "temporary_shelter_seconds": 0,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    },
+    {
+      "realm": "Saltwake",
+      "name": "Breakwater Backflow",
+      "objective": "floodgate brace -> pressure lock",
+      "window_seconds": 6,
+      "cooldown_seconds": 29,
+      "exposure_seconds": 4,
+      "temporary_shelter_seconds": 7,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    },
+    {
+      "realm": "Cinderhold",
+      "name": "Kiln Exhaust Crossfeed",
+      "objective": "ash return -> common vent",
+      "window_seconds": 8,
+      "cooldown_seconds": 31,
+      "exposure_seconds": 6,
+      "temporary_shelter_seconds": 0,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    },
+    {
+      "realm": "Drevlach",
+      "name": "Foreclosure Counterfoil",
+      "objective": "debtor seal -> ledger anchor",
+      "window_seconds": 7,
+      "cooldown_seconds": 30,
+      "exposure_seconds": 4,
+      "temporary_shelter_seconds": 8,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    },
+    {
+      "realm": "Orravane",
+      "name": "Choir Counterweight",
+      "objective": "high note -> opposing weight",
+      "window_seconds": 6,
+      "cooldown_seconds": 32,
+      "exposure_seconds": 5,
+      "temporary_shelter_seconds": 0,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    },
+    {
+      "realm": "Vathless",
+      "name": "Seam-Shear Brace",
+      "objective": "living seam brace -> tension break",
+      "window_seconds": 9,
+      "cooldown_seconds": 33,
+      "exposure_seconds": 6,
+      "temporary_shelter_seconds": 0,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    },
+    {
+      "realm": "Eillun",
+      "name": "Unlisted Presence",
+      "objective": "occupied bed -> empty census",
+      "window_seconds": 7,
+      "cooldown_seconds": 31,
+      "exposure_seconds": 4,
+      "temporary_shelter_seconds": 8,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    },
+    {
+      "realm": "Tharniv",
+      "name": "Rootcourt Refusal",
+      "objective": "crown graft -> opposite root",
+      "window_seconds": 8,
+      "cooldown_seconds": 34,
+      "exposure_seconds": 5,
+      "temporary_shelter_seconds": 0,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    },
+    {
+      "realm": "Auvren",
+      "name": "Paradox Aperture",
+      "objective": "truthful threshold -> opposite opening",
+      "window_seconds": 6,
+      "cooldown_seconds": 37,
+      "exposure_seconds": 6,
+      "temporary_shelter_seconds": 7,
+      "persistent_consequence_source": "ExpeditionState.boss / rescued / returned",
+      "requires_actual_boss": true,
+      "win_does_not_grant_surrender": true
+    }
+  ]
+}

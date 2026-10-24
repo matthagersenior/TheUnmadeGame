@@ -8,7 +8,7 @@ def src(name):
 class LexiconSourceContract(unittest.TestCase):
     def test_two_clues_reach_player_without_model(self):
         p=src("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
-        self.assertIn('Lexicon->RecordEvidence(FName("evidence.glimpse"))',p)
+        self.assertIn('Lexicon->CommitEvidence(FName("evidence.glimpse"),Save)',p)
         self.assertIn('Lexicon->RecordEvidence(FName("evidence.archivist"))',p)
         self.assertIn('Lexicon->UnderstandsVeyl()',p)
         self.assertNotIn("GetSubsystem<UUnmadeLocalDialogueSubsystem>()->RecordEvidence",p)

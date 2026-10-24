@@ -25,5 +25,5 @@ class RecoveryCopy(unittest.TestCase):
   self.assertIn("UFUNCTION() void RecoverToNewProfile();",source("Source/TheUnmadeGame/Public/UI/UnmadeRpgWidget.h"))
   rules=source("Source/TheUnmadeGame/Public/UI/UnmadePlayerFacingRules.h")
   self.assertIn("RecoverCopy",rules)
-  self.assertIn("intent!=SessionIntent::RecoverCopy",rules)
+  self.assertIn("intent!=SessionIntent::Recover&&intent!=SessionIntent::RecoverCopy",rules)
 if __name__=="__main__":unittest.main()

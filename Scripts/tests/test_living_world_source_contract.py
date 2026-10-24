@@ -97,10 +97,9 @@ class LivingWorldSourceTests(unittest.TestCase):
             self.assertIn("SettlementId::" + village, registry)
         self.assertIn("VisitedSettlementsMask", save)
         self.assertIn("RestoredVillages.Restore", hub)
-        self.assertIn("VillagesVisited.Visit", hub)
-        self.assertIn("VillagesVisited.Restore", hub)
-        self.assertIn("MergeNpcSnapshot(Merged", hub)
-        self.assertNotIn("Save->NpcSnapshots.Reset()", hub)
+        self.assertIn("CommitSettlementVisit(VillagesVisited,Village", hub)
+        self.assertIn("visits=before;return false;", read("Source/TheUnmadeGame/Public/World/UnmadeTimedProgressRules.h"))
+        self.assertIn("ReplaceNpcMemory(Save->NpcSnapshots,Snapshot)", hub)
 
     def test_offline_test_and_combined_scenario(self):
         workflow = read(".github/workflows/static-checks.yml")

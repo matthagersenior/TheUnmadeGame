@@ -20,9 +20,11 @@ class BesHouseholdIntegration(unittest.TestCase):
         self.assertIn("PayAllBesArrears",economy)
         self.assertIn("besOnWalkout",economy)
         self.assertIn("besWalkout",materials)
-        self.assertIn("Materials.AdvanceAllOneDay(Civic,BesHousehold.OnWalkout())",hub)
-        self.assertIn("BesHousehold.AdvanceOneDay(Materials.Town(",hub)
-        self.assertIn("LivingTrades.AdvanceOneDay(Materials.Town(",hub)
+        self.assertIn("CommitMaterialDay(Materials,LivingTrades,BesHousehold,Civic",hub)
+        timed=src("Source/TheUnmadeGame/Public/World/UnmadeTimedProgressRules.h")
+        self.assertIn("next.AdvanceAllOneDay(civic,household.OnWalkout())",timed)
+        self.assertIn("nextHome.AdvanceOneDay(simulated)",timed)
+        self.assertIn("nextWages.AdvanceOneDay(simulated,household.OnWalkout())",timed)
 
     def test_actual_three_sites_and_distinct_reactions(self):
         hub=src("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")

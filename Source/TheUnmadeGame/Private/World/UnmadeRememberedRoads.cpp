@@ -29,7 +29,8 @@ bool Sight(UWorld* World,AUnmadeCharacter* P,FVector At,double Range,AActor* Ign
 }
 FString RouteText(int City,int Route){return Route==1?TEXT("hand-maintained daylight lane and open recess"):
  Route==2?FString(UTF8_TO_TCHAR(RoadCities[City].openLine))+TEXT("; recess shut"):
- Route==3?FString(UTF8_TO_TCHAR(RoadCities[City].sealedLine))+TEXT("; service lane shut"):TEXT("undecided");}
+ Route==3?FString(UTF8_TO_TCHAR(RoadCities[City].sealedLine))+TEXT("; service lane shut"):
+ Route==4&&City==4?TEXT("witnessed shared-kiln accord; kiln and archive open at night"):TEXT("undecided");}
 AUnmadeEnemyCharacter* ActualKeeper(UWorld* World,int City){const FName Tag(*FString::Printf(TEXT("Road.%d.Elder"),City));for(TActorIterator<AUnmadeEnemyCharacter> E(World);E;++E)if(E->ActorHasTag(Tag))return *E;return nullptr;}
 }
 bool AUnmadePrototypeHub::CommitRoads(const UnmadeCore::RememberedRoads& Before,AUnmadeCharacter* StrainOwner){
@@ -145,7 +146,7 @@ bool AUnmadePrototypeHub::TryRoadInteraction(AUnmadeCharacter* Player,double Com
    TEXT("The hearth belongs to this household. Its supplies have a separate tally.");
   Say(FString(UTF8_TO_TCHAR(UnmadeCore::RoadPeople[Person].name))+TEXT(" - ")+Detail+(Kind==9?FString(UTF8_TO_TCHAR(UnmadeCore::RoadPeople[Person].concern)):FString()));
  }
- if(City==4&&RememberedRoads.City(City)->resolution&&!RememberedRoads.City(City)->route)Changed=RememberedRoads.Choose(City,Cinderhold.Save().route)||Changed;
+ if(City==4&&RememberedRoads.City(City)->resolution&&!RememberedRoads.City(City)->route)Changed=(Cinderhold.Save().route==4?RememberedRoads.InheritCinderholdAccord(City,!bCinderholdSaveRejected):RememberedRoads.Choose(City,Cinderhold.Save().route))||Changed;
  if(Changed&&CommitRoads(Before)){
   if(Kind==7&&Person==UnmadeCore::RoadPersonIndex(UnmadeCore::RoadCities[City].sender)&&RememberedRoads.City(City)->returnDay)PlayRoadScene(City,true);
  }return true;
@@ -169,7 +170,7 @@ bool AUnmadePrototypeHub::TryRoadAbility(AUnmadeCharacter* Player,int32 Ability,
  if(!Applied){Say(TEXT("Local ability window already active; no Strain charged."));return true;}
  const int Cost=Ability==0?8:24;if(!Player->SpendRealityStrain(Cost)){RememberedRoads=Before;Say(TEXT("Recover stability or use the physical alternative."));return true;}
  if(Ability==0)RememberedRoads.Inspect(City,Record,GetGameDay());
- if(City==4&&RememberedRoads.City(City)->resolution&&!RememberedRoads.City(City)->route)RememberedRoads.Choose(City,Cinderhold.Save().route);
+ if(City==4&&RememberedRoads.City(City)->resolution&&!RememberedRoads.City(City)->route)(Cinderhold.Save().route==4?RememberedRoads.InheritCinderholdAccord(City,!bCinderholdSaveRejected):RememberedRoads.Choose(City,Cinderhold.Save().route));
  if(!CommitRoads(Before,Player)){Player->RefundRealityStrain(Cost);return true;}
  if(Ability==0)Say(UTF8_TO_TCHAR(UnmadeCore::RoadCities[City].clues[Record]));
  else {if(auto* E=ActualKeeper(GetWorld(),City))E->ExposeToFold(Now,6);Say(TEXT("Fold interrupts this elder and extends active cooling to 18 seconds. E remains sufficient."));}
@@ -187,7 +188,7 @@ bool AUnmadePrototypeHub::RecordRoadConversation(FName StableId){
   Brief=RememberedRoads.Brief(City,Day);Changed=Brief;
   Changed=RememberedRoads.Report(City,Day)||Changed;
  }
- if(City==4&&RememberedRoads.City(City)->resolution&&!RememberedRoads.City(City)->route)Changed=RememberedRoads.Choose(City,Cinderhold.Save().route)||Changed;
+ if(City==4&&RememberedRoads.City(City)->resolution&&!RememberedRoads.City(City)->route)Changed=(Cinderhold.Save().route==4?RememberedRoads.InheritCinderholdAccord(City,!bCinderholdSaveRejected):RememberedRoads.Choose(City,Cinderhold.Save().route))||Changed;
  for(int i=0;i<11;++i)Changed=RememberedRoads.Tell(Person,i,Day)||Changed;
  if(Changed&&CommitRoads(Before)){if(Brief){Say(UTF8_TO_TCHAR(UnmadeCore::RoadCities[City].brief));PlayRoadScene(City,false);}return true;}return false;
 }
@@ -220,6 +221,6 @@ bool AUnmadePrototypeHub::RecordRoadElderDefeat(AUnmadeEnemyCharacter* Elder,int
  if(!GetWorld()||bRoadSaveRejected||!RememberedRoads.City(City)||!IsValid(Elder)||!Elder->ActorHasTag(FName(*FString::Printf(TEXT("Road.%d.Elder"),City)))||!IsValid(Elder->GetCombat())||!Elder->GetCombat()->IsDefeated())return false;
  if(RememberedRoads.City(City)->resolution==1)return true;const auto Before=RememberedRoads;
  if(!RememberedRoads.Resolve(City,1,true,true,GetWorld()->GetTimeSeconds()))return false;
- if(City==4)RememberedRoads.Choose(City,Cinderhold.Save().route);
+ if(City==4)(Cinderhold.Save().route==4?RememberedRoads.InheritCinderholdAccord(City,!bCinderholdSaveRejected):RememberedRoads.Choose(City,Cinderhold.Save().route));
  return CommitRoads(Before);
 }

@@ -1,6 +1,14 @@
 #include "World/UnmadePrototypeHub.h"
+#include "World/UnmadeJourneyGuidanceRules.h"
+#include "Save/UnmadeRecoveryRules.h"
+#include "Save/UnmadeCounterThreatRules.h"
+#include "Save/UnmadeSaveSession.h"
+#include "Combat/UnmadeMasteryRules.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
+#include "World/UnmadePublicAccordDutyRules.h"
+#include "World/UnmadeCrossRealmReviewRules.h"
+#include "World/UnmadeIdentityRegistry.h"
 #include "Player/UnmadeCharacter.h"
 #include "NPC/UnmadeNpcCharacter.h"
 #include "Combat/UnmadeEnemyCharacter.h"
@@ -27,16 +35,45 @@ bool Near(AUnmadeCharacter* p,FVector at,AActor* ignored=nullptr){if(!Alive(p)||
 bool Quiet(UWorld* world,AUnmadeCharacter* p,int a){for(TActorIterator<AUnmadeEnemyCharacter> e(world);e;++e){if(!e->IsExpeditionArc(a)||!e->CanBeTargeted())continue;FVector d=p->GetActorLocation()-e->GetActorLocation();if(d.Size2D()>(p->bIsCrouched?350:650)||FVector::DotProduct(e->GetActorForwardVector(),d.GetSafeNormal())<.3)continue;FCollisionQueryParams q(SCENE_QUERY_STAT(DepthStealth),false);q.AddIgnoredActor(p);q.AddIgnoredActor(*e);if(!world->LineTraceTestByChannel(e->GetActorLocation()+FVector(0,0,55),p->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q))return false;}return true;}
 }
 void AUnmadePrototypeHub::BuildAdventureDepth(){
- if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
+ if(!GetWorld())return;DepthSecretGates.SetNum(9);DepthChallengeSigns.SetNum(9);DepthWitnessPlanSigns.SetNum(9);DepthAccordSigns.SetNum(9);DepthAccordWorkActors.SetNum(18);DepthCrossRealmReceiptSigns.SetNum(9);DepthCrossRealmReviewActors.SetNum(9);DepthRetaliators.SetNum(9);DepthEvidenceActors.SetNum(9);DepthCacheActors.SetNum(9);
  auto Sign=[&](FVector at,const FString& text){auto* t=GetWorld()->SpawnActor<ATextRenderActor>(at+FVector(0,0,150),FRotator(0,90,0));if(t){t->GetTextRender()->SetWorldSize(17);t->GetTextRender()->SetText(FText::FromString(text));}return t;};
  for(int a=0;a<9;++a){const auto& s=UnmadeCore::DepthSpecs[a];DepthChallengeSigns[a]=Sign(Room(a,2)+FVector(0,900,0),UTF8_TO_TCHAR(s.challenge));
+  DepthWitnessPlanSigns[a]=Sign(Control(a,0)+FVector(400,350,0),
+    TEXT("REALM WITNESS ROUTE GUIDE / RETURN WITH PERSONALLY READ EVIDENCE"));
+   // The notice stands beside existing local services; it never unlocks a
+   // route or grants favor, and it remains hidden until a witnessed return.
+   DepthAccordSigns[a]=Sign(Shop(a,0,0)+FVector(550,-500,0),TEXT("PUBLIC ACCORD / AWAITING RETURN"));
+   // Only a physical delivery to the destination chief creates a receipt.
+   DepthCrossRealmReceiptSigns[a]=Sign(Shop(a,0,0)+FVector(950,600,0),TEXT("CROSS-REALM RECEIPT"));
+   if(DepthCrossRealmReceiptSigns[a].IsValid())DepthCrossRealmReceiptSigns[a]->SetActorHiddenInGame(true);
   for(int n=0;n<3;++n){Sign(Control(a,n),FString::Printf(TEXT("E - ROUTE CONTROL %d"),n+1));SpawnBlock(Control(a,n)+FVector(0,0,-60),FVector(.6,.6,.7),FName(TEXT("DepthControl")));}
   for(int site=0;site<(a==0?5:3);++site)for(int n=0;n<3;++n){SpawnBlock(Shop(a,n,site)+FVector(0,0,-70),FVector(2,1,.5),FName(TEXT("FrontierService")));Sign(Shop(a,n,site),n==0?TEXT("PROVISIONER / E BUY RECOVERY / FINITE DAILY STOCK"):n==1?TEXT("CRAFT BENCH / E MAKE FIELD KIT / LOCAL FAVOR"):TEXT("TRAINER / E LEARN TECHNIQUE / THREE MASTERY LEVELS"));}
   auto Object=[&](FVector at,FVector scale,FName tag){auto* actor=GetWorld()->SpawnActor<AStaticMeshActor>(at,FRotator::ZeroRotator);if(actor){auto* m=actor->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(scale);actor->Tags.Add(tag);}return actor;};
+
+  // Physical incoming-record review: no free witness, quest or reward.
+  auto* review=Object(Shop(a,0,0)+FVector(550,800,-75),FVector(1.2,.24,1.3),
+   FName(*FString::Printf(TEXT("CrossRealm.Review.%d"),a)));
+  if(review){
+   review->GetStaticMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+   DepthCrossRealmReviewActors[a]=review;
+   review->SetActorHiddenInGame(true);
+  }
+  for(int choice=1;choice<=2;++choice){
+   const auto work=UnmadeCore::PublicAccordDuty(a,0,choice,true,3,false,true);
+   if(!work.active)continue;
+   const FVector at=Shop(a,0,0)+FVector(work.dx,work.dy,-75);
+   auto* actor=Object(at,choice==1?FVector(1.4,1.2,.55):FVector(1.8,.28,1.35),
+    FName(*FString::Printf(TEXT("Depth.CivicWork.%d.%d"),a,choice)));
+   if(actor){
+    actor->GetStaticMeshComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    DepthAccordWorkActors[a*2+choice-1]=actor;
+    actor->SetActorHiddenInGame(true);
+   }
+  }
   SpawnBlock(Evidence(a)+FVector(0,0,-75),FVector(2,1,.5),FName(TEXT("PersonalEvidenceBench")));
   DepthEvidenceActors[a]=Object(Evidence(a)+FVector(0,0,-42),FVector(1,.6,.04),FName(*FString::Printf(TEXT("Depth.Evidence.%d"),a)));
   DepthCacheActors[a]=Object(Secret(a)+FVector(0,0,-60),FVector(1,1,.5),FName(*FString::Printf(TEXT("Depth.Cache.%d"),a)));
-  Sign(Evidence(a),TEXT("E - EXAMINE PERSONAL QUEST EVIDENCE"));Sign(Secret(a),FString(UTF8_TO_TCHAR(s.secret_name))+TEXT(" / E SEARCH WITH ONE FIELD KIT"));
+  Sign(Evidence(a),TEXT("E - EXAMINE PERSONAL QUEST EVIDENCE"));Sign(Secret(a),FString(UTF8_TO_TCHAR(s.secret_name))+TEXT(" / E SEARCH AFTER OPENING ROUTE"));
   SpawnBlock(Room(a,3)+FVector(-450,850,20),FVector(.2,7,2.4),FName(TEXT("SecretAlcoveWall")));
   auto* gate=GetWorld()->SpawnActor<AStaticMeshActor>(Room(a,3)+FVector(-825,500,20),FRotator::ZeroRotator);if(gate){auto* m=gate->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(7.5,.2,2.4));DepthSecretGates[a]=gate;}
   if(a==4){SpawnBlock(Room(a,2)+FVector(-700,650,240),FVector(7,4,.4),FName(TEXT("ChoirUpperWalkway")));auto* ramp=GetWorld()->SpawnActor<AStaticMeshActor>(Room(a,2)+FVector(0,650,90),FRotator(-16,0,0));if(ramp){auto* m=ramp->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(17,4,.35));}}
@@ -48,43 +85,516 @@ void AUnmadePrototypeHub::BuildAdventureDepth(){
 void AUnmadePrototypeHub::RefreshAdventureDepth(){
  if(!GetWorld()||DepthSecretGates.Num()!=9)return;
  for(int a=0;a<9;++a){auto* s=Depth.Arc(a);
+  if(DepthWitnessPlanSigns[a].IsValid()){
+   const bool proof=!bDepthSaveRejected&&!bExpeditionSaveRejected&&s->witness&&s->evidence;
+   const bool brief=DepthWitnessBriefUntil[a]>GetWorld()->GetTimeSeconds();
+   const TCHAR* status=s->route?TEXT("ROUTE OPEN"):!proof?TEXT("EVIDENCE NEEDED")
+      :brief?TEXT("PLAN READY / E APPLY"):TEXT("RETURN TO THE REAL WITNESS");
+   DepthWitnessPlanSigns[a]->GetTextRender()->SetText(FText::FromString(
+      FString::Printf(TEXT("REALM %s / WITNESS ROUTE GUIDE\\n%s"),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),status)));
+  }
+
+   const int incoming=(a+8)%9;
+   if(DepthCrossRealmReceiptSigns[a].IsValid()){
+    const bool received=!bCrossRealmCarryRejected&&!bDepthSaveRejected&&
+      !bIdentitySaveRejected&&!bExpeditionSaveRejected&&
+      CrossRealmCarry.Stage(incoming)>=UnmadeCore::CarryStage::Delivered;
+    DepthCrossRealmReceiptSigns[a]->SetActorHiddenInGame(!received);
+    const auto localReview=UnmadeCore::CrossRealmReview(a,CrossRealmCarry.Stage(incoming),
+      (Expeditions.Arc(a)->visited&1)!=0,Depth.Arc(a)->evidence!=0,
+      !bDepthSaveRejected&&!bCrossRealmCarryRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected);
+    if(DepthCrossRealmReviewActors[a].IsValid()){
+     const bool visible=localReview==UnmadeCore::ReviewState::NeedEvidence||
+       localReview==UnmadeCore::ReviewState::ReadyToCompare||
+       localReview==UnmadeCore::ReviewState::Compared;
+     DepthCrossRealmReviewActors[a]->SetActorHiddenInGame(!visible);
+     DepthCrossRealmReviewActors[a]->SetActorScale3D(
+       localReview==UnmadeCore::ReviewState::Compared?FVector(2.1,.6,.5):FVector(1.2,.24,1.3));
+    }
+    if(received){
+      const FString receipt=FString::Printf(TEXT("RECEIVED IN %s FROM %s\n%s"),
+        UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+        UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[incoming].city),
+        UTF8_TO_TCHAR(Depth.Arc(incoming)->choice==1?
+          UnmadeCore::DepthSpecs[incoming].public_return_a:
+          UnmadeCore::DepthSpecs[incoming].public_return_b));
+      DepthCrossRealmReceiptSigns[a]->GetTextRender()->SetText(FText::FromString(receipt));
+    }
+   }
+  for(int choice=1;choice<=2;++choice)
+   if(DepthAccordWorkActors[a*2+choice-1].IsValid()){
+    const bool visible=!bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected
+      &&Expeditions.Arc(a)->returned&&s->choice==choice;
+    DepthAccordWorkActors[a*2+choice-1]->SetActorHiddenInGame(!visible);
+   }
+
+   if(DepthAccordSigns[a].IsValid()){
+    const bool publicAftermath=!bDepthSaveRejected&&!bExpeditionSaveRejected
+        &&Expeditions.Arc(a)->returned&&s->choice!=0;
+    DepthAccordSigns[a]->SetActorHiddenInGame(!publicAftermath);
+    if(publicAftermath){
+     // Resolve this world's actual public branch directly from authored data.
+     // An earned public second stage is derived from real saved road receipts.
+     const TCHAR* duty=s->choice==1
+       ?(Identity.Arc(a)->repair==7?TEXT("SANCTUARY DUTY"):TEXT("PROTECTED RESERVE"))
+       :(s->counterThreat?TEXT("ROAD WATCH"):TEXT("PUBLIC HEARING"));
+     const FString text=FString::Printf(TEXT("%s / PUBLIC RETURN ACCORD\n%s\n%s"),
+         UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+         UTF8_TO_TCHAR(s->choice==1?UnmadeCore::DepthSpecs[a].public_return_a:UnmadeCore::DepthSpecs[a].public_return_b),duty);
+     DepthAccordSigns[a]->GetTextRender()->SetText(FText::FromString(text));
+    }
+   }
   if(!bDepthSaveRejected&&s->choice==2&&!s->counterThreat){if(!DepthRetaliators[a].IsValid()){auto* enemy=GetWorld()->SpawnActor<AUnmadeEnemyCharacter>(Base(a)+FVector(4500,10500,0),FRotator::ZeroRotator);if(enemy){enemy->ConfigureStyle(a%2?UnmadeCore::EnemyStyle::Watcher:UnmadeCore::EnemyStyle::Stalker);enemy->ConfigureEncounter(FName(*FString::Printf(TEXT("Depth.CounterThreat.%d"),a)),UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].counterparty),FLinearColor(.8,.35,.15));DepthRetaliators[a]=enemy;}}
-    auto* enemy=DepthRetaliators[a].Get();if(IsValid(enemy)&&enemy->GetCombat()->IsDefeated()&&GetWorld()->GetTimeSeconds()>=NextDepthThreatSave[a]){NextDepthThreatSave[a]=GetWorld()->GetTimeSeconds()+2;auto before=Depth;if(Depth.CounterThreat(a)){if(!WriteWorldSnapshot()){Depth=before;}else NotifyRpg(TEXT("The named return-road threat is defeated and remembered. Two local favor earned; it will not respawn."));}}}
+    auto* enemy=DepthRetaliators[a].Get();if(IsValid(enemy)&&enemy->GetCombat()->IsDefeated()&&GetWorld()->GetTimeSeconds()>=NextDepthThreatSave[a]){NextDepthThreatSave[a]=GetWorld()->GetTimeSeconds()+2;const auto result=UnmadeCore::CommitCounterThreatReceipt(Depth,a,true,[&]{return WriteWorldSnapshot();});if(result==UnmadeCore::CounterThreatCommit::Recorded)NotifyRpg(TEXT("The named return-road threat is defeated and remembered. Two local favor earned; it will not respawn."));else if(result==UnmadeCore::CounterThreatCommit::SaveFailed)NotifyRpg(TEXT("Return-road victory could not save. Favor restored; automatic retries continue and complete checkpoints wait."));}}
   if(DepthCacheActors[a].IsValid())DepthCacheActors[a]->SetActorScale3D(s->secret?FVector(1,1,.15):FVector(1,1,.5));if(DepthSecretGates[a].IsValid()){DepthSecretGates[a]->SetActorHiddenInGame(s->route!=0);DepthSecretGates[a]->SetActorEnableCollision(!s->route);}
-  if(DepthChallengeSigns[a].IsValid())DepthChallengeSigns[a]->GetTextRender()->SetText(FText::FromString(FString(UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].challenge))+FString::Printf(TEXT("\n%s / PROGRESS %d / SWITCH MASK %d"),s->route?TEXT("SIDE PASSAGE OPEN"):TEXT("OPTIONAL ROUTE CHALLENGE"),DepthChallenges[a].Progress(),DepthChallenges[a].Mask())));
+  if(DepthChallengeSigns[a].IsValid()){
+   FString status=FString::Printf(TEXT("\n%s / STEPS %d / SWITCH MASK %d"),s->route?TEXT("SIDE PASSAGE OPEN"):TEXT("OPTIONAL ROUTE CHALLENGE"),DepthChallenges[a].Progress(),DepthChallenges[a].Mask());
+   if(a==1)status+=FString::Printf(TEXT("\nTIDE %.1f / 12 — WORKING WINDOW 4-9"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds()));
+   if(a==2&&DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())>0)status+=FString::Printf(TEXT("\nCOOLING WINDOW %.0f SECONDS REMAIN"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds()));
+   DepthChallengeSigns[a]->GetTextRender()->SetText(FText::FromString(FString(UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(a)))+status));
+  }
  }
+}
+// Read-only local duty: permanent narrative decisions stay in their original ledgers.
+bool AUnmadePrototypeHub::GetPublicAccordRoutineTarget(FName ResidentId,bool AtNight,FVector& Out)const{
+ if(!GetWorld()||ResidentId.IsNone()||AtNight||bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected)return false;
+ for(int a=0;a<9;++a){
+  for(int n=0;n<5;++n){
+   if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),a,n)))continue;
+   // Only the chief who physically accepted the previous city's record
+   // is drawn to its local receipt; other citizens keep their own routines.
+   if(n==0&&Expeditions.Arc(a)->visited&&
+      !bCrossRealmCarryRejected&&
+      CrossRealmCarry.Stage((a+8)%9)>=UnmadeCore::CarryStage::Delivered){
+    Out=Shop(a,0,0)+(CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Reviewed&&
+      Depth.Arc(a)->evidence?
+      FVector(550,800,0):FVector(950,600,0));
+    return true;
+   }
+   if(!Expeditions.Arc(a)->returned||!Depth.Arc(a)->choice)return false;
+   const auto work=UnmadeCore::PublicAccordDuty(a,n,Depth.Arc(a)->choice,
+     Expeditions.Arc(a)->returned,Expeditions.Arc(a)->rescued,AtNight,
+     !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected,
+     Depth.Arc(a)->counterThreat,Identity.Arc(a)->repair==7);
+   if(!work.active)return false;
+   Out=Shop(a,0,0)+FVector(work.dx,work.dy,0);
+   return true;
+  }
+ }
+ return false;
+}
+// Existing resident animation assets provide the observable work performance.
+FName AUnmadePrototypeHub::GetPublicAccordWorkCue(FName ResidentId,const FVector& At,bool AtNight)const{
+ FVector DutyTarget;
+ if(!GetPublicAccordRoutineTarget(ResidentId,AtNight,DutyTarget)||
+    FVector::DistSquared2D(At,DutyTarget)>FMath::Square(175.f))return NAME_None;
+ const FString text=ResidentId.ToString();
+ for(int a=0;a<9;++a){
+  if(text.StartsWith(FString::Printf(TEXT("npc.expedition.%d."),a))){
+   if(ResidentId==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a))&&
+      CrossRealmCarry.Stage((a+8)%9)>=UnmadeCore::CarryStage::Delivered)
+    return FName(TEXT("Inspect"));
+   if(Depth.Arc(a)->choice==2&&Depth.Arc(a)->counterThreat)
+    return FName(TEXT("Gesture"));
+   return Depth.Arc(a)->choice==1?FName(TEXT("Repair")):FName(TEXT("Inspect"));
+  }
+ }
+ return NAME_None;
 }
 bool AUnmadePrototypeHub::TryDepthInteraction(AUnmadeCharacter* p,int action,double competing){
  if(!Alive(p)||!GetWorld()||action<0||action>3)return false;int arc=-1,kind=-1,index=0;double best=FMath::Min(310.*310.,competing+1.);
  auto Add=[&](int a,int k,int n,FVector at,AActor* ignored=nullptr){double d=FVector::DistSquared(p->GetActorLocation(),at);if(d<=best&&Near(p,at,ignored)){best=d;arc=a;kind=k;index=n;}};
- for(int a=0;a<9;++a){if(auto* n=Person(GetWorld(),a,0))Add(a,0,0,n->GetActorLocation(),n);if(action!=0)continue;if(auto* n=Person(GetWorld(),a,3))Add(a,1,0,n->GetActorLocation(),n);if(DepthEvidenceActors[a].IsValid())Add(a,2,0,DepthEvidenceActors[a]->GetActorLocation()+FVector(0,0,42),DepthEvidenceActors[a].Get());if(DepthCacheActors[a].IsValid())Add(a,4,0,DepthCacheActors[a]->GetActorLocation()+FVector(0,0,60),DepthCacheActors[a].Get());for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)Add(a,5,n,Shop(a,n,site));if(Expeditions.Arc(a)->rooms&4)Add(a,3,n,Control(a,n));}}
- if(arc<0)return false;if(bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected){NotifyRpg(TEXT("Saved adventure data is invalid. The original record is protected."));return true;}
- auto before=Depth;auto beforeChallenge=DepthChallenges;auto* e=Expeditions.Arc(arc);const auto& spec=UnmadeCore::DepthSpecs[arc];bool changed=false,heal=false;FString line;const TCHAR* cue=TEXT("inspect");
- if(kind==0){if(action==1||action==2){auto* state=Depth.Arc(arc);if(!state->evidence||!e->boss||state->choice)line=TEXT("Speak to the witness, examine their evidence, then resolve the boss before choosing. A committed choice cannot be changed.");else if(DepthPendingArc!=arc||DepthPendingChoice!=action||GetWorld()->GetTimeSeconds()>DepthConfirmUntil){DepthPendingArc=arc;DepthPendingChoice=action;DepthConfirmUntil=GetWorld()->GetTimeSeconds()+20;line=FString::Printf(TEXT("CONFIRM %s: %s\n%s\nPress the SAME choice again within twenty seconds, beside this person. This local accord is permanent. A earns four favor and cheaper provisions; B earns three favor and opens a public hearing, but a displaced claimant contests the return road."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),UTF8_TO_TCHAR(spec.quest),UTF8_TO_TCHAR(action==1?spec.option_a:spec.option_b));}else{changed=Depth.Choose(arc,action,true);line=UTF8_TO_TCHAR(action==1?spec.return_a:spec.return_b);}cue=TEXT("reward");}
+ for(int a=0;a<9;++a){if(auto* n=Person(GetWorld(),a,0))Add(a,0,0,n->GetActorLocation(),n);if(action!=0)continue;if(auto* n=Person(GetWorld(),a,3))Add(a,1,0,n->GetActorLocation(),n);if(DepthEvidenceActors[a].IsValid())Add(a,2,0,DepthEvidenceActors[a]->GetActorLocation()+FVector(0,0,42),DepthEvidenceActors[a].Get());if(DepthCacheActors[a].IsValid())Add(a,4,0,DepthCacheActors[a]->GetActorLocation()+FVector(0,0,60),DepthCacheActors[a].Get());if(DepthAccordSigns[a].IsValid()&&!DepthAccordSigns[a]->IsHidden()&&Expeditions.Arc(a)->returned&&Depth.Arc(a)->choice)
+   Add(a,6,0,DepthAccordSigns[a]->GetActorLocation()-FVector(0,0,150),DepthAccordSigns[a].Get());
+  for(int choice=1;choice<=2;++choice)
+   if(DepthAccordWorkActors[a*2+choice-1].IsValid()&&!DepthAccordWorkActors[a*2+choice-1]->IsHidden())
+    Add(a,7,choice,DepthAccordWorkActors[a*2+choice-1]->GetActorLocation()+FVector(0,0,65),
+     DepthAccordWorkActors[a*2+choice-1].Get());
+  if(DepthCrossRealmReviewActors.IsValidIndex(a)&&DepthCrossRealmReviewActors[a].IsValid()&&
+     !DepthCrossRealmReviewActors[a]->IsHidden())
+    Add(a,8,0,DepthCrossRealmReviewActors[a]->GetActorLocation()+FVector(0,0,75),
+      DepthCrossRealmReviewActors[a].Get());
+  if((Expeditions.Arc(a)->rooms&4)&&!Depth.Arc(a)->route&&
+      DepthWitnessPlanSigns[a].IsValid())
+    Add(a,9,0,DepthWitnessPlanSigns[a]->GetActorLocation()-FVector(0,0,150),
+        DepthWitnessPlanSigns[a].Get());
+  for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)Add(a,5,n,Shop(a,n,site));if(Expeditions.Arc(a)->rooms&4)Add(a,3,n,Control(a,n));}}
+ if(arc<0)return false;if(bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected||bCrossRealmCarryRejected){NotifyRpg(TEXT("Saved adventure data is invalid. The original record is protected."));return true;}
+ auto before=Depth;auto beforeExperience=Experience;auto beforeChallenge=DepthChallenges;auto* e=Expeditions.Arc(arc);const auto& spec=UnmadeCore::DepthSpecs[arc];bool changed=false,heal=false;FString line;const TCHAR* cue=TEXT("inspect");
+ // Speak to the actual named next-realm expedition chief, within the
+ // existing physical interaction range; no world-wide message is emitted.
+ if(kind==0&&action==0){
+  const int source=(arc+8)%9;
+  if(CrossRealmCarry.Stage(source)==UnmadeCore::CarryStage::Carrying){
+   if(!(Expeditions.Arc(arc)->visited&1)){
+    NotifyRpg(TEXT("Visit this realm before attempting a formal hand-delivery."));
+    return true;
+   }
+   const bool accepted=UnmadeCore::CommitCrossRealmCarry(CrossRealmCarry,[&]{
+      return CrossRealmCarry.Deliver(source,arc,GetGameDay(),
+        (Expeditions.Arc(source)->visited&1)!=0&&(Expeditions.Arc(arc)->visited&1)!=0);
+     },[&]{return WriteWorldSnapshot();});
+   if(!accepted){
+     NotifyRpg(TEXT("The destination could not save receipt of the physical packet. It remains in your custody."));
+     return true;
+   }
+   UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+   NotifyRpg(FString::Printf(TEXT("HAND-DELIVERED: The chief in %s accepts the physical %s record. An accountable local receipt is posted; distant residents have not been informed."),
+     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
+     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city)));
+   RefreshAdventureDepth();return true;
+  }
+ }
+ if(kind==7&&action==0){
+  const bool sourceReady=Depth.Arc(arc)->choice!=0&&
+    Expeditions.Arc(arc)->returned&&Identity.Arc(arc)->repair==7;
+  if(CrossRealmCarry.Stage(arc)==UnmadeCore::CarryStage::Waiting&&sourceReady){
+   const bool collected=UnmadeCore::CommitCrossRealmCarry(CrossRealmCarry,[&]{
+     return CrossRealmCarry.Collect(arc,GetGameDay(),sourceReady);
+    },[&]{return WriteWorldSnapshot();});
+   if(!collected){
+     NotifyRpg(TEXT("Could not save the physical record. It remains at this worksite."));
+     return true;
+   }
+   UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+   NotifyRpg(FString::Printf(TEXT("COLLECTED: You carry %s's authenticated civic record. Deliver it IN PERSON to the expedition chief in %s. No remote citizen has received it."),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[UnmadeCore::CrossRealmDestination(arc)].city)));
+   RefreshAdventureDepth();return true;
+  }
+ }
+
+ // Canon: a destination witness must physically receive local proof; simply
+ // discovering it never grants NPC awareness of that evidence.
+ // Local comparison is a separate save-atomic E action: inspecting the desk
+ // is otherwise read-only. The actual recipient must be within speaking range.
+ if(kind==8&&action==0){
+  const int source=UnmadeCore::CrossRealmSource(arc);
+  const auto state=UnmadeCore::CrossRealmReview(arc,CrossRealmCarry.Stage(source),
+    (Expeditions.Arc(arc)->visited&1)!=0,Depth.Arc(arc)->evidence!=0,
+    !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected&&!bCrossRealmCarryRejected);
+  if(state==UnmadeCore::ReviewState::ReadyToCompare){
+   const auto* chief=Person(GetWorld(),arc,0);
+   const FVector desk=DepthCrossRealmReviewActors[arc]->GetActorLocation()+FVector(0,0,75);
+   const bool recipientPresent=IsValid(chief)&&
+     FVector::DistSquared2D(chief->GetActorLocation(),desk)<FMath::Square(520.f);
+   if(!recipientPresent){
+    NotifyRpg(TEXT("Your local evidence is ready, but the actual receiving chief must be beside this table. Return during their daytime receipt duty."));
+    return true;
+   }
+   const bool committed=UnmadeCore::CommitCrossRealmCarry(CrossRealmCarry,[&]{
+      return CrossRealmCarry.Review(source,arc,GetGameDay(),
+          Depth.Arc(arc)->evidence!=0,recipientPresent);
+     },[&]{return WriteWorldSnapshot();});
+   if(!committed){
+    NotifyRpg(TEXT("The comparison did not save. The received packet remains here; present the evidence again."));
+    return true;
+   }
+   if(const char* cue=UnmadeCore::CrossRealmReviewCue(arc))
+    UnmadePresentation::Sound(p,UTF8_TO_TCHAR(cue));
+   else UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+   NotifyRpg(FString::Printf(TEXT("REVIEWED: %s's actual evidence has been examined alongside the hand-carried %s record with its receiving chief. Their local testimony changes, but no other realm learns this automatically."),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
+       UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city)));
+   RefreshAdventureDepth();return true;
+  }
+ }
+ if(kind==0){if(action==1||action==2){auto* state=Depth.Arc(arc);if(!state->evidence||!e->boss||state->choice)line=TEXT("Speak to the witness, examine their evidence, then resolve the boss before choosing. A committed choice cannot be changed.");else if(!DepthConfirmation.Confirm(arc,action,GetWorld()->GetTimeSeconds())){line=FString::Printf(TEXT("CONFIRM %s: %s\n%s\nPress the SAME choice again within twenty seconds, beside this person. This local accord is permanent. A earns four favor and cheaper provisions; B earns three favor and opens a public hearing, but a displaced claimant contests the return road."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),UTF8_TO_TCHAR(spec.quest),UTF8_TO_TCHAR(action==1?spec.option_a:spec.option_b));}else{changed=UnmadeCore::StagePersonalAccord(Depth,Experience,arc,action,true);line=UTF8_TO_TCHAR(action==1?spec.return_a:spec.return_b);}cue=TEXT("reward");}
   else if(!Depth.Arc(arc)->offered){changed=Depth.Offer(arc,(e->visited&1)!=0);line=UTF8_TO_TCHAR(spec.offer);}
   else if(Depth.Arc(arc)->choice)line=UTF8_TO_TCHAR(Depth.Arc(arc)->choice==1?spec.return_a:spec.return_b);
   else line=FString(UTF8_TO_TCHAR(spec.goal))+TEXT("\n6: ")+UTF8_TO_TCHAR(spec.option_a)+TEXT("\n7: ")+UTF8_TO_TCHAR(spec.option_b)+TEXT("\nChoices commit after the witness, physical evidence and boss resolution. J opens your journal.");}
- if(kind==1){changed=Depth.Witness(arc);line=UTF8_TO_TCHAR(spec.witness);}
+ if(kind==1){
+  changed=Depth.Witness(arc);
+  line=UTF8_TO_TCHAR(spec.witness);
+  // The witness does not learn unseen evidence. The player must return with
+  // the physically acquired proof and ask this actual person face to face.
+  if(Depth.Arc(arc)->witness&&Depth.Arc(arc)->evidence&&
+     !Depth.Arc(arc)->route&&(Expeditions.Arc(arc)->visited&1)){
+   DepthWitnessBriefUntil[arc]=GetWorld()->GetTimeSeconds()+360.;
+   line+=TEXT(" A witness can guide one control now. Carry this spoken route plan to the REALM witness guide by the side-route controls and press E. It is temporary, cannot open the route, and never waives tide, height, stealth or combat.");
+  }
+ }
  if(kind==2){changed=Depth.Evidence(arc,(e->rooms&8)!=0);line=UTF8_TO_TCHAR(spec.evidence);}
- if(kind==3){if(Depth.Arc(arc)->route)line=TEXT("This side route is already open.");else{bool done=DepthChallenges[arc].Step(arc,index,GetWorld()->GetTimeSeconds(),p->GetActorLocation().Z>Room(arc,2).Z+180,Quiet(GetWorld(),p,arc));changed=Depth.Route(arc,done);line=FString(UTF8_TO_TCHAR(spec.challenge))+TEXT("\nA wrong sequence can be tried again. Controls are numbered near to far, 1 to 3. Flood interval: seconds 4 through 9 of each twelve-second cycle. This opens a side alcove; the main quest remains accessible.");}}
+ if(kind==9){
+  const double now=GetWorld()->GetTimeSeconds();
+  const bool realProof=Depth.Arc(arc)->witness&&Depth.Arc(arc)->evidence&&
+       (Expeditions.Arc(arc)->visited&1)!=0;
+  if(Depth.Arc(arc)->route)line=TEXT("This side route is already open.");
+  else if(!realProof||DepthWitnessBriefUntil[arc]<=now)
+   line=TEXT("This guide has no current firsthand route account. Examine the local personal evidence, then return and speak to its real witness before using this plan.");
+  else if(!DepthChallenges[arc].Prime(arc,now))
+   line=TEXT("The mechanism is already partly set. Your witness's map only primes an untouched route; finish the remaining steps normally or restart its actual controls.");
+  else{
+   DepthWitnessBriefUntil[arc]=0;
+   line=FString::Printf(TEXT("%s / One genuine first control is aligned by your witness's route plan. YOU must still operate the remaining controls and satisfy physical tide, time, elevation and stealth constraints. No passage or favor has been granted."),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city));
+   UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+  }
+ }
+  if(kind==3){
+   if(Depth.Arc(arc)->route)line=TEXT("This side route is already open.");
+   else{
+    const auto report=DepthChallenges[arc].Attempt(arc,index,GetWorld()->GetTimeSeconds(),p->GetActorLocation().Z>Room(arc,2).Z+180,Quiet(GetWorld(),p,arc));
+    changed=Depth.Route(arc,report.outcome==UnmadeCore::ChallengeOutcome::Complete);
+    FString response;
+    switch(report.outcome){
+     case UnmadeCore::ChallengeOutcome::Complete: response=TEXT("The physical route opens. Your discovery and favor are saved together.");break;
+     case UnmadeCore::ChallengeOutcome::Reset: response=TEXT("The sequence or timer reset. Begin another attempt; the main route is still accessible.");break;
+     case UnmadeCore::ChallengeOutcome::WaitForWindow: response=TEXT("The correct pumps are set, but the water is too high. Toggle the final pump off and complete the combination during the working tide window.");break;
+     case UnmadeCore::ChallengeOutcome::NeedElevation: response=TEXT("Reach the upper choir walkway. These anchors cannot be grounded from below.");break;
+     case UnmadeCore::ChallengeOutcome::Observed: response=TEXT("The census patrol spotted you; the lamps reset. Break line of sight or clear the patrol, then try again.");break;
+     case UnmadeCore::ChallengeOutcome::Progress: response=TEXT("The mechanism responded. Continue the physical sequence; failed attempts do not spend resources.");break;
+     default: response=TEXT("This control cannot be operated now.");break;
+    }
+    line=FString(UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(arc)))+TEXT("\n")+response;
+    if(arc==1)line+=FString::Printf(TEXT("\nCurrent tide phase: %.1f / 12 seconds (working: 4-9)."),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds()));
+    if(arc==2&&report.secondsRemaining>0)line+=FString::Printf(TEXT("\nCooling window: %.0f seconds left."),report.secondsRemaining);
+   }
+  }
  if(kind==4){if(Depth.Arc(arc)->route&&!Depth.Arc(arc)->secret){changed=Depth.Secret(arc,(e->rooms&8)!=0);if(!changed)Depth=before;}line=changed?FString(UTF8_TO_TCHAR(spec.secret_name))+TEXT(" found. Two local favor earned; the final mastery lesson is now available."):TEXT("Open the route, register chamber four and inspect the opened cache. Its discovery needs no consumable.");cue=TEXT("reward");}
+ if(kind==6){
+  const auto* local=Depth.Arc(arc);
+  if(!e->returned||!local->choice)line=TEXT("A witnessed return and resolved personal accord are required before a public account can be examined.");
+  else{
+   line=FString::Printf(TEXT("%s / RETURN-ROAD ACCOUNT\n%s"),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
+    UTF8_TO_TCHAR(local->choice==1?spec.public_return_a:spec.public_return_b));
+   if(local->choice==2&&!Depth.Arc(arc)->counterThreat)
+    line+=TEXT("\nThe displaced claimant still contests the outer road. Seek the actual return-road opponent or choose another route.");
+   else if(Identity.Arc(arc)->repair!=7)
+    line+=TEXT("\nThe public wayposts remain incomplete. Speak with the returning roadkeeper and repair all three posts.");
+   else line+=local->choice==1?TEXT("\nSANCTUARY DUTY: repaired wayposts are staffed by returning neighbors during daylight."):TEXT("\nROAD WATCH: the public ledger remains open and surviving neighbors now patrol the cleared road.");
+  }
+ }
+ if(kind==7){
+  const int branch=Depth.Arc(arc)->choice;
+  if(!e->returned||!branch||index!=branch)
+   line=TEXT("This civic worksite is not staffed until the actual return and public choice are recorded.");
+  else{
+   line=FString::Printf(TEXT("%s / WORK IN PROGRESS\n%s"),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[arc].city),
+    UTF8_TO_TCHAR(branch==1?spec.public_return_a:spec.public_return_b));
+   line+=branch==1
+    ?TEXT("\nThe protected supply duty continues during the day. Find an actual returning neighbor here; the reserve cannot solve every public dispute.")
+    :TEXT("\nThe public ledger and appeal watch continue during the day. Meet the actual witnesses here; the hearing does not resolve the outer claimant automatically.");
+   UnmadePresentation::Sound(p,TEXT("inspect"));
+   p->PlayIdentityMotion(FName(TEXT("Inspect")));
+  }
+ }
+ if(kind==8){
+  const int source=UnmadeCore::CrossRealmSource(arc);
+  const auto review=UnmadeCore::CrossRealmReview(arc,CrossRealmCarry.Stage(source),
+   (e->visited&1)!=0,Depth.Arc(arc)->evidence!=0,
+   !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected&&!bCrossRealmCarryRejected);
+  if(review==UnmadeCore::ReviewState::NeedEvidence)
+   line=FString::Printf(TEXT("The %s packet arrived in person, but this realm cannot compare it yet. Speak to the local witness, inspect chamber-four evidence, and return to this desk."),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+  else if(review==UnmadeCore::ReviewState::ReadyToCompare)
+   line=TEXT("Bring the local evidence to this desk when the named receiving chief is physically present. The comparison cannot happen remotely.");
+  else if(review==UnmadeCore::ReviewState::Compared)
+   line=FString::Printf(TEXT("The received %s packet and this realm's evidence were personally compared. The chief can now describe the differences without naming protected witnesses.\nLocal evidence: %s"),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),UTF8_TO_TCHAR(spec.evidence));
+  else line=TEXT("No physically delivered record has arrived for an accountable comparison.");
+  UnmadePresentation::Sound(p,TEXT("inspect"));
+  p->PlayIdentityMotion(FName(TEXT("Inspect")));
+ }
  if(kind==5&&!ExperienceServicesOpen(arc)){NotifyRpg(ExperienceServiceHours(arc));return true;}
  if(kind==5){changed=Depth.Buy(arc,index,GetGameDay(),index!=0||p->GetCombat()->GetMissingHealth()>0);heal=changed&&index==0;line=changed?index==0?TEXT("Provision purchased. Up to 35 health restored."):index==1?TEXT("Field kit crafted. It suppresses a danger field; progression does not consume it."):TEXT("Earned mastery learned without spending favor. Improved stamina recovery, dodge and parry; F11 invokes your earned technique."):FString::Printf(TEXT("Service costs %d LOCAL FAVOR. Finish the personal quest first. Supplies: four total, once per day, while injured. Kits: capacity three. Training: route for level two, cache for level three."),Depth.Price(arc,index));cue=TEXT("reward");}
- if(changed&&!WriteWorldSnapshot(p)){Depth=before;DepthChallenges=beforeChallenge;NotifyRpg(TEXT("Save failed. Choice, resources and reward rolled back."));return true;}
- if(changed){if(kind==0){DepthPendingArc=-1;DepthPendingChoice=0;}if(heal)p->GetCombat()->Heal(35);UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==5&&index==1?TEXT("Repair"):TEXT("Inspect")));}
+ const bool accord=changed&&kind==0&&Depth.Arc(arc)->choice;
+ if(changed&&!UnmadeCore::CommitHealing(*p->GetCombat(),heal?35:0,[&]{
+  auto Write=[&]{return WriteWorldSnapshot(p);};
+  return accord?p->CommitLocalEvent(FName(Depth.Arc(arc)->choice==1?TEXT("World.PersonalReserve"):TEXT("World.PersonalWitness")),FName(*FString::Printf(TEXT("npc.expedition.%d.0"),arc)),Write):Write();
+ })){Depth=before;Experience=beforeExperience;DepthChallenges=beforeChallenge;NotifyRpg(accord?TEXT("Save failed. Choice, lesson and witnesses restored. Preview and confirm the choice again."):TEXT("Save failed. Progress, resources and reward restored; try again."));return true;}
+ if(changed){UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==5&&index==1?TEXT("Repair"):TEXT("Inspect")));}
  if(kind==0||kind==1)RecordExperienceConversation(FName(*FString::Printf(TEXT("npc.expedition.%d.%d"),arc,kind==0?0:3)),p);
- if(changed&&kind==0&&Depth.Arc(arc)->choice)LearnExperienceTutorial(4,p);
- if(changed&&kind==0&&Depth.Arc(arc)->choice)p->ReportIntegrationEvent(FName(Depth.Arc(arc)->choice==1?TEXT("World.PersonalReserve"):TEXT("World.PersonalWitness")),FName(*FString::Printf(TEXT("npc.expedition.%d.0"),arc)));
  NotifyRpg(line);RefreshAdventureDepth();return true;
 }
-FString AUnmadePrototypeHub::GetDepthJournal()const{FString text=TEXT("PERSONAL STORIES AND LOCAL SERVICES\n");for(int a=0;a<9;++a){auto* s=Depth.Arc(a);if(!s->offered&&!s->route)continue;const auto& spec=UnmadeCore::DepthSpecs[a];text+=FString::Printf(TEXT("%s — %s\nWitness %s / evidence %s / accord %s / route %s / cache %s\nLocal favor %d; mastery %d/3; field kits %d; provisions %d/4\n%s\n\n"),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),UTF8_TO_TCHAR(spec.quest),s->witness?TEXT("heard"):TEXT("pending"),s->evidence?TEXT("read"):TEXT("pending"),s->choice==1?TEXT("protected reserve"):s->choice==2?TEXT("public witness"):TEXT("undecided"),s->route?TEXT("open"):TEXT("pending"),s->secret?TEXT("found"):TEXT("hidden"),s->favor,s->training,s->kits,s->purchases,UTF8_TO_TCHAR(s->choice==1?spec.return_a:s->choice==2?spec.return_b:spec.goal));}return text;}
+FString AUnmadePrototypeHub::GetDepthJournal()const{FString text=TEXT("PERSONAL STORIES AND LOCAL SERVICES\nEarned field kits work in any unresolved danger chamber; the supplying realm pays the kit. Suppression lasts for this visit only.\n");for(int a=0;a<9;++a){auto* s=Depth.Arc(a);if(!s->offered&&!s->route&&!Expeditions.Arc(a)->visited)continue;const auto& spec=UnmadeCore::DepthSpecs[a];text+=FString::Printf(TEXT("%s — %s\nWitness %s / evidence %s / accord %s / route %s / cache %s\nLocal favor %d; mastery %d/3; field kits %d; provisions %d/4\n%s\n\n"),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),UTF8_TO_TCHAR(spec.quest),s->witness?TEXT("heard"):TEXT("pending"),s->evidence?TEXT("read"):TEXT("pending"),s->choice==1?TEXT("protected reserve"):s->choice==2?TEXT("public witness"):TEXT("undecided"),s->route?TEXT("open"):TEXT("pending"),s->secret?TEXT("found"):TEXT("hidden"),s->favor,s->training,s->kits,s->purchases,UTF8_TO_TCHAR(s->choice==1?spec.return_a:s->choice==2?spec.return_b:spec.goal));
+ // Canon continuity + acceptance: not an already-settled answer.
+ // Lore is playable: the journal names the witnessed contradiction and the
+ // real exploration/combat/reality intervention, not an already-settled answer.
+ text+=FString::Printf(TEXT("UNANSWERED QUESTION: %s\nWHAT YOU CAN DO: %s\nREALITY DISCIPLINES: %s\n"),
+   UTF8_TO_TCHAR(spec.mystery_question),
+   UTF8_TO_TCHAR(spec.physical_lead),
+   UTF8_TO_TCHAR(spec.signature_mechanics));
+ if(Expeditions.Arc(a)->returned&&s->choice)
+  text+=FString::Printf(TEXT("NEXT THREAD: %s\n"),
+   UTF8_TO_TCHAR(spec.thread_after_return));
+
+ const auto* field=Identity.Arc(a);
+ if(field){
+  const int repaired=((Identity.Arc(a)->repair&1)?1:0)+((Identity.Arc(a)->repair&2)?1:0)+((Identity.Arc(a)->repair&4)?1:0);
+  text+=FString::Printf(TEXT("LOCAL FIELDWORK\nHunt: %s [%s]\nSurvey: %s [%s]\nWayposts: %s [%d/3 repaired]\n"),
+   UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].hunt_task),Identity.Arc(a)->hunt?TEXT("claimed"):TEXT("available after four guards"),
+   UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].survey_task),Identity.Arc(a)->chart?TEXT("mapped"):TEXT("pending records and mechanism"),
+   UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].repair_task),repaired);
+ }
+ if(Expeditions.Arc(a)->returned&&s->choice){
+  if(s->choice==1&&Identity.Arc(a)->repair==7)
+   text+=TEXT("SANCTUARY DUTY / The repaired wayposts now support a lived daytime rest shift. Find returning residents nearby.\n");
+  else if(s->choice==2&&s->counterThreat)
+   text+=TEXT("ROAD WATCH / The displaced claimant is defeated and the surviving witnesses have changed their daytime patrol.\n");
+  else text+=TEXT("LOCAL ACCORD DUTY / The daytime refuge service or public hearing continues until its unresolved work is addressed.\n");
+ }
+ text+=FString::Printf(TEXT("NEXT INVESTIGATION: %s\n\n"),
+   UTF8_TO_TCHAR(UnmadeCore::NextInvestigationLead(a,*Expeditions.Arc(a),*s)));
+ }return text+GetCrossRealmCarryJournal()+GetCrossRealmReviewJournal();}
+FString AUnmadePrototypeHub::GetCrossRealmCarryJournal()const{
+ FString out=TEXT("\nCROSS-REALM CUSTODY / PLAYER-CARRIED REPORTS\n");
+ for(int a=0;a<9;++a){
+  const auto stage=CrossRealmCarry.Stage(a);
+  if(!Depth.Arc(a)->choice&&stage==UnmadeCore::CarryStage::Waiting)continue;
+  const int dest=UnmadeCore::CrossRealmDestination(a);
+  const bool ready=Depth.Arc(a)->choice!=0&&
+    Expeditions.Arc(a)->returned&&Identity.Arc(a)->repair==7;
+  const TCHAR* next=stage==UnmadeCore::CarryStage::Reviewed
+    ?TEXT("personally compared with destination evidence")
+    :stage==UnmadeCore::CarryStage::Delivered
+    ?TEXT("delivered to the real expedition chief")
+    :stage==UnmadeCore::CarryStage::Carrying
+      ?TEXT("in your custody: travel to the destination chief and speak directly")
+      :ready?TEXT("at the home civic worksite: press E to collect")
+            :TEXT("finish the personal accord, witnessed return and three wayposts");
+  out+=FString::Printf(TEXT("%s -> %s: %s\n"),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[dest].city),next);
+  // No out-of-realm watch changes occur until somebody receives this packet.
+  if(stage==UnmadeCore::CarryStage::Carrying&&
+     !bCrossRealmCarryRejected&&!bExpeditionSaveRejected){
+   const auto* sourceBattle=Expeditions.Arc(a);
+   int guards=0,people=0;
+   for(int bit=0;bit<8;++bit)guards+=(sourceBattle->kills&(1<<bit))?1:0;
+   for(int bit=0;bit<2;++bit)people+=(sourceBattle->rescued&(1<<bit))?1:0;
+   out+=FString::Printf(TEXT("BATTLE TESTIMONY: guardian %s, %d guards died, %d people freed. The receiving chief may change their own frontier sentry ward AFTER hand-delivery; nothing has changed there yet.\n"),
+     sourceBattle->boss==1?TEXT("defeated"):TEXT("yielded alive"),
+     guards,people);
+  }
+ }
+ return out;
+}
+// Only a proven in-person delivery may become an NPC's firsthand local memory.
+FString AUnmadePrototypeHub::GetCrossRealmReviewJournal()const{
+ FString text=TEXT("\nCROSS-REALM INVESTIGATION / LOCAL WITNESS REVIEW\n");
+ for(int a=0;a<9;++a){
+  const int source=UnmadeCore::CrossRealmSource(a);
+  const auto status=UnmadeCore::CrossRealmReview(a,CrossRealmCarry.Stage(source),
+    (Expeditions.Arc(a)->visited&1)!=0,Depth.Arc(a)->evidence!=0,
+    !bDepthSaveRejected&&!bExpeditionSaveRejected&&!bIdentitySaveRejected&&!bCrossRealmCarryRejected);
+  if(status==UnmadeCore::ReviewState::NeedEvidence)
+   text+=FString::Printf(TEXT("%s: The %s packet arrived. Speak to the local witness, examine this realm's physical chamber-four evidence, then return to the chief's review desk.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+  else if(status==UnmadeCore::ReviewState::ReadyToCompare)
+   text+=FString::Printf(TEXT("%s: You have the local evidence. Present it physically at the review desk beside the actual receiving chief; press E.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city));
+  else if(status==UnmadeCore::ReviewState::Compared)
+   text+=FString::Printf(TEXT("%s: Local evidence and the %s packet have been personally compared. The receiving chief now remembers both records.\n"),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[a].city),
+      UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city));
+ }
+ return text;
+}
+FString AUnmadePrototypeHub::GetCrossRealmCombatRecipientLine(FName ResidentId)const{
+ if(bCrossRealmCarryRejected||bExpeditionSaveRejected||bDepthSaveRejected||bIdentitySaveRejected)
+  return FString();
+ for(int a=0;a<9;++a){
+  if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)))continue;
+  const int source=UnmadeCore::CrossRealmCombatSource(a);
+  const auto stage=CrossRealmCarry.Stage(source);
+  const auto* previous=Expeditions.Arc(source);
+  const auto response=UnmadeCore::CrossRealmCombatResponse(a,
+    previous->boss,previous->kills,previous->rescued,previous->returned!=0,
+    stage>=UnmadeCore::CarryStage::Delivered,
+    stage==UnmadeCore::CarryStage::Reviewed,true);
+  if(response.kind==UnmadeCore::CrossRealmCombatKind::Unknown)return FString();
+  return FString::Printf(
+   TEXT(" Your delivered battle account reports %s in %s, %d fallen guards and %d people freed. I responded at our %s: local sentries changed their warning strength by %+d. This is my response to a report, not an eyewitness claim.%s"),
+   previous->boss==1?TEXT("the guardian was defeated"):TEXT("the guardian yielded alive"),
+   UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
+   response.casualties,response.rescued,
+   UTF8_TO_TCHAR(UnmadeCore::CrossRealmCombatProfiles[a].frontier),
+   response.hazardDelta,
+   stage==UnmadeCore::CarryStage::Reviewed?
+    TEXT(" Our local evidence review has tempered the initial order."):
+    TEXT(" We still need to examine our own local evidence."));
+ }
+ return FString();
+}
+FString AUnmadePrototypeHub::GetCrossRealmCarryRecipientLine(FName ResidentId)const{
+ if(bCrossRealmCarryRejected||bDepthSaveRejected||bExpeditionSaveRejected)return FString();
+ for(int a=0;a<9;++a){
+  if(ResidentId!=FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)))continue;
+  const int source=(a+8)%9;
+  if(CrossRealmCarry.Stage(source)<UnmadeCore::CarryStage::Delivered)return FString();
+  if(CrossRealmCarry.Stage(source)==UnmadeCore::CarryStage::Reviewed&&Depth.Arc(a)->evidence)
+   return FString::Printf(TEXT("I compared the actual %s record you brought with the local evidence you presented to me at our review table. Their stories can inform each other, but they do not absolve our own witnesses."),
+     UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city))+GetCrossRealmCombatRecipientLine(ResidentId);
+  return FString::Printf(TEXT("I personally received the hand-carried record from %s. Its account of %s is at our civic receipt station. We must still examine our own realm's conditions before acting."),
+    UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[source].city),
+    UTF8_TO_TCHAR(Depth.Arc(source)->choice==1?
+      UnmadeCore::DepthSpecs[source].public_return_a:
+      UnmadeCore::DepthSpecs[source].public_return_b))+GetCrossRealmCombatRecipientLine(ResidentId);
+ }
+ return FString();
+}
 FString AUnmadePrototypeHub::GetDepthReaction(FName person)const{for(int a=0;a<9;++a){auto* s=Depth.Arc(a);if(!s->offered)continue;bool chief=person==FName(*FString::Printf(TEXT("npc.expedition.%d.0"),a)),witness=person==FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a));if(!chief&&!witness)continue;auto& spec=UnmadeCore::DepthSpecs[a];return FString(UTF8_TO_TCHAR(s->choice?(witness?(s->choice==1?spec.witness_return_a:spec.witness_return_b):(s->choice==1?spec.return_a:spec.return_b)):witness?spec.witness:spec.offer))+(s->choice==2?(s->counterThreat?TEXT(" The return-road claimant is gone. We remember who faced it."):TEXT(" A displaced claimant is watching the outer return road. You can avoid that road or face them.")):TEXT(""));}return FString();}
-FString AUnmadePrototypeHub::GetDepthPrompt(AUnmadeCharacter* p)const{if(!Alive(p))return TEXT("Return to your checkpoint to recover.");for(int a=0;a<9;++a){for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)if(Near(p,Shop(a,n,site)))return FString::Printf(TEXT("E  %s — %d local favor"),n==0?TEXT("Buy provisions"):n==1?TEXT("Craft field kit"):TEXT("Learn mastery"),Depth.Price(a,n));if((Expeditions.Arc(a)->rooms&4)&&Near(p,Control(a,n)))return FString::Printf(TEXT("E  Route control %d — %s"),n+1,UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].challenge));}if(DepthEvidenceActors.IsValidIndex(a)&&DepthEvidenceActors[a].IsValid()&&Near(p,Evidence(a)))return TEXT("E  Read personal evidence");if(DepthCacheActors.IsValidIndex(a)&&DepthCacheActors[a].IsValid()&&Near(p,Secret(a)))return TEXT("E  Inspect opened route cache");if(auto* n=Person(GetWorld(),a,0))if(Near(p,n->GetActorLocation(),n))return FString::Printf(TEXT("E  Speak to %s / 6 or 7 choose after evidence and boss resolution"),*n->GetDisplayLabel());}return TEXT("E interact  •  F inspect  •  J journal  •  I equipment  •  Tab map  •  Shift dodge  •  Ctrl sneak");}
+FString AUnmadePrototypeHub::GetDepthPrompt(AUnmadeCharacter* p)const{if(!Alive(p))return TEXT("Return to your checkpoint to recover.");for(int a=0;a<9;++a){for(int n=0;n<3;++n){for(int site=0;site<(a==0?5:3);++site)if(Near(p,Shop(a,n,site)))return FString::Printf(TEXT("E  %s — %d local favor"),n==0?TEXT("Buy provisions"):n==1?TEXT("Craft field kit"):TEXT("Learn mastery"),Depth.Price(a,n));if((Expeditions.Arc(a)->rooms&4)&&Near(p,Control(a,n)))return FString::Printf(TEXT("E  Route control %d — %s%s"),n+1,UTF8_TO_TCHAR(UnmadeCore::ChallengeInstructions(a)),a==1?*FString::Printf(TEXT(" / tide %.0f of 12"),UnmadeCore::RealmChallenge::TidePhase(GetWorld()->GetTimeSeconds())):a==2?*FString::Printf(TEXT(" / %.0f seconds left"),DepthChallenges[a].SecondsRemaining(GetWorld()->GetTimeSeconds())):TEXT(""));}  if(DepthWitnessPlanSigns.IsValidIndex(a)&&DepthWitnessPlanSigns[a].IsValid()&&
+     !Depth.Arc(a)->route&&(Expeditions.Arc(a)->rooms&4)&&
+     Near(p,DepthWitnessPlanSigns[a]->GetActorLocation()-FVector(0,0,150),
+          DepthWitnessPlanSigns[a].Get()))
+      return TEXT("E  Apply witness-guided route plan");
+for(int choice=1;choice<=2;++choice)
+   if(DepthAccordWorkActors.IsValidIndex(a*2+choice-1)&&DepthAccordWorkActors[a*2+choice-1].IsValid()
+    &&!DepthAccordWorkActors[a*2+choice-1]->IsHidden()
+    &&Near(p,DepthAccordWorkActors[a*2+choice-1]->GetActorLocation()+FVector(0,0,65),DepthAccordWorkActors[a*2+choice-1].Get()))
+     return CrossRealmCarry.Stage(a)==UnmadeCore::CarryStage::Waiting&&
+       Depth.Arc(a)->choice&&Expeditions.Arc(a)->returned&&Identity.Arc(a)->repair==7
+       ?TEXT("E  Collect and carry local report to next realm")
+       :TEXT("E  Inspect working accord station");
+  if(DepthCrossRealmReviewActors.IsValidIndex(a)&&DepthCrossRealmReviewActors[a].IsValid()&&
+   !DepthCrossRealmReviewActors[a]->IsHidden()&&
+   Near(p,DepthCrossRealmReviewActors[a]->GetActorLocation()+FVector(0,0,75),
+      DepthCrossRealmReviewActors[a].Get()))
+    return TEXT("E  Compare incoming report with local evidence");
+  if(DepthAccordSigns.IsValidIndex(a)&&DepthAccordSigns[a].IsValid()&&!DepthAccordSigns[a]->IsHidden()
+   &&Expeditions.Arc(a)->returned&&Depth.Arc(a)->choice
+   &&Near(p,DepthAccordSigns[a]->GetActorLocation()-FVector(0,0,150),DepthAccordSigns[a].Get()))
+   return TEXT("E  Inspect public accord and return-road work");if(DepthEvidenceActors.IsValidIndex(a)&&DepthEvidenceActors[a].IsValid()&&Near(p,Evidence(a)))return TEXT("E  Read personal evidence");if(DepthCacheActors.IsValidIndex(a)&&DepthCacheActors[a].IsValid()&&Near(p,Secret(a)))return TEXT("E  Inspect opened route cache");if(auto* n=Person(GetWorld(),a,0))if(Near(p,n->GetActorLocation(),n))return CrossRealmCarry.Stage((a+8)%9)==UnmadeCore::CarryStage::Carrying
+        ?FString::Printf(TEXT("E  Hand-carry report to %s"),*n->GetDisplayLabel())
+        :FString::Printf(TEXT("E  Speak to %s / 6 or 7 choose after evidence and boss resolution"),*n->GetDisplayLabel());}return TEXT("E interact  •  F inspect  •  J journal  •  I equipment  •  Tab map  •  Shift dodge  •  Ctrl sneak");}
 UnmadeCore::WeaponStyle AUnmadePrototypeHub::PlayerWeaponStyle(UnmadeCore::ItemId legacy)const{auto Apply=[&](UnmadeCore::WeaponStyle s){auto b=ActiveBuild();s.cost*=b.cost;s.reach*=b.reach;return s;};if(GetWorld())if(auto* p=Cast<AUnmadeCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(),0)))if(p->GetEquipment()&&p->GetEquipment()->RealmWeapon()>=0)return Apply(UnmadeCore::RealmWeapon(p->GetEquipment()->RealmWeapon()));using I=UnmadeCore::ItemId;if(legacy==I::Waybreaker||legacy==I::DebtCollector)return Apply({280,1.05,23,1.2,UnmadeCore::CombatStatus::Weaken,"Heavy blade"});if(legacy==I::MapmakersNeedle)return Apply({380,.8,18,1,UnmadeCore::CombatStatus::Expose,"Long needle"});if(legacy==I::RedactedScepter)return Apply({650,1.1,24,1,UnmadeCore::CombatStatus::Slow,"Redacted focus"});if(legacy==I::TemperedEdge)return Apply({235,.55,12,.95,UnmadeCore::CombatStatus::Burn,"Tempered blade"});return Apply({});}
-bool AUnmadePrototypeHub::SelectDepthTechnique(int a,AUnmadeCharacter* p){if(!Alive(p)||bDepthSaveRejected)return false;auto before=Depth;if(!Depth.Select(a))return false;if(!WriteWorldSnapshot(p)){Depth=before;return false;}NotifyRpg(FString(UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].power))+TEXT(" selected. F11 after mastery training."));return true;}
-bool AUnmadePrototypeHub::UseDepthPower(AUnmadeCharacter* p){if(!Alive(p)||bDepthSaveRejected||!GetWorld()||GetActiveMastery()<1)return false;int a=Depth.Active();double now=GetWorld()->GetTimeSeconds();AUnmadeEnemyCharacter* target=nullptr;double best=FMath::Square(800.f);for(TActorIterator<AUnmadeEnemyCharacter> e(GetWorld());e;++e){double d=FVector::DistSquared2D(p->GetActorLocation(),e->GetActorLocation());if(!e->CanBeTargeted()||d>=best)continue;FCollisionQueryParams q(SCENE_QUERY_STAT(TechniqueSight),false);q.AddIgnoredActor(p);q.AddIgnoredActor(*e);if(!GetWorld()->LineTraceTestByChannel(p->GetActorLocation()+FVector(0,0,55),e->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q)){best=d;target=*e;}}
+bool AUnmadePrototypeHub::SelectDepthTechnique(int a,AUnmadeCharacter* p){
+ if(!Alive(p)||bDepthSaveRejected||p->GetWorld()!=GetWorld()||!UnmadeSave::IsSessionWritable(p)){NotifyRpg(TEXT("Technique selection unavailable until the current save and world are ready. The previous technique is unchanged."));return false;}
+ const auto result=UnmadeCore::CommitMasterySelection(Depth,a,[&]{return WriteWorldSnapshot(p);});
+ if(result==UnmadeCore::MasterySelection::Unavailable){NotifyRpg(TEXT("Resolve this realm's personal accord before selecting its technique; mastery training is required to use it."));return false;}
+ if(result==UnmadeCore::MasterySelection::SaveFailed){NotifyRpg(TEXT("Technique selection could not save. Your previous technique was restored; try again."));return false;}
+ if(result==UnmadeCore::MasterySelection::Unchanged){NotifyRpg(TEXT("This technique is already selected. F11 uses it after mastery training."));return true;}
+ NotifyRpg(FString(UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].power))+TEXT(" selected. F11 after mastery training."));return true;
+}
+bool AUnmadePrototypeHub::UseDepthPower(AUnmadeCharacter* p){if(!Alive(p)||bDepthSaveRejected||!GetWorld()||p->GetWorld()!=GetWorld()||!UnmadeSave::IsSessionWritable(p)||GetActiveMastery()<1)return false;int a=Depth.Active();double now=GetWorld()->GetTimeSeconds();AUnmadeEnemyCharacter* target=nullptr;double best=FMath::Square(800.f);for(TActorIterator<AUnmadeEnemyCharacter> e(GetWorld());e;++e){const FVector delta=e->GetActorLocation()-p->GetActorLocation();double d=delta.SizeSquared();if(!UnmadeCore::MasteryTargetInRange(delta.X,delta.Y,delta.Z,e->CanBeTargeted())||d>=best)continue;FCollisionQueryParams q(SCENE_QUERY_STAT(TechniqueSight),false);q.AddIgnoredActor(p);q.AddIgnoredActor(*e);if(!GetWorld()->LineTraceTestByChannel(p->GetActorLocation()+FVector(0,0,55),e->GetActorLocation()+FVector(0,0,55),ECC_Visibility,q)){best=d;target=*e;}}
  if(a!=6&&a!=7&&a!=8&&!target)return false;if(a==7&&(!p->GetCombat()->IsGuarding()||p->GetCombat()->GetMissingHealth()<=0))return false;if(!p->GetCombat()->UsePower(now))return false;
- if(a==6){p->GetCombat()->GrantEvasion(now,.5+GetActiveMastery()*.1);p->LaunchCharacter(p->GetActorForwardVector()*550,false,false);}else if(a==7)p->GetCombat()->Heal(20);else if(a==8)p->GetCombat()->GrantWard(now);else if(target){if(a==4)target->ExposeToFold(now,1.5+GetActiveMastery());else if(a==0||a==5){target->GetCombat()->ApplyStatus(UnmadeCore::CombatStatus::Expose,3+GetActiveMastery());if(a==5)target->GetCombat()->Stagger(now,.8);}else target->GetCombat()->ApplyStatus(a==1?UnmadeCore::CombatStatus::Slow:a==2?UnmadeCore::CombatStatus::Burn:UnmadeCore::CombatStatus::Weaken,4+GetActiveMastery());}
+ if(a==6){p->GetCombat()->GrantEvasion(now,.5+GetActiveMastery()*.1);p->LaunchCharacter(p->GetActorForwardVector()*550,false,false);}else if(a==7)p->GetCombat()->Heal(20);else if(a==8)p->GetCombat()->GrantWard(now);else if(target){if(a==4)target->ExposeToFold(now,1.5+GetActiveMastery());else if(a==0||a==5){target->GetCombat()->ApplyStatus(UnmadeCore::CombatStatus::Expose,3+GetActiveMastery(),p);if(a==5)target->GetCombat()->Stagger(now,.8);}else target->GetCombat()->ApplyStatus(a==1?UnmadeCore::CombatStatus::Slow:a==2?UnmadeCore::CombatStatus::Burn:UnmadeCore::CombatStatus::Weaken,4+GetActiveMastery(),p);}
  p->PlayIdentityMotion(FName(TEXT("Cast")));UnmadePresentation::Sound(p,TEXT("cast"));NotifyRpg(FString(UTF8_TO_TCHAR(UnmadeCore::DepthSpecs[a].power))+TEXT(" used. Thirty stamina; twelve-second recovery."));return true;}
 
-bool AUnmadePrototypeHub::UseDepthFieldKit(AUnmadeCharacter* p){if(!Alive(p)||!GetWorld()||bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected)return false;for(int a=0;a<9;++a){if(FVector::DistSquared2D(p->GetActorLocation(),Room(a,3))>FMath::Square(1100.f)||FMath::Abs(p->GetActorLocation().Z-Room(a,3).Z)>180||Identity.Arc(a)->chart||Expeditions.Arc(a)->boss||GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a])continue;auto before=Depth;if(!Depth.SpendKit(a))return false;if(!WriteWorldSnapshot(p)){Depth=before;NotifyRpg(TEXT("Field kit could not save; no kit consumed."));return false;}ExpeditionHazardQuiet[a]=GetWorld()->GetTimeSeconds()+(Experience.Arc(a)->recipe?30:20);p->PlayIdentityMotion(FName(TEXT("Repair")));NotifyRpg(Experience.Arc(a)->recipe?TEXT("The crafted binding extended this field kit to thirty seconds."):TEXT("One field kit grounded the local danger field for twenty seconds."));return true;}return false;}
+UnmadeCore::FieldKitResult AUnmadePrototypeHub::UseDepthFieldKit(AUnmadeCharacter* p){
+ using UnmadeCore::FieldKitResult;
+ if(!Alive(p)||!GetWorld()||p->GetWorld()!=GetWorld()||!UnmadeSave::IsSessionWritable(p)||bDepthSaveRejected||bExpeditionSaveRejected||bIdentitySaveRejected)return FieldKitResult::Unavailable;
+ for(int a=0;a<9;++a){
+  if(FVector::DistSquared2D(p->GetActorLocation(),Room(a,3))>FMath::Square(1100.f)||FMath::Abs(p->GetActorLocation().Z-Room(a,3).Z)>180||Identity.Arc(a)->chart||Expeditions.Arc(a)->boss||GetWorld()->GetTimeSeconds()<ExpeditionHazardQuiet[a])continue;
+  int supplier=-1;
+  const auto result=UnmadeCore::CommitFieldKit(Depth,a,true,[&]{return WriteWorldSnapshot(p);},supplier);
+  if(result==FieldKitResult::SaveFailed){NotifyRpg(TEXT("Field kit could not save; no kit consumed. Try again."));return result;}
+  if(result!=FieldKitResult::Used)return result;
+  const int seconds=Experience.Arc(a)->recipe?30:20;
+  ExpeditionHazardQuiet[a]=GetWorld()->GetTimeSeconds()+seconds;
+  p->PlayIdentityMotion(FName(TEXT("Repair")));
+  NotifyRpg(FString::Printf(TEXT("One field kit from %s grounded this danger field for %d seconds."),UTF8_TO_TCHAR(UnmadeCore::ExpeditionSpecs[supplier].city),seconds));
+  return result;
+ }
+ return FieldKitResult::Unavailable;
+}

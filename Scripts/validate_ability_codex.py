@@ -258,7 +258,7 @@ def validate(root: Path = ROOT, codex: dict | None = None) -> list[str]:
     saves = source("Source/TheUnmadeGame/Public/Save/UnmadePrototypeSave.h")
     for token in ("AbilityStudy.CanClaimAtlas(CurrentAtlasRequirements())", "NearEchoStudySite()",
                   "Achievement::AtlasOfAbsenceMastery", "bool AUnmadeCharacter::PersistStudy()",
-                  "UnmadeSave::SaveGameToSlot(Save)", "RecordStudyEvidence(Id,1)",
+                  "UnmadeSave::SaveGameToSlot(Save,this)", "RecordStudyEvidence(Id,1)",
                   "AbilityStudy.Experiment(Id)", "AbilityStudy.Master(Id)",
                   "Enemy->IsActivelyTelegraphing(Now)", "Before>Target->GetCombat()->GetHealth()",
                   "Enemy->ExposeToFold"):

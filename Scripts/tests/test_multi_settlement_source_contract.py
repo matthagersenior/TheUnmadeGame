@@ -29,8 +29,7 @@ class MultiVillageSourceTests(unittest.TestCase):
         self.assertIn("LocalRumorTarget(HomeSettlement)",npc)
         self.assertIn("LocalInvestigationTarget(HomeSettlement)",npc)
         self.assertIn("FindNearbyCitizen(",player)
-        self.assertIn("MergeNpcSnapshot(Merged",hub)
-        self.assertNotIn("Save->NpcSnapshots.Reset()",hub)
+        self.assertIn("ReplaceNpcMemory(Save->NpcSnapshots,Snapshot)",hub)
         self.assertNotIn("UUnmadeLocalDialogueSubsystem",npc)
 
     def test_local_village_tasks_and_save_are_authoritative(self):
@@ -44,7 +43,7 @@ class MultiVillageSourceTests(unittest.TestCase):
         self.assertIn("RegionalTasks.Restore(Previous)",hub)
         self.assertIn("RegionalTasks.Converse(",hub)
         self.assertIn("TryResidentVillageTask(Target->GetStableId()",player)
-        self.assertIn('ReportLocalEvent(FName("Player.HelpedVillage")',player)
+        self.assertIn('CommitWorldEvent(FName("Player.HelpedVillage")',hub)
         self.assertIn("Hub->GetVisitedVillageCount()",player)
 
     def test_native_rules_are_tested_in_ci(self):

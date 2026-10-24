@@ -2,8 +2,10 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "World/UnmadeTenfoldChronicle.h"
+#include "World/UnmadeTimedProgressRules.h"
 #include "World/UnmadeConfluenceRules.h"
 #include <string>
+#include "World/UnmadeChronicleHistoryRules.h"
 #include "UnmadeTenfoldComponent.generated.h"
 
 /** Story-authoritative ten-rite quest and power component. AI entirely optional. */
@@ -32,7 +34,16 @@ public:
     void StudyConfluence();
     void ConfluenceChoice1();
     void ConfluenceChoice2();
+    bool HasLegacyDeed(UnmadeCore::Deed Deed)const {
+        const int Index=static_cast<int>(Deed);
+        return Index>=0&&Index<3&&(Chronicle.Snapshot().deeds&(1u<<Index))!=0;
+    }
+    bool CommitActionDeeds(unsigned Mask,TFunctionRef<bool()> Write);
+    bool CaptureChronicle(class UUnmadePrototypeSave* Save)const;
+    bool HasPendingHistory()const{return History.Pending();}
+    void RecordThreatenedOath();
     void RecordLegacyDeed(UnmadeCore::Deed Deed);
+    bool CommitExploredFrontier(int32 RealmIndex,TFunctionRef<bool()> Write);
     void VerifyExploredFrontier(int32 RealmIndex);
     int32 RiteStage(UnmadeCore::RiteId Rite) const {return Chronicle.Stage(Rite);}
     bool IsMastered(UnmadeCore::RiteId Rite) const {return Chronicle.IsMastered(Rite);}
@@ -65,5 +76,9 @@ private:
     int32 LastAppliedAttack=0;
     int32 LastAppliedArmor=0;
     UnmadeCore::RiteId ActiveRite=UnmadeCore::RiteId::Count;
-    double LastTickDayCheck=0;
+    UnmadeCore::TimedProgressRetry DaySaveRetry;
+    UnmadeCore::ChronicleHistory History;
+    bool bRoutePresentationPending=false;
+    void RetryHistorySave();
+    void RemoveOathPowers();
 };

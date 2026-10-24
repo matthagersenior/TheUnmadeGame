@@ -1,0 +1,60 @@
+// Production models + combined-record store. Actor targeting, serialization and
+// presentation still require Unreal; faults here exercise portable record rules.
+#include "realm_chapter_fixture.h"
+#include "Story/UnmadeCommitmentRules.h"
+#include <cassert>
+#include <cstring>
+#include <iostream>
+using namespace UnmadeCore;
+using SaveFixture::Record;
+using RealmFixture::Chapters;
+using RealmFixture::Same;
+int main(){
+ // Internally well-formed subrecords must also obey present chapter prerequisites.
+ auto forged=Chapters{}.Capture();forged.RealmGuardianOutcomes[0]=1;
+ assert(!SaveFixture::Valid(forged));
+ // Omitted optional sections retain the existing legacy policy.
+ forged.bHasEchoQuestSnapshot=false;assert(SaveFixture::Valid(forged));
+ assert(std::strstr(ResidentContinuityLine(Familiarity::Stranger,false,true,true),"begin"));
+ assert(std::strstr(ResidentContinuityLine(Familiarity::Recognized,false,true,true),"first meeting"));
+ int paths=0,checks=0,faults=0;
+ for(int i=0;i<6;++i)for(int initial=1;initial<=2;++initial)for(int followup=1;followup<=2;++followup)for(int answer=1;answer<=2;++answer)for(int force=0;force<2;++force){
+  Chapters s;SaveFixture::Storage store;const auto& q=EchoQuests[i];const auto& f=LaterRealms[i];const auto& a=RealmAftermathSpecs[i+3];const auto realm=q.realm;
+  const char* neighbor=OuterPeople[i*3].id;
+  auto checkpoint=[&]{
+   const auto next=s.Capture();assert(SaveFixture::Valid(next));
+   if(store.primary)for(int fail=1;fail<=2;++fail){
+    auto damaged=store;const auto before=*damaged.Load();damaged.failAt=damaged.writes+fail;damaged.damageOnFailure=true;
+    assert(!damaged.Commit(next));assert(damaged.Load());Same(before,*damaged.Load());Chapters recovered;recovered.Load(*damaged.Load());Same(before,recovered.Capture());++faults;
+   }
+   assert(store.Commit(next));
+   for(int repeat=0;repeat<3;++repeat){assert(store.Load());s.Load(*store.Load());Same(next,s.Capture());++checks;}
+  };
+  checkpoint();assert(s.echo.Begin(realm,false,false,q.openingWitness)==EchoResult::Locked);
+  assert(s.residents.Talk(neighbor,1)==EncounterEvent::FirstHello);checkpoint();
+  assert(s.first.Visit(realm)==LaterResult::Visited);checkpoint();assert(s.first.Begin(realm,f.initiator)==LaterResult::Started);checkpoint();assert(s.first.Study(realm,initial,initial==1?f.trialEvidenceA:f.trialEvidenceB)==LaterResult::EvidenceFound);checkpoint();assert(s.first.Operate(realm,f.mechanism)==LaterResult::Completed);checkpoint();
+  assert(s.aftermath.Begin(realm,s.first.IsComplete(realm),true,a.initiatingWitness)==RealmAftermathResult::Started);checkpoint();assert(s.aftermath.Prepare(realm,a.mechanismSite)==RealmAftermathResult::Prepared);checkpoint();assert(s.aftermath.Inspect(realm,followup,followup==1?a.evidenceForCare:a.evidenceForTruth)==RealmAftermathResult::EvidenceFound);checkpoint();assert(s.aftermath.Testify(realm,followup==1?a.careWitness:a.truthWitness)==RealmAftermathResult::Witnessed);checkpoint();assert(s.aftermath.Decide(realm,followup)==RealmAftermathResult::Resolved);checkpoint();
+  assert(s.echo.Begin(realm,s.first.IsComplete(realm),s.aftermath.Stage(realm)==4,q.openingWitness)==EchoResult::Started);checkpoint();assert(s.echo.Inspect(realm,q.evidenceB)==EchoResult::Discovered);checkpoint();assert(s.echo.Testify(realm,answer==1?q.witnessCare:q.witnessTruth)==EchoResult::NeedEvidence);assert(s.echo.Inspect(realm,q.evidenceA)==EchoResult::Discovered);checkpoint();assert(s.echo.Testify(realm,answer==1?q.witnessCare:q.witnessTruth)==EchoResult::Testified);checkpoint();
+  assert(s.echo.Commit(realm,3-answer,answer==1?q.ritualTruth:q.ritualCare)==EchoResult::WrongChoice);
+  CommitmentGate gate;assert(gate.Attempt(q.title,answer,10)==CommitmentAttempt::Preview);assert(s.echo.Ending(realm)==0);assert(gate.Attempt(q.title,answer,11)==CommitmentAttempt::Confirmed);
+  assert(s.echo.Commit(realm,answer,answer==1?q.ritualCare:q.ritualTruth)==EchoResult::Committed);checkpoint();
+  assert(s.guardians.Resolve(realm,s.echo.Ending(realm)!=0,!force)==(force?GuardianResolution::Defeated:GuardianResolution::Pacified));checkpoint();
+  const auto& v=RealmResonances[i];assert(s.resonance.Record(realm,v.first,1000,true,true)==ResonanceResult::Started);checkpoint();assert(s.resonance.Record(realm,v.second,1010,true,true)==ResonanceResult::Opened);checkpoint();
+  assert(s.residents.Talk(neighbor,2)==EncounterEvent::ReturnHello);checkpoint();assert(!s.residents.Aided(neighbor));assert(s.residents.Talk(neighbor,2)==EncounterEvent::SameDay);assert(s.echo.Commit(realm,3-answer,q.ritualCare)==EchoResult::NoChange);assert(s.guardians.Resolve(realm,true,!force)==GuardianResolution::AlreadyResolved);
+  const auto good=s.Capture();
+  // Every combination of omitted optional chapter sections remains loadable.
+  // Stored bytes in an absent section are ignored, as in the existing schema.
+  for(int mask=0;mask<16;++mask){auto legacy=good;
+   legacy.bHasLaterRealmSnapshot=(mask&1)!=0;legacy.bHasRealmAftermathSnapshot=(mask&2)!=0;
+   legacy.bHasEchoQuestSnapshot=(mask&4)!=0;legacy.bHasGuardianSnapshot=(mask&8)!=0;
+   assert(SaveFixture::Valid(legacy));
+  }
+  auto reject=[&](Record bad){assert(!SaveFixture::Valid(bad));const int writes=store.writes;assert(!store.Commit(bad)&&store.writes==writes);Same(good,*store.Load());auto recovery=store;recovery.primary=bad;assert(recovery.Load());Same(*store.backup,*recovery.Load());};
+  auto bad=good;bad.EchoQuestStages[i]=0;bad.EchoQuestEvidence[i]=0;bad.EchoQuestTestimonies[i]=0;bad.EchoQuestEndings[i]=0;reject(bad);
+  bad=good;bad.LaterRealmStages[i]=0;bad.LaterRealmChoices[i]=0;reject(bad);
+  bad=good;bad.RealmAftermathStages[i+3]=0;bad.RealmAftermathPrepared[i+3]=0;bad.RealmAftermathApproaches[i+3]=0;bad.RealmAftermathEndings[i+3]=0;reject(bad);
+  bad=good;bad.ResidentEncounterVisits.back()=6;reject(bad);
+  ++paths;
+ }
+ std::cout<<"PASS: "<<paths<<" later-realm chapter/guardian paths; "<<checks<<" full reloads; "<<faults<<" failed-write recoveries; contradictory chapters refused before writes\n";
+}
