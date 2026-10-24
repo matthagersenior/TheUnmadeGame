@@ -39,5 +39,13 @@ class WorldPack(unittest.TestCase):
         self.assertIn("Authored?Authored->dayLine:Witness.Line",world)
         self.assertIn("FindOuterPerson(Identifier.Get())",npc)
         self.assertIn("LocalProfile->nightLine:LocalProfile->dayLine",npc)
+        data=(ROOT/"Source/TheUnmadeGame/Public/Authoring/UnmadeOuterPeopleData.h").read_text()
+        for field in ("desire","fear","knowledgeBoundary","voiceDirection"):
+            self.assertIn("const char* "+field,data)
+            self.assertIn("Profile->"+field,npc)
+        self.assertIn("GetDialogueCharacterContext",npc)
+        dialogue=(ROOT/"Source/TheUnmadeGame/Private/Dialogue/UnmadeLocalDialogueSubsystem.cpp").read_text()
+        self.assertIn("Character desire and fear guide voice only",dialogue)
+        self.assertIn("hard limit on factual claims",dialogue)
         self.assertIn("build_world_content.py",bootstrap)
 if __name__=="__main__":unittest.main()

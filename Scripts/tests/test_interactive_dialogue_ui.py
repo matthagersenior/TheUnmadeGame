@@ -35,11 +35,37 @@ class InteractiveDialogueUiTests(unittest.TestCase):
         widget = self.read("Source/TheUnmadeGame/Private/UI/UnmadeRpgWidget.cpp")
         handler = widget.split("void UUnmadeRpgWidget::NpcLine(", 1)[1].split("\n", 1)[0]
         self.assertIn("Id!=CurrentDialogueNpcId", handler)
+        self.assertIn("Session!=ConversationSession", handler)
         self.assertIn("AppendConversation(", handler)
         dialogue = self.read("Source/TheUnmadeGame/Private/Dialogue/UnmadeLocalDialogueSubsystem.cpp")
         self.assertIn("FallbackLine", dialogue)
+        self.assertIn("ConversationSession", dialogue)
         self.assertNotIn("ApplyWorldChange(", dialogue)
         self.assertNotIn("GrantReward(", dialogue)
+
+    def test_reopened_conversation_rejects_late_reply_from_previous_session(self):
+        header = self.read("Source/TheUnmadeGame/Public/Dialogue/UnmadeLocalDialogueSubsystem.h")
+        widget_header = self.read("Source/TheUnmadeGame/Public/UI/UnmadeRpgWidget.h")
+        widget = self.read("Source/TheUnmadeGame/Private/UI/UnmadeRpgWidget.cpp")
+        subsystem = self.read("Source/TheUnmadeGame/Private/Dialogue/UnmadeLocalDialogueSubsystem.cpp")
+        self.assertIn("FUnmadeDialogueReady, FName, NpcId, int64, ConversationSession", header)
+        self.assertIn("int64 ConversationSession=0", widget_header)
+        self.assertIn("++ConversationSession", widget)
+        self.assertIn("RequestConversationDialogue(Npc,BoundedQuestion", widget)
+        self.assertIn("ConversationSession,PreviousDialogue", widget)
+        self.assertIn("ConversationSession, FallbackLine", subsystem)
+        self.assertIn("ConversationSession,\n                bValid ? GeneratedLine : FallbackLine", subsystem)
+        self.assertIn("ConversationSession == 0 && GEngine", subsystem)
+
+    def test_followups_get_bounded_history_labeled_as_noncanonical_dialogue(self):
+        subsystem_header = self.read("Source/TheUnmadeGame/Public/Dialogue/UnmadeLocalDialogueSubsystem.h")
+        subsystem = self.read("Source/TheUnmadeGame/Private/Dialogue/UnmadeLocalDialogueSubsystem.cpp")
+        widget = self.read("Source/TheUnmadeGame/Private/UI/UnmadeRpgWidget.cpp")
+        self.assertIn("RequestConversationDialogue", subsystem_header)
+        self.assertIn("PreviousDialogue.Right(MaxConversationHistoryCharacters)", subsystem)
+        self.assertIn("untrusted dialogue, not evidence", subsystem)
+        self.assertIn("const FString PreviousDialogue=ConversationTranscript", widget)
+        self.assertIn("ConversationSession,PreviousDialogue", widget)
 
     def test_engine_automation_keeps_multiple_npc_accounts_independent(self):
         engine = self.read("Source/TheUnmadeGame/Private/Tests/LocalDialogueAutomationTest.cpp")

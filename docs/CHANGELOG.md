@@ -1225,3 +1225,29 @@ Next: trace ordinary enemy reward delivery for melee/ranged kills and post-cast
 NPC witness persistence, preserving per-realm receipts and authored consequences.
 Keep UHT/Editor build, actual nine-realm walkthroughs, travel, controller/UI and
 interrupted platform IO pending until an Unreal-capable host is available.
+
+## 24 October 2026 — Give NPC follow-up questions bounded conversation context
+
+The optional local model now receives up to 1,200 characters of previous turns
+from the active resident conversation. The transcript is labeled untrusted
+dialogue rather than evidence, and it is not persisted as NPC memory. Deterministic
+offline replies and gameplay state are unchanged. Unreal model behavior and
+multi-turn playback remain pending.
+
+## 24 October 2026 — Feed authored resident character limits into optional dialogue
+
+Generated source profiles now carry the 18 later-realm residents' authored
+desire, fear, knowledge boundary and voice direction alongside their day/night
+lines. The optional local-model prompt uses these as characterization and states
+that motives are not evidence and knowledge boundaries constrain factual claims.
+No NPC behavior, memory or quest state changed. The generated source refreshed;
+Unreal compilation and model-response review remain pending.
+
+## 24 October 2026 — Ignore late replies from closed NPC conversations
+
+NPC dialogue requests and reply events now carry a conversation session ID.
+The UI accepts a response only for the currently open NPC and session, so a
+slow local model response cannot leak into a later conversation with the same
+resident. One-off greetings remain out of the conversation transcript. The
+source contract was extended; Unreal Header Tool and Editor playback are still
+required.

@@ -40,6 +40,8 @@ public:
     UFUNCTION(BlueprintPure, Category="Unmade|NPC")
     bool CanTradeWithPlayer() const;
     FString GetReactionText() const;
+    /** Authored characterization for dialogue presentation; never gameplay evidence. */
+    FString GetDialogueCharacterContext() const;
     FName GetStableId() const { return NpcId; }
     const FString& GetDisplayLabel() const { return NpcDisplayLabel; }
     UUnmadeMemoryComponent* GetMemory() const { return Memory; }

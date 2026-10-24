@@ -102,6 +102,8 @@ void UUnmadeRpgWidget::BeginNpcConversation(AUnmadeNpcCharacter* Npc)
 {
     if(!IsValid(Npc))return;
     if(auto* h=Hub(GetWorld()))if(h->IsBesDirectedScenePlaying())return;
+    ++ConversationSession;
+    if(ConversationSession<=0)ConversationSession=1;
     ConversationNpc=Npc;CurrentDialogueNpcId=Npc->GetStableId();bConversationOpen=true;
     ConversationTranscript=FString::Printf(TEXT("%s\n\n%s\n\nChoose a question, or type your own. Conversation text does not commit quest choices."),*Npc->GetDisplayLabel(),*Npc->GetReactionText());
     if(auto* h=Hub(GetWorld()))h->NotifyRpg(FString::Printf(TEXT("%s: %s"),*Npc->GetDisplayLabel(),*Npc->GetReactionText()));
@@ -120,11 +122,13 @@ void UUnmadeRpgWidget::AskNpcTopic(const FString& Question)
 {
     AUnmadeNpcCharacter* Npc=ConversationNpc.Get();if(!bConversationOpen||!IsValid(Npc))return;
     const FString BoundedQuestion=Question.Left(400);
+    const FString PreviousDialogue=ConversationTranscript;
     AppendConversation(TEXT("You"),BoundedQuestion);
     if(auto* h=Hub(GetWorld()))h->NotifyRpg(FString::Printf(TEXT("You asked %s: %s"),*Npc->GetDisplayLabel(),*BoundedQuestion));
     if(ConversationInput)ConversationInput->SetText(FText::GetEmpty());
     if(auto* Dialogue=GetGameInstance()?GetGameInstance()->GetSubsystem<UUnmadeLocalDialogueSubsystem>():nullptr)
-        Dialogue->RequestDialogue(Npc,BoundedQuestion);
+        Dialogue->RequestConversationDialogue(Npc,BoundedQuestion,
+            ConversationSession,PreviousDialogue);
     else
     {
         AppendConversation(Npc->GetDisplayLabel(),Npc->GetReactionText());
@@ -172,7 +176,7 @@ void UUnmadeRpgWidget::Refresh(){auto* p=Player(this);auto* h=Hub(GetWorld());if
  if((Page==6||Page==7)&&!ActionFeedback.IsEmpty())text+=TEXT("\n\n")+ActionFeedback;
  const FString shown=Page==7?text:pref->FormatControls(text);if(Body->GetText().ToString()!=shown)Body->SetText(FText::FromString(shown));
 }
-void UUnmadeRpgWidget::NpcLine(FName Id,const FString& Line,bool UsedModel){if(!bConversationOpen||Id!=CurrentDialogueNpcId)return;AUnmadeNpcCharacter* Npc=ConversationNpc.Get();const FString Speaker=IsValid(Npc)?Npc->GetDisplayLabel():TEXT("Resident");AppendConversation(Speaker,Line);if(auto* h=Hub(GetWorld()))h->NotifyRpg(FString::Printf(TEXT("%s: %s"),*Speaker,*Line));}
+void UUnmadeRpgWidget::NpcLine(FName Id,int64 Session,const FString& Line,bool UsedModel){if(!bConversationOpen||Id!=CurrentDialogueNpcId||Session!=ConversationSession)return;AUnmadeNpcCharacter* Npc=ConversationNpc.Get();const FString Speaker=IsValid(Npc)?Npc->GetDisplayLabel():TEXT("Resident");AppendConversation(Speaker,Line);if(auto* h=Hub(GetWorld()))h->NotifyRpg(FString::Printf(TEXT("%s: %s"),*Speaker,*Line));}
 void UUnmadeRpgWidget::Journal(){Open(0);}void UUnmadeRpgWidget::Equipment(){Open(1);}void UUnmadeRpgWidget::Map(){Open(2);}void UUnmadeRpgWidget::Dismiss(){Close();}
 void UUnmadeRpgWidget::Weapon(){if(auto* p=Player(this))p->RpgMenuAction(FName(TEXT("Weapon")));Refresh();}
 void UUnmadeRpgWidget::Armor(){if(auto* p=Player(this))p->RpgMenuAction(FName(TEXT("Armor")));Refresh();}

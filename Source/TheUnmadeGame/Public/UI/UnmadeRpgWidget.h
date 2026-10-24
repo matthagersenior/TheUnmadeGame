@@ -60,6 +60,7 @@ private:
  UPROPERTY() TWeakObjectPtr<AUnmadeNpcCharacter> ConversationNpc;
  FName CurrentDialogueNpcId=NAME_None;
  FString ConversationTranscript;
+ int64 ConversationSession=0;
  bool bConversationOpen=false;
  void Refresh();
  void AskNpcTopic(const FString& Question);
@@ -162,7 +163,7 @@ private:
  UFUNCTION() void ChoiceA();
  UFUNCTION() void ChoiceB();
  UFUNCTION() void SelectTechnique();
- UFUNCTION() void NpcLine(FName Id,const FString& Line,bool UsedModel);
+ UFUNCTION() void NpcLine(FName Id,int64 Session,const FString& Line,bool UsedModel);
  UFUNCTION() void Map0();
  UFUNCTION() void Map1();
  UFUNCTION() void Map2();

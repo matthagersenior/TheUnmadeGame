@@ -37,6 +37,18 @@ class LocalDialogueSourceTests(unittest.TestCase):
         self.assertIn("MaxContextEvents", code)
         self.assertIn("TryExtractLine", code)
 
+    def test_model_uses_authored_characterization_with_a_hard_knowledge_limit(self):
+        code = source("Source/TheUnmadeGame/Private/Dialogue/UnmadeLocalDialogueSubsystem.cpp")
+        self.assertIn("GetDialogueCharacterContext()", code)
+        self.assertIn("Character desire and fear guide voice only", code)
+        self.assertIn("hard limit on factual claims", code)
+
+    def test_followup_context_is_bounded_and_not_authoritative(self):
+        code = source("Source/TheUnmadeGame/Private/Dialogue/UnmadeLocalDialogueSubsystem.cpp")
+        self.assertIn("MaxConversationHistoryCharacters = 1200", code)
+        self.assertIn("PreviousDialogue.Right(MaxConversationHistoryCharacters)", code)
+        self.assertIn("untrusted dialogue, not evidence", code)
+
     def test_player_uses_subsystem_with_fallback(self):
         player = source("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         self.assertIn("GetSubsystem<UUnmadeLocalDialogueSubsystem>()", player)
