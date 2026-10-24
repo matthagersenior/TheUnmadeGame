@@ -856,23 +856,23 @@ FString AUnmadeNpcCharacter::GetOfflinePortrayalReply(const FString& PlayerUtter
     const UnmadeCore::OuterPersonSpec* Profile=
         UnmadeCore::FindOuterPerson(Identifier.Get());
     if(!Profile)return FString();
-    if(Asked.Contains(TEXT("want"))||Asked.Contains(TEXT("desire"))||
-       Asked.Contains(TEXT("hope")))
+    if(Asked.Contains(TEXT("what do you want"))||
+       Asked.Contains(TEXT("what is your desire"))||
+       Asked.Contains(TEXT("what do you hope")))
         return FString::Printf(TEXT("What I want is this: %s"),
             UTF8_TO_TCHAR(Profile->desire));
-    if(Asked.Contains(TEXT("fear"))||Asked.Contains(TEXT("afraid"))||
-       Asked.Contains(TEXT("worry"))||Asked.Contains(TEXT("concern")))
+    if(Asked.Contains(TEXT("what worries you"))||
+       Asked.Contains(TEXT("what are you afraid"))||
+       Asked.Contains(TEXT("what do you fear"))||
+       Asked.Contains(TEXT("your fear"))||
+       Asked.Contains(TEXT("what concerns you")))
         return FString::Printf(TEXT("What worries me is this: %s"),
             UTF8_TO_TCHAR(Profile->fear));
-    if(Asked.Contains(TEXT("know"))||Asked.Contains(TEXT("knowledge"))||
-       Asked.Contains(TEXT("certain"))||Asked.Contains(TEXT("boundary"))||
-       Asked.Contains(TEXT("limit")))
+    if(Asked.Contains(TEXT("what do you know"))||
+       Asked.Contains(TEXT("what can't you know"))||
+       Asked.Contains(TEXT("what can you not know"))||
+       Asked.Contains(TEXT("your knowledge boundary"))||
+       Asked.Contains(TEXT("your knowledge limit")))
         return FString::Printf(TEXT("I can speak to this much: %s"),
             UTF8_TO_TCHAR(Profile->knowledgeBoundary));
     return FString();
-}
-
-void AUnmadeNpcCharacter::ConfigureExpeditionResident(FName Id,const FString& Name,UnmadeCore::Realm Home,const FString& Line,int Arc,int Captive){
- ConfigureIdentity(Id,Name,UnmadeCore::NpcRole::Wanderer,UnmadeCore::NpcTemperament::Steady,UnmadeCore::SettlementId::Crossings,Line);
- bLaterRealmResident=true;LaterHome=Home;ExpeditionHomeArc=Arc;ExpeditionCaptive=Captive;HomeLocation=GetActorLocation();
-}
