@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 37917)
-Total output lines: 1461
-
 ## 2026-10-17 — Checked reality costs, crossing arrivals and revival
 
 - Combined direct reality-action Strain, existing language clue and local
@@ -423,7 +420,329 @@ Every substantial gameplay addition needs a companion canon update and a regener
 ## 2026-10-11 — Publication v9 repaired, full illustrated binaries issued
 - Rebuilt the real 132-page master as a 137-page cumulative book and the original 67-page Volume X as 74 pages, preserving all previous chapters, embedded images (52/5 previously) and adding one schematic figure each (53/6 now).
 - Published the two Word masters and two PDFs to the user's private file Library, plus Chapter 28/29 source, atlas artwork and 22-entry ZIP (every member CRC checked, 21 manifest content hashes independently verified).
-- Visual QA: page PNG renders, 0 blank PDF pages and 0 out-o…7917 tokens truncated…le therefore skipped
+- Visual QA: page PNG renders, 0 blank PDF pages and 0 out-of-bounds text blocks. The site schematic is not an Unreal gameplay image. GitHub receipts link Library locations, not invented public release files.
+- Updated the full Volume X editorial source with Chapters 28–29 and strengthened the workflow gate so source commits must also update the release receipt and SHA manifest, not just lore notes. Unreal compilation remains outstanding.
+
+
+## 2026-10-11 — Performance and Peril v10: three rig families, six environments and cinematic gameplay
+- Authored original, offline-generation glTF 2.0 skinned resident (7 joints), beast (7 joints), wraith (5 joints) with five keyed named motion clips per model (15 total) and six PBR material source swatches, plus a playable-asset import acceptance guide. The skinned models are EDITABLE source, not cooked Unreal uassets.
+- Source-wired optional skeletal animation for player, residents and enemies with safe static graybox fallback; resident moving and speaking clip selection and physical temporary scene blocking with clean skip restoration.
+- Expanded six previously generic expedition grounds with 18 distinct source-runtime primitive-mesh landmark placements (ribs, prisms, bells, archive folios, quay piles and kiln stacks), collision choices and optional per-site materials. Older scenery, scout names and save states remain intact.
+- Switched enemy movement from straight swept root offsets to bounded NavigationSystem waypoints and CharacterMovement collision; if no navmesh exists, only line-of-sight local movement is allowed. Added pre-attack warning timing, player counterplay by sight-breaking, impact cues and health hit indication without bypassing original guard/fracture/cooldown rules.
+- Regenerated the COMPLETE illustrated master (140-page PDF/DOCX, 54 images) and standalone Volume X (79 pages, 7 images), adding Chapter 30 and a new technical plate; visually inspected final spreads and checked zero blank/off-page blocks. Issued the 31-entry CRC/SHA-verified bundle and a separate rig source ZIP in the user's Library at `/The Unmade/Illustrated Bible Editions/2026-10-11 Performance and Peril v10`.
+- Work remains unverified in Unreal Editor/UHT/PIE, especially GLTF import paths/scale, skeletal playback, generated NavMesh bounds, occluded camera, player combat balance, content authoring and whole-quest playtesting. The v10 files are a real editorial/software source release, not a completed executable.
+
+
+## 2026-10-11 Paths and Predators v11
+Twelve named creature profiles replace site aliases; six elder variants rally below half health. Six saved, physical latch-and-scout surveys open covered passages. Fold interrupts a pending strike with recovery. Existing campaigns, money, consent, mysteries and endings are unchanged. Source-only validation; Unreal UHT/PIE remains outstanding. Complete illustrated books rebuilt from v10.
+
+
+## 2026-10-11 Cinderhold and the Remembered Road v12
+
+Implemented all six requested development priorities within one optional connected adventure: specific relationship memories, interactive environmental evidence and gates, territorial creatures, an authored Blackslag elder with locked tells and a living alternative, grounded ability combinations and warned permanent choices, and intersecting household/fieldwork/return objectives. Added Volume X Chapter 32 and engine acceptance plan. Exact wages, warmth and Mera's consent remain separate authoritative domains; no OPEN mystery or ending was canonized.
+
+Four new three-beat directed scenes and three actual original prototype stereo effects accompany the source; no final voice recording, bespoke skeletal clip or verified Unreal import is claimed. Versioned dependent snapshot validation, atomic paid route persistence, failed-save rollback, actual living elder checks, earned local reports and historical return values are tested. The v11 Blackslag survey remains compatible and yields to Varda after its existing report. The illustrated master and standalone volume are extended from the intact full v11 editions, retaining prior artwork. See current illustrated receipt/digests for delivered files and explicit engine-validation gap.
+
+
+## 2026 10 11 World of Remembered Roads v13
+
+Implemented optional physical delivery adventures in all nine realms and eleven settlements; all 82 registered residents and six scouts retain stable IDs. Forty-four finite sealed units, carried custody, eleven local mechanism/elder/route branches, dated receiving shelves, witnessed reports and personal home returns. 87 new graybox homes reuse Bes's original household. 22 directed scenes and bounded creature forage/patrol/rest hooks. Existing campaign access, wages, fuel, inventory, consent, endings and OPEN mysteries retain authority. Unreal compilation and playtesting deferred by explicit creator instruction. See Chapter 33 and the v13 acceptance walkthrough.
+
+
+## 11 October 2026 Frontier Adventures v14
+
+Source implementation adds nine combat/exploration arcs connecting existing cities, eighteen new settlements and six-chamber dungeons. Forty-five new residents, seventy-two enemies, nine named bosses, rescue/evidence branches, 18 alternative equipment rewards and nine passive techniques persist with physical return consequences. Existing 88 people, campaign access, wages, fuel, consent and OPEN mysteries retain authority. Total settlement coverage is 29. Boss surrender permits post-boss physical releases without invented rescues. NPC declaration repair removes a malformed earlier function signature. Full cumulative books and package are rebuilt. Unreal compilation and playtesting remain deferred by the creator.
+
+
+## Combat presentation and world identity v15 — 11 October 2026
+
+All nine expedition realms now have a distinct boss signature footprint, a named coupled-valve exploration mechanism, optional guard hunt/survey/road restoration objectives and sanctuary recovery. Return paths show damaged or repaired posts, a refuge resident returning to road-watch duties and remembered rescue/repair dialogue. Surrendered bosses remain visibly alive. Three original prototype rigs now contain 51 keyed clips; 36 new original procedural sound sources accompany optional runtime animation/audio hooks. An independent versioned 46-integer identity save validates expedition/day dependencies and rolls back failed writes. No original endings or OPEN mysteries are resolved; no inventory IDs, wages or consent rules change. This is source implementation and portable prototype asset production; Unreal import, compilation and engine acceptance are deferred. Details: `docs/design/world-identity-v15-acceptance.md`.
+
+
+## Adventure depth v16 — 11 October 2026
+
+Nine dungeon layouts and optional sequence, tide, heat, weight, height, stealth and mirror challenges now accompany nine personal frontier accords with actual named witnesses, physical evidence, confirmed choices and return dialogue. Provisioner/crafting/training stations cover all 29 settlements with finite shared regional favor/stock. Three mastery levels and selected active equipment techniques accompany distinct weapon styles, stamina, combos, dodge, parry, stagger, status and sentinel support. A native UMG journal/equipment/map/conversation interface replaces the converted debug paths while preserving diagnostic fallbacks. Three rigs now contain 57 clips. The optional 110-integer depth save rejects invalid dependencies and rolls back failed writes. The v15 duplicate guard declaration and revival receipt reset are corrected. Original people/item IDs, wages, consent, campaign endings and OPEN mysteries retain authority. All changes are source implemented; Unreal compilation/import and engine acceptance remain deferred. See `docs/design/adventure-depth-v16-acceptance.md`.
+
+Public-witness accords additionally create nine conditional named return-road claimants, one per realm. Actual combat defeat commits a non-respawning outcome and two local favor; failed writes retry without inventing victory. Protected-reserve accords avoid this encounter. New total content adds nine conditional opponents to the existing expedition roster. This does not select a campaign ending.
+
+### 12 October 2026 UTC Player experience v17
+
+Implemented the seven approved source upgrades and both integration corrections: unified independent equipment slots; bounded melee contact and traveling ranged attacks; nine optional authored wings/guardians; 36 day-aware scenes for existing expedition residents; all29 service rooms/hours/specialties and visible repair/occupation/access changes; finite insight/build/tool/binding/privilege rewards; discovery-gated maps, tracked objectives, settings and core rebinding. Existing stories, 133 registered residents, item IDs, ten disciplines, wages/consent, player endings and OPEN mysteries remain. NPC scenes require the real speaker; Crossings guidance respects refusal. Mediation adds access without undoing the accord. Hall-entry waypoints remain collision-safe, never teleporting residents. Complete primary Volume X extends Chapter37. Portable validation and separate cumulative Bible/VolumeX publication receipt accompany this milestone; Unreal compilation, imports, native rendering and playtesting remain deferred. No finished navmesh, voices, environmental art, executable or animation graph is claimed.
+
+### 2026-10-12 — Nine Realm Journeys v18
+
+Closed journal equipment-owner compile error, early-encounter receipt gap, missing reward/fieldwork tracker transitions and unseen return witnesses. Added directional route signs, transient confirmation for irreversible branch/equipment choices, and Drevlach-specific yield validation. No new canonical answers or wage/consent changes. Full illustrated books extend v17 intact; engine verification remains deferred.
+
+
+## Complete RPG Loops v19 12 October 2026
+
+Source implemented: deed-gated free mastery across nine realms; kits restricted to danger benefit; four independent non-destructive profiles with prior-record backup and safe-settlement health/stamina resume; optional fieldwork profile migration; 27 controller-accessible actual actions on seven menu pages; selected six workshop and nine earned field recipes, five trade goods; mapped prompts and signs; deferred distant primitive blocks, cached actors and distance cadence independent of the clock; distinct boss signatures/warnings and timed service gestures. Existing IDs, supplies, consent, wages, endings and OPEN mysteries remain authoritative.
+
+Second audit fixed isolated fieldwork saves, stale profile confirmation and automatic crafting. Repeat with `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`. Unreal compilation, imports, storage interruption, focus, navigation, timing and complete walkthroughs remain deferred. See Chapter 39 and `docs/design/complete-rpg-loops-v19-acceptance.md`.
+
+
+## Player Facing Reliability v20 12 October 2026
+
+Six follow-up audit fixes: scoped, visibly explained backup recovery without overwriting its target; single-pass binding labels; unobstructed alive/consenting merchant checks in both trade directions; native chosen-name and eight-aspect Character page; held stagger/death priority; production-rule behavioral audit coverage. Added actual Toggle Sneak access, eight menu pages and 28 complete action callbacks. A second inspection fixed feedback hidden behind the open menu. Existing saved IDs, wages, consent, protagonist origin, rewards and OPEN mysteries remain authoritative. Identity art remains prototype; no final face, hair, voice or mark assets claimed.
+
+Repeat `python Scripts/audit_gameplay_dependencies.py --check --report audit.json`. Engine compilation, imports, storage interruption, controller focus/platform keyboard, collision, clip/audio timing and complete walkthroughs remain deferred. Chapter 40 and `docs/design/player-facing-reliability-v20-acceptance.md` record the source scope.
+
+## 2026-10-19 — Four authored Ability Study subjects and earned Atlas (source-only)
+
+- Added a four-subject, evidence- and encounter-gated Observation → Understanding → two physical Experiments → Mastery loop, with save integrity, actual Strain costs and earned tactical synergies, not generic automatic enemy skill copying.
+- Added native UI buttons, keyboard inputs, journal and physical telegraph/strike inspection. The true Echo Well is the only provenance-checked origin for the Memory Lens.
+- Gave the previously definition-only Atlas of Absence a one-time, place-bound, mastery-gated reward and distinct +Fold/-Glimpse equipment effects; existing equipment/item ID order was not changed.
+- Added the portable C++ regression executable and integrated source parity checks. The 186-entry Codex distinguishes real active effects from observations and stat-only equipment.
+- Updated living canon and release receipts. The **v20 illustrated artifacts have not been regenerated**, and their original SHA-256 file digests are preserved. Unreal Header Tool compilation, save-load and combat tests inside the Editor are unverified.
+
+## 2026-10-19 — Tomorrow's Debt award and witnessed Auvren route (source-only)
+- Reconciled Tenfold rite reward with existing `FutureReceipt` award: **Tomorrow's Paid Receipt**, while the quest remains *The Ledger of Borrowed Dawn* and the debt cost continues to apply.
+- Main-story witnessed first chapters now provide level 1/2/3/4 atlas attunement for opening/frontier/middle/upper, independent of optional mythic gear, without making skipped chapters count as completed. The same level is used by journal route advice and actual portals, with legacy relic shortcuts preserved.
+- Added portable regression coverage for alternative branches, absent evidence, and relic shortcuts. Saved character identities, NPC witness rules, and endings are not overwritten. Actual Unreal Editor travel/save-load testing remains outstanding.
+- The v20 illustrated artifacts and original SHA-256 receipts are unchanged, not regenerated or rehashed.
+
+## 2026-10-19 — Lore-audited Atlas requirement checklist (source pass)
+
+- Required first-hand Echo Well inspection, Memory Lens and two separate enemy masteries before the Atlas may be claimed.
+- Added the pre-existing Cartography mastery, physical route verification, and double-rite First Absence witnessed resolution to the Atlas reward gate; no new lore shortcut or automatic power absorption.
+- Added authoritative save-derived `[x] / [ ]` requirements for each study technique and the Atlas, displayed in the real Actions page and evidence notebook.
+- Tightened physical field experiments to require fresh enemy telegraphs; remained save-backed and Strain-priced.
+- Added portable C++ and wiring tests for missing evidence, confluence, verified route, place, duplicate reward, and displayed checklist. No Unreal compilation or regenerated illustrated release claimed.
+
+## 2026-10-19 — Unified 243-record Codex and generated player checklists
+
+- Unified all 186 previously indexed entries with 9 realm specifications, 9 expedition journeys, 9 optional experience wings, 9 personal arcs, 9 campaign chapters, 9 aftermath narratives, and 3 settlements in the **existing** Codex.
+- Added typed workshop recipe costs/workbench/skill/output contracts and explicit realm/journey dependency references without inventing any saved rewards or quest outcomes.
+- Replaced manually authored Study and Atlas checklist words with Codex-generated C++ reference tables. A reproducible generator supplies nine realm summaries; CI checks for drift.
+- Preserved existing runtime models, active player saves, provenance and consent rules; full engine runtime data migration and Unreal compilation remain unverified. No illustrated artifact was regenerated.
+
+## 2026-10-19 — Generated workshop recipe rule source
+
+- Replaced the six manually maintained runtime workshop recipe table rows with a deterministic table generated directly from the 243-record canonical Codex.
+- Preserved RecipeId and ItemId numbering, ingredient amounts, skill levels, settlement workbenches, output counts and existing atomic save/economy behavior.
+- Generator checks both Study/Atlas/realm reference tables and the compiled crafting recipe table. Full Unreal compilation and recipe playtesting remain unverified; no illustrated release was rebuilt.
+
+## 2026-10-19 — Codex-owned realm and passage topology
+
+- Added 13 append-only named route dependencies to the existing Codex (now 256 records); preserved all nine original realm names, statuses, conflicts, and attunement tiers.
+- Moved executable WorldAtlas and AtlasPassages tables to deterministic generated `UnmadeCodexAtlasGenerated.inc`, consumed by the original path-planning runtime.
+- Added source, JSON and compiled-C++ tests to detect incorrect edge thresholds, invalid endpoints, shortcut routes and drift between Codex and world descriptions.
+- Existing realm scenes are not claimed to exist without an actual Unreal level; v20 illustrated files were not rebuilt.
+
+## 2026-10-19 — Codex-generated expedition registry
+
+- Migrated the nine executable expedition specification records from independently maintained C++ tables to generated entries in the unified Codex (256 total records).
+- Preserved exact original NPCs, clue text, boss identities, realm positioning and combat/mercy return narration; did not rewrite quest stages or saved outcomes.
+- Added C++ tests and source-parity contracts for all nine expedition rules; no Unreal Editor compile or illustrated-release rebuild claimed.
+
+## 2026-10-19 — Nine optional experience wings become Codex-authored runtime tables
+
+- Moved all nine optional wing gameplay specification tables, including three physical room coordinates each, all task instructions and their NPC witness/choice-dependent reactions, into the existing Codex.
+- Added a generated C++ table, source/JSON parity tests and a portable realm-wing geometry test. Preserved saved indices, physical chapter gates and already-authored social consequences.
+- No Unreal compilation, v20 illustrated file regeneration, or fabricated available levels claimed.
+
+### 2026-10-19 — Generated wing table compiler correction
+
+- Fixed the C++ generator's excess aggregate braces for each three-room grid, preserving all existing coordinates and original scene text. Portable regression compilation verifies the generated source.
+
+## 2026-10-19 — Main-story campaign chapter parity
+
+- Migrated the nine canonical Unanswered Road chapter descriptions, physical discoveries and next-road guidance to the existing Codex and generated `UnmadeCodexCampaignGenerated.inc` consumed by C++.
+- Added C++ and JSON tests for nine ordered chapters, source event IDs and truthful mystery evidence.
+- Preserved the original physically earned campaign, branch alternatives, final-boss gate, save contract and illustrated v20 artifacts.
+
+## 2026-10-19 — Nine authored personal-choice definitions now Codex-owned
+
+- Ported complete witness/physical-evidence/two-choice/lasting aftermath/secret/counterparty texts into the nine existing personal quest Codex entries and generated `UnmadeCodexPersonalQuestsGenerated.inc` consumed by runtime C++.
+- Converted the older adventure-depth builder into a Codex-versus-historical-manuscript compatibility verifier, retaining original dungeon positions.
+- Added regression tests for the nine saved ordinals and mutually exclusive social outcomes. No earned milestones, engine build claims or illustrated release bytes were altered.
+
+## 2026-10-19 — Realm aftermath rules become Codex-generated
+
+- Moved all nine realm aftermath source contracts—mechanism sites, attributed witnesses, mutually exclusive evidence/outcome branches and future local world changes—into canonical Codex records and a compiled generated C++ table.
+- Added compiled portable and Codex-validator regression checks for differing consequences, real witnesses and the truth of level availability.
+- Preserved old game saves, original physical quest gates and narrative choice freedom; no new illustrated assets or Engine builds claimed.
+
+## 2026-10-22 — Campaign journal text and old-save reconstruction
+
+- Added exact native snapshots for campaign journal titles, questions, objectives, lead choices and boss access across each act transition.
+- Reconstructs guidance from existing schema-1 evidence and final-journey fields without adding a journal save field or writing a migration.
+- No canon event, ending, mystery answer, quest reward or completion state changed. Unreal rendering and disk deserialization remain unverified; the historical v20 illustrated package was not regenerated.
+
+## 2026-10-22 — Realm skyline identity profiles
+
+- Added nine source-authored three-piece orientation profiles to distinguish the existing realm skyline silhouettes.
+- Kept decorative meshes noncolliding and outside overlap, navigation and gameplay state.
+- No canon facts, IDs, rewards, save fields or illustrated assets changed. Native checks pass; Unreal rendering remains unverified.
+
+## 2026-10-23 — Nearby study sources and expedition visual studies
+
+- The Study journal now shows visible nearby living creatures, the Echo Well, and named rite witnesses as local learning leads; its established firsthand, payment and rite requirements still govern progress.
+- Added proposed boss and lair visual studies keyed to the nine authored expedition arcs without asserting final level layouts or gameplay behavior.
+- Native tests and reproducible 68-model GLB generation pass. The historical v20 illustrated edition and hashes remain unchanged; no Unreal compile or in-engine visual review is claimed.
+
+# 16 October 2026 — recovery persistence correction
+
+Engineering-only correction: existing consumable and finite service recovery is
+captured with its cost, with failed-write rollback. No narrative or saved-ID
+changes. Portable tests added; no Unreal verification or illustrated artifact
+regeneration claimed. Historical publication receipt and hashes are unchanged.
+
+## 16 October 2026 — illustrations made optional
+
+At the creator's request, gameplay changes no longer require illustrated books,
+new images or publication receipts. Canon/ledger synchronization remains in CI.
+Existing briefs, publishing builders and historical artifact records are retained
+for optional use; no new illustration or book publication is claimed.
+
+
+## 16 October 2026 — combined save preservation
+
+Engineering correction only: a saved history must validate across its present
+subsystems before restoration, reward reconciliation, profile selection or
+backup rotation. Recovery retains its source until a primary save succeeds;
+failed potion persistence reports rollback. Stable identities, consent, wages,
+mutually exclusive outcomes and OPEN mysteries are unchanged. Optional fieldwork
+retains its legacy read path without bypassing a rejected history. Portable
+validation is recorded in `docs/qa/first-playable-progress.md`; Unreal storage and
+playthrough acceptance remain pending. Illustrations remain optional on request.
+
+
+## 16 October 2026 — opening and return save evidence
+
+Engineering-only changes preserve both Crossings choices and both Bellwold
+return outcomes. Shared reward eligibility retains the existing authored grants;
+named wages and Mera's explicit consent remain distinct from player income.
+Malformed financial records are bounded before arithmetic. A saved realm reward
+remains owned when equipment selection fails, with truthful retry feedback.
+No new lore, identifiers, consent rule, wage rate, reward or ending is introduced.
+Portable scenarios and static adapter evidence are recorded in
+`docs/qa/first-playable-progress.md`; Unreal playthrough/storage checks remain
+pending. Illustrations remain optional on request.
+
+
+## 16 October 2026 — local recovery and realm-loop audit
+
+Engineering correction: existing hunt rations, sanctuary rests and purchased
+provisions retain their authored limits and 35-health effect. Successful saves
+now retain the benefit with the spent use/favor; failed writes restore both.
+Cache discovery remains free after its route is opened. Tharniv's existing
+index-7 healing specialty and Eillun's index-6 quiet indexing are unchanged;
+a prior engineering label was corrected. No story, stable ID, currency, consent,
+ending or OPEN mystery changed. See `docs/qa/realm-local-loop-checklist.md` for
+source/portable coverage and remaining Unreal acceptance. Field-kit progression
+eligibility remains an identified gap; illustrations remain optional.
+
+## 16 October 2026 — Portable field kits and realm returns
+
+Earned field kits can suppress another realm's active, unresolved danger chamber.
+The supplying realm retains its favor and kit ledger; local stock takes priority,
+then the first stocked realm in stable order. Existing purchase prerequisites,
+20/30-second local binding duration, chart/boss exclusions and free caches remain.
+A failed world write restores the kit and applies no suppression; its specific
+save-error feedback survives the player action. Suppression remains session-only.
+No save fields, IDs, consent rules or authored consequences changed.
+
+Portable coverage adds 81 supplier/destination transactions with failed backup
+and primary writes, recovery and repeated reloads, plus both authored aftermath
+endings across all nine realms combined with individual resident return ledgers.
+This proves model/record composition, not actor reachability or witness knowledge.
+Echo/guardian consequence composition and actual Unreal interaction/serialization
+remain the next batch and engine acceptance respectively. Artwork stays optional.
+
+## 16 October 2026 — Echo, guardian and return consistency
+
+Combined-save preflight now checks the existing later-realm chapter gates when
+both related optional sections are present: first-chapter completion before
+later-realm aftermath/Echo progress, resolved aftermath before Echo progress,
+and completed Echo before guardian resolution or resonance progress. Individually
+well-formed but contradictory subrecords no longer appear available or reach
+backup rotation. Missing optional sections retain the existing legacy policy;
+there are no new save fields, identities or synthesized story outcomes.
+
+Generic return dialogue no longer claims shared memories of a changed morning
+for strangers or first-day acquaintances. Existing individual aid, consent and
+public records remain separate. Echo conversation save failures now explain that
+progress is unchanged and can be retried. A mismatched Echo control points to the
+matching control rather than promising testimony changes the rules do not allow.
+
+New portable composition covers 96 six-realm initial/aftermath/Echo/guardian paths,
+5,760 full reloads and 3,648 failed backup/primary-write recoveries. It preserves
+independent authored choices, both guardian outcomes, two-clue testimony, explicit
+confirmation, resonance, individual distinct-day returns and non-farmable endings.
+Contradictory outgoing records are refused before writes; invalid primaries select
+the good backup. All sixteen optional chapter-presence combinations retain load
+compatibility in the final valid record. This is source/model/record evidence,
+not a claim of Unreal actor execution or actual filesystem crash safety.
+
+Next batch: trace resonance/final-morning prerequisites and public-versus-personal
+NPC recognition through their adapters. Engine compilation, actor reachability,
+confirmation/controller presentation and actual interrupted IO remain pending.
+Illustrations remain optional; no paid services or main merge are required.
+
+## 16 October 2026 — Final-morning position and resonance prerequisites
+
+The final-morning adapter previously saved the new world before relocating the
+player, so immediate reload retained the old arena position. A shared portable
+transaction now stages the existing return point before synchronous combined
+capture. Failed movement writes nothing; failed writes restore the prior morning
+and position. Success feedback/world refresh follows persistence. The real actor
+movement callback and rollback still require Unreal verification.
+
+Combined preflight checks Auvren first-chapter completion before final progression
+when both optional records exist. Present Tenfold records must show the first
+resonance rite mastered for a pending window, and both rites for an open archive.
+Future-dated resonance windows are rejected against their saved world clock;
+expired windows remain valid and restartable. Missing optional chapter/rite
+sections retain their existing legacy policy. Optional Echo/guardian/observatory
+quests remain unnecessary for the final encounter. No save IDs, authored choices,
+consent, lore outcomes, item amounts or art requirements changed.
+
+Portable tests cover both mornings and six memory seeds (12 paths), 216 full
+reloads, 36 failed writes/moves, inventory/individual-history retention, optional
+rematches, all nine public local records and 24 resonance/mastery combinations.
+Expired windows restart and persist; contradictory records are rejected. A
+save-before-relocation mutation fails the saved-return-position assertion.
+The chapter fixture is shared by the existing 96-path scenario and final tests.
+
+Next: bound automatic retry of failed guardian/final-defeat commits and verify
+interrupted confirmations/repeated retries without duplicated progression or
+misleading feedback. Engine build, world traversal, UI/controller and actual
+platform serialization/interrupted IO remain pending. Artwork remains optional.
+
+## 16 October 2026 — Bounded defeat-save retries
+
+Guardian and final-boss defeat branches retried failed persistence on every
+0.1-second actor tick. Both now use a shared session-only scheduler: attempt
+immediately, retry failures after five active-world seconds, and stop after a
+successful commit for that realm/phase. Actor/phase configuration resets the
+scheduler. Existing defeated state and transaction rollback remain authoritative;
+no victory, reward, health reset or next phase is invented on a failed save.
+The first failure explains automatic retry and loss of unsaved progress on reload.
+Other enemy receipt paths already have bounded delays and remain unchanged.
+
+Portable coverage adds 24 guardian and 72 final-phase failed-write/retry paths,
+including damaged backup/primary writes, recovery selection and suppression of
+repeated commits. A minute-long outage produces 13 callback attempts rather than
+601. Invalid clocks and new phases/resets are covered. Expired, changed-control,
+cancelled, consumed and reloaded confirmations cannot replay prior consent; no
+consent rule changed. Removing the delay or settled guard fails regression tests.
+
+Fresh checks: 322 Python tests, 71 warning-clean portable C++17 executables and
+all 32 gameplay dependency checks pass. New tests pass UBSan. Structure/literals,
+transmedia, hygiene, six Node release cases, manuscript, lore synchronization and
+whitespace checks pass. Prior head `ad96172` passed GitHub source-checks. Actor
+execution, real IO, actual retry timing and feedback/controller flow remain
+Unreal acceptance tasks. Save identifiers, lore and optional artwork are intact.
+
+Next: audit manual saving and profile switching while a defeat receipt is still
+pending, especially whether success feedback accurately describes the committed
+state. Keep engine checks pending and preserve recovery-source protection.
+
+## 16 October 2026 — Checkpoints with pending encounter receipts
+
+A paused-menu Save Now previously wrote a checkpoint without an encounter's
+pending defeat receipt and reported success. Load/New Profile therefore skipped
 the existing unsaved-discard confirmation and could lose that victory. Session
 checkpoints now return pending before their writer runs. The menu explains that
 Continue lets automatic retries run; Load/New keep their existing explicit
