@@ -1,3 +1,11 @@
+## 2026-10-24 — Live accessibility settings for cinematic captions
+
+- Applied the existing saved text scale to speaker, dialogue and Foley rows,
+  refreshing while captions are active; the high-contrast option changes the
+  lower-third backing to black.
+- Added source checks for both preferences. Extreme-scale wrapping and backing
+  readability still need verification in Unreal on PC.
+
 ## 2026-10-24 — Caption-aware timing for directed scenes
 
 - Calculated a minimum beat duration from the visible speaker, subtitle and

@@ -28,6 +28,13 @@ caption fallback and advance timer use the same result, preserving skip and
 scene-state behavior. Native timing checks are added; real actor/VO sync and
 in-engine accessibility review remain pending.
 
+## 2026-10-24 — Live accessibility settings for cinematic captions
+
+The speaker, dialogue and Foley caption fonts now respond to the player's saved
+85–160% text scale while a scene is playing. The lower-third switches to a solid
+black background when high contrast is enabled. Source wiring checks cover both
+settings; layout at extreme scale remains a first-PC Unreal check.
+
 ## 2026-10-17 — Civic Reverberation and Nhal-Vey's one-history dilemma
 
 The delivered Hearth Petition now produces local and mechanically distinct
