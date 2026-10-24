@@ -1,5 +1,7 @@
 # Current illustrated release — Player Facing Reliability v20
 
+**22 October 2026 source-only ecology milestone:** Six existing encounter sites now have proposed collision-bearing creature habitat props, cover, transient player-proximity warnings, reactive lighting and local E-inspection that opens an alcove. Creature lineages, uncertain origin lore, acquisition rules, quest progress and saved state remain unchanged. The illustrated v20 binaries/digests are historical and unchanged; no new illustrated edition was issued. Native Unreal runtime/AI/line-of-sight behavior has not been compiled or playtested.
+
 **23 October 2026 source-only world-discovery and model-gallery update:** The Study journal now surfaces nearby visible creature, Echo Well and rite-witness leads without bypassing firsthand evidence or authored progress rules. Nine proposed boss and nine proposed lair visual studies now map to the existing expedition arcs; these are not final level or gameplay claims. The historical v20 illustrated files and hashes remain unchanged. No new illustrated edition was issued; Unreal compilation, import and in-engine visual QA remain unverified.
 
 **22 October 2026 source-only realm skyline update:** Nine distinct bounded per-piece orientation profiles now shape the existing decorative primitive silhouettes. No new canon fact, gameplay state, collision rule or save field was added. The v20 illustrated files and digests remain historical and unchanged; no new illustrated edition was issued. Unreal rendering remains unverified.

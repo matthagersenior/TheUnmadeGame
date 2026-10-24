@@ -42,6 +42,10 @@ public:
     void ExposeToFold(double Now, double Seconds = 4.0);
     bool IsFractureExposed(double Now) const;
     void ConfigureEncounter(FName Identity,const FString& Name,const FLinearColor& Accent);
+    // Optional visual habitat forecourt: AI routine returns here instead of a generic spawn point.
+    // No save migration or change to encounter creature identity.
+    void ConfigureHabitatHome(const FVector& Forecourt){TerritoryHome=Forecourt;}
+
     void NotifyPlayerHit(float Damage);
 
     UUnmadeCombatComponent* GetCombat() const { return Combat; }

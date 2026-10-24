@@ -1,5 +1,13 @@
 # THE UNMADE — Illustrated Lore Continuity Log
 
+## 2026-10-22 — Six provisional native creature habitats respond to player movement
+
+- Previously, three enemies occupied each of six bounded optional arenas, but the arenas had no individual creature homes or inspectable territory. A source-authored habitat layer supplies distinct prototype den/roost/undercroft/cave geometry while retaining the six existing encounter stable IDs and creature assignments.
+- Sightline-aware approach reports tracks or warnings; a placed glow rises with disturbance and drops behind physical cover. Pressing E at a separate inspection marker releases a shelter alcove shutter. This is optional environmental feedback with no extra combat skills, gear, money, XP, permanent quest state, or change to the prior field-survey latch.
+- The new placement details remain **visual and behavioral proposals**, not canon certification of origins or additional invented creatures. All inspected flags are transient and the source-level tests are not proof of Unreal compilation or actual collision/playability.
+- The existing illustrated v20 edition, historic release binaries and recorded SHA-256 hashes remain unchanged.
+
+
 ## 2026-10-21 — Verified backup copy into an unused save profile
 - A separate, two-press-confirmed Session action can copy a structurally validated old backup into an actually unoccupied numbered profile. The source primary and source backup are never written, deleted or migrated.
 - The copied record is validated on disk before selecting the new profile for normal saving; the action refuses if all destination slots are occupied. Unlike merely loading the backup, the player can now resume saving without overwriting an incompatible source record.

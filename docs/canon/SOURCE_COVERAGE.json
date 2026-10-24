@@ -78,6 +78,24 @@
         "codex:realm.OrchardOfKings",
         "codex:realm.FirstAbsence"
       ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeCreatureHabitatRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:enemy.creature.Cinderjaw",
+        "codex:enemy.creature.PaleStrider",
+        "codex:enemy.creature.Veilwatch",
+        "codex:enemy.creature.GleamMoth",
+        "codex:enemy.creature.HollowHound",
+        "codex:enemy.creature.GriefLantern",
+        "codex:enemy.creature.Inkmaw",
+        "codex:enemy.creature.RedactionEye",
+        "codex:enemy.creature.SaltglassCrawler",
+        "codex:enemy.creature.DrownedWatch",
+        "codex:enemy.creature.Ashmaw",
+        "codex:enemy.creature.KilnWisp"
+      ]
     }
   ]
 }
