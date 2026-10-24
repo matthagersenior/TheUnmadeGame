@@ -5,6 +5,7 @@
 #include "UnmadeUnpaidShiftSubtitleWidget.generated.h"
 
 class UBorder;
+class USizeBox;
 class UTextBlock;
 
 /** Non-modal, safe-area cinematic captions. Always works without WAV/VO.
@@ -37,6 +38,9 @@ private:
     TObjectPtr<UTextBlock> FoleyText;
     UPROPERTY(Transient)
     TObjectPtr<UBorder> Backdrop;
+    UPROPERTY(Transient)
+    TObjectPtr<USizeBox> CaptionWidthConstraint;
     float AppliedTextScale=-1.f;
+    float AppliedCaptionWidth=0.f;
     bool bAppliedHighContrast=false;
 };
