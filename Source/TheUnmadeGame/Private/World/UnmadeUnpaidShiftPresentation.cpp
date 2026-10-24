@@ -218,11 +218,14 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
             if(IsValid(BesSubtitleOverlay))BesSubtitleOverlay->AddToViewport(50);
         }
     }
+    const FString FoleyCaption=UTF8_TO_TCHAR(
+        UnmadeCore::UnpaidFoleyCaption(Beat->foley));
     if(IsValid(BesSubtitleOverlay))
-        BesSubtitleOverlay->DisplayBeat(SpeakerName,Subtitle);
+        BesSubtitleOverlay->DisplayBeat(SpeakerName,Subtitle,FoleyCaption);
     else if(GEngine)
         UnmadeRpgFeedback(-1,Beat->duration,FColor::White,
-            SpeakerName+TEXT(": ")+Subtitle);
+            SpeakerName+TEXT(": ")+Subtitle+
+            (FoleyCaption.IsEmpty()?FString():TEXT(" ")+FoleyCaption));
 
     // Original generated stereo Foley may be imported at this exact path by
     // the guarded first-PC Unreal editor helper. Missing sound is explicitly

@@ -1,3 +1,12 @@
+## 2026-10-24 — Non-speech captions for the Unpaid Shift
+
+- Added a canonical descriptive caption for each of the 35 Foley cues used by
+  the directed scenes. Captions are shown with dialogue in a separate quieter
+  lower-third row even when the associated audio asset is absent.
+- Verified cue coverage with source-contract tests, the full Python suite and
+  a C++17 portable scene-rules compile. Unreal UHT/PIE and in-engine caption
+  readability remain pending.
+
 ## 2026-10-17 — Checked reality costs, crossing arrivals and revival
 
 - Combined direct reality-action Strain, existing language clue and local

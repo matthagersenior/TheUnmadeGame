@@ -13,6 +13,11 @@ class AudioAndCaptionProduction(unittest.TestCase):
         cue=re.findall(r'\{UnpaidScene::\w+,\s*\d+,\s*"[^"]+",\s*"[^"]+",\s*"[^"]+",\s*"[^"]+",\s*"([a-z_]+)"',rules)
         self.assertEqual(len(cue),39)
         self.assertEqual(len(set(cue)),35)
+        mapping=rules.split("inline const char* UnpaidFoleyCaption",1)[1].split("inline constexpr const UnpaidBeat* UnpaidBeatAt",1)[0]
+        captions=set(re.findall(r'UNPAID_FOLEY_CAPTION\(([a-z_]+),"([^"]+)"\)',mapping))
+        self.assertEqual({name for name,_ in captions},set(cue))
+        self.assertTrue(all(text for _,text in captions))
+        self.assertIn("UnmadeCore::UnpaidFoleyCaption(Beat->foley)",source("Source/TheUnmadeGame/Private/World/UnmadeUnpaidShiftPresentation.cpp"))
         generator=source("Scripts/build_unpaid_shift_audio.py")
         for marker in ("with wave.open(", "RATE=32000","wf.setnchannels(2)",
                        "wf.setsampwidth(2)","sha256","unique_cues",
@@ -35,10 +40,12 @@ class AudioAndCaptionProduction(unittest.TestCase):
         for marker in ("FAnchors(0.07f,0.76f,0.93f,0.955f)",
                        "SetAutoWrapText(true)","HitTestInvisible",
                        "FLinearColor(0.012f,0.016f,0.027f,0.87f)",
-                       "SetVisibility(ESlateVisibility::Collapsed)"):
+                       "SetVisibility(ESlateVisibility::Collapsed)",
+                       "FoleyText->SetText(FText::FromString(FoleyCaption))"):
             self.assertIn(marker,widget)
         header=source("Source/TheUnmadeGame/Public/UI/UnmadeUnpaidShiftSubtitleWidget.h")
         self.assertIn("DisplayBeat(",header)
+        self.assertIn("FoleyCaption",header)
         self.assertIn("ClearBeat()",header)
     def test_editor_import_guard_and_windows_integration(self):
         importer=source("Scripts/unreal_editor/import_unpaid_shift_audio.py")

@@ -10,6 +10,15 @@ markers and journal consequences. Portable C++ and source integration
 tests cover order, expiry, cooldown, no loot farming and aftermath.
 Unreal compilation, playability and full combat balance remain pending.
 
+## 2026-10-24 — Non-speech captions for Unpaid Shift cinematics
+
+All 35 authored Foley cues now have plain-language caption text sourced from
+the canonical scene rules and shown in a separate lower-third row alongside
+each subtitle. Captions are driven by beat data rather than audio asset
+availability, so absent WAVs still have readable descriptions. Updated source
+contracts cover every cue; native Unreal layout and accessibility verification
+remain pending.
+
 ## 2026-10-17 — Civic Reverberation and Nhal-Vey's one-history dilemma
 
 The delivered Hearth Petition now produces local and mechanically distinct

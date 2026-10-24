@@ -17,7 +17,8 @@ class THEUNMADEGAME_API UUnmadeUnpaidShiftSubtitleWidget : public UUserWidget
     GENERATED_BODY()
 public:
     UFUNCTION(BlueprintCallable,Category="Unmade|Unpaid Shift")
-    void DisplayBeat(const FString& Speaker,const FString& Subtitle);
+    void DisplayBeat(const FString& Speaker,const FString& Subtitle,
+                     const FString& FoleyCaption);
     UFUNCTION(BlueprintCallable,Category="Unmade|Unpaid Shift")
     void ClearBeat();
 
@@ -29,6 +30,8 @@ private:
     TObjectPtr<UTextBlock> SpeakerText;
     UPROPERTY(Transient)
     TObjectPtr<UTextBlock> SubtitleText;
+    UPROPERTY(Transient)
+    TObjectPtr<UTextBlock> FoleyText;
     UPROPERTY(Transient)
     TObjectPtr<UBorder> Backdrop;
 };
