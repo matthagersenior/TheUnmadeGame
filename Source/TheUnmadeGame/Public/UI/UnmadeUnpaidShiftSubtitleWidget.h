@@ -24,6 +24,9 @@ public:
 
 protected:
     virtual void NativeConstruct() override;
+    virtual void NativeTick(const FGeometry& MyGeometry,float InDeltaTime) override;
+
+    void RefreshAccessibilitySettings();
 
 private:
     UPROPERTY(Transient)
@@ -34,4 +37,6 @@ private:
     TObjectPtr<UTextBlock> FoleyText;
     UPROPERTY(Transient)
     TObjectPtr<UBorder> Backdrop;
+    float AppliedTextScale=-1.f;
+    bool bAppliedHighContrast=false;
 };

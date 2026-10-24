@@ -6,6 +6,7 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Components/TextBlock.h"
+#include "UI/UnmadePlayerPreferences.h"
 
 void UUnmadeUnpaidShiftSubtitleWidget::NativeConstruct()
 {
@@ -55,7 +56,51 @@ void UUnmadeUnpaidShiftSubtitleWidget::NativeConstruct()
     FoleyText->SetFont(FoleyFont);
     if(UVerticalBoxSlot* S=Stack->AddChildToVerticalBox(FoleyText))
         S->SetPadding(FMargin(0.f,4.f,0.f,0.f));
+    RefreshAccessibilitySettings();
     SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UUnmadeUnpaidShiftSubtitleWidget::NativeTick(
+    const FGeometry& MyGeometry,float InDeltaTime)
+{
+    Super::NativeTick(MyGeometry,InDeltaTime);
+    RefreshAccessibilitySettings();
+}
+
+void UUnmadeUnpaidShiftSubtitleWidget::RefreshAccessibilitySettings()
+{
+    const UUnmadePlayerPreferences* Preferences=
+        GetDefault<UUnmadePlayerPreferences>();
+    if(!Preferences)return;
+    if(FMath::Abs(Preferences->TextScale-AppliedTextScale)>.001f)
+    {
+        const float Scale=FMath::Clamp(Preferences->TextScale,.85f,1.6f);
+        if(SpeakerText)
+        {
+            FSlateFontInfo Font=SpeakerText->GetFont();
+            Font.Size=FMath::RoundToInt(20.f*Scale);
+            SpeakerText->SetFont(Font);
+        }
+        if(SubtitleText)
+        {
+            FSlateFontInfo Font=SubtitleText->GetFont();
+            Font.Size=FMath::RoundToInt(25.f*Scale);
+            SubtitleText->SetFont(Font);
+        }
+        if(FoleyText)
+        {
+            FSlateFontInfo Font=FoleyText->GetFont();
+            Font.Size=FMath::RoundToInt(17.f*Scale);
+            FoleyText->SetFont(Font);
+        }
+        AppliedTextScale=Scale;
+    }
+    if(Backdrop&&bAppliedHighContrast!=Preferences->HighContrast)
+    {
+        Backdrop->SetBrushColor(Preferences->HighContrast
+            ?FLinearColor::Black:FLinearColor(0.012f,0.016f,0.027f,0.87f));
+        bAppliedHighContrast=Preferences->HighContrast;
+    }
 }
 
 void UUnmadeUnpaidShiftSubtitleWidget::DisplayBeat(

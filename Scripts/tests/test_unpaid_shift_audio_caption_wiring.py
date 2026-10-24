@@ -48,7 +48,11 @@ class AudioAndCaptionProduction(unittest.TestCase):
                        "SetAutoWrapText(true)","HitTestInvisible",
                        "FLinearColor(0.012f,0.016f,0.027f,0.87f)",
                        "SetVisibility(ESlateVisibility::Collapsed)",
-                       "FoleyText->SetText(FText::FromString(FoleyCaption))"):
+                       "FoleyText->SetText(FText::FromString(FoleyCaption))",
+                       "void UUnmadeUnpaidShiftSubtitleWidget::NativeTick(",
+                       "Preferences->TextScale","FMath::Clamp(Preferences->TextScale,.85f,1.6f)",
+                       "FMath::RoundToInt(25.f*Scale)","FMath::RoundToInt(17.f*Scale)",
+                       "Preferences->HighContrast","FLinearColor::Black"):
             self.assertIn(marker,widget)
         header=source("Source/TheUnmadeGame/Public/UI/UnmadeUnpaidShiftSubtitleWidget.h")
         self.assertIn("DisplayBeat(",header)
