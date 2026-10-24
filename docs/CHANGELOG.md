@@ -35,6 +35,14 @@ The speaker, dialogue and Foley caption fonts now respond to the player's saved
 black background when high contrast is enabled. Source wiring checks cover both
 settings; layout at extreme scale remains a first-PC Unreal check.
 
+## 2026-10-24 — Content-sized cinematic caption panel
+
+The lower-third now keeps its width within 86% of the live viewport and sizes
+its height from wrapped caption content, so the saved large-text setting can
+expand the panel instead of clipping rows at the previous fixed height. Source
+layout checks were updated; actual small-screen and safe-area rendering remains
+an Unreal acceptance task.
+
 ## 2026-10-17 — Civic Reverberation and Nhal-Vey's one-history dilemma
 
 The delivered Hearth Petition now produces local and mechanically distinct

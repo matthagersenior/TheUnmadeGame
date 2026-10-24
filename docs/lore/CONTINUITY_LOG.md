@@ -1,3 +1,11 @@
+## 2026-10-24 — Content-sized accessible cinematic captions
+
+- Replaced the fixed-height lower-third region with a viewport-width-constrained
+  size box that grows to the wrapped speaker, dialogue and Foley rows.
+- The width updates after viewport resizes; source checks cover the layout
+  policy. Portrait/small-screen safe areas and extreme-scale rendering still
+  need Unreal acceptance.
+
 ## 2026-10-24 — Live accessibility settings for cinematic captions
 
 - Applied the existing saved text scale to speaker, dialogue and Foley rows,

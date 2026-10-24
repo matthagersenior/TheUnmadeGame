@@ -3,9 +3,11 @@
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/Border.h"
+#include "Components/SizeBox.h"
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Components/TextBlock.h"
+#include "GameFramework/PlayerController.h"
 #include "UI/UnmadePlayerPreferences.h"
 
 void UUnmadeUnpaidShiftSubtitleWidget::NativeConstruct()
@@ -18,15 +20,18 @@ void UUnmadeUnpaidShiftSubtitleWidget::NativeConstruct()
     UCanvasPanel* Root=WidgetTree->ConstructWidget<UCanvasPanel>();
     WidgetTree->RootWidget=Root;
 
+    CaptionWidthConstraint=WidgetTree->ConstructWidget<USizeBox>();
+    if(UCanvasPanelSlot* Slot=Root->AddChildToCanvas(CaptionWidthConstraint))
+    {
+        Slot->SetAnchors(FAnchors(0.5f,0.97f));
+        Slot->SetOffsets(FMargin(0.f));
+        Slot->SetAlignment(FVector2D(0.5f,1.f));
+        Slot->SetAutoSize(true);
+    }
+    RefreshCaptionWidth();
     Backdrop=WidgetTree->ConstructWidget<UBorder>();
     Backdrop->SetBrushColor(FLinearColor(0.012f,0.016f,0.027f,0.87f));
-    if(UCanvasPanelSlot* Slot=Root->AddChildToCanvas(Backdrop))
-    {
-        Slot->SetAnchors(FAnchors(0.07f,0.76f,0.93f,0.955f));
-        Slot->SetOffsets(FMargin(0.f));
-        Slot->SetAlignment(FVector2D(0.f,0.f));
-        Slot->SetAutoSize(false);
-    }
+    CaptionWidthConstraint->SetContent(Backdrop);
     UVerticalBox* Stack=WidgetTree->ConstructWidget<UVerticalBox>();
     Backdrop->SetContent(Stack);
     Backdrop->SetPadding(FMargin(16.f,10.f,16.f,10.f));
@@ -64,7 +69,22 @@ void UUnmadeUnpaidShiftSubtitleWidget::NativeTick(
     const FGeometry& MyGeometry,float InDeltaTime)
 {
     Super::NativeTick(MyGeometry,InDeltaTime);
+    RefreshCaptionWidth();
     RefreshAccessibilitySettings();
+}
+
+void UUnmadeUnpaidShiftSubtitleWidget::RefreshCaptionWidth()
+{
+    if(!CaptionWidthConstraint)return;
+    int32 ViewportWidth=1600,ViewportHeight=900;
+    if(APlayerController* PC=GetOwningPlayer())
+        PC->GetViewportSize(ViewportWidth,ViewportHeight);
+    const float DesiredWidth=FMath::Max(280.f,ViewportWidth*.86f);
+    if(FMath::Abs(DesiredWidth-AppliedCaptionWidth)>1.f)
+    {
+        CaptionWidthConstraint->SetWidthOverride(DesiredWidth);
+        AppliedCaptionWidth=DesiredWidth;
+    }
 }
 
 void UUnmadeUnpaidShiftSubtitleWidget::RefreshAccessibilitySettings()
