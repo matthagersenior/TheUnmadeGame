@@ -46,16 +46,26 @@ void UUnmadeUnpaidShiftSubtitleWidget::NativeConstruct()
     CaptionFont.Size=25;
     SubtitleText->SetFont(CaptionFont);
     Stack->AddChildToVerticalBox(SubtitleText);
+
+    FoleyText=WidgetTree->ConstructWidget<UTextBlock>();
+    FoleyText->SetAutoWrapText(true);
+    FoleyText->SetColorAndOpacity(FSlateColor(FLinearColor(0.78f,0.82f,0.88f,1.f)));
+    FSlateFontInfo FoleyFont=FoleyText->GetFont();
+    FoleyFont.Size=17;
+    FoleyText->SetFont(FoleyFont);
+    if(UVerticalBoxSlot* S=Stack->AddChildToVerticalBox(FoleyText))
+        S->SetPadding(FMargin(0.f,4.f,0.f,0.f));
     SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UUnmadeUnpaidShiftSubtitleWidget::DisplayBeat(
-    const FString& Speaker,const FString& Subtitle)
+    const FString& Speaker,const FString& Subtitle,const FString& FoleyCaption)
 {
-    if(!SpeakerText||!SubtitleText)return;
+    if(!SpeakerText||!SubtitleText||!FoleyText)return;
     SpeakerText->SetText(FText::FromString(Speaker.IsEmpty()
         ?TEXT("THE UNMADE"):Speaker));
     SubtitleText->SetText(FText::FromString(Subtitle));
+    FoleyText->SetText(FText::FromString(FoleyCaption));
     SetVisibility(ESlateVisibility::HitTestInvisible); // never eats E, mouse or gamepad
 }
 
@@ -63,5 +73,6 @@ void UUnmadeUnpaidShiftSubtitleWidget::ClearBeat()
 {
     if(SpeakerText)SpeakerText->SetText(FText::GetEmpty());
     if(SubtitleText)SubtitleText->SetText(FText::GetEmpty());
+    if(FoleyText)FoleyText->SetText(FText::GetEmpty());
     SetVisibility(ESlateVisibility::Collapsed);
 }

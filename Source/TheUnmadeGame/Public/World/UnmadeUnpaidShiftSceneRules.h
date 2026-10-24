@@ -5,6 +5,7 @@
 #include "World/UnmadeBesHouseholdRules.h"
 #include <array>
 #include <cstddef>
+#include <cstring>
 
 namespace UnmadeCore {
 enum class UnpaidScene : int {
@@ -67,6 +68,50 @@ inline constexpr std::array<UnpaidBeat,39> UnpaidShiftBeats={{
  {UnpaidScene::MaskUnpaid,1,"npc.cinderhold.courier.001","I refused the shift. The cold was real.","bes_refusal_memory","heard as a witnessed echo only","coal_basket_empty","incomplete claim",4.5f},
  {UnpaidScene::MaskUnpaid,2,"stage","The disputed wage remains unpaid. The player must still fight.","boss_mask_return","restore combat immediately","boss_ambience","no outcome override",3.5f}
 }};
+// Descriptive captions are authored from the event identifier, not from the
+// optional WAV asset. Keep each cue legible to players who cannot hear it.
+inline const char* UnpaidFoleyCaption(const char* cue) noexcept {
+    if(!cue)return "";
+#define UNPAID_FOLEY_CAPTION(Id, Text) \
+    if(std::strcmp(cue,#Id)==0)return "[" Text "]"
+    UNPAID_FOLEY_CAPTION(ash_settle,"ash settles softly");
+    UNPAID_FOLEY_CAPTION(ash_steps,"footsteps cross loose ash");
+    UNPAID_FOLEY_CAPTION(basket_rattle,"an empty basket rattles");
+    UNPAID_FOLEY_CAPTION(basket_wood_drop,"a wooden basket lands");
+    UNPAID_FOLEY_CAPTION(boss_ambience,"the boss arena hums");
+    UNPAID_FOLEY_CAPTION(cart_harness_unfasten,"cart harness unfastens");
+    UNPAID_FOLEY_CAPTION(coal_basket_empty,"an empty coal basket shifts");
+    UNPAID_FOLEY_CAPTION(coal_stack,"coal pieces settle into a stack");
+    UNPAID_FOLEY_CAPTION(coin_touch,"a coin is touched");
+    UNPAID_FOLEY_CAPTION(distant_kiln,"a distant kiln rumbles");
+    UNPAID_FOLEY_CAPTION(dock_water,"water moves against the dock");
+    UNPAID_FOLEY_CAPTION(door_draft,"wind slips through the doorway");
+    UNPAID_FOLEY_CAPTION(door_wood,"a wooden door shifts");
+    UNPAID_FOLEY_CAPTION(ember_breath,"an ember breathes low");
+    UNPAID_FOLEY_CAPTION(ember_catch,"an ember catches");
+    UNPAID_FOLEY_CAPTION(fire_dies,"the hearth fire dies down");
+    UNPAID_FOLEY_CAPTION(iron_mark_on_table,"an iron mark taps the table");
+    UNPAID_FOLEY_CAPTION(kiln_missing_rhythm,"the kiln rhythm falters");
+    UNPAID_FOLEY_CAPTION(ledger_close,"the ledger closes");
+    UNPAID_FOLEY_CAPTION(ledger_page_turn,"a ledger page turns");
+    UNPAID_FOLEY_CAPTION(ledger_stamp,"a stamp strikes the ledger");
+    UNPAID_FOLEY_CAPTION(one_distant_bell,"one distant bell rings");
+    UNPAID_FOLEY_CAPTION(paper_folds,"paper folds once");
+    UNPAID_FOLEY_CAPTION(paper_seal,"paper is sealed");
+    UNPAID_FOLEY_CAPTION(pen_scratch,"a pen scratches across paper");
+    UNPAID_FOLEY_CAPTION(quiet_ledger,"the ledger room falls quiet");
+    UNPAID_FOLEY_CAPTION(rain_on_rope,"rain patters on dock rope");
+    UNPAID_FOLEY_CAPTION(room_tone_return,"quiet room tone returns");
+    UNPAID_FOLEY_CAPTION(salt_paper_unfold,"salt-stiff paper unfolds");
+    UNPAID_FOLEY_CAPTION(single_coin_transfer,"one coin changes hands");
+    UNPAID_FOLEY_CAPTION(six_mark_count,"six coins are counted");
+    UNPAID_FOLEY_CAPTION(tide_one_note,"a single low tide note");
+    UNPAID_FOLEY_CAPTION(vent_low,"air moves through a low vent");
+    UNPAID_FOLEY_CAPTION(wet_paper_seal,"a wet paper seal presses down");
+    UNPAID_FOLEY_CAPTION(wind_low,"low wind passes over the roof");
+#undef UNPAID_FOLEY_CAPTION
+    return "";
+}
 inline constexpr const UnpaidBeat* UnpaidBeatAt(UnpaidScene scene,int beat) noexcept{
     if(scene<UnpaidScene::FirstWage||scene>=UnpaidScene::Count||beat<0)return nullptr;
     for(const auto& s:UnpaidShiftBeats)
