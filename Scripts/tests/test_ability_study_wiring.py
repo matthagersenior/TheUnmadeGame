@@ -30,7 +30,7 @@ class AbilityStudyWiring(unittest.TestCase):
         for token in ("if(!PersistStudy()){AbilityStudy.Restore(Before);return false;}",
                       "Malformed Ability Study save",
                       "Save->PlayerStrain=FractureModel.CurrentStrain();",
-                      "return UnmadeSave::SaveGameToSlot(Save);",
+                      "return UnmadeSave::SaveGameToSlot(Save,this);",
                       "if(!PersistStudy())AbilityStudy.Restore(Before);"):
             self.assertIn(token,player)
 

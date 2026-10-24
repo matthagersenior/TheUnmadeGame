@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Items/UnmadeItemRules.h"
-#include "Items/UnmadeItemRules.h"
 #include "CoreMinimal.h"
+#include "Combat/UnmadeCombatRewardRules.h"
 #include "GameFramework/Character.h"
 #include "Fracture/UnmadeFractureRules.h"
 #include "Player/UnmadeCharacterIdentityRules.h"
@@ -30,7 +30,7 @@ class THEUNMADEGAME_API AUnmadeCharacter : public ACharacter
     GENERATED_BODY()
 
 public:
-    bool HasRejectedSave()const{return bFractureSaveRejected||bConflictSaveRejected|| bCharacterIdentitySaveRejected||bStudySaveRejected;}
+    bool HasRejectedSave()const{return bCheckpointRollbackPending||bFractureSaveRejected||bConflictSaveRejected|| bCharacterIdentitySaveRejected||bStudySaveRejected;}
     void CaptureSession(UUnmadePrototypeSave* Save)const;
     bool SaveSessionNow();
     void CraftRecipeSelection(int Recipe);
@@ -71,6 +71,8 @@ public:
     void ReportRiteChoiceEvent(int32 Choice);
     void ReportBrokenOathEvent();
     void ReportRedeemedOathEvent();
+    bool HasPendingCombatRewards()const{return CombatRewards.Pending();}
+    bool IsSessionRestored() const { return bSessionRestored; }
     void ReconcileEarnedRewards();
     UFUNCTION(BlueprintCallable,Category="Unmade|Ability Study") void StudyObserve();
     UFUNCTION(BlueprintCallable,Category="Unmade|Ability Study") void StudyProgress();
@@ -90,9 +92,17 @@ public:
     FString GetCharacterChosenName() const;
 
     void NotifyProjectileImpact(class AUnmadeEnemyCharacter* Target,float Before){HandleMeleeImpact(Target,Before);}
+    void NotifyStatusDefeat(class AUnmadeEnemyCharacter* Target);
     void NotifyWeaponContact(){TickWeaponContact();}
     void ReportIntegrationEvent(FName Event,FName Subject){ReportLocalEvent(Event,Subject);}
     void RecoverIntegrationStrain(double Amount){FractureModel.Recover(Amount/UnmadeCore::FractureModel::RecoveryPerSecond);}
+    bool CommitLocalEvent(FName Event,FName Subject,TFunctionRef<bool()> Write);
+    bool CommitLocalEvents(const TArray<TPair<FName,FName>>& Events,TFunctionRef<bool()> Write);
+    bool CommitRiteEvents(UnmadeCore::RiteId Id,bool CivicApplied,TFunctionRef<bool()> Write);
+    bool CanCommitCheckpoint();
+    bool CommitCheckpointMove(const FVector& Destination,int32 FrontierRoute,TFunctionRef<bool()> Write,bool Recovery=false);
+    FVector ResolveSafeCheckpoint(const FVector& Current)const;
+    bool CommitIntegrationRecovery(double Amount, TFunctionRef<bool()> Write);
 private:
     UnmadeCore::AbilityStudy AbilityStudy;
     bool bStudySaveRejected=false;
@@ -108,6 +118,12 @@ private:
     UnmadeCore::AtlasStudyContext CurrentAtlasRequirements() const;
     UnmadeCore::ItemId SelectedTrade=UnmadeCore::ItemId::Count;
     bool bFractureSaveRejected=false,bConflictSaveRejected=false;
+    UnmadeCore::PendingCombatRewards CombatRewards;
+    void RetryCombatRewards();
+    bool bStartupRewardsReady=false;
+    bool bStartupNoticeShown=false;
+    double NextStartupRewardsAttempt=0;
+    bool InitializeStartupRewards();
     bool bSessionRestored=false;
     double NextSessionSave=0;
     void RestoreSessionWhenReady();
@@ -185,6 +201,12 @@ private:
     void StopGuard();
     bool bPlayerDefeatHandled = false;
     double DefeatRecordedAt=-1.0;
+    UnmadeCore::DefeatSaveRetry DeathRecoveryRetry;
+    bool bCaptureCheckpointPosition=false,bCheckpointRollbackPending=false;
+    FVector CheckpointRollbackPosition=FVector::ZeroVector;
+    uint8 CheckpointRollbackMode=0;
+    double NextCheckpointRollback=0;
+    void RetryCheckpointRollback();
     uint64 LastHazardWarningPulse[2]={0,0};
     uint64 LastHazardImpactPulse[2]={0,0};
     uint64 LastLaterHazardWarningPulse[6]={0,0,0,0,0,0};
@@ -199,6 +221,7 @@ private:
     void SkipDirectedScene();
     void OfferAid();
     void DemonstrateAnomaly();
+    int32 StageLocalWitnesses(FName EventKind,FName SubjectId);
     void ReportLocalEvent(FName EventKind, FName SubjectId = NAME_None);
     void SaveNearbyNpcMemories();
     void FoldReality();

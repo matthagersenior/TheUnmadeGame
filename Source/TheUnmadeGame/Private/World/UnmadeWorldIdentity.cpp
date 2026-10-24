@@ -1,4 +1,5 @@
 #include "World/UnmadePrototypeHub.h"
+#include "Save/UnmadeRecoveryRules.h"
 #include "World/UnmadeIdentityRegistry.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "Player/UnmadeCharacter.h"
@@ -31,7 +32,9 @@ void AUnmadePrototypeHub::BuildIdentity(){
   for(int n=0;n<3;++n){Sign(Puzzle(a,n),FString::Printf(TEXT("E - VALVE %d / TOGGLES MASK %d (1,2,4 = LIGHTS)"),n+1,UnmadeCore::WorldIdentity::Coupling(a,n)));SpawnBlock(Puzzle(a,n)+FVector(0,0,-55),FVector(.8,.8,.7),FName(TEXT("IdentityValve")));
    auto* b=GetWorld()->SpawnActor<AStaticMeshActor>(RepairPost(a,n)+FVector(0,0,-35),FRotator::ZeroRotator);if(b){auto* m=b->GetStaticMeshComponent();m->SetMobility(EComponentMobility::Movable);m->SetStaticMesh(LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube")));m->SetWorldScale3D(FVector(.3,2,.4));m->SetCollisionEnabled(ECollisionEnabled::NoCollision);IdentityRepairs[a*3+n]=b;}Sign(RepairPost(a,n),TEXT("E - REPAIR WAYPOST AFTER WITNESSED RETURN"));
   }
-  Sign(Service(a),TEXT("E - GUARD HUNT / ONE RECOVERY RATION\nF - THREE RECORD SURVEY / HAZARD MAP\nAFTER REPAIRS - DAILY SANCTUARY REST"));
+  // The full morally grounded tasks are in interaction feedback and J;
+  // long quest paragraphs on a world-space sign are not legible or helpful.
+  Sign(Service(a),TEXT("LOCAL FIELDWORK\nE - CLAIM EARNED HUNT\nF - SURVEY RECORDS\nAFTER RETURN - 3 WAYPOSTS\nJ - PURPOSE AND LOCAL CONSEQUENCES"));
   for(TActorIterator<AUnmadeNpcCharacter> npc(GetWorld());npc;++npc)if(npc->GetStableId()==FName(*FString::Printf(TEXT("npc.expedition.%d.3"),a)))IdentityPatrols[a]=*npc;
 
   // Different landmark silhouettes beyond the usable chamber edges; no invented nav shortcuts.
@@ -44,7 +47,7 @@ void AUnmadePrototypeHub::BuildIdentity(){
 void AUnmadePrototypeHub::RefreshIdentity(){
  if(IdentityRepairs.Num()!=27)return;
  for(int a=0;a<9;++a){auto* t=Identity.Arc(a);auto* e=Expeditions.Arc(a);
-  if(IdentityPuzzleSigns[a].IsValid())IdentityPuzzleSigns[a]->GetTextRender()->SetText(FText::FromString(FString::Printf(TEXT("%s\n%s\nLIGHTS %d%d%d / TARGET %d%d%d\nSURVEY THREE RECORDS FOR A PERMANENT HAZARD MAP"),UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].mechanism),UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].hint),t->puzzle&1?1:0,t->puzzle&2?1:0,t->puzzle&4?1:0,UnmadeCore::WorldIdentity::Target(a)&1?1:0,UnmadeCore::WorldIdentity::Target(a)&2?1:0,UnmadeCore::WorldIdentity::Target(a)&4?1:0)));
+  if(IdentityPuzzleSigns[a].IsValid())IdentityPuzzleSigns[a]->GetTextRender()->SetText(FText::FromString(FString::Printf(TEXT("%s\n%s\nLIGHTS %d%d%d / TARGET %d%d%d\n%s"),UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].mechanism),UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].hint),t->puzzle&1?1:0,t->puzzle&2?1:0,t->puzzle&4?1:0,UnmadeCore::WorldIdentity::Target(a)&1?1:0,UnmadeCore::WorldIdentity::Target(a)&2?1:0,UnmadeCore::WorldIdentity::Target(a)&4?1:0,UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[a].survey_task)));
   for(int n=0;n<3;++n)if(IdentityRepairs[a*3+n].IsValid()){auto* p=IdentityRepairs[a*3+n].Get();p->SetActorRotation(FRotator(0,0,t->repair&(1<<n)?0:65));p->SetActorScale3D(t->repair&(1<<n)?FVector(.3,2,2):e->boss==1?FVector(.3,2,.2):FVector(.3,2,.4));}
   if(IdentityPatrols[a].IsValid()&&e->returned&&t->repair==7){auto* npc=IdentityPatrols[a].Get();FVector at=Base(a)+FVector(3700,10000,0);if(FVector::DistSquared2D(npc->GetActorLocation(),at)>FMath::Square(1600.f)){npc->SetActorLocation(at,false);npc->SetExpeditionHome(at);}}
  }
@@ -61,7 +64,15 @@ bool AUnmadePrototypeHub::TryIdentityInteraction(AUnmadeCharacter* p,double comp
   else if(!Identity.Arc(arc)->hunt&&kills>=4){if(p->GetCombat()->GetMissingHealth()>0){changed=Identity.Hunt(arc,kills);heal=changed;}line=TEXT("Hunt: defeat four actual dungeon guards. One recovery ration restores up to 35 health; claim while injured.");cue=TEXT("reward");}
   else{if(p->GetCombat()->GetMissingHealth()>0){changed=Identity.Rest(arc,GetGameDay(),e->returned!=0);heal=changed;}line=TEXT("Sanctuary: all three roadposts repaired after return. Up to 35 health once per game day; no reward consumed at full health.");cue=TEXT("release");}
  }
- if(changed&&!WriteWorldSnapshot(p)){Identity=before;NotifyRpg(TEXT("Save failed. Quest, service and reward rolled back; retry."));return true;}
- if(changed){if(heal)p->GetCombat()->Heal(35);UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==1?TEXT("Repair"):TEXT("Inspect")));RefreshIdentity();RefreshExpeditions();}
+ // Use the same earned-state activities but tell the traveler what this realm asks.
+ if(kind==1)line=FString(UTF8_TO_TCHAR(UnmadeCore::IdentitySpecs[arc].repair_task))+TEXT("\n")+line;
+ if(kind==2){
+  int defeated=0;for(int k=0;k<8;++k)defeated+=(e->kills>>k)&1;
+  const char* task=Survey?UnmadeCore::IdentitySpecs[arc].survey_task:
+    (!before.Arc(arc)->hunt&&defeated>=4?UnmadeCore::IdentitySpecs[arc].hunt_task:UnmadeCore::IdentitySpecs[arc].repair_task);
+  line=FString(UTF8_TO_TCHAR(task))+TEXT("\n")+line;
+ }
+ if(changed&&!UnmadeCore::CommitHealing(*p->GetCombat(),heal?35:0,[&]{return WriteWorldSnapshot(p);})){Identity=before;NotifyRpg(TEXT("Save failed. Quest, service and reward rolled back; retry."));return true;}
+ if(changed){UnmadePresentation::Sound(p,cue);p->PlayIdentityMotion(FName(kind==1?TEXT("Repair"):TEXT("Inspect")));RefreshIdentity();RefreshExpeditions();}
  NotifyRpg(line);return true;
 }

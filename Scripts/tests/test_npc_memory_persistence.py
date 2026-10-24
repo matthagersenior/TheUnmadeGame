@@ -13,14 +13,12 @@ class NpcMemoryPersistence(unittest.TestCase):
   self.assertIn("EventId.IsValid()",rules)
  def test_current_world_does_not_erase_absent_residents(self):
   hub=read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
-  section=hub.split("void AUnmadePrototypeHub::SaveCitizens()",1)[1].split("void AUnmadePrototypeHub::PrepareRealmGeometry(",1)[0]
+  section=hub.split("bool AUnmadePrototypeHub::SaveNpcMemories()",1)[1].split("void AUnmadePrototypeHub::SaveCitizens()",1)[0]
   self.assertNotIn("Save->NpcSnapshots.Reset()",section)
-  self.assertIn("TArray<FUnmadeNpcSnapshot> Merged=Save->NpcSnapshots;",section)
-  self.assertIn("MergeNpcSnapshot(Merged",section)
-  self.assertIn("ValidNpcSnapshots(Merged)",section)
-  self.assertIn("Save->NpcSnapshots=MoveTemp(Merged)",section)
-  self.assertIn("if (!UnmadeSave::SaveGameToSlot(Save))",section)
+  self.assertIn("CommitPendingMemory(bNpcMemorySavePending",section)
+  self.assertIn("WriteWorldSnapshot()",section)
+  self.assertIn("bNpcMemorySavePending=true",section)
   player=read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
   self.assertNotIn("Save->NpcSnapshots.Reset()",player)
-  self.assertIn("MergeNpcSnapshot(Merged",player)
+  self.assertIn("Hub->SaveNpcMemories()",player)
 if __name__=="__main__":unittest.main()

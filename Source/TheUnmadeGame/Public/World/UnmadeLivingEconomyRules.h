@@ -92,12 +92,19 @@ public:
     }
     bool Restore(const Snapshot& in,const MaterialWorld& material,int currentDay)noexcept{
         if(currentDay<1||currentDay>833334)return false;
+        // Bound route counters before using them in worker receipt arithmetic.
+        for(const auto& r:in.routes)
+            if(r.foreignStock<0||r.foreignStock>100||
+               r.deliveries<0||r.deliveries>100000||
+               r.paidMarks<0||r.paidMarks>100000||
+               r.consumedSupport<0||r.consumedSupport>100000||
+               r.paidMarks!=r.deliveries*6||
+               r.consumedSupport+r.foreignStock!=r.deliveries*5)return false;
         std::int64_t accountedMarks=
             in.cargo.route>=0&&in.cargo.route<2
                 ?TradeContracts[in.cargo.route].agreedMarks:0;
         for(int i=0;i<9;++i){
             const auto& w=in.workers[i];
-            accountedMarks+=w.employerMarks+w.earnedMarks;
             if(w.employerMarks<0||w.employerMarks>100000 ||
                w.earnedMarks<0||w.earnedMarks>100000 ||
                w.owedMarks<0||w.owedMarks>100000||
@@ -106,14 +113,8 @@ public:
                w.deliveriesWitnessed<0||w.deliveriesWitnessed>100000 ||
                w.deliveriesWitnessed>in.routes[0].deliveries+in.routes[1].deliveries)
                 return false;
+            accountedMarks+=w.employerMarks+w.earnedMarks;
         }
-        for(const auto& r:in.routes)
-            if(r.foreignStock<0||r.foreignStock>100||
-               r.deliveries<0||r.deliveries>100000||
-               r.paidMarks<0||r.paidMarks>100000||
-               r.consumedSupport<0||r.consumedSupport>100000||
-               r.paidMarks!=r.deliveries*6||
-               r.consumedSupport+r.foreignStock!=r.deliveries*5)return false;
         // Nine municipal treasuries begin with 32 marks each. No new currency
         // may appear from a paid shift, trade, or fabricated receipt.
         if(accountedMarks!=9*32)return false;

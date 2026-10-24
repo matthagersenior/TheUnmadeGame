@@ -57,7 +57,7 @@ class NineRealmWiring(unittest.TestCase):
         self.assertIn("bRealityConsequenceRejected || bOuterReactionsRejected ||",hub)
         self.assertIn("bMaterialSaveRejected || bLivingEconomyRejected ||",hub)
         self.assertIn("bBesHouseholdRejected)return false;",hub)
-        self.assertIn("OuterReactions.Restore(BeforeOuter,Clock.ElapsedSeconds())",hub)
+        self.assertIn("outer=beforeOuter",src("Source/TheUnmadeGame/Public/Save/UnmadeRiteCommitRules.h"))
         self.assertIn("Save->bHasOuterRealmReactions=true;",hub)
         self.assertIn("Tests/world/nine_realm_reactions_test.cpp",
                       src(".github/workflows/static-checks.yml"))

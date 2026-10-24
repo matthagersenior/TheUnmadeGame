@@ -32,10 +32,8 @@ class OfflineNpcContract(unittest.TestCase):
     def test_repeated_saves_replace_snapshots_not_duplicate(self):
         hub = read("Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp")
         player = read("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
-        self.assertIn("MergeNpcSnapshot(Merged", hub)
-        self.assertIn("MergeNpcSnapshot(Merged", player)
-        self.assertNotIn("Save->NpcSnapshots.Reset()", hub)
-        self.assertNotIn("Save->NpcSnapshots.Reset()", player)
+        self.assertIn("ReplaceNpcMemory(Save->NpcSnapshots,Snapshot)", hub)
+        self.assertIn("Hub->SaveNpcMemories()", player)
 
     def test_native_cpp_policy_runs_in_ci(self):
         workflow = read(".github/workflows/static-checks.yml")

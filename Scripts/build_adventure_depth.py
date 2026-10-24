@@ -5,6 +5,12 @@ import argparse,json,re,sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from Scripts.generate_unmade_codex import REALMS,PERSONAL_FIELDS,generate_personal_quests
+EXTENDED_FIELDS=('public_return_a','public_return_b','mystery_question','physical_lead','signature_mechanics','thread_after_return')
+if not all(field in PERSONAL_FIELDS for field in EXTENDED_FIELDS):
+    raise RuntimeError('Codex generator is missing extended personal quest fields')
+EXTENDED_FIELDS=('public_return_a','public_return_b','mystery_question','physical_lead','signature_mechanics','thread_after_return')
+if not all(field in PERSONAL_FIELDS for field in EXTENDED_FIELDS):
+    raise RuntimeError('Codex generator is missing extended personal quest fields')
 FIELDS=('quest','goal')+PERSONAL_FIELDS
 TARGET=ROOT/'Source/TheUnmadeGame/Public/World/UnmadeCodexPersonalQuestsGenerated.inc'
 WRAPPER=ROOT/'Source/TheUnmadeGame/Public/World/UnmadeAdventureDepthRegistry.h'

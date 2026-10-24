@@ -123,6 +123,12 @@ These source coordinates are prototype locations, not claims of finalized produc
 
 **Snapshot integrity:** Cargo can be carried only on an actual registered route. Delivery increments happen on verified arrival, not when NPCs elsewhere hear rumors; stock changes preserve units and money conservation. Corrupt negative balances, implausible delivery counts and inconsistent receipts are rejected before loading a save.
 
+**Restore validation order:** A saved route's stock, delivery, payment, and
+consumption totals are bounded and reconciled before those totals are used to
+validate worker receipts. Invalid snapshots are rejected before they can
+change the live economy. This preserves the same finite-treasury and witnessed-
+delivery rules during recovery as during ordinary play.
+
 ## Nine cultural principles and civic differences
 
 - **ThreefoldReach:** The Wayward Charter. Principle: A witnessed promise outranks an inherited seal. Community dispute: Shelter requires trust; records demand difficult public consent

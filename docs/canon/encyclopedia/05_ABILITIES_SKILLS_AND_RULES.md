@@ -6,6 +6,19 @@
 
 **Learning law:** Encounter → firsthand observation → understanding → authored experimentation → save-backed mastery → bounded combination. An observable monster behavior is not automatically an unlockable skill. A requirement checklist describes real game prerequisites, not a manual shortcut.
 
+## Authored return consequences and open questions
+
+The personal-quest codex now carries six explicit public return states, mystery
+questions, physical leads, signature mechanics, and post-return threads. These
+fields extend authored outcomes without changing the existing choice, consent,
+or evidence requirements. The refuge-road study protects private names while
+allowing an anonymized refused-bed count; the seam study describes disputed
+lineage patterns without publishing unconsulted households. Other studies
+connect water accounting, communal heat, temporal debt, and an occupied sky
+bridge to their already authored return choices. Their questions remain open
+until a player gathers and tests the stated evidence. These are source-authored
+contracts; they do not imply a packaged or Unreal-verified experience.
+
 ## INHERENT (5)
 
 ### Glimpse — `inherent.glimpse`

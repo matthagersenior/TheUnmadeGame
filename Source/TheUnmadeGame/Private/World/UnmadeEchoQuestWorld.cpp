@@ -105,7 +105,9 @@ bool AUnmadePrototypeHub::TryEchoQuestConversation(FName ResidentId)
             return false;
         }
         if(!WriteWorldSnapshot()) {
-            EchoQuest.Restore(Before);return false;
+            EchoQuest.Restore(Before);
+            NotifyRpg(TEXT("Echo conversation could not save; chapter progress is unchanged. Speak again to retry."));
+            return false;
         }
         RefreshEchoQuestWorld();
         if(GEngine)
@@ -198,7 +200,7 @@ bool AUnmadePrototypeHub::InspectEchoQuestSite(
             :Result==UnmadeCore::EchoResult::Committed
             ?FString(UTF8_TO_TCHAR(choice==1?Q.resultCare:Q.resultTruth))
             :Result==UnmadeCore::EchoResult::WrongChoice
-            ?TEXT("This account needs a matching local witness; changing it requires further testimony.")
+            ?TEXT("This control does not match your recorded testimony. Use the other civic control.")
             :TEXT("Read both unique clues, obtain testimony, then choose its matching civic control.");
         UnmadeRpgFeedback(-1,11.f,FColor::Cyan,Line);
     }

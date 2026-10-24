@@ -5,6 +5,8 @@
 #include "Combat/UnmadeCombatRules.h"
 #include "Combat/UnmadeBossRules.h"
 #include "Combat/UnmadeCreatureRules.h"
+#include "Combat/UnmadeCreatureTacticsRules.h"
+#include "Combat/UnmadeCreatureAwarenessRules.h"
 #include "World/UnmadeCinderholdAdventureRules.h"
 #include "World/UnmadeExpeditionRules.h"
 #include "UnmadeEnemyCharacter.generated.h"
@@ -22,6 +24,7 @@ public:
     AUnmadeEnemyCharacter();
     virtual void Tick(float DeltaSeconds) override;
     virtual void BeginPlay() override;
+    virtual bool HasPendingDefeatSave(const AUnmadePrototypeHub& Hub) const;
     void ConfigureCinderholdElder();
     void ConfigureExpedition(int32 Arc,int32 Slot,UnmadeCore::ExpeditionRole Role);
     void ConfigureWingGuardian(int Arc);
@@ -30,6 +33,8 @@ public:
     bool IsWingGuardian(int Arc)const{return bWingGuardian&&ExpeditionArc==Arc;}
     bool IsExpeditionArc(int Arc)const{return ExpeditionArc==Arc;}
     bool IsExpeditionEnemy(int32 Arc,int32 Slot)const{return ExpeditionArc==Arc&&ExpeditionSlot==Slot;}
+    bool IsTemporaryArenaEscort()const{return ExpeditionArc>=0&&
+        (ExpeditionSlot==11||ExpeditionSlot==12);}
     void ConfigureRoadElder(int32 City){RoadElderCity=City;bCinderholdElder=true;TerritoryHome=GetActorLocation();}
     bool CanBeTargeted() const;
     FString GetCombatName()const;
@@ -82,6 +87,7 @@ private:
     double NextPathRefreshAt=0.0;
     FVector NextNavWaypoint=FVector::ZeroVector;
     bool bHasNavWaypoint=false;
+    UnmadeCore::CreatureAwareness Alertness;
     double WindupEndsAt=-1.0;
     double NextWindupAllowedAt=0.0;
     double HitFlashEndsAt=-1.0;
@@ -91,6 +97,7 @@ private:
     bool bSpeciesConfigured=false;
     UnmadeCore::CreatureKind SpeciesKind=UnmadeCore::CreatureKind::Cinderjaw;
     bool bElderEncounter=false;
+    UnmadeCore::CreatureKind Species=UnmadeCore::CreatureKind::Cinderjaw;
     UnmadeCore::CreatureProfile Profile=UnmadeCore::CreatureStats(UnmadeCore::CreatureKind::Cinderjaw);
     double RecoveryEndsAt=0.0;
     double FoldExposedUntil = -1.0;

@@ -7,13 +7,15 @@ class SavePreflightSource(unittest.TestCase):
  def test_live_loader_and_writer_preflight_existing_and_captured_state(self):
     src=get("Source/TheUnmadeGame/Private/Save/UnmadeSaveSession.cpp")
     self.assertIn('#include "Save/UnmadeCriticalSavePreflight.h"',src)
-    self.assertIn("UnmadeCore::ValidCriticalSaveShape(s)",src)
-    self.assertIn("return s&&ValidStored(*s)?s:nullptr;",src)
-    self.assertIn("if(!existing||!ValidStored(*existing))return false;",src)
-    self.assertIn("if(!s||!ValidStored(*s))return false;",src)
-    self.assertIn("SessionPlayer->CaptureSession(s);if(!ValidStored(*s))return false;",src)
-    self.assertLess(src.index("CaptureSession(s);if(!ValidStored(*s))"),
-                    src.index("CommitWithPrevious(*s"))
+    self.assertIn("UnmadeCore::ValidCriticalSaveShape(save)",src)
+    self.assertIn("return save&&ValidStored(*save,slot)?save:nullptr;",src)
+    self.assertIn("if(stored&&(!existing||existing->SchemaVersion!=1))return WriteFailed();",src)
+    self.assertIn("existing&&!ValidStored(*existing,slot)",src)
+    self.assertIn("if(!UnmadeCore::PrepareCombinedCapture(*s",src)
+    self.assertIn("SessionPlayer->CaptureSession(s);",src)
+    self.assertIn("ValidCriticalSaveShape(save)",src)
+    self.assertLess(src.index("CaptureSession(s);"),
+                    src.index("CommitCombinedRecord(*s"))
  def test_legacy_optional_zeroes_and_native_fixture_are_covered(self):
     header=get("Source/TheUnmadeGame/Public/Save/UnmadeCriticalSavePreflight.h")
     self.assertIn("if(save.bHasInventorySnapshot)",header)

@@ -2,6 +2,15 @@
 #include <cmath>
 #include <array>
 namespace UnmadeCore {
+inline bool SameSessionWorld(const void* registeredWorld,const void* sourceWorld){return registeredWorld&&sourceWorld&&registeredWorld==sourceWorld;}
+enum class CheckpointSave { Saved, PendingDefeat, Failed };
+// Session checkpoints must not claim completeness while an encounter receipt
+// awaits its own transaction. That transaction still uses the normal writer.
+template<class Writer>
+CheckpointSave CommitSessionCheckpoint(bool pendingDefeat,Writer write){
+ if(pendingDefeat)return CheckpointSave::PendingDefeat;
+ return write()?CheckpointSave::Saved:CheckpointSave::Failed;
+}
 inline bool ValidProfile(int n){return n>=0&&n<=3;}
 /** Never clone a backup over its own source or an occupied primary/backup. */
 inline int FirstAvailableRecoveryProfile(int source,const std::array<bool,4>& occupied){

@@ -1,6 +1,8 @@
 #include "Combat/UnmadeCombatComponent.h"
 #include "Save/UnmadeRecoveryRules.h"
 #include "Combat/UnmadePresentation.h"
+#include "Combat/UnmadeEnemyCharacter.h"
+#include "Player/UnmadeCharacter.h"
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "GameFramework/Character.h"
@@ -71,7 +73,7 @@ bool UUnmadeCombatComponent::ApplyReservedHit(UUnmadeCombatComponent* Target,dou
     const auto Hit = Target->State.ReceiveHit(
         static_cast<std::uint64_t>(OwnerActor->GetUniqueID()),
         Swing, Damage*Modifier*(Now<Target->WardUntil?.5:1.), bFractureExposed||(Now<Target->StatusUntil&&Target->Status==UnmadeCore::CombatStatus::Expose), Target->GearArmor);
-    if(Hit==UnmadeCore::HitOutcome::Applied){FVector from=OwnerActor->GetActorLocation()-Target->GetOwner()->GetActorLocation();double front=FVector::DotProduct(Target->GetOwner()->GetActorForwardVector(),from.GetSafeNormal2D()),side=FVector::DotProduct(Target->GetOwner()->GetActorRightVector(),from.GetSafeNormal2D());Target->Feedback=front<-.5?TEXT("IMPACT FROM BEHIND"):front>.5?TEXT("FRONTAL IMPACT"):side>0?TEXT("IMPACT FROM RIGHT"):TEXT("IMPACT FROM LEFT");if(bPlayerTempo){Feedback=FString::Printf(TEXT("COMBO %d / %s"),Styled.combo,UTF8_TO_TCHAR(Style.name));if(Styled.combo==3){Target->Stagger(Now,.65);Target->ApplyStatus(Style.status,4);}}UnmadePresentation::Sound(Target->GetOwner(),Target->IsDefeated()?TEXT("death"):Target->State.IsGuarding()?TEXT("guard"):TEXT("impact"));}
+    if(Hit==UnmadeCore::HitOutcome::Applied){FVector from=OwnerActor->GetActorLocation()-Target->GetOwner()->GetActorLocation();double front=FVector::DotProduct(Target->GetOwner()->GetActorForwardVector(),from.GetSafeNormal2D()),side=FVector::DotProduct(Target->GetOwner()->GetActorRightVector(),from.GetSafeNormal2D());Target->Feedback=front<-.5?TEXT("IMPACT FROM BEHIND"):front>.5?TEXT("FRONTAL IMPACT"):side>0?TEXT("IMPACT FROM RIGHT"):TEXT("IMPACT FROM LEFT");if(bPlayerTempo){Feedback=FString::Printf(TEXT("COMBO %d / %s"),Styled.combo,UTF8_TO_TCHAR(Style.name));if(Styled.combo==3){Target->Stagger(Now,.65);Target->ApplyStatus(Style.status,4,OwnerActor);}}UnmadePresentation::Sound(Target->GetOwner(),Target->IsDefeated()?TEXT("death"):Target->State.IsGuarding()?TEXT("guard"):TEXT("impact"));}
     return Hit == UnmadeCore::HitOutcome::Applied;
 }
 bool UUnmadeCombatComponent::BeginWeaponStrike(double Now){
@@ -94,10 +96,36 @@ bool UUnmadeCombatComponent::ReceiveHazardPulse(
 
 bool UUnmadeCombatComponent::ReviveAtCheckpoint()
 {
-    if(!State.ReviveAtCheckpoint(0.75))return false;Tempo.Reset();Contact.Cancel();Status=UnmadeCore::CombatStatus::None;StaggerUntil=0;return true;
+    if(!State.ReviveAtCheckpoint(0.75))return false;Tempo.Reset();Contact.Cancel();ClearTemporaryStatus();StaggerUntil=0;return true;
 }
 
-void UUnmadeCombatComponent::ApplyStatus(UnmadeCore::CombatStatus Type,double Seconds){if(!GetWorld()||IsDefeated()||Type==UnmadeCore::CombatStatus::None||!FMath::IsFinite(Seconds)||Seconds<=0)return;Status=Type;StatusUntil=GetWorld()->GetTimeSeconds()+FMath::Min(Seconds,8.);NextBurn=GetWorld()->GetTimeSeconds()+1;}
-void UUnmadeCombatComponent::TickComponent(float Delta,ELevelTick Tick,FActorComponentTickFunction* Function){Super::TickComponent(Delta,Tick,Function);if(!GetWorld()||IsDefeated())return;double Now=GetWorld()->GetTimeSeconds();if(bPlayerTempo){Tempo.Tick(Now,State.IsGuarding(),Mastery);if(Tempo.Stamina()<=0)State.SetGuarding(false);}if(Now>=StatusUntil){Status=UnmadeCore::CombatStatus::None;return;}if(Status==UnmadeCore::CombatStatus::Burn&&Now>=NextBurn){NextBurn=Now+1;State.ReceiveHit(static_cast<uint64>(GetUniqueID())+0x100000000ULL,++BurnPulse,4,false);UnmadePresentation::Sound(GetOwner(),TEXT("injury"));}}
+void UUnmadeCombatComponent::ApplyStatus(UnmadeCore::CombatStatus Type,double Seconds,AActor* Source)
+{
+    if(!GetWorld()||IsDefeated()||Type<=UnmadeCore::CombatStatus::None||
+       Type>UnmadeCore::CombatStatus::Expose||!FMath::IsFinite(Seconds)||Seconds<=0)return;
+    Status=Type;
+    StatusSource=IsValid(Source)&&Source->GetWorld()==GetWorld()?Source:nullptr;
+    StatusUntil=GetWorld()->GetTimeSeconds()+FMath::Min(Seconds,8.);
+    NextBurn=GetWorld()->GetTimeSeconds()+1;
+}
+void UUnmadeCombatComponent::TickComponent(float Delta,ELevelTick Tick,FActorComponentTickFunction* Function)
+{
+    Super::TickComponent(Delta,Tick,Function);
+    if(!GetWorld()||IsDefeated())return;
+    const double Now=GetWorld()->GetTimeSeconds();
+    if(bPlayerTempo){Tempo.Tick(Now,State.IsGuarding(),Mastery);if(Tempo.Stamina()<=0)State.SetGuarding(false);}
+    if(Now>=StatusUntil){ClearTemporaryStatus();return;}
+    if(Status!=UnmadeCore::CombatStatus::Burn||Now<NextBurn)return;
+    NextBurn=Now+1;
+    auto* Enemy=Cast<AUnmadeEnemyCharacter>(GetOwner());
+    auto* PlayerSource=Cast<AUnmadeCharacter>(StatusSource.Get());
+    const bool PlayerOwned=IsValid(Enemy)&&IsValid(PlayerSource)&&PlayerSource->GetWorld()==GetWorld();
+    const auto Pulse=UnmadeCore::ApplyStatusDamagePulse(State,
+        static_cast<uint64>(GetUniqueID())+0x100000000ULL,++BurnPulse,4,PlayerOwned,
+        [&]{PlayerSource->NotifyStatusDefeat(Enemy);});
+    if(Pulse.hit!=UnmadeCore::HitOutcome::Applied)return;
+    if(IsValid(Enemy))Enemy->NotifyPlayerHit(static_cast<float>(Pulse.injury));
+    UnmadePresentation::Sound(GetOwner(),Pulse.defeated?TEXT("death"):TEXT("injury"));
+}
 
 bool UUnmadeCombatComponent::HasTemporaryStatus()const{return GetWorld()&&Status!=UnmadeCore::CombatStatus::None&&GetWorld()->GetTimeSeconds()<StatusUntil;}

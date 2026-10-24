@@ -8,13 +8,14 @@ class ResonanceWiring(unittest.TestCase):
         ten=src("Source/TheUnmadeGame/Private/World/UnmadeTenfoldComponent.cpp")
         world=src("Source/TheUnmadeGame/Private/World/UnmadeRealmResonanceWorld.cpp")
         npc=src("Source/TheUnmadeGame/Private/NPC/UnmadeNpcCharacter.cpp")
-        for term in ("if(!Persist(true))", "Hub->RecordNearbyRealmRite(Player,Id)",
+        for term in ("return Persist(true);", "Hub->CommitRiteCast(Player,Id,Power.duration,",
                      "Chronicle.IsMastered(Id)"):
             self.assertIn(term,ten)
         self.assertIn("Resonance.Record(",world)
         self.assertIn("EchoQuest.Ending(Spec.realm)!=0",world)
         self.assertIn("Clock.ElapsedSeconds()",world)
-        self.assertIn("Resonance.Restore(Before)",world)
+        self.assertIn("PublishRealmResonance",world)
+        self.assertIn("resonance=beforeResonance",src("Source/TheUnmadeGame/Public/Save/UnmadeRiteCommitRules.h"))
         self.assertIn("RefreshRealmResonanceWorld()",world)
         self.assertIn("SetRiteWorldActorState(",world)
         self.assertIn("GetRealmResonanceStage(LaterHome)",npc)

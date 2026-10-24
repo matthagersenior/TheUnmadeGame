@@ -294,6 +294,21 @@ public:
 
 
 
+    /** Additive Hearth Petition: physical household evidence, competing
+        confidential/public petition and next-day return, no replacement
+        of existing wage or character save data. Missing on old schema-1 saves. */
+    UPROPERTY(SaveGame) bool bHasHearthPetition=false;
+    UPROPERTY(SaveGame) TArray<int32> HearthPetitionState;
+
+    /** Optional hand-carried Cinderhold -> Saltwake -> Crossings document.
+        Older schema-1 saves begin with no physical custody. */
+    UPROPERTY(SaveGame) bool bHasPetitionRelay=false;
+    UPROPERTY(SaveGame) TArray<int32> PetitionRelayState;
+    /** Additive schema-1 compatible physical nine-realm hand-carried custody.
+        Missing on older saves; exact 28-int payload is validated on load. */
+    UPROPERTY(SaveGame) bool bHasCrossRealmCarry=false;
+    UPROPERTY(SaveGame) TArray<int32> CrossRealmCarryState;
+
     /** Optional stable-ID 82-resident return recognition; version1 compatible. */
     UPROPERTY(SaveGame)
     bool bHasResidentContinuitySnapshot=false;

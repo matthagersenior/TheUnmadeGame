@@ -36,7 +36,8 @@ class PrototypeSourceContractTests(unittest.TestCase):
         p = source("Source/TheUnmadeGame/Private/Player/UnmadeCharacter.cpp")
         self.assertIn('FindNearbyCitizen(GetWorld(), GetActorLocation(), 260.f)', p)
         self.assertIn("LineTraceTestByChannel", p)
-        self.assertIn('TEXT("You have already helped this resident.")', p)
+        self.assertIn("Observation.Evidence==EUnmadeEvidenceKind::Witnessed",p)
+        self.assertIn("RecordResidentAid(Target->GetStableId(),AlreadyWitnessed)",p)
         self.assertIn("UnmadeSave::SaveGameToSlot", p)
 
     def test_local_rumors_have_a_real_sharing_path(self):
@@ -46,7 +47,7 @@ class PrototypeSourceContractTests(unittest.TestCase):
         self.assertIn("Event.Evidence == EUnmadeEvidenceKind::Witnessed", p)
         self.assertIn("Listener->GetMemory()->HearRumor(", p)
         self.assertIn("Event.SubjectId", p)
-        self.assertIn("if (bNewMemory) SaveCitizens();", p)
+        self.assertIn("UnmadeCore::CommitPendingMemory(bNpcMemorySavePending,true,[&]{return WriteWorldSnapshot();});", p)
 
     def test_host_preflight_fails_closed_if_missing_requirements(self):
         p = source("Scripts/check_unreal_host.ps1")

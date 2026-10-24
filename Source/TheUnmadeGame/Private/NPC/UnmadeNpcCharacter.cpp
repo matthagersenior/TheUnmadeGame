@@ -4,6 +4,7 @@
 #include "NavigationPath.h"
 #include "Authoring/UnmadeOuterPeopleData.h"
 #include "NPC/UnmadeMemoryComponent.h"
+#include "NPC/UnmadeResidentContinuityRules.h"
 #include "NPC/UnmadeNpcMotionRules.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeEvidenceProvenanceRules.h"
@@ -113,6 +114,7 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
     const auto Action = DecideForPlayer(bPlayerNearby);
 
     UnmadeCore::NpcMotion Motion = UnmadeCore::NpcMotion::Stay;
+    bool bAccordDutyAssigned=false;
     UnmadeCore::Vec2 Target{Current.X, Current.Y};
     double Speed = 70.0;
     double StopRadius = 120.0;
@@ -207,6 +209,45 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
                     Speed=Role==UnmadeCore::NpcRole::Courier?105.0:80.0;
                     StopRadius=115.0;
                 }
+                else
+                {
+                    // Emergency duty overrides ordinary civic work. Only an
+                    // informed Cinderhold resident can take the shared shift.
+                    FVector AccordSite;
+                    if(CachedHub->GetCinderholdAccordRoutineTarget(NpcId,
+                        Phase==UnmadeCore::DayPhase::Night,AccordSite))
+                    {
+                        Target={AccordSite.X,AccordSite.Y};
+                        Speed=72.0;
+                        StopRadius=105.0;
+                    }
+                }
+            }
+        }
+        // Saved daytime civic work is chosen only for routine actors. Urgent
+        // help, avoidance, and local hazard evacuation still take precedence.
+        // This target is followed with the existing navmesh and swept motion.
+        if(CachedHub.IsValid()&&ExpeditionHomeArc>=0)
+        {
+            FVector AccordTarget;
+            if(CachedHub->GetPublicAccordRoutineTarget(NpcId,
+                Phase==UnmadeCore::DayPhase::Night,AccordTarget))
+            {
+                Target={AccordTarget.X,AccordTarget.Y};
+                bAccordDutyAssigned=true;
+                Speed=72.0;
+                StopRadius=105.0;
+            }
+        }
+        if(CachedHub.IsValid()&&!bAccordDutyAssigned&&
+           CachedHub->GetMaterialDuty(HomeLocation,Role)==UnmadeCore::MaterialDuty::Regular)
+        {
+            FVector CivicTarget;
+            if(CachedHub->GetDiscoveryCivicRoutineTarget(NpcId,
+                  Phase==UnmadeCore::DayPhase::Night,CivicTarget))
+            {
+                Target={CivicTarget.X,CivicTarget.Y};
+                Speed=72.0;StopRadius=105.0;
             }
         }
     }
@@ -258,7 +299,12 @@ void AUnmadeNpcCharacter::Tick(float DeltaSeconds)
         SetActorRotation(Offset.Rotation());
         AnimateResident(FName(TEXT("Walk")));
     }
-    else {FName work=CachedHub.IsValid()?CachedHub->ServiceWorkCue(NpcId,Current):NAME_None;AnimateResident(work.IsNone()?FName(TEXT("Idle")):work);}
+    else {
+        FName work=CachedHub.IsValid()?CachedHub->ServiceWorkCue(NpcId,Current):NAME_None;
+        if(work.IsNone()&&bAccordDutyAssigned&&CachedHub.IsValid())
+            work=CachedHub->GetPublicAccordWorkCue(NpcId,Current,Phase==UnmadeCore::DayPhase::Night);
+        AnimateResident(work.IsNone()?FName(TEXT("Idle")):work);
+    }
 }
 
 void AUnmadeNpcCharacter::ConfigureFrontier(const UnmadeCore::FrontierResident& Resident)
@@ -372,7 +418,7 @@ bool AUnmadeNpcCharacter::CanTradeWithPlayer() const
 
 FString AUnmadeNpcCharacter::GetReactionText() const
 {
-    if(CachedHub.IsValid()){const FString Expedition=CachedHub->GetExpeditionReaction(NpcId);if(!Expedition.IsEmpty())return Expedition;}
+    const FString Expedition=CachedHub.IsValid()?CachedHub->GetExpeditionReaction(NpcId):FString();
     // Canonical authored dialogue never requires a model. AI can paraphrase,
     // but it cannot overwrite these deterministic permissions/choices.
     using UnmadeCore::NpcAction;
@@ -395,31 +441,8 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     // Resident dialogue is source-authored; adaptive reactions never change
     // stable identifiers or assert knowledge of unobserved remote events.
     FString CharacterLine = AuthoredLine;
-    if(CachedHub.IsValid())
-    {
-        UnmadeCore::Realm CurrentHome=UnmadeCore::Realm::ThreefoldReach;
-        if(bLaterRealmResident)CurrentHome=LaterHome;
-        else if(bFrontierResident)
-            CurrentHome=NpcId.ToString().StartsWith(TEXT("npc.saltwake."))
-                ?UnmadeCore::Realm::WidowedRain
-                :UnmadeCore::Realm::HearthBeneath;
-        CharacterLine+=TEXT(" ");
-        CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
-        // Only the named person who actually received the carried packet gets
-        // delivery knowledge; other residents need witnessed local testimony.
-        const FString ReturnReply=CachedHub->GetWitnessReturnLine(NpcId);
-        if(!ReturnReply.IsEmpty())
-        {
-            CharacterLine+=TEXT(" ");
-            CharacterLine+=ReturnReply;
-        }
-        const FString PhysicalReceipt=CachedHub->GetWitnessDispatchRecipientLine(NpcId);
-        if(!PhysicalReceipt.IsEmpty())
-        {
-            CharacterLine+=TEXT(" ");
-            CharacterLine+=PhysicalReceipt;
-        }
-    }
+    // First select this actual person's day/night authored voice. Never replace
+    // their persisted return conversation or firsthand evidence after it.
     const auto Phase = CachedHub.IsValid()
         ? CachedHub->GetCurrentPhase() : UnmadeCore::DayPhase::Day;
     const UnmadeCore::OuterPersonSpec* LocalProfile=nullptr;
@@ -434,9 +457,49 @@ FString AUnmadeNpcCharacter::GetReactionText() const
     }
     if (Phase == UnmadeCore::DayPhase::Night && !LocalProfile)
         CharacterLine += TEXT(" It feels like the dark has started listening.");
+    // Source-authoritative record and witnessed memory remain independent.
+    // Expedition residents must be able to recount their actual rescue and
+    // choice without suppressing separate observed events and return context.
+    if(!Expedition.IsEmpty())CharacterLine+=TEXT(" ")+Expedition;
+    if(CachedHub.IsValid())
+    {
+        UnmadeCore::Realm CurrentHome=UnmadeCore::Realm::ThreefoldReach;
+        if(bLaterRealmResident)CurrentHome=LaterHome;
+        else if(bFrontierResident)
+            CurrentHome=NpcId.ToString().StartsWith(TEXT("npc.saltwake."))
+                ?UnmadeCore::Realm::WidowedRain
+                :UnmadeCore::Realm::HearthBeneath;
+        const FTCHARToUTF8 Identifier(*NpcId.ToString());
+        if(UnmadeCore::ResidentContinuityIndex(Identifier.Get())>=0)
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=CachedHub->GetResidentReturnLine(NpcId,CurrentHome);
+        }
+        // A carried reply is known only to its actual named recipient.
+        const FString ReturnReply=CachedHub->GetWitnessReturnLine(NpcId);
+        if(!ReturnReply.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=ReturnReply;
+        }
+        const FString PhysicalReceipt=CachedHub->GetWitnessDispatchRecipientLine(NpcId);
+        if(!PhysicalReceipt.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=PhysicalReceipt;
+        }
+        const FString CarriedReport=CachedHub->GetCrossRealmCarryRecipientLine(NpcId);
+        if(!CarriedReport.IsEmpty())
+        {
+            CharacterLine+=TEXT(" ");
+            CharacterLine+=CarriedReport;
+        }
+    }
     if(CachedHub.IsValid())
     {
         CharacterLine+=CachedHub->GetRoadResidentLine(NpcId);
+        const FString CivicLine=CachedHub->GetDiscoveryCivicResidentLine(NpcId);
+        if(!CivicLine.IsEmpty())CharacterLine+=TEXT(" ")+CivicLine;
         const FString AdventureLine=CachedHub->GetCinderholdResidentLine(NpcId);
         if(!AdventureLine.IsEmpty())CharacterLine+=TEXT(" ")+AdventureLine;
         const FString BesHomeLine=CachedHub->GetBesHouseholdResidentLine(NpcId);
@@ -445,6 +508,11 @@ FString AUnmadeNpcCharacter::GetReactionText() const
             CharacterLine+=TEXT(" ");
             CharacterLine+=BesHomeLine;
         }
+        const FString RelayLine=CachedHub->GetPetitionRelayResidentLine(NpcId);
+        if(!RelayLine.IsEmpty())CharacterLine+=TEXT(" ")+RelayLine;
+        const FString PetitionLine=CachedHub->GetHearthPetitionResidentLine(NpcId);
+        if(!PetitionLine.IsEmpty())
+            CharacterLine+=TEXT(" ")+PetitionLine;
         const FString Livelihood=CachedHub->GetLivingEconomyResidentLine(NpcId);
         if(!Livelihood.IsEmpty())
         {

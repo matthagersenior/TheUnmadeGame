@@ -176,7 +176,8 @@ def generate_campaign(codex):
 DEPTH_OUTPUT=ROOT/"Source/TheUnmadeGame/Public/World/UnmadeCodexPersonalQuestsGenerated.inc"
 PERSONAL_FIELDS=("offer","witness","evidence","option_a","option_b","return_a",
                  "return_b","challenge","secret_name","power","counterparty",
-                 "witness_return_a","witness_return_b")
+                 "witness_return_a","witness_return_b","public_return_a","public_return_b",
+                 "mystery_question","physical_lead","signature_mechanics","thread_after_return")
 
 def generate_personal_quests(codex):
     by={row["id"]:row for row in codex["records"]}

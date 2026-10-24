@@ -10,7 +10,7 @@ class DepthContracts(unittest.TestCase):
  def test_duplicate_combat_declaration_regression(self):
   s=(ROOT/'Source/TheUnmadeGame/Public/Combat/UnmadeCombatComponent.h').read_text();self.assertEqual(s.count('bool IsGuarding('),1)
  def test_choice_and_resource_receipts(self):
-  s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp').read_text();self.assertIn('Depth=before;DepthChallenges=beforeChallenge',s);self.assertLess(s.index('WriteWorldSnapshot(p)'),s.index('Heal(35)'));self.assertIn('Person(GetWorld(),a,0)',s);self.assertIn('DepthPendingChoice!=action',s);self.assertIn('DepthConfirmUntil',s)
+  s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp').read_text();self.assertIn('Depth=before;Experience=beforeExperience;DepthChallenges=beforeChallenge',s);self.assertIn('CommitHealing(*p->GetCombat(),heal?35:0',s);self.assertLess(s.index('CommitHealing('),s.index('WriteWorldSnapshot(p)'));self.assertNotIn('if(heal)p->GetCombat()->Heal(35)',s);self.assertIn('Person(GetWorld(),a,0)',s);self.assertIn('DepthConfirmation.Confirm(arc,action,',s)
   h=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadePrototypeHub.cpp').read_text();self.assertIn('if(bDepthSaveRejected)return false;',h);self.assertIn('if(Save->bHasAdventureDepth)',h)
  def test_physical_evidence_and_cache_presence(self):
   s=(ROOT/'Source/TheUnmadeGame/Private/World/UnmadeAdventureDepth.cpp').read_text();self.assertIn('if(DepthEvidenceActors[a].IsValid())Add',s);self.assertIn('if(DepthCacheActors[a].IsValid())Add',s)

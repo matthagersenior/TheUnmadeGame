@@ -18,6 +18,8 @@ public:
 
     /** Records a real clue once and persists it without modifying unrelated save data. */
     bool RecordEvidence(FName EvidenceId);
+    bool CommitEvidence(FName EvidenceId,TFunctionRef<bool()> Write);
+    bool CaptureLexicon(class UUnmadePrototypeSave* Save)const;
 
     UFUNCTION(BlueprintPure, Category="Unmade|Lexicon")
     bool UnderstandsVeyl() const;

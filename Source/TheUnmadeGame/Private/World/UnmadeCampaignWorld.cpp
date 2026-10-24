@@ -1,6 +1,7 @@
 #include "UI/UnmadeRpgFeedback.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeCampaignSpineRules.h"
+#include "World/UnmadeCivicReverberationRules.h"
 #include "World/UnmadeFrontierRealmRules.h"
 #include "World/UnmadeLaterRealmRules.h"
 #include "Player/UnmadeCharacter.h"
@@ -78,6 +79,16 @@ FString AUnmadePrototypeHub::DescribeUnansweredRoad(AUnmadeCharacter* Player) co
         TEXT("THE UNANSWERED ROAD | ACT %d/6: %s | Question: %s | Next: %s"),
         static_cast<int>(Lead.act),UTF8_TO_TCHAR(Lead.title),
         UTF8_TO_TCHAR(Lead.question),UTF8_TO_TCHAR(Lead.objective));
+    const auto Civic=UnmadeCore::EvaluateCivicReverberation(
+        PetitionRelay.Save(),BesHousehold.Save());
+    if(Civic.nhalQuestion[0])
+    {
+        // Player-facing evidence only. No boss, realm or irreversible choice
+        // becomes complete because a municipal argument was delivered.
+        Message+=TEXT(" | WITNESSED CONTRADICTION: ")+
+            FString(UTF8_TO_TCHAR(Civic.nhalQuestion))+
+            TEXT(" The contradiction is witnessed, not a free victory.");
+    }
     if(!IsValid(Player) || Lead.available==0)return Message;
     const auto From=WhereRoadBegins(Player->GetActorLocation());
     const UUnmadeEquipmentComponent* Gear=Player->GetEquipment();
