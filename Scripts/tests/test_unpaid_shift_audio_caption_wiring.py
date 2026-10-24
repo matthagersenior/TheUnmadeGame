@@ -18,6 +18,13 @@ class AudioAndCaptionProduction(unittest.TestCase):
         self.assertEqual({name for name,_ in captions},set(cue))
         self.assertTrue(all(text for _,text in captions))
         self.assertIn("UnmadeCore::UnpaidFoleyCaption(Beat->foley)",source("Source/TheUnmadeGame/Private/World/UnmadeUnpaidShiftPresentation.cpp"))
+        runtime=source("Source/TheUnmadeGame/Private/World/UnmadeUnpaidShiftPresentation.cpp")
+        for marker in ("CompleteCaption.ParseIntoArray(CaptionWords,TEXT(\" \"),true)",
+                       "1.f+static_cast<float>(CaptionWords.Num())/3.f",
+                       "FMath::Max(Beat->duration,","FString(UTF8_TO_TCHAR(Beat->blocking)),BeatDuration",
+                       "FString(UTF8_TO_TCHAR(Beat->voice)),BeatDuration",
+                       "FMath::Max(0.5f,BeatDuration)"):
+            self.assertIn(marker,runtime)
         generator=source("Scripts/build_unpaid_shift_audio.py")
         for marker in ("with wave.open(", "RATE=32000","wf.setnchannels(2)",
                        "wf.setsampwidth(2)","sha256","unique_cues",

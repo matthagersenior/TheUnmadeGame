@@ -19,6 +19,15 @@ availability, so absent WAVs still have readable descriptions. Updated source
 contracts cover every cue; native Unreal layout and accessibility verification
 remain pending.
 
+## 2026-10-24 — Caption-aware cinematic pacing
+
+Unpaid Shift beats now use the authored duration as a minimum and extend when
+the displayed speaker, dialogue and Foley caption need more time at 180 words
+per minute plus one second. Camera blocking, the Blueprint event duration,
+caption fallback and advance timer use the same result, preserving skip and
+scene-state behavior. Native timing checks are added; real actor/VO sync and
+in-engine accessibility review remain pending.
+
 ## 2026-10-17 — Civic Reverberation and Nhal-Vey's one-history dilemma
 
 The delivered Hearth Petition now produces local and mechanically distinct
