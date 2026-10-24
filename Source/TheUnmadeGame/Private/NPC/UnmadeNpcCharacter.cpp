@@ -843,6 +843,35 @@ FString AUnmadeNpcCharacter::GetDialogueCharacterContext() const
     return FString::Printf(TEXT("Current authored line: %s"),*AuthoredLine.Left(300));
 }
 
+FString AUnmadeNpcCharacter::GetOfflinePortrayalReply(const FString& PlayerUtterance) const
+{
+    if(!bLaterRealmResident)return FString();
+    const FString Asked=PlayerUtterance.ToLower();
+    // Evidence questions always stay on the witnessed/rumored memory path.
+    if(Asked.Contains(TEXT("remember"))||Asked.Contains(TEXT("memory"))||
+       Asked.Contains(TEXT("witness"))||Asked.Contains(TEXT("personally"))||
+       Asked.Contains(TEXT("seen"))||Asked.Contains(TEXT("saw"))||
+       Asked.Contains(TEXT("about me")))return FString();
+    const FTCHARToUTF8 Identifier(*NpcId.ToString());
+    const UnmadeCore::OuterPersonSpec* Profile=
+        UnmadeCore::FindOuterPerson(Identifier.Get());
+    if(!Profile)return FString();
+    if(Asked.Contains(TEXT("want"))||Asked.Contains(TEXT("desire"))||
+       Asked.Contains(TEXT("hope")))
+        return FString::Printf(TEXT("What I want is this: %s"),
+            UTF8_TO_TCHAR(Profile->desire));
+    if(Asked.Contains(TEXT("fear"))||Asked.Contains(TEXT("afraid"))||
+       Asked.Contains(TEXT("worry"))||Asked.Contains(TEXT("concern")))
+        return FString::Printf(TEXT("What worries me is this: %s"),
+            UTF8_TO_TCHAR(Profile->fear));
+    if(Asked.Contains(TEXT("know"))||Asked.Contains(TEXT("knowledge"))||
+       Asked.Contains(TEXT("certain"))||Asked.Contains(TEXT("boundary"))||
+       Asked.Contains(TEXT("limit")))
+        return FString::Printf(TEXT("I can speak to this much: %s"),
+            UTF8_TO_TCHAR(Profile->knowledgeBoundary));
+    return FString();
+}
+
 void AUnmadeNpcCharacter::ConfigureExpeditionResident(FName Id,const FString& Name,UnmadeCore::Realm Home,const FString& Line,int Arc,int Captive){
  ConfigureIdentity(Id,Name,UnmadeCore::NpcRole::Wanderer,UnmadeCore::NpcTemperament::Steady,UnmadeCore::SettlementId::Crossings,Line);
  bLaterRealmResident=true;LaterHome=Home;ExpeditionHomeArc=Arc;ExpeditionCaptive=Captive;HomeLocation=GetActorLocation();

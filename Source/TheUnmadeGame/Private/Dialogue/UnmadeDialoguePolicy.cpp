@@ -45,14 +45,18 @@ FString FUnmadeDialoguePolicy::BuildEvidence(const UUnmadeMemoryComponent* Memor
 
 FString FUnmadeDialoguePolicy::BuildOfflineReply(const UUnmadeMemoryComponent* Memory,
                                                  const FString& PlayerUtterance,
-                                                 const FString& CharacterVoice)
+                                                 const FString& CharacterVoice,
+                                                 const FString& AuthoredPortrayalReply)
 {
     const FString Asked = PlayerUtterance.ToLower();
-    const bool bAskMemory = Asked.Contains(TEXT("remember")) || Asked.Contains(TEXT("memory"));
+    const bool bAskMemory = Asked.Contains(TEXT("remember")) ||
+                            Asked.Contains(TEXT("memory")) ||
+                            Asked.Contains(TEXT("about me"));
     const bool bAskConcern = Asked.Contains(TEXT("worry")) || Asked.Contains(TEXT("concern"));
     const bool bAskWitness = Asked.Contains(TEXT("witness")) || Asked.Contains(TEXT("personally")) ||
-                             Asked.Contains(TEXT("seen"));
-    if (!IsValid(Memory)) return CharacterVoice;
+                             Asked.Contains(TEXT("seen")) || Asked.Contains(TEXT("saw"));
+    if (!IsValid(Memory))
+        return AuthoredPortrayalReply.IsEmpty()?CharacterVoice:AuthoredPortrayalReply;
 
     auto Describe = [](FName Kind) -> const TCHAR*
     {
@@ -91,7 +95,9 @@ FString FUnmadeDialoguePolicy::BuildOfflineReply(const UUnmadeMemoryComponent* M
                 return FString::Printf(TEXT("What worries me is that %s. I can only speak to what reached me."), Summary);
             }
         }
-        return TEXT("I cannot name a particular danger from what I know. I would rather admit that than pretend certainty.");
+        return AuthoredPortrayalReply.IsEmpty()
+            ?TEXT("I cannot name a particular danger from what I know. I would rather admit that than pretend certainty.")
+            :AuthoredPortrayalReply;
     }
 
     if (bAskWitness || bAskMemory)
@@ -116,7 +122,7 @@ FString FUnmadeDialoguePolicy::BuildOfflineReply(const UUnmadeMemoryComponent* M
             : TEXT("I cannot point to a particular thing I remember witnessing about you yet.");
     }
 
-    return CharacterVoice;
+    return AuthoredPortrayalReply.IsEmpty()?CharacterVoice:AuthoredPortrayalReply;
 }
 
 bool FUnmadeDialoguePolicy::TryExtractLine(const FString& ResponseJson, FString& OutLine)

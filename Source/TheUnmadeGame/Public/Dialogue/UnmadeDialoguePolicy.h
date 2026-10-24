@@ -20,7 +20,8 @@ public:
     /** Grounded, deterministic response for offline or rejected model requests. */
     static FString BuildOfflineReply(const UUnmadeMemoryComponent* Memory,
                                      const FString& PlayerUtterance,
-                                     const FString& CharacterVoice);
+                                     const FString& CharacterVoice,
+                                     const FString& AuthoredPortrayalReply=FString());
 
     /** Accept only a completed Ollama /api/chat response containing JSON {"line":"..."}. */
     static bool TryExtractLine(const FString& ResponseJson, FString& OutLine);

@@ -1507,3 +1507,9 @@ separate resident skin, clothing, and trouser surfaces. They remain generic
 presentation assets, not authoritative designs for a named character or proof
 of an NPC's identity, memory, or actions. Their mesh and material changes do
 not affect dialogue, evidence, saved world state, or canonical appearance.
+
+When local inference is unavailable, the 18 later-realm residents can answer
+questions about their own authored desire, fear, and knowledge boundary in their
+distinct dossier terms. These self-descriptions remain portrayal, not testimony.
+Questions about the player or witnessed events continue to rely on each
+resident's separately saved firsthand and rumor records.
