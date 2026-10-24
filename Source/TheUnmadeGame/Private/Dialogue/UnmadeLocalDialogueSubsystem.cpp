@@ -39,7 +39,8 @@ void UUnmadeLocalDialogueSubsystem::RequestDialogue(AUnmadeNpcCharacter* Npc, co
     }
 
     const FName NpcId = Npc->GetStableId();
-    const FString FallbackLine = Npc->GetReactionText();
+    const FString FallbackLine = FUnmadeDialoguePolicy::BuildOfflineReply(
+        Npc->GetMemory(), PlayerUtterance, Npc->GetReactionText());
 
     // Deliberately never sends anything to a cloud service.
     if (!bEnableLocalModel || bRequestInFlight ||

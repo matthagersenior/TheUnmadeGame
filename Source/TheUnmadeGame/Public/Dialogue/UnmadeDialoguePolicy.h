@@ -17,6 +17,11 @@ public:
     /** NPC-specific evidence, including where hearsay came from. */
     static FString BuildEvidence(const UUnmadeMemoryComponent* Memory);
 
+    /** Grounded, deterministic response for offline or rejected model requests. */
+    static FString BuildOfflineReply(const UUnmadeMemoryComponent* Memory,
+                                     const FString& PlayerUtterance,
+                                     const FString& CharacterVoice);
+
     /** Accept only a completed Ollama /api/chat response containing JSON {"line":"..."}. */
     static bool TryExtractLine(const FString& ResponseJson, FString& OutLine);
 };

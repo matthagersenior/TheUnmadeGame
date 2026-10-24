@@ -139,7 +139,7 @@
           "interaction": "Use actual site actor; check line of sight, stage and evidence match",
           "objective": "Choose shelter or research testimony with a clear permanent preview",
           "speaker": "npc.archivist.001",
-          "line": "I heard a bell from a road that doesn't exist. Who would carve a road into silence? The the unanswered interval: bell without a last note gives you one chance to change the place responsibly.",
+          "line": "I heard a bell from a road that doesn't exist. Who would carve a road into silence? The unanswered interval, a bell without a last note, gives you one chance to change the place responsibly.",
           "physical_tag": "Reach.CrossingsWitness",
           "failure": "Mechanism blocked, invalid/wrong evidence or missing power prerequisite",
           "recovery": "Return to the matching clue and retry physical mechanism; never consume evidence on failed persistence",

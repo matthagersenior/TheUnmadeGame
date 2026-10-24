@@ -4,6 +4,7 @@
 #include "UI/UnmadeRpgWidget.h"
 #include "UI/UnmadePlayerPreferences.h"
 #include "Player/UnmadeCharacter.h"
+#include "NPC/UnmadeNpcCharacter.h"
 #include "World/UnmadePrototypeHub.h"
 #include "World/UnmadeAdventureLayout.h"
 #include "World/UnmadeAdventureDepthRegistry.h"
@@ -77,12 +78,64 @@ TSharedRef<SWidget> UUnmadeRpgWidget::RebuildWidget(){SetIsFocusable(true);if(!W
  if(group==6){Action(TEXT("Continue current game"),TEXT("ContinueGame"));Action(TEXT("Save now"),TEXT("SaveNow"));Action(TEXT("Next profile"),TEXT("NextProfile"));Action(TEXT("Load selected profile"),TEXT("LoadProfile"));Action(TEXT("Recover selected backup"),TEXT("LoadBackup"));Action(TEXT("Copy backup into unused profile"),TEXT("RecoverToNewProfile"));Action(TEXT("New game in unused profile"),TEXT("NewProfile"));}
  }
  NameInput=WidgetTree->ConstructWidget<UEditableTextBox>();NameInput->SetVisibility(ESlateVisibility::Collapsed);NameInput->SetHintText(FText::FromString(TEXT("Chosen name")));panelStack->AddChildToVerticalBox(NameInput);
+ ConversationPanel=Frame(FAnchors(.08,.18,.92,.92));ConversationPanel->SetVisibility(ESlateVisibility::Collapsed);
+ auto* conversationStack=WidgetTree->ConstructWidget<UVerticalBox>();ConversationPanel->SetContent(conversationStack);
+ auto* conversationTitle=Text(TEXT("Conversation"),23);conversationStack->AddChildToVerticalBox(conversationTitle);
+ auto* conversationScroll=WidgetTree->ConstructWidget<UScrollBox>();auto* conversationScrollSlot=conversationStack->AddChildToVerticalBox(conversationScroll);conversationScrollSlot->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
+ ConversationBody=Text(TEXT("Choose a question to begin."),19);conversationScroll->AddChild(ConversationBody);
+ auto* topicRow=WidgetTree->ConstructWidget<UWrapBox>();topicRow->SetInnerSlotPadding(FVector2D(6,6));conversationStack->AddChildToVerticalBox(topicRow);
+ auto AddTopic=[&](const FString& title,const TCHAR* callback){auto* button=WidgetTree->ConstructWidget<UButton>();button->SetContent(Text(title,17));topicRow->AddChildToWrapBox(button);FScriptDelegate click;click.BindUFunction(this,FName(callback));button->OnClicked.Add(click);ConversationTopicButtons.Add(button);return button;};
+ ConversationInitialFocus=AddTopic(TEXT("What do you remember about me?"),TEXT("AskNpcMemory"));
+ AddTopic(TEXT("What worries you today?"),TEXT("AskNpcConcern"));
+ AddTopic(TEXT("What have you personally witnessed?"),TEXT("AskNpcWitnessed"));
+ auto* inputRow=WidgetTree->ConstructWidget<UHorizontalBox>();conversationStack->AddChildToVerticalBox(inputRow);
+ ConversationInput=WidgetTree->ConstructWidget<UEditableTextBox>();ConversationInput->SetHintText(FText::FromString(TEXT("Ask your own question (up to 400 characters)")));ConversationInput->SetMaxTextLength(400);inputRow->AddChildToHorizontalBox(ConversationInput);
+ auto* submit=WidgetTree->ConstructWidget<UButton>();submit->SetContent(Text(TEXT("Ask"),17));inputRow->AddChildToHorizontalBox(submit);FScriptDelegate submitClick;submitClick.BindUFunction(this,FName(TEXT("SubmitNpcQuestion")));submit->OnClicked.Add(submitClick);
+ auto* close=WidgetTree->ConstructWidget<UButton>();close->SetContent(Text(TEXT("End conversation"),17));conversationStack->AddChildToVerticalBox(close);FScriptDelegate closeClick;closeClick.BindUFunction(this,FName(TEXT("CloseNpcConversation")));close->OnClicked.Add(closeClick);
  return Super::RebuildWidget();
 }
 void UUnmadeRpgWidget::NativeConstruct(){Super::NativeConstruct();if(GetGameInstance())if(auto* dialogue=GetGameInstance()->GetSubsystem<UUnmadeLocalDialogueSubsystem>())dialogue->OnDialogueReady.AddUniqueDynamic(this,&UUnmadeRpgWidget::NpcLine);Refresh();}
 void UUnmadeRpgWidget::NativeDestruct(){if(GetGameInstance())if(auto* dialogue=GetGameInstance()->GetSubsystem<UUnmadeLocalDialogueSubsystem>())dialogue->OnDialogueReady.RemoveDynamic(this,&UUnmadeRpgWidget::NpcLine);Close();Super::NativeDestruct();}
-void UUnmadeRpgWidget::Open(int value){if(bOpen&&Page==value){Close();return;}if(auto* h=Hub(GetWorld()))if(h->IsBesDirectedScenePlaying())return;bool WasOpen=bOpen;SessionConfirm.Clear();ActionFeedback.Reset();if(value==7&&NameInput)if(auto* p=Player(this))NameInput->SetText(FText::FromString(p->GetCharacterChosenName()));if(!WasOpen)if(auto* p=Player(this)){p->GetCombat()->SetGuarding(false);p->GetCombat()->CancelWeaponStrike();}if(!WasOpen&&!UGameplayStatics::IsGamePaused(this))bPausedWorld=UGameplayStatics::SetGamePaused(this,true);Page=FMath::Clamp(value,0,7);bOpen=true;Panel->SetVisibility(ESlateVisibility::Visible);if(auto* pc=GetOwningPlayer()){pc->bShowMouseCursor=true;FInputModeUIOnly mode;mode.SetWidgetToFocus(TakeWidget());pc->SetInputMode(mode);if(!WasOpen){pc->SetIgnoreMoveInput(true);pc->SetIgnoreLookInput(true);}}if(InitialFocus)InitialFocus->SetKeyboardFocus();Refresh();}
-void UUnmadeRpgWidget::Close(){if(!bOpen)return;SessionConfirm.Clear();ActionFeedback.Reset();bOpen=false;CaptureBinding=0;if(bPausedWorld){UGameplayStatics::SetGamePaused(this,false);bPausedWorld=false;}if(Panel)Panel->SetVisibility(ESlateVisibility::Collapsed);if(auto* pc=GetOwningPlayer()){pc->bShowMouseCursor=false;pc->SetIgnoreMoveInput(false);pc->SetIgnoreLookInput(false);pc->SetInputMode(FInputModeGameOnly());}}
+void UUnmadeRpgWidget::Open(int value){if(bOpen&&Page==value){Close();return;}if(auto* h=Hub(GetWorld()))if(h->IsBesDirectedScenePlaying())return;bool WasOpen=bOpen;SessionConfirm.Clear();ActionFeedback.Reset();if(value==7&&NameInput)if(auto* p=Player(this))NameInput->SetText(FText::FromString(p->GetCharacterChosenName()));if(!WasOpen)if(auto* p=Player(this)){p->GetCombat()->SetGuarding(false);p->GetCombat()->CancelWeaponStrike();}if(!WasOpen&&!UGameplayStatics::IsGamePaused(this))bPausedWorld=UGameplayStatics::SetGamePaused(this,true);Page=FMath::Clamp(value,0,8);bOpen=true;Panel->SetVisibility(ESlateVisibility::Visible);if(auto* pc=GetOwningPlayer()){pc->bShowMouseCursor=true;FInputModeUIOnly mode;mode.SetWidgetToFocus(TakeWidget());pc->SetInputMode(mode);if(!WasOpen){pc->SetIgnoreMoveInput(true);pc->SetIgnoreLookInput(true);}}if(Page==8&&ConversationInitialFocus)ConversationInitialFocus->SetKeyboardFocus();else if(InitialFocus)InitialFocus->SetKeyboardFocus();Refresh();}
+void UUnmadeRpgWidget::Close(){bConversationOpen=false;ConversationNpc.Reset();CurrentDialogueNpcId=NAME_None;if(ConversationPanel)ConversationPanel->SetVisibility(ESlateVisibility::Collapsed);if(!bOpen)return;SessionConfirm.Clear();ActionFeedback.Reset();bOpen=false;CaptureBinding=0;if(bPausedWorld){UGameplayStatics::SetGamePaused(this,false);bPausedWorld=false;}if(Panel)Panel->SetVisibility(ESlateVisibility::Collapsed);if(auto* pc=GetOwningPlayer()){pc->bShowMouseCursor=false;pc->SetIgnoreMoveInput(false);pc->SetIgnoreLookInput(false);pc->SetInputMode(FInputModeGameOnly());}}
+void UUnmadeRpgWidget::BeginNpcConversation(AUnmadeNpcCharacter* Npc)
+{
+    if(!IsValid(Npc))return;
+    if(auto* h=Hub(GetWorld()))if(h->IsBesDirectedScenePlaying())return;
+    ConversationNpc=Npc;CurrentDialogueNpcId=Npc->GetStableId();bConversationOpen=true;
+    ConversationTranscript=FString::Printf(TEXT("%s\n\n%s\n\nChoose a question, or type your own. Conversation text does not commit quest choices."),*Npc->GetDisplayLabel(),*Npc->GetReactionText());
+    if(auto* h=Hub(GetWorld()))h->NotifyRpg(FString::Printf(TEXT("%s: %s"),*Npc->GetDisplayLabel(),*Npc->GetReactionText()));
+    if(ConversationBody)ConversationBody->SetText(FText::FromString(ConversationTranscript));
+    if(ConversationInput)ConversationInput->SetText(FText::GetEmpty());
+    Open(8);
+    if(ConversationPanel)ConversationPanel->SetVisibility(ESlateVisibility::Visible);
+}
+void UUnmadeRpgWidget::AppendConversation(const FString& Speaker,const FString& Line)
+{
+    ConversationTranscript+=FString::Printf(TEXT("\n\n%s: %s"),*Speaker,*Line);
+    if(ConversationTranscript.Len()>6000)ConversationTranscript=ConversationTranscript.Right(6000);
+    if(ConversationBody)ConversationBody->SetText(FText::FromString(ConversationTranscript));
+}
+void UUnmadeRpgWidget::AskNpcTopic(const FString& Question)
+{
+    AUnmadeNpcCharacter* Npc=ConversationNpc.Get();if(!bConversationOpen||!IsValid(Npc))return;
+    const FString BoundedQuestion=Question.Left(400);
+    AppendConversation(TEXT("You"),BoundedQuestion);
+    if(auto* h=Hub(GetWorld()))h->NotifyRpg(FString::Printf(TEXT("You asked %s: %s"),*Npc->GetDisplayLabel(),*BoundedQuestion));
+    if(ConversationInput)ConversationInput->SetText(FText::GetEmpty());
+    if(auto* Dialogue=GetGameInstance()?GetGameInstance()->GetSubsystem<UUnmadeLocalDialogueSubsystem>():nullptr)
+        Dialogue->RequestDialogue(Npc,BoundedQuestion);
+    else
+    {
+        AppendConversation(Npc->GetDisplayLabel(),Npc->GetReactionText());
+        if(auto* h=Hub(GetWorld()))h->NotifyRpg(FString::Printf(TEXT("%s: %s"),*Npc->GetDisplayLabel(),*Npc->GetReactionText()));
+    }
+}
+void UUnmadeRpgWidget::AskNpcMemory(){AskNpcTopic(TEXT("What do you remember about me?"));}
+void UUnmadeRpgWidget::AskNpcConcern(){AskNpcTopic(TEXT("What worries you today?"));}
+void UUnmadeRpgWidget::AskNpcWitnessed(){AskNpcTopic(TEXT("What have you personally witnessed?"));}
+void UUnmadeRpgWidget::SubmitNpcQuestion(){if(!ConversationInput)return;const FString Question=ConversationInput->GetText().ToString().TrimStartAndEnd();if(Question.IsEmpty())return;AskNpcTopic(Question);}
+void UUnmadeRpgWidget::CloseNpcConversation(){Close();}
 bool UUnmadeRpgWidget::CaptureControl(FKey key){if(!CaptureBinding)return false;if(key==EKeys::Escape){CaptureBinding=0;Refresh();return true;}FString reason;if(GetMutableDefault<UUnmadePlayerPreferences>()->Bind(CaptureBinding,key,reason))CaptureBinding=0;if(auto* h=Hub(GetWorld()))h->NotifyRpg(reason);Refresh();return true;}
 FReply UUnmadeRpgWidget::NativeOnMouseButtonDown(const FGeometry& g,const FPointerEvent& e){if(CaptureControl(e.GetEffectingButton()))return FReply::Handled();return Super::NativeOnMouseButtonDown(g,e);}
 FReply UUnmadeRpgWidget::NativeOnAnalogValueChanged(const FGeometry& g,const FAnalogInputEvent& e){
@@ -94,13 +147,13 @@ FReply UUnmadeRpgWidget::NativeOnAnalogValueChanged(const FGeometry& g,const FAn
  }
  return Super::NativeOnAnalogValueChanged(g,e);
 }
-FReply UUnmadeRpgWidget::NativeOnKeyDown(const FGeometry& g,const FKeyEvent& e){auto k=e.GetKey();if(CaptureControl(k))return FReply::Handled();if(k==EKeys::Escape||k==EKeys::Gamepad_FaceButton_Right){Close();return FReply::Handled();}if(k==EKeys::J){Open(0);return FReply::Handled();}if(k==EKeys::I){Open(1);return FReply::Handled();}if(k==EKeys::Gamepad_LeftShoulder||k==EKeys::Gamepad_RightShoulder){Open((Page+(k==EKeys::Gamepad_RightShoulder?1:7))%8);return FReply::Handled();}if(k==EKeys::Six){ChoiceA();return FReply::Handled();}if(k==EKeys::Seven){ChoiceB();return FReply::Handled();}bool navigation=k==EKeys::Tab||k==EKeys::Up||k==EKeys::Down||k==EKeys::Left||k==EKeys::Right||k==EKeys::Enter||k==EKeys::SpaceBar||k==EKeys::Gamepad_DPad_Up||k==EKeys::Gamepad_DPad_Down||k==EKeys::Gamepad_DPad_Left||k==EKeys::Gamepad_DPad_Right||k==EKeys::Gamepad_FaceButton_Bottom;if(bOpen&&!navigation)return FReply::Handled();return Super::NativeOnKeyDown(g,e);}
+FReply UUnmadeRpgWidget::NativeOnKeyDown(const FGeometry& g,const FKeyEvent& e){auto k=e.GetKey();if(CaptureControl(k))return FReply::Handled();if(k==EKeys::Escape||k==EKeys::Gamepad_FaceButton_Right){Close();return FReply::Handled();}if(k==EKeys::J){Open(0);return FReply::Handled();}if(k==EKeys::I){Open(1);return FReply::Handled();}if(k==EKeys::Gamepad_LeftShoulder||k==EKeys::Gamepad_RightShoulder){Open((Page+(k==EKeys::Gamepad_RightShoulder?1:8))%9);return FReply::Handled();}if(k==EKeys::Six){ChoiceA();return FReply::Handled();}if(k==EKeys::Seven){ChoiceB();return FReply::Handled();}bool navigation=k==EKeys::Tab||k==EKeys::Up||k==EKeys::Down||k==EKeys::Left||k==EKeys::Right||k==EKeys::Enter||k==EKeys::SpaceBar||k==EKeys::Gamepad_DPad_Up||k==EKeys::Gamepad_DPad_Down||k==EKeys::Gamepad_DPad_Left||k==EKeys::Gamepad_DPad_Right||k==EKeys::Gamepad_FaceButton_Bottom;if(bOpen&&!navigation)return FReply::Handled();return Super::NativeOnKeyDown(g,e);}
 
 void UUnmadeRpgWidget::NativeTick(const FGeometry& g,float dt){Super::NativeTick(g,dt);if(GetWorld()&&GetWorld()->GetTimeSeconds()>=NextRefresh){NextRefresh=GetWorld()->GetTimeSeconds()+.2;Refresh();}}
 void UUnmadeRpgWidget::Refresh(){auto* p=Player(this);auto* h=Hub(GetWorld());if(!p||!h||!Body)return;auto* combat=p->GetCombat();if(combat){Health->SetPercent(combat->GetHealth()/FMath::Max(1.f,combat->GetMaxHealth()));Stamina->SetPercent(combat->GetStamina()/100);Stats->SetText(FText::FromString(FString::Printf(TEXT("Health %.0f / %.0f   Stamina %.0f   Strain %.0f\n%s"),combat->GetHealth(),combat->GetMaxHealth(),combat->GetStamina(),p->GetRealityStrain(),*combat->GetCombatFeedback())));}
  FString threat;double best=FMath::Square(1400.f);for(auto weak:h->CachedEnemies()){auto* e=weak.Get();if(!e)continue;double d=FVector::DistSquared2D(p->GetActorLocation(),e->GetActorLocation());if(e->CanBeTargeted()&&d<best){FVector toward=e->GetActorLocation()-p->GetActorLocation();if(FVector::DotProduct(p->GetActorForwardVector(),toward.GetSafeNormal2D())<0)continue;FCollisionQueryParams sight(SCENE_QUERY_STAT(HudThreatSight),false);sight.AddIgnoredActor(p);sight.AddIgnoredActor(e);if(GetWorld()->LineTraceTestByChannel(p->GetActorLocation()+FVector(0,0,55),e->GetActorLocation()+FVector(0,0,55),ECC_Visibility,sight))continue;best=d;threat=FString::Printf(TEXT("%s   %.0f / %.0f health\n%s"),*e->GetCombatName(),e->GetCombat()->GetHealth(),e->GetCombat()->GetMaxHealth(),*e->GetCombatWarning());}}EnemyText->SetText(FText::FromString(threat));
  auto* pref=GetDefault<UUnmadePlayerPreferences>();if(FMath::Abs(pref->TextScale-AppliedTextScale)>.001){for(const auto& entry:BaseFonts)if(auto* t=entry.Key.Get()){auto f=t->GetFont();f.Size=FMath::RoundToInt(entry.Value*pref->TextScale);t->SetFont(f);}AppliedTextScale=pref->TextScale;}WidgetTree->ForEachWidget([&](UWidget* w){if(auto* b=Cast<UBorder>(w))b->SetBrushColor(pref->HighContrast?FLinearColor::Black:FLinearColor(.025,.04,.055,.96));});
- Objective->SetVisibility(!bOpen&&!h->IsBesDirectedScenePlaying()?ESlateVisibility::HitTestInvisible:ESlateVisibility::Collapsed);Objective->SetText(FText::FromString(pref->FormatControls(h->GetTrackedObjective())));for(int i=0;i<RealmButtons.Num();++i)RealmButtons[i]->SetVisibility(h->IsRealmKnown(i)?ESlateVisibility::Visible:ESlateVisibility::Collapsed);for(int i=0;i<ActionGroups.Num();++i)ActionGroups[i]->SetVisibility(bOpen&&i==Page?ESlateVisibility::Visible:ESlateVisibility::Collapsed);
+ Objective->SetVisibility(!bOpen&&!h->IsBesDirectedScenePlaying()?ESlateVisibility::HitTestInvisible:ESlateVisibility::Collapsed);Objective->SetText(FText::FromString(pref->FormatControls(h->GetTrackedObjective())));for(int i=0;i<RealmButtons.Num();++i)RealmButtons[i]->SetVisibility(h->IsRealmKnown(i)?ESlateVisibility::Visible:ESlateVisibility::Collapsed);for(int i=0;i<ActionGroups.Num();++i)ActionGroups[i]->SetVisibility(bOpen&&i==Page?ESlateVisibility::Visible:ESlateVisibility::Collapsed);if(Panel)Panel->SetVisibility(bOpen&&Page!=8?ESlateVisibility::Visible:ESlateVisibility::Collapsed);if(ConversationPanel)ConversationPanel->SetVisibility(bConversationOpen?ESlateVisibility::Visible:ESlateVisibility::Collapsed);
  FString contextual=h->GetDepthPrompt(p);if(contextual.StartsWith(TEXT("E ")))contextual=pref->InteractKey.GetDisplayName().ToString()+contextual.Mid(1);if(pref->ControllerPrompts&&contextual.StartsWith(pref->InteractKey.GetDisplayName().ToString()))contextual=pref->PadInteract.GetDisplayName().ToString()+contextual.Mid(pref->InteractKey.GetDisplayName().ToString().Len());Prompt->SetText(FText::FromString(pref->FormatControls(contextual)+TEXT(" / ")+pref->ControlPrompt()));MapContainer->SetVisibility(bOpen&&Page==2?ESlateVisibility::Visible:ESlateVisibility::Collapsed);
  if(h->RpgNoticeSerial!=LastNoticeSerial){LastNoticeSerial=h->RpgNoticeSerial;LastNotice=h->RpgNotice;NoticeUntil=GetWorld()->GetTimeSeconds()+18;Notice->SetText(FText::FromString(pref->FormatControls(LastNotice)));}if(GetWorld()->GetTimeSeconds()<h->RpgSceneUntil){Notice->SetText(FText::FromString(h->RpgSceneNotice));NoticeUntil=FMath::Max(NoticeUntil,h->RpgSceneUntil);}
  NoticePanel->SetVisibility(!bOpen&&!h->IsBesDirectedScenePlaying()&&GetWorld()->GetTimeSeconds()<NoticeUntil?ESlateVisibility::HitTestInvisible:ESlateVisibility::Collapsed);
@@ -113,12 +166,13 @@ void UUnmadeRpgWidget::Refresh(){auto* p=Player(this);auto* h=Hub(GetWorld());if
  if(Page==4){text=TEXT("ACTIONS — available with mouse, keyboard or controller. Each button invokes the existing action beside its real target; it does not bypass earned powers, consent, evidence, time or save checks.\n\n");if(auto* rite=p->FindComponentByClass<UUnmadeTenfoldComponent>())text+=FString::Printf(TEXT("Selected discipline: %s\n"),UTF8_TO_TCHAR(UnmadeCore::RiteSpecs[rite->CurrentSelectedRite()].name));for(const auto& a:UnmadeCore::PlayerActions)text+=FString(UTF8_TO_TCHAR(a.title))+TEXT(": ")+UTF8_TO_TCHAR(a.requirement)+TEXT("\n");text+=TEXT("\n")+p->GetStudyJournal();}
  if(Page==5){if(p->GetEquipment())text=p->GetEquipment()->DescribeRecipe(SelectedRecipe);const auto goods=TradeGoods[SelectedGoods];const auto village=UnmadeCore::SettlementAt(p->GetActorLocation().X,p->GetActorLocation().Y);UnmadeCore::RegionalEconomy pricing;text+=FString::Printf(TEXT("\nSelected trade item: %s\nBase buy price %d marks; local trust can discount. Sell price %d marks. Trading requires the real consenting merchant.\nLegacy crafting requires its workshop; a field recipe requires its earned realm workbench during open hours."),UTF8_TO_TCHAR(UnmadeCore::FindItem(goods)->name),pricing.Price(goods,village),pricing.Price(goods,village)/3);}
  if(Page==6)text=UnmadeSave::DescribeProfiles()+FString::Printf(TEXT("\nSelected profile: %d. Loading preserves the current record; New Game refuses to overwrite an occupied profile.\n"),SelectedProfile);
+ if(Page==8)text=TEXT("Talk with a nearby resident.");
  if(!LastNotice.IsEmpty())text+=TEXT("\n\nLATEST ACTION\n")+LastNotice;
  if(Page==7){const TCHAR* aspects[]={TEXT("Body frame"),TEXT("Face"),TEXT("Hair"),TEXT("Voice"),TEXT("Skin palette"),TEXT("Reality mark"),TEXT("Gait"),TEXT("Calling")};text=FString::Printf(TEXT("CHARACTER\nChosen name: %s\nSelected feature: %s, option %d of %d\nEach successful change is saved; failed writes retain the previous identity. Origin remains The Impossible. Frame, gait and palette use the existing prototype silhouette. Face, hair, voice and marks are saved selections pending final assets and engine acceptance."),*p->GetCharacterChosenName(),aspects[SelectedAspect],p->GetCharacterFeature(SelectedAspect)+1,UnmadeCore::CharacterIdentity::ChoiceCounts[SelectedAspect]);}
  if((Page==6||Page==7)&&!ActionFeedback.IsEmpty())text+=TEXT("\n\n")+ActionFeedback;
  const FString shown=Page==7?text:pref->FormatControls(text);if(Body->GetText().ToString()!=shown)Body->SetText(FText::FromString(shown));
 }
-void UUnmadeRpgWidget::NpcLine(FName Id,const FString& Line,bool UsedModel){if(auto* h=Hub(GetWorld()))h->NotifyRpg(Line);}
+void UUnmadeRpgWidget::NpcLine(FName Id,const FString& Line,bool UsedModel){if(!bConversationOpen||Id!=CurrentDialogueNpcId)return;AUnmadeNpcCharacter* Npc=ConversationNpc.Get();const FString Speaker=IsValid(Npc)?Npc->GetDisplayLabel():TEXT("Resident");AppendConversation(Speaker,Line);if(auto* h=Hub(GetWorld()))h->NotifyRpg(FString::Printf(TEXT("%s: %s"),*Speaker,*Line));}
 void UUnmadeRpgWidget::Journal(){Open(0);}void UUnmadeRpgWidget::Equipment(){Open(1);}void UUnmadeRpgWidget::Map(){Open(2);}void UUnmadeRpgWidget::Dismiss(){Close();}
 void UUnmadeRpgWidget::Weapon(){if(auto* p=Player(this))p->RpgMenuAction(FName(TEXT("Weapon")));Refresh();}
 void UUnmadeRpgWidget::Armor(){if(auto* p=Player(this))p->RpgMenuAction(FName(TEXT("Armor")));Refresh();}

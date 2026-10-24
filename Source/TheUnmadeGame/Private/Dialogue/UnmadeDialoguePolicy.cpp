@@ -43,6 +43,82 @@ FString FUnmadeDialoguePolicy::BuildEvidence(const UUnmadeMemoryComponent* Memor
     return Result;
 }
 
+FString FUnmadeDialoguePolicy::BuildOfflineReply(const UUnmadeMemoryComponent* Memory,
+                                                 const FString& PlayerUtterance,
+                                                 const FString& CharacterVoice)
+{
+    const FString Asked = PlayerUtterance.ToLower();
+    const bool bAskMemory = Asked.Contains(TEXT("remember")) || Asked.Contains(TEXT("memory"));
+    const bool bAskConcern = Asked.Contains(TEXT("worry")) || Asked.Contains(TEXT("concern"));
+    const bool bAskWitness = Asked.Contains(TEXT("witness")) || Asked.Contains(TEXT("personally")) ||
+                             Asked.Contains(TEXT("seen"));
+    if (!IsValid(Memory)) return CharacterVoice;
+
+    auto Describe = [](FName Kind) -> const TCHAR*
+    {
+        if (Kind == FName("Player.Helped")) return TEXT("you helped someone nearby");
+        if (Kind == FName("Player.HelpedVillage")) return TEXT("you helped people in this settlement");
+        if (Kind == FName("Player.DeliveredSupplies")) return TEXT("you delivered supplies");
+        if (Kind == FName("Player.Threatened")) return TEXT("you threatened someone");
+        if (Kind == FName("World.ConflictResearch")) return TEXT("the residents chose to research the danger");
+        if (Kind == FName("World.ConflictShelter")) return TEXT("the residents chose to shelter people");
+        if (Kind == FName("World.LocalRepair")) return TEXT("the local damage was repaired");
+        if (Kind == FName("World.LocalMediation")) return TEXT("the local dispute was mediated");
+        if (Kind == FName("World.BrokenOath")) return TEXT("an oath was broken");
+        if (Kind == FName("World.RedeemedOath")) return TEXT("someone tried to make amends for a broken oath");
+        if (Kind == FName("Reality.CareWitnessed")) return TEXT("you made a careful passage through a change in reality");
+        if (Kind == FName("Reality.InquiryWitnessed")) return TEXT("you examined a change in reality");
+        if (Kind == FName("Reality.Anomaly")) return TEXT("a reality fracture appeared");
+        return nullptr; // Unknown event IDs stay out of player-facing dialogue.
+    };
+
+    const TArray<FUnmadeNpcObservation>& Events = Memory->GetObservations();
+    if (bAskConcern)
+    {
+        for (int32 Index = Events.Num() - 1; Index >= 0; --Index)
+        {
+            const TCHAR* Summary = Describe(Events[Index].EventKind);
+            if (Summary && (Events[Index].EventKind == FName("Player.Threatened") ||
+                            Events[Index].EventKind == FName("World.BrokenOath") ||
+                            Events[Index].EventKind == FName("Reality.Anomaly")))
+            {
+                if (Events[Index].Evidence == EUnmadeEvidenceKind::Rumor &&
+                    !Events[Index].SpeakerId.IsNone())
+                {
+                    return FString::Printf(TEXT("I heard from %s that %s. I did not witness it, but the report worries me."),
+                        *Events[Index].SpeakerId.ToString(), Summary);
+                }
+                return FString::Printf(TEXT("What worries me is that %s. I can only speak to what reached me."), Summary);
+            }
+        }
+        return TEXT("I cannot name a particular danger from what I know. I would rather admit that than pretend certainty.");
+    }
+
+    if (bAskWitness || bAskMemory)
+    {
+        for (int32 Index = Events.Num() - 1; Index >= 0; --Index)
+        {
+            const FUnmadeNpcObservation& Event = Events[Index];
+            const TCHAR* Summary = Describe(Event.EventKind);
+            if (!Summary) continue;
+            if (Event.Evidence == EUnmadeEvidenceKind::Witnessed)
+            {
+                return FString::Printf(TEXT("I remember that %s. I saw it myself."), Summary);
+            }
+            if (bAskMemory && !Event.SpeakerId.IsNone())
+            {
+                return FString::Printf(TEXT("I heard from %s that %s, but I did not see it myself."),
+                    *Event.SpeakerId.ToString(), Summary);
+            }
+        }
+        return bAskWitness
+            ? TEXT("I have no firsthand account of that to give you.")
+            : TEXT("I cannot point to a particular thing I remember witnessing about you yet.");
+    }
+
+    return CharacterVoice;
+}
+
 bool FUnmadeDialoguePolicy::TryExtractLine(const FString& ResponseJson, FString& OutLine)
 {
     OutLine.Empty();
