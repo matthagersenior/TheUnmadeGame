@@ -4,6 +4,7 @@
 #include "InputCoreTypes.h"
 #include "UI/UnmadePlayerFacingRules.h"
 #include "UnmadeRpgWidget.generated.h"
+class AUnmadeNpcCharacter;
 class UEditableTextBox;class UWrapBox;class UButton;class USizeBox;class UTextBlock;class UBorder;class UProgressBar;class UCanvasPanel;
 UCLASS()
 class THEUNMADEGAME_API UUnmadeRpgWidget : public UUserWidget {
@@ -11,6 +12,7 @@ class THEUNMADEGAME_API UUnmadeRpgWidget : public UUserWidget {
 public:
  void Open(int Page);
  void Close();
+ void BeginNpcConversation(AUnmadeNpcCharacter* Npc);
  bool IsOpen()const{return bOpen;}
 protected:
  virtual TSharedRef<SWidget> RebuildWidget()override;
@@ -42,7 +44,12 @@ private:
  UPROPERTY() TObjectPtr<UTextBlock> EnemyText;
  UPROPERTY() TObjectPtr<UBorder> Panel;
  UPROPERTY() TObjectPtr<UBorder> NoticePanel;
+ UPROPERTY() TObjectPtr<UBorder> ConversationPanel;
  UPROPERTY() TObjectPtr<UTextBlock> Body;
+ UPROPERTY() TObjectPtr<UTextBlock> ConversationBody;
+ UPROPERTY() TObjectPtr<UEditableTextBox> ConversationInput;
+ UPROPERTY() TArray<TObjectPtr<UButton>> ConversationTopicButtons;
+ UPROPERTY() TObjectPtr<UButton> ConversationInitialFocus;
  UPROPERTY() TObjectPtr<UTextBlock> Prompt;
  UPROPERTY() TObjectPtr<UTextBlock> Stats;
  UPROPERTY() TObjectPtr<UTextBlock> Notice;
@@ -50,7 +57,18 @@ private:
  UPROPERTY() TObjectPtr<UProgressBar> Stamina;
  UPROPERTY() TObjectPtr<UCanvasPanel> MapCanvas;
  UPROPERTY() TObjectPtr<USizeBox> MapContainer;
+ UPROPERTY() TWeakObjectPtr<AUnmadeNpcCharacter> ConversationNpc;
+ FName CurrentDialogueNpcId=NAME_None;
+ FString ConversationTranscript;
+ bool bConversationOpen=false;
  void Refresh();
+ void AskNpcTopic(const FString& Question);
+ void AppendConversation(const FString& Speaker,const FString& Line);
+ UFUNCTION() void AskNpcMemory();
+ UFUNCTION() void AskNpcConcern();
+ UFUNCTION() void AskNpcWitnessed();
+ UFUNCTION() void SubmitNpcQuestion();
+ UFUNCTION() void CloseNpcConversation();
  void PerformAction(int Index);
  void CycleRecipe(int Direction);
  UFUNCTION() void Actions();

@@ -1087,7 +1087,11 @@ void AUnmadeCharacter::Interact()
     UUnmadeLocalDialogueSubsystem* Dialogue = GetGameInstance()
         ? GetGameInstance()->GetSubsystem<UUnmadeLocalDialogueSubsystem>()
         : nullptr;
-    if (Dialogue)
+    if(RpgWidget)
+    {
+        RpgWidget->BeginNpcConversation(Target);
+    }
+    else if (Dialogue)
     {
         Dialogue->RequestDialogue(Target, TEXT("Hello."));
     }

@@ -1434,6 +1434,13 @@ This temporary guidance is a deliberate alternative for players who care about l
 The route-guide hint is rendered by the string-valued player prompt rather than the boolean interaction handler, and the actual kind-nine control remains an independently reachable physical station. This separation is regression-tested so guidance cannot accidentally short-circuit the true worksite interaction or create an invalid native return type.
 
 
+## 2026-10-24 — Resident conversation starts with what that person knows
+
+Interacting with a nearby resident now opens a player-led conversation panel instead of sending the same automatic greeting. The player can ask about personal memory, present concern, or firsthand observation, or enter a short custom question. The deterministic offline replies draw from that resident's own saved observations; rumor replies name the speaker and remain explicitly unverified. Unknown event identifiers are not surfaced as if their internal labels were natural dialogue. When that person's evidence cannot answer, the reply says so.
+
+Optional local-model text remains presentation only. It receives the resident's bounded evidence context, and neither model output nor a conversation choice writes a quest, reward, relationship, or world-state result. Prompt and response lines are retained in the existing journal history. This is an interaction foundation, not completion of the 82 individually authored multi-session conversations or the main quest's physical branch dialogue. Voice, localization, controller focus and in-engine staging remain acceptance work.
+
+
 ## 2026-10-18 — Earned navigation is not omniscient navigation
 
 The Impossible's journey should be discoverable without a narrator who already knows the missing world's answers. The tracked objective and text map now share one state-derived nine-realm wayfinder. For each realm, the documented next task points to an actual known adventure board, frontier witness marker, chamber-one entrance, entered chamber, holding council, familiar arena, return equipment bench, personal evidence, or previously earned optional fieldwork. It is guidance to a place the player already has a reason to know, not an automatic fast-travel button, newly created magic ability or proof of another character's location.
