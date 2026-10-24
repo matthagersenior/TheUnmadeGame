@@ -869,10 +869,10 @@ FString AUnmadeNpcCharacter::GetOfflinePortrayalReply(const FString& PlayerUtter
         return FString::Printf(TEXT("What worries me is this: %s"),
             UTF8_TO_TCHAR(Profile->fear));
     if(Asked.Contains(TEXT("what do you know"))||
-       Asked.Contains(TEXT("what can't you know"))||
        Asked.Contains(TEXT("what can you not know"))||
        Asked.Contains(TEXT("your knowledge boundary"))||
        Asked.Contains(TEXT("your knowledge limit")))
         return FString::Printf(TEXT("I can speak to this much: %s"),
             UTF8_TO_TCHAR(Profile->knowledgeBoundary));
     return FString();
+}
