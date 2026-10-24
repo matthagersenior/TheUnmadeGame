@@ -821,6 +821,28 @@ FString AUnmadeNpcCharacter::GetReactionText() const
         *NpcDisplayLabel, Line, *CharacterLine, *BeliefLine);
 }
 
+FString AUnmadeNpcCharacter::GetDialogueCharacterContext() const
+{
+    if(bLaterRealmResident)
+    {
+        const FTCHARToUTF8 Identifier(*NpcId.ToString());
+        if(const UnmadeCore::OuterPersonSpec* Profile=
+            UnmadeCore::FindOuterPerson(Identifier.Get()))
+        {
+            const auto Phase=CachedHub.IsValid()
+                ?CachedHub->GetCurrentPhase():UnmadeCore::DayPhase::Day;
+            const char* CurrentLine=Phase==UnmadeCore::DayPhase::Night
+                ?Profile->nightLine:Profile->dayLine;
+            return FString::Printf(
+                TEXT("Authored characterization for voice only — not evidence. Desire: %s. Fear: %s. Hard knowledge boundary: %s. Voice direction: %s. Current authored line: %s"),
+                UTF8_TO_TCHAR(Profile->desire),UTF8_TO_TCHAR(Profile->fear),
+                UTF8_TO_TCHAR(Profile->knowledgeBoundary),
+                UTF8_TO_TCHAR(Profile->voiceDirection),UTF8_TO_TCHAR(CurrentLine));
+        }
+    }
+    return FString::Printf(TEXT("Current authored line: %s"),*AuthoredLine.Left(300));
+}
+
 void AUnmadeNpcCharacter::ConfigureExpeditionResident(FName Id,const FString& Name,UnmadeCore::Realm Home,const FString& Line,int Arc,int Captive){
  ConfigureIdentity(Id,Name,UnmadeCore::NpcRole::Wanderer,UnmadeCore::NpcTemperament::Steady,UnmadeCore::SettlementId::Crossings,Line);
  bLaterRealmResident=true;LaterHome=Home;ExpeditionHomeArc=Arc;ExpeditionCaptive=Captive;HomeLocation=GetActorLocation();

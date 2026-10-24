@@ -87,12 +87,15 @@ def cpp(data):
         "struct OuterPersonSpec {",
         "    const char* id; const char* displayName; const char* realm;",
         "    const char* dayLine; const char* nightLine;",
+        "    const char* desire; const char* fear; const char* knowledgeBoundary;",
+        "    const char* voiceDirection;",
         "};",
         f"inline constexpr std::array<OuterPersonSpec,{len(data['npcs'])}> OuterPeople = {{{{"
     ]
     for p in data["npcs"]:
         lines.append("    {"+",".join(quote(p[k]) for k in
-                 ("id","display_name","realm","day_line","night_line"))+"},")
+                 ("id","display_name","realm","day_line","night_line",
+                  "desire","fear","knowledge_boundary","voice_direction"))+"},")
     lines += [
         "}};",
         "inline const OuterPersonSpec* FindOuterPerson(const char* id) noexcept {",

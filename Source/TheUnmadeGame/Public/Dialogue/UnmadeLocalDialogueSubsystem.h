@@ -6,8 +6,9 @@
 
 class AUnmadeNpcCharacter;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
-    FUnmadeDialogueReady, FName, NpcId, const FString&, Line, bool, bUsedLocalModel);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(
+    FUnmadeDialogueReady, FName, NpcId, int64, ConversationSession,
+    const FString&, Line, bool, bUsedLocalModel);
 
 /**
  * Dialogue-only client for optional localhost Ollama.
@@ -34,7 +35,17 @@ public:
     UFUNCTION(BlueprintCallable, Category="Unmade|Local AI")
     void RequestDialogue(AUnmadeNpcCharacter* Npc, const FString& PlayerUtterance);
 
+    /** Conversation UI variant with bounded, untrusted prior dialogue for follow-up questions. */
+    UFUNCTION(BlueprintCallable, Category="Unmade|Local AI")
+    void RequestConversationDialogue(AUnmadeNpcCharacter* Npc,
+        const FString& PlayerUtterance, int64 ConversationSession,
+        const FString& PreviousDialogue);
+
 private:
     bool bRequestInFlight = false;
-    void Present(FName NpcId, const FString& Line, bool bUsedModel);
+    void RequestDialogueWithContext(AUnmadeNpcCharacter* Npc,
+        const FString& PlayerUtterance, int64 ConversationSession,
+        const FString& PreviousDialogue);
+    void Present(FName NpcId, int64 ConversationSession,
+                 const FString& Line, bool bUsedModel);
 };

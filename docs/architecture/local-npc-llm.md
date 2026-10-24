@@ -5,7 +5,8 @@
 ## Policy
 - All authoritative NPC facts, witnessed events, speaker provenance, trust, fear, quest rules and saves remain in Unreal C++.
 - One shared `UGameInstanceSubsystem` submits an asynchronous dialogue-only request, never tools/function calls. It does not create game events, update memory, grant items, or alter quests.
-- Model sees only one NPC's stable ID, display label, current trust/fear, and at most eight most-recent existing personal observations. Rumors are labeled with their speaker, not misrepresented as witnessed facts.
+- Model context is scoped to one NPC: stable ID, display label, current trust/fear, at most eight most-recent personal observations, and up to 1,200 characters of the active conversation's prior turns. Rumors retain named provenance. Prior dialogue is explicitly untrusted and cannot become evidence or a memory.
+- For the 18 later-realm named residents, the generated profile also supplies authored desire, fear, knowledge boundary and voice direction. Motives guide portrayal only; the model is told that the knowledge boundary limits factual claims. The profile does not grant world knowledge or alter NPC decisions.
 - The selected player's spoken line is bounded to 400 characters and treated as untrusted roleplay content, not world authority.
 - Output must be `{"line":"..."}` from a completed Ollama /api/chat response, at most 240 characters and without control characters. Any failed request, malformed response, busy model, closed game, or disabled option falls back to deterministic `GetReactionText()`.
 - HTTP is hardcoded to loopback `127.0.0.1:11434`. No external LLM endpoints, cloud fallbacks, remote scripts, paid APIs or telemetry. No network request is sent when the feature is disabled.
