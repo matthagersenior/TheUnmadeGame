@@ -46,7 +46,7 @@ class AudioAndCaptionProduction(unittest.TestCase):
         widget=source("Source/TheUnmadeGame/Private/UI/UnmadeUnpaidShiftSubtitleWidget.cpp")
         for marker in ("FAnchors(0.5f,0.97f)","Slot->SetAutoSize(true)",
                        "CaptionWidthConstraint->SetWidthOverride(DesiredWidth)",
-                       "const float DesiredWidth=FMath::Max(280.f,ViewportWidth*.86f)",
+                       "const float DesiredWidth=FMath::Max(1.f,ViewportWidth*.86f)",
                        "SetAutoWrapText(true)","HitTestInvisible",
                        "FLinearColor(0.012f,0.016f,0.027f,0.87f)",
                        "SetVisibility(ESlateVisibility::Collapsed)",

@@ -1,3 +1,10 @@
+## 2026-10-24 — Keep cinematic captions within narrow viewports
+
+- Removed the fixed 280-pixel lower width bound; the panel now uses 86% of the
+  live viewport for both narrow and wide windows.
+- Updated source layout contracts. Very small-device font readability and safe
+  area rendering still require Unreal acceptance.
+
 ## 2026-10-24 — Content-sized accessible cinematic captions
 
 - Replaced the fixed-height lower-third region with a viewport-width-constrained
