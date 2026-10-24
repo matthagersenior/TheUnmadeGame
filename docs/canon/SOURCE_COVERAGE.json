@@ -4,16 +4,52 @@
   "purpose": "All new permanent gameplay and story assets must trace to an established codex identity, or introduce a new reviewed identity in the same PR.",
   "entries": [
     {
-      "path": "Source/TheUnmadeGame/Public/World/UnmadeThreefoldObjectiveGuide.h",
+      "path": "Authoring/first_journey_performance_map_v1.json",
       "classification": "implementation",
       "codex_keys": [
         "codex:realm.ThreefoldReach",
-        "codex:quest.campaign.ThreefoldReach",
-        "codex:quest.aftermath.ThreefoldReach"
+        "codex:journey.expedition.ThreefoldReach",
+        "codex:quest.personal.ThreefoldReach"
       ]
     },
     {
-      "path": "Source/TheUnmadeGame/Public/World/UnmadeProceduralArtRules.h",
+      "path": "Authoring/hearth_petition_v1.json",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.HearthBeneath",
+        "quest:quest:frontier:HearthBeneath",
+        "npc:npc.cinderhold.courier.001"
+      ]
+    },
+    {
+      "path": "Authoring/nine_realm_tactical_encounters_v1.json",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:enemy.expedition_signature.realm.0",
+        "codex:enemy.expedition_signature.realm.1",
+        "codex:enemy.expedition_signature.realm.2",
+        "codex:enemy.expedition_signature.realm.3",
+        "codex:enemy.expedition_signature.realm.4",
+        "codex:enemy.expedition_signature.realm.5",
+        "codex:enemy.expedition_signature.realm.6",
+        "codex:enemy.expedition_signature.realm.7",
+        "codex:enemy.expedition_signature.realm.8"
+      ]
+    },
+    {
+      "path": "Authoring/petition_relay_v1.json",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.HearthBeneath",
+        "codex:realm.WidowedRain",
+        "codex:settlement.Crossings",
+        "npc:npc.cinderhold.courier.001",
+        "npc:npc.saltwake.courier.001",
+        "npc:npc.bridgekeeper.001"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Private/World/UnmadePetitionRelay.cpp",
       "classification": "implementation",
       "codex_keys": [
         "codex:realm.ThreefoldReach",
@@ -28,7 +64,7 @@
       ]
     },
     {
-      "path": "Source/TheUnmadeGame/Public/World/UnmadeCharacterGrayboxRules.h",
+      "path": "Source/TheUnmadeGame/Public/Combat/UnmadeCombatRecoveryRules.h",
       "classification": "implementation",
       "codex_keys": [
         "codex:realm.ThreefoldReach",
@@ -43,14 +79,232 @@
       ]
     },
     {
-      "path": "Source/TheUnmadeGame/Public/Save/UnmadeRecoveryRules.h",
+      "path": "Source/TheUnmadeGame/Public/Combat/UnmadeCombatRewardRules.h",
       "classification": "implementation",
       "codex_keys": [
-        "codex:realm.ThreefoldReach"
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureAwarenessRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Combat/UnmadeCreatureTacticsRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Combat/UnmadeEncounterInterruptionRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Combat/UnmadeMasteryRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Combat/UnmadeNamedBossRewardRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Combat/UnmadeStatusDamageRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Items/UnmadeMilestoneRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Items/UnmadeStarterRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/NPC/UnmadeMemorySaveRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeActionCommitRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeCaptureRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeCombinedSaveRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeCounterThreatRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
       ]
     },
     {
       "path": "Source/TheUnmadeGame/Public/Save/UnmadeCriticalSavePreflight.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeDefeatSaveRetryRules.h",
       "classification": "implementation",
       "codex_keys": [
         "codex:realm.ThreefoldReach",
@@ -80,6 +334,163 @@
       ]
     },
     {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeProfileHandoffRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeRealityTravelRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeRecoveryRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeRelationshipCommitRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeRiteCommitRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/Save/UnmadeServiceCommitRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeArenaTacticsRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeCharacterGrayboxRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeChronicleHistoryRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeCivicReverberationRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeConfluenceGuidanceRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
       "path": "Source/TheUnmadeGame/Public/World/UnmadeCreatureHabitatRules.h",
       "classification": "implementation",
       "codex_keys": [
@@ -95,6 +506,258 @@
         "codex:enemy.creature.DrownedWatch",
         "codex:enemy.creature.Ashmaw",
         "codex:enemy.creature.KilnWisp"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeCrossRealmCarryRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeCrossRealmCombatRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeCrossRealmReviewRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeDiscoveryCivicRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeEncounterHazardRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeEvidenceCounterplayRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeFirstFractureRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeHearthPetitionRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeJourneyGuidanceRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadePetitionRelayRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeProceduralArtRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadePublicAccordDutyRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeThreefoldObjectiveGuide.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:quest.campaign.ThreefoldReach",
+        "codex:quest.aftermath.ThreefoldReach"
+      ]
+    },
+    {
+      "path": "Source/TheUnmadeGame/Public/World/UnmadeTimedProgressRules.h",
+      "classification": "implementation",
+      "codex_keys": [
+        "codex:realm.ThreefoldReach",
+        "codex:realm.WidowedRain",
+        "codex:realm.HearthBeneath",
+        "codex:realm.TidalLedger",
+        "codex:realm.SkyBelow",
+        "codex:realm.CinderSpine",
+        "codex:realm.HundredUnlived",
+        "codex:realm.OrchardOfKings",
+        "codex:realm.FirstAbsence"
+      ]
+    },
+    {
+      "path": "docs/lore/CHAPTER_41_THE_HEARTH_PETITION.md",
+      "classification": "canon",
+      "codex_keys": [
+        "codex:realm.HearthBeneath",
+        "quest:quest:frontier:HearthBeneath",
+        "npc:npc.cinderhold.courier.001"
+      ]
+    },
+    {
+      "path": "docs/lore/CHAPTER_42_THE_TRAVELING_PETITION.md",
+      "classification": "canon",
+      "codex_keys": [
+        "codex:realm.HearthBeneath",
+        "codex:realm.WidowedRain",
+        "codex:settlement.Crossings",
+        "npc:npc.cinderhold.courier.001",
+        "npc:npc.saltwake.courier.001",
+        "npc:npc.bridgekeeper.001"
+      ]
+    },
+    {
+      "path": "docs/lore/CHAPTER_43_CIVIC_REVERBERATION.md",
+      "classification": "canon",
+      "codex_keys": [
+        "codex:realm.HearthBeneath",
+        "codex:realm.WidowedRain",
+        "codex:settlement.Crossings",
+        "npc:npc.cinderhold.courier.001",
+        "npc:npc.saltwake.courier.001",
+        "npc:npc.bridgekeeper.001"
+      ]
+    },
+    {
+      "path": "docs/lore/CHAPTER_44_NINE_FIELDS_OF_REFUSAL.md",
+      "classification": "canon",
+      "codex_keys": [
+        "codex:enemy.expedition_signature.realm.0",
+        "codex:enemy.expedition_signature.realm.1",
+        "codex:enemy.expedition_signature.realm.2",
+        "codex:enemy.expedition_signature.realm.3",
+        "codex:enemy.expedition_signature.realm.4",
+        "codex:enemy.expedition_signature.realm.5",
+        "codex:enemy.expedition_signature.realm.6",
+        "codex:enemy.expedition_signature.realm.7",
+        "codex:enemy.expedition_signature.realm.8"
       ]
     }
   ]
