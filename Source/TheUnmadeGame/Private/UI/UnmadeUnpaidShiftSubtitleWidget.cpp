@@ -79,7 +79,7 @@ void UUnmadeUnpaidShiftSubtitleWidget::RefreshCaptionWidth()
     int32 ViewportWidth=1600,ViewportHeight=900;
     if(APlayerController* PC=GetOwningPlayer())
         PC->GetViewportSize(ViewportWidth,ViewportHeight);
-    const float DesiredWidth=FMath::Max(280.f,ViewportWidth*.86f);
+    const float DesiredWidth=FMath::Max(1.f,ViewportWidth*.86f);
     if(FMath::Abs(DesiredWidth-AppliedCaptionWidth)>1.f)
     {
         CaptionWidthConstraint->SetWidthOverride(DesiredWidth);

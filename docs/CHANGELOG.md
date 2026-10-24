@@ -43,6 +43,13 @@ expand the panel instead of clipping rows at the previous fixed height. Source
 layout checks were updated; actual small-screen and safe-area rendering remains
 an Unreal acceptance task.
 
+## 2026-10-24 — Honor the viewport width on narrow screens
+
+Removed the 280-pixel minimum width from the content-sized caption panel. The
+panel now stays at 86% of the current viewport even when the screen is narrow,
+and text wraps into the height it needs. Source coverage includes the updated
+width rule; device safe-area rendering still needs first-PC acceptance.
+
 ## 2026-10-17 — Civic Reverberation and Nhal-Vey's one-history dilemma
 
 The delivered Hearth Petition now produces local and mechanically distinct
