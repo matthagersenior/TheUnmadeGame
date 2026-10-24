@@ -17,6 +17,11 @@ sweep, seal, yield, dodge and parry.
 The files are actual skeletal geometry/animation data generated outside Unreal,
 not final humanoid rigs or fully dressed character performances. Their shapes
 are generic staging archetypes rather than official NPC/boss appearance canon.
+Skinned body parts use rounded ellipsoid surfaces with smooth normals instead
+of box primitives. The resident also separates skin, linen clothing and
+trousers into roughness-tuned PBR materials, while retaining the established
+bone and animation names. Faces, hands, footwear, hair and tailored garments
+still require the separately authored resident previews or final character art.
 
 You can run this independently:
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate ORIGINAL low-poly skinned glTF characters with 19 keyed motion clips.
+"""Generate ORIGINAL rounded low-poly skinned glTF characters with 19 keyed motion clips.
 
 No Blender, network, paid assets or AI generation required. Each GLTF embeds its
 mesh, skin, skeleton, time samplers and animated quaternion keyframes. The
@@ -60,6 +60,52 @@ def angle_quat(axis, degrees):
     s=math.sin(radians)
     return tuple(axis[i]*s for i in range(3))+(math.cos(radians),)
 
+def ellipsoid(center, half, bone, longitude=16, latitude=10):
+    """Create a smoothly shaded ellipsoid weighted entirely to one bone."""
+    cx,cy,cz=center; hx,hy,hz=half
+    pos=[];normal=[];joints=[];weights=[];faces=[]
+    pos.append((cx,cy+hy,cz));normal.append((0.,1.,0.))
+    joints.append((bone,0,0,0));weights.append((1.,0.,0.,0.))
+    rings=[]
+    for row in range(1,latitude):
+        phi=math.pi*row/latitude
+        ring=[]
+        for col in range(longitude):
+            theta=2*math.pi*col/longitude
+            ux=math.sin(phi)*math.cos(theta)
+            uy=math.cos(phi)
+            uz=math.sin(phi)*math.sin(theta)
+            p=(cx+hx*ux,cy+hy*uy,cz+hz*uz)
+            nx,ny,nz=ux/hx,uy/hy,uz/hz
+            length=math.sqrt(nx*nx+ny*ny+nz*nz)
+            ring.append(len(pos));pos.append(p)
+            normal.append((nx/length,ny/length,nz/length))
+            joints.append((bone,0,0,0));weights.append((1.,0.,0.,0.))
+        rings.append(ring)
+    bottom=len(pos);pos.append((cx,cy-hy,cz));normal.append((0.,-1.,0.))
+    joints.append((bone,0,0,0));weights.append((1.,0.,0.,0.))
+    for col in range(longitude):
+        nxt=(col+1)%longitude
+        faces.append((0,rings[0][nxt],rings[0][col]))
+    for upper,lower in zip(rings,rings[1:]):
+        for col in range(longitude):
+            nxt=(col+1)%longitude
+            faces.extend(((upper[col],upper[nxt],lower[nxt]),
+                          (upper[col],lower[nxt],lower[col])))
+    for col in range(longitude):
+        nxt=(col+1)%longitude
+        faces.append((rings[-1][col],rings[-1][nxt],bottom))
+    return pos,normal,joints,weights,faces
+
+def actor_surface(kind,name):
+    if kind!="Resident":
+        return ("M_Unmade"+kind,COLORS[kind],.86,0.0)
+    if name=="head":
+        return ("M_UnmadeResident_Skin",(.48,.30,.23,1),.78,0.0)
+    if name.endswith("_leg"):
+        return ("M_UnmadeResident_Trousers",(.16,.17,.20,1),.91,0.0)
+    return ("M_UnmadeResident_Linen",(.31,.25,.20,1),.92,0.0)
+
 class Packed:
     def __init__(self):
         self.binary=bytearray()
@@ -103,26 +149,22 @@ def make_actor(kind):
         nodes.append({"name":name,"translation":list(xyz)})
     for name,parent,_,_ in specs:
         if parent:nodes[ids[parent]].setdefault("children",[]).append(ids[name])
-    pos=[];normal=[];joints=[];weights=[];indices=[]
+    pos=[];normal=[];joints=[];weights=[];material_indices={}
     for name,parent,xyz,half in specs:
         if half is None:continue
-        bone=ids[name];center=absolute[name]
-        start=len(pos)
-        for normal3,face in BOX_FACES:
-            for x,y,z in face:
-                pos.append(tuple(center[i]+(v*2-1)*half[i] for i,v in enumerate((x,y,z))))
-                normal.append(normal3)
-                joints.append((bone,0,0,0))
-                weights.append((1.,0.,0.,0.))
-            k=start;start+=4
-            indices.extend([k,k+1,k+2,k,k+2,k+3])
+        bone=ids[name]
+        p,n,j,w,faces=ellipsoid(absolute[name],half,bone)
+        offset=len(pos)
+        pos.extend(p);normal.extend(n);joints.extend(j);weights.extend(w)
+        material=actor_surface(kind,name)[0]
+        material_indices.setdefault(material,[]).extend(
+            index+offset for face in faces for index in face)
     packed=Packed()
     attr={
         "POSITION":packed.add(pos,"3f","VEC3",34962),
         "NORMAL":packed.add(normal,"3f","VEC3",34962),
         "JOINTS_0":packed.add(joints,"4H","VEC4",34962),
         "WEIGHTS_0":packed.add(weights,"4f","VEC4",34962)}
-    index=packed.add([(x,) for x in indices],"H","SCALAR",34963)
     inverse=[]
     for name,_,_,_ in specs:
         x,y,z=absolute[name]
@@ -165,15 +207,23 @@ def make_actor(kind):
             channels.append({"sampler":si,"target":{"node":ids[name],"path":"rotation"}})
         animations.append({"name":"AN_Unmade"+kind+"_"+clip,"samplers":samplers,
                            "channels":channels})
-    doc={"asset":{"version":"2.0","generator":"The Unmade original deterministic rig builder"},
+    material_defs=[];primitives=[]
+    surface_defs={actor_surface(kind,name)[0]:actor_surface(kind,name)[1:]
+                  for name,_,_,half in specs if half is not None}
+    for material_name,(color,roughness,metallic) in surface_defs.items():
+        mat_id=len(material_defs)
+        material_defs.append({"name":material_name,"pbrMetallicRoughness":{
+            "baseColorFactor":list(color),"metallicFactor":metallic,
+            "roughnessFactor":roughness}})
+        index=packed.add([(x,) for x in material_indices[material_name]],"H","SCALAR",34963)
+        primitives.append({"attributes":attr,"indices":index,"material":mat_id})
+    doc={"asset":{"version":"2.0","generator":"The Unmade original deterministic rounded rig builder"},
          "scene":0,"scenes":[{"nodes":[0,len(nodes)]}],
          "nodes":nodes+[{"name":"Mesh_"+kind,"mesh":0,"skin":0}],
          "skins":[{"joints":list(range(len(specs))),"skeleton":0,
                    "inverseBindMatrices":inverse_id}],
-         "meshes":[{"name":"SK_Unmade"+kind,
-                    "primitives":[{"attributes":attr,"indices":index,"material":0}]}],
-         "materials":[{"name":"M_Unmade"+kind,"pbrMetallicRoughness":{
-             "baseColorFactor":COLORS[kind],"metallicFactor":0.0,"roughnessFactor":.86}}],
+         "meshes":[{"name":"SK_Unmade"+kind,"primitives":primitives}],
+         "materials":material_defs,
          "animations":animations}
     return finish(doc,packed)
 

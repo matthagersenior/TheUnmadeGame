@@ -1291,3 +1291,11 @@ slow local model response cannot leak into a later conversation with the same
 resident. One-off greetings remain out of the conversation transcript. The
 source contract was extended; Unreal Header Tool and Editor playback are still
 required.
+
+## 24 October 2026 — Round and surface the animated prototype characters
+
+The three generated skeletal archetypes now use smooth ellipsoid geometry in
+place of box-shaped body segments. Resident skin, linen clothing and trousers
+have distinct roughness-tuned PBR materials. Bone names and all 19 animation
+names stay stable for the importer. The rigs remain previsualization archetypes;
+Unreal import, pose quality and animation playback still need Editor acceptance.

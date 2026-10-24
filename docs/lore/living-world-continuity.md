@@ -1501,3 +1501,9 @@ conversation can help with follow-up references, but it is labeled untrusted
 dialogue and is never stored as an NPC memory or used to change a quest, choice,
 relationship score, save, or world state. This connects existing characterization
 to optional text presentation without changing canon or evidence authority.
+
+The generated animated prototype archetypes now use smooth rounded geometry and
+separate resident skin, clothing, and trouser surfaces. They remain generic
+presentation assets, not authoritative designs for a named character or proof
+of an NPC's identity, memory, or actions. Their mesh and material changes do
+not affect dialogue, evidence, saved world state, or canonical appearance.
