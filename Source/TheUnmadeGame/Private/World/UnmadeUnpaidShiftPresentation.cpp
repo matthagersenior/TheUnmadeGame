@@ -187,13 +187,6 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
             Subtitle=FString::Printf(TEXT("On day %d: %d baskets in the hearth reserve. %d cold days remembered. %d marks owed to Bes at this visit."),Return.returnDay,Return.returnedHeat,Return.returnedColdDays,Return.returnedOwed);
         }
     }
-    FrameBesDirectedBeat(Speaker,FString(UTF8_TO_TCHAR(Beat->camera)),
-        FString(UTF8_TO_TCHAR(Beat->blocking)),Beat->duration);
-    OnBesDirectedBeat.Broadcast(
-        Speaker,Subtitle,FName(UTF8_TO_TCHAR(Beat->camera)),
-        FName(UTF8_TO_TCHAR(Beat->foley)),
-        FString(UTF8_TO_TCHAR(Beat->blocking)),
-        FString(UTF8_TO_TCHAR(Beat->voice)),Beat->duration);
     // Always show complete sequential subtitles in a real lower-third widget.
     // A debug caption only remains if the local player cannot create a UI.
     FString SpeakerName=Speaker==FName(TEXT("stage"))
@@ -209,6 +202,23 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
         const int32 Person=UnmadeCore::RoadPersonIndex(TCHAR_TO_UTF8(*Stable));
         if(Person>=0)SpeakerName=UTF8_TO_TCHAR(UnmadeCore::RoadPeople[Person].name);
     }
+    const FString FoleyCaption=UTF8_TO_TCHAR(
+        UnmadeCore::UnpaidFoleyCaption(Beat->foley));
+    FString CompleteCaption=SpeakerName+TEXT(" ")+Subtitle;
+    if(!FoleyCaption.IsEmpty())CompleteCaption+=TEXT(" ")+FoleyCaption;
+    TArray<FString> CaptionWords;
+    CompleteCaption.ParseIntoArray(CaptionWords,TEXT(" "),true);
+    // Use 180 words per minute plus a one-second settling interval, while
+    // retaining the authored beat duration whenever it already allows more.
+    const float BeatDuration=FMath::Max(Beat->duration,
+        1.f+static_cast<float>(CaptionWords.Num())/3.f);
+    FrameBesDirectedBeat(Speaker,FString(UTF8_TO_TCHAR(Beat->camera)),
+        FString(UTF8_TO_TCHAR(Beat->blocking)),BeatDuration);
+    OnBesDirectedBeat.Broadcast(
+        Speaker,Subtitle,FName(UTF8_TO_TCHAR(Beat->camera)),
+        FName(UTF8_TO_TCHAR(Beat->foley)),
+        FString(UTF8_TO_TCHAR(Beat->blocking)),
+        FString(UTF8_TO_TCHAR(Beat->voice)),BeatDuration);
     if(!IsValid(BesSubtitleOverlay))
     {
         if(APlayerController* PC=GetWorld()->GetFirstPlayerController())
@@ -218,12 +228,10 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
             if(IsValid(BesSubtitleOverlay))BesSubtitleOverlay->AddToViewport(50);
         }
     }
-    const FString FoleyCaption=UTF8_TO_TCHAR(
-        UnmadeCore::UnpaidFoleyCaption(Beat->foley));
     if(IsValid(BesSubtitleOverlay))
         BesSubtitleOverlay->DisplayBeat(SpeakerName,Subtitle,FoleyCaption);
     else if(GEngine)
-        UnmadeRpgFeedback(-1,Beat->duration,FColor::White,
+        UnmadeRpgFeedback(-1,BeatDuration,FColor::White,
             SpeakerName+TEXT(": ")+Subtitle+
             (FoleyCaption.IsEmpty()?FString():TEXT(" ")+FoleyCaption));
 
@@ -242,7 +250,7 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
     ++BesActiveBeat;
     GetWorldTimerManager().SetTimer(BesSubtitleTimer,this,
         &AUnmadePrototypeHub::AdvanceBesDirectedBeat,
-        FMath::Max(0.5f,Beat->duration),false);
+        FMath::Max(0.5f,BeatDuration),false);
 }
 void AUnmadePrototypeHub::MaybePlayBesReturnScene(FName StableId)
 {

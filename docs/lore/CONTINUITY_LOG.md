@@ -1,3 +1,12 @@
+## 2026-10-24 — Caption-aware timing for directed scenes
+
+- Calculated a minimum beat duration from the visible speaker, subtitle and
+  descriptive sound caption at 180 words per minute plus a one-second settling
+  interval, retaining each authored duration as a floor.
+- Shared the resulting duration across actor blocking, Blueprint event,
+  caption fallback and scene advance. Source contracts cover the timing path;
+  actual voice synchronization and Unreal UI reading tests remain pending.
+
 ## 2026-10-24 — Non-speech captions for the Unpaid Shift
 
 - Added a canonical descriptive caption for each of the 35 Foley cues used by
