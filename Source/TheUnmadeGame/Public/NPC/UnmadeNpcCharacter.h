@@ -42,6 +42,8 @@ public:
     FString GetReactionText() const;
     /** Authored characterization for dialogue presentation; never gameplay evidence. */
     FString GetDialogueCharacterContext() const;
+    /** Offline answers to explicitly personal questions, never witness testimony. */
+    FString GetOfflinePortrayalReply(const FString& PlayerUtterance) const;
     FName GetStableId() const { return NpcId; }
     const FString& GetDisplayLabel() const { return NpcDisplayLabel; }
     UUnmadeMemoryComponent* GetMemory() const { return Memory; }

@@ -843,7 +843,36 @@ FString AUnmadeNpcCharacter::GetDialogueCharacterContext() const
     return FString::Printf(TEXT("Current authored line: %s"),*AuthoredLine.Left(300));
 }
 
-void AUnmadeNpcCharacter::ConfigureExpeditionResident(FName Id,const FString& Name,UnmadeCore::Realm Home,const FString& Line,int Arc,int Captive){
- ConfigureIdentity(Id,Name,UnmadeCore::NpcRole::Wanderer,UnmadeCore::NpcTemperament::Steady,UnmadeCore::SettlementId::Crossings,Line);
- bLaterRealmResident=true;LaterHome=Home;ExpeditionHomeArc=Arc;ExpeditionCaptive=Captive;HomeLocation=GetActorLocation();
+FString AUnmadeNpcCharacter::GetOfflinePortrayalReply(const FString& PlayerUtterance) const
+{
+    if(!bLaterRealmResident)return FString();
+    const FString Asked=PlayerUtterance.ToLower();
+    // Evidence questions always stay on the witnessed/rumored memory path.
+    if(Asked.Contains(TEXT("remember"))||Asked.Contains(TEXT("memory"))||
+       Asked.Contains(TEXT("witness"))||Asked.Contains(TEXT("personally"))||
+       Asked.Contains(TEXT("seen"))||Asked.Contains(TEXT("saw"))||
+       Asked.Contains(TEXT("about me")))return FString();
+    const FTCHARToUTF8 Identifier(*NpcId.ToString());
+    const UnmadeCore::OuterPersonSpec* Profile=
+        UnmadeCore::FindOuterPerson(Identifier.Get());
+    if(!Profile)return FString();
+    if(Asked.Contains(TEXT("what do you want"))||
+       Asked.Contains(TEXT("what is your desire"))||
+       Asked.Contains(TEXT("what do you hope")))
+        return FString::Printf(TEXT("What I want is this: %s"),
+            UTF8_TO_TCHAR(Profile->desire));
+    if(Asked.Contains(TEXT("what worries you"))||
+       Asked.Contains(TEXT("what are you afraid"))||
+       Asked.Contains(TEXT("what do you fear"))||
+       Asked.Contains(TEXT("your fear"))||
+       Asked.Contains(TEXT("what concerns you")))
+        return FString::Printf(TEXT("What worries me is this: %s"),
+            UTF8_TO_TCHAR(Profile->fear));
+    if(Asked.Contains(TEXT("what do you know"))||
+       Asked.Contains(TEXT("what can you not know"))||
+       Asked.Contains(TEXT("your knowledge boundary"))||
+       Asked.Contains(TEXT("your knowledge limit")))
+        return FString::Printf(TEXT("I can speak to this much: %s"),
+            UTF8_TO_TCHAR(Profile->knowledgeBoundary));
+    return FString();
 }

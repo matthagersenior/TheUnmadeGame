@@ -1299,3 +1299,11 @@ place of box-shaped body segments. Resident skin, linen clothing and trousers
 have distinct roughness-tuned PBR materials. Bone names and all 19 animation
 names stay stable for the importer. The rigs remain previsualization archetypes;
 Unreal import, pose quality and animation playback still need Editor acceptance.
+
+## 24 October 2026 — Give residents authored offline follow-up answers
+
+Later-realm residents now answer direct questions about their own desire, fear,
+and knowledge boundary from their existing authored profiles when local inference
+is unavailable. Memory and firsthand-witness questions still use the resident's
+separate saved observations, including explicit rumor attribution; portrayal text
+cannot replace evidence or change world state.
