@@ -270,6 +270,8 @@ function rest(){
 }
 function interact(){
   if(focusPaused)return;
+  // A wounded guardian moves toward the player: offer mercy at its ACTUAL position.
+  if(battle&&battle.hp<=1&&distance(s.position,battle)<20){guardianDialog();return;}
   const node=nearNode();
   if(!node||node.dist>15){inform("Approach a glowing field marker to interact.");return;}
   inspect(node);
@@ -412,9 +414,10 @@ function wire(){
   $("closeModal").onclick=closeDialog;
   window.addEventListener("keydown",e=>{
     const k=e.key.toLowerCase();
-    if(["arrowup","arrowdown","arrowleft","arrowright"," ","shift"].includes(k))e.preventDefault();
     if(k==="escape"){if(focusPaused)closeDialog();return;}
+    // Let the browser activate focused modal buttons with Space / Enter.
     if(focusPaused)return;
+    if(["arrowup","arrowdown","arrowleft","arrowright"," ","shift"].includes(k))e.preventDefault();
     keyboard.add(k);
     if(k==="e")interact();
     if(k===" ")attack();
