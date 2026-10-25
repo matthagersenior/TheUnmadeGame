@@ -19,6 +19,15 @@ availability, so absent WAVs still have readable descriptions. Updated source
 contracts cover every cue; native Unreal layout and accessibility verification
 remain pending.
 
+## 2026-10-24 — Spatial Foley sources for Unpaid Shift scenes
+
+Generated Unpaid Shift Foley now plays from the staged resident when a nearby
+speaker is present, or from the authored stage position in front of the player.
+The cues use spherical attenuation with a 2,500-unit inner extent and 5,000-unit
+falloff, following the existing spatial ambience setup. Captions remain visible
+when audio is muted or unavailable. Unreal spatial mix and stereo perception
+still require Editor acceptance.
+
 ## 2026-10-24 — Caption-aware cinematic pacing
 
 Unpaid Shift beats now use the authored duration as a minimum and extend when
