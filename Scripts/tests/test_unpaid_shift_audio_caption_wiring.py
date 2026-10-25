@@ -38,7 +38,9 @@ class AudioAndCaptionProduction(unittest.TestCase):
         self.assertLess(pos_caption,pos_sound)
         for marker in ("BesSubtitleOverlay->ClearBeat()","CreateWidget<UUnmadeUnpaidShiftSubtitleWidget>",
                        "AddToViewport(50)","StaticLoadObject(","LOAD_NoWarn",
-                       "PlaySound2D(","OnBesDirectedBeat.Broadcast(",
+                       "bAllowSpatialization=true","bOverrideAttenuation=true",
+                       "AttenuationOverrides.FalloffDistance=5000",
+                       "OnBesDirectedBeat.Broadcast(",
                        "SetTimer(BesSubtitleTimer"):
             self.assertIn(marker,runtime)
         self.assertIn("UMG",source("Source/TheUnmadeGame/TheUnmadeGame.Build.cs"))

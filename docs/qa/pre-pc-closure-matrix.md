@@ -84,6 +84,15 @@ Portable source contracts and the full Python suite pass. Unreal automation cove
 
 **Next source-only work:** close the role/counterplay acceptance table and the remaining menu navigation, subtitle, and remap error-state contract. **First-PC work still required:** certify prototype mesh imports and skeletal compatibility, play the dialogue and quest routes, import/edit final character assets, record or mix production audio, stage performances in Sequencer, and render the cinematic. Current source models, synthetic WAV cues, and cinematic CSVs are prototypes and handoffs; they are not production-ready assets or a finished film.
 
+### Directed scene Foley source positioning — 24 October
+
+Imported Unpaid Shift Foley cues now spatialize from the staged nearby speaker,
+or from the documented stage point ahead of the player for stage-only beats.
+The cues use a spherical 2,500-unit extent and 5,000-unit falloff; captions do
+not depend on cue availability. This is source wiring only. First-PC review
+must check stereo WAV spatialization, loudness, room context, attenuation and
+caption/audio timing on the actual mix.
+
 ### Asynchronous dialogue session isolation — 24 October
 
 NPC reply events now carry a widget-local conversation session ID through the local inference subsystem. Starting a new conversation advances the ID; the UI accepts a reply only when both stable NPC ID and session ID match. This prevents a delayed Ollama response from a closed conversation appearing after reopening the same resident, in the modal transcript, or as a stale global HUD notice. One-off interaction greetings use session zero and retain their existing HUD notice. The focused dialogue source contracts pass. Unreal delegate generation, HTTP timing, and repeated close/reopen behavior still need Editor automation and a PIE run.

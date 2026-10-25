@@ -1,3 +1,11 @@
+## 2026-10-24 — Spatial Foley sources for directed Unpaid Shift beats
+
+Loaded generated Foley now uses the local staged resident as its source when
+available; stage-only beats originate in front of the player. The component
+uses spherical attenuation and destroys itself after playback. Existing lower
+third captions still carry the cue description independently of sound playback.
+The spatial presentation remains a prototype pending Unreal Editor audio review.
+
 ## 2026-10-24 — Keep cinematic captions within narrow viewports
 
 - Removed the fixed 280-pixel lower width bound; the panel now uses 86% of the

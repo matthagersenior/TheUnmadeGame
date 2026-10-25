@@ -1513,3 +1513,7 @@ questions about their own authored desire, fear, and knowledge boundary in their
 distinct dossier terms. These self-descriptions remain portrayal, not testimony.
 Questions about the player or witnessed events continue to rely on each
 resident's separately saved firsthand and rumor records.
+
+Unpaid Shift Foley cues originate at a locally staged speaker or the nearby
+stage position in front of the player and fade with distance. The accessible
+Foley caption remains the reliable description when audio is muted or missing.
