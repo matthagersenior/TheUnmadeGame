@@ -1517,3 +1517,6 @@ resident's separately saved firsthand and rumor records.
 Unpaid Shift Foley cues originate at a locally staged speaker or the nearby
 stage position in front of the player and fade with distance. The accessible
 Foley caption remains the reliable description when audio is muted or missing.
+### Resident concern and return-topic dialogue — 2026-10-25
+
+All 82 registered residents can answer the existing conversation panel's concern topic from their authored personal concern and can offer their authored next-visit question when asked what to return to. These lines shape portrayal and player-directed conversation only; they do not create memories, witness claims, consent, quest eligibility, or world changes. Saved firsthand observations and named rumors remain the source of factual recollections, and an actually observed danger can take priority over a broad personal concern. Unreal dialogue rendering and PIE playback remain unverified.

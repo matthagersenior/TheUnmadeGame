@@ -3,6 +3,7 @@
 #include "NavigationSystem.h"
 #include "NavigationPath.h"
 #include "Authoring/UnmadeOuterPeopleData.h"
+#include "Authoring/UnmadeResidentReturnData.h"
 #include "NPC/UnmadeMemoryComponent.h"
 #include "NPC/UnmadeResidentContinuityRules.h"
 #include "NPC/UnmadeNpcMotionRules.h"
@@ -845,7 +846,6 @@ FString AUnmadeNpcCharacter::GetDialogueCharacterContext() const
 
 FString AUnmadeNpcCharacter::GetOfflinePortrayalReply(const FString& PlayerUtterance) const
 {
-    if(!bLaterRealmResident)return FString();
     const FString Asked=PlayerUtterance.ToLower();
     // Evidence questions always stay on the witnessed/rumored memory path.
     if(Asked.Contains(TEXT("remember"))||Asked.Contains(TEXT("memory"))||
@@ -853,6 +853,22 @@ FString AUnmadeNpcCharacter::GetOfflinePortrayalReply(const FString& PlayerUtter
        Asked.Contains(TEXT("seen"))||Asked.Contains(TEXT("saw"))||
        Asked.Contains(TEXT("about me")))return FString();
     const FTCHARToUTF8 Identifier(*NpcId.ToString());
+    const UnmadeCore::ReturnDialogueSpec* ResidentProfile=
+        UnmadeCore::FindReturnDialogue(Identifier.Get());
+    if(ResidentProfile &&
+       (Asked.Contains(TEXT("what worries you"))||
+        Asked.Contains(TEXT("what concerns you"))||
+        Asked.Contains(TEXT("your concern"))))
+        return FString::Printf(TEXT("What still matters to me is this: %s"),
+            UTF8_TO_TCHAR(ResidentProfile->personalConcern));
+    if(ResidentProfile &&
+       (Asked.Contains(TEXT("next time"))||
+        Asked.Contains(TEXT("ask you later"))||
+        Asked.Contains(TEXT("what should i ask"))||
+        Asked.Contains(TEXT("what can we discuss next"))))
+        return FString::Printf(TEXT("When you come back, ask me this: %s"),
+            UTF8_TO_TCHAR(ResidentProfile->nextVisitHook));
+    if(!bLaterRealmResident)return FString();
     const UnmadeCore::OuterPersonSpec* Profile=
         UnmadeCore::FindOuterPerson(Identifier.Get());
     if(!Profile)return FString();
