@@ -50,6 +50,7 @@ function sync(){
   $("quest").textContent=c.choice?"Return visit: "+r.choices[c.choice].after:
     !c.spoken?"Talk to the local witness.":
     c.evidence.length<2?"Inspect physical evidence: "+c.evidence.length+"/2 needed.":
+    !c.techniques.understood?"Return to the witness to interpret your examined evidence.":
     !c.mechanism?"Activate the highlighted physical mechanism.":
     "Commit one local outcome at the mechanism, after reading both previews.";
 }
