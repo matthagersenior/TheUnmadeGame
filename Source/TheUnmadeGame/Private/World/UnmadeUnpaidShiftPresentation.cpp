@@ -12,6 +12,8 @@
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
+#include "Sound/SoundAttenuation.h"
+#include "Components/AudioComponent.h"
 #include "UObject/UObjectGlobals.h"
 #include "Camera/CameraActor.h"
 #include "Camera/CameraComponent.h"
@@ -246,7 +248,35 @@ void AUnmadePrototypeHub::AdvanceBesDirectedBeat()
         *AssetName,*AssetName);
     if(USoundBase* Cue=Cast<USoundBase>(StaticLoadObject(
         USoundBase::StaticClass(),nullptr,*AssetPath,nullptr,LOAD_NoWarn)))
-        UGameplayStatics::PlaySound2D(GetWorld(),Cue,0.68f*GetDefault<UUnmadePlayerPreferences>()->AudioVolume);
+    {
+        if(APlayerController* PC=GetWorld()->GetFirstPlayerController())
+        {
+            if(AUnmadeCharacter* Player=Cast<AUnmadeCharacter>(PC->GetPawn()))
+            {
+                FVector Source=BesStagedSpeaker.IsValid()
+                    ?BesStagedSpeaker->GetActorLocation()+FVector(0,0,60)
+                    :Player->GetActorLocation()+Player->GetActorForwardVector()*240.f+
+                        FVector(0,0,45);
+                UAudioComponent* Audio=NewObject<UAudioComponent>(this);
+                if(IsValid(Audio))
+                {
+                    Audio->bAutoDestroy=true;
+                    Audio->RegisterComponent();
+                    Audio->SetWorldLocation(Source);
+                    Audio->SetSound(Cue);
+                    Audio->bAllowSpatialization=true;
+                    Audio->bOverrideAttenuation=true;
+                    Audio->AttenuationOverrides.bAttenuate=true;
+                    Audio->AttenuationOverrides.AttenuationShape=EAttenuationShape::Sphere;
+                    Audio->AttenuationOverrides.AttenuationShapeExtents=FVector(2500,0,0);
+                    Audio->AttenuationOverrides.FalloffDistance=5000;
+                    Audio->SetVolumeMultiplier(
+                        0.68f*GetDefault<UUnmadePlayerPreferences>()->AudioVolume);
+                    Audio->Play();
+                }
+            }
+        }
+    }
     ++BesActiveBeat;
     GetWorldTimerManager().SetTimer(BesSubtitleTimer,this,
         &AUnmadePrototypeHub::AdvanceBesDirectedBeat,
