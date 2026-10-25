@@ -26,7 +26,10 @@ class UnpaidShiftDirectedWiring(unittest.TestCase):
                      "ClearTimer(BesSubtitleTimer)","UnpaidBeatAt",
                      "Beat->duration","BesDecisionPreview(FName Tag)"):
             self.assertIn(term,present)
-        self.assertIn("UGameplayStatics::PlaySound2D(",present)
+        for term in ("bAllowSpatialization=true","bOverrideAttenuation=true",
+                     "AttenuationOverrides.FalloffDistance=5000",
+                     "Audio->bAutoDestroy=true","Audio->Play()"):
+            self.assertIn(term,present)
         self.assertIn("StaticLoadObject(",present)
         self.assertIn("BesSubtitleOverlay->DisplayBeat(",present)
         self.assertIn("BesSubtitleOverlay->ClearBeat()",present)
