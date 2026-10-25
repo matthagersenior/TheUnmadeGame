@@ -52,6 +52,16 @@ test("Two distinct physically examined clues and a witnessed account are require
   discover(s,first,first.evidence[1].id);
   assert.equal(activateMechanism(s,first).ok,true);
 });
+test("Witness-first path requires returning with physical evidence before a world change",()=>{
+  const s=fresh(),r=first;
+  speak(s,r);
+  discover(s,r,r.evidence[0].id);discover(s,r,r.evidence[1].id);
+  assert.equal(canOpenMechanism(s.chapters[r.id]),false);
+  assert.equal(activateMechanism(s,r).ok,false);
+  speak(s,r);
+  assert.equal(s.chapters[r.id].techniques.understood,true);
+  assert.equal(activateMechanism(s,r).ok,true);
+});
 test("Every realm commits exactly one care or truth choice; guardian and side content remain optional",()=>{
   for(const r of rows)for(const choice of ["care","truth"]){
     const s=fresh();
