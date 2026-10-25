@@ -49,7 +49,7 @@ export function campaignProgress(s) {
     studied: Object.values(s.chapters).filter(c => c.techniques.mastered).length };
 }
 export function canOpenMechanism(c) {
-  return c.spoken && c.evidence.length >= 2;
+  return c.spoken && c.evidence.length >= 2 && c.techniques.understood;
 }
 export function canConfrontGuardian(c) {
   return c.evidence.length >= 2 && c.spoken;
@@ -74,15 +74,20 @@ export function speak(s, realm) {
   const c=s.chapters[realm.id];
   if (!c.spoken) {
     c.spoken=true;
-    if(c.techniques.observed)c.techniques.understood=true;
     journal(s, realm.title+": heard testimony from "+realm.witness.id);
+  }
+  // The player may talk before examining anything. A later return to discuss
+  // actual observations, not omniscient dialogue, earns understanding.
+  if(c.techniques.observed&&!c.techniques.understood){
+    c.techniques.understood=true;
+    journal(s, realm.title+": interpreted examined evidence with "+realm.witness.id);
   }
   return {ok:true, text:c.choice?realm.witness.return:realm.witness.line};
 }
 export function activateMechanism(s,realm) {
   const c=s.chapters[realm.id];
   if(c.choice)return {ok:false,text:"The local choice is already recorded. Return to inspect its effect."};
-  if(!canOpenMechanism(c))return {ok:false,text:"The mechanism requires two physically examined clues and a local witness."};
+  if(!canOpenMechanism(c))return {ok:false,text:"The mechanism requires two physical clues and an interpreted conversation with the local witness."};
   c.mechanism=true;
   c.techniques.experimented=true;
   journal(s,realm.title+": activated "+realm.mechanism.id);
