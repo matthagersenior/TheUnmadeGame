@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101521">
+<meta name="description" content="Play a browser-only nine-realm exploration and consequence prototype of The Unmade; not an Unreal build.">
+<title>THE UNMADE — Nine-Realm Playable Campaign Prototype</title>
+<style>
+:root{color-scheme:dark;--bg:#0b111b;--fg:#f5ecdd;--muted:#bec6c8;--gold:#eac99b;--panel:#141c2bed}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:15px/1.5 system-ui,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--fg)}
+button,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #fae6a8;outline-offset:2px}a{color:#e4c49b}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:#111827;padding:11px max(12px,3vw);border-bottom:1px solid #60565a}
+.brand{font:24px Georgia,serif;letter-spacing:.17em;color:#eee6d8;text-decoration:none}
+nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+nav button,.tool button,.touch button,.dialog button{background:#283245;border:1px solid #8e806f;color:#f4ecdf;border-radius:6px;padding:9px 13px}
+nav button:hover,.tool button:hover,.dialog button:hover{background:#4d4a51}
+main{max-width:1550px;margin:auto;padding:8px clamp(8px,2vw,24px) 28px}
+.notice{font-size:12px;color:#e3cba6;margin:6px 0 10px;line-height:1.5}
+.hud{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;background:#161d2b;border:1px solid #6c625d;padding:8px 12px;margin-bottom:8px}
+.hud strong{color:#e8cb9f}.hud span{font-size:13px}
+.game{height:min(70svh,710px);min-height:470px;position:relative;border:1px solid #8a806c;background:#121c2a;overflow:hidden;border-radius:8px}
+#world{display:block;width:100%;height:100%;touch-action:none}
+.overlay{position:absolute;background:#111926e8;border:1px solid #696b75;padding:9px 12px;pointer-events:none;font-size:12px;line-height:1.45}
+#objective{left:12px;top:12px;max-width:min(360px,53%)}#objective b{color:#e9cba2}
+#target{right:12px;top:12px;max-width:min(260px,40%);text-align:right}
+#feedback{left:50%;bottom:14px;transform:translateX(-50%);text-align:center;max-width:min(500px,90%);min-width:min(300px,80%);font-weight:650;color:#f8deac}
+#bossHud{position:absolute;left:50%;top:12px;transform:translateX(-50%);width:min(300px,45%);font-size:12px;text-align:center;background:#1f1722e8;border:1px solid #987e86;padding:7px;display:none}
+.meter{background:#3e2c32;height:9px;margin-top:5px;border-radius:8px;overflow:hidden}.meter i{display:block;width:100%;height:100%;background:#d48384}
+.touch{display:none;position:absolute;inset:auto 10px 66px 10px;align-items:end;justify-content:space-between;pointer-events:none;gap:14px}
+.dpad{display:grid;grid-template-columns:repeat(3,47px);grid-template-rows:repeat(3,45px);gap:4px;pointer-events:auto}
+.dpad button{padding:0;touch-action:none;font-size:19px;font-weight:bold;background:#172238e8;user-select:none}
+.dpad button.active{background:#806b60}
+.battleControls{display:flex;align-items:flex-end;gap:6px;flex-wrap:wrap;max-width:188px;justify-content:flex-end;pointer-events:auto}
+.battleControls button{touch-action:none;min-height:45px;font-size:12px;background:#16243de8}
+.battleControls #interact{border-radius:50%;width:80px;height:80px;border:2px solid #eac99b}
+.dialog{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(610px,95%);max-height:89%;overflow-y:auto;background:#161b29f7;border:1px solid #d8bb8f;padding:clamp(18px,3vw,30px);z-index:10;box-shadow:0 18px 65px #000c}
+.dialog.show{display:block}.dialog h2{font:normal clamp(25px,4vw,39px) Georgia,serif;margin:5px 0 13px}
+.dialog h3{font:normal 21px Georgia,serif}
+.dialog p{color:#e1d8cb;line-height:1.65}
+.dialog small,.eyebrow{font-size:11px;letter-spacing:.12em;color:#e6c699}
+.dialog .choices{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.dialog button{text-align:left;line-height:1.4}.dialog button:disabled{opacity:.55;cursor:not-allowed}
+.dialog .foot{margin-top:17px;border-top:1px solid #68646d;padding-top:12px;display:flex;justify-content:flex-end}
+.dialog .foot button{min-width:115px;text-align:center}
+.chapter-list{display:grid;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr));margin:12px 0}
+.chapter-list button{text-align:left;min-height:65px}.chapter-list button.current{border-color:#f4cf92;background:#4d4051}
+.tool{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:8px}
+.tool button{padding:8px 11px;font-size:12px}
+.tool p{color:#bfc3c7;font-size:12px;margin:0}
+#history{max-height:230px;overflow:auto;font-size:12px;line-height:1.8;border:1px solid #59606b;padding:12px}
+footer{font-size:12px;color:#aeb9c4;margin-top:18px;line-height:1.6}
+@media(max-width:760px){header{gap:5px}.brand{font-size:17px}nav{gap:4px}nav button{font-size:11px;padding:7px 9px}.game{height:75svh;min-height:580px}.touch{display:flex}#objective{font-size:10px;max-width:60%;padding:7px}#target{font-size:10px;max-width:39%;padding:7px}#feedback{bottom:6px;font-size:11px;padding:5px}.chapter-list{grid-template-columns:1fr}.hud span{font-size:11px}#bossHud{top:95px;width:60%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><a class="brand" href="index.html">THE UNMADE</a>
+<nav aria-label="Game controls"><button id="atlasBtn">Atlas · 9 realms</button><button id="journalBtn">Journal</button><button id="profileBtn">Saves</button><button id="helpBtn">Controls</button></nav></header>
+<main>
+<p class="notice"><strong>Playable source-based browser prototype:</strong> move, investigate, confront guardians, make lasting local choices and return across nine realms. Separate from Unreal gameplay and saves; assets, quests and endings are not represented as engine-verified or release-ready.</p>
+<div class="hud"><span id="location">Loading the atlas…</span><span id="health">Resolve ●●●●●●</span><span id="completion">Nine-realm decisions 0/9</span></div>
+<section class="game" aria-label="Top-down playable world">
+<canvas id="world" role="img" aria-label="Playable map with a traveler and proximity-based interactable locations"></canvas>
+<div class="overlay" id="objective"><b>Objective</b><div id="quest">Loading authored encounters…</div></div>
+<div class="overlay" id="target" aria-live="polite">Move toward a marked location and interact.</div>
+<div class="overlay" id="feedback" role="status" aria-live="polite">WASD/arrows to move · E to interact</div>
+<div id="bossHud"><span id="bossName">Guardian</span><div class="meter"><i id="bossFill"></i></div><small id="bossCue">Watch the tell; guard or step clear</small></div>
+<div id="touch" class="touch" aria-label="Touch controls"><div class="dpad"><span></span><button data-key="up" aria-label="Walk north">↑</button><span></span><button data-key="left" aria-label="Walk west">←</button><span></span><button data-key="right" aria-label="Walk east">→</button><span></span><button data-key="down" aria-label="Walk south">↓</button><span></span></div><div class="battleControls"><button id="guardTouch">Guard</button><button id="attackTouch">Attack</button><button id="skillTouch">Study counter</button><button id="interact">INTERACT</button></div></div>
+<div id="modal" class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1"><small id="modalOverline">THE UNMADE</small><h2 id="modalTitle">Field notes</h2><div id="modalBody"></div><div id="modalChoices" class="choices"></div><div class="foot"><button id="closeModal">Return to the world</button></div></div>
+</section>
+<div class="tool"><button id="restBtn">Rest at the refuge</button><button id="clearBtn">Reset current profile</button><p id="saveStatus">Progress saves in this browser's local storage only.</p></div>
+<footer>Prototype scope: nine source-authored local main-story evidence/choice loops, nine optional stories, nine guardian confrontations, observed study counters, 4 independent browser profiles and revisitable outcomes. Not a replacement for Unreal runtime tests, the canonical main-story final boss, full levels, voice performances, or packaged production assets. Canon source: Authoring files in the repository.</footer>
+</main>
+<script type="module" src="nine-realms-play.mjs"></script>
+</body></html>
