@@ -73,6 +73,10 @@ class QuestAndSceneHandoff(unittest.TestCase):
         self.assertIn("RecordResidentConversation(Target->GetStableId())",char)
         self.assertIn("RecordResidentAid(Target->GetStableId(),AlreadyWitnessed)",char)
         self.assertIn("FindReturnDialogue(ID.Get())",ret)
+        self.assertIn("ResidentProfile->personalConcern",ret)
+        self.assertIn("ResidentProfile->nextVisitHook",ret)
+        self.assertIn("What still matters to me is this",ret)
+        self.assertIn("When you come back, ask me this",ret)
     def test_ci_and_first_pc(self):
         ci=(ROOT/".github/workflows/static-checks.yml").read_text()
         pc=(ROOT/"Scripts/first_pc_build_and_test.ps1").read_text()
