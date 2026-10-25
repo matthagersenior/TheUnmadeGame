@@ -10,7 +10,7 @@ Explore nine authored realms through combat, investigation, rescue and reality-c
 
 ## Current status
 
-Current source milestone: **v21 cross-realm parity, first-PC handoff, and PR #164 character/creature anatomy detail** (23 October 2026). [Maintained nine-realm coverage ledger](docs/qa/realm-coverage-ledger.json). The repository contains Unreal C++ gameplay, generated graybox world assembly, portable rules, authored narrative data and prototype asset generators. The source-linked handoff currently indexes 669 work orders across nine realms; this is an authoring and production aid, not evidence that those rows are playable. No packaged playable release is available.
+Current source milestone: **v21 cross-realm parity and first-PC handoff, with source improvements through 25 October 2026**. Recent work added focused NPC conversations with authored resident concerns and return hooks, saved resident continuity, more detailed prototype characters, accessible cinematic captions, and spatial dialogue-scene Foley (PRs #175–#179). [Maintained nine-realm coverage ledger](docs/qa/realm-coverage-ledger.json). The repository contains Unreal C++ gameplay, generated graybox world assembly, portable rules, authored narrative data and prototype asset generators. The source-linked handoff indexes 669 work orders across nine realms; this is an authoring and production aid, not evidence that those rows are playable. No packaged playable release or verified Unreal playthrough is available.
 
 | Evidence | Scope |
 | --- | --- |
@@ -56,7 +56,7 @@ This builds the Editor target and runs Unreal automation with retained reports. 
 - [Development history](docs/CHANGELOG.md) and [latest dated illustrated edition](docs/lore/LATEST_ILLUSTRATED_RELEASE.md).
 - [First-build diagnostics](docs/qa/first-build-diagnostics.md), [binary asset admission](docs/qa/git-lfs.md) and [contribution/release workflow](CONTRIBUTING.md).
 
-Gameplay is deterministic and offline by default. Optional local dialogue uses a disabled-by-default adapter with authored fallback; see [local dialogue architecture](docs/architecture/local-npc-llm.md).
+Gameplay is deterministic and offline by default. Optional local dialogue uses a disabled-by-default adapter with authored fallback; stable residents can answer saved-memory, firsthand-witness, personal-concern and next-visit prompts without a model. See [local dialogue architecture](docs/architecture/local-npc-llm.md).
 
 ## Rights
 
