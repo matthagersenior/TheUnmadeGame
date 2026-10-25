@@ -152,7 +152,35 @@ def scene_manifest(w,c):
       "actors":actors,"expected_actor_count":len(actors)}
 
 def outputs(q,p,w,c):
+    return_header=(
+      "#pragma once\n"
+      "// GENERATED from Authoring/resident_return_encounters.json. DO NOT EDIT.\n"
+      "// Import keys remain the preexisting 82 stable NPC identities.\n"
+      "#include <array>\n#include <cstring>\n"
+      "namespace UnmadeCore {\n"
+      "struct ReturnDialogueSpec {\n"
+      " const char* id; const char* recognize; const char* aid;\n"
+      " const char* publicLine; const char* newMorning;\n"
+      " const char* personalConcern; const char* nextVisitHook;\n"
+      "};\n"
+      "inline constexpr std::array<ReturnDialogueSpec,82> ReturnDialogue = {{\n"
+    )
+    for resident in p["residents"]:
+        fields=("id","recognize_line","aid_line","public_line","post_morning",
+                "personal_concern","next_visit_hook")
+        return_header+="    {"+",".join(json.dumps(resident[field],ensure_ascii=False)
+                                for field in fields)+"},\n"
+    return_header+=(
+      "}};\n"
+      "inline const ReturnDialogueSpec* FindReturnDialogue(const char* id) noexcept {\n"
+      " if(!id)return nullptr;\n"
+      " for(const auto& p:ReturnDialogue)if(std::strcmp(p.id,id)==0)return &p;\n"
+      " return nullptr;\n"
+      "}\n} // namespace UnmadeCore\n"
+    )
     return {
+     ROOT/"Source/TheUnmadeGame/Public/Authoring/UnmadeResidentReturnData.h":
+       return_header,
      OUTPUT/"main_quest_steps_unreal.csv":
        csv_rows(quest_rows(q),QUEST_COLS,"id"),
      OUTPUT/"resident_returns_unreal.csv":
