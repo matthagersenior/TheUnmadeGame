@@ -1,0 +1,48 @@
+name: Nine-realm browser campaign checks
+on:
+  pull_request:
+    paths:
+      - 'site/play-nine-realms.html'
+      - 'site/nine-realms-*'
+      - 'site/tests/nine-realms.test.mjs'
+      - 'Scripts/build_nine_realm_browser.py'
+      - 'Scripts/publishing/build_public_site.py'
+      - 'Authoring/main_quest_interaction_contracts.json'
+      - 'Authoring/lived_universe_atlas.json'
+      - 'Authoring/frontier_adventures_v14.json'
+      - 'Authoring/world_content_pack.json'
+      - '.github/workflows/nine-realm-browser.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'site/play-nine-realms.html'
+      - 'site/nine-realms-*'
+      - 'site/tests/nine-realms.test.mjs'
+      - 'Scripts/build_nine_realm_browser.py'
+      - 'Authoring/main_quest_interaction_contracts.json'
+      - 'Authoring/lived_universe_atlas.json'
+      - 'Authoring/frontier_adventures_v14.json'
+      - 'Authoring/world_content_pack.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  playable-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate authored nine-realm export parity
+        run: python Scripts/build_nine_realm_browser.py --check
+      - name: Parse game and rules modules
+        run: |
+          node --check site/nine-realms-rules.mjs
+          node --check site/nine-realms-play.mjs
+      - name: Test all nine-realm outcome and save contracts
+        run: node --test site/tests/nine-realms.test.mjs
