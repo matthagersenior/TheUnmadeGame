@@ -6,7 +6,7 @@
 
 [Play the nine-realm browser campaign](https://matthagersenior.github.io/TheUnmadeGame/play-nine-realms.html). It supports browser-based movement, investigation, guardian encounters and persistent local choices across nine realms. This is a source-based browser prototype with its own browser saves; it is not an Unreal build, packaged PC release or proof of engine functionality. The [public project page](https://matthagersenior.github.io/TheUnmadeGame/) links to the prototype and cinematic treatment.
 
-The 29 October source update also closed a combined-save validation gap: malformed Ability Study snapshots are now rejected before profile restore (#182). Source CI passed; Unreal compilation, persistent save behavior in PIE/standalone, and PC acceptance remain pending.
+The 28 October source update also closed a combined-save validation gap: malformed Ability Study snapshots are now rejected before profile restore (#182). Source CI passed; Unreal compilation, persistent save behavior in PIE/standalone, and PC acceptance remain pending.
 
 ## Current October 20 supplemental source acceptance
 
