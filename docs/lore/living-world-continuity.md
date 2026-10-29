@@ -1524,3 +1524,8 @@ Foley caption remains the reliable description when audio is muted or missing.
 ### Resident concern and return-topic dialogue — 2026-10-25
 
 All 82 registered residents can answer the existing conversation panel's concern topic from their authored personal concern and can offer their authored next-visit question when asked what to return to. These lines shape portrayal and player-directed conversation only; they do not create memories, witness claims, consent, quest eligibility, or world changes. Saved firsthand observations and named rumors remain the source of factual recollections, and an actually observed danger can take priority over a broad personal concern. Unreal dialogue rendering and PIE playback remain unverified.
+
+
+## 2026-10-28 — Ability Study checklist rejects invalid IDs
+
+The shared Ability Study checklist now validates its selected study before reading the generated requirement table. Valid study progress and saved snapshots are unchanged; invalid IDs return incomplete “Invalid study selection” requirements rather than indexing outside the table. This is a source-safety guard only and does not add or alter canon. Unreal compilation and in-engine menu behavior remain pending the Windows host.

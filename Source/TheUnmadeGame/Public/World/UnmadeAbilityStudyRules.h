@@ -94,6 +94,14 @@ public:
     }
     /** Persistent milestones only; real-world availability is checked by the player adapter. */
     std::array<StudyRequirement,6> Checklist(StudyId id)const noexcept{
+        if(!Valid(static_cast<int>(id)))return {{
+            {"Invalid study selection",false},
+            {"Invalid study selection",false},
+            {"Invalid study selection",false},
+            {"Invalid study selection",false},
+            {"Invalid study selection",false},
+            {"Invalid study selection",false}
+        }};
         return {{
             {CodexStudyRequirements[static_cast<int>(id)][0],(Evidence(id)&1)!=0},
             {CodexStudyRequirements[static_cast<int>(id)][1],(Evidence(id)&2)!=0},
