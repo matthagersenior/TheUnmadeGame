@@ -323,8 +323,8 @@ function resetDialog(){
 function draw(){
   if(!s||!ctx)return;
   const r=realm(),c=chapter(),idx=rec(r.id),p=palettes[idx],w=sizes.w,h=sizes.h;
-  const art=drawRealmScene(ctx,w,h,r.id,time,c.choice,p);
-  const grd=ctx.createLinearGradient(0,0,w,h);grd.addColorStop(0,p[0]);grd.addColorStop(.6,p[1]);grd.addColorStop(1,p[0]);ctx.fillStyle=grd;ctx.globalAlpha=.32;ctx.fillRect(0,0,w,h);ctx.globalAlpha=1;
+  const grd=ctx.createLinearGradient(0,0,w,h);grd.addColorStop(0,p[0]);grd.addColorStop(.6,p[1]);grd.addColorStop(1,p[0]);ctx.fillStyle=grd;ctx.fillRect(0,0,w,h);
+  drawRealmScene(ctx,w,h,r.id,time,c.choice,p);
   ctx.save();
   ctx.fillStyle="rgba(0,0,0,.25)";ctx.fillRect(w*.09,h*.04,w*.8,27);
   ctx.fillStyle=p[2];ctx.font="600 13px Georgia";ctx.fillText(r.culture,w*.11,h*.04+18);
