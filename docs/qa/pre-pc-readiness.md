@@ -1,5 +1,12 @@
 # THE UNMADE — PC-independent readiness ledger
-**Updated 2026-10-20 | Live engineering backlog; this is not a release-complete certification. Historical entries below retain their original dates.**
+**Updated 2026-10-28 | Live engineering backlog; this is not a release-complete certification. Historical entries below retain their original dates.**
+
+
+## Current shareable build (28 October 2026)
+
+[Play the nine-realm browser campaign](https://matthagersenior.github.io/TheUnmadeGame/play-nine-realms.html). It supports browser-based movement, investigation, guardian encounters and persistent local choices across nine realms. This is a source-based browser prototype with its own browser saves; it is not an Unreal build, packaged PC release or proof of engine functionality. The [public project page](https://matthagersenior.github.io/TheUnmadeGame/) links to the prototype and cinematic treatment.
+
+The 29 October source update also closed a combined-save validation gap: malformed Ability Study snapshots are now rejected before profile restore (#182). Source CI passed; Unreal compilation, persistent save behavior in PIE/standalone, and PC acceptance remain pending.
 
 ## Current October 20 supplemental source acceptance
 
@@ -7,7 +14,7 @@
 
 ## Current source handoff status (20 October 2026)
 
-Main at the start of this status refresh was `8611e5d8da04c0e3ae99e16f16500b447ae7161f` (first-PC production package, PR #117). Its source CI passed; the Unreal Editor job was skipped, so there is no engine compilation or playable-game claim. The handoff generator produces nine realm dossiers and 669 source-linked work orders for main steps, clues, optional side stories, return residents and cataloged content. These rows identify production work; they do not certify runtime handlers, Unreal assets or playable scenes. The first-PC implementation plan tracks the remaining source, engine and content gates.
+Main at the start of this status refresh was `8611e5d8da04c0e3ae99e16f16500b447ae7161f` (first-PC production package, PR #117). Its source CI passed; the Unreal Editor job was skipped, so this establishes neither engine compilation nor an Unreal playthrough. The separately published browser prototype is playable in a browser but does not certify Unreal functionality. The handoff generator produces nine realm dossiers and 669 source-linked work orders for main steps, clues, optional side stories, return residents and cataloged content. These rows identify production work; they do not certify runtime handlers, Unreal assets or playable scenes. The first-PC implementation plan tracks the remaining source, engine and content gates.
 
 ## Evidence codes
 - **NATIVE TESTED** — deterministic C++17 tests run under GitHub Actions (not Unreal).
