@@ -1531,3 +1531,11 @@ Added an enum-range check before `Checklist` reads the generated study requireme
 - Added distinct guardian start positions, silhouettes, telegraphs, attack hit shapes and counterplay cues across the optional encounters. Existing evidence and testimony gates, health, mercy, defeat and save rules remain in force.
 - A committed main-story choice now plays a brief, skippable, three-beat captioned aftermath using the already-authored local outcome and witness return text. The scene freezes movement and resumes at completion or Skip/Escape.
 - This is a browser canvas prototype, not Unreal level art, animation, camera cinematography, sound, collision, or production footage. No canon, save schema, authored choice, reward, quest eligibility or NPC knowledge changed. Unreal compilation and visual/playability acceptance remain pending the Windows host.
+
+
+## 2026-10-29 — Saved-stage quest trail and local witness staging
+
+- Added a dotted route cue and animated NEXT marker for the saved main-story interaction: local testimony, next unexamined clue, testimony interpretation, public mechanism, or return witness after a committed outcome.
+- Kept movement entirely player-controlled and derived the target from existing campaign state and authored nodes; this adds no waypoint save, skip path, new knowledge or altered quest gate.
+- Added subtle breathing and approach attention to the existing realm-specific witness illustrations; their authored testimony and local knowledge limits are unchanged.
+- Updated the browser help and public prototype scope. Canvas visuals are not Unreal validated; no save schema, canon or quest outcome changed.
