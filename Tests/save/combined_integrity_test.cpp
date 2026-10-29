@@ -128,6 +128,26 @@ int main(){
     // Original inventory length remains readable; appended quantities default to zero.
     auto old=Earned();old.ItemQuantities.resize(28);assert(Valid(old));
     const auto good=Earned();
+    auto research=good;
+    research.bHasAbilityStudy=true;
+    research.AbilityStudyStages.assign(StudyCount,0);
+    research.AbilityStudyEvidence.assign(StudyCount,0);
+    research.AbilityStudyTrials.assign(StudyCount,0);
+    research.AbilityStudySelection=0;
+    assert(Valid(research)); // Empty recorded studies are valid.
+    auto malformedResearch=research;
+    malformedResearch.AbilityStudyStages[0]=4; // Mastery without evidence or trials.
+    assert(!Valid(malformedResearch));
+    malformedResearch=research;
+    malformedResearch.AbilityStudyStages[0]=1;
+    malformedResearch.AbilityStudyEvidence[0]=2; // No firsthand observation.
+    assert(!Valid(malformedResearch));
+    malformedResearch=research;
+    malformedResearch.AbilityStudySelection=StudyCount;
+    assert(!Valid(malformedResearch));
+    malformedResearch=research;
+    malformedResearch.AbilityStudyTrials.pop_back();
+    assert(!Valid(malformedResearch));
     const auto complete=Expanded();
     auto malformed=complete;malformed.EchoQuestEndings[5]=999;assert(!Valid(malformed));
     malformed=complete;malformed.OuterActiveUntil[7]=std::numeric_limits<double>::quiet_NaN();assert(!Valid(malformed));
