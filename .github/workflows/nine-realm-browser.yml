@@ -43,6 +43,7 @@ jobs:
       - name: Parse game and rules modules
         run: |
           node --check site/nine-realms-rules.mjs
+          node --check site/nine-realms-visuals.mjs
           node --check site/nine-realms-play.mjs
       - name: Test all nine-realm outcome and save contracts
         run: node --test site/tests/nine-realms.test.mjs
