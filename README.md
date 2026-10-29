@@ -4,6 +4,8 @@ A dark, surreal third-person RPG where you reshape reality, investigate conflict
 
 Explore nine authored realms through combat, investigation, rescue and reality-changing abilities. Named residents, finite local economies and saved consequences connect adventures to the people living there.
 
+**[Play the nine-realm browser prototype](https://matthagersenior.github.io/TheUnmadeGame/play-nine-realms.html)** — a source-based campaign with exploration, investigation, guardian encounters and persistent local choices. It runs in a browser and is separate from Unreal; it is not a packaged PC release.
+
 ## The complete canon encyclopedia
 
 [**Browse the Definitive Canon Encyclopedia**](docs/canon/encyclopedia/README.md) — eight volumes covering realms, cities, NPCs, characters, factions, creatures and bosses, weapons and items, all registered abilities and studies, major quests, endings, and unresolved lore. Its [640-entry stable-ID index](docs/canon/encyclopedia/INDEX.json) is source-derived and verified in CI; it does **not** claim Unreal playability.
