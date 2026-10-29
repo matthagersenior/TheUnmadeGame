@@ -229,7 +229,7 @@ function drawStoryBeat(ctx,w,h){
   ctx.restore();
 }
 function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){
-  const words=String(text||"").split(/\\s+/);let line="",rows=[];
+  const words=String(text||"").split(/\s+/);let line="",rows=[];
   for(const word of words){const next=line?line+" "+word:word;if(ctx.measureText(next).width>maxWidth&&line){rows.push(line);line=word;}else line=next;}
   if(line)rows.push(line);const shown=rows.slice(0,3),start=y-(shown.length-1)*lineHeight/2;
   shown.forEach((row,i)=>ctx.fillText(row,x,start+i*lineHeight));
