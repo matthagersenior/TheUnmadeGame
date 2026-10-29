@@ -31,6 +31,7 @@
 #include "World/UnmadeExpeditionRules.h"
 #include "World/UnmadeIdentityRules.h"
 #include "World/UnmadeAdventureDepthRules.h"
+#include "World/UnmadeAbilityStudyRules.h"
 #include "Items/UnmadeItemRules.h"
 #include "World/UnmadePlayerExperienceRules.h"
 #include "Save/UnmadeSessionRules.h"
@@ -502,6 +503,21 @@ bool ValidCombinedRecord(const Record& record, Text text)
     if(Save->bHasWorldIdentity){std::vector<int> Data;for(int V:Save->WorldIdentityState)Data.push_back(V);if(!Save->bHasLivingWorldSnapshot||!Identity.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){ return false; }}
     if(Save->bHasAdventureDepth){std::vector<int> Data;for(int V:Save->AdventureDepthState)Data.push_back(V);if(!Depth.Restore(Data,Expeditions,RestoredClock.DayIndex()+1)){ return false; }}
     if(Save->bHasPlayerExperience){std::vector<int> Data;for(int V:Save->PlayerExperienceState)Data.push_back(V);if(!Experience.Restore(Data,Expeditions,Depth,RestoredClock.DayIndex()+1)){ return false; }}
+    if(Save->bHasAbilityStudy){
+        if(Save->AbilityStudyStages.Num()!=StudyCount ||
+           Save->AbilityStudyEvidence.Num()!=StudyCount ||
+           Save->AbilityStudyTrials.Num()!=StudyCount ||
+           Save->AbilityStudySelection<0 ||
+           Save->AbilityStudySelection>=StudyCount)return false;
+        StudySnapshot snapshot;
+        for(int i=0;i<StudyCount;++i){
+            snapshot.stages[i]=Save->AbilityStudyStages[i];
+            snapshot.evidence[i]=Save->AbilityStudyEvidence[i];
+            snapshot.trials[i]=Save->AbilityStudyTrials[i];
+        }
+        AbilityStudy research;
+        if(!research.Restore(snapshot))return false;
+    }
     if(Save->bHasCrossRealmCarry){
         if(!Save->bHasExpeditions||!Save->bHasWorldIdentity||
            !Save->bHasAdventureDepth)return false;
