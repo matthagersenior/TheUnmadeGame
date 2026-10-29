@@ -71,6 +71,14 @@ function worldNodes(){
 function nearNode(){
   return worldNodes().map(n=>({...n,dist:distance(s.position,n)})).sort((a,b)=>a.dist-b.dist)[0];
 }
+function objectiveNode(){
+  const c=chapter(),nodes=worldNodes();
+  if(c.choice)return nodes.find(n=>n.kind==="witness");
+  if(!c.spoken)return nodes.find(n=>n.kind==="witness");
+  if(c.evidence.length<2)return nodes.find(n=>n.kind==="evidence"&&!c.evidence.includes(n.id));
+  if(!c.techniques.understood)return nodes.find(n=>n.kind==="witness");
+  return nodes.find(n=>n.kind==="mechanism");
+}
 function para(txt){
   const p=document.createElement("p");p.textContent=txt;return p;
 }
@@ -145,7 +153,7 @@ function profilesDialog(){
 function helpDialog(){
   openDialog("How to Play",[
     "Move with WASD or arrow keys. On mobile, use the direction pad. Stand near a diamond/star marker and press E or INTERACT. The target label tells you what is nearby.",
-    "First-story: speak to a local witness; physically inspect at least two different marked clues; use the public mechanism; read care and truth consequences; confirm the same choice twice. Return later to inspect how the place changed.",
+    "Follow the dotted NEXT trail for the saved main-story step: speak to the local witness, physically inspect at least two different marked clues, return to the witness to interpret them, then use the public mechanism. Read both care and truth consequences and confirm one choice twice. Return later to inspect how the place changed.",
     "Guardians are OPTIONAL. Stand near the guardian and interact to begin. Space / ATTACK strikes in range. Each realm has a distinct tell: read the HUD cue and leave the marked line, ring, target or impact area, or Shift / GUARD through the strike. Spare a weakened guardian with E / INTERACT; another strike defeats it. No guardian is required for any main-story choice.",
     "Master one source-named technique by resolving a studied guardian. Press Q / STUDY COUNTER during later encounters to stun briefly. This counter mechanic is a browser balance experiment, not an Unreal rite grant.",
     "After each realm choice, a short captioned aftermath plays over the changed place; press Escape or Skip scene to continue. Find the optional story's next active marker afterward. Five physical stops lead to a separate care/truth resolution. Completing it never gates another realm.",
@@ -335,10 +343,18 @@ function draw(){
     ctx.textAlign="center";ctx.fillText(c.choice.toUpperCase()+" REMAINS",m.x,m.y+30);
   }
   const hazard=drawHazardField(ctx,w,h,r.id,time);
-  const nodes=worldNodes();
+  const nodes=worldNodes(),questTarget=objectiveNode();
+  if(questTarget){
+    const from=xy(s.position),to=xy(questTarget);
+    ctx.save();ctx.strokeStyle="rgba(248,220,164,.53)";ctx.lineWidth=2;ctx.setLineDash([4,9]);
+    ctx.beginPath();ctx.moveTo(from.x,from.y);ctx.lineTo(to.x,to.y);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle="#f7d99f";ctx.font="bold 9px system-ui";ctx.textAlign="center";ctx.fillText("NEXT",to.x,to.y-23);
+    ctx.restore();
+  }
   nodes.forEach(n=>{
-    const loc=xy(n),dist=distance(s.position,n),rad=dist<15?16:12;
-    if(n.kind==="witness"){drawWitness(ctx,loc.x,loc.y,r.id,p,dist<15);}
+    const loc=xy(n),dist=distance(s.position,n),rad=dist<15?16:12,isNext=questTarget&&questTarget.kind===n.kind&&questTarget.id===n.id;
+    if(isNext){ctx.save();ctx.strokeStyle="#f4d493";ctx.lineWidth=2;ctx.setLineDash([4,4]);ctx.beginPath();ctx.arc(loc.x,loc.y,rad+8+Math.sin(time/210)*2,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.restore();}
+    if(n.kind==="witness"){drawWitness(ctx,loc.x,loc.y,r.id,p,dist<15,time);}
     else if(n.kind==="guardian"){drawGuardian(ctx,loc.x,loc.y,r.id,dist<15?1.12:.92);}
     else{ctx.shadowColor=p[2];ctx.shadowBlur=dist<15?22:8;
       ctx.beginPath();ctx.fillStyle=n.kind==="side"?"#a48cda":n.kind==="mechanism"?"#e0b273":"#d0d4cb";
