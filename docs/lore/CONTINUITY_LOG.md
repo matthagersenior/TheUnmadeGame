@@ -1522,3 +1522,12 @@ and evidence choices remain the only source of permanent arena outcomes.
 ## 2026-10-28 — Guard Ability Study checklist indexing
 
 Added an enum-range check before `Checklist` reads the generated study requirement table. Invalid study IDs now yield incomplete invalid-selection requirements; valid Observation → Mastery data and canonical requirements are unchanged. This does not resolve any lore or gameplay mystery. Source CI can verify the portable rule; Unreal compilation and menu rendering remain pending the Windows host.
+
+
+## 2026-10-29 — Nine distinct browser realms, hazards, guardians and aftermath scenes
+
+- Replaced the shared browser terrain layout with nine authored architectural compositions and ambient motion keyed to the existing realm identities; local witnesses and guardian markers now have distinct silhouettes and visual marks.
+- Added nine readable environmental hazard fields with per-realm shapes and timing, matching collision checks, warning labels and guard response.
+- Added distinct guardian start positions, silhouettes, telegraphs, attack hit shapes and counterplay cues across the optional encounters. Existing evidence and testimony gates, health, mercy, defeat and save rules remain in force.
+- A committed main-story choice now plays a brief, skippable, three-beat captioned aftermath using the already-authored local outcome and witness return text. The scene freezes movement and resumes at completion or Skip/Escape.
+- This is a browser canvas prototype, not Unreal level art, animation, camera cinematography, sound, collision, or production footage. No canon, save schema, authored choice, reward, quest eligibility or NPC knowledge changed. Unreal compilation and visual/playability acceptance remain pending the Windows host.
