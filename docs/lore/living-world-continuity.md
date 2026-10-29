@@ -1529,3 +1529,8 @@ All 82 registered residents can answer the existing conversation panel's concern
 ## 2026-10-28 — Ability Study checklist rejects invalid IDs
 
 The shared Ability Study checklist now validates its selected study before reading the generated requirement table. Valid study progress and saved snapshots are unchanged; invalid IDs return incomplete “Invalid study selection” requirements rather than indexing outside the table. This is a source-safety guard only and does not add or alter canon. Unreal compilation and in-engine menu behavior remain pending the Windows host.
+
+
+### Nine-realm browser visual and counterplay pass — 2026-10-29
+
+The browser campaign now draws nine distinct architectural motifs and moving atmospheric details from each realm's authored place identity. Environmental danger has realm-specific geometry, a visible warning and active interval, with matching collision and guard response. Witnesses and guardians have distinct illustrated marks; optional guardian attacks use readable realm-specific sweep, ring, target, cross, fissure, vent or threshold patterns with matching player counterplay cues. A saved main-story choice now enters a brief, skippable, captioned aftermath scene using the selected realm's authored outcome and return line. These are 2D browser presentation and gameplay prototypes: they do not claim Unreal level, camera, animation, collision, audio, or final-cinematic parity. No canon, save shape, choice outcome, NPC knowledge, reward, or quest gate was changed. The canonical Unreal cinematic/storyboard work remains a separate production deliverable.

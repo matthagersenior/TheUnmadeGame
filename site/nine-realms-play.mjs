@@ -1,4 +1,5 @@
 import {MAX_HEALTH,newCampaign,restoreCampaign,campaignProgress,canOpenMechanism,canConfrontGuardian,discover,speak,activateMechanism,commitChoice,sideAction,resolveGuardian,travel,markEndingPreview,journal} from "./nine-realms-rules.mjs";
+import {drawRealmScene,drawHazardField,hazardState,insideHazard,drawWitness,drawGuardian,drawGuardianTelegraph,guardianStart,guardianStrikeHits,guardianCue} from "./nine-realms-visuals.mjs";
 
 const $=id=>document.getElementById(id);
 const canvas=$("world"),ctx=canvas.getContext("2d"),modal=$("modal");
@@ -12,7 +13,7 @@ const palettes=[
 const evidenceCoords=[[21,61],[65,31],[77,75]];
 const sideCoords=[[17,23],[37,17],[60,15],[87,78],[44,72]];
 const SAVE_PREFIX="the-unmade-nine-realm-play-v1-";
-let data,realms,s,profile=1,battle=null,pendingChoice=null;
+let data,realms,s,profile=1,battle=null,pendingChoice=null,storyBeat=null;
 let time=0,last=0,damageCooldown=0,attackCooldown=0,abilityCooldown=0,toastUntil=0,toastText="";
 let sizes={w:800,h:600},keyboard=new Set(),touch=new Set(),guardHold=false,focusPaused=false;
 const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
@@ -145,10 +146,10 @@ function helpDialog(){
   openDialog("How to Play",[
     "Move with WASD or arrow keys. On mobile, use the direction pad. Stand near a diamond/star marker and press E or INTERACT. The target label tells you what is nearby.",
     "First-story: speak to a local witness; physically inspect at least two different marked clues; use the public mechanism; read care and truth consequences; confirm the same choice twice. Return later to inspect how the place changed.",
-    "Guardians are OPTIONAL. Stand near the guardian and interact to begin. Space / ATTACK strikes in range, Shift / GUARD blocks a timed attack, and moving out of the warning ring dodges it. Spare a weakened guardian using E / INTERACT; finishing with a strike defeats it. No guardian is required for any main-story choice.",
+    "Guardians are OPTIONAL. Stand near the guardian and interact to begin. Space / ATTACK strikes in range. Each realm has a distinct tell: read the HUD cue and leave the marked line, ring, target or impact area, or Shift / GUARD through the strike. Spare a weakened guardian with E / INTERACT; another strike defeats it. No guardian is required for any main-story choice.",
     "Master one source-named technique by resolving a studied guardian. Press Q / STUDY COUNTER during later encounters to stun briefly. This counter mechanic is a browser balance experiment, not an Unreal rite grant.",
-    "After each realm choice, find the optional story's next active marker. Five physical stops lead to a separate care/truth resolution. Completing it never gates another realm.",
-    "The atlas permits non-linear visits to every authored realm. Journal shows local and across-realm progress. Rest at a refuge to restore resolve, with no re-award of evidence or committed outcomes."],[],"KEYBOARD & TOUCH");
+    "After each realm choice, a short captioned aftermath plays over the changed place; press Escape or Skip scene to continue. Find the optional story's next active marker afterward. Five physical stops lead to a separate care/truth resolution. Completing it never gates another realm.",
+    "Environmental danger marks its own shape and warning interval. Cross during the quiet phase or guard the pulse, then move clear. The atlas permits non-linear visits to every authored realm. Journal shows local and across-realm progress. Rest at a refuge to restore resolve, with no re-award of evidence or committed outcomes."],[],"KEYBOARD & TOUCH");
 }
 function inspect(node){
   const r=realm(),c=chapter();
@@ -194,12 +195,44 @@ function confirmMain(choice,stage){
     {label:stage===1?"Continue to FINAL confirmation":"COMMIT "+choice.toUpperCase()+" and save",action:()=>{
       if(stage===1){confirmMain(choice,2);return;}
       const result=commitChoice(s,r,choice);
-      if(result.ok){commitUpdate();inform("Saved "+choice+" in "+r.title,6500);
-        openDialog("The Place Has Changed",[result.text,"Return later: "+r.witness.return,"The optional story is now available on its own marked route."]);}
+      if(result.ok){commitUpdate();inform("Saved "+choice+" in "+r.title,6500);startStoryBeat(r,choice,result.text);}
       else inform(result.text);
     }},
     {label:"Cancel without a commitment",action:()=>inform("No choice was committed.")}
   ],"DELIBERATE SAVE BOUNDARY");
+}
+function startStoryBeat(r,choice,resultText){
+  closeDialog();storyBeat={started:time,r,choice,resultText};
+  const button=$("skipCinematic");button.hidden=false;button.focus({preventScroll:true});
+}
+function finishStoryBeat(){
+  if(!storyBeat)return;
+  const beat=storyBeat;storyBeat=null;$("skipCinematic").hidden=true;
+  focusPaused=false;inform("The place remembers your "+beat.choice+" choice. "+beat.r.witness.return,5000);
+  $("interact").focus({preventScroll:true});
+}
+function drawStoryBeat(ctx,w,h){
+  if(!storyBeat)return;
+  const beat=storyBeat,elapsed=time-beat.started,phase=Math.min(2,Math.floor(elapsed/2500));
+  const lines=[beat.r.choices[beat.choice].after,beat.r.witness.return,beat.resultText];
+  ctx.save();ctx.fillStyle="rgba(4,7,13,.82)";const bar=Math.max(48,h*.13);
+  ctx.fillRect(0,0,w,bar);ctx.fillRect(0,h-bar,w,bar);
+  ctx.fillStyle="rgba(10,13,20,.78)";ctx.fillRect(w*.08,h*.69,w*.84,h*.18);
+  ctx.strokeStyle=beat.choice==="care"?"#e8bd79":"#b8d9e1";ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(w*.12,h*.67);ctx.lineTo(w*.88,h*.67);ctx.stroke();
+  ctx.textAlign="center";ctx.fillStyle="#f2d39a";ctx.font="600 12px system-ui";
+  ctx.fillText(beat.choice==="care"?"AFTERMATH · A PROMISE GIVEN":"AFTERMATH · A CLAIM MADE PUBLIC",w/2,h*.74);
+  ctx.fillStyle="#fff4dc";ctx.font="500 "+Math.max(15,Math.min(22,w/34))+"px Georgia";
+  wrapCanvasText(ctx,lines[phase],w/2,h*.80,w*.72,Math.max(20,Math.min(28,w/30)));
+  ctx.fillStyle="rgba(255,255,255,.62)";ctx.font="11px system-ui";ctx.fillText("SCENE "+(phase+1)+" / 3",w/2,h*.94);
+  if(elapsed>=7500)finishStoryBeat();
+  ctx.restore();
+}
+function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){
+  const words=String(text||"").split(/\s+/);let line="",rows=[];
+  for(const word of words){const next=line?line+" "+word:word;if(ctx.measureText(next).width>maxWidth&&line){rows.push(line);line=word;}else line=next;}
+  if(line)rows.push(line);const shown=rows.slice(0,3),start=y-(shown.length-1)*lineHeight/2;
+  shown.forEach((row,i)=>ctx.fillText(row,x,start+i*lineHeight));
 }
 function optionalDialog(){
   const r=realm(),c=chapter();
@@ -240,7 +273,7 @@ function guardianDialog(){
     ...r.guardian.clues,
     "This is a separate browser encounter with telegraphed attacks, movement, guard, optional mercy and recorded outcomes—not the complete Unreal boss choreography."],[
     {label:"Begin confrontation (optional)",action:()=>{
-      battle={x:77,y:12,hp:5,max:5,attackTime:time+1500,warningAt:time+1000,stunnedUntil:0,attacked:false};
+      battle={...guardianStart(r.id),hp:5,max:5,attackTime:time+1500,warningAt:time+1000,stunnedUntil:0,attacked:false,target:{...s.position}};
       inform("Confrontation started. SPACE to strike · SHIFT to guard · E to spare when weakened.",5000);sync();
     }}
   ],"OPTIONAL GUARDIAN");
@@ -291,56 +324,36 @@ function draw(){
   if(!s||!ctx)return;
   const r=realm(),c=chapter(),idx=rec(r.id),p=palettes[idx],w=sizes.w,h=sizes.h;
   const grd=ctx.createLinearGradient(0,0,w,h);grd.addColorStop(0,p[0]);grd.addColorStop(.6,p[1]);grd.addColorStop(1,p[0]);ctx.fillStyle=grd;ctx.fillRect(0,0,w,h);
-  // Architecture and the walkable public route vary by realm palette; stylized production placeholder.
+  drawRealmScene(ctx,w,h,r.id,time,c.choice,p);
   ctx.save();
-  ctx.strokeStyle="rgba(232,217,187,.17)";ctx.lineWidth=7;ctx.setLineDash([24,14]);
-  const trace=[[10,78],[21,61],[42,44],[65,31],[85,48],[77,75],[13,91]];
-  ctx.beginPath();trace.forEach((v,i)=>{const x=v[0]*w/100,y=v[1]*h/100;i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.setLineDash([]);
-  const offset=idx%3*13;
-  for(let i=0;i<24;i++){
-    let x=((i*37+offset)%96+2)*w/100,y=((i*17+idx*9)%90+4)*h/100;
-    ctx.fillStyle=i%3===0?"rgba(232,206,175,.14)":"rgba(7,15,26,.22)";
-    ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+12+idx%4,y-4);ctx.lineTo(x+20,y+11);ctx.lineTo(x+3,y+19);ctx.closePath();ctx.fill();
-    ctx.strokeStyle="rgba(250,237,211,.14)";ctx.stroke();
-  }
   ctx.fillStyle="rgba(0,0,0,.25)";ctx.fillRect(w*.09,h*.04,w*.8,27);
   ctx.fillStyle=p[2];ctx.font="600 13px Georgia";ctx.fillText(r.culture,w*.11,h*.04+18);
   if(c.choice){
-    const m=xy({x:85,y:48});
-    ctx.lineWidth=8;ctx.strokeStyle=c.choice==="care"?"#dfb68d":"#c3e1e3";
-    ctx.beginPath();
-    ctx.moveTo(m.x-32,m.y+12);
-    ctx.lineTo(m.x+32,m.y+12);
-    ctx.stroke();
-    ctx.fillStyle=c.choice==="care"?"#e5b56d":"#b9d2e3";ctx.font="bold 12px system-ui";
-    ctx.fillText(c.choice.toUpperCase()+" ROUTE",m.x-35,m.y+30);
+    const m=xy({x:85,y:48});ctx.lineWidth=5;ctx.strokeStyle=c.choice==="care"?"#dfb68d":"#c3e1e3";
+    ctx.beginPath();ctx.arc(m.x,m.y,16+Math.sin(time/250)*2,0,Math.PI*2);ctx.stroke();
+    ctx.fillStyle=c.choice==="care"?"#e5b56d":"#b9d2e3";ctx.font="bold 11px system-ui";
+    ctx.textAlign="center";ctx.fillText(c.choice.toUpperCase()+" REMAINS",m.x,m.y+30);
   }
-  const hazard=xy({x:56,y:58});
-  const pulse=(time%4800),warning=pulse>3050&&pulse<=4050,active=pulse>4050;
-  ctx.strokeStyle=active?"#ef998b":warning?"#f2cf91":"rgba(230,213,180,.27)";
-  ctx.lineWidth=active?5:2;ctx.setLineDash(warning?[7,6]:[]);ctx.beginPath();ctx.ellipse(hazard.x,hazard.y,Math.min(w,h)*.125,Math.min(w,h)*.125,0,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
-  ctx.fillStyle=active?"#e8b7a8":warning?"#e7ccab":"#b8b0a2";ctx.font="11px system-ui";ctx.textAlign="center";ctx.fillText(active?"DANGER":warning?"WARNING":"HAZARD",hazard.x,hazard.y+5);
+  const hazard=drawHazardField(ctx,w,h,r.id,time);
   const nodes=worldNodes();
   nodes.forEach(n=>{
     const loc=xy(n),dist=distance(s.position,n),rad=dist<15?16:12;
-    ctx.shadowColor=p[2];ctx.shadowBlur=dist<15?22:8;
-    ctx.beginPath();ctx.fillStyle=n.kind==="guardian"?"#953d53":n.kind==="side"?"#a48cda":n.kind==="mechanism"?"#e0b273":"#d0d4cb";
-    ctx.arc(loc.x,loc.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-    ctx.textAlign="center";ctx.font="bold 16px system-ui";ctx.fillStyle="#13202b";ctx.fillText(n.icon,loc.x,loc.y+5);
+    if(n.kind==="witness"){drawWitness(ctx,loc.x,loc.y,r.id,p,dist<15);}
+    else if(n.kind==="guardian"){drawGuardian(ctx,loc.x,loc.y,r.id,dist<15?1.12:.92);}
+    else{ctx.shadowColor=p[2];ctx.shadowBlur=dist<15?22:8;
+      ctx.beginPath();ctx.fillStyle=n.kind==="side"?"#a48cda":n.kind==="mechanism"?"#e0b273":"#d0d4cb";
+      ctx.arc(loc.x,loc.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+      ctx.textAlign="center";ctx.font="bold 16px system-ui";ctx.fillStyle="#13202b";ctx.fillText(n.icon,loc.x,loc.y+5);}
     ctx.font=(dist<15?"bold ":"")+"11px system-ui";const label=format(n.label,24);
     const width=ctx.measureText(label).width+11;
     ctx.fillStyle="rgba(10,17,27,.85)";ctx.fillRect(clamp(loc.x-width/2,0,w-width),loc.y+rad+3,width,18);
     ctx.fillStyle="#f8ebd1";ctx.fillText(label,clamp(loc.x,w-width/2,width/2),loc.y+rad+16);
   });
   if(battle){
-    const loc=xy(battle),rad=(time>battle.warningAt&&time< battle.attackTime)?29:18;
-    ctx.beginPath();ctx.fillStyle="#a34d59";ctx.arc(loc.x,loc.y,15,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle="#ffe4cf";ctx.font="bold 18px system-ui";ctx.fillText("♜",loc.x,loc.y+6);
-    if(time>battle.warningAt&&time<battle.attackTime){
-      ctx.lineWidth=5;ctx.strokeStyle="#f1b885";ctx.beginPath();
-      ctx.ellipse(loc.x,loc.y,Math.min(w,h)*.2,Math.min(w,h)*.2,0,0,Math.PI*2);ctx.stroke();
-      ctx.fillStyle="#f9d8c1";ctx.font="bold 12px system-ui";ctx.fillText("GUARD OR EVADE",loc.x,loc.y-24);
-    }
+    const loc=xy(battle),warning=time>battle.warningAt&&time<battle.attackTime;
+    if(warning)drawGuardianTelegraph(ctx,w,h,r.id,battle);
+    drawGuardian(ctx,loc.x,loc.y,r.id,1.28,warning);
+    if(warning){ctx.fillStyle="#f9d8c1";ctx.font="bold 12px system-ui";ctx.textAlign="center";ctx.fillText("GUARD OR EVADE",loc.x,loc.y-28);}
   }
   const user=xy(s.position);
   ctx.shadowColor="#030810";ctx.shadowBlur=13;
@@ -349,9 +362,10 @@ function draw(){
   ctx.fillStyle=guardHold?"#8cc5d9":"#603c63";ctx.beginPath();ctx.moveTo(user.x-9,user.y+2);ctx.lineTo(user.x+9,user.y+2);ctx.lineTo(user.x+13,user.y+18);ctx.lineTo(user.x-13,user.y+18);ctx.fill();
   ctx.strokeStyle="#e6ca93";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(user.x,user.y+4);ctx.lineTo(user.x,user.y+14);ctx.stroke();
   ctx.restore();
+  drawStoryBeat(ctx,w,h);
   $("bossHud").style.display=battle?"block":"none";
   if(battle){$("bossName").textContent=r.boss;$("bossFill").style.width=(battle.hp/battle.max*100)+"%";
-    $("bossCue").textContent=battle.hp<=1?"Guardian weakened · E to offer mercy":time>battle.warningAt?"Attack telegraphed · guard or move":"Keep moving · attack in range";}
+    $("bossCue").textContent=battle.hp<=1?"Guardian weakened · E to offer mercy":time>battle.warningAt?guardianCue(r.id):"Study its tell · strike in range";}
 }
 function resize(){
   const rect=canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);
@@ -362,7 +376,7 @@ function resize(){
 function tick(now){
   if(!last)last=now;
   const dt=Math.min(.05,(now-last)/1000);last=now;time=now;
-  if(s&&!focusPaused){
+  if(s&&!focusPaused&&!storyBeat){
     let dx=0,dy=0;
     if(keyboard.has("a")||keyboard.has("arrowleft")||touch.has("left"))dx--;
     if(keyboard.has("d")||keyboard.has("arrowright")||touch.has("right"))dx++;
@@ -374,10 +388,10 @@ function tick(now){
       s.position.x=clamp(s.position.x+dx/length*dt*speed,4,96);
       s.position.y=clamp(s.position.y+dy/length*dt*speed,4,96);
     }
-    const hazardTime=time%4800;
-    if(hazardTime>4050&&distance(s.position,{x:56,y:58})<12&&time>damageCooldown){
-      if(!guard){s.health--;inform("Hazard struck. Follow the visible safe route!",2000);}
-      else inform("Guarded the environmental surge.",1400);
+    const hazard=hazardState(realm().id,time);
+    if(hazard.active&&insideHazard(s.position,hazard)&&time>damageCooldown){
+      if(!guard){s.health--;inform(hazard.label+" caught you. Read its warning and cross during the lull.",2100);}
+      else inform("Guarded "+hazard.label+". Move clear before the next pulse.",1500);
       damageCooldown=time+1800;
     }
     if(battle){
@@ -386,12 +400,13 @@ function tick(now){
         battle.x+=sx/d*dt*6;battle.y+=sy/d*dt*6;
       }
       if(time>=battle.attackTime&&time>battle.stunnedUntil){
-        if(distance(battle,s.position)<21&&time>damageCooldown){
-          if(guard){inform("Guardian's tell blocked. Counter now!",1400);}
-          else{s.health--;inform("Guardian hit. Move outside the warning ring or guard.",1700);}
+        const struck=guardianStrikeHits(realm().id,s.position,battle);
+        if(struck&&time>damageCooldown){
+          if(guard){inform("Guardian's "+guardianCue(realm().id)+" blocked. Counter now!",1600);}
+          else{s.health--;inform("Guardian struck. "+guardianCue(realm().id)+".",1900);}
           damageCooldown=time+1000;
         }
-        battle.attackTime=time+2600;battle.warningAt=battle.attackTime-750;
+        battle.attackTime=time+2600;battle.warningAt=battle.attackTime-750;battle.target={...s.position};
       }
     }
     if(s.health<=0){
@@ -412,10 +427,10 @@ function wire(){
   $("helpBtn").onclick=helpDialog;$("restBtn").onclick=rest;$("clearBtn").onclick=resetDialog;
   $("interact").onclick=()=>modal.classList.contains("show")?closeDialog():interact();
   $("attackTouch").onclick=attack;$("skillTouch").onclick=studyCounter;
-  $("closeModal").onclick=closeDialog;
+  $("closeModal").onclick=closeDialog;$("skipCinematic").onclick=finishStoryBeat;
   window.addEventListener("keydown",e=>{
     const k=e.key.toLowerCase();
-    if(k==="escape"){if(focusPaused)closeDialog();return;}
+    if(k==="escape"){if(storyBeat)finishStoryBeat();else if(focusPaused)closeDialog();return;}
     // Let the browser activate focused modal buttons with Space / Enter.
     if(focusPaused)return;
     if(["arrowup","arrowdown","arrowleft","arrowright"," ","shift"].includes(k))e.preventDefault();
