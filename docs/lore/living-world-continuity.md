@@ -1,5 +1,9 @@
 # THE UNMADE — Living Canon and Realm Continuity
 
+## 2026-10-29 — Ability Study is checked at the combined profile boundary
+
+The shared combined-save validator now restores the optional firsthand study snapshot through the existing Observation → Mastery domain rules, including evidence provenance, stage/trial agreement and selected-study bounds. This closes the profile read/write path as well as the earlier critical-record preflight. It changes no ability, reward, quest, realm or mystery; Unreal serialization and Editor acceptance remain pending.
+
 ## 2026-10-22 — Source-only creature territories and reactive habitat prototypes
 
 The six existing optional encounter sites (Reach.AshRoad, Reach.GlassCut, Bellwold.Forgotten, Paperhaven.Torn, Saltwake.Saltglass and Cinderhold.Slag) already had source-assigned canonical species and scout testimony. A **provisional encounter art and environmental interaction layer** now adds distinct jaw dens, watcher roosts, hound undercrofts, archive burrows, tide caves and slag maws outside inhabited streets. These are prototype shapes and reactions, **not newly admitted canon claims about any creature's origin, birthplace, ecology, or the identities of witnesses**.

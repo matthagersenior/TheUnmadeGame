@@ -1,3 +1,9 @@
+## 2026-10-29 — Validate Ability Study before combined profile restore
+
+- Reused the existing AbilityStudy restore contract in the combined profile validator, so a malformed study ledger cannot pass the shared save/session gate after failing or bypassing the narrower preflight.
+- Added regression cases for valid empty records, fabricated mastery, secondhand-only evidence, invalid selection and truncated arrays.
+- No ability unlocks, quest conditions, rewards or lore changed. GitHub Actions source verification is pending; Unreal Editor and serialized-file testing remain required.
+
 ## 2026-10-24 — Spatial Foley sources for directed Unpaid Shift beats
 
 Loaded generated Foley now uses the local staged resident as its source when
