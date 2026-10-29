@@ -146,10 +146,10 @@ function helpDialog(){
   openDialog("How to Play",[
     "Move with WASD or arrow keys. On mobile, use the direction pad. Stand near a diamond/star marker and press E or INTERACT. The target label tells you what is nearby.",
     "First-story: speak to a local witness; physically inspect at least two different marked clues; use the public mechanism; read care and truth consequences; confirm the same choice twice. Return later to inspect how the place changed.",
-    "Guardians are OPTIONAL. Stand near the guardian and interact to begin. Space / ATTACK strikes in range, Shift / GUARD blocks a timed attack, and moving out of the warning ring dodges it. Spare a weakened guardian using E / INTERACT; finishing with a strike defeats it. No guardian is required for any main-story choice.",
+    "Guardians are OPTIONAL. Stand near the guardian and interact to begin. Space / ATTACK strikes in range. Each realm has a distinct tell: read the HUD cue and leave the marked line, ring, target or impact area, or Shift / GUARD through the strike. Spare a weakened guardian with E / INTERACT; another strike defeats it. No guardian is required for any main-story choice.",
     "Master one source-named technique by resolving a studied guardian. Press Q / STUDY COUNTER during later encounters to stun briefly. This counter mechanic is a browser balance experiment, not an Unreal rite grant.",
-    "After each realm choice, find the optional story's next active marker. Five physical stops lead to a separate care/truth resolution. Completing it never gates another realm.",
-    "The atlas permits non-linear visits to every authored realm. Journal shows local and across-realm progress. Rest at a refuge to restore resolve, with no re-award of evidence or committed outcomes."],[],"KEYBOARD & TOUCH");
+    "After each realm choice, a short captioned aftermath plays over the changed place; press Escape or Skip scene to continue. Find the optional story's next active marker afterward. Five physical stops lead to a separate care/truth resolution. Completing it never gates another realm.",
+    "Environmental danger marks its own shape and warning interval. Cross during the quiet phase or guard the pulse, then move clear. The atlas permits non-linear visits to every authored realm. Journal shows local and across-realm progress. Rest at a refuge to restore resolve, with no re-award of evidence or committed outcomes."],[],"KEYBOARD & TOUCH");
 }
 function inspect(node){
   const r=realm(),c=chapter();
