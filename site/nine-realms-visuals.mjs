@@ -82,7 +82,7 @@ export function drawRealmScene(ctx,w,h,id,now,choice,palette){
  // Realm-specific ambient movement.
  ctx.globalAlpha=.3;
  for(let i=0;i<14;i++){
-  const phase=((now*(art.motif==="tide"?.028:art.motif==="kiln"?.018:.012)+i*137)%1000)/1000;
+  const phase=((now*(art.motif==="tide" ? .028 : art.motif==="kiln" ? .018 : .012)+i*137)%1000)/1000;
   const x=((i*71+seed*43)%100)*w/100,y=((phase*103+i*19)%100)*h/100;
   ctx.beginPath();
   if(art.motif==="tide"){ctx.moveTo(x,y);ctx.lineTo(x+5,y+10);ctx.stroke();}
